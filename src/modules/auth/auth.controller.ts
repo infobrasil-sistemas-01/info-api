@@ -8,7 +8,12 @@ import {
   Headers,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ApiBasicAuth, ApiHeader } from '@nestjs/swagger';
+import {
+  ApiBasicAuth,
+  ApiHeader,
+  ApiOperation,
+  ApiResponse,
+} from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { AUTH_CONFIG } from 'src/config/auth.config';
 import type { AuthConfig } from 'src/config/auth.config';
@@ -24,6 +29,20 @@ export class AuthController {
   @Post('login')
   @HttpCode(200)
   @ApiBasicAuth()
+  @ApiOperation({
+    summary: 'Login do usuário',
+    description:
+      'Autentica o usuário usando credenciais básicas e retorna um token de acesso JWT.',
+  })
+  @ApiResponse({
+    status: 200,
+    description:
+      'Login realizado com sucesso, retorna usuário e token de acesso.',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Credenciais inválidas ou header de autorização ausente.',
+  })
   async login(
     @Headers() headers: Record<string, string>,
     @Req() req: Request,
