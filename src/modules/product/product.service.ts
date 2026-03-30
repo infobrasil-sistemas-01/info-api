@@ -7,18 +7,36 @@ export class ProductService {
     private readonly tenantConnectionService: TenantConnectionService,
   ) {}
 
-  async get(credentialsId: string, page: number = 1, pageSize: number = 10) {
+  async get(
+    credentialsId: string,
+    page: number = 1,
+    pageSize: number = 10,
+    group?: number,
+    brand?: number,
+  ) {
     const connection =
       await this.tenantConnectionService.getConnection(credentialsId);
 
-    const query = `SELECT FIRST ? SKIP ? 
+    let params = [pageSize, (page - 1) * pageSize];
+    let query = `SELECT FIRST ? SKIP ? 
                     P.PRO_CODIGO, P.PRO_DESCRICAO, M.MAR_CODIGO, M.MAR_DESCRICAO, G.GRU_CODIGO, G.GRU_DESCRICAO, E.EST_APOIO ESTOQUE, E.PRO_PRECO1 PRECO
                     FROM produtos P 
                     LEFT JOIN marcas M ON P.MAR_CODIGO = M.MAR_CODIGO 
                     LEFT JOIN grupospro G ON P.GRU_CODIGO = G.GRU_CODIGO
-                    LEFT JOIN estoque E ON P.PRO_CODIGO = E.PRO_CODIGO AND LOJ_CODIGO = 1
-                    ORDER BY P.PRO_DESCRICAO`;
-    const params = [pageSize, (page - 1) * pageSize];
+                    LEFT JOIN estoque E ON P.PRO_CODIGO = E.PRO_CODIGO AND LOJ_CODIGO = 1`;
+
+    if (group) {
+      query += ` WHERE P.GRU_CODIGO = ?`;
+      params.push(group);
+    }
+
+    if (brand) {
+      query += group ? ` AND` : ` WHERE`;
+      query += ` P.MAR_CODIGO = ?`;
+      params.push(brand);
+    }
+
+    query += ` ORDER BY P.PRO_DESCRICAO`;
 
     const result = await new Promise((resolve, reject) => {
       connection.query(query, params, (err: any, res: any) => {
