@@ -8,7 +8,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api/v1');
 
   const config = new DocumentBuilder()
-    .setTitle('Info API')
+    .setTitle('InfoBrasil API')
     .setDescription(
       'API de integração do sistema Retaguarda (by InfoBrasil) com outros sistemas, como ERPs, e-commerce, etc.',
     )
