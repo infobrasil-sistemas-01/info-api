@@ -20,6 +20,9 @@ export const envSchema = z.object({
   P99: z.string(),
   P131: z.string(),
   P104: z.string(),
+  CRYPTO_ENC: z.string(),
+  CRYPTO_IV: z.string(),
+  CRYPTO_ALGO: z.string().default('aes-256-cbc'),
 });
 
 export type Env = z.infer<typeof envSchema>;

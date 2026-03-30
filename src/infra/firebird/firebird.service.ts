@@ -1,3 +1,4 @@
+import { decrypt } from './../../utils/crypto.util';
 import { Injectable } from '@nestjs/common';
 import * as firebird from 'node-firebird';
 import { ids } from 'src/utils/ids.util';
@@ -16,7 +17,7 @@ export class FirebirdService {
   async getDatabaseConnection(options: IConnectionOptions) {
     const optionsFinal = {
       ...options,
-      password: ids(options.id),
+      password: decrypt(ids(options.id)),
     };
 
     return new Promise<firebird.Database>((resolve, reject) => {
