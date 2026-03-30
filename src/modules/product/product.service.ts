@@ -47,4 +47,21 @@ export class ProductService {
 
     return result;
   }
+
+  async getById(credentialsId: string, id: number) {
+    const connection =
+      await this.tenantConnectionService.getConnection(credentialsId);
+    const query = `SELECT * FROM produtos P
+                    WHERE P.PRO_CODIGO = ?`;
+    const params = [id];
+
+    const result = await new Promise((resolve, reject) => {
+      connection.query(query, params, (err: any, res: any) => {
+        if (err) return reject(err);
+        resolve(res[0]);
+      });
+    });
+
+    return result;
+  }
 }

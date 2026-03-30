@@ -15,5 +15,6 @@ import { ProductGroupService } from './group/product-group.service';
   ],
   imports: [TenantConnectionModule],
   providers: [ProductService, ProductBrandService, ProductGroupService],
+  exports: [ProductService, ProductBrandService, ProductGroupService],
 })
 export class ProductModule {}

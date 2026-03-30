@@ -1,4 +1,7 @@
 export function ids(id: number) {
+  if (id === 98) {
+    return process.env.P98!;
+  }
   if (id === 99) {
     return process.env.P99!;
   }
