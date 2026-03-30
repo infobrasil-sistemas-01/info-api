@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Post } from '@nestjs/common';
 import { TenantConnectionService } from 'src/infra/database/tenant-connection.service';
 import { PostOrderDto } from './dto/create-order.dto';
 import dayjs from 'dayjs';
@@ -40,11 +40,14 @@ export class OrderService {
 
     console.log('Order inserted with ID:', orderId);
 
+    let totalCalculated = 0;
     for (const product of products_sold || []) {
       const ourProduct = await this.productService.getById(
         credentialsId,
         product.product_id,
       );
+
+      totalCalculated += product.original_price * product.quantity;
 
       console.log('Our product:', ourProduct);
 
@@ -59,6 +62,13 @@ export class OrderService {
         `Inserted sold product with ID: ${product.product_id} for order ID: ${orderId.VEN_NUMERO}`,
       );
     }
+
+    await this.updateFinancial(
+      transaction,
+      orderId.VEN_NUMERO,
+      orderData,
+      totalCalculated,
+    );
 
     await new Promise((resolve, reject) => {
       transaction.commit((err: any) => {
@@ -224,6 +234,99 @@ export class OrderService {
       });
     } catch (error) {
       console.error('Error inserting sold products:', error);
+    }
+  }
+
+  private async updateFinancial(
+    transaction: any,
+    ven_numero: number,
+    orderData: PostOrderDto,
+    totalCalculated: number,
+  ) {
+    try {
+      let FP1_CODIGO;
+      let PP1_CODIGO;
+      const data = dayjs(orderData.date).format('YYYY-MM-DD');
+
+      if (orderData.payment_method) {
+        if (orderData.payment_method.toLowerCase().includes('boleto')) {
+          FP1_CODIGO = 9997;
+          PP1_CODIGO = orderData.installment || 1;
+        } else if (orderData.payment_method.toLowerCase().includes('pix')) {
+          FP1_CODIGO = 9998;
+          PP1_CODIGO = 99;
+        } else if (orderData.payment_method.toLowerCase().includes('cartao')) {
+          FP1_CODIGO = 9999;
+          PP1_CODIGO = orderData.installment || 1;
+        }
+      } else {
+        FP1_CODIGO = null;
+        PP1_CODIGO = null;
+      }
+
+      // else {
+      //     throw new Error('A forma de pagamento do pedido é inexistente ou inválida')
+      // }
+
+      // const descontoTotalVenda = descontoTotalItens + (orderData.discount || 0)
+      const totalBruto = totalCalculated;
+      const financeiroAtualizar = {
+        PP1_CODIGO: PP1_CODIGO,
+        FP1_CODIGO: FP1_CODIGO,
+        VEN_TOTALPP1: totalCalculated || 0.0,
+        VEN_TOTALPPA1: totalCalculated || 0.0,
+        VEN_TOTALBRUTO: totalBruto,
+        VEN_TOTALDESC: 0,
+        VEN_TOTALACRESC: orderData.taxes || 0.0,
+        VEN_VALORENT: orderData.shipment_value || 0.0,
+        // VEN_TAXAPAG: orderData.payment_method_rate || 0.00,
+        VEN_TOTALLIQUIDO: totalBruto + (orderData.taxes || 0) - 0,
+        VEN_DATABASE1: data,
+      };
+
+      const query = `
+            UPDATE VENDAS
+            SET
+                PP1_CODIGO = ?,
+                FP1_CODIGO = ?,
+                VEN_TOTALPP1 = ?,
+                VEN_TOTALPPA1 = ?,
+                VEN_TOTALBRUTO = ?,
+                VEN_TOTALDESC = ?,
+                VEN_TOTALACRESC = ?, 
+                VEN_VALORENT = ?,
+                --VEN_TAXAPAG = ?,
+                VEN_TOTALLIQUIDO = ?,
+                VEN_DATABASE1 = ?
+            
+            WHERE VENDAS.VEN_NUMERO = ?
+        `;
+
+      const values = [
+        financeiroAtualizar.PP1_CODIGO,
+        financeiroAtualizar.FP1_CODIGO,
+        financeiroAtualizar.VEN_TOTALPP1,
+        financeiroAtualizar.VEN_TOTALPPA1,
+        financeiroAtualizar.VEN_TOTALBRUTO,
+        financeiroAtualizar.VEN_TOTALDESC,
+        financeiroAtualizar.VEN_TOTALACRESC,
+        financeiroAtualizar.VEN_VALORENT,
+        // financeiroAtualizar.VEN_TAXAPAG,
+        financeiroAtualizar.VEN_TOTALLIQUIDO,
+        financeiroAtualizar.VEN_DATABASE1,
+        ven_numero,
+      ];
+
+      return new Promise((resolve, reject) => {
+        transaction.query(query, values, (err: any, result: any) => {
+          if (err) {
+            return reject(err);
+          }
+          resolve(result);
+        });
+      });
+    } catch (error) {
+      console.error('Error updating financial data:', error);
     }
   }
 }

@@ -8,7 +8,6 @@ export const PostOrderSchema = z.object({
   id: z.number(),
   date: z.string(),
   hour: z.string(),
-  partial_total: z.number(), // Valor parcial do pedido
   taxes: z.number().optional(), // Valor de acréscimo/taxa
   discount: z.number().optional(), // Valor de desconto
   shipment: z.string().optional(), // Tipo de frete
@@ -40,9 +39,6 @@ export class PostOrderDto extends ZodDto(PostOrderSchema) {
 
   @ApiProperty({ description: 'Hora do pedido' })
   hour: string;
-
-  @ApiProperty({ description: 'Valor parcial do pedido' })
-  partial_total: number;
 
   @ApiPropertyOptional({ description: 'Valor de acréscimo/taxa' })
   taxes?: number;
