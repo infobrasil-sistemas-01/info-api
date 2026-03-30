@@ -6,12 +6,12 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { JwtPayload } from '../types/jwt-payload';
 
-type AuthContext = {
+export type AuthContext = {
   userId: string;
   credentialsId?: string;
 };
 
-type ReqWithAuthContext = {
+export type ReqWithAuthContext = {
   authContext?: AuthContext;
   log: any;
   user: any;
