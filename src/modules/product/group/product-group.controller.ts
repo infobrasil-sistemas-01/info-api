@@ -6,7 +6,6 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { ProductBrandService } from './product-brand.service';
 import {
   JwtAuthGuard,
   type ReqWithAuthContext,
@@ -17,23 +16,24 @@ import {
   ApiQuery,
   ApiResponse,
 } from '@nestjs/swagger';
+import { ProductGroupService } from './product-group.service';
 
-@Controller('products/brands')
-export class ProductBrandController {
-  constructor(private readonly brandService: ProductBrandService) {}
+@Controller('products/groups')
+export class ProductGroupController {
+  constructor(private readonly groupService: ProductGroupService) {}
 
   @Get()
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Listar marcas de produtos',
+    summary: 'Listar grupos de produtos',
     description:
-      'Retorna uma lista paginada de marcas de produtos associadas às credenciais do usuário autenticado.',
-    tags: ['Product / Brand'],
+      'Retorna uma lista paginada de grupos de produtos associadas às credenciais do usuário autenticado.',
+    tags: ['Product / Group'],
   })
   @ApiResponse({
     status: 200,
-    description: 'Lista de marcas de produtos retornada com sucesso.',
+    description: 'Lista de grupos de produtos retornada com sucesso.',
   })
   @ApiResponse({
     status: 400,
@@ -70,6 +70,6 @@ export class ProductBrandController {
       throw new BadRequestException('pageSize cannot exceed 25');
     }
 
-    return this.brandService.get(credentialsId, page, pageSize);
+    return this.groupService.get(credentialsId, page, pageSize);
   }
 }

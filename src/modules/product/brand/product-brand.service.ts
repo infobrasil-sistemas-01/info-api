@@ -7,11 +7,7 @@ export class ProductBrandService {
     private readonly tenantConnectionService: TenantConnectionService,
   ) {}
 
-  async getBrands(
-    credentialsId: string,
-    page: number = 1,
-    pageSize: number = 10,
-  ) {
+  async get(credentialsId: string, page: number = 1, pageSize: number = 10) {
     const connection =
       await this.tenantConnectionService.getConnection(credentialsId);
 

@@ -67,6 +67,6 @@ export class ProductController {
       throw new BadRequestException('pageSize cannot exceed 25');
     }
 
-    return this.productService.getProducts(credentialsId, page, pageSize);
+    return this.productService.get(credentialsId, page, pageSize);
   }
 }
