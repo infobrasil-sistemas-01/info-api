@@ -8,6 +8,7 @@ import {
   Headers,
   UnauthorizedException,
 } from '@nestjs/common';
+import { ApiBasicAuth, ApiHeader } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { AUTH_CONFIG } from 'src/config/auth.config';
 import type { AuthConfig } from 'src/config/auth.config';
@@ -22,6 +23,7 @@ export class AuthController {
 
   @Post('login')
   @HttpCode(200)
+  @ApiBasicAuth()
   async login(
     @Headers() headers: Record<string, string>,
     @Req() req: Request,
