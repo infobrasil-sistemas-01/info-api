@@ -36,7 +36,7 @@ export class AuthService {
       .toString()
       .split(':');
     const user = await this.prisma.user.findUnique({
-      where: { user: username },
+      where: { user: username, status: true },
     });
 
     if (!user) {
