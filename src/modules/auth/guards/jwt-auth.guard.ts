@@ -8,6 +8,7 @@ import { JwtPayload } from '../types/jwt-payload';
 
 type AuthContext = {
   userId: string;
+  credentialsId?: string;
 };
 
 type ReqWithAuthContext = {
@@ -37,7 +38,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       throw new UnauthorizedException('Invalid token (missing sub)');
     }
 
-    req.authContext = { userId };
+    req.authContext = { userId, credentialsId: payload.credentials_id };
 
     if (req.log) req.log = req.log.child({ userId });
 
