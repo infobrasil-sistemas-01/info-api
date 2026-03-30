@@ -9,7 +9,9 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Info API')
-    .setDescription('API de integração com bancos dos clientes')
+    .setDescription(
+      'API de integração do sistema Retaguarda (by InfoBrasil) com outros sistemas, como ERPs, e-commerce, etc.',
+    )
     .setVersion('1.0')
     .addBasicAuth() // 👈 Basic Auth for login
     .addBearerAuth() // 👈 JWT

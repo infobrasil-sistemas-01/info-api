@@ -15,8 +15,13 @@ export class ProductService {
     const connection =
       await this.tenantConnectionService.getConnection(credentialsId);
 
-    const query =
-      'SELECT FIRST ? SKIP ? PRO_CODIGO, PRO_DESCRICAO, PRO_PRCCOMPRA FROM produtos';
+    const query = `SELECT FIRST ? SKIP ? 
+                    P.PRO_CODIGO, P.PRO_DESCRICAO, M.MAR_CODIGO, M.MAR_DESCRICAO, G.GRU_CODIGO, G.GRU_DESCRICAO, E.EST_APOIO ESTOQUE, E.PRO_PRECO1 PRECO
+                    FROM produtos P 
+                    LEFT JOIN marcas M ON P.MAR_CODIGO = M.MAR_CODIGO 
+                    LEFT JOIN grupospro G ON P.GRU_CODIGO = G.GRU_CODIGO
+                    LEFT JOIN estoque E ON P.PRO_CODIGO = E.PRO_CODIGO AND LOJ_CODIGO = 1
+                    ORDER BY P.PRO_DESCRICAO`;
     const params = [pageSize, (page - 1) * pageSize];
 
     const result = await new Promise((resolve, reject) => {
