@@ -1,36 +1,36 @@
+import type { ReqWithAuthContext } from './../auth/guards/jwt-auth.guard';
 import {
+  BadRequestException,
   Controller,
   Get,
-  UseGuards,
-  Req,
   Query,
-  BadRequestException,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
+import { PaymentMethodService } from './payment-method.service';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import {
   ApiBearerAuth,
-  ApiQuery,
   ApiOperation,
+  ApiQuery,
   ApiResponse,
 } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import type { ReqWithAuthContext } from '../auth/guards/jwt-auth.guard';
-import { ProductService } from './product.service';
 
-@Controller('products')
-export class ProductController {
-  constructor(private readonly productService: ProductService) {}
+@Controller('payment-methods')
+export class PaymentMethodController {
+  constructor(private readonly paymentMethodService: PaymentMethodService) {}
 
   @Get()
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Listar produtos',
+    summary: 'Listar formas de pagamento',
     description:
-      'Retorna uma lista paginada de produtos associados às credenciais do usuário autenticado.',
+      'Retorna uma lista paginada de formas de pagamento associados às credenciais do usuário autenticado.',
   })
   @ApiResponse({
     status: 200,
-    description: 'Lista de produtos retornada com sucesso.',
+    description: 'Lista de formas de pagamento retornada com sucesso.',
   })
   @ApiResponse({
     status: 400,
@@ -52,24 +52,10 @@ export class ProductController {
     type: Number,
     description: 'Número de itens por página',
   })
-  @ApiQuery({
-    name: 'group',
-    required: false,
-    type: Number,
-    description: 'Código do grupo para filtrar produtos',
-  })
-  @ApiQuery({
-    name: 'brand',
-    required: false,
-    type: Number,
-    description: 'Código da marca para filtrar produtos',
-  })
-  getProducts(
+  getPaymentMethods(
     @Req() req: ReqWithAuthContext,
     @Query('page') page?: number,
     @Query('pageSize') pageSize?: number,
-    @Query('group') group?: number,
-    @Query('brand') brand?: number,
   ) {
     const credentialsId = req.authContext?.credentialsId;
 
@@ -81,6 +67,6 @@ export class ProductController {
       throw new BadRequestException('pageSize cannot exceed 25');
     }
 
-    return this.productService.get(credentialsId, page, pageSize, group, brand);
+    return this.paymentMethodService.get(credentialsId, page, pageSize);
   }
 }
