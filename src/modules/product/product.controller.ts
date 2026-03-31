@@ -15,6 +15,7 @@ import {
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import type { ReqWithAuthContext } from '../auth/guards/jwt-auth.guard';
 import { ProductService } from './product.service';
+import { min } from 'date-fns';
 
 @Controller('products')
 export class ProductController {
@@ -64,12 +65,19 @@ export class ProductController {
     type: Number,
     description: 'Código da marca para filtrar produtos',
   })
+  @ApiQuery({
+    name: 'minStock',
+    required: false,
+    type: Number,
+    description: 'Quantidade mínima em estoque para filtrar produtos',
+  })
   getProducts(
     @Req() req: ReqWithAuthContext,
     @Query('page') page?: number,
     @Query('pageSize') pageSize?: number,
     @Query('group') group?: number,
     @Query('brand') brand?: number,
+    @Query('minStock') minStock?: number,
   ) {
     const credentialsId = req.authContext?.credentialsId;
 
@@ -81,6 +89,13 @@ export class ProductController {
       throw new BadRequestException('pageSize cannot exceed 25');
     }
 
-    return this.productService.get(credentialsId, page, pageSize, group, brand);
+    return this.productService.get(
+      credentialsId,
+      page,
+      pageSize,
+      group,
+      brand,
+      minStock,
+    );
   }
 }

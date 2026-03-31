@@ -13,6 +13,7 @@ export class ProductService {
     pageSize: number = 10,
     group?: number,
     brand?: number,
+    minStock?: number,
   ) {
     const connection =
       await this.tenantConnectionService.getConnection(credentialsId);
@@ -34,6 +35,12 @@ export class ProductService {
       query += group ? ` AND` : ` WHERE`;
       query += ` P.MAR_CODIGO = ?`;
       params.push(brand);
+    }
+
+    if (minStock) {
+      query += group || brand ? ` AND` : ` WHERE`;
+      query += ` E.EST_APOIO >= ?`;
+      params.push(minStock);
     }
 
     query += ` ORDER BY P.PRO_DESCRICAO`;
