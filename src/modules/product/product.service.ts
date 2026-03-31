@@ -51,7 +51,11 @@ export class ProductService {
   async getById(credentialsId: string, id: number) {
     const connection =
       await this.tenantConnectionService.getConnection(credentialsId);
-    const query = `SELECT * FROM produtos P
+    const query = `SELECT
+                    P.PRO_CODIGO, P.PRO_PRCCOMPRA, P.PRO_PRCCUSTO, P.PRO_PRCCOMPRAFISCAL, P.PRO_CUSTOFISCAL,
+                    E.PRO_PRECO1
+                    FROM produtos P
+                    LEFT JOIN estoque E ON P.PRO_CODIGO = E.PRO_CODIGO AND LOJ_CODIGO = 1
                     WHERE P.PRO_CODIGO = ?`;
     const params = [id];
 

@@ -42,14 +42,12 @@ export class OrderService {
 
     let totalCalculated = 0;
     for (const product of products_sold || []) {
-      const ourProduct = await this.productService.getById(
+      const ourProduct = (await this.productService.getById(
         credentialsId,
         product.product_id,
-      );
+      )) as any;
 
-      totalCalculated += product.original_price * product.quantity;
-
-      console.log('Our product:', ourProduct);
+      totalCalculated += ourProduct.PRO_PRECO1 * product.quantity;
 
       await this.insertSoldProductOnDb(
         transaction,
@@ -163,16 +161,16 @@ export class OrderService {
         COR_CODIGO: product.variant_id ? ourProduct.COR_CODIGO : null,
         PRG_CODIGO: ourProduct.PRG_CODIGO || null,
         IVD_QTDE: product.quantity,
-        IVD_PRECO: product.original_price,
-        IVD_TOTAL: product.original_price * product.quantity,
+        IVD_PRECO: ourProduct.PRO_PRECO1,
+        IVD_TOTAL: ourProduct.PRO_PRECO1 * product.quantity,
         IVD_DESCONTO: 0,
-        IVD_LIQUIDO: product.original_price * product.quantity - 0,
+        IVD_LIQUIDO: ourProduct.PRO_PRECO1 * product.quantity - 0,
         IVD_PRCCOMPRA: ourProduct.PRO_PRCCOMPRA || null,
         IVD_PRCCUSTO: ourProduct.PRO_PRCCUSTO || null,
         IVD_PRCFISCAL: ourProduct.PRO_PRCCOMPRAFISCAL || null,
         IVD_PRCCUSTOFISCAL: ourProduct.PRO_CUSTOFISCAL || null,
         IVD_ENTREGUE: 'N',
-        IVD_PRCAVISTA: product.original_price,
+        IVD_PRCAVISTA: ourProduct.PRO_PRECO1,
       };
 
       const IVD_NUMERO = 'GEN_ID(GEN_NUMEROIVD, 1)';
