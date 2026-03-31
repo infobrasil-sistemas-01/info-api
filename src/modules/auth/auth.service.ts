@@ -59,6 +59,7 @@ export class AuthService {
     const accessToken = await this.signAccessToken({
       userId: user.id.toString(),
       credentialsId: user.dbCredentialsId ?? undefined,
+      storeId: user.storeId ?? undefined,
     });
 
     return {
@@ -94,11 +95,13 @@ export class AuthService {
   private async signAccessToken(params: {
     userId: string;
     credentialsId?: string;
+    storeId?: number;
   }) {
     return this.jwt.signAsync(
       {
         sub: params.userId,
         credentials_id: params.credentialsId,
+        store_id: params.storeId,
       },
       { expiresIn: this.authConfig.accessTokenTtl },
     );

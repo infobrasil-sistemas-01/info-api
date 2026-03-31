@@ -9,6 +9,7 @@ import { JwtPayload } from '../types/jwt-payload';
 export type AuthContext = {
   userId: string;
   credentialsId?: string;
+  storeId?: number;
 };
 
 export type ReqWithAuthContext = {
