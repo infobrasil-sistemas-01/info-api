@@ -12,7 +12,7 @@ export class OrderService {
     private readonly productService: ProductService,
   ) {}
 
-  async post(credentialsId: string, data: PostOrderDto) {
+  async post(credentialsId: string, data: PostOrderDto, storeId: number) {
     const connection =
       await this.tenantConnectionService.getConnection(credentialsId);
 
@@ -33,10 +33,14 @@ export class OrderService {
       });
     });
 
-    const orderId = (await this.insertOrderOnDb(transaction, {
-      ...orderData,
-      date,
-    })) as { VEN_NUMERO: number };
+    const orderId = (await this.insertOrderOnDb(
+      transaction,
+      {
+        ...orderData,
+        date,
+      },
+      storeId,
+    )) as { VEN_NUMERO: number };
 
     let totalCalculated = 0;
     for (const product of products_sold || []) {
@@ -52,6 +56,7 @@ export class OrderService {
         product,
         ourProduct,
         orderId.VEN_NUMERO,
+        storeId,
       );
     }
 
@@ -75,7 +80,11 @@ export class OrderService {
     });
   }
 
-  private async insertOrderOnDb(transaction: any, orderData: any) {
+  private async insertOrderOnDb(
+    transaction: any,
+    orderData: any,
+    storeId: number,
+  ) {
     return new Promise((resolve, reject) => {
       const VEN_NUMERO = 'GEN_ID(GEN_NUMEROVEN, 1)';
 
@@ -83,7 +92,7 @@ export class OrderService {
         VEN_ID_ECOMMERCE: orderData.id,
         VEN_NUMSITE: orderData.id.toString(),
         SIT_CODIGO: 1,
-        LOJ_CODIGO: 1,
+        LOJ_CODIGO: storeId,
         USU_CODIGO: 9999,
         FUN_CODIGO: 9999,
         CLI_CODIGO: 1,
@@ -142,11 +151,12 @@ export class OrderService {
     product: SoldProductDto,
     ourProduct: any,
     ven_numero: number,
+    storeId: number,
   ) {
     try {
       const produtoVendidoInsert = {
         VEN_NUMERO: ven_numero,
-        LOJ_CODIGO: 1,
+        LOJ_CODIGO: storeId,
         PRO_CODIGO: ourProduct.PRO_CODIGO,
         PRK_CODIGO: product.variant_id ? ourProduct.PRO_CODIGO : null,
         TAM_CODIGO: product.variant_id ? ourProduct.TAM_CODIGO : null,

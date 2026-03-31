@@ -32,12 +32,16 @@ export class OrderController {
     description: 'Token de autenticação inválido ou ausente.',
   })
   postOrder(@Req() req: ReqWithAuthContext, @Body() dto: PostOrderDto) {
-    const credentialsId = req.authContext?.credentialsId;
+    const { credentialsId, storeId } = req.authContext || {};
 
     if (!credentialsId) {
       throw new Error('Credentials ID not found in token');
     }
 
-    return this.orderService.post(credentialsId, dto);
+    if (!storeId) {
+      throw new Error('Store ID not found in token');
+    }
+
+    return this.orderService.post(credentialsId, dto, storeId);
   }
 }
