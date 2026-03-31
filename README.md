@@ -53,9 +53,19 @@ npm install
 2. Configure as variáveis de ambiente no arquivo `.env`:
 
    ```env
+   NODE_ENV=development
    PORT=3000
-   DATABASE_URL="postgresql://user:password@localhost:5432/dbname"
-   JWT_SECRET=your-secret-key
+   DATABASE_URL="postgres://postgres:postgres@localhost:5433/infoapi?schema=public"
+   JWT_SECRET="your-secret-key"
+   JWT_EXPIRES_IN="24h"
+   REFRESH_TOKEN_DAYS="7"
+   P98="encrypted-password-98"
+   P99="encrypted-password-98"
+   P131="encrypted-password-98"
+   P104="encrypted-password-98"
+   CRYPTO_ENC="your-encryption-key"
+   CRYPTO_IV="your-initialization-vector"
+   CRYPTO_ALGO="your-encryption-algorithm"
    ```
 
 3. Execute as migrações do banco de dados:
@@ -127,8 +137,9 @@ src/
 │   └── env/
 ├── modules/                   # Módulos da aplicação
 │   ├── auth/                  # Autenticação
-│   ├── product/               # Produtos
 │   └── order/                 # Pedidos
+│   └── payment-method/        # Métodos de Pagamento
+│   ├── product/               # Produtos
 ├── infra/                     # Infraestrutura
 │   ├── database/              # Conexões de banco
 │   ├── prisma/                # Cliente Prisma
