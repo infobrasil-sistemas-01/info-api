@@ -1,36 +1,28 @@
 import { ZodDto } from 'src/common/validation/zod-dto';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import z from 'zod';
-import { SoldProductSchema } from './sold-product.dto';
+import { SoldProductDto, SoldProductSchema } from './sold-product.dto';
 
 export const PostOrderSchema = z.object({
-  status: z.string(),
   id: z.number(),
   date: z.string(),
   hour: z.string(),
   taxes: z.number().optional(), // Valor de acréscimo/taxa
   discount: z.number().optional(), // Valor de desconto
-  shipment: z.string().optional(), // Tipo de frete
-  shipment_value: z.number().optional(), // Valor do frete
   store_note: z.string().optional(), // Informações adicionais da loja
   customer_note: z.string().optional(), // Informações adicionais do cliente
   payment_method_rate: z.number().optional(), // Taxa do meio de pagamento
   installment: z.number().optional(), // Quantidade de parcelas
-  delivery_time: z.string().optional(), // Tempo de entrega
-  payment_method: z.string().nullable(), // Meio de pagamento
+  payment_method: z.string(), // Meio de pagamento
   total: z.number(), // Valor total do pedido
   payment_date: z.string(), // Data de pagamento
   interest: z.number().optional(), // Juros do pedido
-  estimated_delivery_date: z.string().optional(), // Data estimada de entrega
   has_payment: z.boolean(), // Indica se existe pagamento confirmado
   has_invoice: z.boolean(), // Indica se existe nota fiscal
   products_sold: z.array(SoldProductSchema).optional(), // Lista de produtos vendidos
 });
 
 export class PostOrderDto extends ZodDto(PostOrderSchema) {
-  @ApiProperty({ description: 'Status do pedido' })
-  status: string;
-
   @ApiProperty({ description: 'ID do pedido' })
   id: number;
 
@@ -46,12 +38,6 @@ export class PostOrderDto extends ZodDto(PostOrderSchema) {
   @ApiPropertyOptional({ description: 'Valor de desconto' })
   discount?: number;
 
-  @ApiPropertyOptional({ description: 'Tipo de frete' })
-  shipment?: string;
-
-  @ApiPropertyOptional({ description: 'Valor do frete' })
-  shipment_value?: number;
-
   @ApiPropertyOptional({ description: 'Informações adicionais da loja' })
   store_note?: string;
 
@@ -64,11 +50,8 @@ export class PostOrderDto extends ZodDto(PostOrderSchema) {
   @ApiPropertyOptional({ description: 'Quantidade de parcelas' })
   installment?: number;
 
-  @ApiPropertyOptional({ description: 'Tempo de entrega' })
-  delivery_time?: string;
-
-  @ApiProperty({ description: 'Meio de pagamento', nullable: true })
-  payment_method: string | null;
+  @ApiProperty({ description: 'Meio de pagamento' })
+  payment_method: string;
 
   @ApiProperty({ description: 'Valor total do pedido' })
   total: number;
@@ -79,9 +62,6 @@ export class PostOrderDto extends ZodDto(PostOrderSchema) {
   @ApiPropertyOptional({ description: 'Juros do pedido' })
   interest?: number;
 
-  @ApiPropertyOptional({ description: 'Data estimada de entrega' })
-  estimated_delivery_date?: string;
-
   @ApiProperty({ description: 'Indica se existe pagamento confirmado' })
   has_payment: boolean;
 
@@ -90,7 +70,7 @@ export class PostOrderDto extends ZodDto(PostOrderSchema) {
 
   @ApiPropertyOptional({
     description: 'Lista de produtos vendidos',
-    type: [Object],
+    type: [SoldProductDto],
   })
-  products_sold?: any[];
+  products_sold?: SoldProductDto[];
 }

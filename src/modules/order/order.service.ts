@@ -244,25 +244,9 @@ export class OrderService {
     totalCalculated: number,
   ) {
     try {
-      let FP1_CODIGO;
-      let PP1_CODIGO;
+      const FP1_CODIGO = orderData.payment_method;
+      const PP1_CODIGO = orderData.installment || 1;
       const data = dayjs(orderData.date).format('YYYY-MM-DD');
-
-      if (orderData.payment_method) {
-        if (orderData.payment_method.toLowerCase().includes('boleto')) {
-          FP1_CODIGO = 9997;
-          PP1_CODIGO = orderData.installment || 1;
-        } else if (orderData.payment_method.toLowerCase().includes('pix')) {
-          FP1_CODIGO = 9998;
-          PP1_CODIGO = 99;
-        } else if (orderData.payment_method.toLowerCase().includes('cartao')) {
-          FP1_CODIGO = 9999;
-          PP1_CODIGO = orderData.installment || 1;
-        }
-      } else {
-        FP1_CODIGO = null;
-        PP1_CODIGO = null;
-      }
 
       // else {
       //     throw new Error('A forma de pagamento do pedido é inexistente ou inválida')
@@ -278,7 +262,7 @@ export class OrderService {
         VEN_TOTALBRUTO: totalBruto,
         VEN_TOTALDESC: 0,
         VEN_TOTALACRESC: orderData.taxes || 0.0,
-        VEN_VALORENT: orderData.shipment_value || 0.0,
+        VEN_VALORENT: 0.0,
         // VEN_TAXAPAG: orderData.payment_method_rate || 0.00,
         VEN_TOTALLIQUIDO: totalBruto + (orderData.taxes || 0) - 0,
         VEN_DATABASE1: data,

@@ -5,7 +5,6 @@ import z from 'zod';
 export const SoldProductSchema = z.object({
   product_id: z.number(),
   quantity: z.number(),
-  price: z.number(),
   original_price: z.number(),
   variant_id: z.number().optional(),
 });
@@ -16,9 +15,6 @@ export class SoldProductDto extends ZodDto(SoldProductSchema) {
 
   @ApiProperty({ description: 'Quantidade vendida' })
   quantity: number;
-
-  @ApiProperty({ description: 'Preço de venda' })
-  price: number;
 
   @ApiProperty({ description: 'Preço original' })
   original_price: number;
