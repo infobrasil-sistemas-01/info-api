@@ -38,8 +38,6 @@ export class OrderService {
       date,
     })) as { VEN_NUMERO: number };
 
-    console.log('Order inserted with ID:', orderId);
-
     let totalCalculated = 0;
     for (const product of products_sold || []) {
       const ourProduct = (await this.productService.getById(
@@ -54,10 +52,6 @@ export class OrderService {
         product,
         ourProduct,
         orderId.VEN_NUMERO,
-      );
-
-      console.log(
-        `Inserted sold product with ID: ${product.product_id} for order ID: ${orderId.VEN_NUMERO}`,
       );
     }
 
@@ -149,8 +143,6 @@ export class OrderService {
     ourProduct: any,
     ven_numero: number,
   ) {
-    console.log('Inserting sold product:', ourProduct);
-
     try {
       const produtoVendidoInsert = {
         VEN_NUMERO: ven_numero,
