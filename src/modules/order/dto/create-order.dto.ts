@@ -10,7 +10,6 @@ export const PostOrderSchema = z.object({
   taxes: z.number().optional(), // Valor de acréscimo/taxa
   discount: z.number().optional(), // Valor de desconto
   store_note: z.string().optional(), // Informações adicionais da loja
-  customer_note: z.string().optional(), // Informações adicionais do cliente
   payment_method_rate: z.number().optional(), // Taxa do meio de pagamento
   installment: z.number().optional(), // Quantidade de parcelas
   payment_method: z.string(), // Meio de pagamento
@@ -40,9 +39,6 @@ export class PostOrderDto extends ZodDto(PostOrderSchema) {
 
   @ApiPropertyOptional({ description: 'Informações adicionais da loja' })
   store_note?: string;
-
-  @ApiPropertyOptional({ description: 'Informações adicionais do cliente' })
-  customer_note?: string;
 
   @ApiPropertyOptional({ description: 'Taxa do meio de pagamento' })
   payment_method_rate?: number;
