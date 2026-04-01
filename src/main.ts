@@ -14,6 +14,7 @@ async function bootstrap() {
     .setDescription(
       'API de integração do sistema Retaguarda (by InfoBrasil) com outros sistemas, como ERPs, e-commerce, etc.',
     )
+    .addServer('http://localhost:3000', 'Servidor local para desenvolvimento')
     .setVersion('1.0')
     .addBasicAuth() // 👈 Basic Auth for login
     .addBearerAuth() // 👈 JWT
