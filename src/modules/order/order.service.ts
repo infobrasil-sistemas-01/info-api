@@ -95,17 +95,13 @@ export class OrderService {
                 V.VEN_NUMSITE,
                 V.LOJ_CODIGO,
                 V.VEN_TIPO,
-                V.VEN_PRECO,
                 V.VEN_DATA,
                 V.VEN_HORA,
                 V.FP1_CODIGO,
                 FPG.fpg_descricao,
                 V.pp1_codigo,
                 PLP.plp_descricao,
-                V.VEN_TOTALBRUTO,
-                V.ven_totaldesc,
-                V.ven_totalliquido,
-                V.ven_quant
+                V.ven_totalliquido
              FROM VENDAS V
              LEFT JOIN formaspag FPG ON FPG.fpg_codigo = V.fp1_codigo
              LEFT JOIN planospag PLP ON PLP.plp_codigo = V.pp1_codigo
@@ -120,6 +116,48 @@ export class OrderService {
         resolve(res);
       });
     });
+
+    return result;
+  }
+
+  async getById(
+    credentialsId: string,
+    storeId: number,
+    id: number,
+  ): Promise<object> {
+    const connection =
+      await this.tenantConnectionService.getConnection(credentialsId);
+
+    const query = `SELECT
+                VEN_NUMERO,
+                V.VEN_NUMSITE,
+                V.LOJ_CODIGO,
+                V.VEN_TIPO,
+                V.VEN_PRECO,
+                V.VEN_DATA,
+                V.VEN_HORA,
+                V.FP1_CODIGO,
+                FPG.fpg_descricao,
+                V.pp1_codigo,
+                PLP.plp_descricao,
+                V.VEN_TOTALBRUTO,
+                V.ven_totaldesc,
+                V.ven_totalliquido,
+                V.ven_quant
+             FROM VENDAS V
+             LEFT JOIN formaspag FPG ON FPG.fpg_codigo = V.fp1_codigo
+             LEFT JOIN planospag PLP ON PLP.plp_codigo = V.pp1_codigo
+             WHERE V.VEN_NUMERO = ? AND V.LOJ_CODIGO = ? AND V.VEN_TIPO = 'E'
+             ORDER BY V.VEN_NUMERO DESC`;
+
+    const params = [id, storeId];
+
+    const result = (await new Promise((resolve, reject) => {
+      connection.query(query, params, (err: any, res: any) => {
+        if (err) return reject(err);
+        resolve(res[0]);
+      });
+    })) as object;
 
     return result;
   }
