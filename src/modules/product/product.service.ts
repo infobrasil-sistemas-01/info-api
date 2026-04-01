@@ -15,11 +15,16 @@ export class ProductService {
     group?: number,
     brand?: number,
     minStock?: number,
+    search?: string,
   ) {
     const connection =
       await this.tenantConnectionService.getConnection(credentialsId);
 
-    let params = [pageSize, (page - 1) * pageSize, storeId];
+    let params: (number | string)[] = [
+      pageSize,
+      (page - 1) * pageSize,
+      storeId,
+    ];
     let query = `SELECT FIRST ? SKIP ? 
                     P.PRO_CODIGO, P.PRO_EAN, P.PRO_DESCRICAO, M.MAR_CODIGO, M.MAR_DESCRICAO, G.GRU_CODIGO, G.GRU_DESCRICAO, E.EST_APOIO ESTOQUE, E.PRO_PRECO1 PRECO
                     FROM produtos P 
@@ -42,6 +47,12 @@ export class ProductService {
       query += group || brand ? ` AND` : ` WHERE`;
       query += ` E.EST_APOIO >= ?`;
       params.push(minStock);
+    }
+
+    if (search) {
+      query += group || brand || minStock ? ` AND` : ` WHERE`;
+      query += ` P.PRO_DESCRICAO LIKE ?`;
+      params.push(`%${search}%`);
     }
 
     query += ` ORDER BY P.PRO_DESCRICAO`;

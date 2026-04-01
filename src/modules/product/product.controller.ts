@@ -74,6 +74,12 @@ export class ProductController {
     type: Number,
     description: 'Quantidade mínima em estoque para filtrar produtos',
   })
+  @ApiQuery({
+    name: 'search',
+    required: false,
+    type: String,
+    description: 'Termo de busca para filtrar produtos por descrição',
+  })
   getProducts(
     @Req() req: ReqWithAuthContext,
     @Query('page') page?: number,
@@ -81,6 +87,7 @@ export class ProductController {
     @Query('group') group?: number,
     @Query('brand') brand?: number,
     @Query('minStock') minStock?: number,
+    @Query('search') search?: string,
   ) {
     const credentialsId = req.authContext?.credentialsId;
     const storeId = req.authContext?.storeId;
@@ -101,6 +108,7 @@ export class ProductController {
       group,
       brand,
       minStock,
+      search,
     );
   }
 
