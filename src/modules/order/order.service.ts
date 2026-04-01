@@ -261,11 +261,12 @@ export class OrderService {
         VEN_TOTALPP1: totalCalculated || 0.0,
         VEN_TOTALPPA1: totalCalculated || 0.0,
         VEN_TOTALBRUTO: totalBruto,
-        VEN_TOTALDESC: 0,
+        VEN_TOTALDESC: orderData.discount || 0.0,
         VEN_TOTALACRESC: orderData.taxes || 0.0,
         VEN_VALORENT: 0.0,
         // VEN_TAXAPAG: orderData.payment_method_rate || 0.00,
-        VEN_TOTALLIQUIDO: totalBruto + (orderData.taxes || 0) - 0,
+        VEN_TOTALLIQUIDO:
+          totalBruto + (orderData.taxes || 0) - (orderData.discount || 0),
         VEN_DATABASE1: data,
       };
 
