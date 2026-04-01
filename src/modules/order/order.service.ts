@@ -81,6 +81,49 @@ export class OrderService {
     });
   }
 
+  async get(
+    credentialsId: string,
+    storeId: number,
+    page: number = 1,
+    pageSize: number = 10,
+  ) {
+    const connection =
+      await this.tenantConnectionService.getConnection(credentialsId);
+
+    const query = `SELECT FIRST ? SKIP ?
+                VEN_NUMERO,
+                V.VEN_NUMSITE,
+                V.LOJ_CODIGO,
+                V.VEN_TIPO,
+                V.VEN_PRECO,
+                V.VEN_DATA,
+                V.VEN_HORA,
+                V.FP1_CODIGO,
+                FPG.fpg_descricao,
+                V.pp1_codigo,
+                PLP.plp_descricao,
+                V.VEN_TOTALBRUTO,
+                V.ven_totaldesc,
+                V.ven_totalliquido,
+                V.ven_quant
+             FROM VENDAS V
+             LEFT JOIN formaspag FPG ON FPG.fpg_codigo = V.fp1_codigo
+             LEFT JOIN planospag PLP ON PLP.plp_codigo = V.pp1_codigo
+             WHERE V.LOJ_CODIGO = ? AND V.VEN_TIPO = 'E'
+             ORDER BY V.VEN_NUMERO DESC`;
+
+    const params = [pageSize, (page - 1) * pageSize, storeId];
+
+    const result = await new Promise((resolve, reject) => {
+      connection.query(query, params, (err: any, res: any) => {
+        if (err) return reject(err);
+        resolve(res);
+      });
+    });
+
+    return result;
+  }
+
   private async insertOrderOnDb(
     transaction: any,
     orderData: any,
@@ -246,7 +289,7 @@ export class OrderService {
   ) {
     try {
       const FP1_CODIGO = orderData.payment_method;
-      const PP1_CODIGO = orderData.installment || 1;
+      const PP1_CODIGO = orderData.installment || 99;
       const data = dayjs(orderData.date).format('YYYY-MM-DD');
 
       // else {
