@@ -83,6 +83,7 @@ export class ProductController {
     @Query('minStock') minStock?: number,
   ) {
     const credentialsId = req.authContext?.credentialsId;
+    const storeId = req.authContext?.storeId;
 
     if (!credentialsId) {
       throw new Error('Credentials ID not found in token');
@@ -94,6 +95,7 @@ export class ProductController {
 
     return this.productService.get(
       credentialsId,
+      storeId,
       page,
       pageSize,
       group,

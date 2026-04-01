@@ -46,6 +46,7 @@ export class OrderService {
     for (const product of products_sold || []) {
       const ourProduct = (await this.productService.getById(
         credentialsId,
+        storeId,
         product.product_id,
       )) as any;
 
