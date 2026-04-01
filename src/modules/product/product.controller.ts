@@ -5,12 +5,15 @@ import {
   Req,
   Query,
   BadRequestException,
+  NotFoundException,
+  Param,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiQuery,
   ApiOperation,
   ApiResponse,
+  ApiParam,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import type { ReqWithAuthContext } from '../auth/guards/jwt-auth.guard';
@@ -97,5 +100,105 @@ export class ProductController {
       brand,
       minStock,
     );
+  }
+
+  @Get(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Obter detalhes de um produto pelo ID',
+    description:
+      'Retorna os detalhes de um produto específico com base no ID fornecido.',
+  })
+  @ApiParam({
+    name: 'id',
+    type: Number,
+    description: 'ID do produto a ser retornado',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Detalhes do produto retornados com sucesso.',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Erro de requisição, como ID inválido.',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Token de autenticação inválido ou ausente.',
+  })
+  async getProductById(
+    @Req() req: ReqWithAuthContext,
+    @Param('id') id: number,
+  ) {
+    const credentialsId = req.authContext?.credentialsId;
+    const storeId = req.authContext?.storeId;
+
+    if (!credentialsId) {
+      throw new Error('Credentials ID not found in token');
+    }
+
+    const product = await this.productService.getUnique(
+      credentialsId,
+      storeId,
+      id,
+      undefined,
+    );
+
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+
+    return product;
+  }
+
+  @Get('/ean/:ean')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Obter detalhes de um produto pelo EAN',
+    description:
+      'Retorna os detalhes de um produto específico com base no EAN fornecido.',
+  })
+  @ApiParam({
+    name: 'ean',
+    type: Number,
+    description: 'EAN do produto a ser retornado',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Detalhes do produto retornados com sucesso.',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Erro de requisição, como EAN inválido.',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Token de autenticação inválido ou ausente.',
+  })
+  async getProductByEan(
+    @Req() req: ReqWithAuthContext,
+    @Param('ean') ean: number,
+  ) {
+    const credentialsId = req.authContext?.credentialsId;
+    const storeId = req.authContext?.storeId;
+
+    if (!credentialsId) {
+      throw new Error('Credentials ID not found in token');
+    }
+
+    const product = await this.productService.getUnique(
+      credentialsId,
+      storeId,
+      undefined,
+      ean,
+    );
+
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+
+    return product;
   }
 }

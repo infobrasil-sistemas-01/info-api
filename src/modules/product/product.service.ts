@@ -20,7 +20,7 @@ export class ProductService {
 
     let params = [pageSize, (page - 1) * pageSize];
     let query = `SELECT FIRST ? SKIP ? 
-                    P.PRO_CODIGO, P.PRO_DESCRICAO, M.MAR_CODIGO, M.MAR_DESCRICAO, G.GRU_CODIGO, G.GRU_DESCRICAO, E.EST_APOIO ESTOQUE, E.PRO_PRECO1 PRECO
+                    P.PRO_CODIGO, P.PRO_EAN, P.PRO_DESCRICAO, M.MAR_CODIGO, M.MAR_DESCRICAO, G.GRU_CODIGO, G.GRU_DESCRICAO, E.EST_APOIO ESTOQUE, E.PRO_PRECO1 PRECO
                     FROM produtos P 
                     LEFT JOIN marcas M ON P.MAR_CODIGO = M.MAR_CODIGO 
                     LEFT JOIN grupospro G ON P.GRU_CODIGO = G.GRU_CODIGO
@@ -65,6 +65,44 @@ export class ProductService {
                     LEFT JOIN estoque E ON P.PRO_CODIGO = E.PRO_CODIGO AND LOJ_CODIGO = 1
                     WHERE P.PRO_CODIGO = ?`;
     const params = [id];
+
+    const result = await new Promise((resolve, reject) => {
+      connection.query(query, params, (err: any, res: any) => {
+        if (err) return reject(err);
+        resolve(res[0]);
+      });
+    });
+
+    return result;
+  }
+
+  async getUnique(
+    credentialsId: string,
+    store_id: number = 1,
+    id?: number,
+    ean?: number,
+  ) {
+    const connection =
+      await this.tenantConnectionService.getConnection(credentialsId);
+
+    let query = `SELECT
+                    P.PRO_CODIGO, P.PRO_EAN, P.PRO_DESCRICAO, M.MAR_CODIGO, M.MAR_DESCRICAO, G.GRU_CODIGO, G.GRU_DESCRICAO, E.EST_APOIO ESTOQUE, E.PRO_PRECO1 PRECO
+                    FROM produtos P 
+                    LEFT JOIN marcas M ON P.MAR_CODIGO = M.MAR_CODIGO 
+                    LEFT JOIN grupospro G ON P.GRU_CODIGO = G.GRU_CODIGO
+                    LEFT JOIN estoque E ON P.PRO_CODIGO = E.PRO_CODIGO AND LOJ_CODIGO = ?`;
+    let params = [store_id];
+
+    if (id) {
+      query += ` WHERE P.PRO_CODIGO = ?`;
+      params.push(id);
+    }
+
+    if (ean) {
+      query += id ? ` AND` : ` WHERE`;
+      query += ` P.PRO_EAN = ?`;
+      params.push(ean);
+    }
 
     const result = await new Promise((resolve, reject) => {
       connection.query(query, params, (err: any, res: any) => {
