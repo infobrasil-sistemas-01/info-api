@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import path from 'path';
 import fs from 'fs';
+import { apiReference } from '@scalar/nestjs-api-reference';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -12,7 +13,12 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('InfoBrasil API')
     .setDescription(
-      'API de integração do sistema Retaguarda (by InfoBrasil) com outros sistemas, como ERPs, e-commerce, etc.',
+      `API de integração do sistema Retaguarda (by InfoBrasil) com outros sistemas, como ERPs, e-commerce, etc. <br><br>
+      O sistema conta com duas formas de autenticação:<br> 
+      - Basic Auth para login e obtenção de token JWT<br>
+      - JWT para acesso aos endpoints protegidos.
+      <br><br>
+      A API é organizada em módulos, cada um responsável por uma área específica do sistema, como produtos, clientes, vendas, etc.`,
     )
     .addServer('http://localhost:3000', 'Servidor local para desenvolvimento')
     .setVersion('1.0')
@@ -28,6 +34,16 @@ async function bootstrap() {
   }
 
   SwaggerModule.setup('docs', app, document);
+
+  app.use(
+    '/scalar',
+    apiReference({
+      theme: 'purple',
+      content: document,
+      showDeveloperTools: 'localhost',
+      pageTitle: 'InfoBrasil API Docs',
+    }),
+  );
 
   await app.listen(process.env.PORT ?? 3000);
 }

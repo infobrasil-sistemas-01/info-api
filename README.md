@@ -90,11 +90,10 @@ A aplicação estará disponível em `http://localhost:3000` (ou a porta configu
 
 ## 📚 Documentação da API
 
-A documentação completa da API está disponível via Swagger em:
+A documentação completa da API está disponível em duas opções de visualização:
 
-```
-http://localhost:3000/docs
-```
+- Via Swagger em: `http://localhost:3000/docs`
+- Via Scalar (parecido com Postman) em : `http://localhost:3000/scalar`
 
 ### Endpoints Principais
 

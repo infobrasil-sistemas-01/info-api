@@ -112,7 +112,7 @@ export class ProductController {
     );
   }
 
-  @Get(':id')
+  @Get('/id/:id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({
