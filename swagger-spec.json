@@ -1,0 +1,550 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/v1/auth/login": {
+      "post": {
+        "description": "Autentica o usuário usando credenciais básicas e retorna um token de acesso JWT.",
+        "operationId": "AuthController_login",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Login realizado com sucesso, retorna usuário e token de acesso."
+          },
+          "401": {
+            "description": "Credenciais inválidas ou header de autorização ausente."
+          }
+        },
+        "security": [
+          {
+            "basic": []
+          }
+        ],
+        "summary": "Login do usuário",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/products": {
+      "get": {
+        "description": "Retorna uma lista paginada de produtos associados às credenciais do usuário autenticado.",
+        "operationId": "ProductController_getProducts",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Número de página para paginação",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "description": "Número de itens por página",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "group",
+            "required": false,
+            "in": "query",
+            "description": "Código do grupo para filtrar produtos",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "brand",
+            "required": false,
+            "in": "query",
+            "description": "Código da marca para filtrar produtos",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "minStock",
+            "required": false,
+            "in": "query",
+            "description": "Quantidade mínima em estoque para filtrar produtos",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Termo de busca para filtrar produtos por descrição",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de produtos retornada com sucesso."
+          },
+          "400": {
+            "description": "Erro de requisição, como pageSize excedendo o limite."
+          },
+          "401": {
+            "description": "Token de autenticação inválido ou ausente."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Listar produtos",
+        "tags": [
+          "Product"
+        ]
+      }
+    },
+    "/api/v1/products/{id}": {
+      "get": {
+        "description": "Retorna os detalhes de um produto específico com base no ID fornecido.",
+        "operationId": "ProductController_getProductById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID do produto a ser retornado",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do produto retornados com sucesso."
+          },
+          "400": {
+            "description": "Erro de requisição, como ID inválido."
+          },
+          "401": {
+            "description": "Token de autenticação inválido ou ausente."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Obter detalhes de um produto pelo ID",
+        "tags": [
+          "Product"
+        ]
+      }
+    },
+    "/api/v1/products/ean/{ean}": {
+      "get": {
+        "description": "Retorna os detalhes de um produto específico com base no EAN fornecido.",
+        "operationId": "ProductController_getProductByEan",
+        "parameters": [
+          {
+            "name": "ean",
+            "required": true,
+            "in": "path",
+            "description": "EAN do produto a ser retornado",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do produto retornados com sucesso."
+          },
+          "400": {
+            "description": "Erro de requisição, como EAN inválido."
+          },
+          "401": {
+            "description": "Token de autenticação inválido ou ausente."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Obter detalhes de um produto pelo EAN",
+        "tags": [
+          "Product"
+        ]
+      }
+    },
+    "/api/v1/products/brands": {
+      "get": {
+        "description": "Retorna uma lista paginada de marcas de produtos associadas às credenciais do usuário autenticado.",
+        "operationId": "ProductBrandController_getBrands",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Número de página para paginação",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "description": "Número de itens por página",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de marcas de produtos retornada com sucesso."
+          },
+          "400": {
+            "description": "Erro de requisição, como pageSize excedendo o limite."
+          },
+          "401": {
+            "description": "Token de autenticação inválido ou ausente."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Listar marcas de produtos",
+        "tags": [
+          "Product / Brand"
+        ]
+      }
+    },
+    "/api/v1/products/groups": {
+      "get": {
+        "description": "Retorna uma lista paginada de grupos de produtos associadas às credenciais do usuário autenticado.",
+        "operationId": "ProductGroupController_getBrands",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Número de página para paginação",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "description": "Número de itens por página",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de grupos de produtos retornada com sucesso."
+          },
+          "400": {
+            "description": "Erro de requisição, como pageSize excedendo o limite."
+          },
+          "401": {
+            "description": "Token de autenticação inválido ou ausente."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Listar grupos de produtos",
+        "tags": [
+          "Product / Group"
+        ]
+      }
+    },
+    "/api/v1/orders": {
+      "post": {
+        "description": "Cria um novo pedido com os pedidos vendidos e informações de pagamento.",
+        "operationId": "OrderController_postOrder",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostOrderDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Pedido criado com sucesso."
+          },
+          "400": {
+            "description": "Dados inválidos fornecidos."
+          },
+          "401": {
+            "description": "Token de autenticação inválido ou ausente."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Criar um novo pedido",
+        "tags": [
+          "Order"
+        ]
+      },
+      "get": {
+        "description": "Retorna uma lista de pedidos da loja.",
+        "operationId": "OrderController_getOrders",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de pedidos retornada com sucesso."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Obter pedidos",
+        "tags": [
+          "Order"
+        ]
+      }
+    },
+    "/api/v1/orders/{id}": {
+      "get": {
+        "description": "Retorna os detalhes de um pedido específico com base no ID fornecido.",
+        "operationId": "OrderController_getOrderById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID do pedido a ser retornado",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do pedido retornados com sucesso."
+          },
+          "400": {
+            "description": "Erro de requisição, como ID inválido."
+          },
+          "401": {
+            "description": "Token de autenticação inválido ou ausente."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Obter detalhes de um pedido pelo ID",
+        "tags": [
+          "Order"
+        ]
+      }
+    },
+    "/api/v1/payment-methods": {
+      "get": {
+        "description": "Retorna uma lista paginada de formas de pagamento associados às credenciais do usuário autenticado.",
+        "operationId": "PaymentMethodController_getPaymentMethods",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Número de página para paginação",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "description": "Número de itens por página",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de formas de pagamento retornada com sucesso."
+          },
+          "400": {
+            "description": "Erro de requisição, como pageSize excedendo o limite."
+          },
+          "401": {
+            "description": "Token de autenticação inválido ou ausente."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Listar formas de pagamento",
+        "tags": [
+          "PaymentMethod"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "InfoBrasil API",
+    "description": "API de integração do sistema Retaguarda (by InfoBrasil) com outros sistemas, como ERPs, e-commerce, etc.",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "basic": {
+        "type": "http",
+        "scheme": "basic"
+      },
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "SoldProductDto": {
+        "type": "object",
+        "properties": {
+          "product_id": {
+            "type": "number",
+            "description": "ID do produto"
+          },
+          "quantity": {
+            "type": "number",
+            "description": "Quantidade vendida"
+          },
+          "variant_id": {
+            "type": "number",
+            "description": "ID da variante do produto"
+          }
+        },
+        "required": [
+          "product_id",
+          "quantity"
+        ]
+      },
+      "PostOrderDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "ID do pedido"
+          },
+          "date": {
+            "type": "string",
+            "description": "Data do pedido"
+          },
+          "hour": {
+            "type": "string",
+            "description": "Hora do pedido"
+          },
+          "taxes": {
+            "type": "number",
+            "description": "Valor de acréscimo/taxa"
+          },
+          "discount": {
+            "type": "number",
+            "description": "Valor de desconto"
+          },
+          "store_note": {
+            "type": "string",
+            "description": "Informações adicionais da loja"
+          },
+          "payment_method_rate": {
+            "type": "number",
+            "description": "Taxa do meio de pagamento"
+          },
+          "installment": {
+            "type": "number",
+            "description": "Quantidade de parcelas"
+          },
+          "payment_method": {
+            "type": "string",
+            "description": "Meio de pagamento"
+          },
+          "payment_date": {
+            "type": "string",
+            "description": "Data de pagamento"
+          },
+          "interest": {
+            "type": "number",
+            "description": "Juros do pedido"
+          },
+          "has_payment": {
+            "type": "boolean",
+            "description": "Indica se existe pagamento confirmado"
+          },
+          "has_invoice": {
+            "type": "boolean",
+            "description": "Indica se existe nota fiscal"
+          },
+          "products_sold": {
+            "description": "Lista de produtos vendidos",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SoldProductDto"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "date",
+          "hour",
+          "payment_method",
+          "payment_date",
+          "has_payment",
+          "has_invoice"
+        ]
+      }
+    }
+  }
+}
