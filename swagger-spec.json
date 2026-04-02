@@ -436,7 +436,32 @@
     "version": "1.0",
     "contact": {}
   },
-  "tags": [],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Endpoints relacionados à autenticação e obtenção de token JWT"
+    },
+    {
+      "name": "Product",
+      "description": "Endpoints relacionados à gestão de produtos"
+    },
+    {
+      "name": "Product / Brand",
+      "description": "Endpoints relacionados à gestão de marcas e produtos vinculados a marcas"
+    },
+    {
+      "name": "Product / Group",
+      "description": "Endpoints relacionados à gestão de grupos e produtos vinculados a grupos"
+    },
+    {
+      "name": "PaymentMethod",
+      "description": "Endpoints relacionados à gestão de meios de pagamento"
+    },
+    {
+      "name": "Order",
+      "description": "Endpoints relacionados à gestão de pedidos"
+    }
+  ],
   "servers": [
     {
       "url": "http://localhost:3000",
@@ -510,7 +535,7 @@
           },
           "installment": {
             "type": "number",
-            "description": "Quantidade de parcelas"
+            "description": "Quantidade de parcelas (apenas para meios de pagamento com parcelamento)"
           },
           "payment_method": {
             "type": "string",

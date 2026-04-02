@@ -42,7 +42,10 @@ export class PostOrderDto extends ZodDto(PostOrderSchema) {
   @ApiPropertyOptional({ description: 'Taxa do meio de pagamento' })
   payment_method_rate?: number;
 
-  @ApiPropertyOptional({ description: 'Quantidade de parcelas' })
+  @ApiPropertyOptional({
+    description:
+      'Quantidade de parcelas (apenas para meios de pagamento com parcelamento)',
+  })
   installment?: number;
 
   @ApiProperty({ description: 'Meio de pagamento' })

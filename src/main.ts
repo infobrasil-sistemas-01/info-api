@@ -24,6 +24,24 @@ async function bootstrap() {
     .setVersion('1.0')
     .addBasicAuth() // 👈 Basic Auth for login
     .addBearerAuth() // 👈 JWT
+    .addTag(
+      'Auth',
+      'Endpoints relacionados à autenticação e obtenção de token JWT',
+    )
+    .addTag('Product', 'Endpoints relacionados à gestão de produtos')
+    .addTag(
+      'Product / Brand',
+      'Endpoints relacionados à gestão de marcas e produtos vinculados a marcas',
+    )
+    .addTag(
+      'Product / Group',
+      'Endpoints relacionados à gestão de grupos e produtos vinculados a grupos',
+    )
+    .addTag(
+      'PaymentMethod',
+      'Endpoints relacionados à gestão de meios de pagamento',
+    )
+    .addTag('Order', 'Endpoints relacionados à gestão de pedidos')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
