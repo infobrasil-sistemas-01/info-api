@@ -16,7 +16,7 @@ A Info Vendas API é uma aplicação backend desenvolvida com NestJS que facilit
 
 - **Autenticação**: Login via Basic Auth para obter tokens JWT
 - **Produtos**: Listagem paginada de produtos por credenciais
-- **Pedidos**: Criação e gerenciamento de pedidos com produtos vendidos
+- **Vendas**: Criação e gerenciamento de Vendas com produtos vendidos
 - **Documentação**: Documentação interativa da API via Swagger
 - **Validação**: Validação robusta de dados usando Zod
 - **Banco de Dados**: Suporte a múltiplos bancos via Prisma e Firebird
@@ -30,6 +30,10 @@ A Info Vendas API é uma aplicação backend desenvolvida com NestJS que facilit
 - **Validação**: Zod
 - **Documentação**: Swagger/OpenAPI
 - **Testes**: Jest
+
+## Instruções importantes (à Equipe Técnica InfoBrasil)
+
+- Para a geração de **financeiro fiscal** é necessário que, na tabela `CONFIG_PERFIL_LOJAS`, o perfil de `PFL_CODIGO = 104` tenha sua coluna `CPL_PERFIL = S` (no Banco de Dados do Cliente).
 
 ## 📦 Instalação
 
