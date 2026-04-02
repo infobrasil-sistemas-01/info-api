@@ -458,6 +458,10 @@
       "description": "Endpoints relacionados à gestão de meios de pagamento"
     },
     {
+      "name": "Receipt",
+      "description": "Endpoints relacionados à geração de cupons fiscais"
+    },
+    {
       "name": "Order",
       "description": "Endpoints relacionados à gestão de pedidos"
     }

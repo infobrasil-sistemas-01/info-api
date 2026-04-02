@@ -4,6 +4,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ProductModule } from './modules/product/product.module';
 import { OrderModule } from './modules/order/order.module';
 import { PaymentMethodModule } from './modules/payment-method/payment-method.module';
+import { ReceiptModule } from './modules/receipt/receipt.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { PaymentMethodModule } from './modules/payment-method/payment-method.mod
     ProductModule,
     OrderModule,
     PaymentMethodModule,
+    ReceiptModule,
   ],
   controllers: [],
   providers: [],

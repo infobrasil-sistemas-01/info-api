@@ -4,12 +4,14 @@ import { PostOrderDto } from './dto/create-order.dto';
 import dayjs from 'dayjs';
 import { SoldProductDto } from './dto/sold-product.dto';
 import { ProductService } from '../product/product.service';
+import { ReceiptService } from '../receipt/receipt.service';
 
 @Injectable()
 export class OrderService {
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
     private readonly productService: ProductService,
+    private readonly receiptService: ReceiptService,
   ) {}
 
   async post(credentialsId: string, data: PostOrderDto, storeId: number) {
@@ -68,6 +70,8 @@ export class OrderService {
       totalCalculated,
     );
 
+    await this.receiptService.post(transaction, storeId, orderId.VEN_NUMERO);
+
     await new Promise((resolve, reject) => {
       transaction.commit((err: any) => {
         if (err) {
@@ -79,6 +83,8 @@ export class OrderService {
         resolve(true);
       });
     });
+
+    return { orderId: orderId.VEN_NUMERO };
   }
 
   async get(

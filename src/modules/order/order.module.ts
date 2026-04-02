@@ -4,10 +4,11 @@ import { TenantConnectionModule } from 'src/infra/database/tenant-connection.mod
 import { OrderService } from './order.service';
 import { ProductModule } from '../product/product.module';
 import { OrderItemService } from './order-item/order-item.service';
+import { ReceiptModule } from '../receipt/receipt.module';
 
 @Module({
   controllers: [OrderController],
-  imports: [TenantConnectionModule, ProductModule],
+  imports: [TenantConnectionModule, ProductModule, ReceiptModule],
   providers: [OrderService, OrderItemService],
 })
 export class OrderModule {}

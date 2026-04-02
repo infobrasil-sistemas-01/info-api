@@ -31,6 +31,7 @@ export class ProductController {
     summary: 'Listar produtos',
     description:
       'Retorna uma lista paginada de produtos associados às credenciais do usuário autenticado.',
+    tags: ['Product'],
   })
   @ApiResponse({
     status: 200,
@@ -119,6 +120,7 @@ export class ProductController {
     summary: 'Obter detalhes de um produto pelo ID',
     description:
       'Retorna os detalhes de um produto específico com base no ID fornecido.',
+    tags: ['Product'],
   })
   @ApiParam({
     name: 'id',
