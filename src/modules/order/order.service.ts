@@ -5,11 +5,13 @@ import dayjs from 'dayjs';
 import { SoldProductDto } from './dto/sold-product.dto';
 import { ProductService } from '../product/product.service';
 import { ReceiptService } from '../receipt/receipt.service';
+import { OrderItemService } from './order-item/order-item.service';
 
 @Injectable()
 export class OrderService {
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
+    private readonly orderItemService: OrderItemService,
     private readonly productService: ProductService,
     private readonly receiptService: ReceiptService,
   ) {}
@@ -35,7 +37,7 @@ export class OrderService {
       });
     });
 
-    const orderId = (await this.insertOrderOnDb(
+    const order = (await this.insertOrderOnDb(
       transaction,
       {
         ...orderData,
@@ -54,23 +56,23 @@ export class OrderService {
 
       totalCalculated += ourProduct.PRO_PRECO1 * product.quantity;
 
-      await this.insertSoldProductOnDb(
+      await this.orderItemService.insertSoldProductOnDb(
         transaction,
         product,
         ourProduct,
-        orderId.VEN_NUMERO,
+        order.VEN_NUMERO,
         storeId,
       );
     }
 
     await this.updateFinancial(
       transaction,
-      orderId.VEN_NUMERO,
+      order.VEN_NUMERO,
       orderData,
       totalCalculated,
     );
 
-    await this.receiptService.post(transaction, storeId, orderId.VEN_NUMERO);
+    await this.receiptService.post(transaction, storeId, order.VEN_NUMERO);
 
     await new Promise((resolve, reject) => {
       transaction.commit((err: any) => {
@@ -84,7 +86,7 @@ export class OrderService {
       });
     });
 
-    return { orderId: orderId.VEN_NUMERO };
+    return { orderId: order.VEN_NUMERO };
   }
 
   async get(
@@ -232,97 +234,6 @@ export class OrderService {
         }
       });
     });
-  }
-
-  private async insertSoldProductOnDb(
-    transaction: any,
-    product: SoldProductDto,
-    ourProduct: any,
-    ven_numero: number,
-    storeId: number,
-  ) {
-    try {
-      const produtoVendidoInsert = {
-        VEN_NUMERO: ven_numero,
-        LOJ_CODIGO: storeId,
-        PRO_CODIGO: ourProduct.PRO_CODIGO,
-        PRK_CODIGO: product.variant_id ? ourProduct.PRO_CODIGO : null,
-        TAM_CODIGO: product.variant_id ? ourProduct.TAM_CODIGO : null,
-        COR_CODIGO: product.variant_id ? ourProduct.COR_CODIGO : null,
-        PRG_CODIGO: ourProduct.PRG_CODIGO || null,
-        IVD_QTDE: product.quantity,
-        IVD_PRECO: ourProduct.PRO_PRECO1,
-        IVD_TOTAL: ourProduct.PRO_PRECO1 * product.quantity,
-        IVD_DESCONTO: 0,
-        IVD_LIQUIDO: ourProduct.PRO_PRECO1 * product.quantity - 0,
-        IVD_PRCCOMPRA: ourProduct.PRO_PRCCOMPRA || null,
-        IVD_PRCCUSTO: ourProduct.PRO_PRCCUSTO || null,
-        IVD_PRCFISCAL: ourProduct.PRO_PRCCOMPRAFISCAL || null,
-        IVD_PRCCUSTOFISCAL: ourProduct.PRO_CUSTOFISCAL || null,
-        IVD_ENTREGUE: 'N',
-        IVD_PRCAVISTA: ourProduct.PRO_PRECO1,
-      };
-
-      const IVD_NUMERO = 'GEN_ID(GEN_NUMEROIVD, 1)';
-
-      const query = `
-            INSERT INTO ITENSVEN
-            (                
-                IVD_NUMERO,
-                VEN_NUMERO,
-                LOJ_CODIGO,
-                PRO_CODIGO,
-                PRK_CODIGO,
-                TAM_CODIGO,
-                COR_CODIGO,
-                PRG_CODIGO,
-                IVD_QTDE,
-                IVD_PRECO,
-                IVD_DESCONTO,
-                IVD_TOTAL,
-                IVD_LIQUIDO,
-                IVD_PRCCOMPRA,
-                IVD_PRCCUSTO, 
-                IVD_PRCFISCAL,
-                IVD_PRCCUSTOFISCAL,
-                IVD_ENTREGUE,
-                IVD_PRCAVISTA
-            )
-            VALUES (${IVD_NUMERO}, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        `;
-
-      const values = [
-        produtoVendidoInsert.VEN_NUMERO,
-        produtoVendidoInsert.LOJ_CODIGO,
-        produtoVendidoInsert.PRO_CODIGO,
-        produtoVendidoInsert.PRK_CODIGO,
-        produtoVendidoInsert.TAM_CODIGO,
-        produtoVendidoInsert.COR_CODIGO,
-        produtoVendidoInsert.PRG_CODIGO,
-        produtoVendidoInsert.IVD_QTDE,
-        produtoVendidoInsert.IVD_PRECO,
-        produtoVendidoInsert.IVD_DESCONTO,
-        produtoVendidoInsert.IVD_TOTAL,
-        produtoVendidoInsert.IVD_LIQUIDO,
-        produtoVendidoInsert.IVD_PRCCOMPRA,
-        produtoVendidoInsert.IVD_PRCCUSTO,
-        produtoVendidoInsert.IVD_PRCFISCAL,
-        produtoVendidoInsert.IVD_PRCCUSTOFISCAL,
-        produtoVendidoInsert.IVD_ENTREGUE,
-        produtoVendidoInsert.IVD_PRCAVISTA,
-      ];
-
-      return new Promise((resolve, reject) => {
-        transaction.query(query, values, (err: any, result: any) => {
-          if (err) {
-            return reject(err);
-          }
-          resolve(result);
-        });
-      });
-    } catch (error) {
-      console.error('Error inserting sold products:', error);
-    }
   }
 
   private async updateFinancial(
