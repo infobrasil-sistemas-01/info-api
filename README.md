@@ -39,7 +39,7 @@ A Info Vendas API é uma aplicação backend desenvolvida com NestJS que facilit
 
 ```bash
 # Clone o repositório
-git clone https://github.com/seu-usuario/info-vendas-api.git
+git clone https://github.com/infobrasil-sistemas/info-vendas-api
 cd info-vendas-api
 
 # Instale as dependências
