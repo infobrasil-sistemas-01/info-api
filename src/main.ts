@@ -23,7 +23,7 @@ async function bootstrap() {
       A API é organizada em módulos, cada um responsável por uma área específica do sistema, como produtos, clientes, vendas, etc.`,
     )
     .addServer(
-      `http://localhost:${process.env.PORT ?? 3000}`,
+      `http://${process.env.HOST ?? 'localhost'}:${process.env.PORT ?? 3000}`,
       'Servidor local para desenvolvimento',
     )
     .setVersion('1.0')
