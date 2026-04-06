@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { TenantConnectionService } from 'src/infra/database/tenant-connection.service';
 
 @Injectable()
@@ -26,11 +26,11 @@ export class ProductService {
       storeId,
     ];
     let query = `SELECT FIRST ? SKIP ? 
-                    P.PRO_CODIGO, P.PRO_EAN, P.PRO_DESCRICAO, M.MAR_CODIGO, M.MAR_DESCRICAO, G.GRU_CODIGO, G.GRU_DESCRICAO, E.EST_APOIO ESTOQUE, E.PRO_PRECO1 PRECO
+                    P.PRO_CODIGO, P.PRO_CODIGOBAR, P.PRO_DESCRICAO, M.MAR_CODIGO, M.MAR_DESCRICAO, G.GRU_CODIGO, G.GRU_DESCRICAO, E.EST_ATUAL ESTOQUE, E.PRO_PRECO1 PRECO, E.PRO_PRECO2 PRECO2
                     FROM produtos P 
-                    LEFT JOIN marcas M ON P.MAR_CODIGO = M.MAR_CODIGO 
-                    LEFT JOIN grupospro G ON P.GRU_CODIGO = G.GRU_CODIGO
-                    LEFT JOIN estoque E ON P.PRO_CODIGO = E.PRO_CODIGO AND LOJ_CODIGO = ?`;
+                    INNER JOIN marcas M ON P.MAR_CODIGO = M.MAR_CODIGO 
+                    INNER JOIN grupospro G ON P.GRU_CODIGO = G.GRU_CODIGO
+                    INNER JOIN estoque E ON P.PRO_CODIGO = E.PRO_CODIGO AND LOJ_CODIGO = ?`;
 
     if (group) {
       query += ` WHERE P.GRU_CODIGO = ?`;
@@ -45,11 +45,16 @@ export class ProductService {
 
     if (minStock) {
       query += group || brand ? ` AND` : ` WHERE`;
-      query += ` E.EST_APOIO >= ?`;
+      query += ` E.EST_ATUAL >= ?`;
       params.push(minStock);
     }
 
     if (search) {
+      if (search.length < 3) {
+        throw new BadRequestException(
+          'Pesquisa precisa ter pelo menos 3 caracteres.',
+        );
+      }
       query += group || brand || minStock ? ` AND` : ` WHERE`;
       query += ` P.PRO_DESCRICAO LIKE ?`;
       params.push(`%${search}%`);
@@ -71,7 +76,7 @@ export class ProductService {
     const connection =
       await this.tenantConnectionService.getConnection(credentialsId);
     const query = `SELECT
-                    P.PRO_CODIGO, P.PRO_PRCCOMPRA, P.PRO_PRCCUSTO, P.PRO_PRCCOMPRAFISCAL, P.PRO_CUSTOFISCAL,
+                    P.PRO_CODIGO, P.PRO_CODIGOBAR, P.PRO_PRCCOMPRA, P.PRO_PRCCUSTO, P.PRO_PRCCOMPRAFISCAL, P.PRO_CUSTOFISCAL,
                     E.PRO_PRECO1
                     FROM produtos P
                     LEFT JOIN estoque E ON P.PRO_CODIGO = E.PRO_CODIGO AND LOJ_CODIGO = ?
@@ -92,17 +97,17 @@ export class ProductService {
     credentialsId: string,
     store_id: number = 1,
     id?: number,
-    ean?: number,
+    codigoBar?: number,
   ) {
     const connection =
       await this.tenantConnectionService.getConnection(credentialsId);
 
     let query = `SELECT
-                    P.PRO_CODIGO, P.PRO_EAN, P.PRO_DESCRICAO, M.MAR_CODIGO, M.MAR_DESCRICAO, G.GRU_CODIGO, G.GRU_DESCRICAO, E.EST_APOIO ESTOQUE, E.PRO_PRECO1 PRECO
+                    P.PRO_CODIGO, P.PRO_CODIGOBAR, P.PRO_DESCRICAO, M.MAR_CODIGO, M.MAR_DESCRICAO, G.GRU_CODIGO, G.GRU_DESCRICAO, E.EST_ATUAL ESTOQUE, E.PRO_PRECO1 PRECO, E.PRO_PRECO2 PRECO2
                     FROM produtos P 
-                    LEFT JOIN marcas M ON P.MAR_CODIGO = M.MAR_CODIGO 
-                    LEFT JOIN grupospro G ON P.GRU_CODIGO = G.GRU_CODIGO
-                    LEFT JOIN estoque E ON P.PRO_CODIGO = E.PRO_CODIGO AND LOJ_CODIGO = ?`;
+                    INNER JOIN marcas M ON P.MAR_CODIGO = M.MAR_CODIGO 
+                    INNER JOIN grupospro G ON P.GRU_CODIGO = G.GRU_CODIGO
+                    INNER JOIN estoque E ON P.PRO_CODIGO = E.PRO_CODIGO AND LOJ_CODIGO = ?`;
     let params = [store_id];
 
     if (id) {
@@ -110,10 +115,10 @@ export class ProductService {
       params.push(id);
     }
 
-    if (ean) {
+    if (codigoBar) {
       query += id ? ` AND` : ` WHERE`;
-      query += ` P.PRO_EAN = ?`;
-      params.push(ean);
+      query += ` P.PRO_CODIGOBAR = ?`;
+      params.push(codigoBar);
     }
 
     const result = await new Promise((resolve, reject) => {

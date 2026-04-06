@@ -144,16 +144,16 @@
         ]
       }
     },
-    "/api/v1/products/ean/{ean}": {
+    "/api/v1/products/barcode/{barcode}": {
       "get": {
-        "description": "Retorna os detalhes de um produto específico com base no EAN fornecido.",
-        "operationId": "ProductController_getProductByEan",
+        "description": "Retorna os detalhes de um produto específico com base no código de barras fornecido.",
+        "operationId": "ProductController_getProductByBarcode",
         "parameters": [
           {
-            "name": "ean",
+            "name": "barcode",
             "required": true,
             "in": "path",
-            "description": "EAN do produto a ser retornado",
+            "description": "Código de barras do produto a ser retornado",
             "schema": {
               "type": "number"
             }
@@ -164,7 +164,7 @@
             "description": "Detalhes do produto retornados com sucesso."
           },
           "400": {
-            "description": "Erro de requisição, como EAN inválido."
+            "description": "Erro de requisição, como código de barras inválido."
           },
           "401": {
             "description": "Token de autenticação inválido ou ausente."
@@ -175,7 +175,7 @@
             "bearer": []
           }
         ],
-        "summary": "Obter detalhes de um produto pelo EAN",
+        "summary": "Obter detalhes de um produto pelo código de barras",
         "tags": [
           "Product"
         ]

@@ -164,18 +164,18 @@ export class ProductController {
     return product;
   }
 
-  @Get('/ean/:ean')
+  @Get('/barcode/:barcode')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Obter detalhes de um produto pelo EAN',
+    summary: 'Obter detalhes de um produto pelo código de barras',
     description:
-      'Retorna os detalhes de um produto específico com base no EAN fornecido.',
+      'Retorna os detalhes de um produto específico com base no código de barras fornecido.',
   })
   @ApiParam({
-    name: 'ean',
+    name: 'barcode',
     type: Number,
-    description: 'EAN do produto a ser retornado',
+    description: 'Código de barras do produto a ser retornado',
   })
   @ApiResponse({
     status: 200,
@@ -183,15 +183,15 @@ export class ProductController {
   })
   @ApiResponse({
     status: 400,
-    description: 'Erro de requisição, como EAN inválido.',
+    description: 'Erro de requisição, como código de barras inválido.',
   })
   @ApiResponse({
     status: 401,
     description: 'Token de autenticação inválido ou ausente.',
   })
-  async getProductByEan(
+  async getProductByBarcode(
     @Req() req: ReqWithAuthContext,
-    @Param('ean') ean: number,
+    @Param('barcode') barcode: number,
   ) {
     const credentialsId = req.authContext?.credentialsId;
     const storeId = req.authContext?.storeId;
@@ -204,7 +204,7 @@ export class ProductController {
       credentialsId,
       storeId,
       undefined,
-      ean,
+      barcode,
     );
 
     if (!product) {
