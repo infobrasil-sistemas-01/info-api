@@ -8,5 +8,5 @@ export const loginSchema = z.object({
 export class LoginDto {
   static schema = loginSchema;
 
-  basic: string;
+  basic!: string;
 }

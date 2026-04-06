@@ -8,10 +8,8 @@ import { RegistryPrismaService } from 'src/infra/prisma/registry-prisma.service'
 import { JwtService } from '@nestjs/jwt';
 import { EnvService } from 'src/config/env/env.service';
 import * as argon2 from 'argon2';
-import { generateOpaqueToken } from 'src/utils/crypto.util';
 import { AUTH_CONFIG } from 'src/config/auth.config';
 import type { AuthConfig } from 'src/config/auth.config';
-import { addDays } from 'date-fns';
 
 type RequestMeta = { requestId?: string; ip?: string; userAgent?: string };
 
@@ -54,7 +52,7 @@ export class AuthService {
       throw new UnauthorizedException('Credenciais inválidas.');
     }
 
-    const { refreshToken } = await this.issueRefreshToken(meta);
+    const refreshToken = await this.issueRefreshToken(user.id.toString(), meta);
 
     const accessToken = await this.signAccessToken({
       userId: user.id.toString(),
@@ -85,11 +83,19 @@ export class AuthService {
     return argon2.verify(storedHash, password);
   }
 
-  private async issueRefreshToken(meta: RequestMeta) {
-    const refreshToken = generateOpaqueToken(64);
-    const expiresIn = addDays(new Date(), this.authConfig.refreshTokenDays);
-
-    return { refreshToken };
+  private async issueRefreshToken(userId: string, meta: RequestMeta) {
+    return this.jwt.signAsync(
+      {
+        type: 'refresh',
+        userId,
+        requestId: meta.requestId,
+        ip: meta.ip,
+        userAgent: meta.userAgent,
+      },
+      {
+        expiresIn: `${this.authConfig.refreshTokenDays}d`,
+      },
+    );
   }
 
   private async signAccessToken(params: {
@@ -105,5 +111,30 @@ export class AuthService {
       },
       { expiresIn: this.authConfig.accessTokenTtl },
     );
+  }
+
+  async refresh(refreshToken: string) {
+    try {
+      const payload = await this.jwt.verifyAsync(refreshToken);
+      if (payload.type !== 'refresh') {
+        throw new UnauthorizedException('Token inválido.');
+      }
+      const userId = payload.userId;
+      const user = await this.prisma.user.findUnique({
+        where: { id: userId, status: true },
+      });
+      if (!user) {
+        throw new UnauthorizedException('Usuário não encontrado.');
+      }
+      this.assertUserActive(user);
+      const accessToken = await this.signAccessToken({
+        userId: user.id.toString(),
+        credentialsId: user.dbCredentialsId ?? undefined,
+        storeId: user.storeId ?? undefined,
+      });
+      return { accessToken };
+    } catch (error) {
+      throw new UnauthorizedException('Refresh token inválido.');
+    }
   }
 }

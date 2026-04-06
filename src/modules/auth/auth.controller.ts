@@ -7,6 +7,7 @@ import {
   Res,
   Headers,
   UnauthorizedException,
+  Body,
 } from '@nestjs/common';
 import {
   ApiBasicAuth,
@@ -18,6 +19,8 @@ import { AuthService } from './auth.service';
 import { AUTH_CONFIG } from 'src/config/auth.config';
 import type { AuthConfig } from 'src/config/auth.config';
 import type { Request, Response } from 'express';
+import { ref } from 'node:process';
+import { RefreshDto } from './dto/refresh.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -61,6 +64,28 @@ export class AuthController {
 
     return {
       user: result.user,
+      access_token: result.accessToken,
+      refresh_token: result.refreshToken,
+    };
+  }
+
+  @Post('refresh')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: 'Refresh do access token',
+    description: 'Gera um novo access token usando o refresh token.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Novo access token gerado.',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Refresh token inválido.',
+  })
+  async refresh(@Body() body: RefreshDto) {
+    const result = await this.auth.refresh(body.refresh_token);
+    return {
       access_token: result.accessToken,
     };
   }

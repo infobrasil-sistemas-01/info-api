@@ -25,6 +25,35 @@
         ]
       }
     },
+    "/api/v1/auth/refresh": {
+      "post": {
+        "description": "Gera um novo access token usando o refresh token.",
+        "operationId": "AuthController_refresh",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Novo access token gerado."
+          },
+          "401": {
+            "description": "Refresh token inválido."
+          }
+        },
+        "summary": "Refresh do access token",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
     "/api/v1/products": {
       "get": {
         "description": "Retorna uma lista paginada de produtos associados às credenciais do usuário autenticado.",
@@ -485,6 +514,18 @@
       }
     },
     "schemas": {
+      "RefreshDto": {
+        "type": "object",
+        "properties": {
+          "refresh_token": {
+            "type": "string",
+            "description": "Token de refresh para obter um novo token de acesso"
+          }
+        },
+        "required": [
+          "refresh_token"
+        ]
+      },
       "SoldProductDto": {
         "type": "object",
         "properties": {

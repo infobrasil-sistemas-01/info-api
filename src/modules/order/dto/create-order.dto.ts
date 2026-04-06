@@ -22,13 +22,13 @@ export const PostOrderSchema = z.object({
 
 export class PostOrderDto extends ZodDto(PostOrderSchema) {
   @ApiProperty({ description: 'ID do pedido' })
-  id: number;
+  id!: number;
 
   @ApiProperty({ description: 'Data do pedido' })
-  date: string;
+  date!: string;
 
   @ApiProperty({ description: 'Hora do pedido' })
-  hour: string;
+  hour!: string;
 
   @ApiPropertyOptional({ description: 'Valor de acréscimo/taxa' })
   taxes?: number;
@@ -49,19 +49,19 @@ export class PostOrderDto extends ZodDto(PostOrderSchema) {
   installment?: number;
 
   @ApiProperty({ description: 'Meio de pagamento' })
-  payment_method: string;
+  payment_method!: string;
 
   @ApiProperty({ description: 'Data de pagamento' })
-  payment_date: string;
+  payment_date!: string;
 
   @ApiPropertyOptional({ description: 'Juros do pedido' })
   interest?: number;
 
   @ApiProperty({ description: 'Indica se existe pagamento confirmado' })
-  has_payment: boolean;
+  has_payment!: boolean;
 
   @ApiProperty({ description: 'Indica se existe nota fiscal' })
-  has_invoice: boolean;
+  has_invoice!: boolean;
 
   @ApiPropertyOptional({
     description: 'Lista de produtos vendidos',
