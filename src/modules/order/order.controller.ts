@@ -22,6 +22,7 @@ import {
   ApiResponse,
 } from '@nestjs/swagger';
 import { OrderItemService } from './order-item/order-item.service';
+import { GenerateReceiptDto } from './dto/generate-receipt.dto';
 
 @Controller('orders')
 export class OrderController {
@@ -62,6 +63,35 @@ export class OrderController {
     }
 
     return this.orderService.post(credentialsId, dto, storeId);
+  }
+
+  @Post('orders/:id/receipt')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Gerar cupom fiscal para um pedido',
+    description:
+      'Gera um cupom fiscal para um pedido específico e envia para o email do cliente.',
+  })
+  postReceipt(
+    @Req() req: ReqWithAuthContext,
+    @Body() dto: GenerateReceiptDto,
+    @Param('id') orderId: number,
+  ) {
+    const { credentialsId, storeId } = req.authContext || {};
+
+    if (!credentialsId) {
+      throw new Error('Credentials ID not found in token');
+    }
+
+    if (!storeId) {
+      throw new Error('Store ID not found in token');
+    }
+
+    return this.orderService.generateReceipt(credentialsId, orderId, storeId, {
+      email: dto.email,
+      cpf: dto.cpf,
+    });
   }
 
   @Get()

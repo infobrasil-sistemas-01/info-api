@@ -7,7 +7,17 @@ export class ReceiptService {
     private readonly tenantConnectionService: TenantConnectionService,
   ) {}
 
-  async post(transaction: any, storeId: number = 1, orderId: number) {
+  async post(credentialsId: string, storeId: number = 1, orderId: number) {
+    const connection =
+      await this.tenantConnectionService.getConnection(credentialsId);
+
+    const transaction: any = await new Promise((resolve, reject) => {
+      connection.startTransaction((err: any, transaction: any) => {
+        if (err) return reject(err);
+        resolve(transaction);
+      });
+    });
+
     const params = [storeId, orderId];
 
     const query = `EXECUTE BLOCK (
@@ -968,6 +978,16 @@ export class ReceiptService {
       transaction.query(query, params, (err: any, res: any) => {
         if (err) return reject(err);
         resolve(res[0]);
+      });
+    });
+
+    await new Promise((resolve, reject) => {
+      transaction.commit((err: any) => {
+        if (err) {
+          transaction.rollback();
+          return reject(err);
+        }
+        resolve(true);
       });
     });
 

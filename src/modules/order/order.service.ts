@@ -72,8 +72,6 @@ export class OrderService {
       totalCalculated,
     );
 
-    await this.receiptService.post(transaction, storeId, order.VEN_NUMERO);
-
     await new Promise((resolve, reject) => {
       transaction.commit((err: any) => {
         if (err) {
@@ -87,6 +85,66 @@ export class OrderService {
     });
 
     return { orderId: order.VEN_NUMERO };
+  }
+
+  async generateReceipt(
+    credentialsId: string,
+    orderId: number,
+    storeId: number,
+    receiptData: { email: string; cpf?: string },
+  ) {
+    const connection =
+      await this.tenantConnectionService.getConnection(credentialsId);
+
+    const transaction: any = await new Promise((resolve, reject) => {
+      connection.startTransaction((err: any, transaction: any) => {
+        if (err) return reject(err);
+        resolve(transaction);
+      });
+    });
+
+    try {
+      await new Promise((resolve, reject) => {
+        const query = `
+        UPDATE VENDAS 
+        SET VEN_EMAILCLI = ?, VEN_CPFCNPJ = ?, VEN_FISCO = ? 
+        WHERE VEN_NUMERO = ?
+      `;
+
+        const params = [
+          receiptData.email,
+          receiptData.cpf || null,
+          'S',
+          orderId,
+        ];
+
+        transaction.query(query, params, (err: any) => {
+          if (err) {
+            transaction.rollback();
+            return reject(err);
+          }
+
+          transaction.commit((err: any) => {
+            if (err) {
+              transaction.rollback();
+              return reject(err);
+            }
+
+            resolve(true);
+          });
+        });
+      });
+    } catch (error) {
+      throw error;
+    }
+
+    const result = (await this.receiptService.post(
+      credentialsId,
+      storeId,
+      orderId,
+    )) as { ID: number };
+
+    return { receiptId: result.ID };
   }
 
   async get(

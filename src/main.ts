@@ -41,7 +41,6 @@ async function bootstrap() {
       'PaymentMethod',
       'Endpoints relacionados à gestão de meios de pagamento',
     )
-    .addTag('Receipt', 'Endpoints relacionados à geração de cupons fiscais')
     .addTag('Order', 'Endpoints relacionados à gestão de pedidos')
     .build();
 

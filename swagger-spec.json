@@ -375,6 +375,46 @@
         ]
       }
     },
+    "/api/v1/orders/orders/{id}/receipt": {
+      "post": {
+        "description": "Gera um cupom fiscal para um pedido específico e envia para o email do cliente.",
+        "operationId": "OrderController_postReceipt",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateReceiptDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Gerar cupom fiscal para um pedido",
+        "tags": [
+          "Order"
+        ]
+      }
+    },
     "/api/v1/orders/{id}": {
       "get": {
         "description": "Retorna os detalhes de um pedido específico com base no ID fornecido.",
@@ -485,10 +525,6 @@
     {
       "name": "PaymentMethod",
       "description": "Endpoints relacionados à gestão de meios de pagamento"
-    },
-    {
-      "name": "Receipt",
-      "description": "Endpoints relacionados à geração de cupons fiscais"
     },
     {
       "name": "Order",
@@ -618,6 +654,23 @@
           "payment_date",
           "has_payment",
           "has_invoice"
+        ]
+      },
+      "GenerateReceiptDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Email do cliente para envio do cupom fiscal"
+          },
+          "cpf": {
+            "type": "string",
+            "description": "CPF do cliente (opcional, para fins fiscais)"
+          }
+        },
+        "required": [
+          "email",
+          "cpf"
         ]
       }
     }
