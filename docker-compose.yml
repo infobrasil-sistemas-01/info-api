@@ -1,15 +1,48 @@
 services:
+  api-info:
+    container_name: infoapi-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - '3336:3336'
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - infoapi-network
+    restart: unless-stopped
+
   postgres:
-    image: postgres:16
+    image: postgres:16-alpine
     container_name: infoapi-db
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: infoapi
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-infoapi}
     ports:
       - '5433:5432'
     volumes:
       - infoapi_pgdata:/var/lib/postgresql/data
+    networks:
+      - infoapi-network
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-infoapi}',
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
 volumes:
   infoapi_pgdata:
+
+networks:
+  infoapi-network:
+    driver: bridge
