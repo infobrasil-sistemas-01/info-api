@@ -16,9 +16,12 @@ async function bootstrap() {
     .setTitle('InfoBrasil API')
     .setDescription(
       `API de integração do sistema Retaguarda (by InfoBrasil) com outros sistemas, como ERPs, e-commerce, etc. <br><br>
-      O sistema conta com duas formas de autenticação:<br> 
+      **O sistema conta com duas formas de autenticação:**<br> 
       - Basic Auth para login e obtenção de token JWT<br>
       - JWT para acesso aos endpoints protegidos.
+      <br><br>
+      **O usuário e senha de testes são:**<br>
+      infomobile:yd9FvSJ69bz6zvRq7GM&TJ5RD6*DsQPf
       <br><br>
       A API é organizada em módulos, cada um responsável por uma área específica do sistema, como produtos, clientes, vendas, etc.`,
     )
