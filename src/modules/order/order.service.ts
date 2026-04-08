@@ -14,81 +14,85 @@ export class OrderService {
     private readonly orderItemService: OrderItemService,
     private readonly productService: ProductService,
     private readonly receiptService: ReceiptService,
-  ) {}
+  ) { }
 
   async post(credentialsId: string, data: PostOrderDto, storeId: number) {
     const connection =
       await this.tenantConnectionService.getConnection(credentialsId);
 
-    const { products_sold, ...orderData } = data;
+    try {
+      const { products_sold, ...orderData } = data;
 
-    const date = dayjs(orderData.date).format('YYYY-MM-DD');
+      const date = dayjs(orderData.date).format('YYYY-MM-DD');
 
-    if (!date) {
-      throw new BadRequestException('Formato de data inválido');
-    }
+      if (!date) {
+        throw new BadRequestException('Formato de data inválido');
+      }
 
-    const transaction: any = await new Promise((resolve, reject) => {
-      connection.startTransaction((err: any, transaction: any) => {
-        if (err) {
-          return reject(err);
-        }
-        resolve(transaction);
+      const transaction: any = await new Promise((resolve, reject) => {
+        connection.startTransaction((err: any, transaction: any) => {
+          if (err) {
+            return reject(err);
+          }
+          resolve(transaction);
+        });
       });
-    });
 
-    const order = (await this.insertOrderOnDb(
-      transaction,
-      {
-        ...orderData,
-        date,
-      },
-      storeId,
-    )) as { VEN_NUMERO: number };
-
-    if (!products_sold || products_sold.length === 0) {
-      throw new BadRequestException('Order must have at least one product');
-    }
-
-    let totalCalculated = 0;
-    for (const product of products_sold) {
-      const ourProduct = (await this.productService.getById(
-        credentialsId,
-        storeId,
-        product.product_id,
-      )) as any;
-
-      totalCalculated += ourProduct.PRO_PRECO1 * product.quantity;
-
-      await this.orderItemService.insertSoldProductOnDb(
+      const order = (await this.insertOrderOnDb(
         transaction,
-        product,
-        ourProduct,
-        order.VEN_NUMERO,
+        {
+          ...orderData,
+          date,
+        },
         storeId,
+      )) as { VEN_NUMERO: number };
+
+      if (!products_sold || products_sold.length === 0) {
+        throw new BadRequestException('Order must have at least one product');
+      }
+
+      let totalCalculated = 0;
+      for (const product of products_sold) {
+        const ourProduct = (await this.productService.getById(
+          credentialsId,
+          storeId,
+          product.product_id,
+        )) as any;
+
+        totalCalculated += ourProduct.PRO_PRECO1 * product.quantity;
+
+        await this.orderItemService.insertSoldProductOnDb(
+          transaction,
+          product,
+          ourProduct,
+          order.VEN_NUMERO,
+          storeId,
+        );
+      }
+
+      await this.updateFinancial(
+        transaction,
+        order.VEN_NUMERO,
+        orderData,
+        totalCalculated,
       );
-    }
 
-    await this.updateFinancial(
-      transaction,
-      order.VEN_NUMERO,
-      orderData,
-      totalCalculated,
-    );
-
-    await new Promise((resolve, reject) => {
-      transaction.commit((err: any) => {
-        if (err) {
-          transaction.rollback();
-          reject(
-            `Erro ao fazer commit do pedido ${orderData.id} da loja. Erro: ${err}`,
-          );
-        }
-        resolve(true);
+      await new Promise((resolve, reject) => {
+        transaction.commit((err: any) => {
+          if (err) {
+            transaction.rollback();
+            reject(
+              `Erro ao fazer commit do pedido ${orderData.id} da loja. Erro: ${err}`,
+            );
+          }
+          resolve(true);
+        });
       });
-    });
 
-    return { orderId: order.VEN_NUMERO };
+      return { orderId: order.VEN_NUMERO };
+    } finally {
+      await this.tenantConnectionService.detach(credentialsId);
+    }
   }
 
   async generateReceipt(
@@ -100,14 +104,14 @@ export class OrderService {
     const connection =
       await this.tenantConnectionService.getConnection(credentialsId);
 
-    const transaction: any = await new Promise((resolve, reject) => {
-      connection.startTransaction((err: any, transaction: any) => {
-        if (err) return reject(err);
-        resolve(transaction);
-      });
-    });
-
     try {
+      const transaction: any = await new Promise((resolve, reject) => {
+        connection.startTransaction((err: any, transaction: any) => {
+          if (err) return reject(err);
+          resolve(transaction);
+        });
+      });
+
       await new Promise((resolve, reject) => {
         const query = `
         UPDATE VENDAS 
@@ -138,17 +142,17 @@ export class OrderService {
           });
         });
       });
-    } catch (error) {
-      throw error;
+
+      const result = (await this.receiptService.post(
+        credentialsId,
+        storeId,
+        orderId,
+      )) as { ID: number };
+
+      return { receiptId: result.ID };
+    } finally {
+      await this.tenantConnectionService.detach(credentialsId);
     }
-
-    const result = (await this.receiptService.post(
-      credentialsId,
-      storeId,
-      orderId,
-    )) as { ID: number };
-
-    return { receiptId: result.ID };
   }
 
   async get(
@@ -160,34 +164,38 @@ export class OrderService {
     const connection =
       await this.tenantConnectionService.getConnection(credentialsId);
 
-    const query = `SELECT FIRST ? SKIP ?
-                VEN_NUMERO,
-                V.VEN_NUMSITE,
-                V.LOJ_CODIGO,
-                V.VEN_TIPO,
-                V.VEN_DATA,
-                V.VEN_HORA,
-                V.FP1_CODIGO,
-                FPG.fpg_descricao,
-                V.pp1_codigo,
-                PLP.plp_descricao,
-                V.ven_totalliquido
-             FROM VENDAS V
-             LEFT JOIN formaspag FPG ON FPG.fpg_codigo = V.fp1_codigo
-             LEFT JOIN planospag PLP ON PLP.plp_codigo = V.pp1_codigo
-             WHERE V.LOJ_CODIGO = ? AND V.VEN_TIPO = 'E'
-             ORDER BY V.VEN_NUMERO DESC`;
+    try {
+      const query = `SELECT FIRST ? SKIP ?
+                  VEN_NUMERO,
+                  V.VEN_NUMSITE,
+                  V.LOJ_CODIGO,
+                  V.VEN_TIPO,
+                  V.VEN_DATA,
+                  V.VEN_HORA,
+                  V.FP1_CODIGO,
+                  FPG.fpg_descricao,
+                  V.pp1_codigo,
+                  PLP.plp_descricao,
+                  V.ven_totalliquido
+               FROM VENDAS V
+               LEFT JOIN formaspag FPG ON FPG.fpg_codigo = V.fp1_codigo
+               LEFT JOIN planospag PLP ON PLP.plp_codigo = V.pp1_codigo
+               WHERE V.LOJ_CODIGO = ? AND V.VEN_TIPO = 'E'
+               ORDER BY V.VEN_NUMERO DESC`;
 
-    const params = [pageSize, (page - 1) * pageSize, storeId];
+      const params = [pageSize, (page - 1) * pageSize, storeId];
 
-    const result = await new Promise((resolve, reject) => {
-      connection.query(query, params, (err: any, res: any) => {
-        if (err) return reject(err);
-        resolve(res);
+      const result = await new Promise((resolve, reject) => {
+        connection.query(query, params, (err: any, res: any) => {
+          if (err) return reject(err);
+          resolve(res);
+        });
       });
-    });
 
-    return result;
+      return result;
+    } finally {
+      await this.tenantConnectionService.detach(credentialsId);
+    }
   }
 
   async getById(
@@ -198,38 +206,42 @@ export class OrderService {
     const connection =
       await this.tenantConnectionService.getConnection(credentialsId);
 
-    const query = `SELECT
-                VEN_NUMERO,
-                V.VEN_NUMSITE,
-                V.LOJ_CODIGO,
-                V.VEN_TIPO,
-                V.VEN_PRECO,
-                V.VEN_DATA,
-                V.VEN_HORA,
-                V.FP1_CODIGO,
-                FPG.fpg_descricao,
-                V.pp1_codigo,
-                PLP.plp_descricao,
-                V.VEN_TOTALBRUTO,
-                V.ven_totaldesc,
-                V.ven_totalliquido,
-                V.ven_quant
-             FROM VENDAS V
-             LEFT JOIN formaspag FPG ON FPG.fpg_codigo = V.fp1_codigo
-             LEFT JOIN planospag PLP ON PLP.plp_codigo = V.pp1_codigo
-             WHERE V.VEN_NUMERO = ? AND V.LOJ_CODIGO = ? AND V.VEN_TIPO = 'E'
-             ORDER BY V.VEN_NUMERO DESC`;
+    try {
+      const query = `SELECT
+                  VEN_NUMERO,
+                  V.VEN_NUMSITE,
+                  V.LOJ_CODIGO,
+                  V.VEN_TIPO,
+                  V.VEN_PRECO,
+                  V.VEN_DATA,
+                  V.VEN_HORA,
+                  V.FP1_CODIGO,
+                  FPG.fpg_descricao,
+                  V.pp1_codigo,
+                  PLP.plp_descricao,
+                  V.VEN_TOTALBRUTO,
+                  V.ven_totaldesc,
+                  V.ven_totalliquido,
+                  V.ven_quant
+               FROM VENDAS V
+               LEFT JOIN formaspag FPG ON FPG.fpg_codigo = V.fp1_codigo
+               LEFT JOIN planospag PLP ON PLP.plp_codigo = V.pp1_codigo
+               WHERE V.VEN_NUMERO = ? AND V.LOJ_CODIGO = ? AND V.VEN_TIPO = 'E'
+               ORDER BY V.VEN_NUMERO DESC`;
 
-    const params = [id, storeId];
+      const params = [id, storeId];
 
-    const result = (await new Promise((resolve, reject) => {
-      connection.query(query, params, (err: any, res: any) => {
-        if (err) return reject(err);
-        resolve(res[0]);
-      });
-    })) as object;
+      const result = (await new Promise((resolve, reject) => {
+        connection.query(query, params, (err: any, res: any) => {
+          if (err) return reject(err);
+          resolve(res[0]);
+        });
+      })) as object;
 
-    return result;
+      return result;
+    } finally {
+      await this.tenantConnectionService.detach(credentialsId);
+    }
   }
 
   private async insertOrderOnDb(

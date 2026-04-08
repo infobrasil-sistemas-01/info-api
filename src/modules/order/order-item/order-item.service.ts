@@ -107,19 +107,23 @@ export class OrderItemService {
     const connection =
       await this.tenantConnectionService.getConnection(credentialsId);
 
-    const query = `SELECT 
-    IV.PRO_CODIGO, P.PRO_DESCRICAO, IV.IVD_PRECO, IV.IVD_QTDE, IV.IVD_TOTAL, IV.IVD_DESCONTO, IV.IVD_LIQUIDO
-    FROM ITENSVEN IV
-    INNER JOIN PRODUTOS P ON IV.PRO_CODIGO = P.PRO_CODIGO
-    WHERE IV.VEN_NUMERO = ?`;
+    try {
+      const query = `SELECT 
+      IV.PRO_CODIGO, P.PRO_DESCRICAO, IV.IVD_PRECO, IV.IVD_QTDE, IV.IVD_TOTAL, IV.IVD_DESCONTO, IV.IVD_LIQUIDO
+      FROM ITENSVEN IV
+      INNER JOIN PRODUTOS P ON IV.PRO_CODIGO = P.PRO_CODIGO
+      WHERE IV.VEN_NUMERO = ?`;
 
-    const params = [orderId];
+      const params = [orderId];
 
-    return new Promise((resolve, reject) => {
-      connection.query(query, params, (err: any, res: any) => {
-        if (err) return reject(err);
-        resolve(res);
+      return new Promise((resolve, reject) => {
+        connection.query(query, params, (err: any, res: any) => {
+          if (err) return reject(err);
+          resolve(res);
+        });
       });
-    });
+    } finally {
+      await this.tenantConnectionService.detach(credentialsId);
+    }
   }
 }

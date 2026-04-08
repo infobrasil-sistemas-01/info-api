@@ -27,6 +27,7 @@ describe('OrderService', () => {
   beforeEach(async () => {
     mockTenantConnection = {
       getConnection: jest.fn().mockResolvedValue(mockConnection),
+      detach: jest.fn().mockResolvedValue(undefined),
     };
 
     mockOrderItemService = {

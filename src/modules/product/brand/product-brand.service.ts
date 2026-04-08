@@ -11,27 +11,35 @@ export class ProductBrandService {
     const connection =
       await this.tenantConnectionService.getConnection(credentialsId);
 
-    if (page < 1) {
-      throw new BadRequestException('Page must be greater than or equal to 1');
-    }
+    try {
+      if (page < 1) {
+        throw new BadRequestException(
+          'Page must be greater than or equal to 1',
+        );
+      }
 
-    if (pageSize < 1) {
-      throw new BadRequestException('Page size must be greater than or equal to 1');
-    }
+      if (pageSize < 1) {
+        throw new BadRequestException(
+          'Page size must be greater than or equal to 1',
+        );
+      }
 
-    const query = `SELECT FIRST ? SKIP ? 
-                    M.MAR_CODIGO, M.MAR_DESCRICAO
-                    FROM marcas M 
-                    ORDER BY M.MAR_DESCRICAO`;
-    const params = [pageSize, (page - 1) * pageSize];
+      const query = `SELECT FIRST ? SKIP ? 
+                      M.MAR_CODIGO, M.MAR_DESCRICAO
+                      FROM marcas M 
+                      ORDER BY M.MAR_DESCRICAO`;
+      const params = [pageSize, (page - 1) * pageSize];
 
-    const result = await new Promise((resolve, reject) => {
-      connection.query(query, params, (err: any, res: any) => {
-        if (err) return reject(err);
-        resolve(res);
+      const result = await new Promise((resolve, reject) => {
+        connection.query(query, params, (err: any, res: any) => {
+          if (err) return reject(err);
+          resolve(res);
+        });
       });
-    });
 
-    return result;
+      return result;
+    } finally {
+      await this.tenantConnectionService.detach(credentialsId);
+    }
   }
 }

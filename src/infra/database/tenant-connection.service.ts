@@ -9,7 +9,7 @@ export class TenantConnectionService {
   constructor(
     private readonly prisma: RegistryPrismaService,
     private readonly firebirdService: FirebirdService,
-  ) {}
+  ) { }
 
   async getConnection(credentialsId: string) {
     if (this.cache.has(credentialsId)) {
@@ -24,8 +24,15 @@ export class TenantConnectionService {
       throw new Error(`Credentials not found for id: ${credentialsId}`);
     }
 
-    if (!credentials.host || !credentials.database || !credentials.user || !credentials.port) {
-      throw new Error(`Credentials for id: ${credentialsId} are missing required fields`);
+    if (
+      !credentials.host ||
+      !credentials.database ||
+      !credentials.user ||
+      !credentials.port
+    ) {
+      throw new Error(
+        `Credentials for id: ${credentialsId} are missing required fields`,
+      );
     }
 
     const connection = await this.firebirdService.getDatabaseConnection({
@@ -40,5 +47,19 @@ export class TenantConnectionService {
     this.cache.set(credentialsId, connection);
 
     return connection;
+  }
+
+  async detach(credentialsId: string) {
+    const connection = this.cache.get(credentialsId);
+    if (!connection) return;
+
+    await new Promise<void>((resolve, reject) => {
+      connection.detach((err: any) => {
+        if (err) return reject(err);
+        resolve();
+      });
+    });
+
+    this.cache.delete(credentialsId);
   }
 }

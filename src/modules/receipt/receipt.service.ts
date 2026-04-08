@@ -5,22 +5,23 @@ import { TenantConnectionService } from 'src/infra/database/tenant-connection.se
 export class ReceiptService {
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
-  ) {}
+  ) { }
 
   async post(credentialsId: string, storeId: number = 1, orderId: number) {
     const connection =
       await this.tenantConnectionService.getConnection(credentialsId);
 
-    const transaction: any = await new Promise((resolve, reject) => {
-      connection.startTransaction((err: any, transaction: any) => {
-        if (err) return reject(err);
-        resolve(transaction);
+    try {
+      const transaction: any = await new Promise((resolve, reject) => {
+        connection.startTransaction((err: any, transaction: any) => {
+          if (err) return reject(err);
+          resolve(transaction);
+        });
       });
-    });
 
-    const params = [storeId, orderId];
+      const params = [storeId, orderId];
 
-    const query = `EXECUTE BLOCK (
+      const query = `EXECUTE BLOCK (
         P_LOJA_CODIGO INTEGER = ?, 
         P_VEN_NUMERO   INTEGER = ?
     )
@@ -974,28 +975,31 @@ export class ReceiptService {
         END
     END`;
 
-    const result = (await new Promise((resolve, reject) => {
-      transaction.query(query, params, (err: any, res: any) => {
-        if (err) return reject(err);
-        resolve(res[0]);
-      });
-    })) as { ID: number };
+      const result = (await new Promise((resolve, reject) => {
+        transaction.query(query, params, (err: any, res: any) => {
+          if (err) return reject(err);
+          resolve(res[0]);
+        });
+      })) as { ID: number };
 
-    if (!result || result.ID === 0) {
-      transaction.rollback();
-      throw new Error('Order not found');
+      if (!result || result.ID === 0) {
+        transaction.rollback();
+        throw new Error('Order not found');
+      }
+
+      await new Promise((resolve, reject) => {
+        transaction.commit((err: any) => {
+          if (err) {
+            transaction.rollback();
+            return reject(err);
+          }
+          resolve(true);
+        });
+      });
+
+      return result;
+    } finally {
+      await this.tenantConnectionService.detach(credentialsId);
     }
-
-    await new Promise((resolve, reject) => {
-      transaction.commit((err: any) => {
-        if (err) {
-          transaction.rollback();
-          return reject(err);
-        }
-        resolve(true);
-      });
-    });
-
-    return result;
   }
 }
