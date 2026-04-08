@@ -96,7 +96,9 @@ describe('ReceiptService', () => {
         },
       );
 
-      await expect(service.post('cred-1', 1, 99999)).rejects.toThrow();
+      await expect(service.post('cred-1', 1, 99999)).rejects.toThrow(
+        'Order not found',
+      );
     });
 
     it('should throw error when commit fails after query', async () => {

@@ -46,8 +46,12 @@ export class OrderService {
       storeId,
     )) as { VEN_NUMERO: number };
 
+    if (!products_sold || products_sold.length === 0) {
+      throw new BadRequestException('Order must have at least one product');
+    }
+
     let totalCalculated = 0;
-    for (const product of products_sold || []) {
+    for (const product of products_sold) {
       const ourProduct = (await this.productService.getById(
         credentialsId,
         storeId,
