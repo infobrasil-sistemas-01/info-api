@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { TenantConnectionService } from 'src/infra/database/tenant-connection.service';
 
 @Injectable()
@@ -10,6 +10,10 @@ export class ProductGroupService {
   async get(credentialsId: string, page: number = 1, pageSize: number = 10) {
     const connection =
       await this.tenantConnectionService.getConnection(credentialsId);
+
+    if (!page || page < 1)
+      throw new BadRequestException('Page number must be greater than 0');
+    if (!pageSize || pageSize < 1) pageSize = 10;
 
     const query = `SELECT FIRST ? SKIP ? 
                     M.GRU_CODIGO, M.GRU_DESCRICAO
