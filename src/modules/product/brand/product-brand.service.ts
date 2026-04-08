@@ -1,15 +1,23 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { TenantConnectionService } from 'src/infra/database/tenant-connection.service';
 
 @Injectable()
 export class ProductBrandService {
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
-  ) {}
+  ) { }
 
   async get(credentialsId: string, page: number = 1, pageSize: number = 10) {
     const connection =
       await this.tenantConnectionService.getConnection(credentialsId);
+
+    if (page < 1) {
+      throw new BadRequestException('Page must be greater than or equal to 1');
+    }
+
+    if (pageSize < 1) {
+      throw new BadRequestException('Page size must be greater than or equal to 1');
+    }
 
     const query = `SELECT FIRST ? SKIP ? 
                     M.MAR_CODIGO, M.MAR_DESCRICAO

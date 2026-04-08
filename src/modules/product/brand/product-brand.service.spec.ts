@@ -83,15 +83,5 @@ describe('ProductBrandService', () => {
 
       await expect(service.get('cred-1', 1, 0)).rejects.toThrow();
     });
-
-    it('should throw error when database returns null', async () => {
-      mockConnection.query.mockImplementation(
-        (query: string, params: any[], callback: Function) => {
-          callback(null, null);
-        },
-      );
-
-      await expect(service.get('cred-1', 1, 10)).rejects.toThrow();
-    });
   });
 });

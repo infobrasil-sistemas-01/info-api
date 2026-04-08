@@ -52,13 +52,19 @@ export class AuthService {
       throw new UnauthorizedException('Credenciais inválidas.');
     }
 
-    const refreshToken = await this.issueRefreshToken(user.id.toString(), meta);
+    let refreshToken: string;
+    let accessToken: string;
 
-    const accessToken = await this.signAccessToken({
-      userId: user.id.toString(),
-      credentialsId: user.dbCredentialsId ?? undefined,
-      storeId: user.storeId ?? undefined,
-    });
+    try {
+      refreshToken = await this.issueRefreshToken(user.id.toString(), meta);
+      accessToken = await this.signAccessToken({
+        userId: user.id.toString(),
+        credentialsId: user.dbCredentialsId ?? undefined,
+        storeId: user.storeId ?? undefined,
+      });
+    } catch {
+      throw new UnauthorizedException('Falha ao gerar token.');
+    }
 
     return {
       user: {

@@ -24,6 +24,10 @@ export class TenantConnectionService {
       throw new Error(`Credentials not found for id: ${credentialsId}`);
     }
 
+    if (!credentials.host || !credentials.database || !credentials.user || !credentials.port) {
+      throw new Error(`Credentials for id: ${credentialsId} are missing required fields`);
+    }
+
     const connection = await this.firebirdService.getDatabaseConnection({
       host: credentials.host,
       database: credentials.database,

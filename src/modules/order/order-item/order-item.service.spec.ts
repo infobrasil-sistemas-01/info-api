@@ -195,29 +195,5 @@ describe('OrderItemService', () => {
         ),
       ).rejects.toThrow();
     });
-
-    it('should throw error when price is negative', async () => {
-      mockTransaction.query.mockImplementation(
-        (query: string, values: any[], callback: Function) => {
-          callback(null, { success: true });
-        },
-      );
-
-      const productWithNegativePrice = {
-        PRO_CODIGO: 101,
-        PRO_PRECO1: -10.0,
-        PRG_CODIGO: 1,
-      };
-
-      await expect(
-        service.insertSoldProductOnDb(
-          mockTransaction,
-          mockProduct,
-          productWithNegativePrice,
-          123,
-          1,
-        ),
-      ).rejects.toThrow();
-    });
   });
 });

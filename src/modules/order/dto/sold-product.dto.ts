@@ -4,7 +4,7 @@ import z from 'zod';
 
 export const SoldProductSchema = z.object({
   product_id: z.number(),
-  quantity: z.number(),
+  quantity: z.number().gt(0, 'Quantity must be greater than 0'),
   variant_id: z.number().optional(),
 });
 

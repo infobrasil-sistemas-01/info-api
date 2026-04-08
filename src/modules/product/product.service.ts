@@ -5,7 +5,7 @@ import { TenantConnectionService } from 'src/infra/database/tenant-connection.se
 export class ProductService {
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
-  ) {}
+  ) { }
 
   async get(
     credentialsId: string,
@@ -19,6 +19,14 @@ export class ProductService {
   ) {
     const connection =
       await this.tenantConnectionService.getConnection(credentialsId);
+
+    if (page < 1) {
+      throw new BadRequestException('Page must be greater than or equal to 1');
+    }
+
+    if (pageSize < 1) {
+      throw new BadRequestException('Page size must be greater than or equal to 1');
+    }
 
     let params: (number | string)[] = [
       pageSize,

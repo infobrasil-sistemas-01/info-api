@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { TenantConnectionService } from 'src/infra/database/tenant-connection.service';
 import { SoldProductDto } from '../dto/sold-product.dto';
 
@@ -6,7 +6,7 @@ import { SoldProductDto } from '../dto/sold-product.dto';
 export class OrderItemService {
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
-  ) {}
+  ) { }
 
   async insertSoldProductOnDb(
     transaction: any,
@@ -15,6 +15,10 @@ export class OrderItemService {
     ven_numero: number,
     storeId: number,
   ) {
+    if (product.quantity <= 0) {
+      throw new BadRequestException('Quantity must be greater than 0');
+    }
+
     try {
       const produtoVendidoInsert = {
         VEN_NUMERO: ven_numero,

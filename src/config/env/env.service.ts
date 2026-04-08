@@ -11,7 +11,7 @@ export class EnvService {
     if (!parsed.success) {
       console.error('❌ Invalid environment variables');
       console.error(parsed.error.format());
-      process.exit(1);
+      throw new Error('Invalid environment variables');
     }
 
     this.env = parsed.data;
