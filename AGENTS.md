@@ -47,3 +47,108 @@ All routes prefixed with `api/v1` (set in `src/main.ts`).
 ## Business Rule
 
 For fiscal financial generation, table `CONFIG_PERFIL_LOJAS` must have `PFL_CODIGO = 104` with `CPL_PERFIL = 'S'` in the customer's database.
+
+## Testing Patterns
+
+### Test File Naming
+
+- Unit tests: `*.spec.ts` in same directory as source
+- E2E tests: `test/*.e2e-spec.ts`
+
+### Test Structure
+
+**Service tests** (`*.service.spec.ts`):
+
+```typescript
+describe('ServiceName', () => {
+  let service: ServiceName;
+  let mockDependency: any;
+
+  beforeEach(async () => {
+    mockDependency = {
+      /* mock methods */
+    };
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        ServiceName,
+        { provide: Dependency, useValue: mockDependency },
+      ],
+    }).compile();
+    service = module.get<ServiceName>(ServiceName);
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  describe('methodName', () => {
+    it('should return expected result', async () => {
+      mockDependency.method.mockResolvedValue(expectedValue);
+      const result = await service.methodName();
+      expect(result).toEqual(expectedValue);
+    });
+
+    it('should throw error on failure', async () => {
+      mockDependency.method.mockRejectedValue(new Error());
+      await expect(service.methodName()).rejects.toThrow();
+    });
+  });
+});
+```
+
+**Controller tests** (`*.controller.spec.ts`):
+
+```typescript
+describe('ControllerName', () => {
+  let controller: ControllerName;
+  let mockService: jest.Mocked<Service>;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      controllers: [ControllerName],
+      providers: [{ provide: Service, useValue: mockService }],
+    })
+      .overrideGuard(AuthGuard)
+      .useValue({ canActivate: () => true })
+      .compile();
+    controller = module.get<ControllerName>(ControllerName);
+  });
+});
+```
+
+**DTO/Schema validation tests** (`*.dto.spec.ts`):
+
+```typescript
+describe('DtoName', () => {
+  const validData = {
+    /* valid fields */
+  };
+
+  test.each([
+    ['description', validData],
+    ['another case', { ...validData, optional: 'value' }],
+  ])('should accept %s', (_, input) => {
+    expect(() => Schema.parse(input)).not.toThrow();
+  });
+
+  test.each([
+    [
+      'missing required',
+      {
+        /* missing field */
+      },
+    ],
+  ])('should reject %s', (_, input) => {
+    expect(() => Schema.parse(input)).toThrow();
+  });
+});
+```
+
+### Key Patterns
+
+- Use `jest.mock()` for external modules (e.g., `argon2`, `bcrypt`)
+- Use `mockResolvedValue`/`mockRejectedValue` for async methods
+- Use `describe('FAILING: ...')` for edge case tests that document known issues
+- Mock database connections with callback-based `query.mockImplementation((query, params, callback) => { callback(null, result); })`
+- Use `test.each` with template literals for data-driven tests
+- Clean up mocks in `afterEach` with `jest.clearAllMocks()`
