@@ -7,7 +7,7 @@ jest.mock('node-firebird');
 describe('FirebirdService', () => {
   let service: FirebirdService;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [FirebirdService],
     }).compile();

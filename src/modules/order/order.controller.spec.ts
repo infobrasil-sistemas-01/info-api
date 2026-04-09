@@ -30,7 +30,7 @@ describe('OrderController', () => {
     },
   } as any;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [OrderController],
       providers: [

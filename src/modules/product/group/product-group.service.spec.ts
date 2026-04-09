@@ -10,7 +10,7 @@ describe('ProductGroupService', () => {
     query: jest.fn(),
   };
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     mockTenantConnection = {
       getConnection: jest.fn().mockResolvedValue(mockConnection),
       detach: jest.fn().mockResolvedValue(undefined),

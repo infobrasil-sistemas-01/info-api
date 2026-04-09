@@ -21,7 +21,7 @@ describe('ProductController', () => {
     },
   } as any;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ProductController],
       providers: [{ provide: ProductService, useValue: mockProductService }],

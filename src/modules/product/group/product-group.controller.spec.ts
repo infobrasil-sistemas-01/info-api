@@ -20,7 +20,7 @@ describe('ProductGroupController', () => {
     },
   } as any;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ProductGroupController],
       providers: [{ provide: ProductGroupService, useValue: mockGroupService }],

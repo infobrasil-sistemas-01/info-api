@@ -20,7 +20,7 @@ describe('PaymentMethodController', () => {
     },
   } as any;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [PaymentMethodController],
       providers: [

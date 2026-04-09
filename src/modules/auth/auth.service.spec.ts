@@ -25,7 +25,7 @@ describe('AuthService', () => {
     storeId: 1,
   };
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     mockPrisma = {
       user: {
         findUnique: jest.fn(),

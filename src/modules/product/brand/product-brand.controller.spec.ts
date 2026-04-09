@@ -20,7 +20,7 @@ describe('ProductBrandController', () => {
     },
   } as any;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ProductBrandController],
       providers: [{ provide: ProductBrandService, useValue: mockBrandService }],
