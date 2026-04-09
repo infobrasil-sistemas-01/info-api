@@ -982,6 +982,8 @@ export class ReceiptService {
         });
       })) as { ID: number };
 
+      console.log(result);
+
       if (!result || result.ID === 0) {
         transaction.rollback();
         throw new Error('Order not found');
@@ -999,7 +1001,7 @@ export class ReceiptService {
 
       return result;
     } finally {
-      await this.tenantConnectionService.detach(credentialsId);
+      // await this.tenantConnectionService.detach(credentialsId);
     }
   }
 }

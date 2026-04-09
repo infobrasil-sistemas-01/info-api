@@ -29,7 +29,7 @@ export class OrderController {
   constructor(
     private readonly orderService: OrderService,
     private readonly orderItemService: OrderItemService,
-  ) {}
+  ) { }
 
   @Post()
   @UseGuards(JwtAuthGuard)
@@ -65,7 +65,7 @@ export class OrderController {
     return this.orderService.post(credentialsId, dto, storeId);
   }
 
-  @Post('orders/:id/receipt')
+  @Post(':id/receipt')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({

@@ -375,7 +375,7 @@
         ]
       }
     },
-    "/api/v1/orders/orders/{id}/receipt": {
+    "/api/v1/orders/{id}/receipt": {
       "post": {
         "description": "Gera um cupom fiscal para um pedido específico e envia para o email do cliente.",
         "operationId": "OrderController_postReceipt",

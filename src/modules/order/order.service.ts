@@ -91,7 +91,7 @@ export class OrderService {
 
       return { orderId: order.VEN_NUMERO };
     } finally {
-      await this.tenantConnectionService.detach(credentialsId);
+      // await this.tenantConnectionService.detach(credentialsId);
     }
   }
 
@@ -151,7 +151,7 @@ export class OrderService {
 
       return { receiptId: result.ID };
     } finally {
-      await this.tenantConnectionService.detach(credentialsId);
+      // await this.tenantConnectionService.detach(credentialsId);
     }
   }
 
@@ -194,7 +194,7 @@ export class OrderService {
 
       return result;
     } finally {
-      await this.tenantConnectionService.detach(credentialsId);
+      // await this.tenantConnectionService.detach(credentialsId);
     }
   }
 
@@ -240,7 +240,7 @@ export class OrderService {
 
       return result;
     } finally {
-      await this.tenantConnectionService.detach(credentialsId);
+      // await this.tenantConnectionService.detach(credentialsId);
     }
   }
 

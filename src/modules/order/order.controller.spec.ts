@@ -69,6 +69,24 @@ describe('OrderController', () => {
       expect(orderService.post).toHaveBeenCalledWith('cred-1', dto, 1);
       expect(result).toEqual({ orderId: 123 });
     });
+
+    it('should call orderService.post with storeId 1 when not provided', async () => {
+      const dto = new PostOrderDto();
+      dto.id = 123;
+      dto.date = '2024-01-15';
+      dto.hour = '10:30:00';
+      dto.payment_method = 'credit';
+      dto.payment_date = '2024-01-15';
+      dto.has_payment = true;
+      dto.has_invoice = false;
+
+      mockOrderService.post.mockResolvedValue({ orderId: 123 });
+
+      const result = await controller.postOrder(mockReq, dto);
+
+      expect(orderService.post).toHaveBeenCalledWith('cred-1', dto, 1);
+      expect(result).toEqual({ orderId: 123 });
+    });
   });
 
   describe('postReceipt', () => {

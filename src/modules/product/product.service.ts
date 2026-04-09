@@ -84,7 +84,7 @@ export class ProductService {
 
       return result;
     } finally {
-      await this.tenantConnectionService.detach(credentialsId);
+      // await this.tenantConnectionService.detach(credentialsId);
     }
   }
 
@@ -110,7 +110,7 @@ export class ProductService {
 
       return result;
     } finally {
-      await this.tenantConnectionService.detach(credentialsId);
+      // await this.tenantConnectionService.detach(credentialsId);
     }
   }
 
@@ -152,7 +152,7 @@ export class ProductService {
 
       return result;
     } finally {
-      await this.tenantConnectionService.detach(credentialsId);
+      // await this.tenantConnectionService.detach(credentialsId);
     }
   }
 }

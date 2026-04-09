@@ -31,7 +31,7 @@ export class ProductGroupService {
 
       return result;
     } finally {
-      await this.tenantConnectionService.detach(credentialsId);
+      // await this.tenantConnectionService.detach(credentialsId);
     }
   }
 }

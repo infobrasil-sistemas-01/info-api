@@ -123,7 +123,7 @@ export class OrderItemService {
         });
       });
     } finally {
-      await this.tenantConnectionService.detach(credentialsId);
+      // await this.tenantConnectionService.detach(credentialsId);
     }
   }
 }

@@ -2,6 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { AppModule } from '../src/app.module';
+import { PostOrderDto } from 'src/modules/order/dto/create-order.dto';
+import { generateDate, generateHour, generateId } from 'src/utils/generators.util';
 
 describe('API E2E Tests', () => {
   let app: INestApplication;
@@ -28,6 +30,8 @@ describe('API E2E Tests', () => {
     await app.close();
     await moduleFixture.close();
   });
+
+  let orderId;
 
   describe('Auth Flow', () => {
     it('POST /api/v1/auth/login - should login with Basic credentials and return tokens', async () => {
@@ -220,6 +224,97 @@ describe('API E2E Tests', () => {
       it('should return 401 without token', async () => {
         await request(app.getHttpServer())
           .get('/api/v1/products/groups')
+          .expect(401);
+      });
+    });
+
+    describe('POST /api/v1/orders', () => {
+      it('should return 200 with valid token', async () => {
+        const dto: PostOrderDto = {
+          id: generateId(),
+          date: generateDate(),
+          hour: generateHour(),
+          store_note: 'Teste automatizado (E2E)',
+          installment: 1,
+          payment_method: '1',
+          payment_date: generateDate(),
+          has_payment: true,
+          has_invoice: true,
+          products_sold: [
+            {
+              product_id: 1,
+              quantity: 1
+            },
+          ],
+        };
+
+        const response = await request(app.getHttpServer())
+          .post('/api/v1/orders')
+          .set(authHeader())
+          .send(dto)
+          .expect(201);
+
+        orderId = response.body.orderId;
+        expect(orderId).toBeDefined();
+      });
+    });
+
+    describe('GET /api/v1/orders', () => {
+      it('should return 200 with valid token', async () => {
+        await request(app.getHttpServer())
+          .get('/api/v1/orders')
+          .set(authHeader())
+          .expect(200);
+      });
+
+      it('should return 200 with pagination query params', async () => {
+        await request(app.getHttpServer())
+          .get('/api/v1/orders?page=1&pageSize=10')
+          .set(authHeader())
+          .expect(200);
+      });
+
+      it('should return 401 without token', async () => {
+        await request(app.getHttpServer())
+          .get('/api/v1/orders')
+          .expect(401);
+      });
+    });
+
+    describe('GET /api/v1/orders/:id', () => {
+      it('should return 200 with valid token and order id', async () => {
+        await request(app.getHttpServer())
+          .get(`/api/v1/orders/${orderId}`)
+          .set(authHeader())
+          .expect(200);
+      });
+
+      it('should return 401 without token', async () => {
+        await request(app.getHttpServer())
+          .get(`/api/v1/orders/${orderId}`)
+          .expect(401);
+      });
+    });
+
+    describe('POST /api/v1/orders/:id/receipt', () => {
+      it('should return 200 with valid token and order id', async () => {
+        await request(app.getHttpServer())
+          .post(`/api/v1/orders/${orderId}/receipt`)
+          .send({
+            email: 'teste@email.com',
+            cpf: '12345678909'
+          })
+          .set(authHeader())
+          .expect(201);
+      });
+
+      it('should return 401 without token', async () => {
+        await request(app.getHttpServer())
+          .post(`/api/v1/orders/${orderId}/receipt`)
+          .send({
+            email: 'teste@email.com',
+            cpf: '12345678909'
+          })
           .expect(401);
       });
     });
