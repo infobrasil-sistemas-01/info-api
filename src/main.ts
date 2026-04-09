@@ -5,6 +5,11 @@ import path from 'path';
 import fs from 'fs';
 import { apiReference } from '@scalar/nestjs-api-reference';
 
+const packageJsonPath = path.join(process.cwd(), 'package.json');
+const packageVersion = fs.existsSync(packageJsonPath)
+  ? JSON.parse(fs.readFileSync(packageJsonPath, 'utf8')).version
+  : '1.0.0';
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
@@ -29,7 +34,7 @@ async function bootstrap() {
       `${process.env.HOST ?? 'http://localhost:3000'}`,
       'Servidor local para desenvolvimento',
     )
-    .setVersion('1.0')
+    .setVersion(packageVersion)
     .addBasicAuth() // 👈 Basic Auth for login
     .addBearerAuth() // 👈 JWT
     .addTag(
