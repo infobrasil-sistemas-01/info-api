@@ -3,6 +3,7 @@ import { OrderController } from './order.controller';
 import { OrderService } from './order.service';
 import { OrderItemService } from './order-item/order-item.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 import { PostOrderDto } from './dto/create-order.dto';
 import { GenerateReceiptDto } from './dto/generate-receipt.dto';
 
@@ -39,6 +40,8 @@ describe('OrderController', () => {
       ],
     })
       .overrideGuard(JwtAuthGuard)
+      .useValue({ canActivate: () => true })
+      .overrideGuard(PermissionsGuard)
       .useValue({ canActivate: () => true })
       .compile();
 

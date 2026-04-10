@@ -5,10 +5,11 @@ import { OrderService } from './order.service';
 import { ProductModule } from '../product/product.module';
 import { OrderItemService } from './order-item/order-item.service';
 import { ReceiptModule } from '../receipt/receipt.module';
+import { RbacModule } from 'src/infra/rbac/rbac.module';
 
 @Module({
   controllers: [OrderController],
-  imports: [TenantConnectionModule, ProductModule, ReceiptModule],
+  imports: [TenantConnectionModule, ProductModule, ReceiptModule, RbacModule],
   providers: [OrderService, OrderItemService],
 })
-export class OrderModule {}
+export class OrderModule { }

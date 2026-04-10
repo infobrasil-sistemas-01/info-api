@@ -17,13 +17,16 @@ import {
   ApiQuery,
   ApiResponse,
 } from '@nestjs/swagger';
+import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
+import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
 
 @Controller('products/brands')
 export class ProductBrandController {
   constructor(private readonly brandService: ProductBrandService) {}
 
   @Get()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @RequirePermissions({ allOf: ['tenant.brands.view'] })
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Listar marcas de produtos',

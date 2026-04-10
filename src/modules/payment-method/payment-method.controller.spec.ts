@@ -3,6 +3,7 @@ import { BadRequestException } from '@nestjs/common';
 import { PaymentMethodController } from './payment-method.controller';
 import { PaymentMethodService } from './payment-method.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 
 describe('PaymentMethodController', () => {
   let controller: PaymentMethodController;
@@ -28,6 +29,8 @@ describe('PaymentMethodController', () => {
       ],
     })
       .overrideGuard(JwtAuthGuard)
+      .useValue({ canActivate: () => true })
+      .overrideGuard(PermissionsGuard)
       .useValue({ canActivate: () => true })
       .compile();
 

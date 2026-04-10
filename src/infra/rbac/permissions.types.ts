@@ -6,7 +6,7 @@ export type PermissionsRequirement = {
 };
 
 export type PermissionSnapshot = {
-  userId: number;
+  userId: string;
 
   roles: string[];
 

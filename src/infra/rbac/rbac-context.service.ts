@@ -19,10 +19,10 @@ export class RbacContextService {
   constructor(
     @Inject(REQUEST) private readonly req: ReqWithCache,
     private readonly resolver: PermissionResolver,
-  ) {}
+  ) { }
 
   async getOrResolve(
-    userId: number,
+    userId: string,
     options: ResolvePermissionsOptions = {},
   ): Promise<PermissionSnapshot> {
     if (!this.req.__permCache) {

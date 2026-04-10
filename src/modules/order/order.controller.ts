@@ -23,6 +23,8 @@ import {
 } from '@nestjs/swagger';
 import { OrderItemService } from './order-item/order-item.service';
 import { GenerateReceiptDto } from './dto/generate-receipt.dto';
+import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
+import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
 
 @Controller('orders')
 export class OrderController {
@@ -32,7 +34,8 @@ export class OrderController {
   ) { }
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @RequirePermissions({ allOf: ['tenant.orders.create'] })
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Criar um novo pedido',
@@ -66,7 +69,8 @@ export class OrderController {
   }
 
   @Post(':id/receipt')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @RequirePermissions({ allOf: ['tenant.orders.view'] })
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Gerar cupom fiscal para um pedido',
@@ -95,7 +99,8 @@ export class OrderController {
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @RequirePermissions({ allOf: ['tenant.orders.view'] })
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Obter pedidos',
@@ -132,7 +137,8 @@ export class OrderController {
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @RequirePermissions({ allOf: ['tenant.orders.view'] })
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Obter detalhes de um pedido pelo ID',

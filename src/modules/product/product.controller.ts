@@ -18,6 +18,8 @@ import {
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import type { ReqWithAuthContext } from '../auth/guards/jwt-auth.guard';
 import { ProductService } from './product.service';
+import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
+import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
 import { min } from 'date-fns';
 
 @Controller('products')
@@ -25,7 +27,8 @@ export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Get()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @RequirePermissions({ allOf: ['tenant.products.view'] })
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Listar produtos',
@@ -114,7 +117,8 @@ export class ProductController {
   }
 
   @Get('/id/:id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @RequirePermissions({ allOf: ['tenant.products.view'] })
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Obter detalhes de um produto pelo ID',
@@ -165,7 +169,8 @@ export class ProductController {
   }
 
   @Get('/barcode/:barcode')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @RequirePermissions({ allOf: ['tenant.products.view'] })
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Obter detalhes de um produto pelo código de barras',

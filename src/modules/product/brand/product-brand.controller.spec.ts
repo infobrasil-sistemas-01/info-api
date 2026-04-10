@@ -3,6 +3,7 @@ import { BadRequestException } from '@nestjs/common';
 import { ProductBrandController } from './product-brand.controller';
 import { ProductBrandService } from './product-brand.service';
 import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
+import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 
 describe('ProductBrandController', () => {
   let controller: ProductBrandController;
@@ -26,6 +27,8 @@ describe('ProductBrandController', () => {
       providers: [{ provide: ProductBrandService, useValue: mockBrandService }],
     })
       .overrideGuard(JwtAuthGuard)
+      .useValue({ canActivate: () => true })
+      .overrideGuard(PermissionsGuard)
       .useValue({ canActivate: () => true })
       .compile();
 

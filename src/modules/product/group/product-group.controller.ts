@@ -17,13 +17,16 @@ import {
   ApiResponse,
 } from '@nestjs/swagger';
 import { ProductGroupService } from './product-group.service';
+import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
+import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
 
 @Controller('products/groups')
 export class ProductGroupController {
   constructor(private readonly groupService: ProductGroupService) {}
 
   @Get()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @RequirePermissions({ allOf: ['tenant.groups.view'] })
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Listar grupos de produtos',

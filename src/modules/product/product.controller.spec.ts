@@ -3,6 +3,7 @@ import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { ProductController } from './product.controller';
 import { ProductService } from './product.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 
 describe('ProductController', () => {
   let controller: ProductController;
@@ -27,6 +28,8 @@ describe('ProductController', () => {
       providers: [{ provide: ProductService, useValue: mockProductService }],
     })
       .overrideGuard(JwtAuthGuard)
+      .useValue({ canActivate: () => true })
+      .overrideGuard(PermissionsGuard)
       .useValue({ canActivate: () => true })
       .compile();
 

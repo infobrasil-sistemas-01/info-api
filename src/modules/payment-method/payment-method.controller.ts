@@ -15,13 +15,16 @@ import {
   ApiQuery,
   ApiResponse,
 } from '@nestjs/swagger';
+import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
+import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
 
 @Controller('payment-methods')
 export class PaymentMethodController {
   constructor(private readonly paymentMethodService: PaymentMethodService) {}
 
   @Get()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @RequirePermissions({ allOf: ['tenant.payment-methods.view'] })
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Listar formas de pagamento',
