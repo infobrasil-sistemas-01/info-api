@@ -6,34 +6,70 @@
 generator client {
   provider = "prisma-client-js"
 }
+
 datasource db {
   provider = "postgresql"
 }
 
 model User {
-  id String @id @default(uuid())
-  user  String @db.VarChar(78) @unique
-  passwordHash String @db.VarChar(255) @map("password_hash")
-  status Boolean @default(true)
-  dbCredentialsId String @map("db_credentials_id")
-  storeId Int @map("store_id") @default(1)
-  createdAt DateTime @default(now()) @map("created_at") 
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id              String   @id @default(uuid())
+  user            String   @unique @db.VarChar(78)
+  passwordHash    String   @map("password_hash") @db.VarChar(255)
+  status          Boolean  @default(true)
+  dbCredentialsId String   @map("db_credentials_id")
+  storeId         Int      @default(1) @map("store_id")
+  roleId          String?  @map("role_id")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
 
   dbCredentials DbCredentials @relation(fields: [dbCredentialsId], references: [id])
+  role          Role?         @relation(fields: [roleId], references: [id])
 
   @@map("users")
 }
 
 model DbCredentials {
-  id String @id @default(uuid())
-  host String
-  port Int
+  id       String @id @default(uuid())
+  host     String
+  port     Int
   database String
-  user String
-  dbId Int @map("db_id")
+  user     String
+  dbId     Int    @map("db_id")
 
   users User[]
 
   @@map("db_credentials")
+}
+
+model Role {
+  id          String  @id @default(uuid())
+  name        String  @db.VarChar(50)
+  description String? @db.VarChar(255)
+
+  users           User[]
+  rolePermissions RolePermission[]
+
+  @@map("roles")
+}
+
+model Permission {
+  id          String  @id @default(uuid())
+  key         String  @unique @db.VarChar(100)
+  name        String  @db.VarChar(50)
+  description String? @db.VarChar(255)
+
+  rolePermissions RolePermission[]
+
+  @@map("permissions")
+}
+
+model RolePermission {
+  roleId       String
+  permissionId String
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+  @@map("role_permissions")
 }
