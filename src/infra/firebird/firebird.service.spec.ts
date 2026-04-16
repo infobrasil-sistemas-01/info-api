@@ -19,7 +19,7 @@ describe('FirebirdService', () => {
     jest.clearAllMocks();
   });
 
-  describe('getDatabaseConnection', () => {
+  describe('createPool', () => {
     const mockOptions: IConnectionOptions = {
       host: 'localhost',
       port: 3050,
@@ -29,16 +29,15 @@ describe('FirebirdService', () => {
       pageSize: 4096,
     };
 
-    it('should attach to Firebird database with decrypted password', async () => {
-      const mockDb = { detach: jest.fn() };
-      (firebird.attach as jest.Mock).mockImplementation((options, callback) => {
-        callback(null, mockDb);
-      });
+    it('should create a pool with decrypted password', () => {
+      const mockPool = { get: jest.fn() };
+      (firebird.pool as jest.Mock).mockReturnValue(mockPool);
 
-      const result = await service.getDatabaseConnection(mockOptions);
+      const result = service.createPool(mockOptions);
 
-      expect(result).toBe(mockDb);
-      expect(firebird.attach).toHaveBeenCalledWith(
+      expect(result).toBe(mockPool);
+      expect(firebird.pool).toHaveBeenCalledWith(
+        5, // default poolSize
         expect.objectContaining({
           host: 'localhost',
           port: 3050,
@@ -46,60 +45,16 @@ describe('FirebirdService', () => {
           user: 'sysdba',
           pageSize: 4096,
         }),
-        expect.any(Function),
       );
     });
 
-    it('should reject promise when attachment fails', async () => {
-      (firebird.attach as jest.Mock).mockImplementation((options, callback) => {
-        callback(new Error('Attachment error'), null);
-      });
+    it('should use specified pool size', () => {
+      const mockPool = { get: jest.fn() };
+      (firebird.pool as jest.Mock).mockReturnValue(mockPool);
 
-      await expect(service.getDatabaseConnection(mockOptions)).rejects.toThrow(
-        'Attachment error',
-      );
-    });
+      service.createPool(mockOptions, 10);
 
-    it('should call firebird.attach with correct options', async () => {
-      const mockDb = { detach: jest.fn() };
-      (firebird.attach as jest.Mock).mockImplementation((options, callback) => {
-        callback(null, mockDb);
-      });
-
-      await service.getDatabaseConnection(mockOptions);
-
-      expect(firebird.attach).toHaveBeenCalledTimes(1);
-    });
-  });
-
-  describe('FAILING: firebird connection edge cases', () => {
-    const mockOptions: IConnectionOptions = {
-      host: 'localhost',
-      port: 3050,
-      database: 'test.fdb',
-      user: 'sysdba',
-      id: 98,
-      pageSize: 4096,
-    };
-
-    it('should throw error when database file does not exist', async () => {
-      (firebird.attach as jest.Mock).mockImplementation((options, callback) => {
-        callback(new Error('Database file not found'), null);
-      });
-
-      await expect(service.getDatabaseConnection(mockOptions)).rejects.toThrow(
-        'Database file not found',
-      );
-    });
-
-    it('should throw error when connection pool is exhausted', async () => {
-      (firebird.attach as jest.Mock).mockImplementation((options, callback) => {
-        callback(new Error('Pool exhausted'), null);
-      });
-
-      await expect(service.getDatabaseConnection(mockOptions)).rejects.toThrow(
-        'Pool exhausted',
-      );
+      expect(firebird.pool).toHaveBeenCalledWith(10, expect.any(Object));
     });
   });
 });

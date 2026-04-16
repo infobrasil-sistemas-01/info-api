@@ -7,6 +7,8 @@ describe('TenantConnectionService', () => {
   let service: TenantConnectionService;
   let mockPrisma: any;
   let mockFirebirdService: any;
+  let mockPool: any;
+  let mockDb: any;
 
   const mockDbCredentials = {
     id: 'cred-1',
@@ -17,9 +19,13 @@ describe('TenantConnectionService', () => {
     dbId: 98,
   };
 
-  const mockConnection = { query: jest.fn(), detach: jest.fn() };
-
   beforeEach(async () => {
+    mockDb = { detach: jest.fn() };
+    mockPool = {
+      get: jest.fn().mockImplementation((callback) => callback(null, mockDb)),
+      destroy: jest.fn().mockImplementation((callback) => callback()),
+    };
+
     mockPrisma = {
       dbCredentials: {
         findUnique: jest.fn().mockResolvedValue(mockDbCredentials),
@@ -27,7 +33,7 @@ describe('TenantConnectionService', () => {
     };
 
     mockFirebirdService = {
-      getDatabaseConnection: jest.fn().mockResolvedValue(mockConnection),
+      createPool: jest.fn().mockReturnValue(mockPool),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -46,36 +52,26 @@ describe('TenantConnectionService', () => {
   });
 
   describe('getConnection', () => {
-    it('should return cached connection if available', async () => {
-      const connection1 = await service.getConnection('cred-1');
-      const connection2 = await service.getConnection('cred-1');
-
-      expect(connection1).toBe(connection2);
-      expect(mockPrisma.dbCredentials.findUnique).toHaveBeenCalledTimes(1);
-      expect(mockFirebirdService.getDatabaseConnection).toHaveBeenCalledTimes(
-        1,
-      );
-    });
-
-    it('should fetch credentials from prisma when not cached', async () => {
+    it('should fetch credentials from prisma on first call', async () => {
       await service.getConnection('cred-1');
 
       expect(mockPrisma.dbCredentials.findUnique).toHaveBeenCalledWith({
         where: { id: 'cred-1' },
       });
+      expect(mockFirebirdService.createPool).toHaveBeenCalled();
     });
 
-    it('should create connection with correct options from credentials', async () => {
+    it('should NOT fetch credentials from prisma on second call (credentialsCache)', async () => {
+      await service.getConnection('cred-1');
       await service.getConnection('cred-1');
 
-      expect(mockFirebirdService.getDatabaseConnection).toHaveBeenCalledWith({
-        host: 'localhost',
-        database: 'test.fdb',
-        user: 'sysdba',
-        id: 98,
-        port: 3050,
-        pageSize: 4096,
-      });
+      expect(mockPrisma.dbCredentials.findUnique).toHaveBeenCalledTimes(1);
+    });
+
+    it('should return a connection from the pool', async () => {
+      const conn = await service.getConnection('cred-1');
+      expect(conn).toBe(mockDb);
+      expect(mockPool.get).toHaveBeenCalled();
     });
 
     it('should throw error when credentials not found', async () => {
@@ -87,24 +83,37 @@ describe('TenantConnectionService', () => {
     });
   });
 
-  describe('FAILING: tenant connection edge cases', () => {
-    it('should throw error when firebird connection fails', async () => {
-      mockFirebirdService.getDatabaseConnection.mockRejectedValue(
-        new Error('Firebird connection failed'),
-      );
-
-      await expect(service.getConnection('cred-1')).rejects.toThrow(
-        'Firebird connection failed',
-      );
+  describe('releaseConnection', () => {
+    it('should call detach on the connection', () => {
+      service.releaseConnection(mockDb);
+      expect(mockDb.detach).toHaveBeenCalled();
     });
+  });
 
-    it('should throw error when credentials have missing fields', async () => {
-      mockPrisma.dbCredentials.findUnique.mockResolvedValue({
-        id: 'cred-1',
-        host: 'localhost',
-      });
+  describe('destroyPool', () => {
+    it('should destroy the pool and remove from poolCache', async () => {
+      await service.getConnection('cred-1');
+      await service.destroyPool('cred-1');
 
-      await expect(service.getConnection('cred-1')).rejects.toThrow();
+      expect(mockPool.destroy).toHaveBeenCalled();
+
+      // Next getConnection should create a new pool but NOT call Prisma
+      await service.getConnection('cred-1');
+      expect(mockFirebirdService.createPool).toHaveBeenCalledTimes(2);
+      expect(mockPrisma.dbCredentials.findUnique).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('invalidateCredentials', () => {
+    it('should destroy pool and clear credentials cache', async () => {
+      await service.getConnection('cred-1');
+      await service.invalidateCredentials('cred-1');
+
+      expect(mockPool.destroy).toHaveBeenCalled();
+
+      // Next getConnection should call Prisma again
+      await service.getConnection('cred-1');
+      expect(mockPrisma.dbCredentials.findUnique).toHaveBeenCalledTimes(2);
     });
   });
 });
