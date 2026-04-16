@@ -318,5 +318,34 @@ describe('API E2E Tests', () => {
           .expect(401);
       });
     });
+
+    describe('GET /api/v1/account-receivable', () => {
+      it('should return 400 when no filter is provided', async () => {
+        await request(app.getHttpServer())
+          .get('/api/v1/account-receivable')
+          .set(authHeader())
+          .expect(400);
+      });
+
+      it('should return 400 when only page is provided (no filter)', async () => {
+        await request(app.getHttpServer())
+          .get('/api/v1/account-receivable?page=1')
+          .set(authHeader())
+          .expect(400);
+      });
+
+      it('should return 200 with all query params', async () => {
+        await request(app.getHttpServer())
+          .get('/api/v1/account-receivable?page=1&clientId=1&arId=1&situation=A&startDate=2022-01-01&endDate=2022-12-31')
+          .set(authHeader())
+          .expect(200);
+      });
+
+      it('should return 401 without token', async () => {
+        await request(app.getHttpServer())
+          .get('/api/v1/account-receivable')
+          .expect(401);
+      });
+    });
   });
 });

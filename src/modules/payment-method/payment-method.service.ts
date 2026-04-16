@@ -14,7 +14,8 @@ export class PaymentMethodService {
       );
     }
 
-    const connection =
+    let connection: any;
+    connection =
       await this.tenantConnectionService.getConnection(credentialsId);
 
     try {
@@ -32,7 +33,7 @@ export class PaymentMethodService {
 
       return result;
     } finally {
-      // await this.tenantConnectionService.detach(credentialsId);
+      this.tenantConnectionService.releaseConnection(connection);
     }
   }
 }

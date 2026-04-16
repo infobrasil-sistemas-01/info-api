@@ -17,7 +17,8 @@ export class AccountReceivableService {
     startDate?: string,
     endDate?: string
   ) {
-    const connection =
+    let connection: any;
+    connection =
       await this.tenantConnectionService.getConnection(credentialsId);
 
     const pageSize = 25;
@@ -120,7 +121,7 @@ export class AccountReceivableService {
 
       return result;
     } finally {
-      // await this.tenantConnectionService.detach(credentialsId);
+      this.tenantConnectionService.releaseConnection(connection);
     }
   }
 }

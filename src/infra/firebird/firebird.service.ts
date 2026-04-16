@@ -14,17 +14,19 @@ export interface IConnectionOptions {
 
 @Injectable()
 export class FirebirdService {
-  async getDatabaseConnection(options: IConnectionOptions) {
+  /**
+   * Cria um pool de conexões para o banco Firebird.
+   * O pool reutiliza conexões de forma segura sem fechar o socket entre requisições,
+   * evitando o erro `lazy_count` do node-firebird.
+   * @param options Opções de conexão
+   * @param poolSize Número máximo de conexões no pool (padrão: 5)
+   */
+  createPool(options: IConnectionOptions, poolSize = 5): firebird.ConnectionPool {
     const optionsFinal = {
       ...options,
       password: decrypt(ids(options.id)),
     };
 
-    return new Promise<firebird.Database>((resolve, reject) => {
-      firebird.attach(optionsFinal, (err, db) => {
-        if (err) return reject(err);
-        resolve(db);
-      });
-    });
+    return firebird.pool(poolSize, optionsFinal);
   }
 }

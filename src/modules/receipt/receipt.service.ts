@@ -8,7 +8,8 @@ export class ReceiptService {
   ) { }
 
   async post(credentialsId: string, storeId: number = 1, orderId: number) {
-    const connection =
+    let connection: any;
+    connection =
       await this.tenantConnectionService.getConnection(credentialsId);
 
     try {
@@ -1001,7 +1002,7 @@ export class ReceiptService {
 
       return result;
     } finally {
-      // await this.tenantConnectionService.detach(credentialsId);
+      this.tenantConnectionService.releaseConnection(connection);
     }
   }
 }

@@ -17,7 +17,8 @@ export class OrderService {
   ) { }
 
   async post(credentialsId: string, data: PostOrderDto, storeId: number) {
-    const connection =
+    let connection: any;
+    connection =
       await this.tenantConnectionService.getConnection(credentialsId);
 
     try {
@@ -91,7 +92,7 @@ export class OrderService {
 
       return { orderId: order.VEN_NUMERO };
     } finally {
-      // await this.tenantConnectionService.detach(credentialsId);
+      this.tenantConnectionService.releaseConnection(connection);
     }
   }
 
@@ -101,7 +102,8 @@ export class OrderService {
     storeId: number,
     receiptData: { email: string; cpf?: string },
   ) {
-    const connection =
+    let connection: any;
+    connection =
       await this.tenantConnectionService.getConnection(credentialsId);
 
     try {
@@ -151,7 +153,7 @@ export class OrderService {
 
       return { receiptId: result.ID };
     } finally {
-      // await this.tenantConnectionService.detach(credentialsId);
+      this.tenantConnectionService.releaseConnection(connection);
     }
   }
 
@@ -161,7 +163,8 @@ export class OrderService {
     page: number = 1,
     pageSize: number = 10,
   ) {
-    const connection =
+    let connection: any;
+    connection =
       await this.tenantConnectionService.getConnection(credentialsId);
 
     try {
@@ -194,7 +197,7 @@ export class OrderService {
 
       return result;
     } finally {
-      // await this.tenantConnectionService.detach(credentialsId);
+      this.tenantConnectionService.releaseConnection(connection);
     }
   }
 
@@ -203,7 +206,8 @@ export class OrderService {
     storeId: number,
     id: number,
   ): Promise<object> {
-    const connection =
+    let connection: any;
+    connection =
       await this.tenantConnectionService.getConnection(credentialsId);
 
     try {
@@ -240,7 +244,7 @@ export class OrderService {
 
       return result;
     } finally {
-      // await this.tenantConnectionService.detach(credentialsId);
+      this.tenantConnectionService.releaseConnection(connection);
     }
   }
 

@@ -17,7 +17,8 @@ export class ProductService {
     minStock?: number,
     search?: string,
   ) {
-    const connection =
+    let connection: any;
+    connection =
       await this.tenantConnectionService.getConnection(credentialsId);
 
     try {
@@ -84,12 +85,13 @@ export class ProductService {
 
       return result;
     } finally {
-      // await this.tenantConnectionService.detach(credentialsId);
+      this.tenantConnectionService.releaseConnection(connection);
     }
   }
 
   async getById(credentialsId: string, storeId: number = 1, id: number) {
-    const connection =
+    let connection: any;
+    connection =
       await this.tenantConnectionService.getConnection(credentialsId);
 
     try {
@@ -110,7 +112,7 @@ export class ProductService {
 
       return result;
     } finally {
-      // await this.tenantConnectionService.detach(credentialsId);
+      this.tenantConnectionService.releaseConnection(connection);
     }
   }
 
@@ -120,7 +122,8 @@ export class ProductService {
     id?: number,
     codigoBar?: number,
   ) {
-    const connection =
+    let connection: any;
+    connection =
       await this.tenantConnectionService.getConnection(credentialsId);
 
     try {
@@ -152,7 +155,7 @@ export class ProductService {
 
       return result;
     } finally {
-      // await this.tenantConnectionService.detach(credentialsId);
+      this.tenantConnectionService.releaseConnection(connection);
     }
   }
 }

@@ -104,7 +104,8 @@ export class OrderItemService {
   }
 
   async getByOrderId(credentialsId: string, orderId: number) {
-    const connection =
+    let connection: any;
+    connection =
       await this.tenantConnectionService.getConnection(credentialsId);
 
     try {
@@ -123,7 +124,7 @@ export class OrderItemService {
         });
       });
     } finally {
-      // await this.tenantConnectionService.detach(credentialsId);
+      this.tenantConnectionService.releaseConnection(connection);
     }
   }
 }

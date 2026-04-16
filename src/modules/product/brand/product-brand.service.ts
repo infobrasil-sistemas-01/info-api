@@ -8,7 +8,8 @@ export class ProductBrandService {
   ) { }
 
   async get(credentialsId: string, page: number = 1, pageSize: number = 10) {
-    const connection =
+    let connection: any;
+    connection =
       await this.tenantConnectionService.getConnection(credentialsId);
 
     try {
@@ -39,7 +40,7 @@ export class ProductBrandService {
 
       return result;
     } finally {
-      // await this.tenantConnectionService.detach(credentialsId);
+      this.tenantConnectionService.releaseConnection(connection);
     }
   }
 }
