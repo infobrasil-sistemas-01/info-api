@@ -5,6 +5,7 @@ import { ProductModule } from './modules/product/product.module';
 import { OrderModule } from './modules/order/order.module';
 import { PaymentMethodModule } from './modules/payment-method/payment-method.module';
 import { ReceiptModule } from './modules/receipt/receipt.module';
+import { AccountReceivableModule } from './modules/account-receivable/account-receivable.module';
 
 @Module({
   imports: [
@@ -16,8 +17,9 @@ import { ReceiptModule } from './modules/receipt/receipt.module';
     OrderModule,
     PaymentMethodModule,
     ReceiptModule,
+    AccountReceivableModule
   ],
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }

@@ -55,6 +55,7 @@ async function bootstrap() {
       'Endpoints relacionados à gestão de meios de pagamento',
     )
     .addTag('Order', 'Endpoints relacionados à gestão de pedidos')
+    .addTag('AccountReceivable', 'Endpoints relacionados à gestão de contas a receber')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

@@ -497,6 +497,93 @@
           "PaymentMethod"
         ]
       }
+    },
+    "/api/v1/account-receivable": {
+      "get": {
+        "description": "Obtém uma lista de contas a receber da loja.",
+        "operationId": "AccountReceivableController_get",
+        "parameters": [
+          {
+            "name": "endDate",
+            "required": false,
+            "in": "query",
+            "description": "Data final",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "startDate",
+            "required": false,
+            "in": "query",
+            "description": "Data inicial",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "situation",
+            "required": false,
+            "in": "query",
+            "description": "Situação da conta a receber (A - Aberto, L - Liquidado)",
+            "schema": {
+              "enum": [
+                "A",
+                "L"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "arId",
+            "required": false,
+            "in": "query",
+            "description": "ID da conta a receber",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "clientId",
+            "required": false,
+            "in": "query",
+            "description": "ID do cliente",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Página a ser retornada (Máximo 100)",
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Contas a receber obtidas com sucesso."
+          },
+          "401": {
+            "description": "Token de autenticação inválido ou ausente."
+          },
+          "403": {
+            "description": "Token de autenticação inválido ou ausente."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Obter contas a receber",
+        "tags": [
+          "AccountReceivable"
+        ]
+      }
     }
   },
   "info": {
@@ -529,6 +616,10 @@
     {
       "name": "Order",
       "description": "Endpoints relacionados à gestão de pedidos"
+    },
+    {
+      "name": "AccountReceivable",
+      "description": "Endpoints relacionados à gestão de contas a receber"
     }
   ],
   "servers": [

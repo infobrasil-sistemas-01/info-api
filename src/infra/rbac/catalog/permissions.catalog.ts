@@ -149,6 +149,26 @@ export const PERMISSIONS = [
     descricao: 'Visualizar clientes do tenant',
     module: 'tenant'
   },
+  {
+    key: 'tenant.account-receivable.view',
+    descricao: 'Visualizar contas a receber do tenant',
+    module: 'tenant'
+  },
+  {
+    key: 'tenant.account-receivable.create',
+    descricao: 'Criar contas a receber do tenant',
+    module: 'tenant'
+  },
+  {
+    key: 'tenant.account-receivable.update',
+    descricao: 'Atualizar contas a receber do tenant',
+    module: 'tenant'
+  },
+  {
+    key: 'tenant.account-receivable.delete',
+    descricao: 'Deletar contas a receber do tenant',
+    module: 'tenant'
+  },
 ] as const satisfies readonly PermissionDefinition[];
 
 export type PermissionKey = (typeof PERMISSIONS)[number]['key'];
