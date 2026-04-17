@@ -42,10 +42,18 @@ export class AuthController {
     description:
       'Login realizado com sucesso, retorna usuário e token de acesso.',
     schema: {
-      example: {
-        user: { id: 1, username: 'Admin', role: 'Admin' },
-        access_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
-        refresh_token: 'def502005a30ed97cde6...'
+      type: 'object',
+      properties: {
+        user: {
+          type: 'object',
+          properties: {
+            id: { type: 'number', example: 1 },
+            name: { type: 'string', example: 'Admin' },
+            role: { type: 'string', example: 'ADMIN' }
+          }
+        },
+        access_token: { type: 'string', example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' },
+        refresh_token: { type: 'string', example: 'def502005a30ed97cde6...' }
       }
     }
   })
@@ -86,8 +94,9 @@ export class AuthController {
     status: 200,
     description: 'Novo access token gerado.',
     schema: {
-      example: {
-        access_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+      type: 'object',
+      properties: {
+        access_token: { type: 'string', example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' }
       }
     }
   })

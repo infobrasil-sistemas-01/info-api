@@ -61,19 +61,21 @@ export class AccountReceivableController {
         status: 200,
         description: 'Contas a receber obtidas com sucesso.',
         schema: {
-            example: [
-                {
-                    cli_codigo: 1,
-                    cli_nome: "Cliente de Teste",
-                    cli_fone: "11999999999",
-                    cli_celular: "11999999999",
-                    cli_conceito: "A",
-                    rec_numero: 100,
-                    rec_situacao: "A",
-                    rec_datavenc: "2024-05-15T00:00:00.000Z",
-                    rec_valor: 150.00
+            type: 'array',
+            items: {
+                type: 'object',
+                properties: {
+                    CLI_CODIGO: { type: 'number', example: 1 },
+                    CLI_NOME: { type: 'string', example: "Cliente de Teste" },
+                    CLI_FONE: { type: 'string', example: "11999999999" },
+                    CLI_CELULAR: { type: 'string', example: "11999999999" },
+                    CLI_CONCEITO: { type: 'string', example: "A" },
+                    REC_NUMERO: { type: 'number', example: 100 },
+                    REC_SITUACAO: { type: 'string', example: "A" },
+                    REC_DATAVENC: { type: 'string', example: "2024-05-15T00:00:00.000Z" },
+                    REC_VALOR: { type: 'number', example: 150.00 }
                 }
-            ]
+            }
         }
     })
     @ApiResponse({

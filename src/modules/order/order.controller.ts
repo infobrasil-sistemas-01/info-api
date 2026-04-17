@@ -46,8 +46,9 @@ export class OrderController {
     status: 201,
     description: 'Pedido criado com sucesso.',
     schema: {
-      example: {
-        orderId: 12345
+      type: 'object',
+      properties: {
+        orderId: { type: 'number', example: 12345 }
       }
     }
   })
@@ -86,8 +87,9 @@ export class OrderController {
     status: 201,
     description: 'Cupom fiscal gerado e email enviado.',
     schema: {
-      example: {
-        receiptId: 54321
+      type: 'object',
+      properties: {
+        receiptId: { type: 'number', example: 54321 }
       }
     }
   })
@@ -124,21 +126,23 @@ export class OrderController {
     status: 200,
     description: 'Lista de pedidos retornada com sucesso.',
     schema: {
-      example: [
-        {
-          VEN_NUMERO: 12345,
-          VEN_NUMSITE: "WEB-12345",
-          LOJ_CODIGO: 1,
-          VEN_TIPO: "E",
-          VEN_DATA: "2024-05-10T00:00:00.000Z",
-          VEN_HORA: "14:30:00",
-          FP1_CODIGO: 1,
-          fpg_descricao: "Dinheiro",
-          pp1_codigo: 1,
-          plp_descricao: "A Vista",
-          ven_totalliquido: 250.50
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          VEN_NUMERO: { type: 'number', example: 12345 },
+          VEN_NUMSITE: { type: 'string', example: "WEB-12345" },
+          LOJ_CODIGO: { type: 'number', example: 1 },
+          VEN_TIPO: { type: 'string', example: "E" },
+          VEN_DATA: { type: 'string', example: "2024-05-10T00:00:00.000Z" },
+          VEN_HORA: { type: 'string', example: "14:30:00" },
+          FP1_CODIGO: { type: 'number', example: 1 },
+          fpg_descricao: { type: 'string', example: "Dinheiro" },
+          pp1_codigo: { type: 'number', example: 1 },
+          plp_descricao: { type: 'string', example: "A Vista" },
+          ven_totalliquido: { type: 'number', example: 250.50 }
         }
-      ]
+      }
     }
   })
   @ApiQuery({
@@ -185,30 +189,35 @@ export class OrderController {
     status: 200,
     description: 'Detalhes do pedido retornados com sucesso.',
     schema: {
-      example: {
-        VEN_NUMERO: 12345,
-        VEN_NUMSITE: "WEB-12345",
-        LOJ_CODIGO: 1,
-        VEN_TIPO: "E",
-        VEN_PRECO: "1",
-        VEN_DATA: "2024-05-10T00:00:00.000Z",
-        VEN_HORA: "14:30:00",
-        FP1_CODIGO: 1,
-        fpg_descricao: "Dinheiro",
-        pp1_codigo: 1,
-        plp_descricao: "A Vista",
-        VEN_TOTALBRUTO: 300.00,
-        ven_totaldesc: 49.50,
-        ven_totalliquido: 250.50,
-        ven_quant: 2,
-        items: [
-          {
-            ITE_SEQUENCIA: 1,
-            PRO_CODIGO: 101,
-            ITE_QUANT: 2,
-            ITE_PRECO: 150.00
+      type: 'object',
+      properties: {
+        VEN_NUMERO: { type: 'number', example: 12345 },
+        VEN_NUMSITE: { type: 'string', example: "WEB-12345" },
+        LOJ_CODIGO: { type: 'number', example: 1 },
+        VEN_TIPO: { type: 'string', example: "E" },
+        VEN_PRECO: { type: 'string', example: "1" },
+        VEN_DATA: { type: 'string', example: "2024-05-10T00:00:00.000Z" },
+        VEN_HORA: { type: 'string', example: "14:30:00" },
+        FP1_CODIGO: { type: 'number', example: 1 },
+        fpg_descricao: { type: 'string', example: "Dinheiro" },
+        pp1_codigo: { type: 'number', example: 1 },
+        plp_descricao: { type: 'string', example: "A Vista" },
+        VEN_TOTALBRUTO: { type: 'number', example: 300.00 },
+        ven_totaldesc: { type: 'number', example: 49.50 },
+        ven_totalliquido: { type: 'number', example: 250.50 },
+        ven_quant: { type: 'number', example: 2 },
+        items: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              ITE_SEQUENCIA: { type: 'number', example: 1 },
+              PRO_CODIGO: { type: 'number', example: 101 },
+              ITE_QUANT: { type: 'number', example: 2 },
+              ITE_PRECO: { type: 'number', example: 150.00 }
+            }
           }
-        ]
+        }
       }
     }
   })

@@ -12,14 +12,33 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
+                  "type": "object",
+                  "properties": {
                     "user": {
-                      "id": 1,
-                      "username": "Admin",
-                      "role": "Admin"
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "Admin"
+                        },
+                        "role": {
+                          "type": "string",
+                          "example": "ADMIN"
+                        }
+                      }
                     },
-                    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-                    "refresh_token": "def502005a30ed97cde6..."
+                    "access_token": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    },
+                    "refresh_token": {
+                      "type": "string",
+                      "example": "def502005a30ed97cde6..."
+                    }
                   }
                 }
               }
@@ -61,8 +80,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                  "type": "object",
+                  "properties": {
+                    "access_token": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    }
                   }
                 }
               }
@@ -144,20 +167,52 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": [
-                    {
-                      "PRO_CODIGO": 101,
-                      "PRO_CODIGOBAR": "7891234567890",
-                      "PRO_DESCRICAO": "Produto Exemplo",
-                      "MAR_CODIGO": 1,
-                      "MAR_DESCRICAO": "Marca Exemplo",
-                      "GRU_CODIGO": 1,
-                      "GRU_DESCRICAO": "Grupo Exemplo",
-                      "ESTOQUE": 50,
-                      "PRECO": 19.99,
-                      "PRECO2": 17.5
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "PRO_CODIGO": {
+                        "type": "number",
+                        "example": 101
+                      },
+                      "PRO_CODIGOBAR": {
+                        "type": "string",
+                        "example": "7891234567890"
+                      },
+                      "PRO_DESCRICAO": {
+                        "type": "string",
+                        "example": "Produto Exemplo"
+                      },
+                      "MAR_CODIGO": {
+                        "type": "number",
+                        "example": 1
+                      },
+                      "MAR_DESCRICAO": {
+                        "type": "string",
+                        "example": "Marca Exemplo"
+                      },
+                      "GRU_CODIGO": {
+                        "type": "number",
+                        "example": 1
+                      },
+                      "GRU_DESCRICAO": {
+                        "type": "string",
+                        "example": "Grupo Exemplo"
+                      },
+                      "ESTOQUE": {
+                        "type": "number",
+                        "example": 50
+                      },
+                      "PRECO": {
+                        "type": "number",
+                        "example": 19.99
+                      },
+                      "PRECO2": {
+                        "type": "number",
+                        "example": 17.5
+                      }
                     }
-                  ]
+                  }
                 }
               }
             }
@@ -201,14 +256,36 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "PRO_CODIGO": 101,
-                    "PRO_CODIGOBAR": "7891234567890",
-                    "PRO_PRCCOMPRA": 10,
-                    "PRO_PRCCUSTO": 12.5,
-                    "PRO_PRCCOMPRAFISCAL": 11,
-                    "PRO_CUSTOFISCAL": 13,
-                    "PRO_PRECO1": 19.99
+                  "type": "object",
+                  "properties": {
+                    "PRO_CODIGO": {
+                      "type": "number",
+                      "example": 101
+                    },
+                    "PRO_CODIGOBAR": {
+                      "type": "string",
+                      "example": "7891234567890"
+                    },
+                    "PRO_PRCCOMPRA": {
+                      "type": "number",
+                      "example": 10
+                    },
+                    "PRO_PRCCUSTO": {
+                      "type": "number",
+                      "example": 12.5
+                    },
+                    "PRO_PRCCOMPRAFISCAL": {
+                      "type": "number",
+                      "example": 11
+                    },
+                    "PRO_CUSTOFISCAL": {
+                      "type": "number",
+                      "example": 13
+                    },
+                    "PRO_PRECO1": {
+                      "type": "number",
+                      "example": 19.99
+                    }
                   }
                 }
               }
@@ -253,17 +330,48 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "PRO_CODIGO": 101,
-                    "PRO_CODIGOBAR": "7891234567890",
-                    "PRO_DESCRICAO": "Produto Exemplo",
-                    "MAR_CODIGO": 1,
-                    "MAR_DESCRICAO": "Marca Exemplo",
-                    "GRU_CODIGO": 1,
-                    "GRU_DESCRICAO": "Grupo Exemplo",
-                    "ESTOQUE": 50,
-                    "PRECO": 19.99,
-                    "PRECO2": 17.5
+                  "type": "object",
+                  "properties": {
+                    "PRO_CODIGO": {
+                      "type": "number",
+                      "example": 101
+                    },
+                    "PRO_CODIGOBAR": {
+                      "type": "string",
+                      "example": "7891234567890"
+                    },
+                    "PRO_DESCRICAO": {
+                      "type": "string",
+                      "example": "Produto Exemplo"
+                    },
+                    "MAR_CODIGO": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "MAR_DESCRICAO": {
+                      "type": "string",
+                      "example": "Marca Exemplo"
+                    },
+                    "GRU_CODIGO": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "GRU_DESCRICAO": {
+                      "type": "string",
+                      "example": "Grupo Exemplo"
+                    },
+                    "ESTOQUE": {
+                      "type": "number",
+                      "example": 50
+                    },
+                    "PRECO": {
+                      "type": "number",
+                      "example": 19.99
+                    },
+                    "PRECO2": {
+                      "type": "number",
+                      "example": 17.5
+                    }
                   }
                 }
               }
@@ -317,12 +425,20 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": [
-                    {
-                      "MAR_CODIGO": 1,
-                      "MAR_DESCRICAO": "Marca Exemplo"
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "MAR_CODIGO": {
+                        "type": "number",
+                        "example": 1
+                      },
+                      "MAR_DESCRICAO": {
+                        "type": "string",
+                        "example": "Marca Exemplo"
+                      }
                     }
-                  ]
+                  }
                 }
               }
             }
@@ -375,12 +491,20 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": [
-                    {
-                      "GRU_CODIGO": 1,
-                      "GRU_DESCRICAO": "Grupo Exemplo"
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "GRU_CODIGO": {
+                        "type": "number",
+                        "example": 1
+                      },
+                      "GRU_DESCRICAO": {
+                        "type": "string",
+                        "example": "Grupo Exemplo"
+                      }
                     }
-                  ]
+                  }
                 }
               }
             }
@@ -424,8 +548,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "orderId": 12345
+                  "type": "object",
+                  "properties": {
+                    "orderId": {
+                      "type": "number",
+                      "example": 12345
+                    }
                   }
                 }
               }
@@ -475,21 +603,56 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": [
-                    {
-                      "VEN_NUMERO": 12345,
-                      "VEN_NUMSITE": "WEB-12345",
-                      "LOJ_CODIGO": 1,
-                      "VEN_TIPO": "E",
-                      "VEN_DATA": "2024-05-10T00:00:00.000Z",
-                      "VEN_HORA": "14:30:00",
-                      "FP1_CODIGO": 1,
-                      "fpg_descricao": "Dinheiro",
-                      "pp1_codigo": 1,
-                      "plp_descricao": "A Vista",
-                      "ven_totalliquido": 250.5
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "VEN_NUMERO": {
+                        "type": "number",
+                        "example": 12345
+                      },
+                      "VEN_NUMSITE": {
+                        "type": "string",
+                        "example": "WEB-12345"
+                      },
+                      "LOJ_CODIGO": {
+                        "type": "number",
+                        "example": 1
+                      },
+                      "VEN_TIPO": {
+                        "type": "string",
+                        "example": "E"
+                      },
+                      "VEN_DATA": {
+                        "type": "string",
+                        "example": "2024-05-10T00:00:00.000Z"
+                      },
+                      "VEN_HORA": {
+                        "type": "string",
+                        "example": "14:30:00"
+                      },
+                      "FP1_CODIGO": {
+                        "type": "number",
+                        "example": 1
+                      },
+                      "fpg_descricao": {
+                        "type": "string",
+                        "example": "Dinheiro"
+                      },
+                      "pp1_codigo": {
+                        "type": "number",
+                        "example": 1
+                      },
+                      "plp_descricao": {
+                        "type": "string",
+                        "example": "A Vista"
+                      },
+                      "ven_totalliquido": {
+                        "type": "number",
+                        "example": 250.5
+                      }
                     }
-                  ]
+                  }
                 }
               }
             }
@@ -536,8 +699,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "receiptId": 54321
+                  "type": "object",
+                  "properties": {
+                    "receiptId": {
+                      "type": "number",
+                      "example": 54321
+                    }
                   }
                 }
               }
@@ -576,30 +743,92 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": {
-                    "VEN_NUMERO": 12345,
-                    "VEN_NUMSITE": "WEB-12345",
-                    "LOJ_CODIGO": 1,
-                    "VEN_TIPO": "E",
-                    "VEN_PRECO": "1",
-                    "VEN_DATA": "2024-05-10T00:00:00.000Z",
-                    "VEN_HORA": "14:30:00",
-                    "FP1_CODIGO": 1,
-                    "fpg_descricao": "Dinheiro",
-                    "pp1_codigo": 1,
-                    "plp_descricao": "A Vista",
-                    "VEN_TOTALBRUTO": 300,
-                    "ven_totaldesc": 49.5,
-                    "ven_totalliquido": 250.5,
-                    "ven_quant": 2,
-                    "items": [
-                      {
-                        "ITE_SEQUENCIA": 1,
-                        "PRO_CODIGO": 101,
-                        "ITE_QUANT": 2,
-                        "ITE_PRECO": 150
+                  "type": "object",
+                  "properties": {
+                    "VEN_NUMERO": {
+                      "type": "number",
+                      "example": 12345
+                    },
+                    "VEN_NUMSITE": {
+                      "type": "string",
+                      "example": "WEB-12345"
+                    },
+                    "LOJ_CODIGO": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "VEN_TIPO": {
+                      "type": "string",
+                      "example": "E"
+                    },
+                    "VEN_PRECO": {
+                      "type": "string",
+                      "example": "1"
+                    },
+                    "VEN_DATA": {
+                      "type": "string",
+                      "example": "2024-05-10T00:00:00.000Z"
+                    },
+                    "VEN_HORA": {
+                      "type": "string",
+                      "example": "14:30:00"
+                    },
+                    "FP1_CODIGO": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "fpg_descricao": {
+                      "type": "string",
+                      "example": "Dinheiro"
+                    },
+                    "pp1_codigo": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "plp_descricao": {
+                      "type": "string",
+                      "example": "A Vista"
+                    },
+                    "VEN_TOTALBRUTO": {
+                      "type": "number",
+                      "example": 300
+                    },
+                    "ven_totaldesc": {
+                      "type": "number",
+                      "example": 49.5
+                    },
+                    "ven_totalliquido": {
+                      "type": "number",
+                      "example": 250.5
+                    },
+                    "ven_quant": {
+                      "type": "number",
+                      "example": 2
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "ITE_SEQUENCIA": {
+                            "type": "number",
+                            "example": 1
+                          },
+                          "PRO_CODIGO": {
+                            "type": "number",
+                            "example": 101
+                          },
+                          "ITE_QUANT": {
+                            "type": "number",
+                            "example": 2
+                          },
+                          "ITE_PRECO": {
+                            "type": "number",
+                            "example": 150
+                          }
+                        }
                       }
-                    ]
+                    }
                   }
                 }
               }
@@ -653,12 +882,20 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": [
-                    {
-                      "FPG_CODIGO": 1,
-                      "FPG_DESCRICAO": "Dinheiro"
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "FPG_CODIGO": {
+                        "type": "number",
+                        "example": 1
+                      },
+                      "FPG_DESCRICAO": {
+                        "type": "string",
+                        "example": "Dinheiro"
+                      }
                     }
-                  ]
+                  }
                 }
               }
             }
@@ -752,19 +989,48 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "example": [
-                    {
-                      "cli_codigo": 1,
-                      "cli_nome": "Cliente de Teste",
-                      "cli_fone": "11999999999",
-                      "cli_celular": "11999999999",
-                      "cli_conceito": "A",
-                      "rec_numero": 100,
-                      "rec_situacao": "A",
-                      "rec_datavenc": "2024-05-15T00:00:00.000Z",
-                      "rec_valor": 150
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "CLI_CODIGO": {
+                        "type": "number",
+                        "example": 1
+                      },
+                      "CLI_NOME": {
+                        "type": "string",
+                        "example": "Cliente de Teste"
+                      },
+                      "CLI_FONE": {
+                        "type": "string",
+                        "example": "11999999999"
+                      },
+                      "CLI_CELULAR": {
+                        "type": "string",
+                        "example": "11999999999"
+                      },
+                      "CLI_CONCEITO": {
+                        "type": "string",
+                        "example": "A"
+                      },
+                      "REC_NUMERO": {
+                        "type": "number",
+                        "example": 100
+                      },
+                      "REC_SITUACAO": {
+                        "type": "string",
+                        "example": "A"
+                      },
+                      "REC_DATAVENC": {
+                        "type": "string",
+                        "example": "2024-05-15T00:00:00.000Z"
+                      },
+                      "REC_VALOR": {
+                        "type": "number",
+                        "example": 150
+                      }
                     }
-                  ]
+                  }
                 }
               }
             }

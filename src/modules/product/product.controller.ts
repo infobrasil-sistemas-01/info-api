@@ -40,20 +40,22 @@ export class ProductController {
     status: 200,
     description: 'Lista de produtos retornada com sucesso.',
     schema: {
-      example: [
-        {
-          PRO_CODIGO: 101,
-          PRO_CODIGOBAR: "7891234567890",
-          PRO_DESCRICAO: "Produto Exemplo",
-          MAR_CODIGO: 1,
-          MAR_DESCRICAO: "Marca Exemplo",
-          GRU_CODIGO: 1,
-          GRU_DESCRICAO: "Grupo Exemplo",
-          ESTOQUE: 50,
-          PRECO: 19.99,
-          PRECO2: 17.50
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          PRO_CODIGO: { type: 'number', example: 101 },
+          PRO_CODIGOBAR: { type: 'string', example: "7891234567890" },
+          PRO_DESCRICAO: { type: 'string', example: "Produto Exemplo" },
+          MAR_CODIGO: { type: 'number', example: 1 },
+          MAR_DESCRICAO: { type: 'string', example: "Marca Exemplo" },
+          GRU_CODIGO: { type: 'number', example: 1 },
+          GRU_DESCRICAO: { type: 'string', example: "Grupo Exemplo" },
+          ESTOQUE: { type: 'number', example: 50 },
+          PRECO: { type: 'number', example: 19.99 },
+          PRECO2: { type: 'number', example: 17.50 }
         }
-      ]
+      }
     }
   })
   @ApiResponse({
@@ -151,14 +153,15 @@ export class ProductController {
     status: 200,
     description: 'Detalhes do produto retornados com sucesso.',
     schema: {
-      example: {
-        PRO_CODIGO: 101,
-        PRO_CODIGOBAR: "7891234567890",
-        PRO_PRCCOMPRA: 10.00,
-        PRO_PRCCUSTO: 12.50,
-        PRO_PRCCOMPRAFISCAL: 11.00,
-        PRO_CUSTOFISCAL: 13.00,
-        PRO_PRECO1: 19.99
+      type: 'object',
+      properties: {
+        PRO_CODIGO: { type: 'number', example: 101 },
+        PRO_CODIGOBAR: { type: 'string', example: "7891234567890" },
+        PRO_PRCCOMPRA: { type: 'number', example: 10.00 },
+        PRO_PRCCUSTO: { type: 'number', example: 12.50 },
+        PRO_PRCCOMPRAFISCAL: { type: 'number', example: 11.00 },
+        PRO_CUSTOFISCAL: { type: 'number', example: 13.00 },
+        PRO_PRECO1: { type: 'number', example: 19.99 }
       }
     }
   })
@@ -213,17 +216,18 @@ export class ProductController {
     status: 200,
     description: 'Detalhes do produto retornados com sucesso.',
     schema: {
-      example: {
-        PRO_CODIGO: 101,
-        PRO_CODIGOBAR: "7891234567890",
-        PRO_DESCRICAO: "Produto Exemplo",
-        MAR_CODIGO: 1,
-        MAR_DESCRICAO: "Marca Exemplo",
-        GRU_CODIGO: 1,
-        GRU_DESCRICAO: "Grupo Exemplo",
-        ESTOQUE: 50,
-        PRECO: 19.99,
-        PRECO2: 17.50
+      type: 'object',
+      properties: {
+        PRO_CODIGO: { type: 'number', example: 101 },
+        PRO_CODIGOBAR: { type: 'string', example: "7891234567890" },
+        PRO_DESCRICAO: { type: 'string', example: "Produto Exemplo" },
+        MAR_CODIGO: { type: 'number', example: 1 },
+        MAR_DESCRICAO: { type: 'string', example: "Marca Exemplo" },
+        GRU_CODIGO: { type: 'number', example: 1 },
+        GRU_DESCRICAO: { type: 'string', example: "Grupo Exemplo" },
+        ESTOQUE: { type: 'number', example: 50 },
+        PRECO: { type: 'number', example: 19.99 },
+        PRECO2: { type: 'number', example: 17.50 }
       }
     }
   })

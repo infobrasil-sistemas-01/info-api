@@ -38,12 +38,14 @@ export class ProductGroupController {
     status: 200,
     description: 'Lista de grupos de produtos retornada com sucesso.',
     schema: {
-      example: [
-        {
-          GRU_CODIGO: 1,
-          GRU_DESCRICAO: "Grupo Exemplo"
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          GRU_CODIGO: { type: 'number', example: 1 },
+          GRU_DESCRICAO: { type: 'string', example: "Grupo Exemplo" }
         }
-      ]
+      }
     }
   })
   @ApiResponse({

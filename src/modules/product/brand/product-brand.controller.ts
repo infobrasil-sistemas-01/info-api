@@ -38,12 +38,14 @@ export class ProductBrandController {
     status: 200,
     description: 'Lista de marcas de produtos retornada com sucesso.',
     schema: {
-      example: [
-        {
-          MAR_CODIGO: 1,
-          MAR_DESCRICAO: "Marca Exemplo"
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          MAR_CODIGO: { type: 'number', example: 1 },
+          MAR_DESCRICAO: { type: 'string', example: "Marca Exemplo" }
         }
-      ]
+      }
     }
   })
   @ApiResponse({

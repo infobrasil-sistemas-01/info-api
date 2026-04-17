@@ -35,12 +35,14 @@ export class PaymentMethodController {
     status: 200,
     description: 'Lista de formas de pagamento retornada com sucesso.',
     schema: {
-      example: [
-        {
-          FPG_CODIGO: 1,
-          FPG_DESCRICAO: "Dinheiro"
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          FPG_CODIGO: { type: 'number', example: 1 },
+          FPG_DESCRICAO: { type: 'string', example: "Dinheiro" }
         }
-      ]
+      }
     }
   })
   @ApiResponse({
