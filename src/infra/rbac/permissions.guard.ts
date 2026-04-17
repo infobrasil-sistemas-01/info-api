@@ -25,7 +25,7 @@ export class PermissionsGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
     private readonly ctx: RbacContextService,
-  ) {}
+  ) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const requirement =
@@ -63,7 +63,7 @@ export class PermissionsGuard implements CanActivate {
     const ok = this.evaluate(requirement, snap.allowedKeys);
 
     if (!ok) {
-      throw new ForbiddenException('Missing required permission.');
+      throw new ForbiddenException('Você não possui permissão para executar esta ação. Entre em contato com o time técnico da InfoBrasil.');
     }
 
     return true;
