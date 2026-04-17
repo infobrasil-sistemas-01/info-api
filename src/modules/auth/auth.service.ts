@@ -27,7 +27,7 @@ export class AuthService {
     private readonly jwt: JwtService,
     private readonly env: EnvService,
     @Inject(AUTH_CONFIG) private readonly authConfig: AuthConfig,
-  ) {}
+  ) { }
 
   async login(basic: string, meta: RequestMeta) {
     const [username, password] = Buffer.from(basic, 'base64')
@@ -35,6 +35,15 @@ export class AuthService {
       .split(':');
     const user = await this.prisma.user.findUnique({
       where: { user: username, status: true },
+      select: {
+        id: true,
+        user: true,
+        passwordHash: true,
+        status: true,
+        dbCredentialsId: true,
+        storeId: true,
+        role: true,
+      }
     });
 
     if (!user) {
@@ -70,6 +79,7 @@ export class AuthService {
       user: {
         id: user.id.toString(),
         username: user.user,
+        role: user.role.name,
       },
       accessToken,
       refreshToken,
