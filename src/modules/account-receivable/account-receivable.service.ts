@@ -21,56 +21,48 @@ export class AccountReceivableService {
     connection =
       await this.tenantConnectionService.getConnection(credentialsId);
 
-    const pageSize = 25;
-
-
-    if (page < 1) {
-      throw new BadRequestException('A página deve ser maior ou igual a 1');
-    }
-
-    if (page > 100) {
-      throw new BadRequestException('A página deve ser menor ou igual a 100');
-    }
-
-    if (!clientId && !arId && !situation && !startDate && !endDate) {
-      throw new BadRequestException('Pelo menos um filtro deve ser informado');
-    }
-
-    if (situation) {
-      if (situation != 'A' && situation != 'L') {
-        throw new BadRequestException('Situação inválida! Valores aceitos: A (Aberto) ou L (Liquidado)');
-      }
-    }
-
-    if (startDate) {
-      const date = new Date(startDate);
-      if (isNaN(date.getTime())) {
-        throw new BadRequestException('Data inicial inválida');
-      }
-    }
-
-    if (endDate) {
-      const date = new Date(endDate);
-      if (isNaN(date.getTime())) {
-        throw new BadRequestException('Data final inválida');
-      }
-    }
-
-    if (startDate && !endDate) {
-      throw new BadRequestException('Data final é obrigatória quando a data inicial é informada');
-    }
-
-    if (!startDate && endDate) {
-      throw new BadRequestException('Data inicial é obrigatória quando a data final é informada');
-    }
-
     try {
-      const transaction: any = await new Promise((resolve, reject) => {
-        connection.startTransaction((err: any, transaction: any) => {
-          if (err) return reject(err);
-          resolve(transaction);
-        });
-      });
+      const pageSize = 25;
+
+      if (page < 1) {
+        throw new BadRequestException('A página deve ser maior ou igual a 1');
+      }
+
+      if (page > 100) {
+        throw new BadRequestException('A página deve ser menor ou igual a 100');
+      }
+
+      if (!clientId && !arId && !situation && !startDate && !endDate) {
+        throw new BadRequestException('Pelo menos um filtro deve ser informado');
+      }
+
+      if (situation) {
+        if (situation != 'A' && situation != 'L') {
+          throw new BadRequestException('Situação inválida! Valores aceitos: A (Aberto) ou L (Liquidado)');
+        }
+      }
+
+      if (startDate) {
+        const date = new Date(startDate);
+        if (isNaN(date.getTime())) {
+          throw new BadRequestException('Data inicial inválida');
+        }
+      }
+
+      if (endDate) {
+        const date = new Date(endDate);
+        if (isNaN(date.getTime())) {
+          throw new BadRequestException('Data final inválida');
+        }
+      }
+
+      if (startDate && !endDate) {
+        throw new BadRequestException('Data final é obrigatória quando a data inicial é informada');
+      }
+
+      if (!startDate && endDate) {
+        throw new BadRequestException('Data inicial é obrigatória quando a data final é informada');
+      }
 
       let query = `select FIRST ? SKIP ?
       cli.cli_codigo,
@@ -112,7 +104,7 @@ export class AccountReceivableService {
       query += `ORDER BY rec.rec_datavenc DESC`;
 
       const result = (await new Promise((resolve, reject) => {
-        transaction.query(query, params, (err: any, res: any) => {
+        connection.query(query, params, (err: any, res: any) => {
           if (err) return reject(err);
           resolve(res);
         });

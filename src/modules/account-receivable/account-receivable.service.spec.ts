@@ -7,12 +7,8 @@ describe('AccountReceivableService', () => {
   let service: AccountReceivableService;
   let mockTenantConnection: any;
 
-  const mockTransaction = {
-    query: jest.fn(),
-  };
-
   const mockConnection = {
-    startTransaction: jest.fn(),
+    query: jest.fn(),
   };
 
   beforeAll(async () => {
@@ -37,11 +33,7 @@ describe('AccountReceivableService', () => {
 
   describe('get', () => {
     beforeEach(() => {
-      mockConnection.startTransaction.mockImplementation((callback) => {
-        callback(null, mockTransaction);
-      });
-
-      mockTransaction.query.mockImplementation((query, params, callback) => {
+      mockConnection.query.mockImplementation((query, params, callback) => {
         callback(null, [
           {
             cli_codigo: 1,
@@ -59,8 +51,7 @@ describe('AccountReceivableService', () => {
       const result = await service.get('cred-1', 1, 42);
 
       expect(result).toBeDefined();
-      expect(mockConnection.startTransaction).toHaveBeenCalled();
-      expect(mockTransaction.query).toHaveBeenCalled();
+      expect(mockConnection.query).toHaveBeenCalled();
     });
 
     it('should return account receivables with arId filter', async () => {
@@ -92,7 +83,7 @@ describe('AccountReceivableService', () => {
     it('should build query with situation parameter', async () => {
       await service.get('cred-1', 1, undefined, undefined, 'L');
 
-      expect(mockTransaction.query).toHaveBeenCalledWith(
+      expect(mockConnection.query).toHaveBeenCalledWith(
         expect.stringContaining('rec.rec_situacao = ?'),
         expect.arrayContaining(['L']),
         expect.any(Function),
@@ -102,7 +93,7 @@ describe('AccountReceivableService', () => {
     it('should build query with clientId parameter', async () => {
       await service.get('cred-1', 1, 99);
 
-      expect(mockTransaction.query).toHaveBeenCalledWith(
+      expect(mockConnection.query).toHaveBeenCalledWith(
         expect.stringContaining('rec.cli_codigo = ?'),
         expect.arrayContaining([99]),
         expect.any(Function),
@@ -112,7 +103,7 @@ describe('AccountReceivableService', () => {
     it('should build query with arId parameter', async () => {
       await service.get('cred-1', 1, undefined, 55);
 
-      expect(mockTransaction.query).toHaveBeenCalledWith(
+      expect(mockConnection.query).toHaveBeenCalledWith(
         expect.stringContaining('rec.rec_numero = ?'),
         expect.arrayContaining([55]),
         expect.any(Function),
@@ -130,7 +121,7 @@ describe('AccountReceivableService', () => {
         '2024-12-31',
       );
 
-      expect(mockTransaction.query).toHaveBeenCalledWith(
+      expect(mockConnection.query).toHaveBeenCalledWith(
         expect.stringContaining('rec.rec_datavenc BETWEEN ? AND ?'),
         expect.arrayContaining(['2024-01-01', '2024-12-31']),
         expect.any(Function),
@@ -140,7 +131,7 @@ describe('AccountReceivableService', () => {
     it('should calculate correct pagination skip for page 1', async () => {
       await service.get('cred-1', 1, 1);
 
-      expect(mockTransaction.query).toHaveBeenCalledWith(
+      expect(mockConnection.query).toHaveBeenCalledWith(
         expect.any(String),
         expect.arrayContaining([25, 0]),
         expect.any(Function),
@@ -150,7 +141,7 @@ describe('AccountReceivableService', () => {
     it('should calculate correct pagination skip for page 3', async () => {
       await service.get('cred-1', 3, 1);
 
-      expect(mockTransaction.query).toHaveBeenCalledWith(
+      expect(mockConnection.query).toHaveBeenCalledWith(
         expect.any(String),
         expect.arrayContaining([25, 50]),
         expect.any(Function),
@@ -241,18 +232,8 @@ describe('AccountReceivableService', () => {
       ).rejects.toThrow('Data inicial é obrigatória quando a data final é informada');
     });
 
-    it('should throw error when transaction start fails', async () => {
-      mockConnection.startTransaction.mockImplementation((callback) => {
-        callback(new Error('Transaction error'), null);
-      });
-
-      await expect(service.get('cred-1', 1, 1)).rejects.toThrow(
-        'Transaction error',
-      );
-    });
-
     it('should throw error when query fails', async () => {
-      mockTransaction.query.mockImplementation((query, params, callback) => {
+      mockConnection.query.mockImplementation((query, params, callback) => {
         callback(new Error('Query error'), null);
       });
 
