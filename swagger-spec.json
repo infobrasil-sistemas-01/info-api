@@ -8,7 +8,22 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Login realizado com sucesso, retorna usuário e token de acesso."
+            "description": "Login realizado com sucesso, retorna usuário e token de acesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "user": {
+                      "id": 1,
+                      "username": "Admin",
+                      "role": "Admin"
+                    },
+                    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                    "refresh_token": "def502005a30ed97cde6..."
+                  }
+                }
+              }
+            }
           },
           "401": {
             "description": "Credenciais inválidas ou header de autorização ausente."
@@ -42,7 +57,16 @@
         },
         "responses": {
           "200": {
-            "description": "Novo access token gerado."
+            "description": "Novo access token gerado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                  }
+                }
+              }
+            }
           },
           "401": {
             "description": "Refresh token inválido."
@@ -116,7 +140,27 @@
         ],
         "responses": {
           "200": {
-            "description": "Lista de produtos retornada com sucesso."
+            "description": "Lista de produtos retornada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": [
+                    {
+                      "PRO_CODIGO": 101,
+                      "PRO_CODIGOBAR": "7891234567890",
+                      "PRO_DESCRICAO": "Produto Exemplo",
+                      "MAR_CODIGO": 1,
+                      "MAR_DESCRICAO": "Marca Exemplo",
+                      "GRU_CODIGO": 1,
+                      "GRU_DESCRICAO": "Grupo Exemplo",
+                      "ESTOQUE": 50,
+                      "PRECO": 19.99,
+                      "PRECO2": 17.5
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "description": "Erro de requisição, como pageSize excedendo o limite."
@@ -153,7 +197,22 @@
         ],
         "responses": {
           "200": {
-            "description": "Detalhes do produto retornados com sucesso."
+            "description": "Detalhes do produto retornados com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "PRO_CODIGO": 101,
+                    "PRO_CODIGOBAR": "7891234567890",
+                    "PRO_PRCCOMPRA": 10,
+                    "PRO_PRCCUSTO": 12.5,
+                    "PRO_PRCCOMPRAFISCAL": 11,
+                    "PRO_CUSTOFISCAL": 13,
+                    "PRO_PRECO1": 19.99
+                  }
+                }
+              }
+            }
           },
           "400": {
             "description": "Erro de requisição, como ID inválido."
@@ -190,7 +249,25 @@
         ],
         "responses": {
           "200": {
-            "description": "Detalhes do produto retornados com sucesso."
+            "description": "Detalhes do produto retornados com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "PRO_CODIGO": 101,
+                    "PRO_CODIGOBAR": "7891234567890",
+                    "PRO_DESCRICAO": "Produto Exemplo",
+                    "MAR_CODIGO": 1,
+                    "MAR_DESCRICAO": "Marca Exemplo",
+                    "GRU_CODIGO": 1,
+                    "GRU_DESCRICAO": "Grupo Exemplo",
+                    "ESTOQUE": 50,
+                    "PRECO": 19.99,
+                    "PRECO2": 17.5
+                  }
+                }
+              }
+            }
           },
           "400": {
             "description": "Erro de requisição, como código de barras inválido."
@@ -236,7 +313,19 @@
         ],
         "responses": {
           "200": {
-            "description": "Lista de marcas de produtos retornada com sucesso."
+            "description": "Lista de marcas de produtos retornada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": [
+                    {
+                      "MAR_CODIGO": 1,
+                      "MAR_DESCRICAO": "Marca Exemplo"
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "description": "Erro de requisição, como pageSize excedendo o limite."
@@ -282,7 +371,19 @@
         ],
         "responses": {
           "200": {
-            "description": "Lista de grupos de produtos retornada com sucesso."
+            "description": "Lista de grupos de produtos retornada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": [
+                    {
+                      "GRU_CODIGO": 1,
+                      "GRU_DESCRICAO": "Grupo Exemplo"
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "description": "Erro de requisição, como pageSize excedendo o limite."
@@ -319,7 +420,16 @@
         },
         "responses": {
           "201": {
-            "description": "Pedido criado com sucesso."
+            "description": "Pedido criado com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "orderId": 12345
+                  }
+                }
+              }
+            }
           },
           "400": {
             "description": "Dados inválidos fornecidos."
@@ -361,7 +471,28 @@
         ],
         "responses": {
           "200": {
-            "description": "Lista de pedidos retornada com sucesso."
+            "description": "Lista de pedidos retornada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": [
+                    {
+                      "VEN_NUMERO": 12345,
+                      "VEN_NUMSITE": "WEB-12345",
+                      "LOJ_CODIGO": 1,
+                      "VEN_TIPO": "E",
+                      "VEN_DATA": "2024-05-10T00:00:00.000Z",
+                      "VEN_HORA": "14:30:00",
+                      "FP1_CODIGO": 1,
+                      "fpg_descricao": "Dinheiro",
+                      "pp1_codigo": 1,
+                      "plp_descricao": "A Vista",
+                      "ven_totalliquido": 250.5
+                    }
+                  ]
+                }
+              }
+            }
           }
         },
         "security": [
@@ -401,7 +532,16 @@
         },
         "responses": {
           "201": {
-            "description": ""
+            "description": "Cupom fiscal gerado e email enviado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "receiptId": 54321
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -432,7 +572,38 @@
         ],
         "responses": {
           "200": {
-            "description": "Detalhes do pedido retornados com sucesso."
+            "description": "Detalhes do pedido retornados com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "VEN_NUMERO": 12345,
+                    "VEN_NUMSITE": "WEB-12345",
+                    "LOJ_CODIGO": 1,
+                    "VEN_TIPO": "E",
+                    "VEN_PRECO": "1",
+                    "VEN_DATA": "2024-05-10T00:00:00.000Z",
+                    "VEN_HORA": "14:30:00",
+                    "FP1_CODIGO": 1,
+                    "fpg_descricao": "Dinheiro",
+                    "pp1_codigo": 1,
+                    "plp_descricao": "A Vista",
+                    "VEN_TOTALBRUTO": 300,
+                    "ven_totaldesc": 49.5,
+                    "ven_totalliquido": 250.5,
+                    "ven_quant": 2,
+                    "items": [
+                      {
+                        "ITE_SEQUENCIA": 1,
+                        "PRO_CODIGO": 101,
+                        "ITE_QUANT": 2,
+                        "ITE_PRECO": 150
+                      }
+                    ]
+                  }
+                }
+              }
+            }
           },
           "400": {
             "description": "Erro de requisição, como ID inválido."
@@ -478,7 +649,19 @@
         ],
         "responses": {
           "200": {
-            "description": "Lista de formas de pagamento retornada com sucesso."
+            "description": "Lista de formas de pagamento retornada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": [
+                    {
+                      "FPG_CODIGO": 1,
+                      "FPG_DESCRICAO": "Dinheiro"
+                    }
+                  ]
+                }
+              }
+            }
           },
           "400": {
             "description": "Erro de requisição, como pageSize excedendo o limite."
@@ -565,7 +748,26 @@
         ],
         "responses": {
           "200": {
-            "description": "Contas a receber obtidas com sucesso."
+            "description": "Contas a receber obtidas com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": [
+                    {
+                      "cli_codigo": 1,
+                      "cli_nome": "Cliente de Teste",
+                      "cli_fone": "11999999999",
+                      "cli_celular": "11999999999",
+                      "cli_conceito": "A",
+                      "rec_numero": 100,
+                      "rec_situacao": "A",
+                      "rec_datavenc": "2024-05-15T00:00:00.000Z",
+                      "rec_valor": 150
+                    }
+                  ]
+                }
+              }
+            }
           },
           "401": {
             "description": "Token de autenticação inválido ou ausente."
