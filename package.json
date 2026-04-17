@@ -21,7 +21,8 @@
     "release": "commit-and-tag-version",
     "release:first": "commit-and-tag-version --first-release --release-as 1.0.0",
     "release:minor": "commit-and-tag-version --release-as minor",
-    "release:patch": "commit-and-tag-version --release-as patch"
+    "release:patch": "commit-and-tag-version --release-as patch",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
@@ -44,6 +45,7 @@
     "ms": "^2.1.3",
     "node-firebird": "^2.0.2",
     "passport-jwt": "^4.0.1",
+    "patch-package": "^8.0.1",
     "pg": "^8.20.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
