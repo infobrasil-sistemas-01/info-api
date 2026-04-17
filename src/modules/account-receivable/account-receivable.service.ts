@@ -1,5 +1,4 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
-import { resolve } from "path";
 import { TenantConnectionService } from "src/infra/database/tenant-connection.service";
 
 @Injectable()
