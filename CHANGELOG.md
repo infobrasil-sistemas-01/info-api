@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.1.1](https://github.com/infobrasil-sistemas/InfoVendasApi/compare/v1.0.0...v1.1.1) (2026-04-17)
+
+
+### Features
+
+* implements `GET /account-receivable` ([22f440c](https://github.com/infobrasil-sistemas/InfoVendasApi/commit/22f440cb070fe247f5ea5c6fb514258667eaebcc))
+
+
+### Bug Fixes
+
+* `node-firebird` crash bug ([99b0692](https://github.com/infobrasil-sistemas/InfoVendasApi/commit/99b06923a688a68675f3826d3861e6ae849cc4ce))
+* test suites to use new `tenant-connection` ([31abc5d](https://github.com/infobrasil-sistemas/InfoVendasApi/commit/31abc5d9cbd9d4076e66f73982cd00690753df51))
+
 ## [1.1.0](https://github.com/infobrasil-sistemas/InfoVendasApi/compare/v1.0.0...v1.1.0) (2026-04-16)
 
 
