@@ -79,7 +79,7 @@ export class AuthService {
       user: {
         id: user.id.toString(),
         username: user.user,
-        role: user.role.name,
+        role: user.role?.name || null,
       },
       accessToken,
       refreshToken,
