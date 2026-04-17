@@ -60,6 +60,21 @@ export class AccountReceivableController {
     @ApiResponse({
         status: 200,
         description: 'Contas a receber obtidas com sucesso.',
+        schema: {
+            example: [
+                {
+                    cli_codigo: 1,
+                    cli_nome: "Cliente de Teste",
+                    cli_fone: "11999999999",
+                    cli_celular: "11999999999",
+                    cli_conceito: "A",
+                    rec_numero: 100,
+                    rec_situacao: "A",
+                    rec_datavenc: "2024-05-15T00:00:00.000Z",
+                    rec_valor: 150.00
+                }
+            ]
+        }
     })
     @ApiResponse({
         status: 401,

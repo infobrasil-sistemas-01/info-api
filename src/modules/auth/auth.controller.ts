@@ -27,7 +27,7 @@ export class AuthController {
   constructor(
     private readonly auth: AuthService,
     @Inject(AUTH_CONFIG) private readonly authConfig: AuthConfig,
-  ) {}
+  ) { }
 
   @Post('login')
   @HttpCode(200)
@@ -41,6 +41,13 @@ export class AuthController {
     status: 200,
     description:
       'Login realizado com sucesso, retorna usuário e token de acesso.',
+    schema: {
+      example: {
+        user: { id: 1, username: 'Admin', role: 'Admin' },
+        access_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+        refresh_token: 'def502005a30ed97cde6...'
+      }
+    }
   })
   @ApiResponse({
     status: 401,
@@ -78,6 +85,11 @@ export class AuthController {
   @ApiResponse({
     status: 200,
     description: 'Novo access token gerado.',
+    schema: {
+      example: {
+        access_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+      }
+    }
   })
   @ApiResponse({
     status: 401,

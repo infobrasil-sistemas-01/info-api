@@ -37,6 +37,14 @@ export class ProductBrandController {
   @ApiResponse({
     status: 200,
     description: 'Lista de marcas de produtos retornada com sucesso.',
+    schema: {
+      example: [
+        {
+          MAR_CODIGO: 1,
+          MAR_DESCRICAO: "Marca Exemplo"
+        }
+      ]
+    }
   })
   @ApiResponse({
     status: 400,

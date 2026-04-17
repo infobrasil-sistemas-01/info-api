@@ -45,6 +45,11 @@ export class OrderController {
   @ApiResponse({
     status: 201,
     description: 'Pedido criado com sucesso.',
+    schema: {
+      example: {
+        orderId: 12345
+      }
+    }
   })
   @ApiResponse({
     status: 400,
@@ -76,6 +81,15 @@ export class OrderController {
     summary: 'Gerar cupom fiscal para um pedido',
     description:
       'Gera um cupom fiscal para um pedido específico e envia para o email do cliente.',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Cupom fiscal gerado e email enviado.',
+    schema: {
+      example: {
+        receiptId: 54321
+      }
+    }
   })
   postReceipt(
     @Req() req: ReqWithAuthContext,
@@ -109,6 +123,23 @@ export class OrderController {
   @ApiResponse({
     status: 200,
     description: 'Lista de pedidos retornada com sucesso.',
+    schema: {
+      example: [
+        {
+          VEN_NUMERO: 12345,
+          VEN_NUMSITE: "WEB-12345",
+          LOJ_CODIGO: 1,
+          VEN_TIPO: "E",
+          VEN_DATA: "2024-05-10T00:00:00.000Z",
+          VEN_HORA: "14:30:00",
+          FP1_CODIGO: 1,
+          fpg_descricao: "Dinheiro",
+          pp1_codigo: 1,
+          plp_descricao: "A Vista",
+          ven_totalliquido: 250.50
+        }
+      ]
+    }
   })
   @ApiQuery({
     name: 'page',
@@ -153,6 +184,33 @@ export class OrderController {
   @ApiResponse({
     status: 200,
     description: 'Detalhes do pedido retornados com sucesso.',
+    schema: {
+      example: {
+        VEN_NUMERO: 12345,
+        VEN_NUMSITE: "WEB-12345",
+        LOJ_CODIGO: 1,
+        VEN_TIPO: "E",
+        VEN_PRECO: "1",
+        VEN_DATA: "2024-05-10T00:00:00.000Z",
+        VEN_HORA: "14:30:00",
+        FP1_CODIGO: 1,
+        fpg_descricao: "Dinheiro",
+        pp1_codigo: 1,
+        plp_descricao: "A Vista",
+        VEN_TOTALBRUTO: 300.00,
+        ven_totaldesc: 49.50,
+        ven_totalliquido: 250.50,
+        ven_quant: 2,
+        items: [
+          {
+            ITE_SEQUENCIA: 1,
+            PRO_CODIGO: 101,
+            ITE_QUANT: 2,
+            ITE_PRECO: 150.00
+          }
+        ]
+      }
+    }
   })
   @ApiResponse({
     status: 400,

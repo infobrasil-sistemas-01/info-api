@@ -37,6 +37,14 @@ export class ProductGroupController {
   @ApiResponse({
     status: 200,
     description: 'Lista de grupos de produtos retornada com sucesso.',
+    schema: {
+      example: [
+        {
+          GRU_CODIGO: 1,
+          GRU_DESCRICAO: "Grupo Exemplo"
+        }
+      ]
+    }
   })
   @ApiResponse({
     status: 400,

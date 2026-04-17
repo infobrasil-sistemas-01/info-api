@@ -39,6 +39,22 @@ export class ProductController {
   @ApiResponse({
     status: 200,
     description: 'Lista de produtos retornada com sucesso.',
+    schema: {
+      example: [
+        {
+          PRO_CODIGO: 101,
+          PRO_CODIGOBAR: "7891234567890",
+          PRO_DESCRICAO: "Produto Exemplo",
+          MAR_CODIGO: 1,
+          MAR_DESCRICAO: "Marca Exemplo",
+          GRU_CODIGO: 1,
+          GRU_DESCRICAO: "Grupo Exemplo",
+          ESTOQUE: 50,
+          PRECO: 19.99,
+          PRECO2: 17.50
+        }
+      ]
+    }
   })
   @ApiResponse({
     status: 400,
@@ -134,6 +150,17 @@ export class ProductController {
   @ApiResponse({
     status: 200,
     description: 'Detalhes do produto retornados com sucesso.',
+    schema: {
+      example: {
+        PRO_CODIGO: 101,
+        PRO_CODIGOBAR: "7891234567890",
+        PRO_PRCCOMPRA: 10.00,
+        PRO_PRCCUSTO: 12.50,
+        PRO_PRCCOMPRAFISCAL: 11.00,
+        PRO_CUSTOFISCAL: 13.00,
+        PRO_PRECO1: 19.99
+      }
+    }
   })
   @ApiResponse({
     status: 400,
@@ -185,6 +212,20 @@ export class ProductController {
   @ApiResponse({
     status: 200,
     description: 'Detalhes do produto retornados com sucesso.',
+    schema: {
+      example: {
+        PRO_CODIGO: 101,
+        PRO_CODIGOBAR: "7891234567890",
+        PRO_DESCRICAO: "Produto Exemplo",
+        MAR_CODIGO: 1,
+        MAR_DESCRICAO: "Marca Exemplo",
+        GRU_CODIGO: 1,
+        GRU_DESCRICAO: "Grupo Exemplo",
+        ESTOQUE: 50,
+        PRECO: 19.99,
+        PRECO2: 17.50
+      }
+    }
   })
   @ApiResponse({
     status: 400,

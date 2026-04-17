@@ -34,6 +34,14 @@ export class PaymentMethodController {
   @ApiResponse({
     status: 200,
     description: 'Lista de formas de pagamento retornada com sucesso.',
+    schema: {
+      example: [
+        {
+          FPG_CODIGO: 1,
+          FPG_DESCRICAO: "Dinheiro"
+        }
+      ]
+    }
   })
   @ApiResponse({
     status: 400,
