@@ -1052,21 +1052,6 @@
           "AccountReceivable"
         ]
       }
-    },
-    "/api/v1/debug-sentry": {
-      "get": {
-        "operationId": "DebugController_getError",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "summary": "Gera um erro proposital para testar a integração com o Sentry",
-        "tags": [
-          "Debug"
-        ]
-      }
     }
   },
   "info": {

@@ -8,9 +8,6 @@ import { PaymentMethodModule } from './modules/payment-method/payment-method.mod
 import { ReceiptModule } from './modules/receipt/receipt.module';
 import { AccountReceivableModule } from './modules/account-receivable/account-receivable.module';
 
-import { DebugModule } from './modules/debug/debug.module';
-
-
 @Module({
   imports: [
     SentryModule.forRoot(),
@@ -23,7 +20,6 @@ import { DebugModule } from './modules/debug/debug.module';
     PaymentMethodModule,
     ReceiptModule,
     AccountReceivableModule,
-    DebugModule
   ],
   controllers: [],
   providers: [],
