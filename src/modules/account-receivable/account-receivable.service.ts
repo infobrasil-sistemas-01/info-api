@@ -72,7 +72,7 @@ export class AccountReceivableService {
       rec.rec_numero,
       rec.rec_situacao,
       rec.rec_datavenc,
-      rec.rec_valor
+      CAST(rec.rec_valor AS NUMERIC(15,2)) AS rec_valor
       from
       contasreceber rec
       inner join clientes cli on cli.cli_codigo= rec.cli_codigo
