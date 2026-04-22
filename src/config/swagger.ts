@@ -24,10 +24,6 @@ export function setupSwagger(app: INestApplication) {
       A API é organizada em módulos, cada um responsável por uma área específica do sistema, como produtos, clientes, vendas, etc.`,
     )
     .setContact('InfoBrasil Sistemas', 'https://www.infobrasilsistemas.com.br', 'suporte@infobrasilsistemas.com.br')
-    .addServer(
-      'https://info-api.infobrasilsistemas.com.br',
-      'Servidor de produção',
-    )
     .setVersion(packageVersion)
     .addBasicAuth() // 👈 Basic Auth for login
     .addBearerAuth() // 👈 JWT
@@ -57,6 +53,11 @@ export function setupSwagger(app: INestApplication) {
       'Servidor local para desenvolvimento',
     );
   }
+
+  builder.addServer(
+    'https://info-api.infobrasilsistemas.com.br',
+    'Servidor de produção',
+  )
 
   const config = builder.build();
 

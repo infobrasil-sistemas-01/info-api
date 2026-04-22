@@ -1096,12 +1096,12 @@
   ],
   "servers": [
     {
-      "url": "https://info-api.infobrasilsistemas.com.br",
-      "description": "Servidor de produção"
-    },
-    {
       "url": "http://localhost:3336",
       "description": "Servidor local para desenvolvimento"
+    },
+    {
+      "url": "https://info-api.infobrasilsistemas.com.br",
+      "description": "Servidor de produção"
     }
   ],
   "components": {
