@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.1.2](https://github.com/infobrasil-sistemas/InfoVendasApi/compare/v1.1.1...v1.1.2) (2026-04-23)
+
+
+### Features
+
+* **account-receivable:** add two decimal places on `REC_NUMERO` field ([666dfd4](https://github.com/infobrasil-sistemas/InfoVendasApi/commit/666dfd44300e9f31c0d79a18a4126b76ddbbe924))
+
+
+### Bug Fixes
+
+* `account-receivable.service.ts` ([e3c1a23](https://github.com/infobrasil-sistemas/InfoVendasApi/commit/e3c1a2392bc25bc8261efdeb113c757d2e7a0c02))
+* role returning on login endpoint ([f657d45](https://github.com/infobrasil-sistemas/InfoVendasApi/commit/f657d452a780441477adc637da4962c40907f2c5))
+
 ## [1.1.1](https://github.com/infobrasil-sistemas/InfoVendasApi/compare/v1.0.0...v1.1.1) (2026-04-17)
 
 
