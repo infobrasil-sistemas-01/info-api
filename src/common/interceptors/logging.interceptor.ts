@@ -3,32 +3,65 @@ import {
   NestInterceptor,
   ExecutionContext,
   CallHandler,
-  Logger,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import * as Sentry from '@sentry/node';
 
+/**
+ * LoggingInterceptor
+ *
+ * Para cada requisição HTTP:
+ *  - Adiciona um breadcrumb no Sentry com método, url, status e duração
+ *  - Registra logs estruturados (info para 2xx/3xx, warn para 4xx/5xx)
+ *  - Em caso de erro, registra o breadcrumb antes de repassar a exceção
+ */
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
-  private readonly logger = new Logger('HTTP');
-
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const request = context.switchToHttp().getRequest();
-    const { method, url } = request;
+    const { method, url, headers } = request;
     const now = Date.now();
+
+    // Enriquece o scope Sentry com dados da requisição atual
+    Sentry.getCurrentScope().setTag('http.method', method);
+    Sentry.getCurrentScope().setTag('http.url', url);
+
+    const userAgent = headers['user-agent'] ?? 'unknown';
 
     return next.handle().pipe(
       tap({
         next: () => {
           const response = context.switchToHttp().getResponse();
+          const statusCode: number = response.statusCode;
           const delay = Date.now() - now;
-          this.logger.log(`${method} ${url} ${response.statusCode} - ${delay}ms`);
+
+          Sentry.addBreadcrumb({
+            type: 'http',
+            category: 'http',
+            message: `${method} ${url} ${statusCode} (${delay}ms)`,
+            data: { method, url, status_code: statusCode, duration_ms: delay, userAgent },
+            level: statusCode >= 400 ? 'warning' : 'info',
+          });
+
+          if (statusCode >= 400) {
+            Sentry.logger.warn(`${method} ${url} → ${statusCode} (${delay}ms)`);
+          } else {
+            Sentry.logger.info(`${method} ${url} → ${statusCode} (${delay}ms)`);
+          }
         },
-        error: (error) => {
+        error: (error: any) => {
           const delay = Date.now() - now;
-          const status = error.status || 500;
-          this.logger.error(`${method} ${url} ${status} - ${delay}ms`);
-        }
+          const status = error?.status ?? 500;
+
+          Sentry.addBreadcrumb({
+            type: 'http',
+            category: 'http',
+            message: `${method} ${url} ${status} (${delay}ms) – ${error?.message ?? 'Unknown error'}`,
+            data: { method, url, status_code: status, duration_ms: delay },
+            level: 'error',
+          });
+        },
       }),
     );
   }
