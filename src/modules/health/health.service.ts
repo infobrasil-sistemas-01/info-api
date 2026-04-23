@@ -1,0 +1,92 @@
+import { Injectable } from '@nestjs/common';
+import { RegistryPrismaService } from 'src/infra/prisma/registry-prisma.service';
+import { TenantConnectionService } from 'src/infra/database/tenant-connection.service';
+
+export interface DatabaseStatus {
+  status: 'up' | 'down';
+  responseTimeMs?: number;
+  error?: string;
+}
+
+export interface FirebirdTenantStatus {
+  credentialsId: string;
+  status: 'up' | 'down';
+  responseTimeMs: number;
+  error?: string;
+}
+
+export interface FirebirdStatus {
+  activePools: number;
+  cachedCredentials: number;
+  /**
+   * Resultado do ping em cada pool aquecido.
+   * Pools inativos (nunca conectados nesta instância) não são verificados.
+   */
+  tenants: FirebirdTenantStatus[];
+}
+
+export interface HealthStatus {
+  status: 'ok' | 'degraded' | 'error';
+  version: string;
+  uptime: number;
+  timestamp: string;
+  databases: {
+    postgres: DatabaseStatus;
+    firebird: FirebirdStatus;
+  };
+}
+
+@Injectable()
+export class HealthService {
+  constructor(
+    private readonly prisma: RegistryPrismaService,
+    private readonly tenantConnections: TenantConnectionService,
+  ) {}
+
+  async check(): Promise<HealthStatus> {
+    const [postgres, firebird] = await Promise.all([
+      this.checkPostgres(),
+      this.checkFirebird(),
+    ]);
+
+    const postgresOk = postgres.status === 'up';
+    const firebirdOk =
+      firebird.tenants.length === 0 ||
+      firebird.tenants.every((t) => t.status === 'up');
+
+    const status = postgresOk && firebirdOk ? 'ok' : 'degraded';
+
+    return {
+      status,
+      version: process.env.npm_package_version ?? '1.0.0',
+      uptime: Math.floor(process.uptime()),
+      timestamp: new Date().toISOString(),
+      databases: { postgres, firebird },
+    };
+  }
+
+  private async checkPostgres(): Promise<DatabaseStatus> {
+    const start = Date.now();
+    try {
+      await this.prisma.$queryRaw`SELECT 1`;
+      return { status: 'up', responseTimeMs: Date.now() - start };
+    } catch (err: any) {
+      return {
+        status: 'down',
+        responseTimeMs: Date.now() - start,
+        error: err?.message ?? 'Unknown error',
+      };
+    }
+  }
+
+  private async checkFirebird(): Promise<FirebirdStatus> {
+    const stats = this.tenantConnections.getPoolStats();
+    const tenants = await this.tenantConnections.pingActivePools();
+
+    return {
+      activePools: stats.activePools,
+      cachedCredentials: stats.cachedCredentials,
+      tenants,
+    };
+  }
+}

@@ -70,6 +70,71 @@ export class TenantConnectionService {
     this.credentialsCache.delete(credentialsId);
   }
 
+  /**
+   * Retorna métricas sobre os caches de pools e credenciais.
+   * Usado pelo health check sem fazer requisições ao banco.
+   */
+  getPoolStats(): { activePools: number; cachedCredentials: number; tenantIds: string[] } {
+    return {
+      activePools: this.poolCache.size,
+      cachedCredentials: this.credentialsCache.size,
+      tenantIds: Array.from(this.poolCache.keys()),
+    };
+  }
+
+  /**
+   * Tenta executar `SELECT 1 FROM RDB$DATABASE` em cada pool aquecido.
+   * Retorna o resultado por tenant (sem lançar exceção).
+   * Timeout de 3s por pool para não bloquear o health check.
+   */
+  async pingActivePools(): Promise<
+    Array<{ credentialsId: string; status: 'up' | 'down'; responseTimeMs: number; error?: string }>
+  > {
+    const results: Array<{
+      credentialsId: string;
+      status: 'up' | 'down';
+      responseTimeMs: number;
+      error?: string;
+    }> = [];
+
+    for (const [credentialsId, pool] of this.poolCache.entries()) {
+      const start = Date.now();
+      try {
+        await this.pingPool(pool);
+        results.push({ credentialsId, status: 'up', responseTimeMs: Date.now() - start });
+      } catch (err: any) {
+        results.push({
+          credentialsId,
+          status: 'down',
+          responseTimeMs: Date.now() - start,
+          error: err?.message ?? 'Unknown error',
+        });
+      }
+    }
+
+    return results;
+  }
+
+  private pingPool(pool: firebird.ConnectionPool): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      const timeout = setTimeout(() => reject(new Error('Ping timeout (3s)')), 3000);
+
+      pool.get((err, db) => {
+        if (err) {
+          clearTimeout(timeout);
+          return reject(err);
+        }
+
+        db.query('SELECT 1 FROM RDB$DATABASE', [], (qErr) => {
+          clearTimeout(timeout);
+          db.detach();
+          if (qErr) return reject(qErr);
+          resolve();
+        });
+      });
+    });
+  }
+
   private async getPool(credentialsId: string): Promise<firebird.ConnectionPool> {
     if (this.poolCache.has(credentialsId)) {
       return this.poolCache.get(credentialsId)!;

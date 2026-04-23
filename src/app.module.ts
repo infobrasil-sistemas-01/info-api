@@ -7,6 +7,7 @@ import { OrderModule } from './modules/order/order.module';
 import { PaymentMethodModule } from './modules/payment-method/payment-method.module';
 import { ReceiptModule } from './modules/receipt/receipt.module';
 import { AccountReceivableModule } from './modules/account-receivable/account-receivable.module';
+import { HealthModule } from './modules/health/health.module';
 import { GlobalLoggerService } from './common/logger/logger.service';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
@@ -24,6 +25,7 @@ import { EnvModule } from './config/env/env.module';
     PaymentMethodModule,
     ReceiptModule,
     AccountReceivableModule,
+    HealthModule,
   ],
   controllers: [],
   providers: [
