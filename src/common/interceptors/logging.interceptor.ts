@@ -21,6 +21,12 @@ export class LoggingInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const request = context.switchToHttp().getRequest();
     const { method, url, headers } = request;
+
+    // Health check: ignora completamente para não poluir logs e Sentry
+    if (url.startsWith('/api/v1/health')) {
+      return next.handle();
+    }
+
     const now = Date.now();
 
     // Enriquece o scope Sentry com dados da requisição atual
