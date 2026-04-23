@@ -1106,7 +1106,7 @@
   },
   "info": {
     "title": "InfoBrasil API",
-    "description": "API de integração do sistema Retaguarda (by InfoBrasil) com outros sistemas, como ERPs, e-commerce, etc. <br><br>\n      **O sistema conta com duas formas de autenticação:**<br> \n      - Basic Auth para login e obtenção de token JWT<br>\n      - JWT para acesso aos endpoints protegidos.\n      <br><br>\n      **O usuário e senha de testes são:**<br>\n      infomobile:yd9FvSJ69bz6zvRq7GM&TJ5RD6*DsQPf\n      <br><br>\n      A API é organizada em módulos, cada um responsável por uma área específica do sistema, como produtos, clientes, vendas, etc.",
+    "description": "API de integração do sistema Retaguarda (by InfoBrasil) com outros sistemas, como ERPs, e-commerce, etc. <br><br>\n      **O sistema conta com duas formas de autenticação:**<br> \n      - Basic Auth para login e obtenção de token JWT<br>\n      - JWT para acesso aos endpoints protegidos.\n      <br><br>\n      Para verificar a disponibilidade da API acesse nossa <a href='https://infobrasil.statuspage.one/'>Página de Status</a>\n      <br><br>\n      **O usuário e senha de testes são:**<br>\n      infomobile:yd9FvSJ69bz6zvRq7GM&TJ5RD6*DsQPf\n      <br><br>\n      A API é organizada em módulos, cada um responsável por uma área específica do sistema, como produtos, clientes, vendas, etc.",
     "version": "1.1.2",
     "contact": {
       "name": "InfoBrasil Sistemas",

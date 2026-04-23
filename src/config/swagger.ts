@@ -18,6 +18,8 @@ export function setupSwagger(app: INestApplication) {
       - Basic Auth para login e obtenção de token JWT<br>
       - JWT para acesso aos endpoints protegidos.
       <br><br>
+      Para verificar a disponibilidade da API acesse nossa <a href='https://infobrasil.statuspage.one/'>Página de Status</a>
+      <br><br>
       **O usuário e senha de testes são:**<br>
       infomobile:yd9FvSJ69bz6zvRq7GM&TJ5RD6*DsQPf
       <br><br>
