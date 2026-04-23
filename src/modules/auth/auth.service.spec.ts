@@ -23,6 +23,7 @@ describe('AuthService', () => {
     status: true,
     dbCredentialsId: 'cred-1',
     storeId: 1,
+    role: { name: 'admin' }
   };
 
   beforeAll(async () => {
@@ -79,12 +80,21 @@ describe('AuthService', () => {
       const result = await service.login(credentials, meta);
 
       expect(result).toEqual({
-        user: { id: '1', username: 'testuser' },
+        user: { id: '1', role: 'admin', username: 'testuser' },
         accessToken: 'access-token',
         refreshToken: 'refresh-token',
       });
       expect(mockPrisma.user.findUnique).toHaveBeenCalledWith({
         where: { user: 'testuser', status: true },
+        select: {
+          id: true,
+          user: true,
+          passwordHash: true,
+          status: true,
+          dbCredentialsId: true,
+          storeId: true,
+          role: true,
+        },
       });
     });
 
