@@ -8,4 +8,6 @@ Sentry.init({
         Sentry.nodeContextIntegration(),
     ],
     tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0,
+    enableLogs: true,
+    enableMetrics: true
 });

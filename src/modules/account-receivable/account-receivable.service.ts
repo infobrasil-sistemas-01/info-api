@@ -1,8 +1,10 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable, Logger } from "@nestjs/common";
 import { TenantConnectionService } from "src/infra/database/tenant-connection.service";
 
 @Injectable()
 export class AccountReceivableService {
+  private readonly logger = new Logger(AccountReceivableService.name);
+
   constructor(
     private readonly tenantConnectionService: TenantConnectionService
   ) { }
@@ -17,6 +19,7 @@ export class AccountReceivableService {
     endDate?: string
   ) {
     let connection: any;
+    const startTime = Date.now();
     connection =
       await this.tenantConnectionService.getConnection(credentialsId);
 
@@ -102,13 +105,16 @@ export class AccountReceivableService {
 
       query += `ORDER BY rec.rec_datavenc DESC`;
 
+      const queryStartTime = Date.now();
       const result = (await new Promise((resolve, reject) => {
         connection.query(query, params, (err: any, res: any) => {
           if (err) return reject(err);
           resolve(res);
         });
-      })) as object;
+      })) as any[];
 
+      const queryEndTime = Date.now();
+      this.logger.log(`Busca de Contas a Receber executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify({ clientId, arId, situation, startDate, endDate })}, Itens: ${result.length}, Tempo SQL: ${queryEndTime - queryStartTime}ms`);
 
       return result;
     } finally {

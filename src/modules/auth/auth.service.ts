@@ -48,6 +48,7 @@ export class AuthService {
     });
 
     if (!user) {
+      this.logger.warn(`Tentativa de login falhou: usuário "${username}" não encontrado. IP: ${meta.ip}`);
       throw new UnauthorizedException('Credenciais inválidas.');
     }
 
@@ -59,6 +60,7 @@ export class AuthService {
     );
 
     if (!passwordIsValid) {
+      this.logger.warn(`Tentativa de login falhou: senha incorreta para o usuário "${username}". IP: ${meta.ip}`);
       throw new UnauthorizedException('Credenciais inválidas.');
     }
 
@@ -75,6 +77,8 @@ export class AuthService {
     } catch {
       throw new UnauthorizedException('Falha ao gerar token.');
     }
+
+    this.logger.log(`Usuário logado com sucesso: "${user.user}" (ID: ${user.id}). IP: ${meta.ip}`);
 
     return {
       user: {
@@ -149,8 +153,10 @@ export class AuthService {
         credentialsId: user.dbCredentialsId ?? undefined,
         storeId: user.storeId ?? undefined,
       });
+      this.logger.log(`Token de acesso renovado para o usuário ID: ${user.id}`);
       return { accessToken };
     } catch (error) {
+      this.logger.warn(`Falha na renovação de token. Erro: ${error.message}`);
       throw new UnauthorizedException('Refresh token inválido.');
     }
   }

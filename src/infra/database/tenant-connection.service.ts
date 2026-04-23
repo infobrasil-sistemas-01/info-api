@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { RegistryPrismaService } from '../prisma/registry-prisma.service';
 import { FirebirdService, IConnectionOptions } from '../firebird/firebird.service';
 import * as firebird from 'node-firebird';
@@ -10,6 +10,8 @@ export class TenantConnectionService {
 
   /** Cache de pools de conexão Firebird. Um pool por tenant. */
   private poolCache = new Map<string, firebird.ConnectionPool>();
+
+  private readonly logger = new Logger(TenantConnectionService.name);
 
   constructor(
     private readonly prisma: RegistryPrismaService,
@@ -50,7 +52,10 @@ export class TenantConnectionService {
     if (!pool) return;
 
     await new Promise<void>((resolve) => {
-      pool.destroy(() => resolve());
+      pool.destroy(() => {
+        this.logger.log(`Pool de conexões destruído para o tenant: ${credentialsId}`);
+        resolve();
+      });
     });
 
     this.poolCache.delete(credentialsId);
@@ -73,6 +78,7 @@ export class TenantConnectionService {
     const connectionOptions = await this.getCredentials(credentialsId);
     const pool = this.firebirdService.createPool(connectionOptions);
 
+    this.logger.log(`Novo pool de conexões criado para o tenant: ${credentialsId} (${connectionOptions.host})`);
     this.poolCache.set(credentialsId, pool);
 
     return pool;
@@ -88,6 +94,7 @@ export class TenantConnectionService {
       return this.credentialsCache.get(credentialsId)!;
     }
 
+    this.logger.log(`Consultando credenciais no banco para o tenant: ${credentialsId}`);
     const credentials = await this.prisma.dbCredentials.findUnique({
       where: { id: credentialsId },
     });

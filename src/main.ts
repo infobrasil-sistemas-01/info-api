@@ -20,5 +20,7 @@ async function bootstrap() {
 
   await app.listen(process.env.PORT ?? 3000);
   logger.log(`Application is running on: ${await app.getUrl()}`);
+  logger.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+  logger.log(`Sentry/GlitchTip DSN: ${process.env.GLITCHTIP_DSN ? 'Configurado' : 'Não configurado'}`);
 }
 bootstrap();
