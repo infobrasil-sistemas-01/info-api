@@ -10,6 +10,7 @@ import { EnvService } from 'src/config/env/env.service';
 import * as argon2 from 'argon2';
 import { AUTH_CONFIG } from 'src/config/auth.config';
 import type { AuthConfig } from 'src/config/auth.config';
+import * as Sentry from '@sentry/node';
 
 type RequestMeta = { requestId?: string; ip?: string; userAgent?: string };
 
