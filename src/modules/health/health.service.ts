@@ -1,6 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { RegistryPrismaService } from 'src/infra/prisma/registry-prisma.service';
 import { TenantConnectionService } from 'src/infra/database/tenant-connection.service';
+import path from 'path';
+import fs from 'fs';
+
+const packageJsonPath = path.join(process.cwd(), 'package.json');
+const packageVersion = fs.existsSync(packageJsonPath)
+  ? JSON.parse(fs.readFileSync(packageJsonPath, 'utf8')).version
+  : '1.0.0';
 
 export interface DatabaseStatus {
   status: 'up' | 'down';
@@ -41,7 +48,7 @@ export class HealthService {
   constructor(
     private readonly prisma: RegistryPrismaService,
     private readonly tenantConnections: TenantConnectionService,
-  ) {}
+  ) { }
 
   async check(): Promise<HealthStatus> {
     const [postgres, firebird] = await Promise.all([
@@ -58,7 +65,7 @@ export class HealthService {
 
     return {
       status,
-      version: process.env.npm_package_version ?? '1.0.0',
+      version: packageVersion,
       uptime: Math.floor(process.uptime()),
       timestamp: new Date().toISOString(),
       databases: { postgres, firebird },
