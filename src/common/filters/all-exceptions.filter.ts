@@ -11,8 +11,7 @@ import * as Sentry from '@sentry/node';
  * AllExceptionsFilter
  *
  * Captura todas as exceções e:
- *  - Envia 5xx ao Sentry como exceção (com stack trace)
- *  - Envia 4xx importantes (401, 403, 404) como eventos de warning no Sentry
+ *  - Envia 5xx ao Sentry como issue (captureException com stack trace)
  *  - Adiciona breadcrumb para todos os erros
  *  - Formata a resposta JSON padronizada
  */
@@ -58,17 +57,6 @@ export class AllExceptionsFilter implements ExceptionFilter {
         scope.setExtra('request.url', request.url);
         scope.setExtra('request.body', request.body);
         Sentry.captureException(exception);
-      });
-    } else if (status === 401 || status === 403 || status === 404) {
-      // Erros de cliente relevantes: captura como warning para visibilidade
-      Sentry.withScope((scope) => {
-        scope.setTag('http.status', String(status));
-        scope.setTag('http.method', request.method);
-        scope.setExtra('request.url', request.url);
-        Sentry.captureMessage(
-          `[${status}] ${request.method} ${request.url} – ${errorMessage}`,
-          'warning',
-        );
       });
     }
 
