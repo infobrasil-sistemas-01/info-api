@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.1.3](https://github.com/infobrasil-sistemas/InfoVendasApi/compare/v1.1.2...v1.1.3) (2026-04-27)
+
+
+### Features
+
+* block many 404 unauthenticated requests ([1382744](https://github.com/infobrasil-sistemas/InfoVendasApi/commit/13827445ee159b3d31c6c9cbd4db5d0de7d102fe))
+* implements `/health` endpoint ([fd3a7b0](https://github.com/infobrasil-sistemas/InfoVendasApi/commit/fd3a7b02abce1aab72794d84482f2fe73f3d7838))
+
+
+### Bug Fixes
+
+* no send `4xx` errors for issues on sentry ([254272d](https://github.com/infobrasil-sistemas/InfoVendasApi/commit/254272d63520bf00edcafe3667a0214fb97380ed))
+* remove health endpoint to logs ([4bd8faa](https://github.com/infobrasil-sistemas/InfoVendasApi/commit/4bd8faaf8a2cae8d4ba40f7cd22fb02bb5ef91fa))
+
 ## [1.1.2](https://github.com/infobrasil-sistemas/InfoVendasApi/compare/v1.1.1...v1.1.2) (2026-04-23)
 
 
