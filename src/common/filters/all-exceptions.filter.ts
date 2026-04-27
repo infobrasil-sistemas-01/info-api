@@ -4,8 +4,10 @@ import {
   ArgumentsHost,
   HttpException,
   HttpStatus,
+  Injectable,
 } from '@nestjs/common';
 import * as Sentry from '@sentry/node';
+import { IpBlocklistService } from '../throttle/ip-blocklist.service';
 
 /**
  * AllExceptionsFilter
@@ -14,9 +16,13 @@ import * as Sentry from '@sentry/node';
  *  - Envia 5xx ao Sentry como issue (captureException com stack trace)
  *  - Adiciona breadcrumb para todos os erros
  *  - Formata a resposta JSON padronizada
+ *  - Registra 404s por IP para o IpBlocklistService (proteção contra bot scanning)
  */
+@Injectable()
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
+  constructor(private readonly ipBlocklist: IpBlocklistService) {}
+
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
@@ -40,6 +46,16 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const errorMessage =
       exception instanceof Error ? exception.message : String(message);
 
+    // Registra 404s por IP para detecção de bot scanning
+    if (status === 404) {
+      const ip: string =
+        request.ip ??
+        (request.headers['x-real-ip'] as string) ??
+        request.socket?.remoteAddress ??
+        'unknown';
+      this.ipBlocklist.record404(ip);
+    }
+
     // Breadcrumb para todos os erros
     Sentry.addBreadcrumb({
       type: 'error',
@@ -48,6 +64,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
       data: { status_code: status, path: request.url },
       level: status >= 500 ? 'error' : 'warning',
     });
+
 
     if (status >= 500) {
       // Erros de servidor: captura como exceção com stack trace completo

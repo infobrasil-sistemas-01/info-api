@@ -13,8 +13,13 @@ async function bootstrap() {
   const logger = app.get(GlobalLoggerService);
   app.useLogger(logger);
 
+  // Confia no primeiro proxy (Nginx) para resolver o IP real do cliente
+  // via X-Forwarded-For. Necessário para o IpBlocklistService funcionar corretamente.
+  app.getHttpAdapter().getInstance().set('trust proxy', 1);
+
   app.enableCors();
   app.setGlobalPrefix('api/v1');
+
 
   setupSwagger(app);
 

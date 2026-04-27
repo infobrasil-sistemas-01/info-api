@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { AuthModule } from './modules/auth/auth.module';
@@ -11,6 +11,8 @@ import { HealthModule } from './modules/health/health.module';
 import { GlobalLoggerService } from './common/logger/logger.service';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
+import { IpBlocklistService } from './common/throttle/ip-blocklist.service';
+import { IpBlocklistMiddleware } from './common/middleware/ip-blocklist.middleware';
 import { EnvModule } from './config/env/env.module';
 
 @Module({
@@ -30,6 +32,7 @@ import { EnvModule } from './config/env/env.module';
   controllers: [],
   providers: [
     GlobalLoggerService,
+    IpBlocklistService,
     {
       provide: APP_INTERCEPTOR,
       useClass: LoggingInterceptor,
@@ -40,4 +43,9 @@ import { EnvModule } from './config/env/env.module';
     },
   ],
 })
-export class AppModule { }
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer): void {
+    consumer.apply(IpBlocklistMiddleware).forRoutes('*');
+  }
+}
+
