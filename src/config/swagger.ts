@@ -72,7 +72,47 @@ export function setupSwagger(app: INestApplication) {
     fs.writeFileSync(outputPath, JSON.stringify(document, null, 2));
   }
 
-  SwaggerModule.setup('docs', app, document);
+  const customJsCode = `
+    (function() {
+      var check = setInterval(function() {
+        var topbar = document.querySelector('.topbar-wrapper');
+        if (topbar && !document.getElementById('custom-admin-link')) {
+          clearInterval(check);
+          var a = document.createElement('a');
+          a.id = 'custom-admin-link';
+          a.href = '/integration/admin';
+          a.style.marginLeft = 'auto';
+          a.style.display = 'flex';
+          a.style.alignItems = 'center';
+          a.style.justifyContent = 'center';
+          a.style.alignSelf = 'center';
+          a.style.textDecoration = 'none';
+          a.style.flex = '0 0 40px';
+          a.style.width = '40px';
+          a.style.height = '40px';
+          a.style.borderRadius = '50%';
+          a.style.background = 'rgba(255,255,255,0.1)';
+          a.style.transition = 'background 0.3s';
+          a.onmouseover = function() { this.style.background = 'rgba(255,255,255,0.2)'; };
+          a.onmouseout = function() { this.style.background = 'rgba(255,255,255,0.1)'; };
+          a.innerHTML = '<i class="material-icons" style="color: white; font-size: 24px;">support_agent</i>';
+          topbar.appendChild(a);
+        }
+      }, 100);
+    })();
+  `;
+
+  // Servir o JS customizado dinamicamente
+  app.getHttpAdapter().get('/swagger-custom.js', (req, res) => {
+    res.type('application/javascript');
+    res.send(customJsCode);
+  });
+
+  SwaggerModule.setup('docs', app, document, {
+    customSiteTitle: 'InfoBrasil API Docs',
+    customCssUrl: 'https://fonts.googleapis.com/icon?family=Material+Icons',
+    customJs: '/swagger-custom.js',
+  });
 
   app.use(
     '/scalar',
