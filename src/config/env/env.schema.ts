@@ -25,7 +25,13 @@ export const envSchema = z.object({
   CRYPTO_ENC: z.string(),
   CRYPTO_IV: z.string(),
   CRYPTO_ALGO: z.string().default('aes-256-cbc'),
-  GLITCHTIP_DSN: z.string()
+  GLITCHTIP_DSN: z.string(),
+  // Email Configuration (Gmail API)
+  GMAIL_USER: z.string(),
+  GMAIL_CLIENT_ID: z.string(),
+  GMAIL_CLIENT_SECRET: z.string(),
+  GMAIL_REFRESH_TOKEN: z.string(),
+  SUPPORT_EMAIL: z.string().default('suporte@infobrasilsistemas.com.br'),
 });
 
 export type Env = z.infer<typeof envSchema>;
