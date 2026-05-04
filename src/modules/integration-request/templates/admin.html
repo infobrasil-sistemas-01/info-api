@@ -8,13 +8,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #4f46e5;
-            --bg: #f3f4f6;
+            --primary: #059669; /* Emerald Green */
+            --bg: #f0fdf4; /* Soft Mint */
             --card: #ffffff;
-            --text: #111827;
+            --text: #064e3b; /* Dark Green */
             --text-muted: #6b7280;
-            --border: #e5e7eb;
+            --border: #d1fae5;
             --radius: 10px;
+            --accent: #eab308; /* Gold */
         }
 
         * {
@@ -302,6 +303,8 @@
                         <div class="request-card">
                             <span class="status ${req.status.toLowerCase()}">${statusMap[req.status] || req.status}</span>
                             <h3>${req.clientName}</h3>
+                            ${req.legalName ? `<p style="font-size: 0.9rem; font-weight: 600; color: #444; margin-bottom: 2px;">${req.legalName}</p>` : ''}
+                            ${req.cnpj ? `<p style="font-size: 0.8rem; color: #777; margin-bottom: 12px;">CNPJ: ${req.cnpj}</p>` : ''}
                             <p style="font-size: 0.85rem; color: #666; margin-bottom: 16px;">${req.objective}</p>
                             
                             <div class="info-row" style="flex-direction: column; align-items: flex-start; gap: 4px;">

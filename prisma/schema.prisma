@@ -82,6 +82,8 @@ enum HostingType {
 model IntegrationRequest {
   id               String      @id @default(uuid())
   clientName       String      @map("client_name")
+  legalName        String      @map("legal_name")
+  cnpj             String
   hostingType      HostingType @map("hosting_type")
   fixedIp          String?     @map("fixed_ip")
   database         Json // { host: string, port: number, database: string }

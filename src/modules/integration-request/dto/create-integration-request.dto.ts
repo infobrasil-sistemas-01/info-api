@@ -6,6 +6,8 @@ const HostingTypeEnum = z.enum(['DATACENTER', 'CLIENT_SERVER']);
 
 export const CreateIntegrationRequestSchema = z.object({
   clientName: z.string().min(3, 'Nome do cliente muito curto'),
+  legalName: z.string().min(3, 'Razão social muito curta'),
+  cnpj: z.string().min(14, 'CNPJ inválido'),
   hostingType: HostingTypeEnum,
   fixedIp: z.string().optional(),
   database: z.object({
@@ -34,6 +36,12 @@ export class CreateIntegrationRequestDto extends ZodDto(
 ) {
   @ApiProperty({ example: 'Cliente Exemplo' })
   clientName!: string;
+
+  @ApiProperty({ example: 'Empresa Exemplo LTDA' })
+  legalName!: string;
+
+  @ApiProperty({ example: '00.000.000/0000-00' })
+  cnpj!: string;
 
   @ApiProperty({ enum: ['DATACENTER', 'CLIENT_SERVER'] })
   hostingType!: 'DATACENTER' | 'CLIENT_SERVER';

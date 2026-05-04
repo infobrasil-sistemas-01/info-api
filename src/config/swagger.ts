@@ -14,6 +14,8 @@ export function setupSwagger(app: INestApplication) {
     .setTitle('InfoBrasil API')
     .setDescription(
       `API de integração do sistema Retaguarda (by InfoBrasil) com outros sistemas, como ERPs, e-commerce, etc. <br><br>
+      Se deseja solicitar um acesso, preencha o formulário em: <a href='https://info-api.infobrasilsistemas.com.br/integration/form'>Solicitar Acesso</a> <br> 
+      <br><br>
       **O sistema conta com duas formas de autenticação:**<br> 
       - Basic Auth para login e obtenção de token JWT<br>
       - JWT para acesso aos endpoints protegidos.

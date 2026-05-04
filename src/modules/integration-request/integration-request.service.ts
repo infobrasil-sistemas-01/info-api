@@ -12,6 +12,8 @@ export class IntegrationRequestService {
     const request = await this.prisma.integrationRequest.create({
       data: {
         clientName: dto.clientName,
+        legalName: dto.legalName,
+        cnpj: dto.cnpj,
         hostingType: dto.hostingType,
         fixedIp: dto.fixedIp,
         database: dto.database as any,

@@ -47,12 +47,31 @@ export class IntegrationRequestController {
 
   private getTemplatePath(fileName: string): string {
     const paths = [
-      // Caminho no build (dist/src/modules/...)
+      // 1. Caminho padrão no build (dist/src/modules/integration-request/templates/...)
       join(__dirname, 'templates', fileName),
-      // Caminho no build alternativo (dist/modules/...)
-      join(__dirname, '..', '..', 'modules', 'integration-request', 'templates', fileName),
-      // Caminho em desenvolvimento (src/modules/...)
-      join(process.cwd(), 'src', 'modules', 'integration-request', 'templates', fileName),
+      // 2. Caminho alternativo no build (dist/modules/integration-request/templates/...)
+      // Se __dirname for 'dist/src/modules/integration-request', subimos 3 níveis para chegar em 'dist'
+      join(
+        __dirname,
+        '..',
+        '..',
+        '..',
+        'modules',
+        'integration-request',
+        'templates',
+        fileName,
+      ),
+      // 3. Outro caminho alternativo (dist/src/modules/integration-request/templates/...)
+      join(__dirname, '..', 'templates', fileName),
+      // 4. Caminho em desenvolvimento (src/modules/...)
+      join(
+        process.cwd(),
+        'src',
+        'modules',
+        'integration-request',
+        'templates',
+        fileName,
+      ),
     ];
 
     for (const p of paths) {
