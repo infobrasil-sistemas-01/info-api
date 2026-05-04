@@ -22,15 +22,42 @@ export class TenantConnectionService {
    * Retorna uma conexão individual do pool do tenant.
    * Após o uso, chame `releaseConnection(connection)` para devolvê-la ao pool.
    */
-  async getConnection(credentialsId: string): Promise<firebird.Database> {
+  async getConnection(
+    credentialsId: string,
+    isRetry = false,
+  ): Promise<firebird.Database> {
     const pool = await this.getPool(credentialsId);
 
-    return new Promise<firebird.Database>((resolve, reject) => {
-      pool.get((err, db) => {
-        if (err) return reject(err);
-        resolve(db);
+    try {
+      return await new Promise<firebird.Database>((resolve, reject) => {
+        // Timeout de 10 segundos para obter uma conexão do pool
+        const timeout = setTimeout(() => {
+          reject(new Error('Timeout (10s) ao obter conexão do pool Firebird'));
+        }, 10000);
+
+        pool.get((err, db) => {
+          clearTimeout(timeout);
+          if (err) return reject(err);
+          resolve(db);
+        });
       });
-    });
+    } catch (err: any) {
+      this.logger.warn(
+        `Falha ao obter conexão para o tenant ${credentialsId}: ${err.message}`,
+      );
+
+      // Invalida o pool problemático removendo-o do cache e destruindo-o
+      await this.destroyPool(credentialsId);
+
+      if (!isRetry) {
+        this.logger.log(
+          `Tentando recriar o pool para o tenant ${credentialsId} após falha...`,
+        );
+        return this.getConnection(credentialsId, true);
+      }
+
+      throw err;
+    }
   }
 
   /**
@@ -51,14 +78,25 @@ export class TenantConnectionService {
     const pool = this.poolCache.get(credentialsId);
     if (!pool) return;
 
+    // Remove do cache IMEDIATAMENTE para evitar que outras requisições usem um pool em destruição
+    this.poolCache.delete(credentialsId);
+
     await new Promise<void>((resolve) => {
+      const timeout = setTimeout(() => {
+        this.logger.warn(
+          `Timeout (2s) ao destruir pool para o tenant: ${credentialsId}. Seguindo com a limpeza do cache.`,
+        );
+        resolve();
+      }, 2000);
+
       pool.destroy(() => {
-        this.logger.log(`Pool de conexões destruído para o tenant: ${credentialsId}`);
+        clearTimeout(timeout);
+        this.logger.log(
+          `Pool de conexões destruído para o tenant: ${credentialsId}`,
+        );
         resolve();
       });
     });
-
-    this.poolCache.delete(credentialsId);
   }
 
   /**

@@ -81,6 +81,52 @@ describe('TenantConnectionService', () => {
         'Credentials not found for id: invalid-id',
       );
     });
+
+    it('should retry once if pool.get fails', async () => {
+      // Primeira chamada falha, segunda tem sucesso
+      mockPool.get
+        .mockImplementationOnce((callback) => callback(new Error('Pool error')))
+        .mockImplementationOnce((callback) => callback(null, mockDb));
+
+      const conn = await service.getConnection('cred-1');
+      expect(conn).toBe(mockDb);
+      expect(mockPool.get).toHaveBeenCalledTimes(2);
+      expect(mockPool.destroy).toHaveBeenCalledTimes(1);
+    });
+
+    it('should throw error if retry also fails', async () => {
+      mockPool.get.mockImplementation((callback) =>
+        callback(new Error('Persistent error')),
+      );
+
+      await expect(service.getConnection('cred-1')).rejects.toThrow(
+        'Persistent error',
+      );
+      expect(mockPool.get).toHaveBeenCalledTimes(2);
+    });
+
+    it('should retry once if pool.get times out', async () => {
+      jest.useFakeTimers();
+      
+      // Simula um hang perpétuo na primeira chamada e sucesso na segunda
+      mockPool.get.mockImplementationOnce(() => {
+        // Não chama o callback, simulando hang
+      }).mockImplementationOnce((callback) => callback(null, mockDb));
+
+      const promise = service.getConnection('cred-1');
+
+      // Avança o tempo para disparar o timeout (10s)
+      await jest.advanceTimersByTimeAsync(10000);
+
+      // Aguarda a conclusão da promise (que inclui o retry)
+      const conn = await promise;
+
+      expect(conn).toBe(mockDb);
+      expect(mockPool.get).toHaveBeenCalledTimes(2);
+      expect(mockPool.destroy).toHaveBeenCalledTimes(1);
+      
+      jest.useRealTimers();
+    });
   });
 
   describe('releaseConnection', () => {
@@ -101,6 +147,22 @@ describe('TenantConnectionService', () => {
       await service.getConnection('cred-1');
       expect(mockFirebirdService.createPool).toHaveBeenCalledTimes(2);
       expect(mockPrisma.dbCredentials.findUnique).toHaveBeenCalledTimes(1);
+    });
+
+    it('should handle timeout during pool destruction gracefully', async () => {
+      jest.useFakeTimers();
+      mockPool.destroy.mockImplementation(() => {
+        // Simula hang no destroy
+      });
+
+      await service.getConnection('cred-1');
+      const destroyPromise = service.destroyPool('cred-1');
+
+      jest.advanceTimersByTime(2000);
+      await destroyPromise;
+
+      expect(mockPool.destroy).toHaveBeenCalled();
+      jest.useRealTimers();
     });
   });
 
