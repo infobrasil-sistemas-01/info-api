@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.2.1](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.2.0...v1.2.1) (2026-05-04)
+
+
+### Features
+
+* add support icon on Swagger ([7270c5f](https://github.com/infobrasil-sistemas/info-vendas-api/commit/7270c5ffcc9cc9f038a9f1647c08c8552933133f))
+* mail send for client and support ([a67efaf](https://github.com/infobrasil-sistemas/info-vendas-api/commit/a67efafdebe0c79e05691931f649706ab1342cb5))
+* mail send for client and support ([a12ca5c](https://github.com/infobrasil-sistemas/info-vendas-api/commit/a12ca5c3ca06e811bf5249422493ed43ff0423b2))
+
+
+### Bug Fixes
+
+* malformed sql queries ([9f2036b](https://github.com/infobrasil-sistemas/info-vendas-api/commit/9f2036b993bddbc27155a58c0200772e5569a7f9))
+
 ## [1.2.0](https://github.com/infobrasil-sistemas/InfoVendasApi/compare/v1.1.4...v1.2.0) (2026-05-04)
 
 
