@@ -56,19 +56,28 @@ export class AllExceptionsFilter implements ExceptionFilter {
       this.ipBlocklist.record404(ip);
     }
 
+    const user = request.user;
+    const userDisplay = user ? ` [User: ${user.username} (${user.sub})]` : '';
+
     // Breadcrumb para todos os erros
     Sentry.addBreadcrumb({
       type: 'error',
       category: 'exception',
-      message: `${request.method} ${request.url} → ${status}: ${errorMessage}`,
-      data: { status_code: status, path: request.url },
+      message: `${request.method} ${request.url}${userDisplay} → ${status}: ${errorMessage}`,
+      data: {
+        status_code: status,
+        path: request.url,
+        user: user ? { id: user.sub, name: user.username } : undefined,
+      },
       level: status >= 500 ? 'error' : 'warning',
     });
-
 
     if (status >= 500) {
       // Erros de servidor: captura como exceção com stack trace completo
       Sentry.withScope((scope) => {
+        if (user) {
+          scope.setUser({ id: user.sub, username: user.username });
+        }
         scope.setTag('http.status', String(status));
         scope.setTag('http.method', request.method);
         scope.setExtra('request.url', request.url);
@@ -80,11 +89,11 @@ export class AllExceptionsFilter implements ExceptionFilter {
     // Log estruturado
     if (status >= 500) {
       Sentry.logger.error(
-        `${request.method} ${request.url} ${status} – ${errorMessage}`,
+        `${request.method} ${request.url}${userDisplay} ${status} – ${errorMessage}`,
       );
     } else if (status >= 400) {
       Sentry.logger.warn(
-        `${request.method} ${request.url} ${status} – ${errorMessage}`,
+        `${request.method} ${request.url}${userDisplay} ${status} – ${errorMessage}`,
       );
     }
 

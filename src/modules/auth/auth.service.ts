@@ -71,6 +71,7 @@ export class AuthService {
       refreshToken = await this.issueRefreshToken(user.id.toString(), meta);
       accessToken = await this.signAccessToken({
         userId: user.id.toString(),
+        username: user.user,
         credentialsId: user.dbCredentialsId ?? undefined,
         storeId: user.storeId ?? undefined,
       });
@@ -121,12 +122,14 @@ export class AuthService {
 
   private async signAccessToken(params: {
     userId: string;
+    username: string;
     credentialsId?: string;
     storeId?: number;
   }) {
     return this.jwt.signAsync(
       {
         sub: params.userId,
+        username: params.username,
         credentials_id: params.credentialsId,
         store_id: params.storeId,
       },
@@ -150,6 +153,7 @@ export class AuthService {
       this.assertUserActive(user);
       const accessToken = await this.signAccessToken({
         userId: user.id.toString(),
+        username: user.user,
         credentialsId: user.dbCredentialsId ?? undefined,
         storeId: user.storeId ?? undefined,
       });

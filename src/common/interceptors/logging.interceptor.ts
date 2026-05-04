@@ -38,33 +38,65 @@ export class LoggingInterceptor implements NestInterceptor {
     return next.handle().pipe(
       tap({
         next: () => {
+          const user = request.user;
+          const userDisplay = user ? ` [User: ${user.username} (${user.sub})]` : '';
           const response = context.switchToHttp().getResponse();
           const statusCode: number = response.statusCode;
           const delay = Date.now() - now;
 
+          if (user) {
+            Sentry.getCurrentScope().setUser({
+              id: user.sub,
+              username: user.username,
+            });
+          }
+
           Sentry.addBreadcrumb({
             type: 'http',
             category: 'http',
-            message: `${method} ${url} ${statusCode} (${delay}ms)`,
-            data: { method, url, status_code: statusCode, duration_ms: delay, userAgent },
+            message: `${method} ${url}${userDisplay} ${statusCode} (${delay}ms)`,
+            data: {
+              method,
+              url,
+              status_code: statusCode,
+              duration_ms: delay,
+              userAgent,
+              user: user ? { id: user.sub, name: user.username } : undefined,
+            },
             level: statusCode >= 400 ? 'warning' : 'info',
           });
 
+          const logMessage = `${method} ${url}${userDisplay} → ${statusCode} (${delay}ms)`;
           if (statusCode >= 400) {
-            Sentry.logger.warn(`${method} ${url} → ${statusCode} (${delay}ms)`);
+            Sentry.logger.warn(logMessage);
           } else {
-            Sentry.logger.info(`${method} ${url} → ${statusCode} (${delay}ms)`);
+            Sentry.logger.info(logMessage);
           }
         },
         error: (error: any) => {
+          const user = request.user;
+          const userDisplay = user ? ` [User: ${user.username} (${user.sub})]` : '';
           const delay = Date.now() - now;
           const status = error?.status ?? 500;
+
+          if (user) {
+            Sentry.getCurrentScope().setUser({
+              id: user.sub,
+              username: user.username,
+            });
+          }
 
           Sentry.addBreadcrumb({
             type: 'http',
             category: 'http',
-            message: `${method} ${url} ${status} (${delay}ms) – ${error?.message ?? 'Unknown error'}`,
-            data: { method, url, status_code: status, duration_ms: delay },
+            message: `${method} ${url}${userDisplay} ${status} (${delay}ms) – ${error?.message ?? 'Unknown error'}`,
+            data: {
+              method,
+              url,
+              status_code: status,
+              duration_ms: delay,
+              user: user ? { id: user.sub, name: user.username } : undefined,
+            },
             level: 'error',
           });
         },
