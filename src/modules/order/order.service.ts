@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, Post } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, Post } from '@nestjs/common';
 import { TenantConnectionService } from 'src/infra/database/tenant-connection.service';
 import { PostOrderDto } from './dto/create-order.dto';
 import dayjs from 'dayjs';
@@ -9,6 +9,8 @@ import { OrderItemService } from './order-item/order-item.service';
 
 @Injectable()
 export class OrderService {
+  private readonly logger = new Logger(OrderService.name);
+
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
     private readonly orderItemService: OrderItemService,
@@ -188,12 +190,22 @@ export class OrderService {
 
       const params = [pageSize, (page - 1) * pageSize, storeId];
 
+      const queryStartTime = Date.now();
       const result = await new Promise((resolve, reject) => {
         connection.query(query, params, (err: any, res: any) => {
           if (err) return reject(err);
           resolve(res);
         });
       });
+      const queryEndTime = Date.now();
+
+      this.logger.log(
+        `Busca de pedidos executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
+          { storeId, page, pageSize },
+        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${
+          queryEndTime - queryStartTime
+        }ms`,
+      );
 
       return result;
     } finally {
@@ -235,12 +247,20 @@ export class OrderService {
 
       const params = [id, storeId];
 
+      const queryStartTime = Date.now();
       const result = (await new Promise((resolve, reject) => {
         connection.query(query, params, (err: any, res: any) => {
           if (err) return reject(err);
           resolve(res[0]);
         });
       })) as object;
+      const queryEndTime = Date.now();
+
+      this.logger.log(
+        `Busca de pedido por ID executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
+          { storeId, id },
+        )}, Itens: ${result ? 1 : 0}, Tempo SQL: ${queryEndTime - queryStartTime}ms`,
+      );
 
       return result;
     } finally {

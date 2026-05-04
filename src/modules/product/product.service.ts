@@ -1,8 +1,10 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { TenantConnectionService } from 'src/infra/database/tenant-connection.service';
 
 @Injectable()
 export class ProductService {
+  private readonly logger = new Logger(ProductService.name);
+
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
   ) { }
@@ -76,12 +78,22 @@ export class ProductService {
 
       query += ` ORDER BY P.PRO_DESCRICAO`;
 
+      const queryStartTime = Date.now();
       const result = await new Promise((resolve, reject) => {
         connection.query(query, params, (err: any, res: any) => {
           if (err) return reject(err);
           resolve(res);
         });
       });
+      const queryEndTime = Date.now();
+
+      this.logger.log(
+        `Busca de produtos executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
+          { storeId, page, pageSize, group, brand, minStock, search },
+        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${
+          queryEndTime - queryStartTime
+        }ms`,
+      );
 
       return result;
     } finally {
@@ -103,12 +115,20 @@ export class ProductService {
                       WHERE P.PRO_CODIGO = ?`;
       const params = [storeId, id];
 
-      const result = await new Promise((resolve, reject) => {
+      const queryStartTime = Date.now();
+      const result = (await new Promise((resolve, reject) => {
         connection.query(query, params, (err: any, res: any) => {
           if (err) return reject(err);
           resolve(res[0]);
         });
-      });
+      })) as any;
+      const queryEndTime = Date.now();
+
+      this.logger.log(
+        `Busca de produto por ID executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
+          { storeId, id },
+        )}, Itens: ${result ? 1 : 0}, Tempo SQL: ${queryEndTime - queryStartTime}ms`,
+      );
 
       return result;
     } finally {
@@ -152,12 +172,20 @@ export class ProductService {
         params.push(codigoBar);
       }
 
-      const result = await new Promise((resolve, reject) => {
+      const queryStartTime = Date.now();
+      const result = (await new Promise((resolve, reject) => {
         connection.query(query, params, (err: any, res: any) => {
           if (err) return reject(err);
           resolve(res[0]);
         });
-      });
+      })) as any;
+      const queryEndTime = Date.now();
+
+      this.logger.log(
+        `Busca única de produto executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
+          { store_id, id, codigoBar },
+        )}, Itens: ${result ? 1 : 0}, Tempo SQL: ${queryEndTime - queryStartTime}ms`,
+      );
 
       return result;
     } finally {

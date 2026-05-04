@@ -1,9 +1,11 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { TenantConnectionService } from 'src/infra/database/tenant-connection.service';
 import { SoldProductDto } from '../dto/sold-product.dto';
 
 @Injectable()
 export class OrderItemService {
+  private readonly logger = new Logger(OrderItemService.name);
+
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
   ) { }
@@ -117,12 +119,24 @@ export class OrderItemService {
 
       const params = [orderId];
 
-      return new Promise((resolve, reject) => {
+      const queryStartTime = Date.now();
+      const result = await new Promise((resolve, reject) => {
         connection.query(query, params, (err: any, res: any) => {
           if (err) return reject(err);
           resolve(res);
         });
       });
+      const queryEndTime = Date.now();
+
+      this.logger.log(
+        `Busca de itens do pedido executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
+          { orderId },
+        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${
+          queryEndTime - queryStartTime
+        }ms`,
+      );
+
+      return result;
     } finally {
       this.tenantConnectionService.releaseConnection(connection);
     }
