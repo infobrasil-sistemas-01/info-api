@@ -1,0 +1,99 @@
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Res,
+  UseGuards,
+  Patch,
+  Delete,
+  Param,
+  InternalServerErrorException,
+} from '@nestjs/common';
+import {
+  ApiExcludeController,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import type { Response } from 'express';
+import { join } from 'path';
+import { existsSync } from 'fs';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
+import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
+import { CreateIntegrationRequestDto } from './dto/create-integration-request.dto';
+import { IntegrationRequestService } from './integration-request.service';
+
+@ApiTags('Integration Requests')
+@ApiExcludeController()
+@Controller('integration')
+export class IntegrationRequestController {
+  constructor(private readonly service: IntegrationRequestService) {}
+
+  @Get('form')
+  @ApiOperation({ summary: 'Serve a interface de formulário para o cliente' })
+  serveForm(@Res() res: Response) {
+    const path = this.getTemplatePath('form.html');
+    return res.sendFile(path);
+  }
+
+  @Get('admin')
+  @ApiOperation({ summary: 'Serve o painel administrativo para o suporte' })
+  serveAdmin(@Res() res: Response) {
+    const path = this.getTemplatePath('admin.html');
+    return res.sendFile(path);
+  }
+
+  private getTemplatePath(fileName: string): string {
+    const paths = [
+      // Caminho no build (dist/src/modules/...)
+      join(__dirname, 'templates', fileName),
+      // Caminho no build alternativo (dist/modules/...)
+      join(__dirname, '..', '..', 'modules', 'integration-request', 'templates', fileName),
+      // Caminho em desenvolvimento (src/modules/...)
+      join(process.cwd(), 'src', 'modules', 'integration-request', 'templates', fileName),
+    ];
+
+    for (const p of paths) {
+      if (existsSync(p)) return p;
+    }
+
+    throw new InternalServerErrorException(
+      `Template ${fileName} não encontrado em nenhum dos locais esperados.`,
+    );
+  }
+
+  @Post()
+  @ApiOperation({ summary: 'Cria uma nova solicitação de integração' })
+  @ApiResponse({ status: 201, description: 'Solicitação criada com sucesso' })
+  create(@Body() dto: CreateIntegrationRequestDto) {
+    return this.service.create(dto);
+  }
+
+  @Get()
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @RequirePermissions({ anyOf: ['integration-request.view'] })
+  @ApiOperation({ summary: 'Lista todas as solicitações (Requer autenticação)' })
+  findAll() {
+    return this.service.findAll();
+  }
+
+  @Patch(':id/status')
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @RequirePermissions({
+    anyOf: ['integration-request.approve', 'integration-request.reject'],
+  })
+  @ApiOperation({ summary: 'Atualiza o status de uma solicitação' })
+  updateStatus(@Param('id') id: string, @Body('status') status: string) {
+    return this.service.updateStatus(id, status);
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @RequirePermissions({ anyOf: ['integration-request.delete'] })
+  @ApiOperation({ summary: 'Exclui uma solicitação' })
+  remove(@Param('id') id: string) {
+    return this.service.remove(id);
+  }
+}

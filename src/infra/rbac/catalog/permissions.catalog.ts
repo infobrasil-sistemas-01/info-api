@@ -169,6 +169,38 @@ export const PERMISSIONS = [
     descricao: 'Deletar contas a receber do tenant',
     module: 'tenant'
   },
+
+  // ========= SOLICITAÇÕES =========
+  {
+    key: 'integration-request.view',
+    descricao: 'Visualizar solicitações de integração',
+    module: 'integration-request'
+  },
+  {
+    key: 'integration-request.create',
+    descricao: 'Criar solicitações de integração',
+    module: 'integration-request'
+  },
+  {
+    key: 'integration-request.update',
+    descricao: 'Atualizar solicitações de integração',
+    module: 'integration-request'
+  },
+  {
+    key: 'integration-request.delete',
+    descricao: 'Deletar solicitações de integração',
+    module: 'integration-request'
+  },
+  {
+    key: 'integration-request.approve',
+    descricao: 'Aprovar solicitações de integração',
+    module: 'integration-request'
+  },
+  {
+    key: 'integration-request.reject',
+    descricao: 'Recusar solicitações de integração',
+    module: 'integration-request'
+  },
 ] as const satisfies readonly PermissionDefinition[];
 
 export type PermissionKey = (typeof PERMISSIONS)[number]['key'];

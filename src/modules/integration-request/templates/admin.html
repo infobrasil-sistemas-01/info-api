@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Support | Info Vendas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --bg: #f3f4f6;
+            --card: #ffffff;
+            --text: #111827;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --radius: 10px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 40px;
+        }
+
+        .dashboard {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        button.logout {
+            padding: 8px 16px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .requests-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+        }
+
+        .request-card {
+            background: white;
+            padding: 24px;
+            border-radius: var(--radius);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border);
+        }
+
+        .request-card h3 {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+
+        .status.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status.approved {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status.rejected {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .info-label {
+            color: var(--text-muted);
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 20px;
+            border-top: 1px solid #eee;
+            padding-top: 16px;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid transparent;
+            flex: 1;
+            text-align: center;
+        }
+
+        .btn-approve {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-reject {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .btn-delete {
+            background: white;
+            color: #ef4444;
+            border-color: #fee2e2;
+            flex: 0 0 auto;
+        }
+
+        .btn-approve:hover {
+            background: #059669;
+        }
+
+        .btn-reject:hover {
+            background: #d97706;
+        }
+
+        .btn-delete:hover {
+            background: #fee2e2;
+        }
+
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .login-box {
+            background: white;
+            padding: 32px;
+            border-radius: var(--radius);
+            width: 320px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-box h2 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        #admin-content {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="login-section" class="login-overlay">
+        <div class="login-box">
+            <h2>Suporte Info</h2>
+            <input type="text" id="username" placeholder="Usuário">
+            <input type="password" id="password" placeholder="Senha">
+            <button onclick="login()">Entrar</button>
+        </div>
+    </div>
+
+    <div id="admin-content" class="dashboard">
+        <header>
+            <h1>Solicitações de Integração</h1>
+            <button class="logout" onclick="logout()">Sair</button>
+        </header>
+
+        <div id="requests-list" class="requests-grid">
+            <!-- Cards will be inserted here -->
+        </div>
+    </div>
+
+    <script>
+        const API_URL = '/api/v1';
+
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            if (token) {
+                document.getElementById('login-section').style.display = 'none';
+                document.getElementById('admin-content').style.display = 'block';
+                fetchRequests();
+            }
+        }
+
+        async function login() {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            const auth = btoa(user + ':' + pass);
+
+            try {
+                const res = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Authorization': 'Basic ' + auth }
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    localStorage.setItem('token', data.access_token);
+                    checkAuth();
+                } else {
+                    alert('Credenciais inválidas');
+                }
+            } catch (err) {
+                alert('Erro de conexão');
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            window.location.reload();
+        }
+
+        async function fetchRequests() {
+            const token = localStorage.getItem('token');
+            try {
+                const res = await fetch(`/integration`, {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+
+                if (res.status === 401) return logout();
+
+                if (res.status === 403) {
+                    document.getElementById('requests-list').innerHTML = `
+                        <div style="grid-column: 1/-1; text-align: center; padding: 40px; background: #fff; border-radius: 10px; border: 1px solid #fee2e2;">
+                            <h2 style="color: #ef4444; margin-bottom: 10px;">Acesso Negado</h2>
+                            <p style="color: #666;">Você não tem permissão para visualizar as solicitações de integração.<br>Contate o administrador para obter a role <strong>"Suporte Infobrasil"</strong>.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const data = await res.json();
+                const list = document.getElementById('requests-list');
+                list.innerHTML = data.map(req => {
+                    const statusMap = { 'PENDING': 'PENDENTE', 'APPROVED': 'APROVADO', 'REJECTED': 'RECUSADO' };
+                    const hostMap = { 'DATACENTER': 'Nuvem', 'CLIENT_SERVER': 'Local' };
+                    const actionMap = { 'read': 'Ver', 'create': 'Criar', 'update': 'Editar', 'delete': 'Excluir' };
+
+                    return `
+                        <div class="request-card">
+                            <span class="status ${req.status.toLowerCase()}">${statusMap[req.status] || req.status}</span>
+                            <h3>${req.clientName}</h3>
+                            <p style="font-size: 0.85rem; color: #666; margin-bottom: 16px;">${req.objective}</p>
+                            
+                            <div class="info-row" style="flex-direction: column; align-items: flex-start; gap: 4px;">
+                                <span class="info-label">Escopo e Ações</span>
+                                <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+                                    ${req.scopes.map(s => `
+                                        <div style="background: #f3f4f6; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; margin-bottom: 4px;">
+                                            <strong>${s.resource}:</strong> ${s.actions.map(a => actionMap[a] || a).join(', ')}
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Hospedagem</span>
+                                <span>${hostMap[req.hostingType] || req.hostingType}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Banco de Dados</span>
+                                <span>${req.database.host}:${req.database.port}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Caminho DB</span>
+                                <span style="font-size: 0.8rem; word-break: break-all; text-align: right; max-width: 200px;">${req.database.database}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Contato</span>
+                                <span>${req.technicalContact.name}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">E-mail</span>
+                                <span>${req.technicalContact.email}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Lojas</span>
+                                <span>${req.stores.join(', ')}</span>
+                            </div>
+                            <div class="info-row" style="margin-top: 12px; border-top: 1px solid #eee; padding-top: 12px;">
+                                <span class="info-label">Criado em</span>
+                                <span>${new Date(req.createdAt).toLocaleDateString()}</span>
+                            </div>
+
+                            <div class="actions">
+                                <button class="btn-sm btn-approve" onclick="updateStatus('${req.id}', 'APPROVED')">Aprovar</button>
+                                <button class="btn-sm btn-reject" onclick="updateStatus('${req.id}', 'REJECTED')">Recusar</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function updateStatus(id, status) {
+            const token = localStorage.getItem('token');
+            try {
+                const res = await fetch(`/integration/${id}/status`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify({ status })
+                });
+
+                if (res.ok) fetchRequests();
+                else alert('Erro ao atualizar status');
+            } catch (err) {
+                alert('Erro de conexão');
+            }
+        }
+
+        async function deleteRequest(id) {
+            if (!confirm('Deseja realmente excluir esta solicitação?')) return;
+
+            const token = localStorage.getItem('token');
+            try {
+                const res = await fetch(`/integration/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+
+                if (res.ok) fetchRequests();
+                else alert('Erro ao excluir');
+            } catch (err) {
+                alert('Erro de conexão');
+            }
+        }
+
+        checkAuth();
+    </script>
+</body>
+
+</html>

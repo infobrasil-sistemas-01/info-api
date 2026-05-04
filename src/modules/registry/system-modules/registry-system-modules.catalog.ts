@@ -5,6 +5,11 @@ export const SYSTEM_MODULES = [
     nome: 'Tenant',
     descricao: 'Tenant do sistema',
   },
+  {
+    key: 'integration-request',
+    nome: 'Solicitações de Integração',
+    descricao: 'Solicitações de integração',
+  },
 ] as const;
 
 export type SystemModuleKey = (typeof SYSTEM_MODULES)[number]['key'];

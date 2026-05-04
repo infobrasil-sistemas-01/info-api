@@ -73,3 +73,26 @@ model RolePermission {
   @@id([roleId, permissionId])
   @@map("role_permissions")
 }
+
+enum HostingType {
+  DATACENTER
+  CLIENT_SERVER
+}
+
+model IntegrationRequest {
+  id               String      @id @default(uuid())
+  clientName       String      @map("client_name")
+  hostingType      HostingType @map("hosting_type")
+  fixedIp          String?     @map("fixed_ip")
+  database         Json // { host: string, port: number, database: string }
+  stores           Int[]
+  modules          String[] // Quais módulos (ex: Estoque, Financeiro)
+  scopes           Json // { resource: string, actions: string[] }[]
+  objective        String      @db.Text
+  technicalContact Json        @map("technical_contact") // { name: string, email: string, phone: string }
+  status           String      @default("PENDING") // PENDING, APPROVED, REJECTED
+  createdAt        DateTime    @default(now()) @map("created_at")
+  updatedAt        DateTime    @updatedAt @map("updated_at")
+
+  @@map("integration_requests")
+}

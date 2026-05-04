@@ -18,7 +18,9 @@ async function bootstrap() {
   app.getHttpAdapter().getInstance().set('trust proxy', 1);
 
   app.enableCors();
-  app.setGlobalPrefix('api/v1');
+  app.setGlobalPrefix('api/v1', {
+    exclude: ['integration/(.*)'],
+  });
 
 
   setupSwagger(app);
