@@ -103,7 +103,7 @@ export class AccountReceivableService {
         params.push(startDate, endDate);
       }
 
-      query += `ORDER BY rec.rec_datavenc DESC`;
+      query += ` ORDER BY rec.rec_datavenc DESC`;
 
       const queryStartTime = Date.now();
       const result = (await new Promise((resolve, reject) => {

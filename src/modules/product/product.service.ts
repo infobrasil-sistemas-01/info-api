@@ -44,7 +44,7 @@ export class ProductService {
                       FROM produtos P 
                       INNER JOIN marcas M ON P.MAR_CODIGO = M.MAR_CODIGO 
                       INNER JOIN grupospro G ON P.GRU_CODIGO = G.GRU_CODIGO
-                      INNER JOIN estoque E ON P.PRO_CODIGO = E.PRO_CODIGO AND LOJ_CODIGO = ?`;
+                      INNER JOIN estoque E ON P.PRO_CODIGO = E.PRO_CODIGO AND E.LOJ_CODIGO = ?`;
 
       if (group) {
         query += ` WHERE P.GRU_CODIGO = ?`;
@@ -99,7 +99,7 @@ export class ProductService {
                       P.PRO_CODIGO, P.PRO_CODIGOBAR, P.PRO_PRCCOMPRA, P.PRO_PRCCUSTO, P.PRO_PRCCOMPRAFISCAL, P.PRO_CUSTOFISCAL,
                       E.PRO_PRECO1
                       FROM produtos P
-                      LEFT JOIN estoque E ON P.PRO_CODIGO = E.PRO_CODIGO AND LOJ_CODIGO = ?
+                      LEFT JOIN estoque E ON P.PRO_CODIGO = E.PRO_CODIGO AND E.LOJ_CODIGO = ?
                       WHERE P.PRO_CODIGO = ?`;
       const params = [storeId, id];
 
@@ -132,8 +132,14 @@ export class ProductService {
                       FROM produtos P 
                       INNER JOIN marcas M ON P.MAR_CODIGO = M.MAR_CODIGO 
                       INNER JOIN grupospro G ON P.GRU_CODIGO = G.GRU_CODIGO
-                      INNER JOIN estoque E ON P.PRO_CODIGO = E.PRO_CODIGO AND LOJ_CODIGO = ?`;
+                      INNER JOIN estoque E ON P.PRO_CODIGO = E.PRO_CODIGO AND E.LOJ_CODIGO = ?`;
       let params = [store_id];
+
+      if (!id && !codigoBar) {
+        throw new BadRequestException(
+          'É necessário informar o ID ou o Código de Barras.',
+        );
+      }
 
       if (id) {
         query += ` WHERE P.PRO_CODIGO = ?`;
