@@ -323,12 +323,14 @@
                             </div>
                             <div class="info-row">
                                 <span class="info-label">Banco de Dados</span>
-                                <span>${req.database.host}:${req.database.port}</span>
+                                <span>${req.hostingType === 'DATACENTER' ? 'Configuração Automática (Nuvem)' : `${req.database.host}:${req.database.port}`}</span>
                             </div>
+                            ${req.hostingType === 'CLIENT_SERVER' ? `
                             <div class="info-row">
                                 <span class="info-label">Caminho DB</span>
                                 <span style="font-size: 0.8rem; word-break: break-all; text-align: right; max-width: 200px;">${req.database.database}</span>
                             </div>
+                            ` : ''}
                             <div class="info-row">
                                 <span class="info-label">Contato</span>
                                 <span>${req.technicalContact.name}</span>
@@ -336,6 +338,10 @@
                             <div class="info-row">
                                 <span class="info-label">E-mail</span>
                                 <span>${req.technicalContact.email}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Telefone/WhatsApp</span>
+                                <span>${req.technicalContact.phone}</span>
                             </div>
                             <div class="info-row">
                                 <span class="info-label">Lojas</span>

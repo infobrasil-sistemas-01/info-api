@@ -8,12 +8,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #059669; /* Emerald Green */
+            --primary: #059669;
+            /* Emerald Green */
             --primary-hover: #047857;
-            --accent: #eab308; /* Gold/Yellow */
-            --bg: #f0fdf4; /* Very light mint */
+            --accent: #eab308;
+            /* Gold/Yellow */
+            --bg: #f0fdf4;
+            /* Very light mint */
             --card: #ffffff;
-            --text: #064e3b; /* Dark Green Text */
+            --text: #064e3b;
+            /* Dark Green Text */
             --text-muted: #6b7280;
             --border: #d1fae5;
             --radius: 12px;
@@ -269,31 +273,29 @@
             <div class="grid">
                 <div class="form-group">
                     <label for="hostingType">Tipo de Hospedagem</label>
-                    <select id="hostingType" name="hostingType" required>
-                        <option value="CLIENT_SERVER">Servidor do Cliente (Local)</option>
+                    <select id="hostingType" name="hostingType" required onchange="toggleDbSection()">
                         <option value="DATACENTER">Datacenter (Nuvem)</option>
+                        <option value="CLIENT_SERVER">Servidor do Cliente (Local)</option>
                     </select>
-                </div>
-                <div class="form-group">
-                    <label for="fixedIp">IP Fixo (Opcional)</label>
-                    <input type="text" id="fixedIp" name="fixedIp" placeholder="Ex: 187.1.2.3">
                 </div>
             </div>
 
-            <div class="section-title">Banco de Dados (Firebird)</div>
-            <div class="grid">
-                <div class="form-group">
-                    <label for="dbHost">Host / IP</label>
-                    <input type="text" id="dbHost" name="dbHost" required placeholder="Ex: 192.168.0.100">
+            <div id="db-section">
+                <div class="section-title">Banco de Dados (Firebird)</div>
+                <div class="grid">
+                    <div class="form-group">
+                        <label for="dbHost">Host / IP</label>
+                        <input type="text" id="dbHost" name="dbHost" placeholder="Ex: 192.168.0.100">
+                    </div>
+                    <div class="form-group">
+                        <label for="dbPort">Porta</label>
+                        <input type="number" id="dbPort" name="dbPort" value="3050">
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label for="dbPort">Porta</label>
-                    <input type="number" id="dbPort" name="dbPort" required value="3050">
+                    <label for="dbName">Caminho do Banco (Database)</label>
+                    <input type="text" id="dbName" name="dbName" placeholder="Ex: C:\InfoBrasil\DADOS.FDB">
                 </div>
-            </div>
-            <div class="form-group">
-                <label for="dbName">Caminho do Banco (Database)</label>
-                <input type="text" id="dbName" name="dbName" required placeholder="Ex: C:\InfoBrasil\DADOS.FDB">
             </div>
 
             <div class="section-title">Escopo e Permissões</div>
@@ -357,6 +359,10 @@
                     <label for="techEmail">E-mail</label>
                     <input type="email" id="techEmail" name="techEmail" required>
                 </div>
+                <div class="form-group">
+                    <label for="techPhone">Telefone / WhatsApp</label>
+                    <input type="text" id="techPhone" name="techPhone" required placeholder="(00) 00000-0000">
+                </div>
             </div>
 
             <button type="submit" class="submit" id="submit-btn">Enviar Solicitação</button>
@@ -375,16 +381,22 @@
         const formContainer = document.getElementById('form-container');
         const successContainer = document.getElementById('success-container');
         const cnpjInput = document.getElementById('cnpj');
+        const dbSection = document.getElementById('db-section');
+
+        function toggleDbSection() {
+            const type = document.getElementById('hostingType').value;
+            dbSection.style.display = type === 'CLIENT_SERVER' ? 'block' : 'none';
+        }
 
         cnpjInput.addEventListener('input', (e) => {
             let value = e.target.value.replace(/\D/g, '');
             if (value.length > 14) value = value.slice(0, 14);
-            
+
             value = value.replace(/^(\d{2})(\d)/, '$1.$2');
             value = value.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
             value = value.replace(/\.(\d{3})(\d)/, '.$1/$2');
             value = value.replace(/(\d{4})(\d)/, '$1-$2');
-            
+
             e.target.value = value;
         });
 
@@ -445,16 +457,21 @@
             submitBtn.innerText = 'Enviando...';
 
             const formData = new FormData(form);
+            const hostingType = formData.get('hostingType');
+
             const data = {
                 clientName: formData.get('clientName'),
                 legalName: formData.get('legalName'),
                 cnpj: formData.get('cnpj'),
-                hostingType: formData.get('hostingType'),
-                fixedIp: formData.get('fixedIp') || undefined,
-                database: {
+                hostingType: hostingType,
+                database: hostingType === 'CLIENT_SERVER' ? {
                     host: formData.get('dbHost'),
                     port: parseInt(formData.get('dbPort')),
                     database: formData.get('dbName')
+                } : {
+                    host: 'DATACENTER',
+                    port: 0,
+                    database: 'DATACENTER'
                 },
                 stores: formData.get('stores').split(',').map(s => parseInt(s.trim())).filter(s => !isNaN(s)),
                 modules: selectedScopes.map(s => s.resource),
@@ -466,7 +483,7 @@
                 technicalContact: {
                     name: formData.get('techName'),
                     email: formData.get('techEmail'),
-                    phone: 'Não informado'
+                    phone: formData.get('techPhone')
                 }
             };
 
@@ -491,6 +508,7 @@
                 submitBtn.innerText = 'Enviar Solicitação';
             }
         };
+        toggleDbSection();
     </script>
 </body>
 
