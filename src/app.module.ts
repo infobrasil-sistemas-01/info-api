@@ -15,6 +15,7 @@ import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { IpBlocklistService } from './common/throttle/ip-blocklist.service';
 import { IpBlocklistMiddleware } from './common/middleware/ip-blocklist.middleware';
 import { EnvModule } from './config/env/env.module';
+import { EmailModule } from './infra/email/email.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { EnvModule } from './config/env/env.module';
       isGlobal: true,
     }),
     EnvModule,
+    EmailModule,
     AuthModule,
     ProductModule,
     OrderModule,
