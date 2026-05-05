@@ -45,6 +45,13 @@ export class IntegrationRequestController {
     return res.sendFile(path);
   }
 
+  @Get('assets/:file')
+  @ApiOperation({ summary: 'Serve arquivos estáticos para o painel administrativo' })
+  serveAssets(@Param('file') file: string, @Res() res: Response) {
+    const path = this.getTemplatePath(join('assets', file));
+    return res.sendFile(path);
+  }
+
   private getTemplatePath(fileName: string): string {
     const paths = [
       // 1. Caminho padrão no build (dist/src/modules/integration-request/templates/...)
