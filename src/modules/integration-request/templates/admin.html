@@ -342,7 +342,7 @@
         </header>
 
         <nav class="tabs">
-            <div class="tab-btn active" onclick="switchTab('requests')">Solicitações</div>
+            <div id="tab-requests" class="tab-btn hidden" onclick="switchTab('requests')">Solicitações</div>
             <div id="tab-users" class="tab-btn hidden" onclick="switchTab('users')">Usuários</div>
             <div id="tab-roles" class="tab-btn hidden" onclick="switchTab('roles')">Roles</div>
             <div id="tab-creds" class="tab-btn hidden" onclick="switchTab('creds')">Credenciais DB</div>
@@ -555,15 +555,24 @@
             document.getElementById('admin-content').classList.remove('hidden');
             document.getElementById('user-display').innerText = currentUser.username;
 
+            const canViewRequests = currentUser.permissions.includes('integration-request.view');
             const canViewUsers = currentUser.permissions.includes('core.user.view');
+
+            if (canViewRequests) {
+                document.getElementById('tab-requests').classList.remove('hidden');
+                switchTab('requests');
+                fetchRequests();
+            }
+
             if (canViewUsers) {
                 document.getElementById('tab-users').classList.remove('hidden');
                 document.getElementById('tab-roles').classList.remove('hidden');
                 document.getElementById('tab-creds').classList.remove('hidden');
-            }
+                
+                if (!canViewRequests) {
+                    switchTab('users');
+                }
 
-            fetchRequests();
-            if (canViewUsers) {
                 fetchUsers();
                 fetchRoles();
                 fetchPermissions();
