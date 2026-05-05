@@ -80,6 +80,7 @@ model IntegrationRequest {
   modules          String[]
   cnpj             String
   legalName        String      @map("legal_name")
+  rejectionReason  String?     @map("rejection_reason")
 
   @@map("integration_requests")
 }

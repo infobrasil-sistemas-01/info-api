@@ -93,8 +93,11 @@ const Data = {
         const res = await this.fetch(`${API_URL}/permissions`);
         State.allPermissions = await res.json();
     },
-    async updateRequestStatus(id, status) {
-        const res = await this.fetch(`/integration/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status }) });
+    async updateRequestStatus(id, status, rejectionReason = null) {
+        const res = await this.fetch(`/integration/${id}/status`, { 
+            method: 'PATCH', 
+            body: JSON.stringify({ status, rejectionReason }) 
+        });
         if (res.ok) this.fetchRequests();
     },
     async deleteRequest(id) {
@@ -180,6 +183,12 @@ const UI = {
         const btn = el.previousElementSibling;
         el.classList.toggle('hidden');
         btn.querySelector('span').innerText = el.classList.contains('hidden') ? '+' : '-';
+    },
+    promptRejection(id) {
+        const reason = prompt('Por favor, informe o motivo da recusa:');
+        if (reason !== null) {
+            Data.updateRequestStatus(id, 'REJECTED', reason);
+        }
     },
     closeModal() {
         document.getElementById('modal-container').classList.add('hidden');

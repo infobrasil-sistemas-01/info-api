@@ -21,7 +21,14 @@ const Components = {
         return `
             <div class="card">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 16px;">
-                    <span class="status ${req.status.toLowerCase()}">${translateStatus(req.status)}</span>
+                    <div>
+                        <span class="status ${req.status.toLowerCase()}">${translateStatus(req.status)}</span>
+                        ${req.status === 'REJECTED' && req.rejectionReason ? `
+                            <div style="margin-top: 8px; font-size: 0.75rem; color: var(--danger); background: #fef2f2; padding: 4px 8px; border-radius: 4px; border: 1px solid #fee2e2;">
+                                <strong>Motivo:</strong> ${req.rejectionReason}
+                            </div>
+                        ` : ''}
+                    </div>
                     <small style="color: var(--text-muted)">${new Date(req.createdAt).toLocaleDateString()}</small>
                 </div>
                 <h3 style="margin-bottom: 4px;">${req.clientName}</h3>
@@ -70,7 +77,7 @@ const Components = {
                         onclick="Data.updateRequestStatus('${req.id}', 'APPROVED')">Aprovar</button>
                     <button class="btn btn-outline btn-sm" style="flex: 1" 
                         ${req.status === 'AWAITING_CONFIRMATION' || req.status === 'APPROVED' || req.status === 'REJECTED' ? 'disabled title="Aguardando confirmação de e-mail"' : ''}
-                        onclick="Data.updateRequestStatus('${req.id}', 'REJECTED')">Recusar</button>
+                        onclick="UI.promptRejection('${req.id}')">Recusar</button>
                     <button 
                         ${req.status === 'AWAITING_CONFIRMATION' || req.status === 'APPROVED' ? 'disabled' : ''}
                         class="btn btn-danger btn-sm" onclick="Data.deleteRequest('${req.id}')">&times;</button>

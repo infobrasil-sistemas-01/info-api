@@ -128,8 +128,12 @@ export class IntegrationRequestController {
     anyOf: ['integration-request.approve', 'integration-request.reject'],
   })
   @ApiOperation({ summary: 'Atualiza o status de uma solicitação' })
-  updateStatus(@Param('id') id: string, @Body('status') status: string) {
-    return this.service.updateStatus(id, status);
+  updateStatus(
+    @Param('id') id: string,
+    @Body('status') status: string,
+    @Body('rejectionReason') rejectionReason?: string,
+  ) {
+    return this.service.updateStatus(id, status, rejectionReason);
   }
 
   @Delete(':id')

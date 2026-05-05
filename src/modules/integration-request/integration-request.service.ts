@@ -135,7 +135,7 @@ export class IntegrationRequestService {
     });
   }
 
-  async updateStatus(id: string, status: string) {
+  async updateStatus(id: string, status: string, rejectionReason?: string) {
     const existing = await this.prisma.integrationRequest.findUnique({ where: { id } });
     if (!existing) throw new NotFoundException('Solicitação não encontrada');
 
@@ -147,7 +147,7 @@ export class IntegrationRequestService {
 
     const request = await this.prisma.integrationRequest.update({
       where: { id },
-      data: { status },
+      data: { status, rejectionReason },
     });
 
     const statusTraduzido = status === 'APPROVED' ? 'APROVADA' : 'RECUSADA';
@@ -164,7 +164,12 @@ export class IntegrationRequestService {
         <p>O status atual é: <span style="font-weight: bold; color: ${cor};">${statusTraduzido}</span></p>
         ${status === 'APPROVED' 
           ? '<p>Nossa equipe entrará em contato para fornecer as chaves de acesso e próximos passos.</p>' 
-          : '<p>Infelizmente sua solicitação não foi aprovada neste momento. Para mais detalhes, entre em contato com nosso suporte.</p>'}
+          : `
+            <p>Infelizmente sua solicitação não foi aprovada neste momento.</p>
+            ${rejectionReason ? `<p><strong>Motivo da recusa:</strong> ${rejectionReason}</p>` : ''}
+            <p>Para mais detalhes ou para realizar uma nova solicitação corrigida, entre em contato com nosso suporte.</p>
+            `
+        }
         <hr>
         <p style="font-weight: bold;">InfoBrasil Sistemas</p>
       </div>
