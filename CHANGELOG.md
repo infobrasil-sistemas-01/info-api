@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.2.2](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.2.1...v1.2.2) (2026-05-05)
+
+
+### Features
+
+* users && roles && permission && dbCredentials monitoring ([070926c](https://github.com/infobrasil-sistemas/info-vendas-api/commit/070926c7e7750a92c9215c0196436865815df40f))
+
+
+### Bug Fixes
+
+* no show `Solicitações` tab without permission ([4cf7d82](https://github.com/infobrasil-sistemas/info-vendas-api/commit/4cf7d82a064cb1699b597cc550ac908cfed8a57c))
+
 ## [1.2.1](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.2.0...v1.2.1) (2026-05-04)
 
 
