@@ -16,6 +16,10 @@ import { IpBlocklistService } from './common/throttle/ip-blocklist.service';
 import { IpBlocklistMiddleware } from './common/middleware/ip-blocklist.middleware';
 import { EnvModule } from './config/env/env.module';
 import { EmailModule } from './infra/email/email.module';
+import { UserModule } from './modules/user/user.module';
+import { RoleModule } from './modules/role/role.module';
+import { PermissionModule } from './modules/permission/permission.module';
+import { DbCredentialsModule } from './modules/db-credentials/db-credentials.module';
 
 @Module({
   imports: [
@@ -32,6 +36,10 @@ import { EmailModule } from './infra/email/email.module';
     AccountReceivableModule,
     HealthModule,
     IntegrationRequestModule,
+    UserModule,
+    RoleModule,
+    PermissionModule,
+    DbCredentialsModule,
   ],
   controllers: [],
   providers: [

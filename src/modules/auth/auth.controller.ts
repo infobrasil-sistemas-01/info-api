@@ -8,26 +8,46 @@ import {
   Headers,
   UnauthorizedException,
   Body,
+  Get,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBasicAuth,
-  ApiHeader,
   ApiOperation,
   ApiResponse,
+  ApiTags,
 } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { AUTH_CONFIG } from 'src/config/auth.config';
 import type { AuthConfig } from 'src/config/auth.config';
 import type { Request, Response } from 'express';
-import { ref } from 'node:process';
 import { RefreshDto } from './dto/refresh.dto';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { CurrentUser } from './decorators/current-user.decorator';
+import type { JwtPayload } from './types/jwt-payload';
+import { PermissionResolver } from 'src/infra/rbac/permission-resolver.service';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly auth: AuthService,
     @Inject(AUTH_CONFIG) private readonly authConfig: AuthConfig,
+    private readonly permissionResolver: PermissionResolver,
   ) { }
+
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Obter perfil do usuário logado' })
+  async me(@CurrentUser() user: JwtPayload) {
+    const permissions = await this.permissionResolver.resolve(user.sub);
+    return {
+      id: user.sub,
+      username: user.username,
+      permissions: Array.from(permissions.allowedKeys),
+      roles: permissions.roles,
+    };
+  }
 
   @Post('login')
   @HttpCode(200)
@@ -41,25 +61,6 @@ export class AuthController {
     status: 200,
     description:
       'Login realizado com sucesso, retorna usuário e token de acesso.',
-    schema: {
-      type: 'object',
-      properties: {
-        user: {
-          type: 'object',
-          properties: {
-            id: { type: 'number', example: 1 },
-            name: { type: 'string', example: 'Admin' },
-            role: { type: 'string', example: 'ADMIN' }
-          }
-        },
-        access_token: { type: 'string', example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' },
-        refresh_token: { type: 'string', example: 'def502005a30ed97cde6...' }
-      }
-    }
-  })
-  @ApiResponse({
-    status: 401,
-    description: 'Credenciais inválidas ou header de autorização ausente.',
   })
   async login(
     @Headers() headers: Record<string, string>,
@@ -72,7 +73,7 @@ export class AuthController {
         'Authorization header missing or invalid',
       );
     }
-    const base64 = authHeader.slice(6); // Remove 'Basic '
+    const base64 = authHeader.slice(6);
 
     const meta = this.metaFromReq(req);
     const result = await this.auth.login(base64, meta);
@@ -88,21 +89,6 @@ export class AuthController {
   @HttpCode(200)
   @ApiOperation({
     summary: 'Refresh do access token',
-    description: 'Gera um novo access token usando o refresh token.',
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Novo access token gerado.',
-    schema: {
-      type: 'object',
-      properties: {
-        access_token: { type: 'string', example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' }
-      }
-    }
-  })
-  @ApiResponse({
-    status: 401,
-    description: 'Refresh token inválido.',
   })
   async refresh(@Body() body: RefreshDto) {
     const result = await this.auth.refresh(body.refresh_token);

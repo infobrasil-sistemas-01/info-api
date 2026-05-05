@@ -7,25 +7,25 @@ export type PermissionDefinition = {
 };
 
 export const PERMISSIONS = [
-  // ========= USUÁRIOS =========
+  // ========= USUÁRIOS E ROLES =========
   {
     key: 'core.user.create',
-    descricao: 'Criar usuário',
+    descricao: 'Criar usuário/role',
     module: 'core',
   },
   {
     key: 'core.user.view',
-    descricao: 'Visualizar usuários',
+    descricao: 'Visualizar usuários/roles',
     module: 'core',
   },
   {
     key: 'core.user.update',
-    descricao: 'Atualizar usuário',
+    descricao: 'Atualizar usuário/role',
     module: 'core',
   },
   {
     key: 'core.user.delete',
-    descricao: 'Deletar usuário',
+    descricao: 'Deletar usuário/role',
     module: 'core',
   },
   // ========= TENANT =========

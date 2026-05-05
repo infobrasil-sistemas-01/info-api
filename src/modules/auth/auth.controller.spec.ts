@@ -42,7 +42,7 @@ describe('AuthController', () => {
       ip: '127.0.0.1',
       header: jest.fn().mockReturnValue('test-agent'),
       ...overrides,
-    });
+    }) as any;
 
     it('should call authService.login with base64 credentials and meta', async () => {
       const credentials = Buffer.from('user:pass').toString('base64');

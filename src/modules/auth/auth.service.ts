@@ -11,6 +11,7 @@ import * as argon2 from 'argon2';
 import { AUTH_CONFIG } from 'src/config/auth.config';
 import type { AuthConfig } from 'src/config/auth.config';
 import * as Sentry from '@sentry/node';
+import { PermissionResolver } from 'src/infra/rbac/permission-resolver.service';
 
 type RequestMeta = { requestId?: string; ip?: string; userAgent?: string };
 
@@ -28,6 +29,7 @@ export class AuthService {
     private readonly jwt: JwtService,
     private readonly env: EnvService,
     @Inject(AUTH_CONFIG) private readonly authConfig: AuthConfig,
+    private readonly permissionResolver: PermissionResolver,
   ) { }
 
   async login(basic: string, meta: RequestMeta) {
@@ -81,11 +83,14 @@ export class AuthService {
 
     this.logger.log(`Usuário logado com sucesso: "${user.user}" (ID: ${user.id}). IP: ${meta.ip}`);
 
+    const permissions = await this.permissionResolver.resolve(user.id.toString());
+
     return {
       user: {
         id: user.id.toString(),
         username: user.user,
         role: user.role?.name || null,
+        permissions: Array.from(permissions.allowedKeys),
       },
       accessToken,
       refreshToken,

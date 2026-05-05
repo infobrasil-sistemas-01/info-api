@@ -4,18 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Support | Info Vendas</title>
+    <title>Admin Center | Info Vendas</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #059669; /* Emerald Green */
-            --bg: #f0fdf4; /* Soft Mint */
+            --primary: #059669;
+            --primary-hover: #047857;
+            --bg: #f8fafc;
             --card: #ffffff;
-            --text: #064e3b; /* Dark Green */
-            --text-muted: #6b7280;
-            --border: #d1fae5;
-            --radius: 10px;
-            --accent: #eab308; /* Gold */
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --radius: 12px;
+            --accent: #eab308;
+            --danger: #ef4444;
+            --success: #10b981;
         }
 
         * {
@@ -28,61 +31,178 @@
             font-family: 'Inter', sans-serif;
             background-color: var(--bg);
             color: var(--text);
-            padding: 40px;
+            line-height: 1.5;
         }
 
+        .hidden {
+            display: none !important;
+        }
+
+        /* Login */
+        .login-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: var(--radius);
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .login-box h2 {
+            margin-bottom: 24px;
+            text-align: center;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            ring: 2px solid var(--primary-hover);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+        }
+
+        .btn-outline:hover {
+            background: #f1f5f9;
+        }
+
+        .btn-danger {
+            background: #fee2e2;
+            color: var(--danger);
+        }
+
+        .btn-danger:hover {
+            background: #fecaca;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+        }
+
+        /* Layout */
         .dashboard {
-            max-width: 1200px;
+            max-width: 1280px;
             margin: 0 auto;
+            padding: 40px 20px;
         }
 
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 40px;
+            margin-bottom: 32px;
         }
 
-        h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 32px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1px;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-muted);
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
             color: var(--text);
         }
 
-        button.logout {
-            padding: 8px 16px;
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            cursor: pointer;
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
         }
 
+        /* Requests Grid */
         .requests-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
             gap: 24px;
         }
 
-        .request-card {
+        .card {
             background: white;
-            padding: 24px;
-            border-radius: var(--radius);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             border: 1px solid var(--border);
-        }
-
-        .request-card h3 {
-            margin-bottom: 8px;
-            font-size: 1.1rem;
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
         }
 
         .status {
-            display: inline-block;
             padding: 4px 10px;
-            border-radius: 12px;
+            border-radius: 99px;
             font-size: 0.75rem;
-            font-weight: 600;
-            margin-bottom: 16px;
+            font-weight: 700;
             text-transform: uppercase;
         }
 
@@ -101,147 +221,353 @@
             color: #991b1b;
         }
 
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-        }
-
-        .info-label {
-            color: var(--text-muted);
-        }
-
-        .actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 20px;
-            border-top: 1px solid #eee;
-            padding-top: 16px;
-        }
-
-        .btn-sm {
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            cursor: pointer;
-            border: 1px solid transparent;
-            flex: 1;
-            text-align: center;
-        }
-
-        .btn-approve {
-            background: #10b981;
-            color: white;
-        }
-
-        .btn-reject {
-            background: #f59e0b;
-            color: white;
-        }
-
-        .btn-delete {
+        /* Tables */
+        .table-container {
             background: white;
-            color: #ef4444;
-            border-color: #fee2e2;
-            flex: 0 0 auto;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
         }
 
-        .btn-approve:hover {
-            background: #059669;
-        }
-
-        .btn-reject:hover {
-            background: #d97706;
-        }
-
-        .btn-delete:hover {
-            background: #fee2e2;
-        }
-
-        .login-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
+        table {
             width: 100%;
-            height: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            background: #f8fafc;
+            padding: 16px;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Modals */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
             background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            z-index: 2000;
         }
 
-        .login-box {
+        .modal {
             background: white;
             padding: 32px;
             border-radius: var(--radius);
-            width: 320px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-        }
-
-        .login-box h2 {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .login-box input {
             width: 100%;
-            padding: 12px;
-            margin-bottom: 12px;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .modal-footer {
+            margin-top: 24px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .permissions-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+            max-height: 300px;
+            overflow-y: auto;
             border: 1px solid var(--border);
-            border-radius: 6px;
-        }
-
-        .login-box button {
-            width: 100%;
             padding: 12px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
+            border-radius: 8px;
         }
 
-        #admin-content {
-            display: none;
+        .perm-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+        }
+
+        .perm-item input {
+            width: auto;
         }
     </style>
 </head>
 
 <body>
+    <!-- Login Section -->
     <div id="login-section" class="login-overlay">
         <div class="login-box">
-            <h2>Suporte Info</h2>
-            <input type="text" id="username" placeholder="Usuário">
-            <input type="password" id="password" placeholder="Senha">
-            <button onclick="login()">Entrar</button>
+            <h2>InfoAPI Admin</h2>
+            <div class="form-group">
+                <label>Usuário</label>
+                <input type="text" id="username" placeholder="Seu usuário">
+            </div>
+            <div class="form-group">
+                <label>Senha</label>
+                <input type="password" id="password" placeholder="Sua senha">
+            </div>
+            <button class="btn btn-primary" style="width: 100%" onclick="login()">Entrar</button>
         </div>
     </div>
 
-    <div id="admin-content" class="dashboard">
+    <!-- Main Dashboard -->
+    <div id="admin-content" class="dashboard hidden">
         <header>
-            <h1>Solicitações de Integração</h1>
-            <button class="logout" onclick="logout()">Sair</button>
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <img src="https://static.wixstatic.com/media/97349f_a4abdfe6f4384c2884ae2228ad3528b9~mv2.png/v1/fill/w_60,h_60,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Cabe%C3%A7alhoSIte_fw.png"
+                    alt="Logo" style="height: 32px;">
+                <h1>Admin Center</h1>
+            </div>
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <span id="user-display" style="font-weight: 600; color: var(--text-muted);"></span>
+                <button class="btn btn-outline" onclick="logout()">Sair</button>
+            </div>
         </header>
 
-        <div id="requests-list" class="requests-grid">
-            <!-- Cards will be inserted here -->
+        <nav class="tabs">
+            <div class="tab-btn active" onclick="switchTab('requests')">Solicitações</div>
+            <div id="tab-users" class="tab-btn hidden" onclick="switchTab('users')">Usuários</div>
+            <div id="tab-roles" class="tab-btn hidden" onclick="switchTab('roles')">Roles</div>
+            <div id="tab-creds" class="tab-btn hidden" onclick="switchTab('creds')">Credenciais DB</div>
+        </nav>
+
+        <!-- Requests Section -->
+        <section id="section-requests" class="tab-content">
+            <div id="requests-list" class="requests-grid"></div>
+        </section>
+
+        <!-- Users Section -->
+        <section id="section-users" class="tab-content hidden">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h2>Gestão de Usuários</h2>
+                <button class="btn btn-primary" onclick="openUserModal()">+ Novo Usuário</button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Usuário</th>
+                            <th>Role</th>
+                            <th>Loja</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-table-body"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Roles Section -->
+        <section id="section-roles" class="tab-content hidden">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h2>Gestão de Roles</h2>
+                <button class="btn btn-primary" onclick="openRoleModal()">+ Nova Role</button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Descrição</th>
+                            <th>Usuários</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="roles-table-body"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Credentials Section -->
+        <section id="section-creds" class="tab-content hidden">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h2>Credenciais de Banco</h2>
+                <button class="btn btn-primary" onclick="openCredModal()">+ Nova Credencial</button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Host</th>
+                            <th>Database</th>
+                            <th>Porta</th>
+                            <th>Usuário</th>
+                            <th>DB ID</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="creds-table-body"></tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal Container -->
+    <div id="modal-container" class="modal-overlay hidden">
+        <!-- User Modal -->
+        <div id="user-modal" class="modal hidden">
+            <div class="modal-header">
+                <h3 id="user-modal-title">Novo Usuário</h3>
+                <button onclick="closeModal()" style="background: none; border: none; cursor: pointer; font-size: 1.5rem;">&times;</button>
+            </div>
+            <form id="user-form" onsubmit="saveUser(event)">
+                <input type="hidden" id="edit-user-id">
+                <div class="form-group">
+                    <label>Nome de Usuário</label>
+                    <input type="text" id="user-username" required>
+                </div>
+                <div class="form-group">
+                    <label>Senha <span id="pass-hint" style="font-weight: 400; color: var(--text-muted); font-size: 0.75rem;">(deixe em branco para manter a atual se estiver editando)</span></label>
+                    <input type="password" id="user-password">
+                </div>
+                <div class="form-group">
+                    <label>Role</label>
+                    <select id="user-role" required></select>
+                </div>
+                <div class="form-group">
+                    <label>Credenciais DB</label>
+                    <select id="user-db-id" required></select>
+                </div>
+                <div class="form-group">
+                    <label>Loja (ID)</label>
+                    <input type="number" id="user-store" value="1" required>
+                </div>
+                <div class="form-group" style="display: flex; align-items: center; gap: 8px;">
+                    <input type="checkbox" id="user-status" checked style="width: auto;">
+                    <label style="margin-bottom: 0;">Ativo</label>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" onclick="closeModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Role Modal -->
+        <div id="role-modal" class="modal hidden">
+            <div class="modal-header">
+                <h3 id="role-modal-title">Nova Role</h3>
+                <button onclick="closeModal()" style="background: none; border: none; cursor: pointer; font-size: 1.5rem;">&times;</button>
+            </div>
+            <form id="role-form" onsubmit="saveRole(event)">
+                <input type="hidden" id="edit-role-id">
+                <div class="form-group">
+                    <label>Nome</label>
+                    <input type="text" id="role-name" required>
+                </div>
+                <div class="form-group">
+                    <label>Descrição</label>
+                    <textarea id="role-desc" rows="2"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Permissões</label>
+                    <div id="permissions-list" class="permissions-grid"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" onclick="closeModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Credential Modal -->
+        <div id="cred-modal" class="modal hidden">
+            <div class="modal-header">
+                <h3 id="cred-modal-title">Nova Credencial</h3>
+                <button onclick="closeModal()" style="background: none; border: none; cursor: pointer; font-size: 1.5rem;">&times;</button>
+            </div>
+            <form id="cred-form" onsubmit="saveCred(event)">
+                <input type="hidden" id="edit-cred-id">
+                <div class="form-group">
+                    <label>Host</label>
+                    <input type="text" id="cred-host" required>
+                </div>
+                <div class="form-group">
+                    <label>Porta</label>
+                    <input type="number" id="cred-port" value="5432" required>
+                </div>
+                <div class="form-group">
+                    <label>Banco de Dados</label>
+                    <input type="text" id="cred-database" required>
+                </div>
+                <div class="form-group">
+                    <label>Usuário</label>
+                    <input type="text" id="cred-user" required>
+                </div>
+                <div class="form-group">
+                    <label>DB ID (Configuração)</label>
+                    <input type="number" id="cred-dbid" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" onclick="closeModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
         </div>
     </div>
 
     <script>
         const API_URL = '/api/v1';
+        let currentUser = null;
+        let allRoles = [];
+        let allPermissions = [];
+        let allCreds = [];
 
-        function checkAuth() {
+        async function checkAuth() {
             const token = localStorage.getItem('token');
             if (token) {
-                document.getElementById('login-section').style.display = 'none';
-                document.getElementById('admin-content').style.display = 'block';
-                fetchRequests();
+                try {
+                    const res = await fetch(`${API_URL}/auth/me`, {
+                        headers: { 'Authorization': 'Bearer ' + token }
+                    });
+                    if (res.ok) {
+                        currentUser = await res.json();
+                        setupDashboard();
+                    } else {
+                        logout();
+                    }
+                } catch (err) {
+                    logout();
+                }
+            }
+        }
+
+        function setupDashboard() {
+            document.getElementById('login-section').style.display = 'none';
+            document.getElementById('admin-content').classList.remove('hidden');
+            document.getElementById('user-display').innerText = currentUser.username;
+
+            const canViewUsers = currentUser.permissions.includes('core.user.view');
+            if (canViewUsers) {
+                document.getElementById('tab-users').classList.remove('hidden');
+                document.getElementById('tab-roles').classList.remove('hidden');
+                document.getElementById('tab-creds').classList.remove('hidden');
+            }
+
+            fetchRequests();
+            if (canViewUsers) {
+                fetchUsers();
+                fetchRoles();
+                fetchPermissions();
+                fetchCreds();
             }
         }
 
@@ -259,7 +585,7 @@
                 if (res.ok) {
                     const data = await res.json();
                     localStorage.setItem('token', data.access_token);
-                    checkAuth();
+                    await checkAuth();
                 } else {
                     alert('Credenciais inválidas');
                 }
@@ -273,131 +599,299 @@
             window.location.reload();
         }
 
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+            const btn = document.querySelector(`.tab-btn[onclick*="${tab}"]`);
+            if (btn) btn.classList.add('active');
+            document.getElementById(`section-${tab}`).classList.remove('hidden');
+        }
+
+        // --- Requests ---
         async function fetchRequests() {
             const token = localStorage.getItem('token');
             try {
-                const res = await fetch(`/integration`, {
-                    headers: { 'Authorization': 'Bearer ' + token }
-                });
-
+                const res = await fetch(`/integration`, { headers: { 'Authorization': 'Bearer ' + token } });
                 if (res.status === 401) return logout();
-
-                if (res.status === 403) {
-                    document.getElementById('requests-list').innerHTML = `
-                        <div style="grid-column: 1/-1; text-align: center; padding: 40px; background: #fff; border-radius: 10px; border: 1px solid #fee2e2;">
-                            <h2 style="color: #ef4444; margin-bottom: 10px;">Acesso Negado</h2>
-                            <p style="color: #666;">Você não tem permissão para visualizar as solicitações de integração.<br>Contate o administrador para obter a role <strong>"Suporte Infobrasil"</strong>.</p>
-                        </div>
-                    `;
-                    return;
-                }
+                if (!res.ok) return;
 
                 const data = await res.json();
                 const list = document.getElementById('requests-list');
                 list.innerHTML = data.map(req => {
                     const statusMap = { 'PENDING': 'PENDENTE', 'APPROVED': 'APROVADO', 'REJECTED': 'RECUSADO' };
-                    const hostMap = { 'DATACENTER': 'Nuvem', 'CLIENT_SERVER': 'Local' };
-                    const actionMap = { 'read': 'Ver', 'create': 'Criar', 'update': 'Editar', 'delete': 'Excluir' };
-
                     return `
-                        <div class="request-card">
-                            <span class="status ${req.status.toLowerCase()}">${statusMap[req.status] || req.status}</span>
-                            <h3>${req.clientName}</h3>
-                            ${req.legalName ? `<p style="font-size: 0.9rem; font-weight: 600; color: #444; margin-bottom: 2px;">${req.legalName}</p>` : ''}
-                            ${req.cnpj ? `<p style="font-size: 0.8rem; color: #777; margin-bottom: 12px;">CNPJ: ${req.cnpj}</p>` : ''}
-                            <p style="font-size: 0.85rem; color: #666; margin-bottom: 16px;">${req.objective}</p>
-                            
-                            <div class="info-row" style="flex-direction: column; align-items: flex-start; gap: 4px;">
-                                <span class="info-label">Escopo e Ações</span>
-                                <div style="display: flex; flex-wrap: wrap; gap: 4px;">
-                                    ${req.scopes.map(s => `
-                                        <div style="background: #f3f4f6; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; margin-bottom: 4px;">
-                                            <strong>${s.resource}:</strong> ${s.actions.map(a => actionMap[a] || a).join(', ')}
-                                        </div>
-                                    `).join('')}
-                                </div>
+                        <div class="card">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 16px;">
+                                <span class="status ${req.status.toLowerCase()}">${statusMap[req.status] || req.status}</span>
+                                <small style="color: var(--text-muted)">${new Date(req.createdAt).toLocaleDateString()}</small>
                             </div>
-                            <div class="info-row">
-                                <span class="info-label">Hospedagem</span>
-                                <span>${hostMap[req.hostingType] || req.hostingType}</span>
+                            <h3 style="margin-bottom: 4px;">${req.clientName}</h3>
+                            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">${req.cnpj || 'Sem CNPJ'}</p>
+                            <div style="margin-bottom: 20px;">
+                                <small style="font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">CONTATO</small>
+                                <p style="font-size: 0.9rem;">${req.technicalContact.name} - ${req.technicalContact.email}</p>
                             </div>
-                            <div class="info-row">
-                                <span class="info-label">Banco de Dados</span>
-                                <span>${req.hostingType === 'DATACENTER' ? 'Configuração Automática (Nuvem)' : `${req.database.host}:${req.database.port}`}</span>
-                            </div>
-                            ${req.hostingType === 'CLIENT_SERVER' ? `
-                            <div class="info-row">
-                                <span class="info-label">Caminho DB</span>
-                                <span style="font-size: 0.8rem; word-break: break-all; text-align: right; max-width: 200px;">${req.database.database}</span>
-                            </div>
-                            ` : ''}
-                            <div class="info-row">
-                                <span class="info-label">Contato</span>
-                                <span>${req.technicalContact.name}</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">E-mail</span>
-                                <span>${req.technicalContact.email}</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Telefone/WhatsApp</span>
-                                <span>${req.technicalContact.phone}</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Lojas</span>
-                                <span>${req.stores.join(', ')}</span>
-                            </div>
-                            <div class="info-row" style="margin-top: 12px; border-top: 1px solid #eee; padding-top: 12px;">
-                                <span class="info-label">Criado em</span>
-                                <span>${new Date(req.createdAt).toLocaleDateString()}</span>
-                            </div>
-
-                            <div class="actions">
-                                <button class="btn-sm btn-approve" onclick="updateStatus('${req.id}', 'APPROVED')">Aprovar</button>
-                                <button class="btn-sm btn-reject" onclick="updateStatus('${req.id}', 'REJECTED')">Recusar</button>
+                            <div style="display: flex; gap: 8px;">
+                                <button class="btn btn-primary btn-sm" style="flex: 1" onclick="updateRequestStatus('${req.id}', 'APPROVED')">Aprovar</button>
+                                <button class="btn btn-outline btn-sm" style="flex: 1" onclick="updateRequestStatus('${req.id}', 'REJECTED')">Recusar</button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteRequest('${req.id}')">&times;</button>
                             </div>
                         </div>
                     `;
                 }).join('');
-            } catch (err) {
-                console.error(err);
-            }
+            } catch (err) { console.error(err); }
         }
 
-        async function updateStatus(id, status) {
+        async function updateRequestStatus(id, status) {
             const token = localStorage.getItem('token');
-            try {
-                const res = await fetch(`/integration/${id}/status`, {
-                    method: 'PATCH',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + token
-                    },
-                    body: JSON.stringify({ status })
-                });
-
-                if (res.ok) fetchRequests();
-                else alert('Erro ao atualizar status');
-            } catch (err) {
-                alert('Erro de conexão');
-            }
+            const res = await fetch(`/integration/${id}/status`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                body: JSON.stringify({ status })
+            });
+            if (res.ok) fetchRequests();
+            else alert('Erro ao atualizar');
         }
 
         async function deleteRequest(id) {
-            if (!confirm('Deseja realmente excluir esta solicitação?')) return;
+            if (!confirm('Excluir?')) return;
+            const token = localStorage.getItem('token');
+            const res = await fetch(`/integration/${id}`, { method: 'DELETE', headers: { 'Authorization': 'Bearer ' + token } });
+            if (res.ok) fetchRequests();
+        }
+
+        // --- Users ---
+        async function fetchUsers() {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`${API_URL}/users`, { headers: { 'Authorization': 'Bearer ' + token } });
+            const users = await res.json();
+            const tbody = document.getElementById('users-table-body');
+            tbody.innerHTML = users.map(u => `
+                <tr>
+                    <td style="font-weight: 600;">${u.user}</td>
+                    <td>${u.role ? u.role.name : '<span style="color: red">Nenhuma</span>'}</td>
+                    <td>Loja ${u.storeId}</td>
+                    <td><span style="color: ${u.status ? 'var(--success)' : 'var(--danger)'}">${u.status ? 'Ativo' : 'Inativo'}</span></td>
+                    <td>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-outline btn-sm" onclick="editUser('${u.id}')">Editar</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteUser('${u.id}')">Excluir</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function openUserModal() {
+            document.getElementById('user-form').reset();
+            document.getElementById('edit-user-id').value = '';
+            document.getElementById('user-modal-title').innerText = 'Novo Usuário';
+            document.getElementById('pass-hint').classList.add('hidden');
+            document.getElementById('user-modal').classList.remove('hidden');
+            document.getElementById('modal-container').classList.remove('hidden');
+        }
+
+        async function editUser(id) {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`${API_URL}/users/${id}`, { headers: { 'Authorization': 'Bearer ' + token } });
+            const u = await res.json();
+            document.getElementById('edit-user-id').value = u.id;
+            document.getElementById('user-username').value = u.user;
+            document.getElementById('user-role').value = u.roleId || '';
+            document.getElementById('user-db-id').value = u.dbCredentialsId;
+            document.getElementById('user-store').value = u.storeId;
+            document.getElementById('user-status').checked = u.status;
+            document.getElementById('user-password').value = '';
+            document.getElementById('user-modal-title').innerText = 'Editar Usuário';
+            document.getElementById('pass-hint').classList.remove('hidden');
+            document.getElementById('user-modal').classList.remove('hidden');
+            document.getElementById('modal-container').classList.remove('hidden');
+        }
+
+        async function saveUser(e) {
+            e.preventDefault();
+            const id = document.getElementById('edit-user-id').value;
+            const data = {
+                user: document.getElementById('user-username').value,
+                roleId: document.getElementById('user-role').value || null,
+                dbCredentialsId: document.getElementById('user-db-id').value,
+                storeId: parseInt(document.getElementById('user-store').value),
+                status: document.getElementById('user-status').checked,
+            };
+            const pass = document.getElementById('user-password').value;
+            if (pass) data.password = pass;
 
             const token = localStorage.getItem('token');
-            try {
-                const res = await fetch(`/integration/${id}`, {
-                    method: 'DELETE',
-                    headers: { 'Authorization': 'Bearer ' + token }
-                });
+            const res = await fetch(id ? `${API_URL}/users/${id}` : `${API_URL}/users`, {
+                method: id ? 'PATCH' : 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                body: JSON.stringify(data)
+            });
+            if (res.ok) { closeModal(); fetchUsers(); }
+            else alert('Erro ao salvar');
+        }
 
-                if (res.ok) fetchRequests();
-                else alert('Erro ao excluir');
-            } catch (err) {
-                alert('Erro de conexão');
-            }
+        async function deleteUser(id) {
+            if (!confirm('Excluir?')) return;
+            const token = localStorage.getItem('token');
+            await fetch(`${API_URL}/users/${id}`, { method: 'DELETE', headers: { 'Authorization': 'Bearer ' + token } });
+            fetchUsers();
+        }
+
+        // --- Roles ---
+        async function fetchRoles() {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`${API_URL}/roles`, { headers: { 'Authorization': 'Bearer ' + token } });
+            allRoles = await res.json();
+            document.getElementById('user-role').innerHTML = '<option value="">Sem Role</option>' + allRoles.map(r => `<option value="${r.id}">${r.name}</option>`).join('');
+            document.getElementById('roles-table-body').innerHTML = allRoles.map(r => `
+                <tr>
+                    <td style="font-weight: 600;">${r.name}</td>
+                    <td>${r.description || '-'}</td>
+                    <td>${r._count.users} usuários</td>
+                    <td>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-outline btn-sm" onclick="editRole('${r.id}')">Editar</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteRole('${r.id}')">Excluir</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function openRoleModal() {
+            document.getElementById('role-form').reset();
+            document.getElementById('edit-role-id').value = '';
+            document.getElementById('role-modal-title').innerText = 'Nova Role';
+            document.getElementById('role-modal').classList.remove('hidden');
+            document.getElementById('modal-container').classList.remove('hidden');
+        }
+
+        async function editRole(id) {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`${API_URL}/roles/${id}`, { headers: { 'Authorization': 'Bearer ' + token } });
+            const r = await res.json();
+            document.getElementById('edit-role-id').value = r.id;
+            document.getElementById('role-name').value = r.name;
+            document.getElementById('role-desc').value = r.description || '';
+            const permIds = r.rolePermissions.map(rp => rp.permissionId);
+            document.querySelectorAll('input[name="permissions"]').forEach(cb => cb.checked = permIds.includes(cb.value));
+            document.getElementById('role-modal-title').innerText = 'Editar Role';
+            document.getElementById('role-modal').classList.remove('hidden');
+            document.getElementById('modal-container').classList.remove('hidden');
+        }
+
+        async function saveRole(e) {
+            e.preventDefault();
+            const id = document.getElementById('edit-role-id').value;
+            const perms = Array.from(document.querySelectorAll('input[name="permissions"]:checked')).map(cb => cb.value);
+            const data = { name: document.getElementById('role-name').value, description: document.getElementById('role-desc').value, permissions: perms };
+            const token = localStorage.getItem('token');
+            const res = await fetch(id ? `${API_URL}/roles/${id}` : `${API_URL}/roles`, {
+                method: id ? 'PATCH' : 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                body: JSON.stringify(data)
+            });
+            if (res.ok) { closeModal(); fetchRoles(); }
+            else alert('Erro ao salvar');
+        }
+
+        async function deleteRole(id) {
+            if (!confirm('Excluir?')) return;
+            const token = localStorage.getItem('token');
+            const res = await fetch(`${API_URL}/roles/${id}`, { method: 'DELETE', headers: { 'Authorization': 'Bearer ' + token } });
+            if (!res.ok) alert('Erro ao excluir (possui usuários?)');
+            fetchRoles();
+        }
+
+        // --- Permissions ---
+        async function fetchPermissions() {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`${API_URL}/permissions`, { headers: { 'Authorization': 'Bearer ' + token } });
+            allPermissions = await res.json();
+            document.getElementById('permissions-list').innerHTML = allPermissions.map(p => `
+                <label class="perm-item"><input type="checkbox" name="permissions" value="${p.id}"><span><strong>${p.key}</strong> - ${p.name}</span></label>
+            `).join('');
+        }
+
+        // --- Credentials ---
+        async function fetchCreds() {
+            const token = localStorage.getItem('token');
+            try {
+                const res = await fetch(`${API_URL}/db-credentials`, { headers: { 'Authorization': 'Bearer ' + token } });
+                allCreds = await res.json();
+                document.getElementById('user-db-id').innerHTML = allCreds.map(c => `<option value="${c.id}">${c.database} (${c.host})</option>`).join('');
+                document.getElementById('creds-table-body').innerHTML = allCreds.map(c => `
+                    <tr>
+                        <td style="font-weight: 600;">${c.host}</td>
+                        <td>${c.database}</td>
+                        <td>${c.port}</td>
+                        <td>${c.user}</td>
+                        <td>${c.dbId}</td>
+                        <td>
+                            <div style="display: flex; gap: 8px;">
+                                <button class="btn btn-outline btn-sm" onclick="editCred('${c.id}')">Editar</button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteCred('${c.id}')">Excluir</button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (err) { console.error(err); }
+        }
+
+        function openCredModal() {
+            document.getElementById('cred-form').reset();
+            document.getElementById('edit-cred-id').value = '';
+            document.getElementById('cred-modal-title').innerText = 'Nova Credencial';
+            document.getElementById('cred-modal').classList.remove('hidden');
+            document.getElementById('modal-container').classList.remove('hidden');
+        }
+
+        async function editCred(id) {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`${API_URL}/db-credentials/${id}`, { headers: { 'Authorization': 'Bearer ' + token } });
+            const c = await res.json();
+            document.getElementById('edit-cred-id').value = c.id;
+            document.getElementById('cred-host').value = c.host;
+            document.getElementById('cred-port').value = c.port;
+            document.getElementById('cred-database').value = c.database;
+            document.getElementById('cred-user').value = c.user;
+            document.getElementById('cred-dbid').value = c.dbId;
+            document.getElementById('cred-modal-title').innerText = 'Editar Credencial';
+            document.getElementById('cred-modal').classList.remove('hidden');
+            document.getElementById('modal-container').classList.remove('hidden');
+        }
+
+        async function saveCred(e) {
+            e.preventDefault();
+            const id = document.getElementById('edit-cred-id').value;
+            const data = {
+                host: document.getElementById('cred-host').value,
+                port: parseInt(document.getElementById('cred-port').value),
+                database: document.getElementById('cred-database').value,
+                user: document.getElementById('cred-user').value,
+                dbId: parseInt(document.getElementById('cred-dbid').value),
+            };
+            const token = localStorage.getItem('token');
+            const res = await fetch(id ? `${API_URL}/db-credentials/${id}` : `${API_URL}/db-credentials`, {
+                method: id ? 'PATCH' : 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                body: JSON.stringify(data)
+            });
+            if (res.ok) { closeModal(); fetchCreds(); }
+            else alert('Erro ao salvar');
+        }
+
+        async function deleteCred(id) {
+            if (!confirm('Excluir?')) return;
+            const token = localStorage.getItem('token');
+            await fetch(`${API_URL}/db-credentials/${id}`, { method: 'DELETE', headers: { 'Authorization': 'Bearer ' + token } });
+            fetchCreds();
+        }
+
+        function closeModal() {
+            document.getElementById('modal-container').classList.add('hidden');
+            document.querySelectorAll('.modal').forEach(m => m.classList.add('hidden'));
         }
 
         checkAuth();
