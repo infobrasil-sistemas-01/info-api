@@ -307,6 +307,50 @@
         .perm-item input {
             width: auto;
         }
+
+        /* Accordion */
+        .accordion-btn {
+            background: #f1f5f9;
+            width: 100%;
+            padding: 10px;
+            text-align: left;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            margin-top: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .accordion-content {
+            padding-top: 12px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            border-top: 1px dashed var(--border);
+            margin-top: 10px;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .detail-box {
+            background: #f8fafc;
+            padding: 8px;
+            border-radius: 6px;
+        }
+
+        .detail-box label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
     </style>
 </head>
 
@@ -628,6 +672,9 @@
                 const list = document.getElementById('requests-list');
                 list.innerHTML = data.map(req => {
                     const statusMap = { 'PENDING': 'PENDENTE', 'APPROVED': 'APROVADO', 'REJECTED': 'RECUSADO' };
+                    const db = req.database || {};
+                    const contact = req.technicalContact || {};
+                    
                     return `
                         <div class="card">
                             <div style="display: flex; justify-content: space-between; margin-bottom: 16px;">
@@ -636,11 +683,60 @@
                             </div>
                             <h3 style="margin-bottom: 4px;">${req.clientName}</h3>
                             <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">${req.cnpj || 'Sem CNPJ'}</p>
-                            <div style="margin-bottom: 20px;">
-                                <small style="font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">CONTATO</small>
-                                <p style="font-size: 0.9rem;">${req.technicalContact.name} - ${req.technicalContact.email}</p>
+                            
+                            <div style="margin-bottom: 16px;">
+                                <small style="font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">CONTATO TÉCNICO</small>
+                                <p style="font-size: 0.9rem; font-weight: 600;">${contact.name || 'N/A'}</p>
+                                <p style="font-size: 0.85rem; color: var(--text-muted);">${contact.email || ''}</p>
+                                <p style="font-size: 0.85rem; color: var(--text-muted);">${contact.phone || ''}</p>
                             </div>
-                            <div style="display: flex; gap: 8px;">
+
+                            <button class="accordion-btn" onclick="toggleDetails('${req.id}')">
+                                Ver Detalhes <span>+</span>
+                            </button>
+
+                            <div id="details-${req.id}" class="accordion-content hidden">
+                                <div style="margin-bottom: 12px;">
+                                    <small style="font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">OBJETIVO</small>
+                                    <p style="font-size: 0.85rem; background: #fffbeb; padding: 8px; border-radius: 6px; border: 1px solid #fef3c7;">${req.objective}</p>
+                                </div>
+
+                                <div class="details-grid">
+                                    <div class="detail-box">
+                                        <label>Razão Social</label>
+                                        <p>${req.legalName}</p>
+                                    </div>
+                                    <div class="detail-box">
+                                        <label>Hospedagem</label>
+                                        <p>${req.hostingType === 'DATACENTER' ? 'DataCenter' : 'Servidor Cliente'}</p>
+                                    </div>
+                                    <div class="detail-box">
+                                        <label>IP Fixo</label>
+                                        <p>${req.fixedIp || 'N/A'}</p>
+                                    </div>
+                                    <div class="detail-box">
+                                        <label>Lojas (IDs)</label>
+                                        <p>${req.stores.join(', ')}</p>
+                                    </div>
+                                </div>
+
+                                <div style="margin-bottom: 12px;">
+                                    <small style="font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">BANCO DE DADOS</small>
+                                    <p style="font-size: 0.8rem; font-family: monospace;">${db.host}:${db.port} / ${db.database}</p>
+                                </div>
+
+                                <div style="margin-bottom: 12px;">
+                                    <small style="font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">MÓDULOS E ESCOPO</small>
+                                    <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+                                        ${req.modules.map(m => `<span style="background: #e2e8f0; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem;">${m}</span>`).join('')}
+                                    </div>
+                                    <div style="margin-top: 8px; font-size: 0.75rem;">
+                                        ${req.scopes.map(s => `<strong>${s.resource}:</strong> ${s.actions.join(', ')}`).join(' | ')}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="display: flex; gap: 8px; margin-top: 20px;">
                                 <button class="btn btn-primary btn-sm" style="flex: 1" onclick="updateRequestStatus('${req.id}', 'APPROVED')">Aprovar</button>
                                 <button class="btn btn-outline btn-sm" style="flex: 1" onclick="updateRequestStatus('${req.id}', 'REJECTED')">Recusar</button>
                                 <button class="btn btn-danger btn-sm" onclick="deleteRequest('${req.id}')">&times;</button>
@@ -901,6 +997,13 @@
         function closeModal() {
             document.getElementById('modal-container').classList.add('hidden');
             document.querySelectorAll('.modal').forEach(m => m.classList.add('hidden'));
+        }
+
+        function toggleDetails(id) {
+            const el = document.getElementById(`details-${id}`);
+            const btn = el.previousElementSibling;
+            el.classList.toggle('hidden');
+            btn.querySelector('span').innerText = el.classList.contains('hidden') ? '+' : '-';
         }
 
         checkAuth();
