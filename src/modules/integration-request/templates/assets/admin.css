@@ -203,6 +203,11 @@ header {
     color: #92400e;
 }
 
+.status.awaiting_confirmation {
+    background: #ffedd5;
+    color: #9a3412;
+}
+
 .status.approved {
     background: #d1fae5;
     color: #065f46;
@@ -211,6 +216,11 @@ header {
 .status.rejected {
     background: #fee2e2;
     color: #991b1b;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 /* Tables */

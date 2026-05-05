@@ -97,6 +97,23 @@ export class IntegrationRequestController {
     return this.service.create(dto);
   }
 
+  @Get('confirm/:id')
+  @ApiOperation({ summary: 'Confirma o e-mail do cliente' })
+  async confirm(@Param('id') id: string, @Res() res: Response) {
+    try {
+      await this.service.confirm(id);
+      const path = this.getTemplatePath('confirmed.html');
+      return res.sendFile(path);
+    } catch (error) {
+      // Mesmo se der erro, vamos mostrar uma página amigável (ou o erro)
+      const path = this.getTemplatePath('confirmed.html');
+      // Passar contexto via query ou algo similar se fosse SSR, 
+      // mas como é static, o confirmed.html pode lidar com estados via JS se necessário.
+      // Por simplicidade, vamos apenas enviar o arquivo.
+      return res.sendFile(path);
+    }
+  }
+
   @Get()
   @UseGuards(JwtAuthGuard, PermissionsGuard)
   @RequirePermissions({ anyOf: ['integration-request.view'] })

@@ -7,6 +7,7 @@ const translateAction = (a) => ({
 }[a] || a);
 
 const translateStatus = (s) => ({
+    'AWAITING_CONFIRMATION': 'AGUARDANDO CONFIRMAÇÃO',
     'PENDING': 'PENDENTE',
     'APPROVED': 'APROVADO',
     'REJECTED': 'RECUSADO'
@@ -64,9 +65,15 @@ const Components = {
                 </div>
 
                 <div style="display: flex; gap: 8px; margin-top: 20px;">
-                    <button class="btn btn-primary btn-sm" style="flex: 1" onclick="Data.updateRequestStatus('${req.id}', 'APPROVED')">Aprovar</button>
-                    <button class="btn btn-outline btn-sm" style="flex: 1" onclick="Data.updateRequestStatus('${req.id}', 'REJECTED')">Recusar</button>
-                    <button class="btn btn-danger btn-sm" onclick="Data.deleteRequest('${req.id}')">&times;</button>
+                    <button class="btn btn-primary btn-sm" style="flex: 1" 
+                        ${req.status === 'AWAITING_CONFIRMATION' || req.status === 'APPROVED' || req.status === 'REJECTED' ? 'disabled title="Aguardando confirmação de e-mail"' : ''}
+                        onclick="Data.updateRequestStatus('${req.id}', 'APPROVED')">Aprovar</button>
+                    <button class="btn btn-outline btn-sm" style="flex: 1" 
+                        ${req.status === 'AWAITING_CONFIRMATION' || req.status === 'APPROVED' || req.status === 'REJECTED' ? 'disabled title="Aguardando confirmação de e-mail"' : ''}
+                        onclick="Data.updateRequestStatus('${req.id}', 'REJECTED')">Recusar</button>
+                    <button 
+                        ${req.status === 'AWAITING_CONFIRMATION' || req.status === 'APPROVED' ? 'disabled' : ''}
+                        class="btn btn-danger btn-sm" onclick="Data.deleteRequest('${req.id}')">&times;</button>
                 </div>
             </div>
         `;
