@@ -28,6 +28,7 @@ export class IntegrationRequestService {
         scopes: dto.scopes as any,
         objective: dto.objective,
         technicalContact: dto.technicalContact as any,
+        responsiblePerson: dto.responsiblePerson as any,
         status: 'AWAITING_CONFIRMATION',
       },
     });

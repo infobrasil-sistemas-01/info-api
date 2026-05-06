@@ -65,22 +65,23 @@ model RolePermission {
 }
 
 model IntegrationRequest {
-  id               String      @id @default(uuid())
-  clientName       String      @map("client_name")
-  hostingType      HostingType @map("hosting_type")
-  fixedIp          String?     @map("fixed_ip")
-  database         Json
-  stores           Int[]
-  scopes           Json
-  objective        String
-  technicalContact Json        @map("technical_contact")
-  status           String      @default("PENDING")
-  createdAt        DateTime    @default(now()) @map("created_at")
-  updatedAt        DateTime    @updatedAt @map("updated_at")
-  modules          String[]
-  cnpj             String
-  legalName        String      @map("legal_name")
-  rejectionReason  String?     @map("rejection_reason")
+  id                String      @id @default(uuid())
+  clientName        String      @map("client_name")
+  hostingType       HostingType @map("hosting_type")
+  fixedIp           String?     @map("fixed_ip")
+  database          Json
+  stores            Int[]
+  scopes            Json
+  objective         String
+  technicalContact  Json        @map("technical_contact")
+  responsiblePerson Json        @default("{}") @map("responsible_person")
+  status            String      @default("PENDING")
+  createdAt         DateTime    @default(now()) @map("created_at")
+  updatedAt         DateTime    @updatedAt @map("updated_at")
+  modules           String[]
+  cnpj              String?
+  legalName         String      @map("legal_name")
+  rejectionReason   String?     @map("rejection_reason")
 
   @@map("integration_requests")
 }

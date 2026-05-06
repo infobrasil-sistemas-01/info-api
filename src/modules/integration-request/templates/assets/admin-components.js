@@ -34,11 +34,19 @@ const Components = {
                 <h3 style="margin-bottom: 4px;">${req.clientName}</h3>
                 <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">${req.cnpj || 'Sem CNPJ'}</p>
                 
-                <div style="margin-bottom: 16px;">
-                    <small style="font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">CONTATO TÉCNICO</small>
-                    <p style="font-size: 0.9rem; font-weight: 600;">${contact.name || 'N/A'}</p>
-                    <p style="font-size: 0.85rem; color: var(--text-muted);">${contact.email || ''}</p>
-                    <p style="font-size: 0.85rem; color: var(--text-muted);">${contact.phone || ''}</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                    <div>
+                        <small style="font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">RESPONSÁVEL</small>
+                        <p style="font-size: 0.9rem; font-weight: 600;">${req.responsiblePerson?.name || 'N/A'}</p>
+                        <p style="font-size: 0.85rem; color: var(--text-muted);">${req.responsiblePerson?.email || ''}</p>
+                        <p style="font-size: 0.85rem; color: var(--text-muted);">${req.responsiblePerson?.phone || ''}</p>
+                    </div>
+                    <div>
+                        <small style="font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">CONTATO TÉCNICO</small>
+                        <p style="font-size: 0.9rem; font-weight: 600;">${contact.name || 'N/A'}</p>
+                        <p style="font-size: 0.85rem; color: var(--text-muted);">${contact.email || ''}</p>
+                        <p style="font-size: 0.85rem; color: var(--text-muted);">${contact.phone || ''}</p>
+                    </div>
                 </div>
 
                 <button class="accordion-btn" onclick="UI.toggleDetails('${req.id}')">

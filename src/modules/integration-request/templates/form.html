@@ -362,7 +362,25 @@
                 </div>
                 <div class="form-group">
                     <label for="techPhone">Telefone / WhatsApp</label>
-                    <input type="text" id="techPhone" name="techPhone" required placeholder="(00) 00000-0000">
+                    <input type="text" id="techPhone" name="techPhone" required placeholder="(00) 00000-0000"
+                        class="phone-mask">
+                </div>
+            </div>
+
+            <div class="section-title">Responsável pela Empresa</div>
+            <div class="grid">
+                <div class="form-group">
+                    <label for="respName">Nome</label>
+                    <input type="text" id="respName" name="respName" required>
+                </div>
+                <div class="form-group">
+                    <label for="respEmail">E-mail</label>
+                    <input type="email" id="respEmail" name="respEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="respPhone">Telefone / WhatsApp</label>
+                    <input type="text" id="respPhone" name="respPhone" required placeholder="(00) 00000-0000"
+                        class="phone-mask">
                 </div>
             </div>
 
@@ -399,6 +417,31 @@
             value = value.replace(/(\d{4})(\d)/, '$1-$2');
 
             e.target.value = value;
+        });
+
+        // Phone Mask Logic
+        function applyPhoneMask(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 11) value = value.slice(0, 11);
+
+            if (value.length > 10) {
+                // (00) 00000-0000
+                value = value.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3');
+            } else if (value.length > 6) {
+                // (00) 0000-0000
+                value = value.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
+            } else if (value.length > 2) {
+                // (00) 0000
+                value = value.replace(/^(\d{2})(\d{0,5})/, '($1) $2');
+            } else if (value.length > 0) {
+                // (00
+                value = value.replace(/^(\d{0,2})/, '($1');
+            }
+            e.target.value = value;
+        }
+
+        document.querySelectorAll('.phone-mask').forEach(input => {
+            input.addEventListener('input', applyPhoneMask);
         });
 
         let selectedScopes = [];
@@ -485,6 +528,11 @@
                     name: formData.get('techName'),
                     email: formData.get('techEmail'),
                     phone: formData.get('techPhone')
+                },
+                responsiblePerson: {
+                    name: formData.get('respName'),
+                    email: formData.get('respEmail'),
+                    phone: formData.get('respPhone')
                 }
             };
 
