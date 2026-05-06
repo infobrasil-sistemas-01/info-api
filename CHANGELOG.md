@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.2.4](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.2.3...v1.2.4) (2026-05-06)
+
+
+### Features
+
+* add responsible contact to request form ([ac7e741](https://github.com/infobrasil-sistemas/info-vendas-api/commit/ac7e7412f9f6a50744ab764e3c115b755e1af270))
+
+
+### Bug Fixes
+
+* nest warnings ([333b805](https://github.com/infobrasil-sistemas/info-vendas-api/commit/333b805ba198a4f8980163612ede16b8ba24ed52))
+
 ## [1.2.3](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.2.2...v1.2.3) (2026-05-05)
 
 
