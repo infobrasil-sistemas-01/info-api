@@ -57,7 +57,7 @@ import { DbCredentialsModule } from './modules/db-credentials/db-credentials.mod
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {
-    consumer.apply(IpBlocklistMiddleware).forRoutes('*');
+    consumer.apply(IpBlocklistMiddleware).forRoutes('*path');
   }
 }
 
