@@ -24,12 +24,29 @@ import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
 import { CreateIntegrationRequestDto } from './dto/create-integration-request.dto';
 import { IntegrationRequestService } from './integration-request.service';
+import { UserService } from '../user/user.service';
 
 @ApiTags('Integration Requests')
 @ApiExcludeController()
 @Controller('integration')
 export class IntegrationRequestController {
-  constructor(private readonly service: IntegrationRequestService) {}
+  constructor(
+    private readonly service: IntegrationRequestService,
+    private readonly userService: UserService,
+  ) {}
+
+  @Get('setup-password/:token')
+  @ApiOperation({ summary: 'Serve a interface de configuração de senha' })
+  serveSetupPassword(@Res() res: Response) {
+    const path = this.getTemplatePath('setup-password.html');
+    return res.sendFile(path);
+  }
+
+  @Post('setup-password/:token')
+  @ApiOperation({ summary: 'Gera e configura a senha do usuário via token' })
+  async handleSetupPassword(@Param('token') token: string) {
+    return this.userService.setupPasswordByToken(token);
+  }
 
   @Get('form')
   @ApiOperation({ summary: 'Serve a interface de formulário para o cliente' })

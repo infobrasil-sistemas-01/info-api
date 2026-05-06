@@ -3,7 +3,8 @@ const State = {
     currentUser: null,
     allRoles: [],
     allPermissions: [],
-    allCreds: []
+    allCreds: [],
+    allUsers: []
 };
 
 const Data = {
@@ -11,13 +12,29 @@ const Data = {
         const token = localStorage.getItem('token');
         const res = await fetch(url, {
             ...options,
-            headers: { 
+            headers: {
                 'Authorization': 'Bearer ' + token,
                 'Content-Type': 'application/json',
-                ...options.headers 
+                ...options.headers
             }
         });
-        if (res.status === 401) Auth.logout();
+
+        if (res.status === 401) {
+            Auth.logout();
+            return res;
+        }
+
+        if (res.status >= 400 && res.status < 500) {
+            try {
+                const clone = res.clone();
+                const data = await clone.json();
+                const msg = data.message || 'Erro inesperado';
+                alert(`Erro ${res.status}: ${Array.isArray(msg) ? msg.join(', ') : msg}`);
+            } catch (e) {
+                console.error('Erro ao ler corpo da resposta de erro', e);
+            }
+        }
+
         return res;
     },
     async fetchAll() {
@@ -43,60 +60,39 @@ const Data = {
     },
     async fetchUsers() {
         const res = await this.fetch(`${API_URL}/users`);
-        const users = await res.json();
-        document.getElementById('section-users').innerHTML = `
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-                <h2>Gestão de Usuários</h2>
-                <button class="btn btn-primary" onclick="UI.openUserModal()">+ Novo Usuário</button>
-            </div>
-            <div class="table-container">
-                <table>
-                    <thead><tr><th>Usuário</th><th>Role</th><th>Loja</th><th>Status</th><th>Ações</th></tr></thead>
-                    <tbody id="users-table-body">${users.map(Components.UserRow).join('')}</tbody>
-                </table>
-            </div>
-        `;
+        State.allUsers = await res.json();
+        document.getElementById('section-users').innerHTML = Components.UserTable(State.allUsers);
+    },
+    async deleteInvite(id) {
+        if (!confirm('Deseja realmente revogar este convite?')) return;
+        const res = await this.fetch(`${API_URL}/user-invitations/${id}`, { method: 'DELETE' });
+        if (res.ok) this.fetchUsers(); // Refresh both since user is deleted too
+    },
+    async resendInvite(id) {
+        const res = await this.fetch(`${API_URL}/user-invitations/${id}/resend`, { method: 'POST' });
+        if (res.ok) {
+            alert('Convite reenviado com sucesso!');
+            this.fetchUsers();
+        }
     },
     async fetchRoles() {
         const res = await this.fetch(`${API_URL}/roles`);
         State.allRoles = await res.json();
-        document.getElementById('section-roles').innerHTML = `
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-                <h2>Gestão de Roles</h2>
-                <button class="btn btn-primary" onclick="UI.openRoleModal()">+ Nova Role</button>
-            </div>
-            <div class="table-container">
-                <table>
-                    <thead><tr><th>Nome</th><th>Descrição</th><th>Usuários</th><th>Ações</th></tr></thead>
-                    <tbody id="roles-table-body">${State.allRoles.map(Components.RoleRow).join('')}</tbody>
-                </table>
-            </div>
-        `;
+        document.getElementById('section-roles').innerHTML = Components.RoleTable(State.allRoles);
     },
     async fetchCreds() {
         const res = await this.fetch(`${API_URL}/db-credentials`);
         State.allCreds = await res.json();
-        document.getElementById('section-creds').innerHTML = `
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-                <h2>Credenciais de Banco</h2>
-                <button class="btn btn-primary" onclick="UI.openCredModal()">+ Nova Credencial</button>
-            </div>
-            <div class="table-container">
-                <table>
-                    <thead><tr><th>Host</th><th>Database</th><th>Porta</th><th>Usuário</th><th>DB ID</th><th>Ações</th></tr></thead>
-                    <tbody id="creds-table-body">${State.allCreds.map(Components.CredRow).join('')}</tbody>
-                </table>
-            </div>
-        `;
+        document.getElementById('section-creds').innerHTML = Components.CredTable(State.allCreds);
     },
     async fetchPermissions() {
         const res = await this.fetch(`${API_URL}/permissions`);
         State.allPermissions = await res.json();
     },
     async updateRequestStatus(id, status, rejectionReason = null) {
-        const res = await this.fetch(`/integration/${id}/status`, { 
-            method: 'PATCH', 
-            body: JSON.stringify({ status, rejectionReason }) 
+        const res = await this.fetch(`/integration/${id}/status`, {
+            method: 'PATCH',
+            body: JSON.stringify({ status, rejectionReason })
         });
         if (res.ok) this.fetchRequests();
     },
@@ -168,6 +164,10 @@ const UI = {
         const canViewRequests = State.currentUser.permissions.includes('integration-request.view');
         const canViewUsers = State.currentUser.permissions.includes('core.user.view');
 
+        if (canViewUsers) {
+            document.getElementById('tab-users').classList.remove('hidden');
+        }
+
         if (canViewRequests) {
             document.getElementById('tab-requests').classList.remove('hidden');
             switchTab('requests');
@@ -203,23 +203,20 @@ const UI = {
             </div>
             <form onsubmit="UI.saveUser(event, '${id || ''}')">
                 <div class="form-group"><label>Usuário</label><input type="text" id="u-name" required></div>
-                <div class="form-group">
-                    <label>Senha ${id ? '<small>(deixe em branco para manter)</small>' : ''}</label>
-                    <input type="password" id="u-pass" ${id ? '' : 'required'}>
-                </div>
+                ${!id ? '<div class="form-group"><label>E-mail</label><input type="email" id="u-email" required placeholder="Para envio do convite"></div>' : ''}
                 <div class="form-group"><label>Role</label><select id="u-role" required></select></div>
                 <div class="form-group"><label>Credenciais DB</label><select id="u-db" required></select></div>
                 <div class="form-group"><label>Loja (ID)</label><input type="number" id="u-store" value="1" required></div>
                 <div class="form-group" style="display:flex; align-items:center; gap:8px;">
-                    <input type="checkbox" id="u-status" checked style="width:auto;"><label style="margin:0">Ativo</label>
+                    <input type="checkbox" id="u-status" ${id ? 'checked' : ''} style="width:auto;"><label style="margin:0">Ativo</label>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline" onclick="UI.closeModal()">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Salvar</button>
+                    <button type="submit" class="btn btn-primary">${id ? 'Salvar' : 'Criar e Enviar Convite'}</button>
                 </div>
             </form>
         `;
-        
+
         // Populate selects
         document.getElementById('u-role').innerHTML = '<option value="">Sem Role</option>' + State.allRoles.map(r => `<option value="${r.id}">${r.name}</option>`).join('');
         document.getElementById('u-db').innerHTML = State.allCreds.map(c => `<option value="${c.id}">${c.database} (${c.host})</option>`).join('');
@@ -235,10 +232,23 @@ const UI = {
         const res = await Data.fetch(`${API_URL}/users/${id}`);
         const u = await res.json();
         document.getElementById('u-name').value = u.user;
+        const emailEl = document.getElementById('u-email');
+        if (emailEl) emailEl.value = u.email || '';
         document.getElementById('u-role').value = u.roleId || '';
         document.getElementById('u-db').value = u.dbCredentialsId;
         document.getElementById('u-store').value = u.storeId;
         document.getElementById('u-status').checked = u.status;
+    },
+    toggleInvite(userId) {
+        const row = document.getElementById(`inv-row-${userId}`);
+        const svg = document.getElementById(`svg-exp-${userId}`);
+        if (row.classList.contains('hidden')) {
+            row.classList.remove('hidden');
+            if (svg) svg.style.transform = 'rotate(90deg)';
+        } else {
+            row.classList.add('hidden');
+            if (svg) svg.style.transform = 'rotate(0deg)';
+        }
     },
     async saveUser(e, id) {
         e.preventDefault();
@@ -249,8 +259,8 @@ const UI = {
             storeId: parseInt(document.getElementById('u-store').value),
             status: document.getElementById('u-status').checked
         };
-        const pass = document.getElementById('u-pass').value;
-        if (pass) data.password = pass;
+        const emailEl = document.getElementById('u-email');
+        if (emailEl) data.email = emailEl.value;
 
         const res = await Data.fetch(id ? `${API_URL}/users/${id}` : `${API_URL}/users`, {
             method: id ? 'PATCH' : 'POST',

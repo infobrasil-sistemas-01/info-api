@@ -93,9 +93,28 @@ const Components = {
             </div>
         `;
     },
-    UserRow: (u) => `
-        <tr>
-            <td style="font-weight: 600;">${u.user}</td>
+    UserRow: (u) => {
+        const inv = u.invitation;
+        const hasInvite = !!inv;
+        const isExpired = hasInvite && new Date(inv.expiresAt) < new Date() && !inv.acceptedAt;
+
+        console.log('UserRow data:', u);
+
+        return `
+        <tr class="user-main-row">
+            <td>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    ${hasInvite ? `
+                        <button class="btn-icon" onclick="UI.toggleInvite('${u.id}')" id="btn-exp-${u.id}">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.2s;" id="svg-exp-${u.id}">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </button>
+                    ` : '<div style="width: 24px;"></div>'}
+                    <span style="font-weight: 600;">${u.user}</span>
+                </div>
+            </td>
+            <td style="color: var(--text-muted); font-size: 0.9rem;">${u.email || '-'}</td>
             <td>${u.role ? u.role.name : '<span style="color: red">Nenhuma</span>'}</td>
             <td>Loja ${u.storeId}</td>
             <td><span style="color: ${u.status ? 'var(--success)' : 'var(--danger)'}">${u.status ? 'Ativo' : 'Inativo'}</span></td>
@@ -106,6 +125,54 @@ const Components = {
                 </div>
             </td>
         </tr>
+        ${hasInvite ? `
+        <tr id="inv-row-${u.id}" class="invite-details-row hidden">
+            <td colspan="6" style="padding: 12px 24px; background: #f8fafc; border-left: 4px solid var(--primary);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div>
+                        <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">Detalhes do Convite</div>
+                        <div style="display: grid; grid-template-columns: auto auto; gap: 16px 32px;">
+                            <div>
+                                <span class="label">Token:</span>
+                                <code style="font-size: 0.8rem; background: #e2e8f0; padding: 2px 4px; border-radius: 4px;">${inv.token}</code>
+                            </div>
+                            <div>
+                                <span class="label">Expiração:</span>
+                                <span style="font-size: 0.85rem;">${new Date(inv.expiresAt).toLocaleString()}</span>
+                            </div>
+                            <div>
+                                <span class="label">Criado em:</span>
+                                <span style="font-size: 0.85rem;">${new Date(inv.createdAt).toLocaleString()}</span>
+                            </div>
+                            <div>
+                                <span class="label">Aceito em:</span>
+                                <span style="font-size: 0.85rem;">${inv.acceptedAt ? new Date(inv.acceptedAt).toLocaleString() : 'Pendente'}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        ${!inv.acceptedAt ? `<button class="btn btn-outline btn-sm" onclick="Data.resendInvite('${inv.id}')">Reenviar E-mail</button>` : ''}
+                        ${!inv.acceptedAt ? `<button class="btn btn-danger btn-sm" onclick="Data.deleteInvite('${inv.id}')">Revogar Convite</button>` : ''}
+                    </div>
+                </div>
+            </td>
+        </tr>
+        ` : ''}
+    `;
+    },
+    UserTable: (users) => `
+        <div class="card">
+            <div class="card-header">
+                <h2>Gestão de Usuários</h2>
+                <button class="btn btn-primary" onclick="UI.openUserModal()">+ Novo Usuário</button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead><tr><th>Usuário</th><th>E-mail</th><th>Role</th><th>Loja</th><th>Status</th><th>Ações</th></tr></thead>
+                    <tbody id="users-table-body">${users.map(Components.UserRow).join('')}</tbody>
+                </table>
+            </div>
+        </div>
     `,
     RoleRow: (r) => `
         <tr>
@@ -119,6 +186,20 @@ const Components = {
                 </div>
             </td>
         </tr>
+    `,
+    RoleTable: (roles) => `
+        <div class="card">
+            <div class="card-header">
+                <h2>Gestão de Roles</h2>
+                <button class="btn btn-primary" onclick="UI.openRoleModal()">+ Nova Role</button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead><tr><th>Nome</th><th>Descrição</th><th>Usuários</th><th>Ações</th></tr></thead>
+                    <tbody id="roles-table-body">${roles.map(Components.RoleRow).join('')}</tbody>
+                </table>
+            </div>
+        </div>
     `,
     CredRow: (c) => `
         <tr>
@@ -134,5 +215,19 @@ const Components = {
                 </div>
             </td>
         </tr>
+    `,
+    CredTable: (creds) => `
+        <div class="card">
+            <div class="card-header">
+                <h2>Credenciais de Banco</h2>
+                <button class="btn btn-primary" onclick="UI.openCredModal()">+ Nova Credencial</button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead><tr><th>Host</th><th>Database</th><th>Porta</th><th>Usuário</th><th>DB ID</th><th>Ações</th></tr></thead>
+                    <tbody id="creds-table-body">${creds.map(Components.CredRow).join('')}</tbody>
+                </table>
+            </div>
+        </div>
     `
 };
