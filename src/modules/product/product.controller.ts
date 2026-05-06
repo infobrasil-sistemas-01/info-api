@@ -20,7 +20,6 @@ import type { ReqWithAuthContext } from '../auth/guards/jwt-auth.guard';
 import { ProductService } from './product.service';
 import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
-import { min } from 'date-fns';
 
 @Controller('products')
 export class ProductController {
@@ -51,7 +50,8 @@ export class ProductController {
           MAR_DESCRICAO: { type: 'string', example: "Marca Exemplo" },
           GRU_CODIGO: { type: 'number', example: 1 },
           GRU_DESCRICAO: { type: 'string', example: "Grupo Exemplo" },
-          ESTOQUE: { type: 'number', example: 50 },
+          EST_ATUAL: { type: 'number', example: 50 },
+          EST_APOIO: { type: 'number', example: 50 },
           PRECO: { type: 'number', example: 19.99 },
           PRECO2: { type: 'number', example: 17.50 }
         }

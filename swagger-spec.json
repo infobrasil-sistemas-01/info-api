@@ -165,7 +165,11 @@
                         "type": "string",
                         "example": "Grupo Exemplo"
                       },
-                      "ESTOQUE": {
+                      "EST_ATUAL": {
+                        "type": "number",
+                        "example": 50
+                      },
+                      "EST_APOIO": {
                         "type": "number",
                         "example": 50
                       },

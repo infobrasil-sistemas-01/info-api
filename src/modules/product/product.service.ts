@@ -42,7 +42,7 @@ export class ProductService {
         storeId,
       ];
       let query = `SELECT FIRST ? SKIP ? 
-                      P.PRO_CODIGO, P.PRO_CODIGOBAR, P.PRO_DESCRICAO, M.MAR_CODIGO, M.MAR_DESCRICAO, G.GRU_CODIGO, G.GRU_DESCRICAO, E.EST_ATUAL ESTOQUE, E.PRO_PRECO1 PRECO, E.PRO_PRECO2 PRECO2
+                      P.PRO_CODIGO, P.PRO_CODIGOBAR, P.PRO_DESCRICAO, M.MAR_CODIGO, M.MAR_DESCRICAO, G.GRU_CODIGO, G.GRU_DESCRICAO, E.EST_ATUAL, E.EST_APOIO, E.PRO_PRECO1 PRECO, E.PRO_PRECO2 PRECO2
                       FROM produtos P 
                       INNER JOIN marcas M ON P.MAR_CODIGO = M.MAR_CODIGO 
                       INNER JOIN grupospro G ON P.GRU_CODIGO = G.GRU_CODIGO
@@ -90,8 +90,7 @@ export class ProductService {
       this.logger.log(
         `Busca de produtos executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
           { storeId, page, pageSize, group, brand, minStock, search },
-        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${
-          queryEndTime - queryStartTime
+        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${queryEndTime - queryStartTime
         }ms`,
       );
 
