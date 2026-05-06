@@ -131,7 +131,8 @@ const Data = {
 
 // --- Auth & Initial Load ---
 const Auth = {
-    async login() {
+    async login(e) {
+        if (e) e.preventDefault();
         const user = document.getElementById('username').value;
         const pass = document.getElementById('password').value;
         const auth = btoa(user + ':' + pass);
@@ -143,7 +144,11 @@ const Auth = {
             const data = await res.json();
             localStorage.setItem('token', data.access_token);
             this.check();
-        } else alert('Credenciais inválidas');
+        } else {
+            const err = document.getElementById('login-error');
+            if (err) err.classList.remove('hidden');
+            else alert('Credenciais inválidas');
+        }
     },
     logout() {
         localStorage.removeItem('token');
@@ -151,20 +156,39 @@ const Auth = {
     },
     async check() {
         const token = localStorage.getItem('token');
-        if (!token) return;
+        if (!token) {
+            const loginContainer = document.getElementById('login-container');
+            if (loginContainer) loginContainer.classList.remove('hidden');
+            return;
+        }
         const res = await fetch(`${API_URL}/auth/me`, { headers: { 'Authorization': 'Bearer ' + token } });
         if (res.ok) {
             State.currentUser = await res.json();
             UI.setup();
-        } else this.logout();
+        } else {
+            this.logout();
+        }
     }
 };
+
+// Listeners
+document.addEventListener('DOMContentLoaded', () => {
+    Auth.check();
+    const loginForm = document.getElementById('login-form');
+    if (loginForm) {
+        loginForm.addEventListener('submit', (e) => Auth.login(e));
+    }
+});
 
 // --- UI Interactions & Modals ---
 const UI = {
     setup() {
-        document.getElementById('login-section').style.display = 'none';
-        document.getElementById('admin-content').classList.remove('hidden');
+        const loginContainer = document.getElementById('login-container');
+        if (loginContainer) loginContainer.classList.add('hidden');
+        
+        const adminContent = document.getElementById('admin-content');
+        if (adminContent) adminContent.classList.remove('hidden');
+        
         document.getElementById('user-display').innerText = State.currentUser.username;
 
         const canViewRequests = State.currentUser.permissions.includes('integration-request.view');

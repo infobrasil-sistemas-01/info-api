@@ -6,64 +6,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-mail Confirmado | InfoBrasil</title>
     <link rel="icon" type="image/x-icon" href="/integration/assets/favicon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #059669;
-            --primary-hover: #047857;
-            --bg: #f8fafc;
-            --text: #1e293b;
-            --text-muted: #64748b;
+            --primary: #10b981;
+            --bg: #06110d;
+            --card-bg: #0c1f18;
+            --text: #f0fdf4;
+            --text-muted: #94a3b8;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Outfit', sans-serif;
         }
 
         body {
             background-color: var(--bg);
+            background: radial-gradient(circle at top right, #064e3b, #06110d);
             color: var(--text);
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
             padding: 20px;
         }
 
         .container {
-            background: white;
-            padding: 48px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-            max-width: 500px;
+            background: var(--card-bg);
             width: 100%;
+            max-width: 450px;
+            padding: 50px 40px;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             text-align: center;
         }
 
-        .icon-circle {
-            width: 80px;
-            height: 80px;
-            background: #ecfdf5;
+        .icon-success {
+            font-size: 64px;
             color: var(--primary);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 24px;
-            font-size: 40px;
-        }
-
-        h1 {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            color: var(--text);
-        }
-
-        p {
             color: var(--text-muted);
             line-height: 1.6;
             margin-bottom: 32px;

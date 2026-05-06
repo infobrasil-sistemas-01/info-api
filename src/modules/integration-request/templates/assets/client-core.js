@@ -23,14 +23,14 @@ const Translations = {
     translate(perm) {
         // Remove prefixos core. ou tenant.
         let clean = perm.replace(/^(core|tenant)\./, '');
-        
+
         const parts = clean.split('.');
         if (parts.length >= 2) {
             const mod = this.modules[parts[0]] || parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
             const act = this.actions[parts[1]] || parts[1].charAt(0).toUpperCase() + parts[1].slice(1);
             return `${mod}: ${act}`;
         }
-        
+
         return clean.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
     }
 };
@@ -83,6 +83,7 @@ const UI = {
         list.innerHTML = user.permissions.map(p => `<span class="perm-tag">${Translations.translate(p)}</span>`).join('');
         
         this.loadStats();
+        this.loadPlans();
     },
     async loadStats() {
         try {
@@ -109,16 +110,62 @@ const UI = {
             console.error('Erro ao carregar stats', e);
         }
     },
+    async loadPlans() {
+        try {
+            const res = await fetch(`${API_URL}/plans`, {
+                headers: { 'Authorization': `Bearer ${Auth.getToken()}` }
+            });
+            const plans = await res.json();
+            const grid = document.querySelector('.upgrade-grid');
+            
+            grid.innerHTML = plans.map(p => `
+                <div class="card upgrade-card ${p.name === 'Advanced' ? 'featured' : ''}">
+                    <div class="plan-header">
+                        <span class="badge">${p.name}</span>
+                        <h2>${p.name === 'Free' ? 'Gratuito' : p.name === 'Standard' ? 'Fisicalize' : p.name === 'Advanced' ? 'Comercialize' : 'Full'}</h2>
+                    </div>
+                    <p>${p.description || 'Plano ideal para suas necessidades.'}</p>
+                    <ul>
+                        <li>${p.reqMonth.toLocaleString()} req/mês</li>
+                        <li>Limite de ${p.maxPageSize} registros</li>
+                        <li>Range de ${p.maxDateRangeDays} dias</li>
+                    </ul>
+                </div>
+            `).join('');
+        } catch (e) {
+            console.error('Erro ao carregar planos', e);
+        }
+    },
     animateProgress(id, current, limit, percentage) {
-        document.getElementById(`${id}-current`).textContent = current.toLocaleString();
-        document.getElementById(`${id}-limit`).textContent = limit.toLocaleString();
+        const currentEl = document.getElementById(`${id}-current`);
+        const limitEl = document.getElementById(`${id}-limit`);
+        const barEl = document.getElementById(`${id}-bar`);
+
+        if (currentEl) currentEl.textContent = current.toLocaleString();
+        if (limitEl) limitEl.textContent = limit.toLocaleString();
         
-        const bar = document.getElementById(`${id}-bar`);
-        bar.style.width = '0%';
-        setTimeout(() => {
-            bar.style.width = `${Math.min(100, percentage)}%`;
-            if (percentage > 90) bar.style.background = 'var(--danger)';
-        }, 100);
+        if (barEl) {
+            barEl.style.width = '0%';
+            setTimeout(() => {
+                barEl.style.width = `${Math.min(100, percentage)}%`;
+                if (percentage > 90) barEl.style.background = 'var(--danger)';
+            }, 100);
+        }
+    },
+    switchTab(tabId) {
+        // Update Buttons
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        const activeBtn = document.querySelector(`.tab-btn[onclick*="${tabId}"]`);
+        if (activeBtn) activeBtn.classList.add('active');
+
+        // Update Content
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.remove('active');
+        });
+        const activeContent = document.getElementById(`tab-${tabId}`);
+        if (activeContent) activeContent.classList.add('active');
     }
 };
 
@@ -127,16 +174,16 @@ document.getElementById('login-form').onsubmit = async (e) => {
     e.preventDefault();
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
-    
+
     try {
         const res = await fetch(`${API_URL}/auth/login`, {
             method: 'POST',
-            headers: { 
+            headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Basic ' + btoa(username + ':' + password)
             }
         });
-        
+
         if (res.ok) {
             const data = await res.json();
             Auth.setToken(data.access_token);

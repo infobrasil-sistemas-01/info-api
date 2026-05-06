@@ -6,34 +6,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Center | Info Vendas</title>
     <link rel="icon" type="image/x-icon" href="/integration/assets/favicon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/integration/assets/admin.css">
 </head>
 
 <body>
     <!-- Login Section -->
-    <div id="login-section" class="login-overlay">
-        <div class="login-box">
-            <h2>InfoAPI Admin</h2>
-            <div class="form-group">
-                <label>Usuário</label>
-                <input type="text" id="username" placeholder="Seu usuário">
+    <div id="login-container" class="hidden">
+        <div class="login-card">
+            <div class="brand-login">
+                <span class="brand-name">Info<span>API</span></span>
             </div>
-            <div class="form-group">
-                <label>Senha</label>
-                <input type="password" id="password" placeholder="Sua senha">
-            </div>
-            <button class="btn btn-primary" style="width: 100%" onclick="Auth.login()">Entrar</button>
+            <h1>Bem-vindo</h1>
+            <p>Acesse sua área de administração</p>
+            <form id="login-form">
+                <div class="form-group">
+                    <label>E-mail ou Usuário</label>
+                    <input type="text" id="username" required placeholder="Digite seu acesso">
+                </div>
+                <div class="form-group">
+                    <label>Senha</label>
+                    <input type="password" id="password" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn-primary">Entrar</button>
+            </form>
+            <div id="login-error" class="error-msg hidden">Credenciais inválidas</div>
         </div>
     </div>
 
     <!-- Main Dashboard -->
     <div id="admin-content" class="dashboard hidden">
         <header>
-            <div style="display: flex; align-items: center; gap: 16px;">
-                <img src="https://static.wixstatic.com/media/97349f_a4abdfe6f4384c2884ae2228ad3528b9~mv2.png/v1/fill/w_60,h_60,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Cabe%C3%A7alhoSIte_fw.png"
-                    alt="Logo" style="height: 32px;">
-                <h1>Admin Center</h1>
+            <div class="brand">
+                <span class="brand-name">Info<span>API</span></span>
+                <span class="brand-divider"></span>
+                <span class="panel-name">Administração</span>
             </div>
             <div style="display: flex; align-items: center; gap: 16px;">
                 <span id="user-display" style="font-weight: 600; color: var(--text-muted);"></span>

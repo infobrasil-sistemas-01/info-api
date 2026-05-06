@@ -54,10 +54,10 @@ const Components = {
                 </button>
 
                 <div id="details-${req.id}" class="accordion-content hidden">
-                    <div style="margin-bottom: 12px;">
-                        <small style="font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">OBJETIVO</small>
-                        <p style="font-size: 0.85rem; background: #fffbeb; padding: 8px; border-radius: 6px; border: 1px solid #fef3c7;">${req.objective}</p>
-                    </div>
+                <div style="margin-bottom: 12px;">
+                    <small style="font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">OBJETIVO</small>
+                    <p class="objective-box">${req.objective}</p>
+                </div>
                     <div class="details-grid">
                         <div class="detail-box"><label>Razão Social</label><p>${req.legalName}</p></div>
                         <div class="detail-box"><label>Hospedagem</label><p>${req.hostingType === 'DATACENTER' ? 'DataCenter' : 'Servidor Cliente'}</p></div>
@@ -69,9 +69,8 @@ const Components = {
                         <p style="font-size: 0.8rem; font-family: monospace;">${db.host}:${db.port} / ${db.database}</p>
                     </div>
                     <div>
-                        <small style="font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">MÓDULOS E ESCOPO</small>
                         <div style="display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px;">
-                            ${req.modules.map(m => `<span style="background: #e2e8f0; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem;">${m}</span>`).join('')}
+                            ${req.modules.map(m => `<span class="tag-pill">${m}</span>`).join('')}
                         </div>
                         <div style="font-size: 0.75rem;">
                             ${req.scopes.map(s => `<strong>${s.resource}:</strong> ${s.actions.map(translateAction).join(', ')}`).join(' | ')}
@@ -132,14 +131,14 @@ const Components = {
         </tr>
         ${hasInvite ? `
         <tr id="inv-row-${u.id}" class="invite-details-row hidden">
-            <td colspan="6" style="padding: 12px 24px; background: #f8fafc; border-left: 4px solid var(--primary);">
+            <td colspan="7" class="invite-details-box">
                 <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                     <div>
                         <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">Detalhes do Convite</div>
                         <div style="display: grid; grid-template-columns: auto auto; gap: 16px 32px;">
                             <div>
                                 <span class="label">Token:</span>
-                                <code style="font-size: 0.8rem; background: #e2e8f0; padding: 2px 4px; border-radius: 4px;">${inv.token}</code>
+                                <code class="code-snippet">${inv.token}</code>
                             </div>
                             <div>
                                 <span class="label">Expiração:</span>
