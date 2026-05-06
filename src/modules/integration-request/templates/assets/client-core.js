@@ -10,7 +10,10 @@ const Translations = {
         'groups': 'Grupos',
         'orders': 'Pedidos',
         'integration-request': 'Solicitações de Integração',
-        'db-credentials': 'Credenciais de Banco'
+        'db-credentials': 'Credenciais de Banco',
+        'payment-methods': 'Formas de Pagamento',
+        'account-receivable': 'Contas a Receber',
+        'clients': 'Clientes',
     },
     actions: {
         'view': 'Visualizar',
@@ -73,15 +76,15 @@ const UI = {
     initApp(user) {
         document.getElementById('login-container').classList.add('hidden');
         document.getElementById('app-container').classList.remove('hidden');
-        
+
         document.getElementById('user-display-name').textContent = user.username || 'Usuário';
         document.getElementById('user-avatar').textContent = (user.username || 'U').charAt(0).toUpperCase();
         document.getElementById('user-role-name').textContent = user.roles && user.roles.length > 0 ? user.roles[0].name : 'Sem Cargo';
-        
+
         // Permissões
         const list = document.getElementById('permissions-list');
         list.innerHTML = user.permissions.map(p => `<span class="perm-tag">${Translations.translate(p)}</span>`).join('');
-        
+
         this.loadStats();
         this.loadPlans();
     },
@@ -91,9 +94,9 @@ const UI = {
                 headers: { 'Authorization': `Bearer ${Auth.getToken()}` }
             });
             const data = await res.json();
-            
+
             const { limits, usage } = data;
-            
+
             // Badge do Plano
             const badge = document.getElementById('user-plan-badge');
             badge.textContent = limits.name || 'Free';
@@ -102,7 +105,7 @@ const UI = {
             // Update Stats
             this.animateProgress('req-month', usage.reqsMonth, limits.reqMonth, usage.monthPercentage);
             this.animateProgress('req-min', usage.reqsMinute, limits.reqMin, usage.minutePercentage);
-            
+
             document.getElementById('max-page-size').textContent = `${limits.maxPageSize} registros`;
             document.getElementById('max-date-range').textContent = `${limits.maxDateRangeDays} dias`;
 
@@ -117,21 +120,26 @@ const UI = {
             });
             const plans = await res.json();
             const grid = document.querySelector('.upgrade-grid');
-            
-            grid.innerHTML = plans.map(p => `
-                <div class="card upgrade-card ${p.name === 'Advanced' ? 'featured' : ''}">
-                    <div class="plan-header">
-                        <span class="badge">${p.name}</span>
-                        <h2>${p.name === 'Free' ? 'Gratuito' : p.name === 'Standard' ? 'Fisicalize' : p.name === 'Advanced' ? 'Comercialize' : 'Full'}</h2>
+
+            grid.innerHTML = plans.map(p => {
+                return `
+                    <div class="card upgrade-card ${p.name === 'Advanced' ? 'featured' : ''}">
+                        <div class="plan-header">
+                            <h2 class="plan-title">${p.name}</h2>
+                            <div class="plan-price">
+                                <span class="currency">R$</span>
+                                <span class="amount">${p.name === 'Free' ? '0,00' : 'Sob Consulta'}</span>
+                            </div>
+                        </div>
+                        <p class="plan-description">${p.description || 'Plano ideal para suas necessidades de integração.'}</p>
+                        <ul class="plan-features">
+                            <li><strong>${p.reqMonth.toLocaleString()}</strong> req/mês</li>
+                            <li>Limite de <strong>${p.maxPageSize}</strong> registros</li>
+                            <li>Range de <strong>${p.maxDateRangeDays}</strong> dias</li>
+                        </ul>
                     </div>
-                    <p>${p.description || 'Plano ideal para suas necessidades.'}</p>
-                    <ul>
-                        <li>${p.reqMonth.toLocaleString()} req/mês</li>
-                        <li>Limite de ${p.maxPageSize} registros</li>
-                        <li>Range de ${p.maxDateRangeDays} dias</li>
-                    </ul>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         } catch (e) {
             console.error('Erro ao carregar planos', e);
         }
@@ -143,7 +151,7 @@ const UI = {
 
         if (currentEl) currentEl.textContent = current.toLocaleString();
         if (limitEl) limitEl.textContent = limit.toLocaleString();
-        
+
         if (barEl) {
             barEl.style.width = '0%';
             setTimeout(() => {

@@ -7,6 +7,7 @@
     <title>Admin Center | Info Vendas</title>
     <link rel="icon" type="image/x-icon" href="/integration/assets/favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="/integration/assets/admin.css">
 </head>
 
@@ -37,14 +38,21 @@
     <!-- Main Dashboard -->
     <div id="admin-content" class="dashboard hidden">
         <header>
-            <div class="brand">
-                <span class="brand-name">Info<span>API</span></span>
-                <span class="brand-divider"></span>
-                <span class="panel-name">Administração</span>
-            </div>
-            <div style="display: flex; align-items: center; gap: 16px;">
-                <span id="user-display" style="font-weight: 600; color: var(--text-muted);"></span>
-                <button class="btn btn-outline" onclick="Auth.logout()">Sair</button>
+            <div class="header-content">
+                <div class="brand">
+                    <span class="brand-name">Info<span>API</span></span>
+                    <span class="brand-divider"></span>
+                    <span class="panel-name">Administração</span>
+                </div>
+                <div class="header-right">
+                    <div class="user-info">
+                        <span id="user-display" style="font-weight: 600; color: var(--text-muted); font-size: 0.9rem;"></span>
+                        <div class="avatar" style="width: 38px; height: 38px; background: var(--primary); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: white;">A</div>
+                    </div>
+                    <button class="btn-logout" onclick="Auth.logout()" title="Sair" style="background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.2); padding: 8px; border-radius: 10px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center;">
+                        <i class='bx bx-log-out bx-flip-horizontal' style="font-size: 1.3rem;"></i>
+                    </button>
+                </div>
             </div>
         </header>
 
