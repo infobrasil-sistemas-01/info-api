@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.2.6](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.2.4...v1.2.6) (2026-05-06)
+
+
+### Features
+
+* invite management ([0bbcf01](https://github.com/infobrasil-sistemas/info-vendas-api/commit/0bbcf01e9deb27b8784f1f5f0940d3787878c36f))
+* rate limiting by user ([d87477d](https://github.com/infobrasil-sistemas/info-vendas-api/commit/d87477d01931e724b87895e9e4ebc9581fb75128))
+
+
+### Bug Fixes
+
+* prisma seeding ([0ffc6f6](https://github.com/infobrasil-sistemas/info-vendas-api/commit/0ffc6f676db104b3af6cd0dda12d2c32a3103cec))
+* product GET fields ([bbf7c9a](https://github.com/infobrasil-sistemas/info-vendas-api/commit/bbf7c9aca4eaec8a7f94b13f44ada8f70b1a07e3))
+
 ## [1.2.5](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.2.4...v1.2.5) (2026-05-06)
 
 
