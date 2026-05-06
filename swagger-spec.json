@@ -10,6 +10,11 @@
             "description": ""
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "summary": "Obter perfil do usuário logado",
         "tags": [
           "Auth"
@@ -1061,6 +1066,46 @@
         "summary": "Health check da API",
         "tags": [
           "Health"
+        ]
+      }
+    },
+    "/api/v1/plans/stats": {
+      "get": {
+        "operationId": "StatsController_getStats",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Obtém estatísticas de uso e limites do plano do usuário logado",
+        "tags": [
+          "Plans & Usage"
+        ]
+      }
+    },
+    "/api/v1/plans": {
+      "get": {
+        "operationId": "StatsController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Lista todos os planos disponíveis",
+        "tags": [
+          "Plans & Usage"
         ]
       }
     }

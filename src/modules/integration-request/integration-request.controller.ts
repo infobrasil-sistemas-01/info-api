@@ -9,6 +9,7 @@ import {
   Delete,
   Param,
   InternalServerErrorException,
+  Render,
 } from '@nestjs/common';
 import {
   ApiExcludeController,
@@ -33,7 +34,7 @@ export class IntegrationRequestController {
   constructor(
     private readonly service: IntegrationRequestService,
     private readonly userService: UserService,
-  ) {}
+  ) { }
 
   @Get('setup-password/:token')
   @ApiOperation({ summary: 'Serve a interface de configuração de senha' })
@@ -46,6 +47,13 @@ export class IntegrationRequestController {
   @ApiOperation({ summary: 'Gera e configura a senha do usuário via token' })
   async handleSetupPassword(@Param('token') token: string) {
     return this.userService.setupPasswordByToken(token);
+  }
+
+  @Get('client')
+  @ApiOperation({ summary: 'Serve o dashboard do cliente' })
+  clientDashboard(@Res() res: Response) {
+    const path = this.getTemplatePath('client.html');
+    return res.sendFile(path);
   }
 
   @Get('form')

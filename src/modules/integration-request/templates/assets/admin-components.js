@@ -115,7 +115,12 @@ const Components = {
                 </div>
             </td>
             <td style="color: var(--text-muted); font-size: 0.9rem;">${u.email || '-'}</td>
-            <td>${u.role ? u.role.name : '<span style="color: red">Nenhuma</span>'}</td>
+            <td>${u.role ? u.role.name : '<span style="color: var(--text-muted)">Nenhuma</span>'}</td>
+            <td>
+                <span class="plan-badge ${u.plan?.name?.toLowerCase() || 'free'}">
+                    ${u.plan ? u.plan.name : 'Free'}
+                </span>
+            </td>
             <td>Loja ${u.storeId}</td>
             <td><span style="color: ${u.status ? 'var(--success)' : 'var(--danger)'}">${u.status ? 'Ativo' : 'Inativo'}</span></td>
             <td>
@@ -168,7 +173,7 @@ const Components = {
             </div>
             <div class="table-container">
                 <table>
-                    <thead><tr><th>Usuário</th><th>E-mail</th><th>Role</th><th>Loja</th><th>Status</th><th>Ações</th></tr></thead>
+                    <thead><tr><th>Usuário</th><th>E-mail</th><th>Role</th><th>Plano</th><th>Loja</th><th>Status</th><th>Ações</th></tr></thead>
                     <tbody id="users-table-body">${users.map(Components.UserRow).join('')}</tbody>
                 </table>
             </div>

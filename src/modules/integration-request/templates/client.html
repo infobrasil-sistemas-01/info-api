@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Área do Cliente - Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/integration/assets/client.css">
+</head>
+<body>
+    <div id="login-container" class="hidden">
+        <div class="login-card">
+            <div class="brand-login">
+                <span class="brand-name">Info<span>Brasil</span></span>
+            </div>
+            <h1>Bem-vindo</h1>
+            <p>Acesse sua área de integração</p>
+            <form id="login-form">
+                <div class="form-group">
+                    <label>E-mail ou Usuário</label>
+                    <input type="text" id="username" required placeholder="Digite seu acesso">
+                </div>
+                <div class="form-group">
+                    <label>Senha</label>
+                    <input type="password" id="password" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn-primary">Entrar</button>
+            </form>
+            <div id="login-error" class="error-msg hidden">Credenciais inválidas</div>
+        </div>
+    </div>
+
+    <div id="app-container" class="hidden">
+        <header>
+            <div class="header-content">
+                <div class="brand">
+                    <span class="brand-name">Info<span>Brasil</span></span>
+                    <span class="brand-divider"></span>
+                    <span class="panel-name">Painel de Integração</span>
+                </div>
+                <div class="header-right">
+                    <div class="user-info">
+                        <div class="avatar" id="user-avatar">U</div>
+                        <div>
+                            <h2 id="user-display-name">Carregando...</h2>
+                            <span id="user-plan-badge" class="plan-badge">Plano</span>
+                        </div>
+                    </div>
+                    <button onclick="Auth.logout()" class="btn-logout">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <section class="usage-grid">
+                <div class="card usage-card">
+                    <h3>Uso Mensal</h3>
+                    <div class="usage-stats">
+                        <span id="req-month-current">0</span> / <span id="req-month-limit">0</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div id="req-month-bar" class="progress-fill" style="width: 0%"></div>
+                    </div>
+                    <p class="stats-label">Requisições no mês atual</p>
+                </div>
+
+                <div class="card usage-card">
+                    <h3>Frequência (Minuto)</h3>
+                    <div class="usage-stats">
+                        <span id="req-min-current">0</span> / <span id="req-min-limit">0</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div id="req-min-bar" class="progress-fill" style="width: 0%"></div>
+                    </div>
+                    <p class="stats-label">Limite de requisições simultâneas</p>
+                </div>
+
+                <div class="card info-card">
+                    <h3>Configurações do Plano</h3>
+                    <div class="info-item">
+                        <span class="label">Máx. Registros:</span>
+                        <span class="value" id="max-page-size">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Range de Data:</span>
+                        <span class="value" id="max-date-range">-</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="details-section">
+                <div class="card permissions-card">
+                    <h3>Sua Role & Permissões</h3>
+                    <p class="role-name" id="user-role-name">-</p>
+                    <div class="permissions-list" id="permissions-list">
+                        <!-- Permissões entram aqui -->
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="/integration/assets/client-core.js"></script>
+</body>
+</html>

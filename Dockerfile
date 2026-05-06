@@ -27,13 +27,15 @@ COPY prisma.config.ts ./
 COPY tsconfig*.json ./
 
 RUN npm ci --omit=dev
-RUN npm install --no-save tsx typescript
+RUN npm install --no-save tsx typescript ts-node
 RUN node node_modules/prisma/build/index.js generate
 
 COPY --from=builder /app/dist ./dist
 COPY entrypoint.sh ./entrypoint.sh
 RUN chmod +x entrypoint.sh
 
-EXPOSE 3336
+ARG PORT=3336
+ENV PORT=${PORT}
+EXPOSE ${PORT}
 
 ENTRYPOINT ["sh", "entrypoint.sh"]

@@ -22,7 +22,7 @@ import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
 
 @Controller('products/groups')
 export class ProductGroupController {
-  constructor(private readonly groupService: ProductGroupService) {}
+  constructor(private readonly groupService: ProductGroupService) { }
 
   @Get()
   @UseGuards(JwtAuthGuard, PermissionsGuard)
@@ -77,10 +77,6 @@ export class ProductGroupController {
 
     if (!credentialsId) {
       throw new Error('Credentials ID not found in token');
-    }
-
-    if (pageSize && pageSize > 25) {
-      throw new BadRequestException('pageSize cannot exceed 25');
     }
 
     return this.groupService.get(credentialsId, page, pageSize);

@@ -22,7 +22,7 @@ import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
 
 @Controller('products/brands')
 export class ProductBrandController {
-  constructor(private readonly brandService: ProductBrandService) {}
+  constructor(private readonly brandService: ProductBrandService) { }
 
   @Get()
   @UseGuards(JwtAuthGuard, PermissionsGuard)
@@ -79,9 +79,7 @@ export class ProductBrandController {
       throw new Error('Credentials ID not found in token');
     }
 
-    if (pageSize && pageSize > 25) {
-      throw new BadRequestException('pageSize cannot exceed 25');
-    }
+
 
     return this.brandService.get(credentialsId, page, pageSize);
   }

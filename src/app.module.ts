@@ -20,6 +20,8 @@ import { UserModule } from './modules/user/user.module';
 import { RoleModule } from './modules/role/role.module';
 import { PermissionModule } from './modules/permission/permission.module';
 import { DbCredentialsModule } from './modules/db-credentials/db-credentials.module';
+import { PlanModule } from './modules/plan/plan.module';
+import { PlanLimitInterceptor } from './modules/plan/interceptors/plan-limit.interceptor';
 
 @Module({
   imports: [
@@ -40,6 +42,7 @@ import { DbCredentialsModule } from './modules/db-credentials/db-credentials.mod
     RoleModule,
     PermissionModule,
     DbCredentialsModule,
+    PlanModule,
   ],
   controllers: [],
   providers: [
@@ -48,6 +51,10 @@ import { DbCredentialsModule } from './modules/db-credentials/db-credentials.mod
     {
       provide: APP_INTERCEPTOR,
       useClass: LoggingInterceptor,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: PlanLimitInterceptor,
     },
     {
       provide: APP_FILTER,

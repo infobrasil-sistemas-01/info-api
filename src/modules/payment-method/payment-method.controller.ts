@@ -20,7 +20,7 @@ import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
 
 @Controller('payment-methods')
 export class PaymentMethodController {
-  constructor(private readonly paymentMethodService: PaymentMethodService) {}
+  constructor(private readonly paymentMethodService: PaymentMethodService) { }
 
   @Get()
   @UseGuards(JwtAuthGuard, PermissionsGuard)
@@ -74,10 +74,6 @@ export class PaymentMethodController {
 
     if (!credentialsId) {
       throw new Error('Credentials ID not found in token');
-    }
-
-    if (pageSize && pageSize > 25) {
-      throw new BadRequestException('pageSize cannot exceed 25');
     }
 
     return this.paymentMethodService.get(credentialsId, page, pageSize);

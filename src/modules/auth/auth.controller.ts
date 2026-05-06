@@ -13,6 +13,7 @@ import {
 } from '@nestjs/common';
 import {
   ApiBasicAuth,
+  ApiBearerAuth,
   ApiOperation,
   ApiResponse,
   ApiTags,
@@ -37,6 +38,7 @@ export class AuthController {
   ) { }
 
   @Get('me')
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Obter perfil do usuário logado' })
   async me(@CurrentUser() user: JwtPayload) {

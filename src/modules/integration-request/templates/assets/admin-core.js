@@ -4,7 +4,8 @@ const State = {
     allRoles: [],
     allPermissions: [],
     allCreds: [],
-    allUsers: []
+    allUsers: [],
+    allPlans: []
 };
 
 const Data = {
@@ -47,6 +48,7 @@ const Data = {
             this.fetchRoles();
             this.fetchPermissions();
             this.fetchCreds();
+            this.fetchPlans();
         }
     },
     async fetchRequests() {
@@ -88,6 +90,10 @@ const Data = {
     async fetchPermissions() {
         const res = await this.fetch(`${API_URL}/permissions`);
         State.allPermissions = await res.json();
+    },
+    async fetchPlans() {
+        const res = await this.fetch(`${API_URL}/plans`);
+        State.allPlans = await res.json();
     },
     async updateRequestStatus(id, status, rejectionReason = null) {
         const res = await this.fetch(`/integration/${id}/status`, {
@@ -204,7 +210,8 @@ const UI = {
             <form onsubmit="UI.saveUser(event, '${id || ''}')">
                 <div class="form-group"><label>Usuário</label><input type="text" id="u-name" required></div>
                 ${!id ? '<div class="form-group"><label>E-mail</label><input type="email" id="u-email" required placeholder="Para envio do convite"></div>' : ''}
-                <div class="form-group"><label>Role</label><select id="u-role" required></select></div>
+                <div class="form-group"><label>Role</label><select id="u-role"></select></div>
+                <div class="form-group"><label>Plano</label><select id="u-plan"></select></div>
                 <div class="form-group"><label>Credenciais DB</label><select id="u-db" required></select></div>
                 <div class="form-group"><label>Loja (ID)</label><input type="number" id="u-store" value="1" required></div>
                 <div class="form-group" style="display:flex; align-items:center; gap:8px;">
@@ -219,6 +226,7 @@ const UI = {
 
         // Populate selects
         document.getElementById('u-role').innerHTML = '<option value="">Sem Role</option>' + State.allRoles.map(r => `<option value="${r.id}">${r.name}</option>`).join('');
+        document.getElementById('u-plan').innerHTML = '<option value="">Plano Gratuito (Free)</option>' + State.allPlans.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
         document.getElementById('u-db').innerHTML = State.allCreds.map(c => `<option value="${c.id}">${c.database} (${c.host})</option>`).join('');
 
         if (id) {
@@ -237,6 +245,7 @@ const UI = {
         document.getElementById('u-role').value = u.roleId || '';
         document.getElementById('u-db').value = u.dbCredentialsId;
         document.getElementById('u-store').value = u.storeId;
+        document.getElementById('u-plan').value = u.planId || '';
         document.getElementById('u-status').checked = u.status;
     },
     toggleInvite(userId) {
@@ -255,6 +264,7 @@ const UI = {
         const data = {
             user: document.getElementById('u-name').value,
             roleId: document.getElementById('u-role').value || null,
+            planId: document.getElementById('u-plan').value || null,
             dbCredentialsId: document.getElementById('u-db').value,
             storeId: parseInt(document.getElementById('u-store').value),
             status: document.getElementById('u-status').checked

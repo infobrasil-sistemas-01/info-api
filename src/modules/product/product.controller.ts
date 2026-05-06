@@ -24,7 +24,7 @@ import { min } from 'date-fns';
 
 @Controller('products')
 export class ProductController {
-  constructor(private readonly productService: ProductService) {}
+  constructor(private readonly productService: ProductService) { }
 
   @Get()
   @UseGuards(JwtAuthGuard, PermissionsGuard)
@@ -116,10 +116,6 @@ export class ProductController {
 
     if (!credentialsId) {
       throw new Error('Credentials ID not found in token');
-    }
-
-    if (pageSize && pageSize > 25) {
-      throw new BadRequestException('pageSize cannot exceed 25');
     }
 
     return this.productService.get(

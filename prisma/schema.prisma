@@ -17,11 +17,40 @@ model User {
   updatedAt       DateTime      @updatedAt @map("updated_at")
   storeId         Int           @default(1) @map("store_id")
   roleId          String?       @map("role_id")
+  planId          String?       @map("plan_id")
   dbCredentials   DbCredentials @relation(fields: [dbCredentialsId], references: [id])
   role            Role?         @relation(fields: [roleId], references: [id])
+  plan            Plan?         @relation(fields: [planId], references: [id])
   invitation      UserInvitation?
+  requestLogs     RequestLog[]
 
   @@map("users")
+}
+
+model Plan {
+  id               String   @id @default(uuid())
+  name             String   @unique
+  reqMin           Int      @map("req_min")
+  reqMonth         Int      @map("req_month")
+  maxPageSize      Int      @map("max_page_size")
+  maxDateRangeDays Int      @map("max_date_range_days")
+  users            User[]
+
+  @@map("plans")
+}
+
+model RequestLog {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  method    String
+  path      String
+  status    Int
+  ip        String?
+  createdAt DateTime @default(now()) @map("created_at")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@map("request_logs")
 }
 
 model UserInvitation {

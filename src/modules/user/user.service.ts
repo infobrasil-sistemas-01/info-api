@@ -148,6 +148,8 @@ export class UserService {
         dbCredentialsId: true,
         storeId: true,
         createdAt: true,
+        planId: true,
+        plan: { select: { name: true } },
         invitation: true,
       },
       orderBy: { user: 'asc' },
