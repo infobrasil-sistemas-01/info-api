@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.2.5](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.2.4...v1.2.5) (2026-05-06)
+
+
+### Features
+
+* invite management ([0bbcf01](https://github.com/infobrasil-sistemas/info-vendas-api/commit/0bbcf01e9deb27b8784f1f5f0940d3787878c36f))
+
 ## [1.2.4](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.2.3...v1.2.4) (2026-05-06)
 
 
