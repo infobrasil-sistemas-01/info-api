@@ -78,7 +78,10 @@
             <div class="tabs">
                 <button class="tab-btn active" onclick="UI.switchTab('usage')">Meu Plano e Uso</button>
                 <button class="tab-btn" onclick="UI.switchTab('permissions')">Minhas Permissões</button>
-                <button class="tab-btn" onclick="UI.switchTab('upgrade')">Upgrade</button>
+                <!-- 
+                <button class="tab-btn" onclick="UI.switchTab('upgrade')">Upgrade</button> 
+                Desabilitado enquanto os planos não estiverem definidos pelo time comercial.
+                -->
                 <button class="tab-btn" onclick="UI.switchTab('glossary')">Glossário</button>
                 <button class="tab-btn" onclick="UI.switchTab('security')">Segurança</button>
             </div>
@@ -213,7 +216,8 @@
                                         <li><strong>Limite Mensal:</strong> Controla a cota de uso conforme o seu plano
                                             contratado.</li>
                                         <li><strong>Excedeu?</strong> A API retornará o status
-                                            <code>429 Too Many Requests</code>.</li>
+                                            <code>429 Too Many Requests</code>.
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -227,7 +231,8 @@
                                     <p><strong>RBAC:</strong> Role Based Access Control. Significa que seu acesso é
                                         baseado em permissões específicas atreladas ao seu usuário.</p>
                                     <p><strong>Endpoints:</strong> São os endereços da API (ex: <code>/products</code>,
-                                        <code>/orders</code>). Cada um representa um recurso do ERP.</p>
+                                        <code>/orders</code>). Cada um representa um recurso do ERP.
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -240,26 +245,31 @@
                 <div class="security-container">
                     <div class="card security-card">
                         <h2><i class='bx bx-shield-quarter'></i> Segurança e Credenciais</h2>
-                        <p class="security-intro">Gerencie a segurança da sua integração e rotacione suas chaves de acesso.</p>
+                        <p class="security-intro">Gerencie a segurança da sua integração e rotacione suas chaves de
+                            acesso.</p>
 
                         <div class="warning-box">
                             <i class='bx bx-error-alt'></i>
                             <div class="warning-text">
-                                <strong>Atenção:</strong> Ao rotacionar sua senha, a anterior será invalidada imediatamente. 
-                                Você deverá atualizar as configurações em seu ERP ou Integrador para não interromper a sincronização.
+                                <strong>Atenção:</strong> Ao rotacionar sua senha, a anterior será invalidada
+                                imediatamente.
+                                Você deverá atualizar as configurações em seu ERP ou Integrador para não interromper a
+                                sincronização.
                             </div>
                         </div>
 
                         <div class="rotation-section">
                             <h3>Rotação de Chave de Acesso</h3>
                             <p>Gere uma nova senha aleatória e segura para sua integração.</p>
-                            
+
                             <div class="rotation-reasons">
                                 <h4>Quando devo rotacionar?</h4>
                                 <ul>
                                     <li><i class='bx bx-check'></i> Suspeita de vazamento da senha atual.</li>
-                                    <li><i class='bx bx-check'></i> Saída de um colaborador que tinha acesso às chaves.</li>
-                                    <li><i class='bx bx-check'></i> Boa prática de segurança (rotação periódica a cada 90 dias).</li>
+                                    <li><i class='bx bx-check'></i> Saída de um colaborador que tinha acesso às chaves.
+                                    </li>
+                                    <li><i class='bx bx-check'></i> Boa prática de segurança (rotação periódica a cada
+                                        90 dias).</li>
                                     <li><i class='bx bx-check'></i> Auditoria de conformidade.</li>
                                 </ul>
                             </div>
@@ -284,7 +294,7 @@
                                     </div>
                                 </div>
                                 <p class="important-note">
-                                    <strong>IMPORTANTE:</strong> Esta senha será exibida <u>apenas esta vez</u>. 
+                                    <strong>IMPORTANTE:</strong> Esta senha será exibida <u>apenas esta vez</u>.
                                     Certifique-se de copiá-la e salvá-la em um local seguro.
                                 </p>
                             </div>
