@@ -14,12 +14,14 @@ RUN npx prisma generate
 COPY . .
 RUN npm run build
 
-RUN apk add --no-cache curl
+
 
 # ---------- PRODUCTION STAGE ----------
 FROM node:20-alpine
 
 WORKDIR /app
+
+RUN apk add --no-cache curl
 
 COPY package*.json ./
 COPY prisma ./prisma/
