@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.3.0](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.2.6...v1.3.0) (2026-05-07)
+
+
+### Features
+
+* add rotate password to client ([17b09be](https://github.com/infobrasil-sistemas/info-vendas-api/commit/17b09be30283f0dce36588f106f0ebccd34fb31f))
+* vpn guard on admin endpoints ([3d71064](https://github.com/infobrasil-sistemas/info-vendas-api/commit/3d7106469f2224752a8e4ef55399881457a9d777))
+
+
+### Bug Fixes
+
+* action btns on admin panel ([f9c4d0d](https://github.com/infobrasil-sistemas/info-vendas-api/commit/f9c4d0d7003b5b4262d8e7b69bb7f03f21652eaa))
+* auto logout to clients in admin ([d05ed8b](https://github.com/infobrasil-sistemas/info-vendas-api/commit/d05ed8bb1b038a9ddd31c9656a93027b1d4e49c1))
+* close buttons on modals ([77a97bf](https://github.com/infobrasil-sistemas/info-vendas-api/commit/77a97bf1a2dafe7f053c1bc74b22957b788675af))
+* icon on client panel ([797c134](https://github.com/infobrasil-sistemas/info-vendas-api/commit/797c1344acdb2cb03b6b6b8e8c3495349a5285ef))
+* permissions block on creation role ([528c2bd](https://github.com/infobrasil-sistemas/info-vendas-api/commit/528c2bde644a7d7b12f342abd760bfeae9b41064))
+* remove vpn guard && add docs ([9ec30c1](https://github.com/infobrasil-sistemas/info-vendas-api/commit/9ec30c1481b173447b7b5f521ad61df9097d8865))
+* setup password ([4e85a08](https://github.com/infobrasil-sistemas/info-vendas-api/commit/4e85a087691ec1651750a3d84522c0493a1ffadd))
+
 ## [1.2.6](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.2.4...v1.2.6) (2026-05-06)
 
 
