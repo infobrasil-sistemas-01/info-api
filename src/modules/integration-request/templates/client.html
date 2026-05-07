@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Área do Cliente | InfoAPI</title>
+    <link rel="icon" type="image/x-icon" href="/integration/assets/favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="/integration/assets/client.css">
@@ -39,8 +40,10 @@
         <div class="top-announcement">
             <div class="announcement-content">
                 <i class='bx bx-book-open'></i>
-                <span>Bem-vindo à InfoAPI! Comece explorando nossa <strong>Documentação Técnica</strong> para realizar sua primeira integração.</span>
-                <a href="/docs" target="_blank" class="announcement-link">Abrir Docs <i class='bx bx-right-arrow-alt'></i></a>
+                <span>Bem-vindo à InfoAPI! Comece explorando nossa <strong>Documentação Técnica</strong> para realizar
+                    sua primeira integração.</span>
+                <a href="/docs" target="_blank" class="announcement-link">Abrir Docs <i
+                        class='bx bx-right-arrow-alt'></i></a>
             </div>
         </div>
 
@@ -150,7 +153,7 @@
                     <div class="card glossary-card">
                         <h2>📖 Glossário Técnico</h2>
                         <p class="glossary-intro">Entenda os conceitos fundamentais para integrar com a nossa API.</p>
-                        
+
                         <div class="accordion">
                             <div class="accordion-item">
                                 <button class="accordion-header" onclick="UI.toggleAccordion(this)">
@@ -158,10 +161,13 @@
                                     <i class='bx bx-chevron-down'></i>
                                 </button>
                                 <div class="accordion-content">
-                                    <p>O JWT é um padrão para transmissão segura de informações entre partes como um objeto JSON. Na nossa API, ele é o "crachá" que você usa após o login.</p>
+                                    <p>O JWT é um padrão para transmissão segura de informações entre partes como um
+                                        objeto JSON. Na nossa API, ele é o "crachá" que você usa após o login.</p>
                                     <ul>
-                                        <li><strong>Stateless:</strong> O servidor não precisa guardar sua sessão, o próprio token carrega seus dados.</li>
-                                        <li><strong>Como usar:</strong> Envie o token em todas as requisições no cabeçalho <code>Authorization</code> com o prefixo <code>Bearer</code>.</li>
+                                        <li><strong>Stateless:</strong> O servidor não precisa guardar sua sessão, o
+                                            próprio token carrega seus dados.</li>
+                                        <li><strong>Como usar:</strong> Envie o token em todas as requisições no
+                                            cabeçalho <code>Authorization</code> com o prefixo <code>Bearer</code>.</li>
                                     </ul>
                                     <div class="code-example">
                                         <code>Authorization: Bearer eyJhbGciOiJIUzI1Ni...</code>
@@ -175,11 +181,13 @@
                                     <i class='bx bx-chevron-down'></i>
                                 </button>
                                 <div class="accordion-content">
-                                    <p>É o método usado apenas na rota de <strong>Login</strong> para obter seu token JWT. Ele consiste em codificar seu usuário e senha em Base64.</p>
+                                    <p>É o método usado apenas na rota de <strong>Login</strong> para obter seu token
+                                        JWT. Ele consiste em codificar seu usuário e senha em Base64.</p>
                                     <div class="steps">
                                         <p><strong>Como criar o token Basic:</strong></p>
                                         <ol>
-                                            <li>Junte seu usuário e senha com dois pontos: <code>usuario:senha</code></li>
+                                            <li>Junte seu usuário e senha com dois pontos: <code>usuario:senha</code>
+                                            </li>
                                             <li>Codifique essa string para Base64.</li>
                                             <li>Envie no cabeçalho <code>Authorization: Basic [TOKEN_BASE64]</code></li>
                                         </ol>
@@ -196,11 +204,15 @@
                                     <i class='bx bx-chevron-down'></i>
                                 </button>
                                 <div class="accordion-content">
-                                    <p>Para garantir a estabilidade do servidor Firebird, limitamos a frequência de requisições.</p>
+                                    <p>Para garantir a estabilidade do servidor Firebird, limitamos a frequência de
+                                        requisições.</p>
                                     <ul>
-                                        <li><strong>Limite por Minuto:</strong> Evita picos de tráfego que podem travar o banco.</li>
-                                        <li><strong>Limite Mensal:</strong> Controla a cota de uso conforme o seu plano contratado.</li>
-                                        <li><strong>Excedeu?</strong> A API retornará o status <code>429 Too Many Requests</code>.</li>
+                                        <li><strong>Limite por Minuto:</strong> Evita picos de tráfego que podem travar
+                                            o banco.</li>
+                                        <li><strong>Limite Mensal:</strong> Controla a cota de uso conforme o seu plano
+                                            contratado.</li>
+                                        <li><strong>Excedeu?</strong> A API retornará o status
+                                            <code>429 Too Many Requests</code>.</li>
                                     </ul>
                                 </div>
                             </div>
@@ -211,8 +223,10 @@
                                     <i class='bx bx-chevron-down'></i>
                                 </button>
                                 <div class="accordion-content">
-                                    <p><strong>RBAC:</strong> Role Based Access Control. Significa que seu acesso é baseado em permissões específicas atreladas ao seu usuário.</p>
-                                    <p><strong>Endpoints:</strong> São os endereços da API (ex: <code>/products</code>, <code>/orders</code>). Cada um representa um recurso do ERP.</p>
+                                    <p><strong>RBAC:</strong> Role Based Access Control. Significa que seu acesso é
+                                        baseado em permissões específicas atreladas ao seu usuário.</p>
+                                    <p><strong>Endpoints:</strong> São os endereços da API (ex: <code>/products</code>,
+                                        <code>/orders</code>). Cada um representa um recurso do ERP.</p>
                                 </div>
                             </div>
                         </div>
