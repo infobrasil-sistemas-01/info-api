@@ -183,16 +183,22 @@ document.addEventListener('DOMContentLoaded', () => {
 // --- UI Interactions & Modals ---
 const UI = {
     setup() {
-        const loginContainer = document.getElementById('login-container');
-        if (loginContainer) loginContainer.classList.add('hidden');
-        
-        const adminWrapper = document.getElementById('admin-wrapper');
-        if (adminWrapper) adminWrapper.classList.remove('hidden');
-        
-        document.getElementById('user-display').innerText = State.currentUser.username;
-
         const canViewRequests = State.currentUser.permissions.includes('integration-request.view');
         const canViewUsers = State.currentUser.permissions.includes('core.user.view');
+
+        // Security check: If user has no business here, send them to the Client Portal
+        if (!canViewRequests && !canViewUsers) {
+            window.location.href = '/integration/client';
+            return;
+        }
+
+        const loginContainer = document.getElementById('login-container');
+        if (loginContainer) loginContainer.classList.add('hidden');
+
+        const adminWrapper = document.getElementById('admin-wrapper');
+        if (adminWrapper) adminWrapper.classList.remove('hidden');
+
+        document.getElementById('user-display').innerText = State.currentUser.username;
 
         if (canViewUsers) {
             document.getElementById('tab-users').classList.remove('hidden');
