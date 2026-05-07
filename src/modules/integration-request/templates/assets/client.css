@@ -435,9 +435,46 @@ header {
     border: 1px solid var(--border);
 }
 
-/* PERMISSIONS */
-.role-name { font-size: 2rem; font-weight: 700; margin-bottom: 24px; }
-.permissions-list { display: flex; flex-wrap: wrap; gap: 10px; }
+/* PERMISSIONS TAB */
+#tab-permissions .card {
+    padding: 0;
+    background: none;
+    border: none;
+}
+
+.perm-group {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 1.5rem;
+}
+
+.perm-group h4 {
+    color: var(--primary);
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.perm-group h4::before {
+    content: '';
+    display: block;
+    width: 4px;
+    height: 16px;
+    background: var(--primary);
+    border-radius: 2px;
+}
+
+.perm-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
 .perm-tag {
     background: rgba(16, 185, 129, 0.1);
     color: #34d399;

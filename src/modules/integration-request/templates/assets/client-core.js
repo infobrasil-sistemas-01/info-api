@@ -24,17 +24,22 @@ const Translations = {
         'setup': 'Configurar'
     },
     translate(perm) {
-        // Remove prefixos core. ou tenant.
         let clean = perm.replace(/^(core|tenant)\./, '');
-
         const parts = clean.split('.');
         if (parts.length >= 2) {
             const mod = this.modules[parts[0]] || parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
             const act = this.actions[parts[1]] || parts[1].charAt(0).toUpperCase() + parts[1].slice(1);
             return `${mod}: ${act}`;
         }
-
         return clean.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    },
+    translateAction(perm) {
+        let clean = perm.replace(/^(core|tenant)\./, '');
+        const parts = clean.split('.');
+        if (parts.length >= 2) {
+            return this.actions[parts[1]] || parts[1].charAt(0).toUpperCase() + parts[1].slice(1);
+        }
+        return this.translate(perm);
     }
 };
 
@@ -81,9 +86,27 @@ const UI = {
         document.getElementById('user-avatar').textContent = (user.username || 'U').charAt(0).toUpperCase();
         document.getElementById('user-role-name').textContent = user.roles && user.roles.length > 0 ? user.roles[0].name : 'Sem Cargo';
 
-        // Permissões
+        // Agrupamento de Permissões
+        const grouped = {};
+        user.permissions.forEach(p => {
+            const clean = p.replace(/^(core|tenant)\./, '');
+            const resource = clean.split('.')[0];
+            if (!grouped[resource]) grouped[resource] = [];
+            grouped[resource].push(p);
+        });
+
         const list = document.getElementById('permissions-list');
-        list.innerHTML = user.permissions.map(p => `<span class="perm-tag">${Translations.translate(p)}</span>`).join('');
+        list.innerHTML = Object.entries(grouped).map(([resource, perms]) => {
+            const title = Translations.modules[resource] || resource.charAt(0).toUpperCase() + resource.slice(1);
+            return `
+                <div class="perm-group">
+                    <h4>${title}</h4>
+                    <div class="perm-items">
+                        ${perms.map(p => `<span class="perm-tag">${Translations.translateAction(p)}</span>`).join('')}
+                    </div>
+                </div>
+            `;
+        }).join('');
 
         await this.loadStats();
         this.loadPlans();
@@ -181,7 +204,7 @@ const UI = {
     toggleAccordion(header) {
         const item = header.parentElement;
         const isActive = item.classList.contains('active');
-        
+
         // Fecha outros itens (estilo Sanfona)
         document.querySelectorAll('.accordion-item').forEach(i => i.classList.remove('active'));
 
