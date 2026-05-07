@@ -205,4 +205,28 @@ export class UserService {
       where: { id },
     });
   }
+
+  async rotatePassword(userId: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new NotFoundException('Usuário não encontrado');
+    }
+
+    const plainPassword = generateApiPassword();
+    const passwordHash = await argon2.hash(plainPassword);
+
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { passwordHash },
+    });
+
+    this.logger.log(`Credenciais rotacionadas para o usuário: ${user.user}`);
+
+    return {
+      password: plainPassword,
+    };
+  }
 }

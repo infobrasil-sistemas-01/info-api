@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiExcludeController, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -56,5 +57,11 @@ export class UserController {
   @ApiOperation({ summary: 'Excluir um usuário' })
   remove(@Param('id') id: string) {
     return this.userService.remove(id);
+  }
+
+  @Post('me/rotate-password')
+  @ApiOperation({ summary: 'Rotacionar senha do usuário logado' })
+  rotateMe(@Request() req: any) {
+    return this.userService.rotatePassword(req.user.sub);
   }
 }

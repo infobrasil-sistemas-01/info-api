@@ -211,6 +211,43 @@ const UI = {
         if (!isActive) {
             item.classList.add('active');
         }
+    },
+    async confirmRotation() {
+        const confirmed = confirm("TEM CERTEZA? Sua senha atual deixará de funcionar imediatamente em todos os sistemas integrados.");
+        if (!confirmed) return;
+
+        const btn = document.querySelector('.btn-rotate');
+        const originalHtml = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i> Processando...";
+
+        try {
+            const res = await fetch(`${API_URL}/users/me/rotate-password`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${Auth.getToken()}` }
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                document.getElementById('rotation-action-box').classList.add('hidden');
+                document.getElementById('new-password-box').classList.remove('hidden');
+                document.getElementById('new-password-value').textContent = data.password;
+            } else {
+                alert('Erro ao rotacionar senha. Tente novamente mais tarde.');
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+            }
+        } catch (e) {
+            alert('Erro de conexão.');
+            btn.disabled = false;
+            btn.innerHTML = originalHtml;
+        }
+    },
+    copyNewPassword() {
+        const pass = document.getElementById('new-password-value').textContent;
+        navigator.clipboard.writeText(pass).then(() => {
+            alert('Senha copiada com sucesso! Guarde-a em local seguro.');
+        });
     }
 };
 
