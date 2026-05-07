@@ -663,6 +663,29 @@ tr:last-child td {
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.rejection-box {
+    margin-top: 10px;
+    font-size: 0.75rem;
+    color: #fca5a5;
+    background: rgba(239, 68, 68, 0.1);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    line-height: 1.4;
+    width: 100%;
+}
+
+.rejection-box-title {
+    color: #ef4444;
+    text-transform: uppercase;
+    font-size: 0.65rem;
+    display: block;
+    margin-bottom: 2px;
+    font-weight: 700;
+}
+
 .invite-details-box {
     padding: 16px 24px;
     background: rgba(0, 0, 0, 0.2) !important;

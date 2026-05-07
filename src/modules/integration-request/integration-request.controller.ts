@@ -146,7 +146,7 @@ export class IntegrationRequestController {
         }
     }
 
-    @Get()
+    @Get('list')
     @UseGuards(JwtAuthGuard, PermissionsGuard)
     @RequirePermissions({ anyOf: ['integration-request.view'] })
     @ApiOperation({ summary: 'Lista todas as solicitações (Requer autenticação)' })

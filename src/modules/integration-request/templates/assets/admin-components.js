@@ -30,8 +30,9 @@ const Components = {
                     <div>
                         <span class="status ${req.status.toLowerCase()}">${translateStatus(req.status)}</span>
                         ${req.status === 'REJECTED' && req.rejectionReason ? `
-                            <div style="margin-top: 8px; font-size: 0.75rem; color: var(--danger); background: #fef2f2; padding: 4px 8px; border-radius: 4px; border: 1px solid #fee2e2;">
-                                <strong>Motivo:</strong> ${req.rejectionReason}
+                            <div class="rejection-box">
+                                <strong class="rejection-box-title">Motivo da Recusa</strong> 
+                                ${req.rejectionReason}
                             </div>
                         ` : ''}
                     </div>
@@ -240,6 +241,89 @@ const Components = {
                     <thead><tr><th>Host</th><th>Database</th><th>Porta</th><th>Usuário</th><th>DB ID</th><th>Ações</th></tr></thead>
                     <tbody id="creds-table-body">${creds.map(Components.CredRow).join('')}</tbody>
                 </table>
+            </div>
+        </div>
+    `,
+    RequestFilterTabs: (activeFilter = 'ALL') => {
+        const tabs = [
+            { id: 'ALL', label: 'Todas', icon: 'bx-list-ul' },
+            { id: 'PENDING', label: 'Pendentes', icon: 'bx-time-five' },
+            { id: 'AWAITING_CONFIRMATION', label: 'Aguardando E-mail', icon: 'bx-envelope' },
+            { id: 'APPROVED', label: 'Aprovadas', icon: 'bx-check-circle' },
+            { id: 'REJECTED', label: 'Recusadas', icon: 'bx-x-circle' }
+        ];
+
+        return `
+            <div class="filter-tabs" style="display: flex; gap: 10px; margin-bottom: 2rem; overflow-x: auto; padding-bottom: 5px;">
+                ${tabs.map(t => `
+                    <button class="filter-tab ${activeFilter === t.id ? 'active' : ''}" 
+                            onclick="switchRequestFilter('${t.id}')"
+                            style="
+                                display: flex; 
+                                align-items: center; 
+                                gap: 8px; 
+                                padding: 8px 16px; 
+                                border-radius: 10px; 
+                                border: 1px solid ${activeFilter === t.id ? 'var(--primary)' : 'var(--border)'}; 
+                                background: ${activeFilter === t.id ? 'rgba(16, 185, 129, 0.1)' : 'var(--card-bg)'}; 
+                                color: ${activeFilter === t.id ? 'var(--primary)' : 'var(--text-muted)'}; 
+                                cursor: pointer;
+                                white-space: nowrap;
+                                font-size: 0.9rem;
+                                font-weight: 500;
+                                transition: all 0.2s;
+                            ">
+                        <i class='bx ${t.icon}'></i>
+                        ${t.label}
+                    </button>
+                `).join('')}
+            </div>
+        `;
+    },
+    LinksGrid: () => `
+
+    <div class="links-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; padding: 1rem 0;">
+        <div class="card link-card" style="display: flex; flex-direction: column; gap: 1rem; padding: 2rem;">
+            <div style="font-size: 2.5rem; color: var(--primary);"><i class='bx bx-file-blank'></i></div>
+            <h3 style="margin: 0;">Formulário de Solicitação</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem; flex-grow: 1;">Link direto para o formulário público de novas solicitações de integração.</p>
+            <a href="/integration/form" target="_blank" class="btn btn-outline" style="text-align: center; text-decoration: none;">Abrir Formulário</a>
+        </div>      
+    
+        <div class="card link-card" style="display: flex; flex-direction: column; gap: 1rem; padding: 2rem; transition: transform 0.3s;">
+            <div style="font-size: 2.5rem; color: var(--primary);"><i class='bx bx-book-content'></i></div>
+            <h3 style="margin: 0;">Documentação Técnica</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem; flex-grow: 1;">Referência completa da API (Swagger). Endpoints, parâmetros e autenticação para desenvolvedores.</p>
+            <a href="/docs" target="_blank" class="btn btn-outline" style="text-align: center; text-decoration: none;">Abrir Documentação</a>
+        </div>
+
+        <div class="card link-card" style="display: flex; flex-direction: column; gap: 1rem; padding: 2rem;">
+            <div style="font-size: 2.5rem; color: var(--primary);"><i class='bx bx-rocket'></i></div>
+            <h3 style="margin: 0;">Landing Page (Pública)</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem; flex-grow: 1;">A vitrine do serviço. Ideal para apresentar a API para novos clientes e parceiros.</p>
+            <a href="/integration" target="_blank" class="btn btn-outline" style="text-align: center; text-decoration: none;">Ver Landing Page</a>
+        </div>
+
+        <div class="card link-card" style="display: flex; flex-direction: column; gap: 1rem; padding: 2rem;">
+            <div style="font-size: 2.5rem; color: var(--primary);"><i class='bx bx-user-pin'></i></div>
+            <h3 style="margin: 0;">Portal do Cliente</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem; flex-grow: 1;">Interface onde o cliente gerencia suas permissões, chaves de segurança e visualiza seu plano.</p>
+                <a href="/integration/client" target="_blank" class="btn btn-outline" style="text-align: center; text-decoration: none;">Acessar Portal</a>
+            </div>
+
+            <div class="card link-card" style="display: flex; flex-direction: column; gap: 1rem; padding: 2rem;">
+                <div style="font-size: 2.5rem; color: var(--primary);"><i class='bx bx-pulse'></i></div>
+                <h3 style="margin: 0;">Página de Status</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem; flex-grow: 1;">Monitoramento em tempo real da saúde dos servidores e serviços de integração.</p>
+                <a href="https://infobrasil.statuspage.one/" target="_blank" class="btn btn-outline" style="text-align: center; text-decoration: none;">Verificar Status</a>
+            </div>
+
+
+            <div class="card link-card" style="display: flex; flex-direction: column; gap: 1rem; padding: 2rem; border: 1px dashed var(--primary); background: rgba(16, 185, 129, 0.05);">
+                <div style="font-size: 2.5rem; color: var(--primary);"><i class='bx bx-support'></i></div>
+                <h3 style="margin: 0;">Suporte Interno</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem; flex-grow: 1;">Dúvidas técnicas ou problemas com o painel administrativo? Acione o time de desenvolvimento.</p>
+                <a href="mailto:suporte@infobrasilsistemas.com.br" class="btn btn-primary" style="text-align: center; text-decoration: none;">Enviar E-mail</a>
             </div>
         </div>
     `

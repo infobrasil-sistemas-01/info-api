@@ -5,7 +5,9 @@ const State = {
     allPermissions: [],
     allCreds: [],
     allUsers: [],
-    allPlans: []
+    allPlans: [],
+    allRequests: [],
+    currentRequestFilter: 'ALL'
 };
 
 const Data = {
@@ -52,11 +54,19 @@ const Data = {
         }
     },
     async fetchRequests() {
-        const res = await this.fetch('/integration');
-        if (res.ok) {
-            const data = await res.json();
+        try {
+            const res = await this.fetch('/integration/list');
+            if (res.ok) {
+                State.allRequests = await res.json();
+                UI.renderRequests();
+            }
+        } catch (error) {
+            console.error('Erro ao buscar solicitações:', error);
             document.getElementById('section-requests').innerHTML = `
-                <div class="requests-grid">${data.map(Components.RequestCard).join('')}</div>
+                <div class="card" style="text-align: center; padding: 2rem; color: var(--danger);">
+                    <i class='bx bx-error-circle' style="font-size: 2rem;"></i>
+                    <p>Erro ao carregar solicitações. Verifique o console.</p>
+                </div>
             `;
         }
     },
@@ -228,19 +238,40 @@ const UI = {
 
         document.getElementById('user-display').innerText = State.currentUser.username;
 
-        if (canViewUsers) {
-            document.getElementById('tab-users').classList.remove('hidden');
-        }
+        // Default tab
+        switchTab('links');
 
         if (canViewRequests) {
             document.getElementById('tab-requests').classList.remove('hidden');
-            switchTab('requests');
+            switchTab('requests'); // High priority
         }
         if (canViewUsers) {
             ['tab-users', 'tab-roles', 'tab-creds'].forEach(id => document.getElementById(id).classList.remove('hidden'));
             if (!canViewRequests) switchTab('users');
         }
         Data.fetchAll();
+    },
+    renderRequests() {
+        const section = document.getElementById('section-requests');
+        const filtered = State.currentRequestFilter === 'ALL'
+            ? State.allRequests
+            : State.allRequests.filter(r => r.status === State.currentRequestFilter);
+
+        let content = Components.RequestFilterTabs(State.currentRequestFilter);
+
+        if (filtered.length === 0) {
+            content += `
+                <div class="card" style="text-align: center; padding: 4rem; background: rgba(16, 185, 129, 0.05); border: 1px dashed var(--primary);">
+                    <div style="font-size: 4rem; color: var(--primary); margin-bottom: 1.5rem;"><i class='bx bx-check-circle'></i></div>
+                    <h2 style="color: #fff; margin-bottom: 1rem;">Tudo limpo por aqui!</h2>
+                    <p style="color: var(--text-muted);">Nenhuma solicitação encontrada com este filtro.</p>
+                </div>
+            `;
+        } else {
+            content += `<div class="requests-grid">${filtered.map(Components.RequestCard).join('')}</div>`;
+        }
+
+        section.innerHTML = content;
     },
     toggleDetails(id) {
         const el = document.getElementById(`details-${id}`);
@@ -478,6 +509,17 @@ function switchTab(tab) {
     document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
     const btn = document.querySelector(`.tab-btn[onclick*="${tab}"]`);
     if (btn) btn.classList.add('active');
+
     const section = document.getElementById(`section-${tab}`);
-    if (section) section.classList.remove('hidden');
+    if (section) {
+        section.classList.remove('hidden');
+        if (tab === 'links') {
+            section.innerHTML = Components.LinksGrid();
+        }
+    }
+}
+
+function switchRequestFilter(status) {
+    State.currentRequestFilter = status;
+    UI.renderRequests();
 }
