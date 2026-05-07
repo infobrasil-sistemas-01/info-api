@@ -23,6 +23,8 @@ import { DbCredentialsModule } from './modules/db-credentials/db-credentials.mod
 import { PlanModule } from './modules/plan/plan.module';
 import { PlanLimitInterceptor } from './modules/plan/interceptors/plan-limit.interceptor';
 
+import { AppController } from './app.controller';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -44,7 +46,7 @@ import { PlanLimitInterceptor } from './modules/plan/interceptors/plan-limit.int
     DbCredentialsModule,
     PlanModule,
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [
     GlobalLoggerService,
     IpBlocklistService,

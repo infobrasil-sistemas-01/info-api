@@ -19,7 +19,7 @@ async function bootstrap() {
 
   app.enableCors();
   app.setGlobalPrefix('api/v1', {
-    exclude: ['integration', 'integration/(.*)'],
+    exclude: ['integration', 'integration/(.*)', 'favicon.ico'],
   });
 
 
