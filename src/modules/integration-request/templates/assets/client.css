@@ -133,6 +133,62 @@ body {
     font-size: 0.9rem;
 }
 
+/* TOP ANNOUNCEMENT */
+.top-announcement {
+    background: linear-gradient(90deg, #064e3b 0%, #10b981 100%);
+    color: white;
+    padding: 10px 0;
+    width: 100%;
+    flex-shrink: 0;
+    margin-bottom: 1rem;
+}
+
+.announcement-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.9rem;
+}
+
+.announcement-content i {
+    font-size: 1.2rem;
+}
+
+.announcement-link {
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 4px 12px;
+    border-radius: 99px;
+    transition: all 0.3s ease;
+    margin-left: 10px;
+}
+
+.announcement-link:hover {
+    background: white;
+    color: var(--primary);
+}
+
+@media (max-width: 768px) {
+    .announcement-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 8px;
+    }
+
+    .announcement-link {
+        margin-left: 0;
+    }
+}
+
 /* APP LAYOUT - HEADER */
 header {
     width: 100%;
