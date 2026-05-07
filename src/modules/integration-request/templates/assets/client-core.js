@@ -73,7 +73,7 @@ const UI = {
         document.getElementById('login-container').classList.remove('hidden');
         document.getElementById('app-container').classList.add('hidden');
     },
-    initApp(user) {
+    async initApp(user) {
         document.getElementById('login-container').classList.add('hidden');
         document.getElementById('app-container').classList.remove('hidden');
 
@@ -85,7 +85,7 @@ const UI = {
         const list = document.getElementById('permissions-list');
         list.innerHTML = user.permissions.map(p => `<span class="perm-tag">${Translations.translate(p)}</span>`).join('');
 
-        this.loadStats();
+        await this.loadStats();
         this.loadPlans();
     },
     async loadStats() {
@@ -96,11 +96,12 @@ const UI = {
             const data = await res.json();
 
             const { limits, usage } = data;
+            this.currentPlanName = limits.name || 'Free';
 
             // Badge do Plano
             const badge = document.getElementById('user-plan-badge');
-            badge.textContent = limits.name || 'Free';
-            badge.className = `plan-badge ${limits.name?.toLowerCase() || 'free'}`;
+            badge.textContent = this.currentPlanName;
+            badge.className = `plan-badge ${this.currentPlanName.toLowerCase()}`;
 
             // Update Stats
             this.animateProgress('req-month', usage.reqsMonth, limits.reqMonth, usage.monthPercentage);
@@ -122,8 +123,10 @@ const UI = {
             const grid = document.querySelector('.upgrade-grid');
 
             grid.innerHTML = plans.map(p => {
+                const isCurrent = p.name === this.currentPlanName;
                 return `
-                    <div class="card upgrade-card ${p.name === 'Advanced' ? 'featured' : ''}">
+                    <div class="card upgrade-card ${p.name === 'Advanced' ? 'featured' : ''} ${isCurrent ? 'current' : ''}">
+                        ${isCurrent ? '<div class="current-plan-banner">SEU PLANO ATUAL</div>' : ''}
                         <div class="plan-header">
                             <h2 class="plan-title">${p.name}</h2>
                             <div class="plan-price">
