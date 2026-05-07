@@ -186,8 +186,8 @@ const UI = {
         const loginContainer = document.getElementById('login-container');
         if (loginContainer) loginContainer.classList.add('hidden');
         
-        const adminContent = document.getElementById('admin-content');
-        if (adminContent) adminContent.classList.remove('hidden');
+        const adminWrapper = document.getElementById('admin-wrapper');
+        if (adminWrapper) adminWrapper.classList.remove('hidden');
         
         document.getElementById('user-display').innerText = State.currentUser.username;
 

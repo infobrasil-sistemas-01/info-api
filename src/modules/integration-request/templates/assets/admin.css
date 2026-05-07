@@ -13,6 +13,12 @@
     --radius: 12px;
 }
 
+#admin-wrapper:not(.hidden) {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -26,7 +32,9 @@ body {
     min-height: 100vh;
 }
 
-.hidden { display: none !important; }
+.hidden {
+    display: none !important;
+}
 
 /* LOGIN SCREEN */
 #login-container {
@@ -48,13 +56,32 @@ body {
     text-align: center;
 }
 
-.brand-login { margin-bottom: 1rem; }
+.brand-login {
+    margin-bottom: 1rem;
+}
 
-.login-card h1 { font-size: 2rem; margin-bottom: 0.5rem; }
-.login-card p { color: var(--text-muted); margin-bottom: 2rem; }
+.login-card h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
 
-.form-group { text-align: left; margin-bottom: 1.5rem; }
-.form-group label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-muted); }
+.login-card p {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    text-align: left;
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
 .form-group input,
 .form-group select,
 .form-group textarea {
@@ -106,9 +133,16 @@ input[type="checkbox"] {
     outline: none !important;
     box-shadow: none !important;
 }
-.btn-primary:hover { background: var(--primary-hover); }
 
-.error-msg { color: var(--danger); margin-top: 1rem; font-size: 0.9rem; }
+.btn-primary:hover {
+    background: var(--primary-hover);
+}
+
+.error-msg {
+    color: var(--danger);
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}
 
 /* DASHBOARD COMPONENTS */
 .btn {
@@ -153,13 +187,17 @@ input[type="checkbox"] {
 
 /* Layout */
 .dashboard {
+    width: 100%;
     max-width: 1280px;
     margin: 0 auto;
     padding: 40px 20px;
+    flex: 1 0 auto;
 }
 
 /* APP LAYOUT - HEADER */
 header {
+    width: 100%;
+    flex-shrink: 0;
     background: rgba(12, 31, 24, 0.8);
     backdrop-filter: blur(12px);
     border: 1px solid var(--border);
@@ -554,9 +592,20 @@ tr:last-child td {
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.status-sent { background: rgba(16, 185, 129, 0.1); color: #34d399; }
-.status-pending { background: rgba(245, 158, 11, 0.1); color: #fbbf24; }
-.status-approved { background: rgba(16, 185, 129, 0.1); color: #34d399; }
+.status-sent {
+    background: rgba(16, 185, 129, 0.1);
+    color: #34d399;
+}
+
+.status-pending {
+    background: rgba(245, 158, 11, 0.1);
+    color: #fbbf24;
+}
+
+.status-approved {
+    background: rgba(16, 185, 129, 0.1);
+    color: #34d399;
+}
 
 .plan-badge {
     padding: 4px 10px;
@@ -566,6 +615,76 @@ tr:last-child td {
     text-transform: uppercase;
 }
 
-.plan-badge.free { background: rgba(255, 255, 255, 0.05); color: #94a3b8; }
-.plan-badge.profissional { background: rgba(14, 165, 233, 0.1); color: #38bdf8; }
-.plan-badge.enterprise { background: rgba(168, 85, 247, 0.1); color: #c084fc; }
+.plan-badge.free {
+    background: rgba(255, 255, 255, 0.05);
+    color: #94a3b8;
+}
+
+.plan-badge.profissional {
+    background: rgba(14, 165, 233, 0.1);
+    color: #38bdf8;
+}
+
+.plan-badge.enterprise {
+    background: rgba(168, 85, 247, 0.1);
+    color: #c084fc;
+}
+
+/* FOOTER */
+.app-footer {
+    width: 100%;
+    flex-shrink: 0;
+    margin-top: 4rem;
+    padding: 2rem 0;
+    border-top: 1px solid var(--border);
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.footer-info p {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.footer-links {
+    display: flex;
+    gap: 24px;
+}
+
+.footer-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: var(--primary);
+}
+
+.footer-links a i {
+    font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footer-links {
+        justify-content: center;
+    }
+}

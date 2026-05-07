@@ -35,39 +35,61 @@
         </div>
     </div>
 
-    <!-- Main Dashboard -->
-    <div id="admin-content" class="dashboard hidden">
-        <header>
-            <div class="header-content">
-                <div class="brand">
-                    <span class="brand-name">Info<span>API</span></span>
-                    <span class="brand-divider"></span>
-                    <span class="panel-name">Administração</span>
-                </div>
-                <div class="header-right">
-                    <div class="user-info">
-                        <span id="user-display" style="font-weight: 600; color: var(--text-muted); font-size: 0.9rem;"></span>
-                        <div class="avatar" style="width: 38px; height: 38px; background: var(--primary); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: white;">A</div>
+    <!-- Main Dashboard Wrapper -->
+    <div id="admin-wrapper" class="hidden">
+        <div id="admin-content" class="dashboard">
+            <header>
+                <div class="header-content">
+                    <div class="brand">
+                        <span class="brand-name">Info<span>API</span></span>
+                        <span class="brand-divider"></span>
+                        <span class="panel-name">Administração</span>
                     </div>
-                    <button class="btn-logout" onclick="Auth.logout()" title="Sair" style="background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.2); padding: 8px; border-radius: 10px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center;">
-                        <i class='bx bx-log-out bx-flip-horizontal' style="font-size: 1.3rem;"></i>
-                    </button>
+                    <div class="header-right">
+                        <div class="user-info">
+                            <span id="user-display"
+                                style="font-weight: 600; color: var(--text-muted); font-size: 0.9rem;"></span>
+                            <div class="avatar"
+                                style="width: 38px; height: 38px; background: var(--primary); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: white;">
+                                A</div>
+                        </div>
+                        <button class="btn-logout" onclick="Auth.logout()" title="Sair"
+                            style="background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.2); padding: 8px; border-radius: 10px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center;">
+                            <i class='bx bx-log-out bx-flip-horizontal' style="font-size: 1.3rem;"></i>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <nav class="tabs">
+                <div id="tab-requests" class="tab-btn hidden" onclick="switchTab('requests')">Solicitações</div>
+                <div id="tab-users" class="tab-btn hidden" onclick="switchTab('users')">Usuários</div>
+                <div id="tab-roles" class="tab-btn hidden" onclick="switchTab('roles')">Roles</div>
+                <div id="tab-creds" class="tab-btn hidden" onclick="switchTab('creds')">Credenciais DB</div>
+            </nav>
+
+            <!-- Sections -->
+            <section id="section-requests" class="tab-content hidden"></section>
+            <section id="section-users" class="tab-content hidden"></section>
+            <section id="section-roles" class="tab-content hidden"></section>
+            <section id="section-creds" class="tab-content hidden"></section>
+        </div>
+
+        <footer class="app-footer">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <p>&copy; 2026 InfoBrasil Sistemas. Todos os direitos reservados.</p>
+                </div>
+                <div class="footer-links">
+                    <a href="https://infobrasil.statuspage.one" target="_blank">
+                        <i class='bx bx-pulse'></i> Status do Sistema
+                    </a>
+                    <a href="https://www.infobrasilsistemas.com.br" target="_blank">
+                        <i class='bx bx-globe'></i> Site Oficial
+                    </a>
                 </div>
             </div>
-        </header>
-
-        <nav class="tabs">
-            <div id="tab-requests" class="tab-btn hidden" onclick="switchTab('requests')">Solicitações</div>
-            <div id="tab-users" class="tab-btn hidden" onclick="switchTab('users')">Usuários</div>
-            <div id="tab-roles" class="tab-btn hidden" onclick="switchTab('roles')">Roles</div>
-            <div id="tab-creds" class="tab-btn hidden" onclick="switchTab('creds')">Credenciais DB</div>
-        </nav>
-
-        <!-- Sections -->
-        <section id="section-requests" class="tab-content hidden"></section>
-        <section id="section-users" class="tab-content hidden"></section>
-        <section id="section-roles" class="tab-content hidden"></section>
-        <section id="section-creds" class="tab-content hidden"></section>
+        </footer>
     </div>
 
     <!-- Modals -->
