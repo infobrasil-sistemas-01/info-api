@@ -14,11 +14,12 @@ import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
 import { DbCredentialsService } from './db-credentials.service';
 import type { CreateDbCredentialsDto, UpdateDbCredentialsDto } from './dto/db-credentials.dto';
+import { VpnGuard } from 'src/infra/guards/vpn.guard';
 
 @ApiTags('DbCredentials')
 @ApiExcludeController()
 @Controller('db-credentials')
-@UseGuards(JwtAuthGuard, PermissionsGuard)
+@UseGuards(JwtAuthGuard, PermissionsGuard, VpnGuard)
 @ApiBearerAuth()
 export class DbCredentialsController {
   constructor(private readonly dbCredentialsService: DbCredentialsService) {}

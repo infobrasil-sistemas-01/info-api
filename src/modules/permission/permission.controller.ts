@@ -4,11 +4,12 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
 import { PermissionService } from './permission.service';
+import { VpnGuard } from 'src/infra/guards/vpn.guard';
 
 @ApiTags('Permission')
 @ApiExcludeController()
 @Controller('permissions')
-@UseGuards(JwtAuthGuard, PermissionsGuard)
+@UseGuards(JwtAuthGuard, PermissionsGuard, VpnGuard)
 @ApiBearerAuth()
 export class PermissionController {
   constructor(private readonly permissionService: PermissionService) { }

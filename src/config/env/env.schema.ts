@@ -32,6 +32,7 @@ export const envSchema = z.object({
   GMAIL_CLIENT_SECRET: z.string(),
   GMAIL_REFRESH_TOKEN: z.string(),
   SUPPORT_EMAIL: z.string().default('suporte@infobrasilsistemas.com.br'),
+  ALLOWED_VPN_PREFIX: z.string().default('172.26.0.'),
 });
 
 export type Env = z.infer<typeof envSchema>;
