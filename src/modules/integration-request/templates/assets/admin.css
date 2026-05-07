@@ -321,7 +321,26 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 24px;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+}
+
+.card-header h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+    letter-spacing: -0.02em;
+    flex: 1;
+}
+
+.card-header .btn {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    height: fit-content;
+    width: fit-content;
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 .status {
