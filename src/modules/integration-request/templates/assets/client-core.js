@@ -177,6 +177,17 @@ const UI = {
         });
         const activeContent = document.getElementById(`tab-${tabId}`);
         if (activeContent) activeContent.classList.add('active');
+    },
+    toggleAccordion(header) {
+        const item = header.parentElement;
+        const isActive = item.classList.contains('active');
+        
+        // Fecha outros itens (estilo Sanfona)
+        document.querySelectorAll('.accordion-item').forEach(i => i.classList.remove('active'));
+
+        if (!isActive) {
+            item.classList.add('active');
+        }
     }
 };
 
