@@ -28,11 +28,7 @@ export class AppController {
   }
 
   @Get()
-  index() {
-    return {
-      name: 'Info Vendas API',
-      version: '1.0.0',
-      status: 'OK'
-    };
+  index(@Res() res: any) {
+    return res.redirect('/integration');
   }
 }

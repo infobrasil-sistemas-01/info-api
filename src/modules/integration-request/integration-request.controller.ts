@@ -36,6 +36,13 @@ export class IntegrationRequestController {
         private readonly userService: UserService,
     ) { }
 
+    @Get('/')
+    @ApiOperation({ summary: 'Serve a landing page do serviço' })
+    serveLanding(@Res() res: Response) {
+        const path = this.getTemplatePath('landing.html');
+        return res.sendFile(path);
+    }
+
     @Get('setup-password/:token')
     @ApiOperation({ summary: 'Serve a interface de configuração de senha' })
     serveSetupPassword(@Res() res: Response) {

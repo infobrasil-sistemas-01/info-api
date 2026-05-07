@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfoAPI | Integração de Alta Performance</title>
+    <link rel="icon" type="image/x-icon" href="/integration/assets/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-hover: #059669;
+            --bg: #06110d;
+            --card-bg: #0c1f18;
+            --text: #f0fdf4;
+            --text-muted: #94a3b8;
+            --glass: rgba(16, 185, 129, 0.1);
+            --border: rgba(255, 255, 255, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Nav */
+        nav {
+            height: 70px;
+            padding: 1.5rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background: rgba(6, 17, 13, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .brand-name {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .brand-name span {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Hero */
+        .hero {
+            min-height: calc(100vh - 80px);
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding: 4rem 0;
+            background: radial-gradient(circle at 70% 30%, rgba(16, 185, 129, 0.1), transparent 40%);
+        }
+
+        .hero-content {
+            max-width: 700px;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(to bottom right, #fff 60%, var(--text-muted));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding-bottom: 10px;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.8rem 1.8rem;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #06110d;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
+        }
+
+        .btn-outline {
+            border: 1px solid var(--border);
+            color: var(--text);
+            background: var(--glass);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--primary);
+        }
+
+        /* Section Title */
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Features/Params */
+        .params {
+            padding: 8rem 0;
+            background: rgba(255, 255, 255, 0.01);
+        }
+
+        .params-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .param-card {
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .param-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .param-card i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .param-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .param-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .resource-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--glass);
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 1rem;
+            margin-right: 0.5rem;
+        }
+
+        /* Plans */
+        .plans {
+            padding: 8rem 0;
+        }
+
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .plan-card {
+            background: var(--card-bg);
+            border-radius: 32px;
+            padding: 3rem;
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .plan-card.featured {
+            border-color: var(--primary);
+            background: linear-gradient(145deg, var(--card-bg), #0f2d22);
+        }
+
+        .plan-card h3 {
+            font-size: 1.25rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .plan-price {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .plan-price span {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .plan-features {
+            list-style: none;
+            margin-bottom: 3rem;
+        }
+
+        .plan-features li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .plan-features li i {
+            color: var(--primary);
+            margin-top: 3px;
+            font-size: 1.2rem;
+        }
+
+        /* Tooltip */
+        .has-tooltip {
+            position: relative;
+            cursor: help;
+            border-bottom: 1px dotted var(--text-muted);
+        }
+
+        .tooltip {
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            background: #111;
+            color: #fff;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            width: 220px;
+            text-align: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border);
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        .tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #111 transparent transparent transparent;
+        }
+
+        .has-tooltip:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 0;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .cta-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="container">
+        <div class="brand-name">Info<span>API</span></div>
+        <div class="nav-links">
+            <a href="#params">Funcionalidades</a>
+            <a href="#plans">Planos</a>
+            <a href="/docs" target="_blank">Docs</a>
+            <a href="/integration/form" class="btn btn-outline" style="padding: 0.5rem 1.5rem;">Solicitar Acesso</a>
+        </div>
+    </nav>
+
+    <section class="hero container">
+        <div class="hero-content">
+            <h1>Conecte seu ERP ao mundo digital.</h1>
+            <p>A solução robusta e escalável da InfoBrasil para integração de dados em tempo real com seu sistema de
+                retaguarda.</p>
+            <div class="cta-group">
+                <a href="/integration/form" class="btn btn-primary">Começar Agora <i
+                        class='bx bx-right-arrow-alt'></i></a>
+                <a href="/docs" target="_blank" class="btn btn-outline"><i class='bx bx-code-alt'></i> Ver
+                    Documentação</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="ecosystem container">
+        <div class="ecosystem-grid">
+            <div class="ecosystem-text">
+                <span class="resource-tag" style="margin-bottom: 1rem;">O Coração da Integração</span>
+                <h2>Os dados do seu ERP, agora em qualquer lugar.</h2>
+                <p>A <strong>InfoAPI</strong> atua como uma camada de inteligência e segurança entre o seu banco de
+                    dados Retaguarda e o mundo externo. Esqueça integrações complexas via arquivos ou acessos diretos
+                    inseguros.</p>
+                <ul class="plan-features" style="margin-top: 2rem;">
+                    <li><i class='bx bx-check-double'></i>
+                        <div><strong>Automação:</strong> Conecte ferramentas como n8n, Zapier ou Make para automatizar
+                            fluxos.</div>
+                    </li>
+                    <li><i class='bx bx-check-double'></i>
+                        <div><strong>IA & Código:</strong> Use assistentes como Claude Code ou GitHub Copilot para ler e
+                            agir sobre dados reais.</div>
+                    </li>
+                    <li><i class='bx bx-check-double'></i>
+                        <div><strong>Ecossistema:</strong> Alimente e-commerces, aplicativos móveis e Dashboards de BI
+                            sem latência.</div>
+                    </li>
+                </ul>
+            </div>
+            <div class="ecosystem-visual">
+                <div class="visual-wrapper">
+                    <img src="/integration/assets/api_ecosystem_diagram_1778182878593.png" alt="Ecossistema InfoAPI"
+                        style="width: 100%; border-radius: 24px; border: 1px solid var(--border);">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        .ecosystem {
+            padding: 8rem 0;
+            position: relative;
+        }
+
+        .ecosystem-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .ecosystem-text h2 {
+            font-size: 2.8rem;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            color: #fff;
+        }
+
+        .ecosystem-text p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+        }
+
+        .visual-wrapper {
+            position: relative;
+            padding: 10px;
+            background: linear-gradient(145deg, rgba(16, 185, 129, 0.1), transparent);
+            border-radius: 32px;
+        }
+
+        .logo-overlay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #fff;
+            padding: 8px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-overlay img {
+            width: 32px;
+            height: 32px;
+        }
+
+        @media (max-width: 968px) {
+            .ecosystem-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .ecosystem-text {
+                order: 2;
+            }
+
+            .ecosystem-visual {
+                order: 1;
+            }
+        }
+    </style>
+
+    <section id="params" class="params">
+        <div class="container">
+            <div class="section-header">
+                <h2>Funcionalidades da API</h2>
+                <p>Nossa arquitetura garante a estabilidade do seu banco de dados através de limites inteligentes e
+                    endpoints otimizados.</p>
+            </div>
+            <div class="params-grid">
+                <div class="param-card">
+                    <i class='bx bx-shopping-bag'></i>
+                    <h3>Produtos & Estoque</h3>
+                    <p>Consulta completa de itens, saldos, preços por tabela e variações de grade em tempo real.</p>
+                    <span class="resource-tag">GET /products</span>
+                    <span class="resource-tag">GET /products/{id}</span>
+                </div>
+                <div class="param-card">
+                    <i class='bx bx-cart-alt'></i>
+                    <h3>Vendas & Pedidos</h3>
+                    <p>Integração de pedidos de venda, consulta de status de faturamento e histórico de movimentações.
+                    </p>
+                    <span class="resource-tag">POST /orders</span>
+                    <span class="resource-tag">GET /orders</span>
+                </div>
+                <div class="param-card">
+                    <i class='bx bx-credit-card-front'></i>
+                    <h3>Contas a Receber</h3>
+                    <p>Visualização de contas a receber e status com diversos filtros.</p>
+                    <span class="resource-tag">GET /account-receivable</span>
+                </div>
+            </div>
+            <div style="text-align: center;">
+                <a href="/docs" target="_blank" class="btn btn-outline">
+                    <i class='bx bx-list-ul'></i> Ver Documentação Completa (Swagger)
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="plans" class="plans container">
+        <div class="section-header">
+            <h2>Planos Flexíveis</h2>
+            <p>Escolha a capacidade ideal para a sua operação de integração.</p>
+        </div>
+        <div class="plans-grid" id="plans-grid">
+            <!-- Renderizado via JS -->
+            <p style="text-align: center; grid-column: 1/-1; color: var(--text-muted);">Carregando planos...</p>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 InfoBrasil Sistemas. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        async function loadPlans() {
+            try {
+                const res = await fetch('/api/v1/plans');
+                const plans = await res.json();
+                const grid = document.getElementById('plans-grid');
+
+                if (!plans || plans.length === 0) {
+                    grid.innerHTML = '<p style="text-align: center; grid-column: 1/-1; color: var(--text-muted);">Nenhum plano disponível no momento.</p>';
+                    return;
+                }
+
+                grid.innerHTML = plans.map((p, index) => {
+                    // Lógica sugerida pelo usuário: Primeiro plano com preço, segundos "Sob Consulta"
+                    const isConsultation = index > 0;
+                    const priceHtml = isConsultation
+                        ? 'Sob Consulta'
+                        : `R$ 0<span>/mês</span>`; // Placeholder básico para o preço do plano light
+
+                    return `
+                        <div class="plan-card ${index === 1 ? 'featured' : ''}">
+                            <h3>${p.name}</h3>
+                            <div class="plan-price">${priceHtml}</div>
+                            <ul class="plan-features">
+                                <li>
+                                    <i class='bx bx-check'></i> 
+                                    <div>
+                                        <span class="has-tooltip">
+                                            ${p.reqMonth.toLocaleString()} req/mês
+                                            <span class="tooltip">Cota total de chamadas que sua integração pode realizar mensalmente.</span>
+                                        </span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <i class='bx bx-check'></i> 
+                                    <div>
+                                        <span class="has-tooltip">
+                                            ${p.reqMin} req/minuto
+                                            <span class="tooltip">Volume máximo de chamadas simultâneas para garantir a saúde do servidor.</span>
+                                        </span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <i class='bx bx-check'></i> 
+                                    <div>
+                                        <span class="has-tooltip">
+                                            ${p.maxDateRangeDays} dias de range
+                                            <span class="tooltip">Período máximo de dias permitido em filtros de data (ex: buscar vendas).</span>
+                                        </span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <i class='bx bx-check'></i> 
+                                    <div>
+                                        <span class="has-tooltip">
+                                            Max ${p.maxPageSize} registros
+                                            <span class="tooltip">Limite de registros retornados em uma única chamada de listagem (paginação).</span>
+                                        </span>
+                                    </div>
+                                </li>
+                            </ul>
+                            <a href="/integration/form" class="btn ${index === 1 ? 'btn-primary' : 'btn-outline'}" style="width: 100%; justify-content: center;">
+                                ${isConsultation ? 'Falar com Vendas' : 'Escolher Plano'}
+                            </a>
+                        </div>
+                    `;
+                }).join('');
+
+            } catch (error) {
+                console.error('Erro ao carregar planos:', error);
+                document.getElementById('plans-grid').innerHTML = '<p style="text-align: center; grid-column: 1/-1; color: var(--danger);">Erro ao carregar planos. Tente novamente mais tarde.</p>';
+            }
+        }
+
+        loadPlans();
+    </script>
+</body>
+
+</html>

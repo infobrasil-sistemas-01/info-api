@@ -9,7 +9,6 @@ import { RegistryPrismaService } from 'src/infra/prisma/registry-prisma.service'
 @ApiBearerAuth()
 @ApiTags('Plans & Usage')
 @Controller('plans')
-@UseGuards(JwtAuthGuard)
 export class StatsController {
   constructor(
     private readonly planService: PlanService,
@@ -17,6 +16,7 @@ export class StatsController {
   ) { }
 
   @Get('stats')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Obtém estatísticas de uso e limites do plano do usuário logado' })
   async getStats(@CurrentUser() user: JwtPayload) {
     return this.planService.getUserStats(user.sub);
