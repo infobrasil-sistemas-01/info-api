@@ -163,6 +163,9 @@ const Components = {
                     <div style="display: flex; gap: 8px;">
                         ${!inv.acceptedAt ? `<button class="btn btn-outline btn-sm" onclick="Data.resendInvite('${inv.id}')">Reenviar E-mail</button>` : ''}
                         ${!inv.acceptedAt ? `<button class="btn btn-danger btn-sm" onclick="Data.deleteInvite('${inv.id}')">Revogar Convite</button>` : ''}
+                        <button class="btn btn-outline btn-sm" title="Copiar link de convite" onclick="UI.copyInvitationLink(event, '${inv.token}')">
+                            <i class='bx bx-copy-alt'></i> Copiar Link
+                        </button>
                     </div>
                 </div>
             </td>
@@ -178,7 +181,7 @@ const Components = {
             </div>
             <div class="table-container">
                 <table>
-                    <thead><tr><th>Usuário</th><th>E-mail</th><th>Role</th><th>Plano</th><th>Loja</th><th>Status</th><th>Ações</th></tr></thead>
+                    <thead><tr><th>Usuário</th><th>E-mail</th><th>Perfil de acesso</th><th>Plano</th><th>Loja</th><th>Status</th><th>Ações</th></tr></thead>
                     <tbody id="users-table-body">${users.map(Components.UserRow).join('')}</tbody>
                 </table>
             </div>
@@ -200,8 +203,8 @@ const Components = {
     RoleTable: (roles) => `
         <div class="card">
             <div class="card-header">
-                <h2>Gestão de Roles</h2>
-                <button class="btn btn-primary" onclick="UI.openRoleModal()">+ Nova Role</button>
+                <h2>Gestão de Perfis de Acesso</h2>
+                <button class="btn btn-primary" onclick="UI.openRoleModal()">+ Novo Perfil</button>
             </div>
             <div class="table-container">
                 <table>

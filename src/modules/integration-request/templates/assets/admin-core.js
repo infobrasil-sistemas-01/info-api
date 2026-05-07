@@ -258,6 +258,13 @@ const UI = {
         document.getElementById('modal-container').classList.add('hidden');
         document.querySelectorAll('.modal').forEach(m => m.classList.add('hidden'));
     },
+    copyInvitationLink(event, token) {
+        event.stopPropagation();
+        const url = `${window.location.origin}/integration/setup-password/${token}`;
+        navigator.clipboard.writeText(url).then(() => {
+            alert('Link de convite copiado para a área de transferência!');
+        });
+    },
     openUserModal(id = null) {
         const modal = document.getElementById('user-modal');
         modal.innerHTML = `
