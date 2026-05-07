@@ -263,7 +263,7 @@ const UI = {
         modal.innerHTML = `
             <div class="modal-header">
                 <h3>${id ? 'Editar Usuário' : 'Novo Usuário'}</h3>
-                <button onclick="UI.closeModal()" style="background: none; border: none; cursor: pointer; font-size: 1.5rem;">&times;</button>
+                <button onclick="UI.closeModal()" style="background: none; border: none; cursor: pointer; font-size: 1.5rem; color: white;">&times;</button>
             </div>
             <form onsubmit="UI.saveUser(event, '${id || ''}')">
                 <div class="form-group"><label>Usuário</label><input type="text" id="u-name" required></div>
@@ -354,7 +354,7 @@ const UI = {
         modal.innerHTML = `
             <div class="modal-header">
                 <h3>${id ? 'Editar Role' : 'Nova Role'}</h3>
-                <button onclick="UI.closeModal()" style="background: none; border: none; cursor: pointer; font-size: 1.5rem;">&times;</button>
+                <button onclick="UI.closeModal()" style="background: none; border: none; cursor: pointer; font-size: 1.5rem; color: white;">&times;</button>
             </div>
             <form onsubmit="UI.saveRole(event, '${id || ''}')">
                 <div class="form-group"><label>Nome</label><input type="text" id="r-name" required></div>
@@ -422,7 +422,7 @@ const UI = {
         modal.innerHTML = `
             <div class="modal-header">
                 <h3>${id ? 'Editar Credencial' : 'Nova Credencial'}</h3>
-                <button onclick="UI.closeModal()" style="background: none; border: none; cursor: pointer; font-size: 1.5rem;">&times;</button>
+                <button onclick="UI.closeModal()" style="background: none; border: none; cursor: pointer; font-size: 1.5rem; color: white;">&times;</button>
             </div>
             <form onsubmit="UI.saveCred(event, '${id || ''}')">
                 <div class="form-group"><label>Host</label><input type="text" id="c-host" required></div>
