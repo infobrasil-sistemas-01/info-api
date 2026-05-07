@@ -180,6 +180,34 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+// --- Constants & Helpers ---
+const LABEL_MAP = {
+    // Módulos
+    'core': 'Sistema (Core)',
+    'tenant': 'Dados ERP (Tenant)',
+    'integration-request': 'Solicitações (Painel)',
+
+    // Entidades
+    'user': 'Usuários & Roles',
+    'products': 'Produtos',
+    'payment-methods': 'Meios de Pagamento',
+    'orders': 'Pedidos / Vendas',
+    'brands': 'Marcas',
+    'groups': 'Grupos',
+    'clients': 'Clientes',
+    'account-receivable': 'Contas a Receber',
+    'dbcredential': 'Credenciais DB',
+
+    // Ações do painel de solicitação
+    'approve': 'Aprovar',
+    'create': 'Criar',
+    'reject': 'Recusar',
+    'delete': 'Deletar',
+    'update': 'Atualizar',
+    'view': 'Visualizar',
+    'edit': 'Editar'
+};
+
 // --- UI Interactions & Modals ---
 const UI = {
     setup() {
@@ -310,6 +338,19 @@ const UI = {
     },
     openRoleModal(id = null) {
         const modal = document.getElementById('role-modal');
+
+        // Advanced Grouping: Module > Entity > Actions
+        const structure = {};
+        State.allPermissions.forEach(p => {
+            const [mod, ent] = p.key.split('.');
+            const moduleLabel = LABEL_MAP[mod] || mod;
+            const entityLabel = LABEL_MAP[ent] || ent || 'Geral';
+
+            if (!structure[moduleLabel]) structure[moduleLabel] = {};
+            if (!structure[moduleLabel][entityLabel]) structure[moduleLabel][entityLabel] = [];
+            structure[moduleLabel][entityLabel].push(p);
+        });
+
         modal.innerHTML = `
             <div class="modal-header">
                 <h3>${id ? 'Editar Role' : 'Nova Role'}</h3>
@@ -319,9 +360,29 @@ const UI = {
                 <div class="form-group"><label>Nome</label><input type="text" id="r-name" required></div>
                 <div class="form-group"><label>Descrição</label><textarea id="r-desc" rows="2"></textarea></div>
                 <div class="form-group"><label>Permissões</label>
-                    <div class="permissions-grid">
-                        ${State.allPermissions.map(p => `
-                            <label class="perm-item"><input type="checkbox" name="perms" value="${p.id}"><span><strong>${p.key}</strong> - ${p.descricao}</span></label>
+                    <div class="permissions-accordion">
+                        ${Object.entries(structure).map(([module, entities]) => `
+                            <div class="perm-module-group">
+                                <button type="button" class="perm-module-header" onclick="this.nextElementSibling.classList.toggle('hidden')">
+                                    <span>${module}</span>
+                                    <i class='bx bx-chevron-down'></i>
+                                </button>
+                                <div class="perm-module-content hidden">
+                                    ${Object.entries(entities).map(([entity, perms]) => `
+                                        <div class="perm-entity-row">
+                                            <span class="entity-name">${entity}</span>
+                                            <div class="actions-inline">
+                                                ${perms.map(p => `
+                                                    <label class="perm-inline-item" title="${p.description || ''}">
+                                                        <input type="checkbox" name="perms" value="${p.id}">
+                                                        <span>${translateAction(p.key)}</span>
+                                                    </label>
+                                                `).join('')}
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
                         `).join('')}
                     </div>
                 </div>

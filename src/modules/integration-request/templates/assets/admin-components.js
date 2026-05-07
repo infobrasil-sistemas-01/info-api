@@ -1,10 +1,16 @@
-// --- Helpers & Translations ---
-const translateAction = (a) => ({
-    'read': 'Leitura',
-    'create': 'Escrita',
-    'update': 'Edição',
-    'delete': 'Exclusão'
-}[a] || a);
+const translateAction = (key) => {
+    const action = key.split('.').pop();
+    return {
+        'view': 'Ver',
+        'create': 'Criar',
+        'update': 'Edit',
+        'delete': 'Del',
+        'manage': 'Tudo',
+        'approve': 'Aprovar',
+        'reject': 'Recusar',
+        'read': 'Leitura'
+    }[action] || action;
+};
 
 const translateStatus = (s) => ({
     'AWAITING_CONFIRMATION': 'AGUARDANDO CONFIRMAÇÃO',

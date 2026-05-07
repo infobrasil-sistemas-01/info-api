@@ -452,26 +452,94 @@ tr:last-child td {
     gap: 12px;
 }
 
-.permissions-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 8px;
-    max-height: 300px;
-    overflow-y: auto;
+.permissions-accordion {
+    background: rgba(0, 0, 0, 0.2);
     border: 1px solid var(--border);
-    padding: 12px;
-    border-radius: 8px;
+    border-radius: 16px;
+    overflow: hidden;
+    max-height: 400px;
+    overflow-y: auto;
 }
 
-.perm-item {
+.perm-module-group {
+    border-bottom: 1px solid var(--border);
+}
+
+.perm-module-group:last-child {
+    border-bottom: none;
+}
+
+.perm-module-header {
+    width: 100%;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: transparent;
+    border: none;
+    color: var(--primary);
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.perm-module-header:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.perm-module-content {
+    padding: 0 16px 8px;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.perm-entity-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.perm-entity-row:last-child {
+    border-bottom: none;
+}
+
+.entity-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+    min-width: 120px;
+}
+
+.actions-inline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.perm-inline-item {
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-size: 0.9rem;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: color 0.2s;
 }
 
-.perm-item input {
-    width: auto;
+.perm-inline-item:hover {
+    color: var(--text);
+}
+
+.perm-inline-item input {
+    width: 14px;
+    height: 14px;
+    accent-color: var(--primary);
+    cursor: pointer;
 }
 
 .accordion-btn {
