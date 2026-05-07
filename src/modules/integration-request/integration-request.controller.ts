@@ -26,7 +26,6 @@ import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
 import { CreateIntegrationRequestDto } from './dto/create-integration-request.dto';
 import { IntegrationRequestService } from './integration-request.service';
 import { UserService } from '../user/user.service';
-import { VpnGuard } from 'src/infra/guards/vpn.guard';
 
 @ApiTags('Integration Requests')
 @ApiExcludeController()
@@ -65,7 +64,6 @@ export class IntegrationRequestController {
     }
 
     @Get('admin')
-    @UseGuards(VpnGuard)
     @ApiOperation({ summary: 'Serve o painel administrativo para o suporte' })
     serveAdmin(@Res() res: Response) {
         const path = this.getTemplatePath('admin.html');
@@ -142,7 +140,7 @@ export class IntegrationRequestController {
     }
 
     @Get()
-    @UseGuards(JwtAuthGuard, PermissionsGuard, VpnGuard)
+    @UseGuards(JwtAuthGuard, PermissionsGuard)
     @RequirePermissions({ anyOf: ['integration-request.view'] })
     @ApiOperation({ summary: 'Lista todas as solicitações (Requer autenticação)' })
     findAll() {
@@ -150,7 +148,7 @@ export class IntegrationRequestController {
     }
 
     @Patch(':id/status')
-    @UseGuards(JwtAuthGuard, PermissionsGuard, VpnGuard)
+    @UseGuards(JwtAuthGuard, PermissionsGuard)
     @RequirePermissions({
         anyOf: ['integration-request.approve', 'integration-request.reject'],
     })
@@ -164,7 +162,7 @@ export class IntegrationRequestController {
     }
 
     @Delete(':id')
-    @UseGuards(JwtAuthGuard, PermissionsGuard, VpnGuard)
+    @UseGuards(JwtAuthGuard, PermissionsGuard)
     @RequirePermissions({ anyOf: ['integration-request.delete'] })
     @ApiOperation({ summary: 'Exclui uma solicitação' })
     remove(@Param('id') id: string) {

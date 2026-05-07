@@ -14,12 +14,11 @@ import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
 import { UserService } from './user.service';
 import type { CreateUserDto, UpdateUserDto } from './dto/user.dto';
-import { VpnGuard } from 'src/infra/guards/vpn.guard';
 
 @ApiTags('User')
 @ApiExcludeController()
 @Controller('users')
-@UseGuards(JwtAuthGuard, PermissionsGuard, VpnGuard)
+@UseGuards(JwtAuthGuard, PermissionsGuard)
 @ApiBearerAuth()
 export class UserController {
   constructor(private readonly userService: UserService) { }

@@ -14,12 +14,11 @@ import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
 import { RoleService } from './role.service';
 import type { CreateRoleDto, UpdateRoleDto } from './dto/role.dto';
-import { VpnGuard } from 'src/infra/guards/vpn.guard';
 
 @ApiTags('Role')
 @ApiExcludeController()
 @Controller('roles')
-@UseGuards(JwtAuthGuard, PermissionsGuard, VpnGuard)
+@UseGuards(JwtAuthGuard, PermissionsGuard)
 @ApiBearerAuth()
 export class RoleController {
   constructor(private readonly roleService: RoleService) { }
