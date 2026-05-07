@@ -15,7 +15,7 @@ export class UserService {
     private readonly prisma: RegistryPrismaService,
     private readonly emailService: EmailService,
     private readonly env: EnvService,
-  ) {}
+  ) { }
 
   async create(data: CreateUserDto) {
     const existing = await this.prisma.user.findUnique({
@@ -34,7 +34,7 @@ export class UserService {
       passwordHash = await argon2.hash(password);
     } else {
       // Hash de fallback para campo não nulo
-      passwordHash = 'AWAITING_SETUP'; 
+      passwordHash = 'AWAITING_SETUP';
       userData.status = false;
       hasInvitation = true;
     }
@@ -59,7 +59,7 @@ export class UserService {
     if (hasInvitation && data.email) {
       const token = randomUUID();
       const expiresAt = new Date();
-      expiresAt.setMinutes(expiresAt.getMinutes() + 10);
+      expiresAt.setHours(expiresAt.getHours() + 1);
 
       await this.prisma.userInvitation.create({
         data: {
@@ -76,10 +76,10 @@ export class UserService {
   }
 
   public async sendInvitationEmail(to: string, username: string, token: string) {
-    const baseUrl = this.env.get('NODE_ENV') === 'production' 
-      ? 'https://info-api.infobrasilsistemas.com.br' 
+    const baseUrl = this.env.get('NODE_ENV') === 'production'
+      ? 'https://info-api.infobrasilsistemas.com.br'
       : `http://localhost:${this.env.get('PORT') || 3000}`;
-    
+
     const setupUrl = `${baseUrl}/integration/setup-password/${token}`;
 
     const html = `
@@ -180,7 +180,7 @@ export class UserService {
 
   async update(id: string, data: UpdateUserDto) {
     const { password, ...userData } = data;
-    
+
     const updateData: any = { ...userData };
 
     if (password) {
