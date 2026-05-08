@@ -1125,6 +1125,18 @@
         "tags": [
           "Announcement"
         ]
+      },
+      "post": {
+        "operationId": "AnnouncementController_create",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Announcement"
+        ]
       }
     },
     "/api/v1/announcements/{id}/view": {
@@ -1142,6 +1154,64 @@
         ],
         "responses": {
           "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Announcement"
+        ]
+      }
+    },
+    "/api/v1/announcements/admin/all": {
+      "get": {
+        "operationId": "AnnouncementController_findAllAdmin",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Announcement"
+        ]
+      }
+    },
+    "/api/v1/announcements/{id}": {
+      "patch": {
+        "operationId": "AnnouncementController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Announcement"
+        ]
+      },
+      "delete": {
+        "operationId": "AnnouncementController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
             "description": ""
           }
         },

@@ -798,3 +798,24 @@ tr:last-child td {
         justify-content: center;
     }
 }
+
+/* Announcement Management Styles */
+.ann-type-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+.ann-type-icon.info { background: rgba(16, 185, 129, 0.1); color: var(--primary); }
+.ann-type-icon.warning { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+.ann-type-icon.alert { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
+.ann-type-icon.doc { background: rgba(99, 102, 241, 0.1); color: #6366f1; }
+
+.status.info { background: rgba(16, 185, 129, 0.1); color: #34d399; }
+.status.warning { background: rgba(245, 158, 11, 0.1); color: #fbbf24; }
+.status.alert { background: rgba(239, 68, 68, 0.1); color: #f87171; }
+.status.doc { background: rgba(99, 102, 241, 0.1); color: #a5b4fc; }

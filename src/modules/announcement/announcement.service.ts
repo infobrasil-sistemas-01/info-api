@@ -54,8 +54,48 @@ export class AnnouncementService {
     });
   }
 
-  // Admin methods (can be expanded later)
+  async findAll() {
+    return this.prisma.announcement.findMany({
+      orderBy: { createdAt: 'desc' },
+      include: {
+        _count: {
+          select: { views: true }
+        }
+      }
+    });
+  }
+
+  async findOne(id: string) {
+    return this.prisma.announcement.findUnique({
+      where: { id },
+    });
+  }
+
   async create(data: any) {
-    return this.prisma.announcement.create({ data });
+    return this.prisma.announcement.create({
+      data: {
+        ...data,
+        active: data.active ?? true,
+        startDate: data.startDate ? new Date(data.startDate) : null,
+        endDate: data.endDate ? new Date(data.endDate) : null,
+      },
+    });
+  }
+
+  async update(id: string, data: any) {
+    return this.prisma.announcement.update({
+      where: { id },
+      data: {
+        ...data,
+        startDate: data.startDate ? new Date(data.startDate) : null,
+        endDate: data.endDate ? new Date(data.endDate) : null,
+      },
+    });
+  }
+
+  async delete(id: string) {
+    return this.prisma.announcement.delete({
+      where: { id },
+    });
   }
 }

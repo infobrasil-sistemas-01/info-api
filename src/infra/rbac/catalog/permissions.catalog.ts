@@ -201,6 +201,28 @@ export const PERMISSIONS = [
     descricao: 'Recusar solicitações de integração',
     module: 'integration-request'
   },
+
+  // ========= AVISOS =========
+  {
+    key: 'core.announcement.view',
+    descricao: 'Visualizar avisos',
+    module: 'core',
+  },
+  {
+    key: 'core.announcement.create',
+    descricao: 'Criar avisos',
+    module: 'core',
+  },
+  {
+    key: 'core.announcement.update',
+    descricao: 'Atualizar avisos',
+    module: 'core',
+  },
+  {
+    key: 'core.announcement.delete',
+    descricao: 'Deletar avisos',
+    module: 'core',
+  },
 ] as const satisfies readonly PermissionDefinition[];
 
 export type PermissionKey = (typeof PERMISSIONS)[number]['key'];

@@ -242,6 +242,60 @@ const Components = {
                     <tbody id="creds-table-body">${creds.map(Components.CredRow).join('')}</tbody>
                 </table>
             </div>
+            </div>
+        </div>
+    `,
+    AnnouncementRow: (ann) => {
+        const typeLabels = {
+            'INFO': { label: 'Informativo', class: 'info', icon: 'bx-info-circle' },
+            'WARNING': { label: 'Aviso', class: 'warning', icon: 'bx-error' },
+            'ALERT': { label: 'Alerta', class: 'alert', icon: 'bx-alarm' },
+            'DOC': { label: 'Doc', class: 'doc', icon: 'bx-book' }
+        };
+        const type = typeLabels[ann.type] || typeLabels.INFO;
+        
+        return `
+        <tr>
+            <td>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div class="ann-type-icon ${type.class}"><i class='bx ${type.icon}'></i></div>
+                    <span style="font-weight: 600; font-size: 0.9rem;">${ann.text.length > 50 ? ann.text.substring(0, 50) + '...' : ann.text}</span>
+                </div>
+            </td>
+            <td><span class="status ${type.class}">${type.label}</span></td>
+            <td>
+                <div style="font-size: 0.8rem; color: var(--text-muted);">
+                    ${ann.startDate ? `De: ${new Date(ann.startDate).toLocaleDateString()}<br>` : ''}
+                    ${ann.endDate ? `Até: ${new Date(ann.endDate).toLocaleDateString()}` : (ann.startDate ? '' : 'Sempre ativo')}
+                </div>
+            </td>
+            <td>
+                <div style="display: flex; align-items: center; gap: 5px; font-weight: 600; color: var(--primary);">
+                    <i class='bx bx-show'></i> ${ann._count?.views || 0}
+                </div>
+            </td>
+            <td><span style="color: ${ann.active ? 'var(--success)' : 'var(--danger)'}">${ann.active ? 'Sim' : 'Não'}</span></td>
+            <td>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn btn-outline btn-sm" onclick="UI.openAnnouncementModal('${ann.id}')">Editar</button>
+                    <button class="btn btn-danger btn-sm" onclick="Data.deleteAnnouncement('${ann.id}')">Excluir</button>
+                </div>
+            </td>
+        </tr>
+        `;
+    },
+    AnnouncementTable: (anns) => `
+        <div class="card">
+            <div class="card-header">
+                <h2>Gestão de Avisos do Sistema</h2>
+                <button class="btn btn-primary" onclick="UI.openAnnouncementModal()">+ Novo Aviso</button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead><tr><th>Conteúdo</th><th>Tipo</th><th>Validade</th><th>Vistos</th><th>Ativo</th><th>Ações</th></tr></thead>
+                    <tbody id="anns-table-body">${anns.map(Components.AnnouncementRow).join('')}</tbody>
+                </table>
+            </div>
         </div>
     `,
     RequestFilterTabs: (activeFilter = 'ALL') => {

@@ -7,6 +7,7 @@ const State = {
     allUsers: [],
     allPlans: [],
     allRequests: [],
+    allAnnouncements: [],
     currentRequestFilter: 'ALL'
 };
 
@@ -43,14 +44,30 @@ const Data = {
     async fetchAll() {
         const canViewUsers = State.currentUser.permissions.includes('core.user.view');
         const canViewRequests = State.currentUser.permissions.includes('integration-request.view');
+        const canViewAnns = State.currentUser.permissions.includes('core.announcement.view');
 
         if (canViewRequests) this.fetchRequests();
+        if (canViewAnns) this.fetchAnnouncements();
         if (canViewUsers) {
             this.fetchUsers();
             this.fetchRoles();
             this.fetchPermissions();
             this.fetchCreds();
             this.fetchPlans();
+        }
+    },
+    async fetchAnnouncements() {
+        const res = await this.fetch(`${API_URL}/announcements/admin/all`);
+        if (res.ok) {
+            State.allAnnouncements = await res.json();
+            const section = document.getElementById('section-announcements');
+            if (section) section.innerHTML = Components.AnnouncementTable(State.allAnnouncements);
+        }
+    },
+    async deleteAnnouncement(id) {
+        if (confirm('Excluir este aviso?')) {
+            const res = await this.fetch(`${API_URL}/announcements/${id}`, { method: 'DELETE' });
+            if (res.ok) this.fetchAnnouncements();
         }
     },
     async fetchRequests() {
@@ -249,6 +266,12 @@ const UI = {
             ['tab-users', 'tab-roles', 'tab-creds'].forEach(id => document.getElementById(id).classList.remove('hidden'));
             if (!canViewRequests) switchTab('users');
         }
+
+        const canViewAnns = State.currentUser.permissions.includes('core.announcement.view');
+        if (canViewAnns) {
+            document.getElementById('tab-announcements').classList.remove('hidden');
+        }
+
         Data.fetchAll();
     },
     renderRequests() {
@@ -501,6 +524,79 @@ const UI = {
             body: JSON.stringify(data)
         });
         if (res.ok) { this.closeModal(); Data.fetchCreds(); }
+    },
+    openAnnouncementModal(id = null) {
+        const modal = document.getElementById('announcement-modal');
+        modal.innerHTML = `
+            <div class="modal-header">
+                <h3>${id ? 'Editar Aviso' : 'Novo Aviso'}</h3>
+                <button onclick="UI.closeModal()" style="background: none; border: none; cursor: pointer; font-size: 1.5rem; color: white;">&times;</button>
+            </div>
+            <form onsubmit="UI.saveAnnouncement(event, '${id || ''}')">
+                <div class="form-group">
+                    <label>Tipo de Aviso</label>
+                    <select id="a-type" required>
+                        <option value="INFO">Informativo (Verde)</option>
+                        <option value="WARNING">Aviso (Amarelo)</option>
+                        <option value="ALERT">Alerta (Vermelho)</option>
+                        <option value="DOC">Documentação (Indigo)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Texto do Aviso</label>
+                    <textarea id="a-text" rows="3" required placeholder="Mensagem que aparecerá na faixa superior"></textarea>
+                </div>
+                <div class="details-grid">
+                    <div class="form-group"><label>Texto do CTA (Opcional)</label><input type="text" id="a-ctaText" placeholder="Ex: Saber Mais"></div>
+                    <div class="form-group"><label>Link do CTA (Opcional)</label><input type="text" id="a-ctaLink" placeholder="https://..."></div>
+                </div>
+                <div class="details-grid">
+                    <div class="form-group"><label>Data Início (Opcional)</label><input type="date" id="a-start"></div>
+                    <div class="form-group"><label>Data Fim (Opcional)</label><input type="date" id="a-end"></div>
+                </div>
+                <div class="form-group" style="display:flex; align-items:center; gap:8px;">
+                    <input type="checkbox" id="a-active" checked style="width:auto;"><label style="margin:0">Ativo</label>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" onclick="UI.closeModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar Aviso</button>
+                </div>
+            </form>
+        `;
+
+        if (id) {
+            const ann = State.allAnnouncements.find(a => a.id === id);
+            if (ann) {
+                document.getElementById('a-type').value = ann.type;
+                document.getElementById('a-text').value = ann.text;
+                document.getElementById('a-ctaText').value = ann.ctaText || '';
+                document.getElementById('a-ctaLink').value = ann.ctaLink || '';
+                if (ann.startDate) document.getElementById('a-start').value = ann.startDate.split('T')[0];
+                if (ann.endDate) document.getElementById('a-end').value = ann.endDate.split('T')[0];
+                document.getElementById('a-active').checked = ann.active;
+            }
+        }
+
+        modal.classList.remove('hidden');
+        document.getElementById('modal-container').classList.remove('hidden');
+    },
+    async saveAnnouncement(e, id) {
+        e.preventDefault();
+        const data = {
+            type: document.getElementById('a-type').value,
+            text: document.getElementById('a-text').value,
+            ctaText: document.getElementById('a-ctaText').value || null,
+            ctaLink: document.getElementById('a-ctaLink').value || null,
+            startDate: document.getElementById('a-start').value || null,
+            endDate: document.getElementById('a-end').value || null,
+            active: document.getElementById('a-active').checked
+        };
+
+        const res = await Data.fetch(id ? `${API_URL}/announcements/${id}` : `${API_URL}/announcements`, {
+            method: id ? 'PATCH' : 'POST',
+            body: JSON.stringify(data)
+        });
+        if (res.ok) { this.closeModal(); Data.fetchAnnouncements(); }
     }
 };
 
@@ -515,6 +611,9 @@ function switchTab(tab) {
         section.classList.remove('hidden');
         if (tab === 'links') {
             section.innerHTML = Components.LinksGrid();
+        }
+        if (tab === 'announcements') {
+            Data.fetchAnnouncements();
         }
     }
 }
