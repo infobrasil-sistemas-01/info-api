@@ -39,12 +39,11 @@ echo "Aguardando healthcheck..."
 ATTEMPTS=30
 COUNT=0
 
-until docker exec $TARGET_SERVICE curl -fs "http://localhost:${APP_PORT}${HEALTH_PATH}" > /dev/null; do
+until [ "$(docker inspect --format='{{.State.Health.Status}}' $TARGET_SERVICE)" = "healthy" ]; do
 COUNT=$((COUNT + 1))
 
 if [ $COUNT -ge $ATTEMPTS ]; then
 echo "Nova versão falhou no healthcheck."
-echo "Mantendo ambiente atual."
 exit 1
 fi
 
