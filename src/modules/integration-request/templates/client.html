@@ -37,13 +37,20 @@
 
     <!-- App Section -->
     <div id="app-container" class="hidden">
-        <div class="top-announcement">
-            <div class="announcement-content">
-                <i class='bx bx-book-open'></i>
-                <span>Bem-vindo à InfoAPI! Comece explorando nossa <strong>Documentação Técnica</strong> para realizar
-                    sua primeira integração.</span>
-                <a href="/docs" target="_blank" class="announcement-link">Abrir Docs <i
-                        class='bx bx-right-arrow-alt'></i></a>
+        <div id="announcement-bar" class="top-announcement hidden">
+            <div id="announcement-slider" class="announcement-slider">
+                <!-- Slides dinâmicos entram aqui -->
+            </div>
+            <div class="announcement-controls">
+                <button id="announcement-prev" class="announcement-btn hidden" onclick="UI.prevAnnouncement()">
+                    <i class='bx bx-chevron-left'></i>
+                </button>
+                <button id="announcement-next" class="announcement-btn hidden" onclick="UI.nextAnnouncement()">
+                    <i class='bx bx-chevron-right'></i>
+                </button>
+                <button class="announcement-btn" onclick="UI.dismissAnnouncement()" title="Fechar aviso">
+                    <i class='bx bx-x'></i>
+                </button>
             </div>
         </div>
 

@@ -110,6 +110,102 @@ const UI = {
 
         await this.loadStats();
         this.loadPlans();
+        this.loadAnnouncements();
+    },
+
+    announcements: [],
+    currentAnnIndex: 0,
+
+    async loadAnnouncements() {
+        try {
+            const res = await fetch(`${API_URL}/announcements`, {
+                headers: { 'Authorization': `Bearer ${Auth.getToken()}` }
+            });
+            if (res.ok) {
+                this.announcements = await res.json();
+                this.renderAnnouncements();
+            }
+        } catch (e) {
+            console.error('Erro ao carregar avisos', e);
+        }
+    },
+
+    renderAnnouncements() {
+        const bar = document.getElementById('announcement-bar');
+        const slider = document.getElementById('announcement-slider');
+        
+        if (!this.announcements || this.announcements.length === 0) {
+            bar.classList.add('hidden');
+            return;
+        }
+
+        bar.classList.remove('hidden');
+        
+        slider.innerHTML = this.announcements.map(ann => {
+            const iconMap = {
+                'DOC': 'bx-book-open',
+                'INFO': 'bx-info-circle',
+                'WARNING': 'bx-error-alt',
+                'ALERT': 'bx-alarm-exclamation'
+            };
+            const icon = iconMap[ann.type] || 'bx-bell';
+            
+            return `
+                <div class="announcement-slide ${ann.type.toLowerCase()}">
+                    <i class='bx ${icon}'></i>
+                    <span>${ann.text}</span>
+                    ${ann.ctaText ? `<a href="${ann.ctaLink || '#'}" target="_blank" class="announcement-link">${ann.ctaText}</a>` : ''}
+                </div>
+            `;
+        }).join('');
+
+        // Controls
+        const prev = document.getElementById('announcement-prev');
+        const next = document.getElementById('announcement-next');
+        
+        if (this.announcements.length > 1) {
+            prev.classList.remove('hidden');
+            next.classList.remove('hidden');
+        } else {
+            prev.classList.add('hidden');
+            next.classList.add('hidden');
+        }
+
+        this.currentAnnIndex = 0;
+        this.updateSliderPos();
+    },
+
+    nextAnnouncement() {
+        this.currentAnnIndex = (this.currentAnnIndex + 1) % this.announcements.length;
+        this.updateSliderPos();
+    },
+
+    prevAnnouncement() {
+        this.currentAnnIndex = (this.currentAnnIndex - 1 + this.announcements.length) % this.announcements.length;
+        this.updateSliderPos();
+    },
+
+    updateSliderPos() {
+        const slider = document.getElementById('announcement-slider');
+        slider.style.transform = `translateX(-${this.currentAnnIndex * 100}%)`;
+    },
+
+    async dismissAnnouncement() {
+        const ann = this.announcements[this.currentAnnIndex];
+        if (!ann) return;
+
+        try {
+            // Chamada otimista
+            this.announcements.splice(this.currentAnnIndex, 1);
+            this.renderAnnouncements();
+
+            await fetch(`${API_URL}/announcements/${ann.id}/view`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${Auth.getToken()}` }
+            });
+        } catch (e) {
+            console.error('Erro ao dispensar aviso', e);
+        }
     },
     async loadStats() {
         try {

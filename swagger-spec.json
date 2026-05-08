@@ -1112,6 +1112,43 @@
           "Plans & Usage"
         ]
       }
+    },
+    "/api/v1/announcements": {
+      "get": {
+        "operationId": "AnnouncementController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Announcement"
+        ]
+      }
+    },
+    "/api/v1/announcements/{id}/view": {
+      "post": {
+        "operationId": "AnnouncementController_markAsViewed",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Announcement"
+        ]
+      }
     }
   },
   "info": {

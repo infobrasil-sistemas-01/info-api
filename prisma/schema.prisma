@@ -23,6 +23,7 @@ model User {
   plan            Plan?         @relation(fields: [planId], references: [id])
   invitation      UserInvitation?
   requestLogs     RequestLog[]
+  announcementViews AnnouncementView[]
 
   @@map("users")
 }
@@ -132,4 +133,39 @@ model IntegrationRequest {
 enum HostingType {
   DATACENTER
   CLIENT_SERVER
+}
+
+enum AnnouncementType {
+  DOC
+  INFO
+  WARNING
+  ALERT
+}
+
+model Announcement {
+  id        String           @id @default(uuid())
+  type      AnnouncementType @default(INFO)
+  text      String           @db.Text
+  ctaText   String?          @map("cta_text") @db.VarChar(50)
+  ctaLink   String?          @map("cta_link") @db.VarChar(255)
+  startDate DateTime?        @map("start_date")
+  endDate   DateTime?        @map("end_date")
+  active    Boolean          @default(true)
+  createdAt DateTime         @default(now()) @map("created_at")
+  updatedAt DateTime         @updatedAt @map("updated_at")
+  views     AnnouncementView[]
+
+  @@map("announcements")
+}
+
+model AnnouncementView {
+  id             String       @id @default(uuid())
+  announcementId String       @map("announcement_id")
+  userId         String       @map("user_id")
+  viewedAt       DateTime     @default(now()) @map("viewed_at")
+  announcement   Announcement @relation(fields: [announcementId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([announcementId, userId])
+  @@map("announcement_views")
 }

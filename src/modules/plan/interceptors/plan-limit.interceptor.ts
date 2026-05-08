@@ -35,6 +35,7 @@ export class PlanLimitInterceptor implements NestInterceptor {
       '/api/v1/roles',
       '/api/v1/permissions',
       '/api/v1/db-credentials',
+      '/api/v1/announcements',
       '/integration',
     ].some(excluded => path.startsWith(excluded));
 
