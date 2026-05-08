@@ -1,23 +1,36 @@
-upstream infoapi {
-    server api-info:${PORT};
-}
-
 server {
     listen ${PORT};
     server_name localhost;
 
-    # Aumentar timeout para migrações longas se necessário
+    resolver 127.0.0.11 valid=5s;
+
     proxy_read_timeout 300s;
-    proxy_connect_timeout 75s;
+    proxy_connect_timeout 5s;
+    proxy_send_timeout 300s;
+
+    proxy_next_upstream error timeout http_502 http_503 http_504;
+    proxy_next_upstream_tries 3;
 
     location / {
-        proxy_pass http://infoapi;
+        # deploy.sh troca api-blue <-> api-green
+        set $upstream_api "${ACTIVE_UPSTREAM}";
+
+        proxy_pass http://$upstream_api:3336;
+
+        proxy_http_version 1.1;
+
+        proxy_set_header Connection "";
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
 
-        # Desativar buffering para respostas longas (opcional)
         proxy_buffering off;
+    }
+
+    location /gateway-health {
+        access_log off;
+        return 200 'gateway is up';
+        add_header Content-Type text/plain;
     }
 }
