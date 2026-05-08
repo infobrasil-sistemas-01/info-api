@@ -940,3 +940,48 @@ header {
 .important-note strong {
     color: var(--danger);
 }
+
+/* CODE BLOCKS */
+.code-block {
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 12px;
+    position: relative;
+    border: 1px solid var(--border);
+}
+
+.code-block pre {
+    margin: 0;
+    overflow-x: auto;
+    padding-right: 40px;
+}
+
+.code-block code {
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 0.85rem;
+    color: #e2e8f0;
+    line-height: 1.5;
+}
+
+.btn-copy-small {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 6px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.btn-copy-small:hover {
+    background: var(--primary);
+    color: #000;
+    border-color: var(--primary);
+}

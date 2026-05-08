@@ -84,6 +84,7 @@
                 -->
                 <button class="tab-btn" onclick="UI.switchTab('glossary')">Glossário</button>
                 <button class="tab-btn" onclick="UI.switchTab('security')">Segurança</button>
+                <button class="tab-btn" onclick="UI.switchTab('links')">Links Úteis</button>
             </div>
 
             <!-- Tab: Usage -->
@@ -150,158 +151,170 @@
                         style="display: inline-block; width: auto; margin-top: 1.5rem; text-decoration: none;">Falar com
                         Suporte</a>
                 </div>
-            </section>
-            -->
-            <!-- Desabilitado enquanto os planos não estiverem definidos pelo time comercial. -->
-
             <!-- Tab: Glossary -->
             <section id="tab-glossary" class="tab-content">
-                <div class="glossary-container">
-                    <div class="card glossary-card">
-                        <h2>📖 Glossário Técnico</h2>
-                        <p class="glossary-intro">Entenda os conceitos fundamentais para integrar com a nossa API.</p>
+                <div class="perm-group">
+                    <h4><i class='bx bx-book-content'></i> JWT (JSON Web Token)</h4>
+                    <p style="color: var(--text-muted); margin-bottom: 16px; line-height: 1.6;">O JWT é um padrão para
+                        transmissão segura de informações. Na nossa API, ele é o "crachá" que você usa após o login.</p>
+                    <div class="perm-items">
+                        <span class="perm-tag">Stateless (Sem Sessão)</span>
+                        <span class="perm-tag">Auto-contido</span>
+                        <span class="perm-tag">Cabeçalho Authorization</span>
+                    </div>
+                    <div
+                        style="margin-top: 16px; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px; border-left: 3px solid var(--primary);">
+                        <code
+                            style="color: var(--primary); font-size: 0.85rem;">Authorization: Bearer [SEU_TOKEN]</code>
+                    </div>
+                </div>
 
-                        <div class="accordion">
-                            <div class="accordion-item">
-                                <button class="accordion-header" onclick="UI.toggleAccordion(this)">
-                                    <span>O que é JWT (JSON Web Token)?</span>
-                                    <i class='bx bx-chevron-down'></i>
+                <div class="perm-group">
+                    <h4><i class='bx bx-lock-alt'></i> Autenticação Basic</h4>
+                    <p style="color: var(--text-muted); margin-bottom: 16px; line-height: 1.6;">Método usado exclusivamente na rota de Login para obter seu token JWT inicial. O cabeçalho é composto pela string <code>usuario:senha</code> codificada em Base64.</p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+                        <div>
+                            <p style="font-size: 0.8rem; color: var(--primary); margin-bottom: 8px; font-weight: 600;">Exemplo em JavaScript:</p>
+                            <div class="code-block">
+                                <pre><code>const auth = btoa('user:pass');
+console.log('Basic ' + auth);</code></pre>
+                                <button class="btn-copy-small" onclick="UI.copyText('const auth = btoa(\'usuario:senha\');\nconsole.log(\'Basic \' + auth);', 'Exemplo JS copiado!')" title="Copiar código JS">
+                                    <i class='bx bx-copy'></i>
                                 </button>
-                                <div class="accordion-content">
-                                    <p>O JWT é um padrão para transmissão segura de informações entre partes como um
-                                        objeto JSON. Na nossa API, ele é o "crachá" que você usa após o login.</p>
-                                    <ul>
-                                        <li><strong>Stateless:</strong> O servidor não precisa guardar sua sessão, o
-                                            próprio token carrega seus dados.</li>
-                                        <li><strong>Como usar:</strong> Envie o token em todas as requisições no
-                                            cabeçalho <code>Authorization</code> com o prefixo <code>Bearer</code>.</li>
-                                    </ul>
-                                    <div class="code-example">
-                                        <code>Authorization: Bearer eyJhbGciOiJIUzI1Ni...</code>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="accordion-item">
-                                <button class="accordion-header" onclick="UI.toggleAccordion(this)">
-                                    <span>Como funciona a Autenticação Basic?</span>
-                                    <i class='bx bx-chevron-down'></i>
-                                </button>
-                                <div class="accordion-content">
-                                    <p>É o método usado apenas na rota de <strong>Login</strong> para obter seu token
-                                        JWT. Ele consiste em codificar seu usuário e senha em Base64.</p>
-                                    <div class="steps">
-                                        <p><strong>Como criar o token Basic:</strong></p>
-                                        <ol>
-                                            <li>Junte seu usuário e senha com dois pontos: <code>usuario:senha</code>
-                                            </li>
-                                            <li>Codifique essa string para Base64.</li>
-                                            <li>Envie no cabeçalho <code>Authorization: Basic [TOKEN_BASE64]</code></li>
-                                        </ol>
-                                    </div>
-                                    <div class="code-example">
-                                        <p>Exemplo (JS): <code>btoa('meu_usuario:minha_senha')</code></p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="accordion-item">
-                                <button class="accordion-header" onclick="UI.toggleAccordion(this)">
-                                    <span>O que é Rate Limiting (Limites)?</span>
-                                    <i class='bx bx-chevron-down'></i>
-                                </button>
-                                <div class="accordion-content">
-                                    <p>Para garantir a estabilidade do servidor Firebird, limitamos a frequência de
-                                        requisições.</p>
-                                    <ul>
-                                        <li><strong>Limite por Minuto:</strong> Evita picos de tráfego que podem travar
-                                            o banco.</li>
-                                        <li><strong>Limite Mensal:</strong> Controla a cota de uso conforme o seu plano
-                                            contratado.</li>
-                                        <li><strong>Excedeu?</strong> A API retornará o status
-                                            <code>429 Too Many Requests</code>.
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="accordion-item">
-                                <button class="accordion-header" onclick="UI.toggleAccordion(this)">
-                                    <span>Conceitos Complementares</span>
-                                    <i class='bx bx-chevron-down'></i>
-                                </button>
-                                <div class="accordion-content">
-                                    <p><strong>RBAC:</strong> Role Based Access Control. Significa que seu acesso é
-                                        baseado em permissões específicas atreladas ao seu usuário.</p>
-                                    <p><strong>Endpoints:</strong> São os endereços da API (ex: <code>/products</code>,
-                                        <code>/orders</code>). Cada um representa um recurso do ERP.
-                                    </p>
-                                </div>
                             </div>
                         </div>
+                        <div>
+                            <p style="font-size: 0.8rem; color: #3776ab; margin-bottom: 8px; font-weight: 600;">Exemplo em Python:</p>
+                            <div class="code-block">
+                                <pre><code>import base64
+auth = base64.b64encode(b'user:pass').decode()
+print(f'Basic {auth}')</code></pre>
+                                <button class="btn-copy-small" onclick="UI.copyText('import base64\nauth = base64.b64encode(b\'usuario:senha\').decode()\nprint(f\'Basic {auth}\')', 'Exemplo Python copiado!')" title="Copiar código Python">
+                                    <i class='bx bx-copy'></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="perm-group">
+                    <h4><i class='bx bx-timer'></i> Rate Limiting</h4>
+                    <p style="color: var(--text-muted); margin-bottom: 16px; line-height: 1.6;">Controle de frequência
+                        para garantir a estabilidade do servidor e evitar sobrecarga no banco de dados.</p>
+                    <div class="perm-items">
+                        <span class="perm-tag">Limite por Minuto</span>
+                        <span class="perm-tag">Cota Mensal</span>
+                        <span class="perm-tag">HTTP 429</span>
+                    </div>
+                </div>
+
+                <div class="perm-group">
+                    <h4><i class='bx bx-git-branch'></i> Conceitos Adicionais</h4>
+                    <div class="perm-items">
+                        <span class="perm-tag" title="Role Based Access Control">RBAC</span>
+                        <span class="perm-tag">Endpoints</span>
+                        <span class="perm-tag">REST API</span>
+                        <span class="perm-tag">Firebird ERP</span>
                     </div>
                 </div>
             </section>
 
             <!-- Tab: Security -->
             <section id="tab-security" class="tab-content">
-                <div class="security-container">
-                    <div class="card security-card">
-                        <h2><i class='bx bx-shield-quarter'></i> Segurança e Credenciais</h2>
-                        <p class="security-intro">Gerencie a segurança da sua integração e rotacione suas chaves de
-                            acesso.</p>
+                <div class="perm-group" style="border-left: 4px solid #f59e0b; background: rgba(245, 158, 11, 0.05);">
+                    <h4 style="color: #f59e0b;"><i class='bx bx-error-alt'></i> Aviso Importante</h4>
+                    <p style="color: var(--text); line-height: 1.6;">Ao rotacionar sua senha, a anterior será invalidada
+                        imediatamente. Você deverá atualizar as configurações em seu ERP ou Integrador para não
+                        interromper a sincronização.</p>
+                </div>
 
-                        <div class="warning-box">
-                            <i class='bx bx-error-alt'></i>
-                            <div class="warning-text">
-                                <strong>Atenção:</strong> Ao rotacionar sua senha, a anterior será invalidada
-                                imediatamente.
-                                Você deverá atualizar as configurações em seu ERP ou Integrador para não interromper a
-                                sincronização.
-                            </div>
-                        </div>
+                <div class="perm-group">
+                    <h4><i class='bx bx-refresh'></i> Rotação de Chave de Acesso</h4>
+                    <p style="color: var(--text-muted); margin-bottom: 20px;">Gere uma nova senha aleatória e segura
+                        para sua integração. Recomendamos fazer isso periodicamente.</p>
 
-                        <div class="rotation-section">
-                            <h3>Rotação de Chave de Acesso</h3>
-                            <p>Gere uma nova senha aleatória e segura para sua integração.</p>
+                    <div id="rotation-action-box">
+                        <button onclick="UI.confirmRotation()" class="btn-primary"
+                            style="width: auto; padding: 12px 32px;">
+                            <i class='bx bx-refresh'></i> Rotacionar Senha Agora
+                        </button>
+                    </div>
 
-                            <div class="rotation-reasons">
-                                <h4>Quando devo rotacionar?</h4>
-                                <ul>
-                                    <li><i class='bx bx-check'></i> Suspeita de vazamento da senha atual.</li>
-                                    <li><i class='bx bx-check'></i> Saída de um colaborador que tinha acesso às chaves.
-                                    </li>
-                                    <li><i class='bx bx-check'></i> Boa prática de segurança (rotação periódica a cada
-                                        90 dias).</li>
-                                    <li><i class='bx bx-check'></i> Auditoria de conformidade.</li>
-                                </ul>
-                            </div>
-
-                            <div id="rotation-action-box">
-                                <button onclick="UI.confirmRotation()" class="btn-primary btn-rotate">
-                                    <i class='bx bx-refresh'></i> Rotacionar Agora
+                    <div id="new-password-box" class="hidden">
+                        <div
+                            style="background: rgba(16, 185, 129, 0.1); padding: 16px; border-radius: 12px; border: 1px solid var(--primary); margin-top: 16px;">
+                            <p style="color: var(--primary); font-weight: 700; margin-bottom: 12px;"><i
+                                    class='bx bx-check-circle'></i> Senha rotacionada com sucesso!</p>
+                            <div
+                                style="display: flex; align-items: center; gap: 12px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px;">
+                                <code id="new-password-value"
+                                    style="font-family: monospace; font-size: 1.1rem; color: #fff; flex: 1;">••••••••••••</code>
+                                <button onclick="UI.copyNewPassword()" class="btn-copy"
+                                    style="background: var(--primary); border: none; color: #000; padding: 8px; border-radius: 6px; cursor: pointer;">
+                                    <i class='bx bx-copy'></i>
                                 </button>
                             </div>
-
-                            <div id="new-password-box" class="hidden">
-                                <div class="success-alert">
-                                    <i class='bx bx-check-circle'></i> Senha rotacionada com sucesso!
-                                </div>
-                                <div class="password-display">
-                                    <label>Sua Nova Senha:</label>
-                                    <div class="password-box">
-                                        <code id="new-password-value">••••••••••••</code>
-                                        <button onclick="UI.copyNewPassword()" class="btn-copy" title="Copiar Senha">
-                                            <i class='bx bx-copy'></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <p class="important-note">
-                                    <strong>IMPORTANTE:</strong> Esta senha será exibida <u>apenas esta vez</u>.
-                                    Certifique-se de copiá-la e salvá-la em um local seguro.
-                                </p>
-                            </div>
+                            <p style="margin-top: 12px; font-size: 0.8rem; color: #fca5a5;"><strong>IMPORTANTE:</strong>
+                                Esta senha não será exibida novamente.</p>
                         </div>
+                    </div>
+                </div>
+
+                <div class="perm-group">
+                    <h4><i class='bx bx-shield-check'></i> Boas Práticas de Segurança</h4>
+                    <div class="perm-items">
+                        <span class="perm-tag"><i class='bx bx-time'></i> Rotação a cada 90 dias</span>
+                        <span class="perm-tag"><i class='bx bx-user-x'></i> Remover ex-colaboradores</span>
+                        <span class="perm-tag"><i class='bx bx-lock-open'></i> Evitar senhas óbvias</span>
+                        <span class="perm-tag"><i class='bx bx-broadcast'></i> Uso de IP Fixo</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab: Links -->
+            <section id="tab-links" class="tab-content">
+                <div class="usage-grid">
+                    <div class="card link-card"
+                        style="display: flex; flex-direction: column; gap: 1rem; padding: 2rem;">
+                        <div style="font-size: 2.5rem; color: var(--primary);"><i class='bx bx-book-open'></i></div>
+                        <h3 style="margin: 0; color: var(--text);">Documentação Técnica</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; flex-grow: 1;">Referência completa de
+                            endpoints, modelos de dados e exemplos de integração.</p>
+                        <a href="/docs" target="_blank" class="btn-primary"
+                            style="text-align: center; text-decoration: none; padding: 10px;">Ver Documentação</a>
+                    </div>
+
+                    <div class="card link-card"
+                        style="display: flex; flex-direction: column; gap: 1rem; padding: 2rem;">
+                        <div style="font-size: 2.5rem; color: #60a5fa;"><i class='bx bx-pulse'></i></div>
+                        <h3 style="margin: 0; color: var(--text);">Status do Sistema</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; flex-grow: 1;">Acompanhe a saúde dos
+                            nossos servidores e serviços em tempo real.</p>
+                        <a href="https://infobrasil.statuspage.one" target="_blank" class="btn-primary"
+                            style="text-align: center; text-decoration: none; padding: 10px; background: #60a5fa;">Verificar
+                            Status</a>
+                    </div>
+
+                    <div class="card link-card"
+                        style="display: flex; flex-direction: column; gap: 1rem; padding: 2rem;">
+                        <div style="font-size: 2.5rem; color: #f59e0b;"><i class='bx bx-plus-circle'></i></div>
+                        <h3 style="margin: 0; color: var(--text);">Nova Solicitação</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; flex-grow: 1;">Precisa de novos módulos
+                            ou chaves de acesso? Preencha o formulário.</p>
+                        <a href="/integration/form" target="_blank" class="btn-primary"
+                            style="text-align: center; text-decoration: none; padding: 10px; background: #f59e0b;">Solicitar
+                            Agora</a>
+                    </div>
+
+                    <div class="card link-card"
+                        style="display: flex; flex-direction: column; gap: 1rem; padding: 2rem; border: 1px dashed var(--primary); background: rgba(16, 185, 129, 0.05);">
+                        <div style="font-size: 2.5rem; color: var(--primary);"><i class='bx bx-support'></i></div>
+                        <h3 style="margin: 0; color: var(--text);">Suporte Técnico</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; flex-grow: 1;">Dúvidas técnicas ou
+                            problemas com sua integração? Fale com nosso time.</p>
+                        <a href="mailto:suporte@infobrasilsistemas.com.br" class="btn-primary"
+                            style="text-align: center; text-decoration: none; padding: 10px;">Enviar E-mail</a>
                     </div>
                 </div>
             </section>

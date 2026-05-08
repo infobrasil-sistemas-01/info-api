@@ -243,11 +243,28 @@ const UI = {
             btn.innerHTML = originalHtml;
         }
     },
+    copyText(text, message) {
+        navigator.clipboard.writeText(text).then(() => {
+            // Feedback visual simples
+            const feedback = document.createElement('div');
+            feedback.style.position = 'fixed';
+            feedback.style.bottom = '20px';
+            feedback.style.right = '20px';
+            feedback.style.background = 'var(--primary)';
+            feedback.style.color = '#000';
+            feedback.style.padding = '12px 24px';
+            feedback.style.borderRadius = '8px';
+            feedback.style.fontWeight = 'bold';
+            feedback.style.zIndex = '9999';
+            feedback.style.boxShadow = '0 4px 15px rgba(0,0,0,0.3)';
+            feedback.textContent = message || 'Copiado com sucesso!';
+            document.body.appendChild(feedback);
+            setTimeout(() => feedback.remove(), 2000);
+        });
+    },
     copyNewPassword() {
         const pass = document.getElementById('new-password-value').textContent;
-        navigator.clipboard.writeText(pass).then(() => {
-            alert('Senha copiada com sucesso! Guarde-a em local seguro.');
-        });
+        this.copyText(pass, 'Senha copiada com sucesso!');
     }
 };
 
