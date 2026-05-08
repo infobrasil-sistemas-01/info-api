@@ -103,10 +103,76 @@ export class UserService {
       .catch(err => this.logger.error(`Erro ao enviar convite para ${to}: ${err.message}`));
   }
 
+  public async sendWelcomeEmail(to: string, username: string, permissions: string[]) {
+    const baseUrl = this.env.get('NODE_ENV') === 'production'
+      ? 'https://info-api.infobrasilsistemas.com.br'
+      : `http://localhost:${this.env.get('PORT') || 3000}`;
+
+    const clientUrl = `${baseUrl}/integration/client`;
+    const docsUrl = `${baseUrl}/docs`;
+
+    const permissionsHtml = permissions.length > 0
+      ? `<ul style="padding-left: 20px; color: #475569; font-size: 0.9rem;">
+          ${permissions.map(p => `<li style="margin-bottom: 4px;">${p}</li>`).join('')}
+         </ul>`
+      : '<p style="color: #666; font-size: 0.9rem;">Nenhuma permissão específica atribuída.</p>';
+
+    const html = `
+      <div style="font-family: sans-serif; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 8px; padding: 24px; background: #fff;">
+        <div style="text-align: center; margin-bottom: 24px;">
+            <h1 style="color: #059669; margin: 0;">Boas-vindas ao InfoAPI!</h1>
+            <p style="color: #64748b;">Sua conta foi configurada com sucesso.</p>
+        </div>
+        
+        <p>Olá, <strong>${username}</strong>!</p>
+        <p>É um prazer ter você conosco. Sua senha de acesso foi gerada e agora você já pode utilizar todos os recursos da nossa API.</p>
+        
+        <div style="background: #f8fafc; border-radius: 8px; padding: 20px; margin: 24px 0;">
+            <h3 style="margin-top: 0; color: #0f172a; font-size: 1rem;">Seus Acessos Rápidos:</h3>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                <a href="${clientUrl}" style="color: #059669; text-decoration: none; font-weight: 600;">➔ Acessar Painel do Cliente</a>
+                <a href="${docsUrl}" style="color: #059669; text-decoration: none; font-weight: 600;">➔ Ver Documentação Técnica (Swagger)</a>
+            </div>
+        </div>
+
+        <h3 style="color: #0f172a; font-size: 1rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">O que você pode fazer:</h3>
+        <p style="font-size: 0.9rem; color: #64748b;">Com base no seu perfil de acesso, você tem as seguintes permissões:</p>
+        ${permissionsHtml}
+
+        <div style="margin-top: 32px; padding: 16px; background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px;">
+            <p style="margin: 0; font-size: 0.85rem; color: #92400e;">
+                <strong>Dica de Segurança:</strong> Nunca compartilhe sua senha. Caso precise de uma nova credencial, você pode rotacioná-la a qualquer momento no Painel do Cliente.
+            </p>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 32px 0;">
+        <p style="font-weight: bold; margin-bottom: 4px;">Equipe InfoBrasil Sistemas</p>
+        <p style="font-size: 0.8rem; color: #94a3b8; margin-top: 0;">Este é um e-mail automático, por favor não responda.</p>
+      </div>
+    `;
+
+    await this.emailService.sendEmail(to, 'Bem-vindo ao InfoAPI - Sua conta está pronta!', html)
+      .catch(err => this.logger.error(`Erro ao enviar e-mail de boas-vindas para ${to}: ${err.message}`));
+  }
+
   async setupPasswordByToken(token: string) {
     const invitation = await this.prisma.userInvitation.findUnique({
       where: { token },
-      include: { user: true }
+      include: {
+        user: {
+          include: {
+            role: {
+              include: {
+                rolePermissions: {
+                  include: {
+                    permission: true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     });
 
     if (!invitation || invitation.acceptedAt || invitation.expiresAt < new Date()) {
@@ -129,6 +195,12 @@ export class UserService {
         data: { acceptedAt: new Date() }
       })
     ]);
+
+    // Enviar e-mail de boas-vindas
+    if (invitation.user.email) {
+      const perms = invitation.user.role?.rolePermissions.map(rp => rp.permission.name) || [];
+      await this.sendWelcomeEmail(invitation.user.email, invitation.user.user, perms);
+    }
 
     return {
       username: invitation.user.user,
