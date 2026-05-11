@@ -254,6 +254,10 @@ const UI = {
         if (adminWrapper) adminWrapper.classList.remove('hidden');
 
         document.getElementById('user-display').innerText = State.currentUser.username;
+        const avatarEl = document.getElementById('user-avatar');
+        if (avatarEl) {
+            avatarEl.innerText = (State.currentUser.username || 'A').charAt(0).toUpperCase();
+        }
 
         // Default tab
         switchTab('links');
