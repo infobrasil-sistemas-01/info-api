@@ -127,6 +127,32 @@ body {
     transform: translateY(-1px);
 }
 
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    outline: none;
+    gap: 8px;
+    font-size: 0.9rem;
+}
+
+.btn-outline {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text);
+}
+
+.btn-outline:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--primary);
+}
+
 .error-msg {
     color: var(--danger);
     margin-top: 1rem;
