@@ -83,7 +83,8 @@
 
         <main class="dashboard">
             <div class="tabs">
-                <button class="tab-btn active" onclick="UI.switchTab('usage')">Meu Plano e Uso</button>
+                <button class="tab-btn active" onclick="UI.switchTab('guide')">Guia de Integração</button>
+                <button class="tab-btn" onclick="UI.switchTab('usage')">Meu Plano e Uso</button>
                 <button class="tab-btn" onclick="UI.switchTab('permissions')">Minhas Permissões</button>
                 <!-- 
                 <button class="tab-btn" onclick="UI.switchTab('upgrade')">Upgrade</button> 
@@ -94,8 +95,77 @@
                 <button class="tab-btn" onclick="UI.switchTab('links')">Links Úteis</button>
             </div>
 
+            <!-- Tab: Guide -->
+            <section id="tab-guide" class="tab-content active">
+                <div class="card guide-container">
+                    <div style="text-align: center; margin-bottom: 40px;">
+                        <h2 style="font-size: 1.8rem; margin-bottom: 12px; color: var(--primary);">Manual de Integração</h2>
+                        <p style="color: var(--text-muted);">Siga estes passos para conectar sua aplicação à InfoAPI em minutos.</p>
+                    </div>
+
+                    <div class="guide-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>Autenticação (Obter Token)</h3>
+                            <p>Toda comunicação é protegida. Primeiro, você deve trocar suas credenciais por um token de acesso.</p>
+                            <div class="code-block">
+                                POST /api/v1/auth/login<br>
+                                Authorization: Basic [USUARIO:SENHA em Base64]
+                            </div>
+                            <p style="font-size: 0.85rem;">O retorno conterá um <code>access_token</code> (válido por 1h) e um <code>refresh_token</code>.</p>
+                        </div>
+                    </div>
+
+                    <div class="guide-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>Realizar Requisições</h3>
+                            <p>Com o token em mãos, adicione-o ao cabeçalho de todas as chamadas seguintes.</p>
+                            <div class="code-block">
+                                GET /api/v1/products<br>
+                                Authorization: Bearer [SEU_ACCESS_TOKEN]
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="guide-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>Renovação Automática (Refresh)</h3>
+                            <p>Para evitar que sua integração pare de funcionar quando o token expirar, use o <code>refresh_token</code>.</p>
+                            <div class="guide-tip">
+                                <i class='bx bx-bulb'></i> <strong>Dica:</strong> Não peça para o usuário logar de novo. Use o refresh token para pegar um novo acesso silenciosamente.
+                            </div>
+                            <div class="code-block">
+                                POST /api/v1/auth/refresh<br>
+                                Body: { "refresh_token": "..." }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ai-prompt-box">
+                        <div class="ai-header">
+                            <i class='bx bxs-bot'></i>
+                            <h4>Manual para sua IA (Claude, ChatGPT, etc)</h4>
+                        </div>
+                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 16px;">Copie o prompt abaixo e cole na sua IA favorita para gerar o código de integração instantaneamente:</p>
+                        <div class="prompt-text">
+                            "Preciso de um script em <strong>Python</strong> (ou sua linguagem) para integrar com a InfoAPI. 
+                            1. O login é em /api/v1/auth/login usando Basic Auth. 
+                            2. Salve o access_token e o refresh_token. 
+                            3. Faça um GET em /api/v1/products com o token. 
+                            4. Se receber erro 401, use o refresh_token em /api/v1/auth/refresh para renovar o acesso e tente novamente."
+                            
+                            <button onclick="UI.copyText(this.parentElement.innerText, 'Prompt copiado!')" class="btn-copy-small" style="position: absolute; top: 10px; right: 10px; background: var(--primary); border: none; border-radius: 4px; padding: 4px; cursor: pointer;">
+                                <i class='bx bx-copy'></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- Tab: Usage -->
-            <section id="tab-usage" class="tab-content active">
+            <section id="tab-usage" class="tab-content">
                 <div class="usage-grid">
                     <div class="card">
                         <h3>Uso Mensal</h3>

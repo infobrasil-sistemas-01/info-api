@@ -111,6 +111,10 @@ const UI = {
         await this.loadStats();
         this.loadPlans();
         this.loadAnnouncements();
+
+        // Inicializa aba pela URL ou padrão 'guide'
+        const hash = window.location.hash.replace('#', '');
+        this.switchTab(hash || 'guide', false);
     },
 
     announcements: [],
@@ -282,7 +286,10 @@ const UI = {
             }, 100);
         }
     },
-    switchTab(tabId) {
+    switchTab(tabId, updateHash = true) {
+        // Se não houver tabId (ex: hash vazio), usa 'guide'
+        if (!tabId) tabId = 'guide';
+
         // Update Buttons
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.classList.remove('active');
@@ -296,6 +303,11 @@ const UI = {
         });
         const activeContent = document.getElementById(`tab-${tabId}`);
         if (activeContent) activeContent.classList.add('active');
+
+        // Update URL Hash
+        if (updateHash) {
+            window.location.hash = tabId;
+        }
     },
     toggleAccordion(header) {
         const item = header.parentElement;
@@ -393,3 +405,9 @@ document.getElementById('login-form').onsubmit = async (e) => {
 
 // Start
 Auth.check();
+
+// Handle Hash Change
+window.onhashchange = () => {
+    const hash = window.location.hash.replace('#', '');
+    UI.switchTab(hash, false);
+};
