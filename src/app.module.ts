@@ -68,7 +68,7 @@ import { AppController } from './app.controller';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {
-    consumer.apply(IpBlocklistMiddleware).forRoutes('*path');
+    // consumer.apply(IpBlocklistMiddleware).forRoutes('*path');
   }
 }
 

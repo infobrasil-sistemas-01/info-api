@@ -53,7 +53,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
         (request.headers['x-real-ip'] as string) ??
         request.socket?.remoteAddress ??
         'unknown';
-      this.ipBlocklist.record404(ip);
+      // this.ipBlocklist.record404(ip);
     }
 
     const user = request.user;
