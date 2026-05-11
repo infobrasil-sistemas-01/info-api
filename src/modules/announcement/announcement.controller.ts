@@ -3,8 +3,10 @@ import { AnnouncementService } from './announcement.service';
 import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
 import { CurrentUser } from 'src/modules/auth/decorators/current-user.decorator';
 import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
+import { ApiExcludeController } from '@nestjs/swagger';
 
 @Controller('announcements')
+@ApiExcludeController()
 @UseGuards(JwtAuthGuard)
 export class AnnouncementController {
   constructor(private readonly announcementService: AnnouncementService) { }
