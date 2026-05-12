@@ -32,6 +32,9 @@ export const envSchema = z.object({
   GMAIL_CLIENT_SECRET: z.string(),
   GMAIL_REFRESH_TOKEN: z.string(),
   SUPPORT_EMAIL: z.string().default('suporte@infobrasilsistemas.com.br'),
+  UPTIMEROBOT_APIKEY: z.string(),
+  UPTIMEROBOT_MONITOR_ID: z.string(),
+  UPTIMEROBOT_APIURL: z.string()
 });
 
 export type Env = z.infer<typeof envSchema>;

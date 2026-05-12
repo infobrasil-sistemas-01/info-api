@@ -23,6 +23,7 @@ import { DbCredentialsModule } from './modules/db-credentials/db-credentials.mod
 import { PlanModule } from './modules/plan/plan.module';
 import { PlanLimitInterceptor } from './modules/plan/interceptors/plan-limit.interceptor';
 import { AnnouncementModule } from './modules/announcement/announcement.module';
+import { UptimeModule } from './modules/uptime/uptime.module';
 
 import { AppController } from './app.controller';
 
@@ -47,6 +48,7 @@ import { AppController } from './app.controller';
     DbCredentialsModule,
     PlanModule,
     AnnouncementModule,
+    UptimeModule,
   ],
   controllers: [AppController],
   providers: [

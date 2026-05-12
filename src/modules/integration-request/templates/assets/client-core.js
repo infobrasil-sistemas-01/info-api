@@ -111,6 +111,7 @@ const UI = {
         await this.loadStats();
         this.loadPlans();
         this.loadAnnouncements();
+        this.loadUptimeStatus();
 
         // Inicializa aba pela URL ou padrão 'guide'
         const hash = window.location.hash.replace('#', '');
@@ -373,6 +374,25 @@ const UI = {
     copyNewPassword() {
         const pass = document.getElementById('new-password-value').textContent;
         this.copyText(pass, 'Senha copiada com sucesso!');
+    },
+    async loadUptimeStatus() {
+        try {
+            const res = await fetch(`${API_URL}/uptime/status`, {
+                headers: { 'Authorization': `Bearer ${Auth.getToken()}` }
+            });
+            if (res.ok) {
+                const data = await res.json();
+                const statusEl = document.getElementById('uptime-status');
+                if (statusEl) {
+                    const isUp = data.status === 2;
+                    statusEl.innerHTML = isUp 
+                        ? '<span style="color: #10b981; font-weight: 700;">● Online</span>' 
+                        : '<span style="color: #ef4444; font-weight: 700;">● Offline</span>';
+                }
+            }
+        } catch (e) {
+            console.error('Erro ao carregar status do sistema', e);
+        }
     }
 };
 

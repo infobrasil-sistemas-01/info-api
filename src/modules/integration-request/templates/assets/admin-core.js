@@ -153,6 +153,23 @@ const Data = {
             await this.fetch(`${API_URL}/db-credentials/${id}`, { method: 'DELETE' });
             this.fetchCreds();
         }
+    },
+    async fetchUptimeStatus() {
+        try {
+            const res = await this.fetch(`${API_URL}/uptime/status`);
+            if (res.ok) {
+                const data = await res.json();
+                const statusEl = document.getElementById('uptime-status');
+                if (statusEl) {
+                    const isUp = data.status === "UP";
+                    statusEl.innerHTML = isUp
+                        ? '<span style="color: #10b981; font-weight: 700;">● Online</span>'
+                        : '<span style="color: #ef4444; font-weight: 700;">● Offline</span>';
+                }
+            }
+        } catch (e) {
+            console.error('Erro ao buscar status do sistema', e);
+        }
     }
 };
 
@@ -277,6 +294,7 @@ const UI = {
         }
 
         Data.fetchAll();
+        Data.fetchUptimeStatus();
     },
     renderRequests() {
         const section = document.getElementById('section-requests');
