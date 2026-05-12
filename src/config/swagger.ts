@@ -20,7 +20,7 @@ export function setupSwagger(app: INestApplication) {
       - Basic Auth para login e obtenção de token JWT<br>
       - JWT para acesso aos endpoints protegidos.
       <br><br>
-      Para verificar a disponibilidade da API acesse nossa <a href='https://stats.uptimerobot.com/zHdEriLG2n/'>Página de Status</a>
+      Para verificar a disponibilidade da API acesse nossa <a href='https://stats.uptimerobot.com/zHdEriLG2n/802908478/'>Página de Status</a>
       <br><br>
       A API é organizada em módulos, cada um responsável por uma área específica do sistema, como produtos, clientes, vendas, etc.`,
     )
