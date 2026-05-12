@@ -377,14 +377,13 @@ const UI = {
     },
     async loadUptimeStatus() {
         try {
-            const res = await fetch(`${API_URL}/uptime/status`, {
-                headers: { 'Authorization': `Bearer ${Auth.getToken()}` }
-            });
+            // Usando o novo endpoint interno (sem prefixo api/v1)
+            const res = await fetch('/status/data');
             if (res.ok) {
                 const data = await res.json();
                 const statusEl = document.getElementById('uptime-status');
-                if (statusEl) {
-                    const isUp = data.status === 2;
+                if (statusEl && data.current) {
+                    const isUp = data.current.apiStatus === 'UP';
                     statusEl.innerHTML = isUp 
                         ? '<span style="color: #10b981; font-weight: 700;">● Online</span>' 
                         : '<span style="color: #ef4444; font-weight: 700;">● Offline</span>';

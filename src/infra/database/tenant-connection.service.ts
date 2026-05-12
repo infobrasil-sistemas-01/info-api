@@ -153,6 +153,11 @@ export class TenantConnectionService {
     return results;
   }
 
+  async ping(credentialsId: string): Promise<void> {
+    const pool = await this.getPool(credentialsId);
+    await this.pingPool(pool);
+  }
+
   private pingPool(pool: firebird.ConnectionPool): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       const timeout = setTimeout(() => reject(new Error('Ping timeout (3s)')), 3000);

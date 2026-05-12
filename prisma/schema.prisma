@@ -169,3 +169,15 @@ model AnnouncementView {
   @@unique([announcementId, userId])
   @@map("announcement_views")
 }
+
+model StatusLog {
+  id         String   @id @default(uuid())
+  apiStatus  String   @db.VarChar(10) // "UP" ou "DOWN"
+  apiLatency Int
+  dbStatus   String   @db.VarChar(10) // "UP" ou "DOWN"
+  dbLatency  Int
+  timestamp  DateTime @default(now()) @map("timestamp")
+
+  @@index([timestamp])
+  @@map("status_logs")
+}

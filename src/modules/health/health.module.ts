@@ -8,5 +8,6 @@ import { HealthService } from './health.service';
   imports: [InfraRegistryModule, TenantConnectionModule],
   controllers: [HealthController],
   providers: [HealthService],
+  exports: [HealthService],
 })
 export class HealthModule {}

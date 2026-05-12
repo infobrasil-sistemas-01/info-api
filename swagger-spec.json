@@ -1213,11 +1213,61 @@
           "Client"
         ]
       }
+    },
+    "/status/data": {
+      "get": {
+        "operationId": "StatusController_getData",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Obter dados de status e histórico (Público)",
+        "tags": [
+          "Status"
+        ]
+      }
+    },
+    "/status/my-connection": {
+      "get": {
+        "operationId": "StatusController_getMyConnection",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Verificar status da conexão do tenant (Usuário)",
+        "tags": [
+          "Status"
+        ]
+      }
+    },
+    "/status": {
+      "get": {
+        "operationId": "StatusController_getPage",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Página de Status visual (Pública)",
+        "tags": [
+          "Status"
+        ]
+      }
     }
   },
   "info": {
     "title": "InfoBrasil API",
-    "description": "API de integração do sistema Retaguarda (by InfoBrasil) com outros sistemas, como ERPs, e-commerce, etc. <br><br>\n      Se deseja solicitar um acesso, preencha o formulário em: <a href='https://info-api.infobrasilsistemas.com.br/integration/form'>Solicitar Acesso</a>\n      <br><br>\n      **O sistema conta com duas formas de autenticação:**<br> \n      - Basic Auth para login e obtenção de token JWT<br>\n      - JWT para acesso aos endpoints protegidos.\n      <br><br>\n      Para verificar a disponibilidade da API acesse nossa <a href='https://stats.uptimerobot.com/zHdEriLG2n/802908478/'>Página de Status</a>\n      <br><br>\n      A API é organizada em módulos, cada um responsável por uma área específica do sistema, como produtos, clientes, vendas, etc.",
+    "description": "API de integração do sistema Retaguarda (by InfoBrasil) com outros sistemas, como ERPs, e-commerce, etc. <br><br>\n      Se deseja solicitar um acesso, preencha o formulário em: <a href='https://info-api.infobrasilsistemas.com.br/integration/form'>Solicitar Acesso</a>\n      <br><br>\n      **O sistema conta com duas formas de autenticação:**<br> \n      - Basic Auth para login e obtenção de token JWT<br>\n      - JWT para acesso aos endpoints protegidos.\n      <br><br>\n      Para verificar a disponibilidade da API acesse nossa <a href='/status'>Página de Status</a>\n      <br><br>\n      A API é organizada em módulos, cada um responsável por uma área específica do sistema, como produtos, clientes, vendas, etc.",
     "version": "1.4.0",
     "contact": {
       "name": "InfoBrasil Sistemas",

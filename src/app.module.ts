@@ -25,6 +25,8 @@ import { PlanLimitInterceptor } from './modules/plan/interceptors/plan-limit.int
 import { AnnouncementModule } from './modules/announcement/announcement.module';
 import { UptimeModule } from './modules/uptime/uptime.module';
 import { ClientModule } from './modules/client/client.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { StatusModule } from './modules/status/status.module';
 
 import { AppController } from './app.controller';
 
@@ -51,6 +53,8 @@ import { AppController } from './app.controller';
     AnnouncementModule,
     UptimeModule,
     ClientModule,
+    ScheduleModule.forRoot(),
+    StatusModule,
   ],
   controllers: [AppController],
   providers: [

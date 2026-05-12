@@ -86,6 +86,25 @@ export class HealthService {
     }
   }
 
+  async checkTenant(dbCredentialsId: string): Promise<FirebirdTenantStatus> {
+    const start = Date.now();
+    try {
+      await this.tenantConnections.ping(dbCredentialsId);
+      return {
+        credentialsId: dbCredentialsId,
+        status: 'up',
+        responseTimeMs: Date.now() - start,
+      };
+    } catch (err: any) {
+      return {
+        credentialsId: dbCredentialsId,
+        status: 'down',
+        responseTimeMs: Date.now() - start,
+        error: err?.message ?? 'Unknown error',
+      };
+    }
+  }
+
   private async checkFirebird(): Promise<FirebirdStatus> {
     const stats = this.tenantConnections.getPoolStats();
     const tenants = await this.tenantConnections.pingActivePools();
