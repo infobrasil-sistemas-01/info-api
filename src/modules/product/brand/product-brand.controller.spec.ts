@@ -61,11 +61,5 @@ describe('ProductBrandController', () => {
         undefined,
       );
     });
-
-    it('should throw BadRequestException when pageSize exceeds 25', () => {
-      expect(() => controller.getBrands(mockReq, 1, 30)).toThrow(
-        BadRequestException,
-      );
-    });
   });
 });

@@ -11,7 +11,7 @@ describe('API E2E Tests', () => {
   let refreshToken: string;
 
   const TEST_CREDENTIALS = Buffer.from(
-    'infomobile:yd9FvSJ69bz6zvRq7GM&TJ5RD6*DsQPf',
+    'infomobile:xOQw^RBE^Ir^KJjNk^QWtdi0ALST6Wpt',
   ).toString('base64');
 
   let moduleFixture: TestingModule;

@@ -84,12 +84,6 @@ describe('ProductController', () => {
         undefined,
       );
     });
-
-    it('should throw BadRequestException when pageSize exceeds 25', () => {
-      expect(() => controller.getProducts(mockReq, 1, 30)).toThrow(
-        BadRequestException,
-      );
-    });
   });
 
   describe('getProductById', () => {

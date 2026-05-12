@@ -202,8 +202,7 @@ export class OrderService {
       this.logger.log(
         `Busca de pedidos executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
           { storeId, page, pageSize },
-        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${
-          queryEndTime - queryStartTime
+        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${queryEndTime - queryStartTime
         }ms`,
       );
 
@@ -278,7 +277,7 @@ export class OrderService {
 
       const orderInsert = {
         VEN_ID_ECOMMERCE: orderData.id,
-        VEN_NUMSITE: orderData.id.toString(),
+        VEN_NUMSITE: typeof orderData.id === 'string' ? orderData.id : orderData.id.toString(),
         SIT_CODIGO: 1,
         LOJ_CODIGO: storeId,
         USU_CODIGO: 9999,

@@ -6,6 +6,7 @@ import { JwtService } from '@nestjs/jwt';
 import { EnvService } from 'src/config/env/env.service';
 import { AUTH_CONFIG } from 'src/config/auth.config';
 import * as argon2 from 'argon2';
+import { PermissionResolver } from 'src/infra/rbac/permission-resolver.service';
 
 jest.mock('argon2');
 
@@ -15,6 +16,7 @@ describe('AuthService', () => {
   let mockJwt: any;
   let mockEnv: any;
   let mockAuthConfig: any;
+  let mockPermissionResolver: any;
 
   const mockUser = {
     id: '1',
@@ -47,6 +49,10 @@ describe('AuthService', () => {
       refreshTokenDays: 30,
     };
 
+    mockPermissionResolver = {
+      resolve: jest.fn(),
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AuthService,
@@ -54,6 +60,7 @@ describe('AuthService', () => {
         { provide: JwtService, useValue: mockJwt },
         { provide: EnvService, useValue: mockEnv },
         { provide: AUTH_CONFIG, useValue: mockAuthConfig },
+        { provide: PermissionResolver, useValue: mockPermissionResolver },
       ],
     }).compile();
 
@@ -77,10 +84,21 @@ describe('AuthService', () => {
         .mockResolvedValueOnce('refresh-token')
         .mockResolvedValueOnce('access-token');
 
+      mockPermissionResolver.resolve.mockResolvedValue({
+        userId: '1',
+        roles: ['admin'],
+        allowedKeys: new Set(['perm1']),
+      });
+
       const result = await service.login(credentials, meta);
 
       expect(result).toEqual({
-        user: { id: '1', role: 'admin', username: 'testuser' },
+        user: {
+          id: '1',
+          role: 'admin',
+          username: 'testuser',
+          permissions: ['perm1'],
+        },
         accessToken: 'access-token',
         refreshToken: 'refresh-token',
       });

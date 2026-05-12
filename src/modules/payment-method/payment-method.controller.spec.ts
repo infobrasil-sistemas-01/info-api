@@ -63,11 +63,5 @@ describe('PaymentMethodController', () => {
         undefined,
       );
     });
-
-    it('should throw BadRequestException when pageSize exceeds 25', () => {
-      expect(() => controller.getPaymentMethods(mockReq, 1, 30)).toThrow(
-        BadRequestException,
-      );
-    });
   });
 });

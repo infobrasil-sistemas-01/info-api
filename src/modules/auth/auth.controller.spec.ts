@@ -4,6 +4,7 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { AUTH_CONFIG } from 'src/config/auth.config';
 import { RefreshDto } from './dto/refresh.dto';
+import { PermissionResolver } from 'src/infra/rbac/permission-resolver.service';
 
 describe('AuthController', () => {
   let controller: AuthController;
@@ -12,6 +13,10 @@ describe('AuthController', () => {
   const mockAuthService = {
     login: jest.fn(),
     refresh: jest.fn(),
+  };
+
+  const mockPermissionResolver = {
+    resolve: jest.fn(),
   };
 
   const mockAuthConfig = {
@@ -25,6 +30,7 @@ describe('AuthController', () => {
       providers: [
         { provide: AuthService, useValue: mockAuthService },
         { provide: AUTH_CONFIG, useValue: mockAuthConfig },
+        { provide: PermissionResolver, useValue: mockPermissionResolver },
       ],
     }).compile();
 
