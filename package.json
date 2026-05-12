@@ -21,7 +21,9 @@
     "release": "commit-and-tag-version",
     "release:first": "commit-and-tag-version --first-release --release-as 1.0.0",
     "release:minor": "commit-and-tag-version --release-as minor",
-    "release:patch": "commit-and-tag-version --release-as patch"
+    "release:patch": "commit-and-tag-version --release-as patch",
+    "swagger:generate": "npx ts-node --transpile-only -r tsconfig-paths/register scripts/generate-swagger.ts",
+    "swagger:retroactive": "npx ts-node --transpile-only -r tsconfig-paths/register scripts/retroactive-swagger.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",

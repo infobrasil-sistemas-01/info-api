@@ -1,0 +1,5 @@
+{
+  "scripts": {
+    "postbump": "npm run swagger:generate && git add docs/swagger"
+  }
+}

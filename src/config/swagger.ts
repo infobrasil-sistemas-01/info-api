@@ -4,12 +4,7 @@ import { apiReference } from '@scalar/nestjs-api-reference';
 import path from 'path';
 import fs from 'fs';
 
-export function setupSwagger(app: INestApplication) {
-  const packageJsonPath = path.join(process.cwd(), 'package.json');
-  const packageVersion = fs.existsSync(packageJsonPath)
-    ? JSON.parse(fs.readFileSync(packageJsonPath, 'utf8')).version
-    : '1.0.0';
-
+export function getSwaggerConfigBuilder(packageVersion: string): DocumentBuilder {
   const builder = new DocumentBuilder()
     .setTitle('InfoBrasil API')
     .setDescription(
@@ -58,8 +53,32 @@ export function setupSwagger(app: INestApplication) {
   builder.addServer(
     'https://info-api.infobrasilsistemas.com.br',
     'Servidor de produção',
-  )
+  );
 
+  return builder;
+}
+
+export function setupSwagger(app: INestApplication) {
+  const packageJsonPath = path.join(process.cwd(), 'package.json');
+  const packageVersion = fs.existsSync(packageJsonPath)
+    ? JSON.parse(fs.readFileSync(packageJsonPath, 'utf8')).version
+    : '1.0.0';
+
+  const docsDir = path.join(process.cwd(), 'docs', 'swagger');
+  
+  // Lista todos os arquivos swagger-*.json para registrar as versões
+  const files = fs.existsSync(docsDir) 
+    ? fs.readdirSync(docsDir).filter(f => f.startsWith('swagger-') && f.endsWith('.json'))
+    : [];
+
+  // Mapear versões encontradas
+  const swaggerVersions = files.map(f => {
+    const version = f.replace('swagger-', '').replace('.json', '');
+    const document = JSON.parse(fs.readFileSync(path.join(docsDir, f), 'utf8'));
+    return { version, document };
+  });
+
+  const builder = getSwaggerConfigBuilder(packageVersion);
   const config = builder.build();
 
   const document = SwaggerModule.createDocument(app, config);
@@ -69,12 +88,19 @@ export function setupSwagger(app: INestApplication) {
     fs.writeFileSync(outputPath, JSON.stringify(document, null, 2));
   }
 
+  const availableVersions = swaggerVersions.map(v => v.version).sort((a, b) => {
+    return b.localeCompare(a, undefined, { numeric: true, sensitivity: 'base' });
+  });
+
   const customJsCode = `
     (function() {
+      var availableVersions = ${JSON.stringify(availableVersions)};
       var check = setInterval(function() {
         var topbar = document.querySelector('.topbar-wrapper');
         if (topbar && !document.getElementById('custom-admin-link')) {
           clearInterval(check);
+          
+          // 1. Botão Admin (Existente)
           var a = document.createElement('a');
           a.id = 'custom-admin-link';
           a.href = '/integration/admin';
@@ -94,6 +120,51 @@ export function setupSwagger(app: INestApplication) {
           a.onmouseout = function() { this.style.background = 'rgba(255,255,255,0.1)'; };
           a.innerHTML = '<i class="material-icons" style="color: white; font-size: 24px;">support_agent</i>';
           topbar.appendChild(a);
+
+          // 2. Seletor de Versões
+          var selectContainer = document.createElement('div');
+          selectContainer.style.marginLeft = '15px';
+          selectContainer.style.display = 'flex';
+          selectContainer.style.alignItems = 'center';
+
+          var select = document.createElement('select');
+          select.id = 'version-selector';
+          select.style.padding = '5px 10px';
+          select.style.borderRadius = '4px';
+          select.style.border = '1px solid rgba(255,255,255,0.3)';
+          select.style.background = '#3b4151';
+          select.style.color = 'white';
+          select.style.cursor = 'pointer';
+          select.style.outline = 'none';
+
+          // Opção para a versão atual (Principal)
+          var currentOpt = document.createElement('option');
+          currentOpt.value = '';
+          currentOpt.text = 'Versão Atual (${packageVersion})';
+          select.appendChild(currentOpt);
+
+          availableVersions.forEach(function(v) {
+            if (v === '${packageVersion}') return;
+            var opt = document.createElement('option');
+            opt.value = 'v' + v;
+            opt.text = 'v' + v;
+            if (window.location.pathname.includes('/v' + v)) {
+              opt.selected = true;
+            }
+            select.appendChild(opt);
+          });
+
+          select.onchange = function(e) {
+            var val = e.target.value;
+            if (val === '') {
+              window.location.href = '/docs';
+            } else {
+              window.location.href = '/docs/' + val;
+            }
+          };
+
+          selectContainer.appendChild(select);
+          topbar.appendChild(selectContainer);
         }
       }, 100);
     })();
@@ -105,6 +176,7 @@ export function setupSwagger(app: INestApplication) {
     res.send(customJsCode);
   });
 
+  // 1. Registro da versão principal (Atual)
   SwaggerModule.setup('docs', app, document, {
     customSiteTitle: 'InfoBrasil API Docs',
     customCssUrl: 'https://fonts.googleapis.com/icon?family=Material+Icons',
@@ -120,4 +192,25 @@ export function setupSwagger(app: INestApplication) {
       pageTitle: 'InfoBrasil API Docs',
     }),
   );
+
+  // 2. Registro das versões históricas encontradas em docs/swagger
+  swaggerVersions.forEach(({ version, document: versionDoc }) => {
+    // Swagger UI: /docs/v1.3.0
+    SwaggerModule.setup(`docs/v${version}`, app, versionDoc, {
+      customSiteTitle: `InfoBrasil API Docs v${version}`,
+      customCssUrl: 'https://fonts.googleapis.com/icon?family=Material+Icons',
+      customJs: '/swagger-custom.js',
+    });
+
+    // Scalar: /scalar/v1.3.0
+    app.use(
+      `/scalar/v${version}`,
+      apiReference({
+        theme: 'purple',
+        content: versionDoc,
+        showDeveloperTools: 'localhost',
+        pageTitle: `InfoBrasil API Docs v${version}`,
+      }),
+    );
+  });
 }
