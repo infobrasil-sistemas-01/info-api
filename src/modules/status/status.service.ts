@@ -56,16 +56,26 @@ export class StatusService {
   }
 
   async getLatestStatus() {
-    return this.prisma.statusLog.findFirst({
-      orderBy: { timestamp: 'desc' },
-    });
+    try {
+      return await this.prisma.statusLog.findFirst({
+        orderBy: { timestamp: 'desc' },
+      });
+    } catch (e) {
+      this.logger.error(`Error fetching latest status: ${e.message}`);
+      return null;
+    }
   }
 
   async getHistory(limit = 90) {
-    const logs = await this.prisma.statusLog.findMany({
-      take: limit,
-      orderBy: { timestamp: 'desc' },
-    });
-    return logs.reverse();
+    try {
+      const logs = await this.prisma.statusLog.findMany({
+        take: limit,
+        orderBy: { timestamp: 'desc' },
+      });
+      return logs.reverse();
+    } catch (e) {
+      this.logger.error(`Error fetching status history: ${e.message}`);
+      return [];
+    }
   }
 }
