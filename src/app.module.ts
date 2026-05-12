@@ -24,6 +24,7 @@ import { PlanModule } from './modules/plan/plan.module';
 import { PlanLimitInterceptor } from './modules/plan/interceptors/plan-limit.interceptor';
 import { AnnouncementModule } from './modules/announcement/announcement.module';
 import { UptimeModule } from './modules/uptime/uptime.module';
+import { ClientModule } from './modules/client/client.module';
 
 import { AppController } from './app.controller';
 
@@ -49,6 +50,7 @@ import { AppController } from './app.controller';
     PlanModule,
     AnnouncementModule,
     UptimeModule,
+    ClientModule,
   ],
   controllers: [AppController],
   providers: [
