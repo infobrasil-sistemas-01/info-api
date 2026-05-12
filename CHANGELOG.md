@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.5.0](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.4.0...v1.5.0) (2026-05-12)
+
+
+### Features
+
+* clients options on request form ([623da51](https://github.com/infobrasil-sistemas/info-vendas-api/commit/623da515d142307960e19e08b2c81f0109920088))
+* status page ([5d9f94d](https://github.com/infobrasil-sistemas/info-vendas-api/commit/5d9f94db2330ee3189361cb4430942347a7db7af))
+
 ## [1.4.0](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.2.6...v1.4.0) (2026-05-12)
 
 
