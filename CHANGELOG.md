@@ -2,6 +2,48 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.4.0](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.2.6...v1.4.0) (2026-05-12)
+
+
+### Features
+
+* `Links Uteis` on client panel ([acf4332](https://github.com/infobrasil-sistemas/info-vendas-api/commit/acf4332348839841daf35a963ab64af614e23b14))
+* add rotate password to client ([17b09be](https://github.com/infobrasil-sistemas/info-vendas-api/commit/17b09be30283f0dce36588f106f0ebccd34fb31f))
+* add seed script for announcement permissions and assign to admin role ([5dfb265](https://github.com/infobrasil-sistemas/info-vendas-api/commit/5dfb26501f0ede87bda9811e282265ccd41149f6))
+* docs versioning ([59e4700](https://github.com/infobrasil-sistemas/info-vendas-api/commit/59e4700e1f5477b5db479a55ab6634c8ce59b8cb))
+* implement announcement system with persistence, tracking, and UI integration ([758f7cd](https://github.com/infobrasil-sistemas/info-vendas-api/commit/758f7cdba974464e64e534ff2f1d31fcfee24190))
+* implement clients module ([ec85e36](https://github.com/infobrasil-sistemas/info-vendas-api/commit/ec85e36d6c0ebf805c047b53544a843b4244463f))
+* implement RBAC-protected announcement module and define system-wide permissions catalog ([09ab59e](https://github.com/infobrasil-sistemas/info-vendas-api/commit/09ab59e04bebedf11e0e718f481a763e4214fb1c))
+* integration guide tab ([11fdcc6](https://github.com/infobrasil-sistemas/info-vendas-api/commit/11fdcc619c97215aa9b4be82490c52bb7ba14334))
+* lp of integrations ([6e6f699](https://github.com/infobrasil-sistemas/info-vendas-api/commit/6e6f699cb86a62eae0c3f17a6213da8fb79d9202))
+* tab `Links Uteis` && filter for `Solicitações` ([31a7cfb](https://github.com/infobrasil-sistemas/info-vendas-api/commit/31a7cfb140018ccf09836a009d32f1e74b1ef808))
+* uptime monitor ([be93a00](https://github.com/infobrasil-sistemas/info-vendas-api/commit/be93a000702c4182f6fc87a595654392a2c65b7e))
+* vpn guard on admin endpoints ([3d71064](https://github.com/infobrasil-sistemas/info-vendas-api/commit/3d7106469f2224752a8e4ef55399881457a9d777))
+* welcome email after password generation ([c6b8bfc](https://github.com/infobrasil-sistemas/info-vendas-api/commit/c6b8bfcb9da314101cd772adf0478ddc4c791c70))
+
+
+### Bug Fixes
+
+* action btns on admin panel ([f9c4d0d](https://github.com/infobrasil-sistemas/info-vendas-api/commit/f9c4d0d7003b5b4262d8e7b69bb7f03f21652eaa))
+* alter invite duration ([0ded33e](https://github.com/infobrasil-sistemas/info-vendas-api/commit/0ded33e7c5f2617f36191707c1e7b462bf55ad9e))
+* apply green-blue strategy to deploy ([82c8a65](https://github.com/infobrasil-sistemas/info-vendas-api/commit/82c8a656dbf5857944abe7076c8fa2e242984b3f))
+* auto logout to clients in admin ([d05ed8b](https://github.com/infobrasil-sistemas/info-vendas-api/commit/d05ed8bb1b038a9ddd31c9656a93027b1d4e49c1))
+* close buttons on modals ([77a97bf](https://github.com/infobrasil-sistemas/info-vendas-api/commit/77a97bf1a2dafe7f053c1bc74b22957b788675af))
+* deploy.sh healthcheck ([77d5a5d](https://github.com/infobrasil-sistemas/info-vendas-api/commit/77d5a5d7c4b19a79ec4642ba31d3342652b36c4c))
+* favicon ([9a2071b](https://github.com/infobrasil-sistemas/info-vendas-api/commit/9a2071b7fd67fd64ec04d87418a9937d0eeb8297))
+* favicon2 ([8e9ff32](https://github.com/infobrasil-sistemas/info-vendas-api/commit/8e9ff32b91c9ddde352858a7f75c79a4bb50a4e7))
+* icon on client panel ([797c134](https://github.com/infobrasil-sistemas/info-vendas-api/commit/797c1344acdb2cb03b6b6b8e8c3495349a5285ef))
+* images ([4d6aef7](https://github.com/infobrasil-sistemas/info-vendas-api/commit/4d6aef70d3d0e49bebfe30c61d7e8e4b8a1921f6))
+* permissions block on creation role ([528c2bd](https://github.com/infobrasil-sistemas/info-vendas-api/commit/528c2bde644a7d7b12f342abd760bfeae9b41064))
+* remove 404s blocklist ([6a93b49](https://github.com/infobrasil-sistemas/info-vendas-api/commit/6a93b496888c19fb7a9f32230ad776ab174139fc))
+* remove announcement endpoints of Swagger ([4150f0e](https://github.com/infobrasil-sistemas/info-vendas-api/commit/4150f0ef3fd4fbd93195a06b0389b6c3eb2eabed))
+* remove vpn guard && add docs ([9ec30c1](https://github.com/infobrasil-sistemas/info-vendas-api/commit/9ec30c1481b173447b7b5f521ad61df9097d8865))
+* setup password ([4e85a08](https://github.com/infobrasil-sistemas/info-vendas-api/commit/4e85a087691ec1651750a3d84522c0493a1ffadd))
+* status page url ([95e341a](https://github.com/infobrasil-sistemas/info-vendas-api/commit/95e341a08b689c002aa0f52efd3c6e30b9af1de8))
+* statuspage url ([223420a](https://github.com/infobrasil-sistemas/info-vendas-api/commit/223420acc2227b23cda6d3e493065ee097bfc615))
+* turn database seed script for announcement permissions and assign them to the Admin role to JS file ([e4c579d](https://github.com/infobrasil-sistemas/info-vendas-api/commit/e4c579d19d581fa30f0c05013cf578b3323df5e2))
+* unit tests ([b1a7220](https://github.com/infobrasil-sistemas/info-vendas-api/commit/b1a7220e28c5731158e37d3f7db5cd6b674caf99))
+
 ## [1.3.0](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.2.6...v1.3.0) (2026-05-07)
 
 
