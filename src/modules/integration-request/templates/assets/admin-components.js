@@ -253,7 +253,7 @@ const Components = {
             'DOC': { label: 'Doc', class: 'doc', icon: 'bx-book' }
         };
         const type = typeLabels[ann.type] || typeLabels.INFO;
-        
+
         return `
         <tr>
             <td>
@@ -369,7 +369,7 @@ const Components = {
                 <div style="font-size: 2.5rem; color: var(--primary);"><i class='bx bx-pulse'></i></div>
                 <h3 style="margin: 0;">Página de Status</h3>
                 <p style="color: var(--text-muted); font-size: 0.9rem; flex-grow: 1;">Monitoramento em tempo real da saúde dos servidores e serviços de integração.</p>
-                <a href="https://infobrasil.statuspage.one/" target="_blank" class="btn btn-outline" style="text-align: center; text-decoration: none;">Verificar Status</a>
+                <a href="https://stats.uptimerobot.com/zHdEriLG2n/" target="_blank" class="btn btn-outline" style="text-align: center; text-decoration: none;">Verificar Status</a>
             </div>
 
 
