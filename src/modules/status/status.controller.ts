@@ -53,14 +53,21 @@ export class StatusController {
 
   @Get()
   @ApiOperation({ summary: 'Página de Status visual (Pública)' })
-  async getPage(@Res() res: Response) {
-    const templatePath = path.join(process.cwd(), 'src', 'modules', 'status', 'templates', 'status.html');
-
-    if (!fs.existsSync(templatePath)) {
+  async getStatusPage(@Res() res: Response) {
+    // Busca o template independente de estar em src (dev) ou dist (prod)
+    const htmlPath = path.join(__dirname, 'templates', 'status.html');
+    
+    if (!fs.existsSync(htmlPath)) {
+      // Fallback para quando o path pode variar dependendo da build
+      const altPath = path.join(process.cwd(), 'dist/modules/status/templates/status.html');
+      if (fs.existsSync(altPath)) {
+        const html = fs.readFileSync(altPath, 'utf8');
+        return res.type('text/html').send(html);
+      }
       return res.status(404).send('Status page template not found');
     }
 
-    const html = fs.readFileSync(templatePath, 'utf8');
+    const html = fs.readFileSync(htmlPath, 'utf8');
     res.type('text/html').send(html);
   }
 }
