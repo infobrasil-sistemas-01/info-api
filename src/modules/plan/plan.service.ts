@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { RegistryPrismaService } from 'src/infra/prisma/registry-prisma.service';
 
 export interface PlanLimits {
+  name: string;
   reqMin: number;
   reqMonth: number;
   maxPageSize: number;
@@ -12,6 +13,7 @@ export interface PlanLimits {
 export class PlanService {
   // Limites padrão do plano Free (conforme imagem)
   private readonly DEFAULT_FREE_LIMITS: PlanLimits = {
+    name: 'Free',
     reqMin: 30,
     reqMonth: 10000,
     maxPageSize: 100,
@@ -31,6 +33,7 @@ export class PlanService {
     }
 
     return {
+      name: user.plan.name,
       reqMin: user.plan.reqMin,
       reqMonth: user.plan.reqMonth,
       maxPageSize: user.plan.maxPageSize,
