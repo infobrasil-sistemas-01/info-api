@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,7 +20,11 @@
             --border: rgba(255, 255, 255, 0.05);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
             font-family: 'Outfit', sans-serif;
@@ -30,25 +35,109 @@
             line-height: 1.5;
         }
 
-        .container { max-width: 900px; margin: 0 auto; }
-
-        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-        
-        .logo { display: flex; align-items: center; gap: 0.75rem; }
-        .logo-icon { 
-            background: var(--primary); width: 40px; height: 40px; 
-            border-radius: 8px; display: flex; align-items: center; justify-content: center; 
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
         }
-        .logo h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em; }
-        .logo h1 span { color: var(--primary); }
 
-        .badge { 
-            padding: 0.4rem 1rem; border-radius: 99px; font-size: 0.875rem; 
-            font-weight: 600; display: flex; align-items: center; gap: 0.5rem; 
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
         }
-        .badge-loading { background: var(--card-bg); color: var(--text-muted); }
-        .badge-up { background: var(--success); color: white; box-shadow: 0 0 20px rgba(16, 185, 129, 0.3); }
-        .badge-down { background: var(--danger); color: white; box-shadow: 0 0 20px rgba(239, 68, 68, 0.3); }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            background: var(--primary);
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .logo h1 span {
+            color: var(--primary);
+        }
+
+        .badge {
+            padding: 0.5rem 1.25rem;
+            border-radius: 99px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+        }
+
+        .badge-loading {
+            color: var(--text-muted);
+        }
+
+        .badge-up {
+            color: var(--success);
+            border-color: rgba(16, 185, 129, 0.2);
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        .badge-down {
+            color: var(--danger);
+            border-color: rgba(239, 68, 68, 0.2);
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        /* Pulsing Status Indicator */
+        .status-indicator {
+            position: relative;
+            width: 10px;
+            height: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .status-indicator .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+            z-index: 2;
+        }
+
+        .status-indicator .ping {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: currentColor;
+            opacity: 0.75;
+            animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+            z-index: 1;
+        }
+
+        @keyframes ping {
+
+            75%,
+            100% {
+                transform: scale(3);
+                opacity: 0;
+            }
+        }
 
         .glass {
             background: var(--card-bg);
@@ -60,50 +149,219 @@
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        .hero { text-align: center; padding: 2rem; margin-bottom: 2rem; }
-        .hero h2 { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; }
-        .hero p { color: var(--text-muted); font-size: 1rem; }
+        .hero {
+            text-align: left;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
 
-        .services-list { border-radius: 1rem; overflow: hidden; margin-bottom: 2rem; }
-        .services-header { padding: 1rem 1.5rem; background: rgba(255,255,255,0.03); font-weight: 600; border-bottom: 1px solid var(--border); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); }
-        .service-item { padding: 1.25rem 1.5rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
-        .service-info { display: flex; align-items: center; gap: 0.75rem; }
-        .service-info .material-icons { color: var(--text-muted); font-size: 1.25rem; }
-        .service-status { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; font-weight: 600; }
-        .dot { width: 8px; height: 8px; border-radius: 50%; }
+        .hero-title-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
 
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
-        @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+        .hero h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
 
-        .metric-card { padding: 1.5rem; border-radius: 1rem; }
-        .metric-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-        .metric-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; }
-        .metric-value { font-size: 2rem; font-weight: 700; color: white; }
-        .metric-footer { font-size: 0.75rem; color: #475569; margin-top: 0.5rem; }
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
 
-        .history-section { margin-bottom: 2rem; }
-        .history-card { padding: 1.5rem; }
-        .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; }
-        .history-header h3 { font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem; font-weight: 600; color: var(--text-main); }
-        
-        .uptime-bars { display: flex; align-items: flex-end; justify-content: space-between; height: 32px; margin-bottom: 0.5rem; }
-        .bar { flex: 1; height: 24px; border-radius: 2px; margin: 0 1px; transition: transform 0.2s; background: rgba(255,255,255,0.03); }
-        .bar:hover { transform: scaleY(1.3); cursor: pointer; }
-        .bar-up { background: var(--success); }
-        .bar-down { background: var(--danger); }
+        .services-list {
+            border-radius: 1rem;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
 
-        .history-footer { display: flex; justify-content: space-between; font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; }
+        .services-header {
+            padding: 1rem 1.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            font-weight: 600;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+        }
 
-        footer { text-align: center; margin-top: 3rem; color: var(--text-muted); font-size: 0.85rem; font-weight: 400; opacity: 0.7; }
+        .service-item {
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
 
-        .pulse { animation: pulse 2s infinite; }
+        .service-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .service-info .material-icons {
+            color: var(--text-muted);
+            font-size: 1.25rem;
+        }
+
+        .service-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 640px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .metric-card {
+            padding: 1.5rem;
+            border-radius: 1rem;
+        }
+
+        .metric-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 700;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .metric-footer {
+            font-size: 0.75rem;
+            color: #475569;
+            margin-top: 0.5rem;
+        }
+
+        .history-section {
+            margin-bottom: 2rem;
+        }
+
+        .history-card {
+            padding: 1.5rem;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+        }
+
+        .history-header h3 {
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .uptime-bars {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 32px;
+            margin-bottom: 0.5rem;
+        }
+
+        .bar {
+            flex: 1;
+            height: 24px;
+            border-radius: 2px;
+            margin: 0 1px;
+            transition: transform 0.2s;
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .bar:hover {
+            transform: scaleY(1.3);
+            cursor: pointer;
+        }
+
+        .bar-up {
+            background: var(--success);
+        }
+
+        .bar-down {
+            background: var(--danger);
+        }
+
+        .history-footer {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 600;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 400;
+            opacity: 0.7;
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
         @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.4; }
-            100% { opacity: 1; }
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.4;
+            }
+
+            100% {
+                opacity: 1;
+            }
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <header>
@@ -112,12 +370,22 @@
                 <h1>Info<span>API</span> Status</h1>
             </div>
             <div id="overall-status-badge" class="badge badge-loading">
-                <span class="dot pulse" style="background: white;"></span> Verificando...
+                <div class="status-indicator">
+                    <div class="ping"></div>
+                    <div class="dot"></div>
+                </div>
+                <span class="status-text">Verificando...</span>
             </div>
         </header>
 
         <div class="glass hero">
-            <h2 id="hero-title">Sistemas Operacionais</h2>
+            <div class="hero-title-container">
+                <div id="hero-indicator" class="status-indicator" style="width: 14px; height: 14px; color: white;">
+                    <div class="ping"></div>
+                    <div class="dot" style="width: 12px; height: 12px;"></div>
+                </div>
+                <h2 id="hero-title">Sistemas Operacionais</h2>
+            </div>
             <p>Monitoramento dinâmico da infraestrutura InfoBrasil.</p>
         </div>
 
@@ -127,19 +395,27 @@
             <div class="service-item">
                 <div class="service-info">
                     <span class="material-icons">api</span>
-                    <span>API Core Engine</span>
+                    <span>InfoAPI</span>
                 </div>
                 <div class="service-status" id="service-api-status">
-                    <span class="dot" style="background: var(--success)"></span> <span style="color: var(--success)">Operacional</span>
+                    <div class="status-indicator" style="color: var(--success)">
+                        <div class="ping"></div>
+                        <div class="dot"></div>
+                    </div>
+                    <span style="color: var(--success)">Operacional</span>
                 </div>
             </div>
             <div class="service-item">
                 <div class="service-info">
                     <span class="material-icons">storage</span>
-                    <span>Banco de Dados (PostgreSQL)</span>
+                    <span>Banco de Dados</span>
                 </div>
                 <div class="service-status" id="service-db-status">
-                    <span class="dot" style="background: var(--success)"></span> <span style="color: var(--success)">Operacional</span>
+                    <div class="status-indicator" style="color: var(--success)">
+                        <div class="ping"></div>
+                        <div class="dot"></div>
+                    </div>
+                    <span style="color: var(--success)">Operacional</span>
                 </div>
             </div>
         </div>
@@ -148,14 +424,14 @@
         <div class="grid">
             <div class="glass metric-card">
                 <div class="metric-header">
-                    <span class="metric-label">Uptime API (90m)</span>
+                    <span class="metric-label">Uptime InfoAPI (90m)</span>
                     <span class="material-icons" style="color: var(--primary)">check_circle</span>
                 </div>
                 <div class="metric-value" id="uptime-api-percent">--%</div>
             </div>
             <div class="glass metric-card">
                 <div class="metric-header">
-                    <span class="metric-label">Uptime DB (90m)</span>
+                    <span class="metric-label">Uptime BD (90m)</span>
                     <span class="material-icons" style="color: var(--primary)">storage</span>
                 </div>
                 <div class="metric-value" id="uptime-db-percent">--%</div>
@@ -166,7 +442,7 @@
         <div class="history-section">
             <div class="glass history-card">
                 <div class="history-header">
-                    <h3><span class="material-icons" style="font-size: 1.2rem;">api</span> Histórico API Core</h3>
+                    <h3><span class="material-icons" style="font-size: 1.2rem;">api</span> Histórico InfoAPI</h3>
                     <span id="latency-api-avg" style="font-size: 0.75rem; color: var(--text-muted)">-- ms</span>
                 </div>
                 <div id="api-bars" class="uptime-bars"></div>
@@ -175,7 +451,9 @@
 
             <div class="glass history-card">
                 <div class="history-header">
-                    <h3><span class="material-icons" style="font-size: 1.2rem;">storage</span> Histórico PostgreSQL</h3>
+                    <h3><span class="material-icons" style="font-size: 1.2rem;">storage</span> Histórico do Banco de
+                        Dados
+                    </h3>
                     <span id="latency-db-avg" style="font-size: 0.75rem; color: var(--text-muted)">-- ms</span>
                 </div>
                 <div id="db-bars" class="uptime-bars"></div>
@@ -193,27 +471,31 @@
             try {
                 const response = await fetch('/status/data');
                 if (!response.ok) throw new Error('Servidor offline');
-                
+
                 const data = await response.json();
                 if (!data || !data.current) return;
 
                 const latest = data.current;
                 const history = data.history || [];
-                
+
                 // Update Badge & Hero
                 const badge = document.getElementById('overall-status-badge');
                 const heroTitle = document.getElementById('hero-title');
-                
+
                 const isAllUp = latest.apiStatus === 'UP' && latest.dbStatus === 'UP';
+
+                const heroIndicator = document.getElementById('hero-indicator');
 
                 if (isAllUp) {
                     badge.className = 'badge badge-up';
-                    badge.innerHTML = '<span class="dot pulse" style="background: white;"></span> Online';
-                    heroTitle.innerText = 'Todos os sistemas operacionais';
+                    badge.querySelector('.status-text').innerText = 'Sistemas Online';
+                    heroTitle.innerText = 'Todos os serviços operacionais';
+                    heroIndicator.style.color = 'var(--success)';
                 } else {
                     badge.className = 'badge badge-down';
-                    badge.innerHTML = '<span class="dot pulse" style="background: white;"></span> Incidente Detectado';
+                    badge.querySelector('.status-text').innerText = 'Incidente Detectado';
                     heroTitle.innerText = 'Sistemas apresentando instabilidade';
+                    heroIndicator.style.color = 'var(--danger)';
                 }
 
                 // Update Service Items
@@ -236,15 +518,15 @@
 
         function updateServiceRow(type, status) {
             const el = document.getElementById(`service-${type}-status`);
-            const dot = el.querySelector('.dot');
+            const indicator = el.querySelector('.status-indicator');
             const text = el.querySelector('span:last-child');
-            
+
             if (status === 'UP') {
-                dot.style.background = 'var(--success)';
+                indicator.style.color = 'var(--success)';
                 text.innerText = 'Operacional';
                 text.style.color = 'var(--success)';
             } else {
-                dot.style.background = 'var(--danger)';
+                indicator.style.color = 'var(--danger)';
                 text.innerText = 'Indisponível';
                 text.style.color = 'var(--danger)';
             }
@@ -253,13 +535,13 @@
         function updateMetric(type, history) {
             const statusKey = `${type}Status`;
             const latencyKey = `${type}Latency`;
-            
+
             const upCount = history.filter(l => l[statusKey] === 'UP').length;
             const percent = history.length > 0 ? ((upCount / history.length) * 100).toFixed(1) : '100';
             document.getElementById(`uptime-${type}-percent`).innerText = `${percent}%`;
 
-            const avgLatency = history.length > 0 
-                ? Math.round(history.reduce((acc, curr) => acc + curr[latencyKey], 0) / history.length) 
+            const avgLatency = history.length > 0
+                ? Math.round(history.reduce((acc, curr) => acc + curr[latencyKey], 0) / history.length)
                 : 0;
             document.getElementById(`latency-${type}-avg`).innerText = `Média: ${avgLatency} ms`;
         }
@@ -267,18 +549,18 @@
         function renderBars(type, history) {
             const container = document.getElementById(`${type}-bars`);
             container.innerHTML = '';
-            
+
             const statusKey = `${type}Status`;
             const latencyKey = `${type}Latency`;
 
             const fullHistory = [...new Array(Math.max(0, 90 - history.length)).fill({ [statusKey]: 'EMPTY' }), ...history];
-            
+
             fullHistory.forEach(log => {
                 const bar = document.createElement('div');
                 bar.className = 'bar';
                 if (log[statusKey] === 'UP') bar.classList.add('bar-up');
                 else if (log[statusKey] === 'DOWN') bar.classList.add('bar-down');
-                
+
                 if (log.timestamp) {
                     const dateObj = new Date(log.timestamp);
                     const time = dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -296,4 +578,5 @@
         setInterval(updateStatus, 60000);
     </script>
 </body>
+
 </html>

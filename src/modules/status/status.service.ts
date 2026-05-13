@@ -55,6 +55,28 @@ export class StatusService {
     this.logger.log(`Monitor check - API: ${apiStatus} (${apiLatency}ms) | DB: ${dbStatus} (${dbLatency}ms)`);
   }
 
+  /**
+   * Limpa logs mais antigos que 7 dias para evitar inchaço do banco de dados.
+   * Roda todos os dias às 03:00 AM.
+   */
+  @Cron(CronExpression.EVERY_DAY_AT_3AM)
+  async cleanup() {
+    this.logger.log('Starting status logs cleanup...');
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+    try {
+      const { count } = await this.prisma.statusLog.deleteMany({
+        where: {
+          timestamp: { lt: sevenDaysAgo },
+        },
+      });
+      this.logger.log(`Cleanup finished. Removed ${count} old status logs.`);
+    } catch (e) {
+      this.logger.error(`Failed to cleanup status logs: ${e.message}`);
+    }
+  }
+
   async getLatestStatus() {
     try {
       return await this.prisma.statusLog.findFirst({
