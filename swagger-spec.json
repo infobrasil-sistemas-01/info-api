@@ -554,7 +554,10 @@
             "name": "page",
             "required": false,
             "in": "query",
+            "description": "Página atual",
             "schema": {
+              "default": 1,
+              "example": 1,
               "type": "number"
             }
           },
@@ -562,6 +565,45 @@
             "name": "pageSize",
             "required": false,
             "in": "query",
+            "description": "Quantidade de itens por página",
+            "schema": {
+              "default": 10,
+              "example": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "storeId",
+            "required": false,
+            "in": "query",
+            "description": "ID da loja (LOJ_CODIGO)",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "startDate",
+            "required": false,
+            "in": "query",
+            "description": "Data inicial (YYYY-MM-DD)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "endDate",
+            "required": false,
+            "in": "query",
+            "description": "Data final (YYYY-MM-DD)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "clientId",
+            "required": false,
+            "in": "query",
+            "description": "ID do cliente",
             "schema": {
               "type": "number"
             }
@@ -702,6 +744,15 @@
             "required": true,
             "in": "path",
             "description": "ID do pedido a ser retornado",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "storeId",
+            "required": false,
+            "in": "query",
+            "description": "ID da loja (LOJ_CODIGO)",
             "schema": {
               "type": "number"
             }

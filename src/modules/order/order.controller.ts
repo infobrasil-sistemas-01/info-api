@@ -148,27 +148,65 @@ export class OrderController {
   @ApiQuery({
     name: 'page',
     required: false,
+    type: Number,
+    description: 'Página atual',
+    example: 1,
+    default: 1,
   })
   @ApiQuery({
     name: 'pageSize',
     required: false,
+    type: Number,
+    description: 'Quantidade de itens por página',
+    example: 10,
+    default: 10,
+  })
+  @ApiQuery({
+    name: 'storeId',
+    required: false,
+    type: Number,
+    description: 'ID da loja (LOJ_CODIGO)',
+  })
+  @ApiQuery({
+    name: 'startDate',
+    required: false,
+    type: String,
+    description: 'Data inicial (YYYY-MM-DD)',
+  })
+  @ApiQuery({
+    name: 'endDate',
+    required: false,
+    type: String,
+    description: 'Data final (YYYY-MM-DD)',
+  })
+  @ApiQuery({
+    name: 'clientId',
+    required: false,
+    type: Number,
+    description: 'ID do cliente',
   })
   getOrders(
     @Req() req: ReqWithAuthContext,
     @Query('page') page?: number,
     @Query('pageSize') pageSize?: number,
+    @Query('storeId') storeIdQuery?: number,
+    @Query('startDate') startDate?: string,
+    @Query('endDate') endDate?: string,
+    @Query('clientId') clientId?: number,
   ) {
-    const { credentialsId, storeId } = req.authContext || {};
+    const { credentialsId, storeId: storeIdToken } = req.authContext || {};
 
     if (!credentialsId) {
       throw new Error('Credentials ID not found in token');
     }
 
-    if (!storeId) {
-      throw new Error('Store ID not found in token');
-    }
+    const finalStoreId = storeIdQuery ? Number(storeIdQuery) : storeIdToken;
 
-    return this.orderService.get(credentialsId, storeId, page, pageSize);
+    return this.orderService.get(credentialsId, finalStoreId, page, pageSize, {
+      startDate,
+      endDate,
+      clientId: clientId ? Number(clientId) : undefined,
+    });
   }
 
   @Get(':id')
@@ -184,6 +222,12 @@ export class OrderController {
     name: 'id',
     type: Number,
     description: 'ID do pedido a ser retornado',
+  })
+  @ApiQuery({
+    name: 'storeId',
+    required: false,
+    type: Number,
+    description: 'ID da loja (LOJ_CODIGO)',
   })
   @ApiResponse({
     status: 200,
@@ -229,20 +273,22 @@ export class OrderController {
     status: 401,
     description: 'Token de autenticação inválido ou ausente.',
   })
-  async getOrderById(@Req() req: ReqWithAuthContext, @Param('id') id: number) {
-    const { credentialsId, storeId } = req.authContext || {};
+  async getOrderById(
+    @Req() req: ReqWithAuthContext,
+    @Param('id') id: number,
+    @Query('storeId') storeIdQuery?: number,
+  ) {
+    const { credentialsId, storeId: storeIdToken } = req.authContext || {};
 
     if (!credentialsId) {
       throw new Error('Credentials ID not found in token');
     }
 
-    if (!storeId) {
-      throw new Error('Store ID not found in token');
-    }
+    const finalStoreId = storeIdQuery ? Number(storeIdQuery) : storeIdToken;
 
     const orderData = await this.orderService.getById(
       credentialsId,
-      storeId,
+      finalStoreId,
       id,
     );
     const orderItems = await this.orderItemService.getByOrderId(
