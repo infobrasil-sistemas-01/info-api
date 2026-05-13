@@ -20,6 +20,8 @@ import {
 import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
 
+import { ProductBrandResponseDto } from '../dto/product-response.dto';
+
 @Controller('products/brands')
 export class ProductBrandController {
   constructor(private readonly brandService: ProductBrandService) { }
@@ -37,16 +39,7 @@ export class ProductBrandController {
   @ApiResponse({
     status: 200,
     description: 'Lista de marcas de produtos retornada com sucesso.',
-    schema: {
-      type: 'array',
-      items: {
-        type: 'object',
-        properties: {
-          MAR_CODIGO: { type: 'number', example: 1 },
-          MAR_DESCRICAO: { type: 'string', example: "Marca Exemplo" }
-        }
-      }
-    }
+    type: [ProductBrandResponseDto],
   })
   @ApiResponse({
     status: 400,

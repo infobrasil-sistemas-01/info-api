@@ -135,53 +135,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "properties": {
-                      "PRO_CODIGO": {
-                        "type": "number",
-                        "example": 101
-                      },
-                      "PRO_CODIGOBAR": {
-                        "type": "string",
-                        "example": "7891234567890"
-                      },
-                      "PRO_DESCRICAO": {
-                        "type": "string",
-                        "example": "Produto Exemplo"
-                      },
-                      "MAR_CODIGO": {
-                        "type": "number",
-                        "example": 1
-                      },
-                      "MAR_DESCRICAO": {
-                        "type": "string",
-                        "example": "Marca Exemplo"
-                      },
-                      "GRU_CODIGO": {
-                        "type": "number",
-                        "example": 1
-                      },
-                      "GRU_DESCRICAO": {
-                        "type": "string",
-                        "example": "Grupo Exemplo"
-                      },
-                      "EST_ATUAL": {
-                        "type": "number",
-                        "example": 50
-                      },
-                      "EST_APOIO": {
-                        "type": "number",
-                        "example": 50
-                      },
-                      "PRECO": {
-                        "type": "number",
-                        "example": 19.99
-                      },
-                      "PRECO2": {
-                        "type": "number",
-                        "example": 17.5
-                      }
-                    }
+                    "$ref": "#/components/schemas/ProductResponseDto"
                   }
                 }
               }
@@ -226,37 +180,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "PRO_CODIGO": {
-                      "type": "number",
-                      "example": 101
-                    },
-                    "PRO_CODIGOBAR": {
-                      "type": "string",
-                      "example": "7891234567890"
-                    },
-                    "PRO_PRCCOMPRA": {
-                      "type": "number",
-                      "example": 10
-                    },
-                    "PRO_PRCCUSTO": {
-                      "type": "number",
-                      "example": 12.5
-                    },
-                    "PRO_PRCCOMPRAFISCAL": {
-                      "type": "number",
-                      "example": 11
-                    },
-                    "PRO_CUSTOFISCAL": {
-                      "type": "number",
-                      "example": 13
-                    },
-                    "PRO_PRECO1": {
-                      "type": "number",
-                      "example": 19.99
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProductDetailResponseDto"
                 }
               }
             }
@@ -300,49 +224,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "PRO_CODIGO": {
-                      "type": "number",
-                      "example": 101
-                    },
-                    "PRO_CODIGOBAR": {
-                      "type": "string",
-                      "example": "7891234567890"
-                    },
-                    "PRO_DESCRICAO": {
-                      "type": "string",
-                      "example": "Produto Exemplo"
-                    },
-                    "MAR_CODIGO": {
-                      "type": "number",
-                      "example": 1
-                    },
-                    "MAR_DESCRICAO": {
-                      "type": "string",
-                      "example": "Marca Exemplo"
-                    },
-                    "GRU_CODIGO": {
-                      "type": "number",
-                      "example": 1
-                    },
-                    "GRU_DESCRICAO": {
-                      "type": "string",
-                      "example": "Grupo Exemplo"
-                    },
-                    "ESTOQUE": {
-                      "type": "number",
-                      "example": 50
-                    },
-                    "PRECO": {
-                      "type": "number",
-                      "example": 19.99
-                    },
-                    "PRECO2": {
-                      "type": "number",
-                      "example": 17.5
-                    }
-                  }
+                  "$ref": "#/components/schemas/ProductBarcodeResponseDto"
                 }
               }
             }
@@ -397,17 +279,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "properties": {
-                      "MAR_CODIGO": {
-                        "type": "number",
-                        "example": 1
-                      },
-                      "MAR_DESCRICAO": {
-                        "type": "string",
-                        "example": "Marca Exemplo"
-                      }
-                    }
+                    "$ref": "#/components/schemas/ProductBrandResponseDto"
                   }
                 }
               }
@@ -463,17 +335,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "properties": {
-                      "GRU_CODIGO": {
-                        "type": "number",
-                        "example": 1
-                      },
-                      "GRU_DESCRICAO": {
-                        "type": "string",
-                        "example": "Grupo Exemplo"
-                      }
-                    }
+                    "$ref": "#/components/schemas/ProductGroupResponseDto"
                   }
                 }
               }
@@ -617,53 +479,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "properties": {
-                      "VEN_NUMERO": {
-                        "type": "number",
-                        "example": 12345
-                      },
-                      "VEN_NUMSITE": {
-                        "type": "string",
-                        "example": "WEB-12345"
-                      },
-                      "LOJ_CODIGO": {
-                        "type": "number",
-                        "example": 1
-                      },
-                      "VEN_TIPO": {
-                        "type": "string",
-                        "example": "E"
-                      },
-                      "VEN_DATA": {
-                        "type": "string",
-                        "example": "2024-05-10T00:00:00.000Z"
-                      },
-                      "VEN_HORA": {
-                        "type": "string",
-                        "example": "14:30:00"
-                      },
-                      "FP1_CODIGO": {
-                        "type": "number",
-                        "example": 1
-                      },
-                      "fpg_descricao": {
-                        "type": "string",
-                        "example": "Dinheiro"
-                      },
-                      "pp1_codigo": {
-                        "type": "number",
-                        "example": 1
-                      },
-                      "plp_descricao": {
-                        "type": "string",
-                        "example": "A Vista"
-                      },
-                      "ven_totalliquido": {
-                        "type": "number",
-                        "example": 250.5
-                      }
-                    }
+                    "$ref": "#/components/schemas/OrderResponseDto"
                   }
                 }
               }
@@ -764,93 +580,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "VEN_NUMERO": {
-                      "type": "number",
-                      "example": 12345
-                    },
-                    "VEN_NUMSITE": {
-                      "type": "string",
-                      "example": "WEB-12345"
-                    },
-                    "LOJ_CODIGO": {
-                      "type": "number",
-                      "example": 1
-                    },
-                    "VEN_TIPO": {
-                      "type": "string",
-                      "example": "E"
-                    },
-                    "VEN_PRECO": {
-                      "type": "string",
-                      "example": "1"
-                    },
-                    "VEN_DATA": {
-                      "type": "string",
-                      "example": "2024-05-10T00:00:00.000Z"
-                    },
-                    "VEN_HORA": {
-                      "type": "string",
-                      "example": "14:30:00"
-                    },
-                    "FP1_CODIGO": {
-                      "type": "number",
-                      "example": 1
-                    },
-                    "fpg_descricao": {
-                      "type": "string",
-                      "example": "Dinheiro"
-                    },
-                    "pp1_codigo": {
-                      "type": "number",
-                      "example": 1
-                    },
-                    "plp_descricao": {
-                      "type": "string",
-                      "example": "A Vista"
-                    },
-                    "VEN_TOTALBRUTO": {
-                      "type": "number",
-                      "example": 300
-                    },
-                    "ven_totaldesc": {
-                      "type": "number",
-                      "example": 49.5
-                    },
-                    "ven_totalliquido": {
-                      "type": "number",
-                      "example": 250.5
-                    },
-                    "ven_quant": {
-                      "type": "number",
-                      "example": 2
-                    },
-                    "items": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "ITE_SEQUENCIA": {
-                            "type": "number",
-                            "example": 1
-                          },
-                          "PRO_CODIGO": {
-                            "type": "number",
-                            "example": 101
-                          },
-                          "ITE_QUANT": {
-                            "type": "number",
-                            "example": 2
-                          },
-                          "ITE_PRECO": {
-                            "type": "number",
-                            "example": 150
-                          }
-                        }
-                      }
-                    }
-                  }
+                  "$ref": "#/components/schemas/OrderDetailResponseDto"
                 }
               }
             }
@@ -905,17 +635,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "properties": {
-                      "FPG_CODIGO": {
-                        "type": "number",
-                        "example": 1
-                      },
-                      "FPG_DESCRICAO": {
-                        "type": "string",
-                        "example": "Dinheiro"
-                      }
-                    }
+                    "$ref": "#/components/schemas/PaymentMethodResponseDto"
                   }
                 }
               }
@@ -1391,6 +1111,233 @@
           "refresh_token"
         ]
       },
+      "ProductResponseDto": {
+        "type": "object",
+        "properties": {
+          "PRO_CODIGO": {
+            "type": "number",
+            "example": 101,
+            "description": "Código do produto"
+          },
+          "PRO_CODIGOBAR": {
+            "type": "string",
+            "example": "7891234567890",
+            "description": "Código de barras"
+          },
+          "PRO_DESCRICAO": {
+            "type": "string",
+            "example": "Produto Exemplo",
+            "description": "Descrição do produto"
+          },
+          "MAR_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código da marca"
+          },
+          "MAR_DESCRICAO": {
+            "type": "string",
+            "example": "Marca Exemplo",
+            "description": "Descrição da marca"
+          },
+          "GRU_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código do grupo"
+          },
+          "GRU_DESCRICAO": {
+            "type": "string",
+            "example": "Grupo Exemplo",
+            "description": "Descrição do grupo"
+          },
+          "EST_ATUAL": {
+            "type": "number",
+            "example": 50,
+            "description": "Estoque atual"
+          },
+          "EST_APOIO": {
+            "type": "number",
+            "example": 50,
+            "description": "Estoque de apoio"
+          },
+          "PRECO": {
+            "type": "number",
+            "example": 19.99,
+            "description": "Preço 1"
+          },
+          "PRECO2": {
+            "type": "number",
+            "example": 17.5,
+            "description": "Preço 2"
+          }
+        },
+        "required": [
+          "PRO_CODIGO",
+          "PRO_CODIGOBAR",
+          "PRO_DESCRICAO",
+          "MAR_CODIGO",
+          "MAR_DESCRICAO",
+          "GRU_CODIGO",
+          "GRU_DESCRICAO",
+          "EST_ATUAL",
+          "EST_APOIO",
+          "PRECO",
+          "PRECO2"
+        ]
+      },
+      "ProductDetailResponseDto": {
+        "type": "object",
+        "properties": {
+          "PRO_CODIGO": {
+            "type": "number",
+            "example": 101,
+            "description": "Código do produto"
+          },
+          "PRO_CODIGOBAR": {
+            "type": "string",
+            "example": "7891234567890",
+            "description": "Código de barras"
+          },
+          "PRO_PRCCOMPRA": {
+            "type": "number",
+            "example": 10,
+            "description": "Preço de compra"
+          },
+          "PRO_PRCCUSTO": {
+            "type": "number",
+            "example": 12.5,
+            "description": "Preço de custo"
+          },
+          "PRO_PRCCOMPRAFISCAL": {
+            "type": "number",
+            "example": 11,
+            "description": "Preço de compra fiscal"
+          },
+          "PRO_CUSTOFISCAL": {
+            "type": "number",
+            "example": 13,
+            "description": "Custo fiscal"
+          },
+          "PRO_PRECO1": {
+            "type": "number",
+            "example": 19.99,
+            "description": "Preço 1"
+          }
+        },
+        "required": [
+          "PRO_CODIGO",
+          "PRO_CODIGOBAR",
+          "PRO_PRCCOMPRA",
+          "PRO_PRCCUSTO",
+          "PRO_PRCCOMPRAFISCAL",
+          "PRO_CUSTOFISCAL",
+          "PRO_PRECO1"
+        ]
+      },
+      "ProductBarcodeResponseDto": {
+        "type": "object",
+        "properties": {
+          "PRO_CODIGO": {
+            "type": "number",
+            "example": 101,
+            "description": "Código do produto"
+          },
+          "PRO_CODIGOBAR": {
+            "type": "string",
+            "example": "7891234567890",
+            "description": "Código de barras"
+          },
+          "PRO_DESCRICAO": {
+            "type": "string",
+            "example": "Produto Exemplo",
+            "description": "Descrição do produto"
+          },
+          "MAR_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código da marca"
+          },
+          "MAR_DESCRICAO": {
+            "type": "string",
+            "example": "Marca Exemplo",
+            "description": "Descrição da marca"
+          },
+          "GRU_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código do grupo"
+          },
+          "GRU_DESCRICAO": {
+            "type": "string",
+            "example": "Grupo Exemplo",
+            "description": "Descrição do grupo"
+          },
+          "ESTOQUE": {
+            "type": "number",
+            "example": 50,
+            "description": "Estoque total"
+          },
+          "PRECO": {
+            "type": "number",
+            "example": 19.99,
+            "description": "Preço 1"
+          },
+          "PRECO2": {
+            "type": "number",
+            "example": 17.5,
+            "description": "Preço 2"
+          }
+        },
+        "required": [
+          "PRO_CODIGO",
+          "PRO_CODIGOBAR",
+          "PRO_DESCRICAO",
+          "MAR_CODIGO",
+          "MAR_DESCRICAO",
+          "GRU_CODIGO",
+          "GRU_DESCRICAO",
+          "ESTOQUE",
+          "PRECO",
+          "PRECO2"
+        ]
+      },
+      "ProductBrandResponseDto": {
+        "type": "object",
+        "properties": {
+          "MAR_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código da marca"
+          },
+          "MAR_DESCRICAO": {
+            "type": "string",
+            "example": "Marca Exemplo",
+            "description": "Descrição da marca"
+          }
+        },
+        "required": [
+          "MAR_CODIGO",
+          "MAR_DESCRICAO"
+        ]
+      },
+      "ProductGroupResponseDto": {
+        "type": "object",
+        "properties": {
+          "GRU_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código do grupo"
+          },
+          "GRU_DESCRICAO": {
+            "type": "string",
+            "example": "Grupo Exemplo",
+            "description": "Descrição do grupo"
+          }
+        },
+        "required": [
+          "GRU_CODIGO",
+          "GRU_DESCRICAO"
+        ]
+      },
       "SoldProductDto": {
         "type": "object",
         "properties": {
@@ -1500,6 +1447,258 @@
         "required": [
           "email",
           "cpf"
+        ]
+      },
+      "OrderResponseDto": {
+        "type": "object",
+        "properties": {
+          "VEN_NUMERO": {
+            "type": "number",
+            "example": 12345,
+            "description": "Número da venda"
+          },
+          "VEN_NUMSITE": {
+            "type": "string",
+            "example": "WEB-12345",
+            "description": "Número da venda no site"
+          },
+          "LOJ_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código da loja"
+          },
+          "VEN_TIPO": {
+            "type": "string",
+            "example": "E",
+            "description": "Tipo da venda"
+          },
+          "VEN_DATA": {
+            "type": "string",
+            "example": "2024-05-10T00:00:00.000Z",
+            "description": "Data da venda"
+          },
+          "VEN_HORA": {
+            "type": "string",
+            "example": "14:30:00",
+            "description": "Hora da venda"
+          },
+          "FP1_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código da forma de pagamento"
+          },
+          "fpg_descricao": {
+            "type": "string",
+            "example": "Dinheiro",
+            "description": "Descrição da forma de pagamento"
+          },
+          "pp1_codigo": {
+            "type": "number",
+            "example": 1,
+            "description": "Código do plano de pagamento"
+          },
+          "plp_descricao": {
+            "type": "string",
+            "example": "A Vista",
+            "description": "Descrição do plano de pagamento"
+          },
+          "ven_totalliquido": {
+            "type": "number",
+            "example": 250.5,
+            "description": "Valor total líquido"
+          },
+          "CLI_CODIGO": {
+            "type": "number",
+            "example": 123,
+            "description": "Código do cliente"
+          },
+          "CLI_NOME": {
+            "type": "string",
+            "example": "Cliente Exemplo",
+            "description": "Nome do cliente"
+          }
+        },
+        "required": [
+          "VEN_NUMERO",
+          "VEN_NUMSITE",
+          "LOJ_CODIGO",
+          "VEN_TIPO",
+          "VEN_DATA",
+          "VEN_HORA",
+          "FP1_CODIGO",
+          "fpg_descricao",
+          "pp1_codigo",
+          "plp_descricao",
+          "ven_totalliquido",
+          "CLI_CODIGO",
+          "CLI_NOME"
+        ]
+      },
+      "OrderItemResponseDto": {
+        "type": "object",
+        "properties": {
+          "ITE_SEQUENCIA": {
+            "type": "number",
+            "example": 1,
+            "description": "Sequência do item"
+          },
+          "PRO_CODIGO": {
+            "type": "number",
+            "example": 101,
+            "description": "Código do produto"
+          },
+          "ITE_QUANT": {
+            "type": "number",
+            "example": 2,
+            "description": "Quantidade"
+          },
+          "ITE_PRECO": {
+            "type": "number",
+            "example": 150,
+            "description": "Preço unitário"
+          }
+        },
+        "required": [
+          "ITE_SEQUENCIA",
+          "PRO_CODIGO",
+          "ITE_QUANT",
+          "ITE_PRECO"
+        ]
+      },
+      "OrderDetailResponseDto": {
+        "type": "object",
+        "properties": {
+          "VEN_NUMERO": {
+            "type": "number",
+            "example": 12345,
+            "description": "Número da venda"
+          },
+          "VEN_NUMSITE": {
+            "type": "string",
+            "example": "WEB-12345",
+            "description": "Número da venda no site"
+          },
+          "LOJ_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código da loja"
+          },
+          "VEN_TIPO": {
+            "type": "string",
+            "example": "E",
+            "description": "Tipo da venda"
+          },
+          "VEN_DATA": {
+            "type": "string",
+            "example": "2024-05-10T00:00:00.000Z",
+            "description": "Data da venda"
+          },
+          "VEN_HORA": {
+            "type": "string",
+            "example": "14:30:00",
+            "description": "Hora da venda"
+          },
+          "FP1_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código da forma de pagamento"
+          },
+          "fpg_descricao": {
+            "type": "string",
+            "example": "Dinheiro",
+            "description": "Descrição da forma de pagamento"
+          },
+          "pp1_codigo": {
+            "type": "number",
+            "example": 1,
+            "description": "Código do plano de pagamento"
+          },
+          "plp_descricao": {
+            "type": "string",
+            "example": "A Vista",
+            "description": "Descrição do plano de pagamento"
+          },
+          "ven_totalliquido": {
+            "type": "number",
+            "example": 250.5,
+            "description": "Valor total líquido"
+          },
+          "CLI_CODIGO": {
+            "type": "number",
+            "example": 123,
+            "description": "Código do cliente"
+          },
+          "CLI_NOME": {
+            "type": "string",
+            "example": "Cliente Exemplo",
+            "description": "Nome do cliente"
+          },
+          "VEN_PRECO": {
+            "type": "string",
+            "example": "1",
+            "description": "Preço da venda"
+          },
+          "VEN_TOTALBRUTO": {
+            "type": "number",
+            "example": 300,
+            "description": "Valor total bruto"
+          },
+          "ven_totaldesc": {
+            "type": "number",
+            "example": 49.5,
+            "description": "Valor total de desconto"
+          },
+          "ven_quant": {
+            "type": "number",
+            "example": 2,
+            "description": "Quantidade total de itens"
+          },
+          "items": {
+            "description": "Itens do pedido",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderItemResponseDto"
+            }
+          }
+        },
+        "required": [
+          "VEN_NUMERO",
+          "VEN_NUMSITE",
+          "LOJ_CODIGO",
+          "VEN_TIPO",
+          "VEN_DATA",
+          "VEN_HORA",
+          "FP1_CODIGO",
+          "fpg_descricao",
+          "pp1_codigo",
+          "plp_descricao",
+          "ven_totalliquido",
+          "CLI_CODIGO",
+          "CLI_NOME",
+          "VEN_PRECO",
+          "VEN_TOTALBRUTO",
+          "ven_totaldesc",
+          "ven_quant",
+          "items"
+        ]
+      },
+      "PaymentMethodResponseDto": {
+        "type": "object",
+        "properties": {
+          "FPG_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código da forma de pagamento"
+          },
+          "FPG_DESCRICAO": {
+            "type": "string",
+            "example": "Dinheiro",
+            "description": "Descrição da forma de pagamento"
+          }
+        },
+        "required": [
+          "FPG_CODIGO",
+          "FPG_DESCRICAO"
         ]
       }
     }

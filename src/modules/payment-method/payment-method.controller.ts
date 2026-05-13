@@ -18,6 +18,8 @@ import {
 import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
 
+import { PaymentMethodResponseDto } from './dto/payment-method-response.dto';
+
 @Controller('payment-methods')
 export class PaymentMethodController {
   constructor(private readonly paymentMethodService: PaymentMethodService) { }
@@ -34,16 +36,7 @@ export class PaymentMethodController {
   @ApiResponse({
     status: 200,
     description: 'Lista de formas de pagamento retornada com sucesso.',
-    schema: {
-      type: 'array',
-      items: {
-        type: 'object',
-        properties: {
-          FPG_CODIGO: { type: 'number', example: 1 },
-          FPG_DESCRICAO: { type: 'string', example: "Dinheiro" }
-        }
-      }
-    }
+    type: [PaymentMethodResponseDto],
   })
   @ApiResponse({
     status: 400,

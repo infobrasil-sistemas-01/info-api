@@ -20,6 +20,8 @@ import { ProductGroupService } from './product-group.service';
 import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
 
+import { ProductGroupResponseDto } from '../dto/product-response.dto';
+
 @Controller('products/groups')
 export class ProductGroupController {
   constructor(private readonly groupService: ProductGroupService) { }
@@ -37,16 +39,7 @@ export class ProductGroupController {
   @ApiResponse({
     status: 200,
     description: 'Lista de grupos de produtos retornada com sucesso.',
-    schema: {
-      type: 'array',
-      items: {
-        type: 'object',
-        properties: {
-          GRU_CODIGO: { type: 'number', example: 1 },
-          GRU_DESCRICAO: { type: 'string', example: "Grupo Exemplo" }
-        }
-      }
-    }
+    type: [ProductGroupResponseDto],
   })
   @ApiResponse({
     status: 400,

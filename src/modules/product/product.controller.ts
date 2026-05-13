@@ -20,6 +20,11 @@ import type { ReqWithAuthContext } from '../auth/guards/jwt-auth.guard';
 import { ProductService } from './product.service';
 import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
+import { 
+  ProductResponseDto, 
+  ProductDetailResponseDto, 
+  ProductBarcodeResponseDto 
+} from './dto/product-response.dto';
 
 @Controller('products')
 export class ProductController {
@@ -38,25 +43,7 @@ export class ProductController {
   @ApiResponse({
     status: 200,
     description: 'Lista de produtos retornada com sucesso.',
-    schema: {
-      type: 'array',
-      items: {
-        type: 'object',
-        properties: {
-          PRO_CODIGO: { type: 'number', example: 101 },
-          PRO_CODIGOBAR: { type: 'string', example: "7891234567890" },
-          PRO_DESCRICAO: { type: 'string', example: "Produto Exemplo" },
-          MAR_CODIGO: { type: 'number', example: 1 },
-          MAR_DESCRICAO: { type: 'string', example: "Marca Exemplo" },
-          GRU_CODIGO: { type: 'number', example: 1 },
-          GRU_DESCRICAO: { type: 'string', example: "Grupo Exemplo" },
-          EST_ATUAL: { type: 'number', example: 50 },
-          EST_APOIO: { type: 'number', example: 50 },
-          PRECO: { type: 'number', example: 19.99 },
-          PRECO2: { type: 'number', example: 17.50 }
-        }
-      }
-    }
+    type: [ProductResponseDto],
   })
   @ApiResponse({
     status: 400,
@@ -148,18 +135,7 @@ export class ProductController {
   @ApiResponse({
     status: 200,
     description: 'Detalhes do produto retornados com sucesso.',
-    schema: {
-      type: 'object',
-      properties: {
-        PRO_CODIGO: { type: 'number', example: 101 },
-        PRO_CODIGOBAR: { type: 'string', example: "7891234567890" },
-        PRO_PRCCOMPRA: { type: 'number', example: 10.00 },
-        PRO_PRCCUSTO: { type: 'number', example: 12.50 },
-        PRO_PRCCOMPRAFISCAL: { type: 'number', example: 11.00 },
-        PRO_CUSTOFISCAL: { type: 'number', example: 13.00 },
-        PRO_PRECO1: { type: 'number', example: 19.99 }
-      }
-    }
+    type: ProductDetailResponseDto,
   })
   @ApiResponse({
     status: 400,
@@ -211,21 +187,7 @@ export class ProductController {
   @ApiResponse({
     status: 200,
     description: 'Detalhes do produto retornados com sucesso.',
-    schema: {
-      type: 'object',
-      properties: {
-        PRO_CODIGO: { type: 'number', example: 101 },
-        PRO_CODIGOBAR: { type: 'string', example: "7891234567890" },
-        PRO_DESCRICAO: { type: 'string', example: "Produto Exemplo" },
-        MAR_CODIGO: { type: 'number', example: 1 },
-        MAR_DESCRICAO: { type: 'string', example: "Marca Exemplo" },
-        GRU_CODIGO: { type: 'number', example: 1 },
-        GRU_DESCRICAO: { type: 'string', example: "Grupo Exemplo" },
-        ESTOQUE: { type: 'number', example: 50 },
-        PRECO: { type: 'number', example: 19.99 },
-        PRECO2: { type: 'number', example: 17.50 }
-      }
-    }
+    type: ProductBarcodeResponseDto,
   })
   @ApiResponse({
     status: 400,

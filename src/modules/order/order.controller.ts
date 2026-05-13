@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { PostOrderDto } from './dto/create-order.dto';
+import { OrderResponseDto, OrderDetailResponseDto } from './dto/order-response.dto';
 import {
   JwtAuthGuard,
   type ReqWithAuthContext,
@@ -125,25 +126,7 @@ export class OrderController {
   @ApiResponse({
     status: 200,
     description: 'Lista de pedidos retornada com sucesso.',
-    schema: {
-      type: 'array',
-      items: {
-        type: 'object',
-        properties: {
-          VEN_NUMERO: { type: 'number', example: 12345 },
-          VEN_NUMSITE: { type: 'string', example: "WEB-12345" },
-          LOJ_CODIGO: { type: 'number', example: 1 },
-          VEN_TIPO: { type: 'string', example: "E" },
-          VEN_DATA: { type: 'string', example: "2024-05-10T00:00:00.000Z" },
-          VEN_HORA: { type: 'string', example: "14:30:00" },
-          FP1_CODIGO: { type: 'number', example: 1 },
-          fpg_descricao: { type: 'string', example: "Dinheiro" },
-          pp1_codigo: { type: 'number', example: 1 },
-          plp_descricao: { type: 'string', example: "A Vista" },
-          ven_totalliquido: { type: 'number', example: 250.50 }
-        }
-      }
-    }
+    type: [OrderResponseDto],
   })
   @ApiQuery({
     name: 'page',
@@ -232,38 +215,7 @@ export class OrderController {
   @ApiResponse({
     status: 200,
     description: 'Detalhes do pedido retornados com sucesso.',
-    schema: {
-      type: 'object',
-      properties: {
-        VEN_NUMERO: { type: 'number', example: 12345 },
-        VEN_NUMSITE: { type: 'string', example: "WEB-12345" },
-        LOJ_CODIGO: { type: 'number', example: 1 },
-        VEN_TIPO: { type: 'string', example: "E" },
-        VEN_PRECO: { type: 'string', example: "1" },
-        VEN_DATA: { type: 'string', example: "2024-05-10T00:00:00.000Z" },
-        VEN_HORA: { type: 'string', example: "14:30:00" },
-        FP1_CODIGO: { type: 'number', example: 1 },
-        fpg_descricao: { type: 'string', example: "Dinheiro" },
-        pp1_codigo: { type: 'number', example: 1 },
-        plp_descricao: { type: 'string', example: "A Vista" },
-        VEN_TOTALBRUTO: { type: 'number', example: 300.00 },
-        ven_totaldesc: { type: 'number', example: 49.50 },
-        ven_totalliquido: { type: 'number', example: 250.50 },
-        ven_quant: { type: 'number', example: 2 },
-        items: {
-          type: 'array',
-          items: {
-            type: 'object',
-            properties: {
-              ITE_SEQUENCIA: { type: 'number', example: 1 },
-              PRO_CODIGO: { type: 'number', example: 101 },
-              ITE_QUANT: { type: 'number', example: 2 },
-              ITE_PRECO: { type: 'number', example: 150.00 }
-            }
-          }
-        }
-      }
-    }
+    type: OrderDetailResponseDto,
   })
   @ApiResponse({
     status: 400,
