@@ -277,22 +277,26 @@ const UI = {
             avatarEl.innerText = (State.currentUser.username || 'A').charAt(0).toUpperCase();
         }
 
-        // Default tab
-        switchTab('links');
+        // Default tab logic based on permissions and URL hash
+        const hash = window.location.hash.replace('#', '');
+        let defaultTab = 'links';
 
         if (canViewRequests) {
             document.getElementById('tab-requests').classList.remove('hidden');
-            switchTab('requests'); // High priority
+            defaultTab = 'requests';
         }
         if (canViewUsers) {
             ['tab-users', 'tab-roles', 'tab-creds'].forEach(id => document.getElementById(id).classList.remove('hidden'));
-            if (!canViewRequests) switchTab('users');
+            if (!canViewRequests) defaultTab = 'users';
         }
 
         const canViewAnns = State.currentUser.permissions.includes('core.announcement.view');
         if (canViewAnns) {
             document.getElementById('tab-announcements').classList.remove('hidden');
         }
+
+        // Switch to the tab from hash or the prioritized default
+        switchTab(hash || defaultTab, false);
 
         Data.fetchAll();
         Data.fetchUptimeStatus();
@@ -623,10 +627,16 @@ const UI = {
     }
 };
 
-function switchTab(tab) {
+function switchTab(tab, updateHash = true) {
+    if (!tab) return;
+    
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
-    const btn = document.querySelector(`.tab-btn[onclick*="${tab}"]`);
+    
+    // Find button by its onclick attribute containing the tab name
+    const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => 
+        b.getAttribute('onclick')?.includes(`'${tab}'`)
+    );
     if (btn) btn.classList.add('active');
 
     const section = document.getElementById(`section-${tab}`);
@@ -639,7 +649,17 @@ function switchTab(tab) {
             Data.fetchAnnouncements();
         }
     }
+
+    if (updateHash) {
+        window.location.hash = tab;
+    }
 }
+
+// Handle Browser Navigation (Back/Forward)
+window.onhashchange = () => {
+    const hash = window.location.hash.replace('#', '');
+    if (hash) switchTab(hash, false);
+};
 
 function switchRequestFilter(status) {
     State.currentRequestFilter = status;

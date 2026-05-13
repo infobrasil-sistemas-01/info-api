@@ -178,7 +178,10 @@ const Components = {
         <div class="card">
             <div class="card-header">
                 <h2>Gestão de Usuários</h2>
-                <button class="btn btn-primary" onclick="UI.openUserModal()">+ Novo Usuário</button>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn btn-outline" onclick="Data.fetchUsers()" title="Atualizar dados"><i class='bx bx-refresh'></i></button>
+                    <button class="btn btn-primary" onclick="UI.openUserModal()">+ Novo Usuário</button>
+                </div>
             </div>
             <div class="table-container">
                 <table>
@@ -205,7 +208,10 @@ const Components = {
         <div class="card">
             <div class="card-header">
                 <h2>Gestão de Perfis de Acesso</h2>
-                <button class="btn btn-primary" onclick="UI.openRoleModal()">+ Novo Perfil</button>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn btn-outline" onclick="Data.fetchRoles()" title="Atualizar dados"><i class='bx bx-refresh'></i></button>
+                    <button class="btn btn-primary" onclick="UI.openRoleModal()">+ Novo Perfil</button>
+                </div>
             </div>
             <div class="table-container">
                 <table>
@@ -234,7 +240,10 @@ const Components = {
         <div class="card">
             <div class="card-header">
                 <h2>Credenciais de Banco</h2>
-                <button class="btn btn-primary" onclick="UI.openCredModal()">+ Nova Credencial</button>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn btn-outline" onclick="Data.fetchCreds()" title="Atualizar dados"><i class='bx bx-refresh'></i></button>
+                    <button class="btn btn-primary" onclick="UI.openCredModal()">+ Nova Credencial</button>
+                </div>
             </div>
             <div class="table-container">
                 <table>
@@ -288,7 +297,10 @@ const Components = {
         <div class="card">
             <div class="card-header">
                 <h2>Gestão de Avisos do Sistema</h2>
-                <button class="btn btn-primary" onclick="UI.openAnnouncementModal()">+ Novo Aviso</button>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn btn-outline" onclick="Data.fetchAnnouncements()" title="Atualizar dados"><i class='bx bx-refresh'></i></button>
+                    <button class="btn btn-primary" onclick="UI.openAnnouncementModal()">+ Novo Aviso</button>
+                </div>
             </div>
             <div class="table-container">
                 <table>
@@ -308,29 +320,34 @@ const Components = {
         ];
 
         return `
-            <div class="filter-tabs" style="display: flex; gap: 10px; margin-bottom: 2rem; overflow-x: auto; padding-bottom: 5px;">
-                ${tabs.map(t => `
-                    <button class="filter-tab ${activeFilter === t.id ? 'active' : ''}" 
-                            onclick="switchRequestFilter('${t.id}')"
-                            style="
-                                display: flex; 
-                                align-items: center; 
-                                gap: 8px; 
-                                padding: 8px 16px; 
-                                border-radius: 10px; 
-                                border: 1px solid ${activeFilter === t.id ? 'var(--primary)' : 'var(--border)'}; 
-                                background: ${activeFilter === t.id ? 'rgba(16, 185, 129, 0.1)' : 'var(--card-bg)'}; 
-                                color: ${activeFilter === t.id ? 'var(--primary)' : 'var(--text-muted)'}; 
-                                cursor: pointer;
-                                white-space: nowrap;
-                                font-size: 0.9rem;
-                                font-weight: 500;
-                                transition: all 0.2s;
-                            ">
-                        <i class='bx ${t.icon}'></i>
-                        ${t.label}
-                    </button>
-                `).join('')}
+            <div class="filter-tabs-wrapper" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem;">
+                <div class="filter-tabs" style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px;">
+                    ${tabs.map(t => `
+                        <button class="filter-tab ${activeFilter === t.id ? 'active' : ''}" 
+                                onclick="switchRequestFilter('${t.id}')"
+                                style="
+                                    display: flex; 
+                                    align-items: center; 
+                                    gap: 8px; 
+                                    padding: 8px 16px; 
+                                    border-radius: 10px; 
+                                    border: 1px solid ${activeFilter === t.id ? 'var(--primary)' : 'var(--border)'}; 
+                                    background: ${activeFilter === t.id ? 'rgba(16, 185, 129, 0.1)' : 'var(--card-bg)'}; 
+                                    color: ${activeFilter === t.id ? 'var(--primary)' : 'var(--text-muted)'}; 
+                                    cursor: pointer;
+                                    white-space: nowrap;
+                                    font-size: 0.9rem;
+                                    font-weight: 500;
+                                    transition: all 0.2s;
+                                ">
+                            <i class='bx ${t.icon}'></i>
+                            ${t.label}
+                        </button>
+                    `).join('')}
+                </div>
+                <button class="btn btn-outline" onclick="Data.fetchRequests()" title="Atualizar solicitações" style="padding: 10px; border-radius: 10px;">
+                    <i class='bx bx-refresh' style="font-size: 1.2rem;"></i>
+                </button>
             </div>
         `;
     },
