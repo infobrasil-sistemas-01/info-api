@@ -5,6 +5,8 @@ import { AppModule } from './app.module';
 import { setupSwagger } from './config/swagger';
 import { GlobalLoggerService } from './common/logger/logger.service';
 
+import { ZodValidationPipe } from './common/validation/zod-validation.pipe';
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     bufferLogs: true,
@@ -12,6 +14,8 @@ async function bootstrap() {
 
   const logger = app.get(GlobalLoggerService);
   app.useLogger(logger);
+
+  app.useGlobalPipes(new ZodValidationPipe());
 
   // Confia no primeiro proxy (Nginx) para resolver o IP real do cliente
   // via X-Forwarded-For. Necessário para o IpBlocklistService funcionar corretamente.
