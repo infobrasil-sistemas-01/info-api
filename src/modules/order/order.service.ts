@@ -161,17 +161,47 @@ export class OrderService {
 
   async get(
     credentialsId: string,
-    storeId: number,
+    storeId?: number,
     page: number = 1,
     pageSize: number = 10,
+    filters: {
+      startDate?: string;
+      endDate?: string;
+      clientId?: number;
+    } = {},
   ) {
     let connection: any;
     connection =
       await this.tenantConnectionService.getConnection(credentialsId);
 
     try {
+      let whereClause = `WHERE V.VEN_TIPO = 'E'`;
+      const params: any[] = [pageSize, (page - 1) * pageSize];
+
+      if (storeId) {
+        whereClause += ` AND V.LOJ_CODIGO = ?`;
+        params.push(storeId);
+      }
+
+      if (filters.startDate) {
+        whereClause += ` AND V.VEN_DATA >= ?`;
+        params.push(filters.startDate);
+      }
+
+      if (filters.endDate) {
+        whereClause += ` AND V.VEN_DATA <= ?`;
+        params.push(filters.endDate);
+      }
+
+      if (filters.clientId) {
+        whereClause += ` AND V.CLI_CODIGO = ?`;
+        params.push(filters.clientId);
+      }
+
       const query = `SELECT FIRST ? SKIP ?
                   VEN_NUMERO,
+                  V.CLI_CODIGO,
+                  C.CLI_NOME,
                   V.VEN_NUMSITE,
                   V.LOJ_CODIGO,
                   V.VEN_TIPO,
@@ -185,10 +215,9 @@ export class OrderService {
                FROM VENDAS V
                LEFT JOIN formaspag FPG ON FPG.fpg_codigo = V.fp1_codigo
                LEFT JOIN planospag PLP ON PLP.plp_codigo = V.pp1_codigo
-               WHERE V.LOJ_CODIGO = ? AND V.VEN_TIPO = 'E'
+               LEFT JOIN clientes C ON C.cli_codigo = V.cli_codigo
+               ${whereClause}
                ORDER BY V.VEN_NUMERO DESC`;
-
-      const params = [pageSize, (page - 1) * pageSize, storeId];
 
       const queryStartTime = Date.now();
       const result = await new Promise((resolve, reject) => {
@@ -214,7 +243,7 @@ export class OrderService {
 
   async getById(
     credentialsId: string,
-    storeId: number,
+    storeId: number | undefined,
     id: number,
   ): Promise<object> {
     let connection: any;
@@ -222,6 +251,14 @@ export class OrderService {
       await this.tenantConnectionService.getConnection(credentialsId);
 
     try {
+      let whereClause = `WHERE V.VEN_NUMERO = ? AND V.VEN_TIPO = 'E'`;
+      const params: any[] = [id];
+
+      if (storeId) {
+        whereClause += ` AND V.LOJ_CODIGO = ?`;
+        params.push(storeId);
+      }
+
       const query = `SELECT
                   VEN_NUMERO,
                   V.VEN_NUMSITE,
@@ -241,10 +278,8 @@ export class OrderService {
                FROM VENDAS V
                LEFT JOIN formaspag FPG ON FPG.fpg_codigo = V.fp1_codigo
                LEFT JOIN planospag PLP ON PLP.plp_codigo = V.pp1_codigo
-               WHERE V.VEN_NUMERO = ? AND V.LOJ_CODIGO = ? AND V.VEN_TIPO = 'E'
+               ${whereClause}
                ORDER BY V.VEN_NUMERO DESC`;
-
-      const params = [id, storeId];
 
       const queryStartTime = Date.now();
       const result = (await new Promise((resolve, reject) => {

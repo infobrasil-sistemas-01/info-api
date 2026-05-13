@@ -552,7 +552,7 @@
         "parameters": [
           {
             "name": "page",
-            "required": false,
+            "required": true,
             "in": "query",
             "schema": {
               "type": "number"
@@ -560,8 +560,44 @@
           },
           {
             "name": "pageSize",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "storeId",
             "required": false,
             "in": "query",
+            "description": "ID da loja (LOJ_CODIGO)",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "startDate",
+            "required": false,
+            "in": "query",
+            "description": "Data inicial (YYYY-MM-DD)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "endDate",
+            "required": false,
+            "in": "query",
+            "description": "Data final (YYYY-MM-DD)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "clientId",
+            "required": false,
+            "in": "query",
+            "description": "ID do cliente",
             "schema": {
               "type": "number"
             }
@@ -702,6 +738,15 @@
             "required": true,
             "in": "path",
             "description": "ID do pedido a ser retornado",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "storeId",
+            "required": false,
+            "in": "query",
+            "description": "ID da loja (LOJ_CODIGO)",
             "schema": {
               "type": "number"
             }
