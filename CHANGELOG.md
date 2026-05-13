@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.5.1](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.4.0...v1.5.1) (2026-05-13)
+
+
+### Features
+
+* clients options on request form ([623da51](https://github.com/infobrasil-sistemas/info-vendas-api/commit/623da515d142307960e19e08b2c81f0109920088))
+* status page ([5d9f94d](https://github.com/infobrasil-sistemas/info-vendas-api/commit/5d9f94db2330ee3189361cb4430942347a7db7af))
+
+
+### Bug Fixes
+
+* prisma migrations ([b893091](https://github.com/infobrasil-sistemas/info-vendas-api/commit/b893091c508b331597c2138b307377b6085e7f92))
+* status page template path for production ([a9ef81d](https://github.com/infobrasil-sistemas/info-vendas-api/commit/a9ef81dfa63615f29fe163e203431d26febdd736))
+* zod validation ([ff09578](https://github.com/infobrasil-sistemas/info-vendas-api/commit/ff09578d4b47f8d86ad5d2234611161d0460480b))
+
 ## [1.5.0](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.4.0...v1.5.0) (2026-05-12)
 
 
