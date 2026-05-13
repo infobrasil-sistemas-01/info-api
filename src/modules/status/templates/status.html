@@ -469,7 +469,7 @@
     <script>
         async function updateStatus() {
             try {
-                const response = await fetch('/status/data');
+                const response = await fetch(`/status/data?t=${Date.now()}`);
                 if (!response.ok) throw new Error('Servidor offline');
 
                 const data = await response.json();

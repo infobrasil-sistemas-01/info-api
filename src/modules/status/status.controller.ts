@@ -1,4 +1,4 @@
-import { Controller, Get, Res, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Res, UseGuards, Req, Header } from '@nestjs/common';
 import type { Response } from 'express';
 import { StatusService } from './status.service';
 import * as fs from 'fs';
@@ -16,6 +16,7 @@ export class StatusController {
   ) { }
 
   @Get('data')
+  @Header('Cache-Control', 'no-store')
   @ApiOperation({ summary: 'Obter dados de status e histórico (Público)' })
   async getData() {
     const latest = await this.statusService.getLatestStatus();
