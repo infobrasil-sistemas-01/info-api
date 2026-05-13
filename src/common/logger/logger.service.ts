@@ -14,6 +14,19 @@ import * as Sentry from '@sentry/node';
  * Os logs estruturados são visíveis no painel "Logs" do GlitchTip quando
  * enableLogs: true está configurado no Sentry.init().
  */
+/**
+ * Contextos do NestJS que são muito ruidosos durante a inicialização
+ * e não precisam ir para o GlitchTip/Sentry.
+ */
+const NOISY_CONTEXTS = [
+  'InstanceLoader',
+  'RoutesResolver',
+  'RouterExplorer',
+  'NestFactory',
+  'NestApplication',
+  'StatusService', // Log de monitoramento a cada minuto
+];
+
 @Injectable()
 export class GlobalLoggerService extends ConsoleLogger {
   // ------------------------------------------------------------------ error
@@ -31,18 +44,21 @@ export class GlobalLoggerService extends ConsoleLogger {
   // ------------------------------------------------------------------ log (info)
   log(message: any, context?: string): void {
     super.log(message, context);
+    if (context && NOISY_CONTEXTS.includes(context)) return;
     this.toSentryLog('info', message, context);
   }
 
   // ------------------------------------------------------------------ debug
   debug(message: any, context?: string): void {
     super.debug(message, context);
+    if (context && NOISY_CONTEXTS.includes(context)) return;
     this.toSentryLog('debug', message, context);
   }
 
   // ------------------------------------------------------------------ verbose (trace)
   verbose(message: any, context?: string): void {
     super.verbose(message, context);
+    if (context && NOISY_CONTEXTS.includes(context)) return;
     this.toSentryLog('trace', message, context);
   }
 
