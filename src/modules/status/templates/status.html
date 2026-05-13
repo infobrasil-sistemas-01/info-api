@@ -280,10 +280,13 @@
                 else if (log[statusKey] === 'DOWN') bar.classList.add('bar-down');
                 
                 if (log.timestamp) {
-                    const time = new Date(log.timestamp).toLocaleTimeString();
-                    bar.title = `${time}: ${log[statusKey]} (${log[latencyKey]}ms)`;
+                    const dateObj = new Date(log.timestamp);
+                    const time = dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    const date = dateObj.toLocaleDateString();
+                    const statusText = log[statusKey] === 'UP' ? 'OPERACIONAL' : 'INSTÁVEL';
+                    bar.title = `[${date} ${time}]\nStatus: ${statusText}\nLatência: ${log[latencyKey]}ms`;
                 } else {
-                    bar.title = 'Sem dados';
+                    bar.title = 'Sem dados de monitoramento';
                 }
                 container.appendChild(bar);
             });

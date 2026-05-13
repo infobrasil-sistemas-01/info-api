@@ -128,29 +128,28 @@ export class TenantConnectionService {
   async pingActivePools(): Promise<
     Array<{ credentialsId: string; status: 'up' | 'down'; responseTimeMs: number; error?: string }>
   > {
-    const results: Array<{
-      credentialsId: string;
-      status: 'up' | 'down';
-      responseTimeMs: number;
-      error?: string;
-    }> = [];
+    const poolEntries = Array.from(this.poolCache.entries());
 
-    for (const [credentialsId, pool] of this.poolCache.entries()) {
-      const start = Date.now();
-      try {
-        await this.pingPool(pool);
-        results.push({ credentialsId, status: 'up', responseTimeMs: Date.now() - start });
-      } catch (err: any) {
-        results.push({
-          credentialsId,
-          status: 'down',
-          responseTimeMs: Date.now() - start,
-          error: err?.message ?? 'Unknown error',
-        });
-      }
-    }
-
-    return results;
+    return await Promise.all(
+      poolEntries.map(async ([credentialsId, pool]) => {
+        const start = Date.now();
+        try {
+          await this.pingPool(pool);
+          return {
+            credentialsId,
+            status: 'up' as const,
+            responseTimeMs: Date.now() - start,
+          };
+        } catch (err: any) {
+          return {
+            credentialsId,
+            status: 'down' as const,
+            responseTimeMs: Date.now() - start,
+            error: err?.message ?? 'Unknown error',
+          };
+        }
+      }),
+    );
   }
 
   async ping(credentialsId: string): Promise<void> {

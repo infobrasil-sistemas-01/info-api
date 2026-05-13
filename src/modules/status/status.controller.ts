@@ -39,23 +39,23 @@ export class StatusController {
       return { status: 'error', message: 'Credentials not found in token' };
     }
 
-    const [generalHealth, tenantHealth] = await Promise.all([
-      this.healthService.check(),
+    const [postgresHealth, tenantHealth] = await Promise.all([
+      this.healthService.checkPostgres(),
       this.healthService.checkTenant(credentialsId)
     ]);
 
     const totalTime = Date.now() - start;
     const maxDbWait = Math.max(
       tenantHealth.responseTimeMs,
-      generalHealth.databases.postgres.responseTimeMs || 0
+      postgresHealth.responseTimeMs || 0
     );
     const apiOverhead = totalTime - maxDbWait;
 
     return {
-      api: generalHealth.status === 'ok' ? 'UP' : 'DOWN',
+      api: 'UP', // Se chegou aqui, a API está respondendo
       apiLatency: apiOverhead > 0 ? apiOverhead : 1,
-      postgres: generalHealth.databases.postgres.status === 'up' ? 'UP' : 'DOWN',
-      postgresLatency: generalHealth.databases.postgres.responseTimeMs,
+      postgres: postgresHealth.status === 'up' ? 'UP' : 'DOWN',
+      postgresLatency: postgresHealth.responseTimeMs,
       tenant: tenantHealth.status === 'up' ? 'UP' : 'DOWN',
       tenantLatency: tenantHealth.responseTimeMs
     };

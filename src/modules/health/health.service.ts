@@ -42,15 +42,26 @@ export interface HealthStatus {
     firebird: FirebirdStatus;
   };
 }
-
 @Injectable()
 export class HealthService {
+  private lastCheck: HealthStatus | null = null;
+  private lastCheckTime = 0;
+  private readonly CACHE_TTL = 30000; // 30 segundos
+
   constructor(
     private readonly prisma: RegistryPrismaService,
     private readonly tenantConnections: TenantConnectionService,
   ) { }
 
   async check(): Promise<HealthStatus> {
+    const now = Date.now();
+    if (this.lastCheck && now - this.lastCheckTime < this.CACHE_TTL) {
+      return {
+        ...this.lastCheck,
+        timestamp: new Date().toISOString(), // Mantém o timestamp atualizado
+      };
+    }
+
     const [postgres, firebird] = await Promise.all([
       this.checkPostgres(),
       this.checkFirebird(),
@@ -63,16 +74,19 @@ export class HealthService {
 
     const status = postgresOk && firebirdOk ? 'ok' : 'degraded';
 
-    return {
+    this.lastCheck = {
       status,
       version: packageVersion,
       uptime: Math.floor(process.uptime()),
       timestamp: new Date().toISOString(),
       databases: { postgres, firebird },
     };
+    this.lastCheckTime = now;
+
+    return this.lastCheck;
   }
 
-  private async checkPostgres(): Promise<DatabaseStatus> {
+  async checkPostgres(): Promise<DatabaseStatus> {
     const start = Date.now();
     try {
       await this.prisma.$queryRaw`SELECT 1`;

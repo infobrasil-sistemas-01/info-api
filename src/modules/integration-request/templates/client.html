@@ -558,47 +558,57 @@ print(f'Basic {auth}')</code></pre>
             }
 
             // Atualiza a barra de uptime
-            updateUptimeBar(type, status);
+            updateUptimeBar(type, status, latency);
         }
 
         const UptimeHistory = {
-            api: Array(25).fill(true),
-            postgres: Array(25).fill(true),
-            tenant: Array(25).fill(true)
+            api: [],
+            postgres: [],
+            tenant: []
         };
 
-        function updateUptimeBar(type, currentStatus) {
+        function updateUptimeBar(type, currentStatus, latency) {
             const barEl = document.getElementById(`status-${type}-uptime-bar`);
             const pctEl = document.getElementById(`status-${type}-uptime-pct`);
             if (!barEl) return;
 
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
             const history = UptimeHistory[type];
-            history.push(currentStatus === 'UP');
+            history.push({ 
+                isUp: currentStatus === 'UP', 
+                latency: latency || 0,
+                time: timeStr
+            });
+            
             if (history.length > 30) history.shift();
 
             // Renderiza os ticks
             barEl.innerHTML = '';
             
-            // Se tiver pouco histórico, preenchemos com "vazios" (design)
-            const totalTicks = 30;
-            const emptyTicks = totalTicks - history.length;
+            // Slots vazios para preencher o design (30 slots fixos)
+            const totalSlots = 30;
+            const emptyCount = totalSlots - history.length;
             
-            for (let i = 0; i < emptyTicks; i++) {
+            for (let i = 0; i < emptyCount; i++) {
                 const tick = document.createElement('div');
                 tick.className = 'uptime-tick pending';
                 barEl.appendChild(tick);
             }
 
-            history.forEach((isUp, idx) => {
+            history.forEach((log) => {
                 const tick = document.createElement('div');
-                tick.className = `uptime-tick ${isUp ? 'up' : 'down'}`;
-                const timeStr = idx === history.length - 1 ? 'Agora' : `${(history.length - 1 - idx) * 1}m atrás`;
-                tick.title = `Status: ${isUp ? 'UP' : 'DOWN'} (${timeStr})`;
+                tick.className = `uptime-tick ${log.isUp ? 'up' : 'down'}`;
+                
+                const statusLabel = log.isUp ? 'OPERACIONAL' : 'INSTÁVEL';
+                tick.title = `[${log.time}]\nStatus: ${statusLabel}\nLatência: ${log.latency}ms`;
+                
                 barEl.appendChild(tick);
             });
 
-            // Calcula porcentagem (simplificado para os últimos 30 slots preenchidos)
-            const ups = history.filter(h => h).length;
+            // Calcula porcentagem baseada no histórico acumulado
+            const ups = history.filter(h => h.isUp).length;
             const pct = history.length > 0 ? Math.round((ups / history.length) * 100) : 100;
             if (pctEl) pctEl.innerText = `${pct}%`;
         }
