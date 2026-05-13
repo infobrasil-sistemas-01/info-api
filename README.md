@@ -10,30 +10,27 @@
 
 ## 📋 Descrição
 
-A Info Vendas API é uma aplicação backend desenvolvida com NestJS que facilita a integração entre sistemas de vendas e bancos de dados de clientes. Oferece funcionalidades para autenticação de usuários, listagem de produtos e criação de pedidos, com suporte a múltiplas credenciais de banco de dados.
+A **Info Vendas API (v1.5.0)** é uma aplicação backend desenvolvida com NestJS que facilita a integração entre sistemas de vendas e bancos de dados de clientes. Oferece funcionalidades para autenticação de usuários, listagem de produtos e criação de pedidos, com suporte a múltiplas credenciais de banco de dados.
 
 ## 🚀 Funcionalidades
 
-- **Autenticação**: Login via Basic Auth para obter tokens JWT
-- **Produtos**: Listagem paginada de produtos por credenciais
-- **Vendas**: Criação e gerenciamento de Vendas com produtos vendidos
-- **Documentação**: Documentação interativa da API via Swagger
-- **Validação**: Validação robusta de dados usando Zod
-- **Banco de Dados**: Suporte a múltiplos bancos via Prisma e Firebird
+- **Autenticação**: Login via Basic Auth para obter tokens JWT e Refresh Tokens.
+- **Gestão de Planos**: Interceptor de limites de uso (mensal, por minuto, range de datas e pageSize).
+- **Dashboard do Cliente**: Interface premium para monitoramento de consumo, status de conexão e guia de integração.
+- **Painel Administrativo**: Gestão de usuários, cargos, permissões, anúncios e credenciais de banco.
+- **Monitoramento de Saúde**: Status em tempo real (Uptime Bars) para API, Postgres e conexões Firebird.
+- **Documentação**: Documentação interativa via Swagger e Scalar.
+- **Banco de Dados**: Suporte híbrido (PostgreSQL para core, Firebird para dados de ERP).
 
 ## 🛠️ Tecnologias Utilizadas
 
-- **Framework**: [NestJS](https://nestjs.com/)
+- **Framework**: [NestJS](https://nestjs.com/) v11
 - **Linguagem**: TypeScript
-- **Banco de Dados**: Prisma ORM com suporte a PostgreSQL e Firebird
-- **Autenticação**: JWT e Passport
+- **ORM**: Prisma (com PostgreSQL e Firebird)
+- **Segurança**: JWT, Passport, Argon2 (Hashing), Criptografia AES-256 para credenciais.
 - **Validação**: Zod
-- **Documentação**: Swagger/OpenAPI
-- **Testes**: Jest
-
-## Instruções importantes (à Equipe Técnica InfoBrasil)
-
-- Para a geração de **financeiro fiscal** é necessário que, na tabela `CONFIG_PERFIL_LOJAS`, o perfil de `PFL_CODIGO = 104` tenha sua coluna `CPL_PERFIL = S` (no Banco de Dados do Cliente).
+- **Logs & Monitoramento**: Sentry / GlitchTip
+- **Design**: HTML/CSS/JS puros com Glassmorphism e Boxicons.
 
 ## 📦 Instalação
 
@@ -49,30 +46,18 @@ npm install
 ## ⚙️ Configuração
 
 1. Copie o arquivo de exemplo de configuração de ambiente:
-
    ```bash
    cp .env.example .env
    ```
 
-2. Configure as variáveis de ambiente no arquivo `.env`:
+2. Configure as variáveis de ambiente no arquivo `.env`. Certifique-se de configurar as chaves de criptografia (`CRYPTO_ENC`, `CRYPTO_IV`) e segredos do JWT.
 
-   ```env
-   NODE_ENV=development
-   PORT=3000
-   DATABASE_URL="postgres://postgres:postgres@localhost:5433/infoapi?schema=public"
-   JWT_SECRET="your-secret-key"
-   JWT_EXPIRES_IN="24h"
-   REFRESH_TOKEN_DAYS="7"
-   P98="encrypted-password-98"
-   P99="encrypted-password-98"
-   P131="encrypted-password-98"
-   P104="encrypted-password-98"
-   CRYPTO_ENC="your-encryption-key"
-   CRYPTO_IV="your-initialization-vector"
-   CRYPTO_ALGO="your-encryption-algorithm"
+3. Gere o Prisma Client:
+   ```bash
+   npx prisma generate
    ```
 
-3. Execute as migrações do banco de dados:
+4. Execute as migrações (Desenvolvimento):
    ```bash
    npx prisma migrate dev
    ```
@@ -83,98 +68,40 @@ npm install
 # Modo desenvolvimento (com hot reload)
 npm run start:dev
 
-# Modo produção
-npm run start:prod
-
-# Build da aplicação
+# Modo produção (requer build)
 npm run build
+npm run start:prod
 ```
 
-A aplicação estará disponível em `http://localhost:3000` (ou a porta configurada).
+## 🚢 Fluxo de Deploy
 
-## 📚 Documentação da API
+O deploy da Info Vendas API segue um processo rigoroso para garantir a consistência do banco de dados e a disponibilidade do serviço.
 
-A documentação completa da API está disponível em duas opções de visualização:
+### 1. Preparação (CI/CD)
+- Execução de testes unitários: `npm run test`
+- Verificação de Lint: `npm run lint`
+- Build da aplicação: `npm run build`
 
-- Via Swagger em: `http://localhost:3000/docs`
-- Via Scalar (parecido com Postman) em : `http://localhost:3000/scalar`
-
-### Endpoints Principais
-
-#### Autenticação
-
-- `POST /api/v1/auth/login` - Login do usuário (Basic Auth)
-
-#### Produtos
-
-- `GET /api/v1/products` - Listar produtos (requer JWT)
-
-#### Pedidos
-
-- `POST /api/v1/orders` - Criar novo pedido (requer JWT)
-
-## 🧪 Testes
-
+### 2. Migração de Banco (Produção)
+Antes de iniciar a nova versão, as migrações do Prisma devem ser aplicadas:
 ```bash
-# Executar todos os testes
-npm run test
-
-# Testes com watch mode
-npm run test:watch
-
-# Cobertura de testes
-npm run test:cov
-
-# Testes E2E
-npm run test:e2e
+npx prisma migrate deploy
 ```
 
-## 📁 Estrutura do Projeto
-
+### 3. Inicialização
+Em ambiente de produção (Docker ou Bare Metal), a aplicação deve ser iniciada a partir do arquivo compilado:
+```bash
+node dist/src/main.js
 ```
-src/
-├── app.module.ts              # Módulo principal
-├── main.ts                    # Ponto de entrada da aplicação
-├── config/                    # Configurações globais
-│   ├── auth.config.ts
-│   └── env/
-├── modules/                   # Módulos da aplicação
-│   ├── auth/                  # Autenticação
-│   └── order/                 # Pedidos
-│   └── payment-method/        # Métodos de Pagamento
-│   ├── product/               # Produtos
-├── infra/                     # Infraestrutura
-│   ├── database/              # Conexões de banco
-│   ├── prisma/                # Cliente Prisma
-│   └── firebird/              # Cliente Firebird
-├── utils/                     # Utilitários
-└── test/                      # Testes
-```
+*Nota: Devido à estrutura do NestJS, o ponto de entrada em produção é `dist/src/main.js`.*
 
-## 🔧 Scripts Disponíveis
+## 📚 Documentação
 
-- `npm run start` - Inicia a aplicação
-- `npm run start:dev` - Inicia em modo desenvolvimento
-- `npm run start:debug` - Inicia em modo debug
-- `npm run start:prod` - Inicia em modo produção
-- `npm run build` - Compila a aplicação
-- `npm run test` - Executa testes unitários
-- `npm run test:e2e` - Executa testes E2E
-- `npm run lint` - Executa o linter
-- `npm run format` - Formata o código
-
-## 🤝 Contribuição
-
-1. Fork o projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/nova-feature`)
-3. Commit suas mudanças (`git commit -m 'Adiciona nova feature'`)
-4. Push para a branch (`git push origin feature/nova-feature`)
-5. Abra um Pull Request
+- **Documentação Técnica**: Veja o arquivo [TECHNICAL_DOC.md](./TECHNICAL_DOC.md) para detalhes de arquitetura.
+- **Swagger**: `http://localhost:3000/docs`
+- **Scalar**: `http://localhost:3000/scalar`
+- **Guia de Integração**: Disponível no Dashboard do Cliente em `/integration`.
 
 ## 📄 Licença
 
-Este projeto está sob a licença UNLICENSED.
-
-## 📞 Suporte
-
-Para dúvidas ou suporte, entre em contato com a equipe de desenvolvimento.
+Este projeto é de propriedade exclusiva da **InfoBrasil Sistemas**. Uso não autorizado é proibido.
