@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.5.2](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.4.0...v1.5.2) (2026-05-13)
+
+
+### Features
+
+* clients options on request form ([623da51](https://github.com/infobrasil-sistemas/info-vendas-api/commit/623da515d142307960e19e08b2c81f0109920088))
+* filters on GET orders ([781edbd](https://github.com/infobrasil-sistemas/info-vendas-api/commit/781edbd50dc8ab7a238882584fd35ddad5a69383))
+* filters on GET orders ([0ab3628](https://github.com/infobrasil-sistemas/info-vendas-api/commit/0ab36289be207bb6d8ef1cd592e49c2da2734a58))
+* implement background monitoring service and status dashboard template ([2da7b1e](https://github.com/infobrasil-sistemas/info-vendas-api/commit/2da7b1eec07b618dd9e27bcd3cf356db33d7632d))
+* status page ([5d9f94d](https://github.com/infobrasil-sistemas/info-vendas-api/commit/5d9f94db2330ee3189361cb4430942347a7db7af))
+
+
+### Bug Fixes
+
+* api latency 0ms bug ([ab29a24](https://github.com/infobrasil-sistemas/info-vendas-api/commit/ab29a24ebccbb6c24a1c665f87659671d7a64ae7))
+* prisma migrations ([b893091](https://github.com/infobrasil-sistemas/info-vendas-api/commit/b893091c508b331597c2138b307377b6085e7f92))
+* resolve merge conflicts in order controller and swagger spec ([ec930ce](https://github.com/infobrasil-sistemas/info-vendas-api/commit/ec930ced7cd2b8e376f7b3fb02bce4dddeacff32))
+* status controller ([f28f354](https://github.com/infobrasil-sistemas/info-vendas-api/commit/f28f354cf90f6680929a8714d79468f0895515fc))
+* status page template path for production ([a9ef81d](https://github.com/infobrasil-sistemas/info-vendas-api/commit/a9ef81dfa63615f29fe163e203431d26febdd736))
+* zod validation ([ff09578](https://github.com/infobrasil-sistemas/info-vendas-api/commit/ff09578d4b47f8d86ad5d2234611161d0460480b))
+
 ## [1.5.1](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.4.0...v1.5.1) (2026-05-13)
 
 
