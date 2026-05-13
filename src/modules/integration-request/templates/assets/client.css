@@ -245,35 +245,52 @@ body {
 }
 
 /* Tipos de Avisos com Glassmorfismo */
-.announcement-slide.info { 
-    background: rgba(16, 185, 129, 0.12); 
-    color: #34d399; 
+.announcement-slide.info {
+    background: rgba(16, 185, 129, 0.12);
+    color: #34d399;
 }
-.announcement-slide.info .announcement-btn { color: #34d399; border-color: rgba(52, 211, 153, 0.2); }
 
-.announcement-slide.warning { 
-    background: rgba(245, 158, 11, 0.12); 
-    color: #fbbf24; 
+.announcement-slide.info .announcement-btn {
+    color: #34d399;
+    border-color: rgba(52, 211, 153, 0.2);
 }
-.announcement-slide.warning .announcement-btn { color: #fbbf24; border-color: rgba(251, 191, 36, 0.2); }
 
-.announcement-slide.alert { 
-    background: rgba(239, 68, 68, 0.12); 
-    color: #f87171; 
+.announcement-slide.warning {
+    background: rgba(245, 158, 11, 0.12);
+    color: #fbbf24;
 }
-.announcement-slide.alert .announcement-btn { color: #f87171; border-color: rgba(248, 113, 113, 0.2); }
 
-.announcement-slide.doc { 
-    background: rgba(99, 102, 241, 0.12); 
-    color: #a5b4fc; 
+.announcement-slide.warning .announcement-btn {
+    color: #fbbf24;
+    border-color: rgba(251, 191, 36, 0.2);
 }
-.announcement-slide.doc .announcement-btn { color: #a5b4fc; border-color: rgba(165, 180, 252, 0.2); }
+
+.announcement-slide.alert {
+    background: rgba(239, 68, 68, 0.12);
+    color: #f87171;
+}
+
+.announcement-slide.alert .announcement-btn {
+    color: #f87171;
+    border-color: rgba(248, 113, 113, 0.2);
+}
+
+.announcement-slide.doc {
+    background: rgba(99, 102, 241, 0.12);
+    color: #a5b4fc;
+}
+
+.announcement-slide.doc .announcement-btn {
+    color: #a5b4fc;
+    border-color: rgba(165, 180, 252, 0.2);
+}
 
 @media (max-width: 768px) {
     .announcement-slide {
         padding: 0 45px;
         font-size: 0.78rem;
     }
+
     .announcement-link {
         display: block;
         margin-left: 0;
@@ -1077,8 +1094,15 @@ header {
 }
 
 @keyframes slideUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .success-alert {
@@ -1191,4 +1215,133 @@ header {
     background: var(--primary);
     color: #000;
     border-color: var(--primary);
+}
+
+/* UPTIME HISTORY BAR */
+.uptime-container {
+    margin-top: 1.5rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--border);
+}
+
+.uptime-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+}
+
+.uptime-bar {
+    display: flex;
+    gap: 3px;
+    height: 18px;
+    align-items: flex-end;
+}
+
+.uptime-tick {
+    flex: 1;
+    height: 100%;
+    background: var(--success);
+    border-radius: 2px;
+    opacity: 0.8;
+    transition: all 0.2s;
+    cursor: help;
+}
+
+.uptime-tick:hover {
+    opacity: 1;
+    transform: scaleY(1.1);
+}
+
+.uptime-tick.down {
+    background: var(--danger);
+}
+
+.uptime-tick.pending {
+    background: var(--text-muted);
+    opacity: 0.3;
+}
+
+.uptime-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    opacity: 0.7;
+}
+
+/* FIREBIRD SPECIAL CARD */
+.card-fb {
+    background: linear-gradient(135deg, var(--card-bg) 0%, #0d2a20 100%);
+    border-color: rgba(16, 185, 129, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.card-fb::before {
+    content: '\eb3d';
+    /* bx-data icon */
+    font-family: 'boxicons';
+    position: absolute;
+    right: -10px;
+    bottom: -10px;
+    font-size: 6rem;
+    opacity: 0.03;
+    transform: rotate(-15deg);
+}
+
+.card-fb .status-badge-mini {
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+.card-fb h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--primary);
+}
+
+.card-fb h3 i {
+    font-size: 1.1rem;
+}
+
+/* STATUS BADGE REPOSITIONING */
+.status-badge-mini {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 6px 14px !important;
+    font-size: 0.75rem !important;
+    z-index: 5;
+}
+
+/* Adjust card padding to accommodate absolute badge */
+.card {
+    position: relative;
+}
+
+/* FIREBIRD LATENCY ENHANCEMENT */
+.latency-fb {
+    text-align: left;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.latency-value {
+    font-size: 1.1rem !important;
+    font-weight: 700;
+    color: var(--text) !important;
+    opacity: 1 !important;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.latency-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }

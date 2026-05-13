@@ -32,6 +32,7 @@ export class StatusController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Verificar status da conexão do tenant (Usuário)' })
   async getMyConnection(@Req() req: ReqWithAuthContext) {
+    const start = Date.now();
     const credentialsId = req.authContext?.credentialsId;
 
     if (!credentialsId) {
@@ -43,9 +44,18 @@ export class StatusController {
       this.healthService.checkTenant(credentialsId)
     ]);
 
+    const totalTime = Date.now() - start;
+    const maxDbWait = Math.max(
+      tenantHealth.responseTimeMs,
+      generalHealth.databases.postgres.responseTimeMs || 0
+    );
+    const apiOverhead = totalTime - maxDbWait;
+
     return {
       api: generalHealth.status === 'ok' ? 'UP' : 'DOWN',
+      apiLatency: apiOverhead > 0 ? apiOverhead : 1,
       postgres: generalHealth.databases.postgres.status === 'up' ? 'UP' : 'DOWN',
+      postgresLatency: generalHealth.databases.postgres.responseTimeMs,
       tenant: tenantHealth.status === 'up' ? 'UP' : 'DOWN',
       tenantLatency: tenantHealth.responseTimeMs
     };
@@ -56,7 +66,7 @@ export class StatusController {
   async getStatusPage(@Res() res: Response) {
     // Busca o template independente de estar em src (dev) ou dist (prod)
     const htmlPath = path.join(__dirname, 'templates', 'status.html');
-    
+
     if (!fs.existsSync(htmlPath)) {
       // Fallback para quando o path pode variar dependendo da build
       const altPath = path.join(process.cwd(), 'dist/modules/status/templates/status.html');

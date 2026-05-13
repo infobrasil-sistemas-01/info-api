@@ -1251,7 +1251,7 @@
     },
     "/status": {
       "get": {
-        "operationId": "StatusController_getPage",
+        "operationId": "StatusController_getStatusPage",
         "parameters": [],
         "responses": {
           "200": {

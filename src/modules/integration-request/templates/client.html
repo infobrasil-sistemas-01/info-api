@@ -92,7 +92,7 @@
                 -->
                 <button class="tab-btn" onclick="UI.switchTab('glossary')">Glossário</button>
                 <button class="tab-btn" onclick="UI.switchTab('security')">Segurança</button>
-                <button class="tab-btn" onclick="UI.switchTab('status')">Status da Conexão</button>
+
                 <button class="tab-btn" onclick="UI.switchTab('links')">Links Úteis</button>
             </div>
 
@@ -213,7 +213,86 @@
                             <span class="value" id="max-date-range">-</span>
                         </div>
                     </div>
+
+                    <div class="card">
+                        <h3>Status API</h3>
+                        <div id="status-api-val" class="status-badge-mini">VERIFICANDO...</div>
+                        
+                        <div class="latency-fb">
+                            <span class="latency-label">Resposta da API</span>
+                            <span id="status-api-latency" class="latency-value">-- ms</span>
+                        </div>
+                        
+                        <p class="stats-label">Motor principal do ecossistema</p>
+                        
+                        <div class="uptime-container">
+                            <div class="uptime-header">
+                                <span>Disponibilidade (Últimos 30 min)</span>
+                                <span id="status-api-uptime-pct">--%</span>
+                            </div>
+                            <div id="status-api-uptime-bar" class="uptime-bar">
+                                <!-- Ticks gerados via JS -->
+                            </div>
+                            <div class="uptime-footer">
+                                <span>30 min atrás</span>
+                                <span>Agora</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Banco Global</h3>
+                        <div id="status-postgres-val" class="status-badge-mini">VERIFICANDO...</div>
+                        
+                        <div class="latency-fb">
+                            <span class="latency-label">Latência do Banco</span>
+                            <span id="status-postgres-latency" class="latency-value">-- ms</span>
+                        </div>
+                        
+                        <p class="stats-label">Nuvem e gerenciamento de conta</p>
+
+                        <div class="uptime-container">
+                            <div class="uptime-header">
+                                <span>Disponibilidade (Últimos 30 min)</span>
+                                <span id="status-postgres-uptime-pct">--%</span>
+                            </div>
+                            <div id="status-postgres-uptime-bar" class="uptime-bar">
+                                <!-- Ticks gerados via JS -->
+                            </div>
+                            <div class="uptime-footer">
+                                <span>30 min atrás</span>
+                                <span>Agora</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card card-fb">
+                        <h3><i class='bx bxs-hot'></i> Seu Banco (FireBird)</h3>
+                        <div id="status-tenant-val" class="status-badge-mini">VERIFICANDO...</div>
+                        
+                        <div class="latency-fb">
+                            <span class="latency-label">Latência Atual</span>
+                            <span id="status-tenant-latency" class="latency-value">-- ms</span>
+                        </div>
+                        
+                        <p class="stats-label">Conexão direta com seu ERP</p>
+
+                        <div class="uptime-container">
+                            <div class="uptime-header">
+                                <span>Estabilidade (Últimos 30 min)</span>
+                                <span id="status-tenant-uptime-pct">--%</span>
+                            </div>
+                            <div id="status-tenant-uptime-bar" class="uptime-bar">
+                                <!-- Ticks gerados via JS -->
+                            </div>
+                            <div class="uptime-footer">
+                                <span>30 min atrás</span>
+                                <span>Agora</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
             </section>
 
             <!-- Tab: Permissions -->
@@ -370,62 +449,7 @@ print(f'Basic {auth}')</code></pre>
                 </div>
             </section>
 
-            <!-- Tab: Status -->
-            <section id="tab-status" class="tab-content">
-                <div class="card" style="text-align: center; padding: 3rem 2rem;">
-                    <h2 style="font-size: 1.5rem; margin-bottom: 2rem; color: var(--primary);">Saúde da sua Integração
-                    </h2>
 
-                    <div class="status-grid"
-                        style="display: flex; flex-direction: column; gap: 1rem; max-width: 500px; margin: 0 auto;">
-                        <!-- API -->
-                        <div class="status-row"
-                            style="background: rgba(255,255,255,0.03); padding: 1.25rem; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border);">
-                            <div style="display: flex; align-items: center; gap: 1rem;">
-                                <i class='bx bx-server' style="font-size: 1.5rem; color: var(--text-muted);"></i>
-                                <span style="font-weight: 600;">API Core Engine</span>
-                            </div>
-                            <div id="status-api-val" class="status-badge-mini"
-                                style="background: var(--success); color: white; padding: 4px 12px; border-radius: 99px; font-size: 0.75rem; font-weight: 700;">
-                                ONLINE</div>
-                        </div>
-
-                        <!-- Postgres -->
-                        <div class="status-row"
-                            style="background: rgba(255,255,255,0.03); padding: 1.25rem; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border);">
-                            <div style="display: flex; align-items: center; gap: 1rem;">
-                                <i class='bx bx-data' style="font-size: 1.5rem; color: var(--text-muted);"></i>
-                                <span style="font-weight: 600;">Banco de Dados Global</span>
-                            </div>
-                            <div id="status-postgres-val" class="status-badge-mini"
-                                style="background: var(--success); color: white; padding: 4px 12px; border-radius: 99px; font-size: 0.75rem; font-weight: 700;">
-                                ONLINE</div>
-                        </div>
-
-                        <!-- Tenant -->
-                        <div class="status-row"
-                            style="background: rgba(16, 185, 129, 0.05); padding: 1.5rem; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--primary);">
-                            <div style="display: flex; align-items: center; gap: 1rem;">
-                                <i class='bx bx-data' style="font-size: 1.8rem; color: var(--primary);"></i>
-                                <div style="display: flex; flex-direction: column; justify-content: center; text-align: left; gap: 2px;">
-                                    <span style="font-weight: 700; line-height: 1.2; display: block;">Seu Banco de Dados</span>
-                                    <span id="status-tenant-latency"
-                                        style="font-size: 0.72rem; color: var(--text-muted); opacity: 0.8;">Latência: -- ms</span>
-                                </div>
-                            </div>
-                            <div id="status-tenant-val" class="status-badge-mini"
-                                style="background: var(--success); color: white; padding: 6px 16px; border-radius: 99px; font-size: 0.8rem; font-weight: 700;">
-                                ESTÁVEL</div>
-                        </div>
-                    </div>
-
-                    <p style="margin-top: 2rem; font-size: 0.85rem; color: var(--text-muted);">
-                        Verificações automáticas a cada 60 segundos.
-                        <br>Para histórico detalhado, acesse nossa <a href="/status" target="_blank"
-                            style="color: var(--primary);">Página de Status Pública</a>.
-                    </p>
-                </div>
-            </section>
             <section id="tab-links" class="tab-content">
                 <div class="links-grid"
                     style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; padding: 1rem 0;">
@@ -503,9 +527,10 @@ print(f'Basic {auth}')</code></pre>
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const data = await res.json();
+                console.log('[Status Debug]', data);
 
-                updateStatusUI('api', data.api);
-                updateStatusUI('postgres', data.postgres);
+                updateStatusUI('api', data.api, data.apiLatency);
+                updateStatusUI('postgres', data.postgres, data.postgresLatency);
                 updateStatusUI('tenant', data.tenant, data.tenantLatency);
             } catch (e) {
                 console.error('Falha ao buscar status:', e);
@@ -524,15 +549,58 @@ print(f'Basic {auth}')</code></pre>
                 valEl.style.background = 'var(--danger)';
             }
 
-            // Exibe a latência apenas para o tenant
-            if (type === 'tenant') {
-                const latencyEl = document.getElementById('status-tenant-latency');
-                if (latencyEl) {
-                    latencyEl.innerText = (latency !== undefined && latency !== null)
-                        ? `Latência: ${latency} ms`
-                        : 'Latência: -- ms';
-                }
+            // Exibe a latência
+            const latencyEl = document.getElementById(`status-${type}-latency`);
+            if (latencyEl) {
+                latencyEl.innerText = (latency !== undefined && latency !== null)
+                    ? `${latency} ms`
+                    : '-- ms';
             }
+
+            // Atualiza a barra de uptime
+            updateUptimeBar(type, status);
+        }
+
+        const UptimeHistory = {
+            api: Array(25).fill(true),
+            postgres: Array(25).fill(true),
+            tenant: Array(25).fill(true)
+        };
+
+        function updateUptimeBar(type, currentStatus) {
+            const barEl = document.getElementById(`status-${type}-uptime-bar`);
+            const pctEl = document.getElementById(`status-${type}-uptime-pct`);
+            if (!barEl) return;
+
+            const history = UptimeHistory[type];
+            history.push(currentStatus === 'UP');
+            if (history.length > 30) history.shift();
+
+            // Renderiza os ticks
+            barEl.innerHTML = '';
+            
+            // Se tiver pouco histórico, preenchemos com "vazios" (design)
+            const totalTicks = 30;
+            const emptyTicks = totalTicks - history.length;
+            
+            for (let i = 0; i < emptyTicks; i++) {
+                const tick = document.createElement('div');
+                tick.className = 'uptime-tick pending';
+                barEl.appendChild(tick);
+            }
+
+            history.forEach((isUp, idx) => {
+                const tick = document.createElement('div');
+                tick.className = `uptime-tick ${isUp ? 'up' : 'down'}`;
+                const timeStr = idx === history.length - 1 ? 'Agora' : `${(history.length - 1 - idx) * 1}m atrás`;
+                tick.title = `Status: ${isUp ? 'UP' : 'DOWN'} (${timeStr})`;
+                barEl.appendChild(tick);
+            });
+
+            // Calcula porcentagem (simplificado para os últimos 30 slots preenchidos)
+            const ups = history.filter(h => h).length;
+            const pct = history.length > 0 ? Math.round((ups / history.length) * 100) : 100;
+            if (pctEl) pctEl.innerText = `${pct}%`;
         }
 
         // Intercepta a troca de abas para atualizar o status
@@ -545,16 +613,16 @@ print(f'Basic {auth}')</code></pre>
             const originalSwitchTab = UI.switchTab;
             UI.switchTab = function (tabId) {
                 originalSwitchTab(tabId);
-                if (tabId === 'status') refreshTenantStatus();
+                if (tabId === 'usage') refreshTenantStatus();
             };
         }
 
         initStatusLogic();
 
-        // Auto-refresh a cada 60s se a aba estiver ativa
+        // Auto-refresh a cada 60s se a aba de Uso estiver ativa
         setInterval(() => {
-            const statusTab = document.getElementById('tab-status');
-            if (statusTab && statusTab.classList.contains('active')) {
+            const usageTab = document.getElementById('tab-usage');
+            if (usageTab && usageTab.classList.contains('active')) {
                 refreshTenantStatus();
             }
         }, 60000);
