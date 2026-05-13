@@ -4,7 +4,6 @@ import {
   UseGuards,
   Req,
   Query,
-  BadRequestException,
   NotFoundException,
   Param,
 } from '@nestjs/common';
@@ -20,10 +19,10 @@ import type { ReqWithAuthContext } from '../auth/guards/jwt-auth.guard';
 import { ProductService } from './product.service';
 import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
-import { 
-  ProductResponseDto, 
-  ProductDetailResponseDto, 
-  ProductBarcodeResponseDto 
+import {
+  ProductResponseDto,
+  ProductDetailResponseDto,
+  ProductBarcodeResponseDto
 } from './dto/product-response.dto';
 
 @Controller('products')
@@ -89,8 +88,17 @@ export class ProductController {
     type: String,
     description: 'Termo de busca para filtrar produtos por descrição',
   })
+  @ApiQuery({
+    name: 'storeId',
+    required: true,
+    type: Number,
+    description: 'Código da loja para buscar os estoques dos produtos',
+    default: 1,
+    example: 1
+  })
   getProducts(
     @Req() req: ReqWithAuthContext,
+    @Query('storeId') storeId: number,
     @Query('page') page?: number,
     @Query('pageSize') pageSize?: number,
     @Query('group') group?: number,
@@ -99,7 +107,6 @@ export class ProductController {
     @Query('search') search?: string,
   ) {
     const credentialsId = req.authContext?.credentialsId;
-    const storeId = req.authContext?.storeId;
 
     if (!credentialsId) {
       throw new Error('Credentials ID not found in token');

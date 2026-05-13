@@ -73,6 +73,17 @@
         "operationId": "ProductController_getProducts",
         "parameters": [
           {
+            "name": "storeId",
+            "required": true,
+            "in": "query",
+            "description": "Código da loja para buscar os estoques dos produtos",
+            "schema": {
+              "default": 1,
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
             "name": "page",
             "required": false,
             "in": "query",

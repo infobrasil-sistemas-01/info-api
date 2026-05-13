@@ -11,7 +11,7 @@ export class ProductService {
 
   async get(
     credentialsId: string,
-    storeId: number = 1,
+    storeId: number,
     page: number = 1,
     pageSize: number = 10,
     group?: number,
