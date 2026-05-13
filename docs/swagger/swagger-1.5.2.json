@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.0",
   "paths": {
-    "/api/v1/auth/me": {
+    "/auth/me": {
       "get": {
         "operationId": "AuthController_me",
         "parameters": [],
@@ -21,7 +21,7 @@
         ]
       }
     },
-    "/api/v1/auth/login": {
+    "/auth/login": {
       "post": {
         "description": "Autentica o usuário usando credenciais básicas e retorna um token de acesso JWT.",
         "operationId": "AuthController_login",
@@ -42,7 +42,7 @@
         ]
       }
     },
-    "/api/v1/auth/refresh": {
+    "/auth/refresh": {
       "post": {
         "operationId": "AuthController_refresh",
         "parameters": [],
@@ -67,7 +67,7 @@
         ]
       }
     },
-    "/api/v1/products": {
+    "/products": {
       "get": {
         "description": "Retorna uma lista paginada de produtos associados às credenciais do usuário autenticado.",
         "operationId": "ProductController_getProducts",
@@ -205,7 +205,7 @@
         ]
       }
     },
-    "/api/v1/products/id/{id}": {
+    "/products/id/{id}": {
       "get": {
         "description": "Retorna os detalhes de um produto específico com base no ID fornecido.",
         "operationId": "ProductController_getProductById",
@@ -279,7 +279,7 @@
         ]
       }
     },
-    "/api/v1/products/barcode/{barcode}": {
+    "/products/barcode/{barcode}": {
       "get": {
         "description": "Retorna os detalhes de um produto específico com base no código de barras fornecido.",
         "operationId": "ProductController_getProductByBarcode",
@@ -365,7 +365,7 @@
         ]
       }
     },
-    "/api/v1/products/brands": {
+    "/products/brands": {
       "get": {
         "description": "Retorna uma lista paginada de marcas de produtos associadas às credenciais do usuário autenticado.",
         "operationId": "ProductBrandController_getBrands",
@@ -431,7 +431,7 @@
         ]
       }
     },
-    "/api/v1/products/groups": {
+    "/products/groups": {
       "get": {
         "description": "Retorna uma lista paginada de grupos de produtos associadas às credenciais do usuário autenticado.",
         "operationId": "ProductGroupController_getBrands",
@@ -497,7 +497,7 @@
         ]
       }
     },
-    "/api/v1/orders": {
+    "/orders": {
       "post": {
         "description": "Cria um novo pedido com os pedidos vendidos e informações de pagamento.",
         "operationId": "OrderController_postOrder",
@@ -681,7 +681,7 @@
         ]
       }
     },
-    "/api/v1/orders/{id}/receipt": {
+    "/orders/{id}/receipt": {
       "post": {
         "description": "Gera um cupom fiscal para um pedido específico e envia para o email do cliente.",
         "operationId": "OrderController_postReceipt",
@@ -734,7 +734,7 @@
         ]
       }
     },
-    "/api/v1/orders/{id}": {
+    "/orders/{id}": {
       "get": {
         "description": "Retorna os detalhes de um pedido específico com base no ID fornecido.",
         "operationId": "OrderController_getOrderById",
@@ -873,7 +873,7 @@
         ]
       }
     },
-    "/api/v1/payment-methods": {
+    "/payment-methods": {
       "get": {
         "description": "Retorna uma lista paginada de formas de pagamento associados às credenciais do usuário autenticado.",
         "operationId": "PaymentMethodController_getPaymentMethods",
@@ -939,7 +939,7 @@
         ]
       }
     },
-    "/api/v1/account-receivable": {
+    "/account-receivable": {
       "get": {
         "description": "Obtém uma lista de contas a receber da loja.",
         "operationId": "AccountReceivableController_get",
@@ -1074,7 +1074,7 @@
         ]
       }
     },
-    "/api/v1/health": {
+    "/health": {
       "get": {
         "description": "Verifica o status da API e das dependências (PostgreSQL). Retorna 200 com `status: \"ok\"` quando tudo está operacional, ou `status: \"degraded\"` quando alguma dependência está indisponível.",
         "operationId": "HealthController_check",
@@ -1124,7 +1124,7 @@
         ]
       }
     },
-    "/api/v1/plans/stats": {
+    "/plans/stats": {
       "get": {
         "operationId": "StatsController_getStats",
         "parameters": [],
@@ -1144,7 +1144,7 @@
         ]
       }
     },
-    "/api/v1/plans": {
+    "/plans": {
       "get": {
         "operationId": "StatsController_findAll",
         "parameters": [],
@@ -1164,7 +1164,7 @@
         ]
       }
     },
-    "/api/v1/clients": {
+    "/clients": {
       "get": {
         "operationId": "ClientController_get",
         "parameters": [
@@ -1236,7 +1236,7 @@
         ]
       }
     },
-    "/api/v1/clients/{id}": {
+    "/clients/{id}": {
       "get": {
         "operationId": "ClientController_getById",
         "parameters": [
