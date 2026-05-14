@@ -14,6 +14,7 @@ import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
 import { DbCredentialsService } from './db-credentials.service';
 import type { CreateDbCredentialsDto, UpdateDbCredentialsDto } from './dto/db-credentials.dto';
+import { HealthService } from '../health/health.service';
 
 @ApiTags('DbCredentials')
 @ApiExcludeController()
@@ -21,7 +22,10 @@ import type { CreateDbCredentialsDto, UpdateDbCredentialsDto } from './dto/db-cr
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 @ApiBearerAuth()
 export class DbCredentialsController {
-  constructor(private readonly dbCredentialsService: DbCredentialsService) {}
+  constructor(
+    private readonly dbCredentialsService: DbCredentialsService,
+    private readonly healthService: HealthService,
+  ) {}
 
   @Post()
   @RequirePermissions({ allOf: ['core.user.create'] })
@@ -51,5 +55,11 @@ export class DbCredentialsController {
   @RequirePermissions({ allOf: ['core.user.delete'] })
   remove(@Param('id') id: string) {
     return this.dbCredentialsService.remove(id);
+  }
+
+  @Get(':id/test')
+  @RequirePermissions({ allOf: ['core.user.view'] })
+  testConnection(@Param('id') id: string) {
+    return this.healthService.checkTenant(id);
   }
 }

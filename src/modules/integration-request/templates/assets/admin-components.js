@@ -230,6 +230,7 @@ const Components = {
             <td>${c.dbId}</td>
             <td>
                 <div style="display: flex; gap: 8px;">
+                    <button id="btn-test-${c.id}" class="btn btn-outline btn-sm" onclick="Data.testCred('${c.id}')">Testar conexão</button>
                     <button class="btn btn-outline btn-sm" onclick="UI.openCredModal('${c.id}')">Editar</button>
                     <button class="btn btn-danger btn-sm" onclick="Data.deleteCred('${c.id}')">Excluir</button>
                 </div>

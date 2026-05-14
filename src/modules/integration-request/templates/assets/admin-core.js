@@ -154,6 +154,34 @@ const Data = {
             this.fetchCreds();
         }
     },
+    async testCred(id) {
+        try {
+            const btn = document.getElementById(`btn-test-${id}`);
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = 'Testando...';
+            }
+
+            const res = await this.fetch(`${API_URL}/db-credentials/${id}/test`);
+            if (res.ok) {
+                const data = await res.json();
+                if (data.status === 'up') {
+                    alert(`✅ Conexão bem-sucedida!\nTempo de resposta: ${data.responseTimeMs}ms`);
+                } else {
+                    alert(`❌ Falha na conexão:\n${data.error || 'Erro desconhecido'}`);
+                }
+            }
+        } catch (error) {
+            console.error('Erro ao testar conexão:', error);
+            alert('Erro inesperado ao testar conexão.');
+        } finally {
+            const btn = document.getElementById(`btn-test-${id}`);
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = 'Testar conexão';
+            }
+        }
+    },
     async fetchUptimeStatus() {
         try {
             // Usando o novo endpoint público sem prefixo api/v1
