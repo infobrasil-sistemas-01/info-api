@@ -102,6 +102,17 @@
             }
           },
           {
+            "name": "priceTable",
+            "required": false,
+            "in": "query",
+            "description": "Código da tabela de preço para buscar os preços dos produtos. Se não informado, será usado o valor 1.",
+            "schema": {
+              "default": 1,
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
             "name": "group",
             "required": false,
             "in": "query",
@@ -183,6 +194,28 @@
             "schema": {
               "type": "number"
             }
+          },
+          {
+            "name": "priceTable",
+            "required": false,
+            "in": "query",
+            "description": "Código da tabela de preço para buscar os preços dos produtos. Se não informado, será usado o valor 1.",
+            "schema": {
+              "default": 1,
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "storeId",
+            "required": false,
+            "in": "query",
+            "description": "Código da loja para buscar os estoques dos produtos. Se não informado, será usado o valor 1.",
+            "schema": {
+              "default": 1,
+              "example": 1,
+              "type": "number"
+            }
           }
         ],
         "responses": {
@@ -225,6 +258,28 @@
             "in": "path",
             "description": "Código de barras do produto a ser retornado",
             "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "priceTable",
+            "required": false,
+            "in": "query",
+            "description": "Código da tabela de preço para buscar os preços dos produtos. Se não informado, será usado o valor 1.",
+            "schema": {
+              "default": 1,
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "storeId",
+            "required": false,
+            "in": "query",
+            "description": "Código da loja para buscar os estoques dos produtos. Se não informado, será usado o valor 1.",
+            "schema": {
+              "default": 1,
+              "example": 1,
               "type": "number"
             }
           }

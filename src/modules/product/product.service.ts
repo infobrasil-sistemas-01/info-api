@@ -14,6 +14,7 @@ export class ProductService {
     storeId: number,
     page: number = 1,
     pageSize: number = 10,
+    priceTable: number = 1,
     group?: number,
     brand?: number,
     minStock?: number,
@@ -36,17 +37,24 @@ export class ProductService {
         );
       }
 
+      if (priceTable < 1 || priceTable > 12) {
+        throw new BadRequestException(
+          'Tabela de preço inválida. Deve ser entre 1 e 12.',
+        );
+      }
+
       let params: (number | string)[] = [
         pageSize,
         (page - 1) * pageSize,
         storeId,
       ];
       let query = `SELECT FIRST ? SKIP ? 
-                      P.PRO_CODIGO, P.PRO_CODIGOBAR, P.PRO_DESCRICAO, M.MAR_CODIGO, M.MAR_DESCRICAO, G.GRU_CODIGO, G.GRU_DESCRICAO, E.EST_ATUAL, E.EST_APOIO, E.PRO_PRECO1 PRECO, E.PRO_PRECO2 PRECO2
+                      P.PRO_CODIGO, P.PRO_CODIGOBAR, P.PRO_DESCRICAO, M.MAR_CODIGO, M.MAR_DESCRICAO, G.GRU_CODIGO, G.GRU_DESCRICAO, E.EST_ATUAL, E.EST_APOIO, PRO_PRECO${priceTable} PRECO
                       FROM produtos P 
-                      INNER JOIN marcas M ON P.MAR_CODIGO = M.MAR_CODIGO 
-                      INNER JOIN grupospro G ON P.GRU_CODIGO = G.GRU_CODIGO
-                      INNER JOIN estoque E ON P.PRO_CODIGO = E.PRO_CODIGO AND E.LOJ_CODIGO = ?`;
+                      INNER JOIN estoque E ON P.PRO_CODIGO = E.PRO_CODIGO AND E.LOJ_CODIGO = ?
+                      LEFT JOIN marcas M ON P.MAR_CODIGO = M.MAR_CODIGO 
+                      LEFT JOIN grupospro G ON P.GRU_CODIGO = G.GRU_CODIGO
+                      `;
 
       if (group) {
         query += ` WHERE P.GRU_CODIGO = ?`;
@@ -140,6 +148,7 @@ export class ProductService {
     store_id: number = 1,
     id?: number,
     codigoBar?: number,
+    priceTable: number = 1,
   ) {
     let connection: any;
     connection =
@@ -147,7 +156,7 @@ export class ProductService {
 
     try {
       let query = `SELECT
-                      P.PRO_CODIGO, P.PRO_CODIGOBAR, P.PRO_DESCRICAO, M.MAR_CODIGO, M.MAR_DESCRICAO, G.GRU_CODIGO, G.GRU_DESCRICAO, E.EST_ATUAL ESTOQUE, E.PRO_PRECO1 PRECO, E.PRO_PRECO2 PRECO2
+                      P.PRO_CODIGO, P.PRO_CODIGOBAR, P.PRO_DESCRICAO, M.MAR_CODIGO, M.MAR_DESCRICAO, G.GRU_CODIGO, G.GRU_DESCRICAO, E.EST_ATUAL ESTOQUE, E.PRO_PRECO${priceTable} PRECO
                       FROM produtos P 
                       INNER JOIN marcas M ON P.MAR_CODIGO = M.MAR_CODIGO 
                       INNER JOIN grupospro G ON P.GRU_CODIGO = G.GRU_CODIGO
