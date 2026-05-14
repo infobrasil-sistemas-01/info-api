@@ -38,6 +38,12 @@ export class TenantConnectionService {
         pool.get((err, db) => {
           clearTimeout(timeout);
           if (err) return reject(err);
+          
+          // Previne crash por Unhandled 'error' event caso a conexão caia depois
+          (db as any).on('error', (dbErr: any) => {
+            this.logger.error(`Erro na conexão Firebird para o tenant ${credentialsId}: ${dbErr?.message}`);
+          });
+
           resolve(db);
         });
       });
@@ -66,7 +72,11 @@ export class TenantConnectionService {
    */
   releaseConnection(connection: firebird.Database): void {
     if (!connection) return;
-    connection.detach();
+    try {
+      connection.detach();
+    } catch (err: any) {
+      this.logger.error(`Erro ao fazer detach: ${err.message}`);
+    }
   }
 
   /**
@@ -89,13 +99,19 @@ export class TenantConnectionService {
         resolve();
       }, 2000);
 
-      pool.destroy(() => {
+      try {
+        pool.destroy(() => {
+          clearTimeout(timeout);
+          this.logger.log(
+            `Pool de conexões destruído para o tenant: ${credentialsId}`,
+          );
+          resolve();
+        });
+      } catch (err: any) {
         clearTimeout(timeout);
-        this.logger.log(
-          `Pool de conexões destruído para o tenant: ${credentialsId}`,
-        );
+        this.logger.error(`Erro ao destruir pool para o tenant ${credentialsId}: ${err.message}`);
         resolve();
-      });
+      }
     });
   }
 
@@ -167,12 +183,26 @@ export class TenantConnectionService {
           return reject(err);
         }
 
-        db.query('SELECT 1 FROM RDB$DATABASE', [], (qErr) => {
-          clearTimeout(timeout);
-          db.detach();
-          if (qErr) return reject(qErr);
-          resolve();
+        (db as any).on('error', (dbErr: any) => {
+          this.logger.error(`Erro na conexão Firebird durante pingPool: ${dbErr?.message}`);
         });
+
+        try {
+          db.query('SELECT 1 FROM RDB$DATABASE', [], (qErr) => {
+            clearTimeout(timeout);
+            try {
+              db.detach();
+            } catch (e) {
+              // ignore detach errors if connection is broken
+            }
+            if (qErr) return reject(qErr);
+            resolve();
+          });
+        } catch (e) {
+          clearTimeout(timeout);
+          try { db.detach(); } catch (err) {}
+          reject(e);
+        }
       });
     });
   }
