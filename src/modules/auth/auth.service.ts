@@ -86,14 +86,14 @@ export class AuthService {
     const permissions = await this.permissionResolver.resolve(user.id.toString());
 
     return {
+      accessToken,
+      refreshToken,
       user: {
         id: user.id.toString(),
         username: user.user,
         role: user.role?.name || null,
         permissions: Array.from(permissions.allowedKeys),
       },
-      accessToken,
-      refreshToken,
     };
   }
 

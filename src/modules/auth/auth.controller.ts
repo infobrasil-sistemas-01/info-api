@@ -80,11 +80,7 @@ export class AuthController {
     const meta = this.metaFromReq(req);
     const result = await this.auth.login(base64, meta);
 
-    return {
-      user: result.user,
-      access_token: result.accessToken,
-      refresh_token: result.refreshToken,
-    };
+    return result;
   }
 
   @Post('refresh')
