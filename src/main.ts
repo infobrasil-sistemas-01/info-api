@@ -7,6 +7,18 @@ import { GlobalLoggerService } from './common/logger/logger.service';
 
 import { ZodValidationPipe } from './common/validation/zod-validation.pipe';
 
+// Previne que bugs internos do node-firebird (como o erro de leitura de buffer na autenticação) derrubem o servidor
+process.on('uncaughtException', (err: any, origin: string) => {
+  if (err?.message?.includes('readUInt16LE') && err?.stack?.includes('node-firebird')) {
+    console.error(`[Node-Firebird Bug Safecatch] Ignorando crash interno do driver: ${err.message}`);
+    return; // Não derruba o servidor
+  }
+  
+  // Para qualquer outro erro não tratado, logamos e encerramos o processo
+  console.error(`Uncaught Exception (${origin}):`, err);
+  process.exit(1);
+});
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     bufferLogs: true,

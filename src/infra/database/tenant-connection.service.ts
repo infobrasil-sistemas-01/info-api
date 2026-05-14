@@ -40,9 +40,12 @@ export class TenantConnectionService {
           if (err) return reject(err);
           
           // Previne crash por Unhandled 'error' event caso a conexão caia depois
-          (db as any).on('error', (dbErr: any) => {
-            this.logger.error(`Erro na conexão Firebird para o tenant ${credentialsId}: ${dbErr?.message}`);
-          });
+          // Verifica se já tem listener para não vazar memória no pool (MaxListenersExceededWarning)
+          if ((db as any).listenerCount('error') === 0) {
+            (db as any).on('error', (dbErr: any) => {
+              this.logger.error(`Erro na conexão Firebird para o tenant ${credentialsId}: ${dbErr?.message}`);
+            });
+          }
 
           resolve(db);
         });
@@ -183,9 +186,11 @@ export class TenantConnectionService {
           return reject(err);
         }
 
-        (db as any).on('error', (dbErr: any) => {
-          this.logger.error(`Erro na conexão Firebird durante pingPool: ${dbErr?.message}`);
-        });
+        if ((db as any).listenerCount('error') === 0) {
+          (db as any).on('error', (dbErr: any) => {
+            this.logger.error(`Erro na conexão Firebird durante pingPool: ${dbErr?.message}`);
+          });
+        }
 
         try {
           db.query('SELECT 1 FROM RDB$DATABASE', [], (qErr) => {
