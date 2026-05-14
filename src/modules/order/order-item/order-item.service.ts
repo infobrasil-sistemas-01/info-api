@@ -131,8 +131,94 @@ export class OrderItemService {
       this.logger.log(
         `Busca de itens do pedido executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
           { orderId },
-        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${
-          queryEndTime - queryStartTime
+        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${queryEndTime - queryStartTime
+        }ms`,
+      );
+
+      return result;
+    } finally {
+      this.tenantConnectionService.releaseConnection(connection);
+    }
+  }
+
+  async get(
+    credentialsId: string,
+    storeId: number,
+    filters: {
+      page?: number;
+      pageSize?: number;
+      orderId?: number;
+      productId?: number;
+      brandId?: number;
+      groupId?: number;
+      startDate?: string;
+      endDate?: string;
+    },
+  ) {
+    let connection: any;
+    connection =
+      await this.tenantConnectionService.getConnection(credentialsId);
+
+    try {
+      const { page = 1, pageSize = 10 } = filters;
+      const params: any[] = [pageSize, (page - 1) * pageSize, storeId];
+      let whereClause = `WHERE V.LOJ_CODIGO = ? AND V.VEN_TIPO = 'E'`;
+
+      if (filters.orderId) {
+        whereClause += ` AND V.VEN_NUMERO = ?`;
+        params.push(filters.orderId);
+      }
+
+      if (filters.productId) {
+        whereClause += ` AND IV.PRO_CODIGO = ?`;
+        params.push(filters.productId);
+      }
+
+      if (filters.brandId) {
+        whereClause += ` AND P.MAR_CODIGO = ?`;
+        params.push(filters.brandId);
+      }
+
+      if (filters.groupId) {
+        whereClause += ` AND P.GRU_CODIGO = ?`;
+        params.push(filters.groupId);
+      }
+
+      if (filters.startDate) {
+        whereClause += ` AND V.VEN_DATA >= ?`;
+        params.push(filters.startDate);
+      }
+
+      if (filters.endDate) {
+        whereClause += ` AND V.VEN_DATA <= ?`;
+        params.push(filters.endDate);
+      }
+
+      const query = `SELECT FIRST ? SKIP ? 
+                      V.VEN_NUMERO, V.VEN_DATA, IV.PRO_CODIGO, P.PRO_DESCRICAO, 
+                      IV.IVD_QTDE, IV.IVD_PRECO, IV.IVD_TOTAL, IV.IVD_DESCONTO, IV.IVD_LIQUIDO,
+                      M.MAR_CODIGO, M.MAR_DESCRICAO, G.GRU_CODIGO, G.GRU_DESCRICAO
+                      FROM ITENSVEN IV
+                      INNER JOIN VENDAS V ON V.VEN_NUMERO = IV.VEN_NUMERO
+                      INNER JOIN PRODUTOS P ON P.PRO_CODIGO = IV.PRO_CODIGO
+                      LEFT JOIN MARCAS M ON M.MAR_CODIGO = P.MAR_CODIGO
+                      LEFT JOIN GRUPOSPRO G ON G.GRU_CODIGO = P.GRU_CODIGO
+                      ${whereClause}
+                      ORDER BY V.VEN_DATA DESC, V.VEN_NUMERO DESC`;
+
+      const queryStartTime = Date.now();
+      const result = await new Promise((resolve, reject) => {
+        connection.query(query, params, (err: any, res: any) => {
+          if (err) return reject(err);
+          resolve(res);
+        });
+      });
+      const queryEndTime = Date.now();
+
+      this.logger.log(
+        `Busca transversal de itens de venda executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
+          filters,
+        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${queryEndTime - queryStartTime
         }ms`,
       );
 

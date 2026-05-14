@@ -669,6 +669,114 @@
         ]
       }
     },
+    "/api/v1/order-items": {
+      "get": {
+        "description": "Retorna uma lista de itens de pedidos com informações de marca e grupo.",
+        "operationId": "OrderItemController_get",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Página atual",
+            "schema": {
+              "default": 1,
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "description": "Itens por página",
+            "schema": {
+              "default": 10,
+              "example": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "orderId",
+            "required": false,
+            "in": "query",
+            "description": "ID da venda (VEN_NUMERO)",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "productId",
+            "required": false,
+            "in": "query",
+            "description": "ID do produto (PRO_CODIGO)",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "brandId",
+            "required": false,
+            "in": "query",
+            "description": "ID da marca (MAR_CODIGO)",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "groupId",
+            "required": false,
+            "in": "query",
+            "description": "ID do grupo (GRU_CODIGO)",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "startDate",
+            "required": false,
+            "in": "query",
+            "description": "Data inicial (YYYY-MM-DD)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "endDate",
+            "required": false,
+            "in": "query",
+            "description": "Data final (YYYY-MM-DD)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de itens retornada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrderItemEnrichedResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Listar itens de pedidos",
+        "tags": [
+          "Order Items"
+        ]
+      }
+    },
     "/api/v1/payment-methods": {
       "get": {
         "description": "Retorna uma lista paginada de formas de pagamento associados às credenciais do usuário autenticado.",
@@ -1813,6 +1921,91 @@
           "ven_totaldesc",
           "ven_quant",
           "items"
+        ]
+      },
+      "OrderItemEnrichedResponseDto": {
+        "type": "object",
+        "properties": {
+          "VEN_NUMERO": {
+            "type": "number",
+            "example": 12345,
+            "description": "Número da venda"
+          },
+          "VEN_DATA": {
+            "type": "string",
+            "example": "2024-05-10T00:00:00.000Z",
+            "description": "Data da venda"
+          },
+          "PRO_CODIGO": {
+            "type": "number",
+            "example": 101,
+            "description": "Código do produto"
+          },
+          "PRO_DESCRICAO": {
+            "type": "string",
+            "example": "Produto Exemplo",
+            "description": "Descrição do produto"
+          },
+          "IVD_QTDE": {
+            "type": "number",
+            "example": 2,
+            "description": "Quantidade"
+          },
+          "IVD_PRECO": {
+            "type": "number",
+            "example": 150,
+            "description": "Preço unitário"
+          },
+          "IVD_TOTAL": {
+            "type": "number",
+            "example": 300,
+            "description": "Valor total"
+          },
+          "IVD_DESCONTO": {
+            "type": "number",
+            "example": 0,
+            "description": "Valor de desconto"
+          },
+          "IVD_LIQUIDO": {
+            "type": "number",
+            "example": 300,
+            "description": "Valor líquido"
+          },
+          "MAR_CODIGO": {
+            "type": "number",
+            "example": 7,
+            "description": "Código da marca"
+          },
+          "MAR_DESCRICAO": {
+            "type": "string",
+            "example": "Marca Exemplo",
+            "description": "Descrição da marca"
+          },
+          "GRU_CODIGO": {
+            "type": "number",
+            "example": 12,
+            "description": "Código do grupo"
+          },
+          "GRU_DESCRICAO": {
+            "type": "string",
+            "example": "Grupo Exemplo",
+            "description": "Descrição do grupo"
+          }
+        },
+        "required": [
+          "VEN_NUMERO",
+          "VEN_DATA",
+          "PRO_CODIGO",
+          "PRO_DESCRICAO",
+          "IVD_QTDE",
+          "IVD_PRECO",
+          "IVD_TOTAL",
+          "IVD_DESCONTO",
+          "IVD_LIQUIDO",
+          "MAR_CODIGO",
+          "MAR_DESCRICAO",
+          "GRU_CODIGO",
+          "GRU_DESCRICAO"
         ]
       },
       "PaymentMethodResponseDto": {
