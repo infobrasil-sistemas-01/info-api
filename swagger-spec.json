@@ -1020,6 +1020,34 @@
         "tags": [
           "Client"
         ]
+      },
+      "post": {
+        "operationId": "ClientController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateClientDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Criar cliente",
+        "tags": [
+          "Client"
+        ]
       }
     },
     "/api/v1/clients/{id}": {
@@ -1030,7 +1058,9 @@
             "name": "id",
             "required": true,
             "in": "path",
+            "description": "ID do cliente (CLI_CODIGO)",
             "schema": {
+              "example": 1,
               "type": "number"
             }
           }
@@ -1046,6 +1076,43 @@
           }
         ],
         "summary": "Obter detalhe do cliente",
+        "tags": [
+          "Client"
+        ]
+      },
+      "patch": {
+        "operationId": "ClientController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateClientDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Atualizar cliente",
         "tags": [
           "Client"
         ]
@@ -1766,6 +1833,128 @@
           "FPG_CODIGO",
           "FPG_DESCRICAO"
         ]
+      },
+      "CreateClientDto": {
+        "type": "object",
+        "properties": {
+          "LOJ_CODIGO": {
+            "type": "number",
+            "description": "Código da loja",
+            "example": 1,
+            "default": 1
+          },
+          "CLI_NOME": {
+            "type": "string",
+            "description": "Nome do cliente",
+            "example": "João Silva"
+          },
+          "CLI_FANTASIA": {
+            "type": "string",
+            "description": "Nome fantasia",
+            "example": "João ME"
+          },
+          "CLI_ENDERECO": {
+            "type": "string",
+            "description": "Endereço",
+            "example": "Rua ABC, 123"
+          },
+          "CLI_COMPL_ENDERECO": {
+            "type": "string",
+            "description": "Complemento",
+            "example": "Apto 101"
+          },
+          "CLI_CEP": {
+            "type": "string",
+            "description": "CEP",
+            "example": "60000-000"
+          },
+          "CLI_BAIRRO": {
+            "type": "string",
+            "description": "Bairro",
+            "example": "Centro"
+          },
+          "CLI_UF": {
+            "type": "string",
+            "description": "UF",
+            "example": "CE",
+            "default": "CE"
+          },
+          "CLI_FONE": {
+            "type": "string",
+            "description": "Telefone",
+            "example": "8533334444"
+          },
+          "CLI_CELULAR": {
+            "type": "string",
+            "description": "Celular",
+            "example": "85999998888"
+          },
+          "CLI_CPF_CNPJ": {
+            "type": "string",
+            "description": "CPF ou CNPJ",
+            "example": "12345678901"
+          }
+        },
+        "required": [
+          "LOJ_CODIGO",
+          "CLI_NOME",
+          "CLI_UF"
+        ]
+      },
+      "UpdateClientDto": {
+        "type": "object",
+        "properties": {
+          "LOJ_CODIGO": {
+            "type": "number",
+            "description": "Código da loja",
+            "example": 1
+          },
+          "CLI_NOME": {
+            "type": "string",
+            "description": "Nome do cliente",
+            "example": "João Silva"
+          },
+          "CLI_FANTASIA": {
+            "type": "string",
+            "description": "Nome fantasia",
+            "example": "João ME"
+          },
+          "CLI_ENDERECO": {
+            "type": "string",
+            "description": "Endereço",
+            "example": "Rua ABC, 123"
+          },
+          "CLI_COMPL_ENDERECO": {
+            "type": "string",
+            "description": "Complemento",
+            "example": "Apto 101"
+          },
+          "CLI_CEP": {
+            "type": "string",
+            "description": "CEP",
+            "example": "60000-000"
+          },
+          "CLI_BAIRRO": {
+            "type": "string",
+            "description": "Bairro",
+            "example": "Centro"
+          },
+          "CLI_UF": {
+            "type": "string",
+            "description": "UF",
+            "example": "CE"
+          },
+          "CLI_FONE": {
+            "type": "string",
+            "description": "Telefone",
+            "example": "8533334444"
+          },
+          "CLI_CELULAR": {
+            "type": "string",
+            "description": "Celular",
+            "example": "85999998888"
+          }
+        }
       }
     }
   }
