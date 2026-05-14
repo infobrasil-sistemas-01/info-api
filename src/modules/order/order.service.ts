@@ -175,7 +175,7 @@ export class OrderService {
       await this.tenantConnectionService.getConnection(credentialsId);
 
     try {
-      let whereClause = `WHERE V.VEN_TIPO = 'E'`;
+      let whereClause = `WHERE 1=1`;
       const params: any[] = [pageSize, (page - 1) * pageSize];
 
       if (storeId) {
@@ -251,7 +251,7 @@ export class OrderService {
       await this.tenantConnectionService.getConnection(credentialsId);
 
     try {
-      let whereClause = `WHERE V.VEN_NUMERO = ? AND V.VEN_TIPO = 'E'`;
+      let whereClause = `WHERE V.VEN_NUMERO = ?`;
       const params: any[] = [id];
 
       if (storeId) {
