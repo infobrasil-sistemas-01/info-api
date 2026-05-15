@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.10.1](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.10.0...v1.10.1) (2026-05-15)
+
+
+### Bug Fixes
+
+* `clients`, `employees` and `suppliers` response dto ([ad5ba58](https://github.com/infobrasil-sistemas/info-vendas-api/commit/ad5ba589cd26ac87fd7585bff367e182bf974512))
+* file `.versionrc` ([d04c408](https://github.com/infobrasil-sistemas/info-vendas-api/commit/d04c4087100bf937d726f76bdd1fa9a3243d868a))
+
 ## [1.10.0](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.9.0...v1.10.0) (2026-05-15)
 
 
