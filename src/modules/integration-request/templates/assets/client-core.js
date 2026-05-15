@@ -16,6 +16,7 @@ const Translations = {
         'clients': 'Clientes',
         'employees': 'Funcionários',
         'suppliers': 'Fornecedores',
+        'service-providers': 'Prestadores',
         'announcement': 'Avisos do Sistema',
     },
     actions: {

@@ -29,6 +29,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { StatusModule } from './modules/status/status.module';
 import { EmployeeModule } from './modules/employee/employee.module';
 import { SupplierModule } from './modules/supplier/supplier.module';
+import { ServiceProviderModule } from './modules/service-provider/service-provider.module';
 
 import { AppController } from './app.controller';
 
@@ -57,6 +58,7 @@ import { AppController } from './app.controller';
     ClientModule,
     EmployeeModule,
     SupplierModule,
+    ServiceProviderModule,
     ScheduleModule.forRoot(),
     StatusModule,
   ],

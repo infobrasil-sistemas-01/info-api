@@ -209,6 +209,26 @@ export const PERMISSIONS = [
     descricao: 'Deletar fornecedores do tenant',
     module: 'tenant'
   },
+  {
+    key: 'tenant.service-providers.view',
+    descricao: 'Visualizar prestadores do tenant',
+    module: 'tenant'
+  },
+  {
+    key: 'tenant.service-providers.create',
+    descricao: 'Criar prestadores do tenant',
+    module: 'tenant'
+  },
+  {
+    key: 'tenant.service-providers.update',
+    descricao: 'Atualizar prestadores do tenant',
+    module: 'tenant'
+  },
+  {
+    key: 'tenant.service-providers.delete',
+    descricao: 'Deletar prestadores do tenant',
+    module: 'tenant'
+  },
 
   // ========= SOLICITAÇÕES =========
   {

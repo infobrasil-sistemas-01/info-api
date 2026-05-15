@@ -271,6 +271,7 @@ const LABEL_MAP = {
     'account-receivable': 'Contas a Receber',
     'employees': 'Funcionários',
     'suppliers': 'Fornecedores',
+    'service-providers': 'Prestadores de Serviço',
     'announcement': 'Avisos & Notificações',
     'dbcredential': 'Credenciais DB',
 

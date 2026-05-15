@@ -60,7 +60,11 @@ INSERT INTO permissions (id, key, name, description) VALUES
 (gen_random_uuid(), 'tenant.suppliers.view', 'Visualizar fornecedores', 'Visualizar fornecedores do tenant'),
 (gen_random_uuid(), 'tenant.suppliers.create', 'Criar fornecedores', 'Criar fornecedores do tenant'),
 (gen_random_uuid(), 'tenant.suppliers.update', 'Atualizar fornecedores', 'Atualizar fornecedores do tenant'),
-(gen_random_uuid(), 'tenant.suppliers.delete', 'Deletar fornecedores', 'Deletar fornecedores do tenant')
+(gen_random_uuid(), 'tenant.suppliers.delete', 'Deletar fornecedores', 'Deletar fornecedores do tenant'),
+(gen_random_uuid(), 'tenant.service-providers.view', 'Visualizar prestadores', 'Visualizar prestadores do tenant'),
+(gen_random_uuid(), 'tenant.service-providers.create', 'Criar prestadores', 'Criar prestadores do tenant'),
+(gen_random_uuid(), 'tenant.service-providers.update', 'Atualizar prestadores', 'Atualizar prestadores do tenant'),
+(gen_random_uuid(), 'tenant.service-providers.delete', 'Deletar prestadores', 'Deletar prestadores do tenant')
 ON CONFLICT (key) DO UPDATE SET 
     name = EXCLUDED.name, 
     description = EXCLUDED.description;
