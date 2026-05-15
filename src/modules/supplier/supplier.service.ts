@@ -2,8 +2,8 @@ import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { TenantConnectionService } from 'src/infra/database/tenant-connection.service';
 
 @Injectable()
-export class EmployeeService {
-  private readonly logger = new Logger(EmployeeService.name);
+export class SupplierService {
+  private readonly logger = new Logger(SupplierService.name);
 
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
@@ -11,7 +11,7 @@ export class EmployeeService {
 
   async get(
     credentialsId: string,
-    storeId: number = 1,
+    storeId?: number,
     page: number = 1,
     pageSize: number = 10,
     search?: string,
@@ -22,19 +22,24 @@ export class EmployeeService {
     try {
       const params: (number | string)[] = [
         pageSize,
-        (page - 1) * pageSize,
-        storeId,
+        (page - 1) * pageSize
       ];
       let query = `SELECT FIRST ? SKIP ? 
-                      FUN_CODIGO, FUN_NOME, FUN_APELIDO, FUN_ENDERECO, FUN_BAIRRO,
-                      FUN_CIDADE, FUN_UF, FUN_CEP, FUN_FONE, FUN_CELULAR, FUN_EMAIL,
-                      FUN_CPF, FUN_IDENTIDADE, FUN_SITUACAO, FUN_DATANASC,
-                      FUN_DATAADMISSAO, FUN_DATADEMISSAO, LOJ_CODIGO
-                      FROM funcionarios 
-                      WHERE LOJ_CODIGO = ?`;
+                      CRE_CODIGO, CRE_NOME, CRE_FANTASIA, CRE_ENDERECO, CRE_BAIRRO,
+                      CRE_UF, CRE_CONTATO, CRE_CEP, CRE_CNPJ, CRE_CGF, CRE_FONE,
+                      CRE_CELULAR, CRE_FAX, CRE_ZEROOITO, CRE_EMAIL, CRE_SITE,
+                      CRE_REPRESENTANTE, CRE_FONEREP, CRE_CELULARREP, CRE_EMAILREP,
+                      CRE_SITUACAO, LOJ_CODIGO
+                      FROM credores 
+                      WHERE 1=1`;
+
+      if (storeId) {
+        query += ` AND LOJ_CODIGO = ?`;
+        params.push(storeId);
+      }
 
       if (situation) {
-        query += ` AND FUN_SITUACAO = ?`;
+        query += ` AND CRE_SITUACAO = ?`;
         params.push(situation);
       }
 
@@ -42,11 +47,11 @@ export class EmployeeService {
         if (search.length < 3) {
           throw new BadRequestException('Pesquisa precisa ter pelo menos 3 caracteres.');
         }
-        query += ` AND (FUN_NOME LIKE ? OR FUN_APELIDO LIKE ?)`;
+        query += ` AND (CRE_NOME LIKE ? OR CRE_FANTASIA LIKE ?)`;
         params.push(`%${search}%`, `%${search}%`);
       }
 
-      query += ` ORDER BY FUN_NOME`;
+      query += ` ORDER BY CRE_NOME`;
 
       const startTime = Date.now();
       const result = await new Promise((resolve, reject) => {
@@ -58,13 +63,13 @@ export class EmployeeService {
       const endTime = Date.now();
 
       this.logger.log(
-        `Busca de funcionários executada. Tenant: ${credentialsId}, Tempo SQL: ${endTime - startTime}ms`,
+        `Busca de fornecedores executada. Tenant: ${credentialsId}, Tempo SQL: ${endTime - startTime}ms`,
       );
       return result;
     } catch (error) {
       console.error(error);
       this.logger.error(
-        `Erro ao buscar funcionários. Tenant: ${credentialsId}`,
+        `Erro ao buscar fornecedores. Tenant: ${credentialsId}`,
         error,
       );
       throw error;
@@ -78,12 +83,13 @@ export class EmployeeService {
 
     try {
       const query = `SELECT 
-                      FUN_CODIGO, FUN_NOME, FUN_APELIDO, FUN_ENDERECO, FUN_BAIRRO,
-                      FUN_CIDADE, FUN_UF, FUN_CEP, FUN_FONE, FUN_CELULAR, FUN_EMAIL,
-                      FUN_CPF, FUN_IDENTIDADE, FUN_SITUACAO, FUN_DATANASC,
-                      FUN_DATAADMISSAO, FUN_DATADEMISSAO, LOJ_CODIGO
-                      FROM funcionarios 
-                      WHERE FUN_CODIGO = ?`;
+                      CRE_CODIGO, CRE_NOME, CRE_FANTASIA, CRE_ENDERECO, CRE_BAIRRO,
+                      CRE_UF, CRE_CONTATO, CRE_CEP, CRE_CNPJ, CRE_CGF, CRE_FONE,
+                      CRE_CELULAR, CRE_FAX, CRE_ZEROOITO, CRE_EMAIL, CRE_SITE,
+                      CRE_REPRESENTANTE, CRE_FONEREP, CRE_CELULARREP, CRE_EMAILREP,
+                      CRE_SITUACAO, LOJ_CODIGO
+                      FROM credores 
+                      WHERE CRE_CODIGO = ?`;
       const params = [id];
 
       const startTime = Date.now();
@@ -96,13 +102,13 @@ export class EmployeeService {
       const endTime = Date.now();
 
       this.logger.log(
-        `Busca de funcionário por ID executada. Tenant: ${credentialsId}, ID: ${id}, Tempo SQL: ${endTime - startTime}ms`,
+        `Busca de fornecedor por ID executada. Tenant: ${credentialsId}, ID: ${id}, Tempo SQL: ${endTime - startTime}ms`,
       );
       return result;
     } catch (error) {
       console.error(error);
       this.logger.error(
-        `Erro ao buscar funcionário por ID. Tenant: ${credentialsId}, ID: ${id}`,
+        `Erro ao buscar fornecedor por ID. Tenant: ${credentialsId}, ID: ${id}`,
         error,
       );
       throw error;

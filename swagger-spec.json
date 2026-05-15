@@ -1331,6 +1331,109 @@
         ]
       }
     },
+    "/api/v1/suppliers": {
+      "get": {
+        "operationId": "SupplierController_get",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Página atual",
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "description": "Itens por página",
+            "schema": {
+              "example": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Busca por nome ou fantasia",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "situation",
+            "required": false,
+            "in": "query",
+            "description": "Situação do fornecedor",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "A",
+                "I"
+              ]
+            }
+          },
+          {
+            "name": "storeId",
+            "required": false,
+            "in": "query",
+            "description": "ID da loja",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Listar fornecedores",
+        "tags": [
+          "Supplier"
+        ]
+      }
+    },
+    "/api/v1/suppliers/{id}": {
+      "get": {
+        "operationId": "SupplierController_getById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID do fornecedor (CRE_CODIGO)",
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Obter detalhe do fornecedor",
+        "tags": [
+          "Supplier"
+        ]
+      }
+    },
     "/status/data": {
       "get": {
         "operationId": "StatusController_getData",

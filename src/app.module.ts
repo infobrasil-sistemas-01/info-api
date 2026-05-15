@@ -28,6 +28,7 @@ import { ClientModule } from './modules/client/client.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { StatusModule } from './modules/status/status.module';
 import { EmployeeModule } from './modules/employee/employee.module';
+import { SupplierModule } from './modules/supplier/supplier.module';
 
 import { AppController } from './app.controller';
 
@@ -55,6 +56,7 @@ import { AppController } from './app.controller';
     UptimeModule,
     ClientModule,
     EmployeeModule,
+    SupplierModule,
     ScheduleModule.forRoot(),
     StatusModule,
   ],

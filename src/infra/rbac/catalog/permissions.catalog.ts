@@ -189,6 +189,26 @@ export const PERMISSIONS = [
     descricao: 'Deletar funcionários do tenant',
     module: 'tenant'
   },
+  {
+    key: 'tenant.suppliers.view',
+    descricao: 'Visualizar fornecedores do tenant',
+    module: 'tenant'
+  },
+  {
+    key: 'tenant.suppliers.create',
+    descricao: 'Criar fornecedores do tenant',
+    module: 'tenant'
+  },
+  {
+    key: 'tenant.suppliers.update',
+    descricao: 'Atualizar fornecedores do tenant',
+    module: 'tenant'
+  },
+  {
+    key: 'tenant.suppliers.delete',
+    descricao: 'Deletar fornecedores do tenant',
+    module: 'tenant'
+  },
 
   // ========= SOLICITAÇÕES =========
   {

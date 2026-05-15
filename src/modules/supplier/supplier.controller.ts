@@ -3,25 +3,25 @@ import { ApiBearerAuth, ApiTags, ApiOperation, ApiParam } from '@nestjs/swagger'
 import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
-import { EmployeeService } from './employee.service';
-import { GetEmployeesQueryDto } from './dto/get-employees-query.dto';
+import { SupplierService } from './supplier.service';
+import { GetSuppliersQueryDto } from './dto/get-suppliers-query.dto';
 import { CurrentUser } from 'src/modules/auth/decorators/current-user.decorator';
 
-@ApiTags('Employee')
+@ApiTags('Supplier')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, PermissionsGuard)
-@Controller('employees')
-export class EmployeeController {
-  constructor(private readonly employeeService: EmployeeService) { }
+@Controller('suppliers')
+export class SupplierController {
+  constructor(private readonly supplierService: SupplierService) { }
 
   @Get()
-  @RequirePermissions({ allOf: ['tenant.employees.view'] })
-  @ApiOperation({ summary: 'Listar funcionários' })
+  @RequirePermissions({ allOf: ['tenant.suppliers.view'] })
+  @ApiOperation({ summary: 'Listar fornecedores' })
   async get(
     @CurrentUser() user: any,
-    @Query() query: GetEmployeesQueryDto,
+    @Query() query: GetSuppliersQueryDto,
   ) {
-    return this.employeeService.get(
+    return this.supplierService.get(
       user.credentials_id,
       query.storeId,
       query.page,
@@ -32,13 +32,13 @@ export class EmployeeController {
   }
 
   @Get(':id')
-  @RequirePermissions({ allOf: ['tenant.employees.view'] })
-  @ApiOperation({ summary: 'Obter detalhe do funcionário' })
-  @ApiParam({ name: 'id', description: 'ID do funcionário (FUN_CODIGO)', example: 1 })
+  @RequirePermissions({ allOf: ['tenant.suppliers.view'] })
+  @ApiOperation({ summary: 'Obter detalhe do fornecedor' })
+  @ApiParam({ name: 'id', description: 'ID do fornecedor (CRE_CODIGO)', example: 1 })
   async getById(
     @CurrentUser() user: any,
     @Param('id') id: number,
   ) {
-    return this.employeeService.getById(user.credentials_id, id);
+    return this.supplierService.getById(user.credentials_id, id);
   }
 }

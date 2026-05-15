@@ -269,6 +269,9 @@ const LABEL_MAP = {
     'groups': 'Grupos',
     'clients': 'Clientes',
     'account-receivable': 'Contas a Receber',
+    'employees': 'Funcionários',
+    'suppliers': 'Fornecedores',
+    'announcement': 'Avisos & Notificações',
     'dbcredential': 'Credenciais DB',
 
     // Ações do painel de solicitação
