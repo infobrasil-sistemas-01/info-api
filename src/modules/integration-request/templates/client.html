@@ -106,6 +106,38 @@
                             minutos.</p>
                     </div>
 
+                    <!-- Vídeo de Boas-vindas em Accordion -->
+                    <div class="accordion-video" style="margin-bottom: 40px;">
+                        <button onclick="UI.toggleAccordion(this)" class="accordion-header"
+                            style="width: 100%; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.15); padding: 18px 24px; border-radius: 12px; color: var(--primary); display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.3s ease; font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 1.1rem; outline: none;">
+                            <span style="display: flex; align-items: center;">
+                                <i class='bx bx-play-circle'
+                                    style="margin-right: 12px; font-size: 1.6rem; opacity: 0.9;"></i>
+                                Fluxo de Autenticação e Primeira Requisição
+                            </span>
+                            <i class='bx bx-chevron-down accordion-icon'
+                                style="font-size: 1.5rem; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);"></i>
+                        </button>
+                        <div class="accordion-content"
+                            style="max-height: 0; overflow: hidden; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); background: rgba(0,0,0,0.15); border-radius: 0 0 12px 12px; margin-top: 0; border: 1px solid rgba(16, 185, 129, 0.1); border-top: none; opacity: 0;">
+                            <div style="padding: 24px;">
+                                <p
+                                    style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.95rem; line-height: 1.5;">
+                                    Confira no tutorial em vídeo como realizar o fluxo completo de autenticação e a
+                                    primeira chamada à API de forma correta:
+                                </p>
+                                <div class="video-wrapper"
+                                    style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.5); border: 1px solid rgba(255,255,255,0.05); background: #000;">
+                                    <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+                                        src="https://www.youtube.com/embed/OykdP33Glps"
+                                        title="Fluxo de Autenticação e Primeira Requisição" frameborder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="guide-step">
                         <div class="step-number">1</div>
                         <div class="step-content">
@@ -217,14 +249,14 @@
                     <div class="card">
                         <h3>Status API</h3>
                         <div id="status-api-val" class="status-badge-mini">VERIFICANDO...</div>
-                        
+
                         <div class="latency-fb">
                             <span class="latency-label">Resposta da API</span>
                             <span id="status-api-latency" class="latency-value">-- ms</span>
                         </div>
-                        
+
                         <p class="stats-label">Motor principal do ecossistema</p>
-                        
+
                         <div class="uptime-container">
                             <div class="uptime-header">
                                 <span>Disponibilidade (Últimos 30 min)</span>
@@ -243,12 +275,12 @@
                     <div class="card">
                         <h3>Banco Global</h3>
                         <div id="status-postgres-val" class="status-badge-mini">VERIFICANDO...</div>
-                        
+
                         <div class="latency-fb">
                             <span class="latency-label">Latência do Banco</span>
                             <span id="status-postgres-latency" class="latency-value">-- ms</span>
                         </div>
-                        
+
                         <p class="stats-label">Nuvem e gerenciamento de conta</p>
 
                         <div class="uptime-container">
@@ -269,12 +301,12 @@
                     <div class="card card-fb">
                         <h3><i class='bx bxs-hot'></i> Seu Banco (FireBird)</h3>
                         <div id="status-tenant-val" class="status-badge-mini">VERIFICANDO...</div>
-                        
+
                         <div class="latency-fb">
                             <span class="latency-label">Latência Atual</span>
                             <span id="status-tenant-latency" class="latency-value">-- ms</span>
                         </div>
-                        
+
                         <p class="stats-label">Conexão direta com seu ERP</p>
 
                         <div class="uptime-container">
@@ -576,21 +608,21 @@ print(f'Basic {auth}')</code></pre>
             const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
             const history = UptimeHistory[type];
-            history.push({ 
-                isUp: currentStatus === 'UP', 
+            history.push({
+                isUp: currentStatus === 'UP',
                 latency: latency || 0,
                 time: timeStr
             });
-            
+
             if (history.length > 30) history.shift();
 
             // Renderiza os ticks
             barEl.innerHTML = '';
-            
+
             // Slots vazios para preencher o design (30 slots fixos)
             const totalSlots = 30;
             const emptyCount = totalSlots - history.length;
-            
+
             for (let i = 0; i < emptyCount; i++) {
                 const tick = document.createElement('div');
                 tick.className = 'uptime-tick pending';
@@ -600,10 +632,10 @@ print(f'Basic {auth}')</code></pre>
             history.forEach((log) => {
                 const tick = document.createElement('div');
                 tick.className = `uptime-tick ${log.isUp ? 'up' : 'down'}`;
-                
+
                 const statusLabel = log.isUp ? 'OPERACIONAL' : 'INSTÁVEL';
                 tick.title = `[${log.time}]\nStatus: ${statusLabel}\nLatência: ${log.latency}ms`;
-                
+
                 barEl.appendChild(tick);
             });
 
@@ -619,6 +651,27 @@ print(f'Basic {auth}')</code></pre>
                 setTimeout(initStatusLogic, 100);
                 return;
             }
+
+            // Adiciona função de Accordion ao objeto UI global
+            UI.toggleAccordion = function (btn) {
+                const content = btn.nextElementSibling;
+                const icon = btn.querySelector('.accordion-icon');
+                const isOpen = content.style.maxHeight !== '0px' && content.style.maxHeight !== '';
+
+                if (isOpen) {
+                    content.style.maxHeight = '0px';
+                    content.style.opacity = '0';
+                    icon.style.transform = 'rotate(0deg)';
+                    btn.style.borderRadius = '12px';
+                    btn.style.background = 'rgba(16, 185, 129, 0.08)';
+                } else {
+                    content.style.maxHeight = content.scrollHeight + 'px';
+                    content.style.opacity = '1';
+                    icon.style.transform = 'rotate(180deg)';
+                    btn.style.borderRadius = '12px 12px 0 0';
+                    btn.style.background = 'rgba(16, 185, 129, 0.12)';
+                }
+            };
 
             const originalSwitchTab = UI.switchTab;
             UI.switchTab = function (tabId) {
