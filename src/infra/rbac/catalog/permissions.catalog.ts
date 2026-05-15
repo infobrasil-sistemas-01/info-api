@@ -70,6 +70,26 @@ export const PERMISSIONS = [
     module: 'tenant',
   },
   {
+    key: 'tenant.payment-plans.view',
+    descricao: 'Visualizar planos de pagamento do tenant',
+    module: 'tenant',
+  },
+  {
+    key: 'tenant.payment-plans.create',
+    descricao: 'Criar planos de pagamento do tenant',
+    module: 'tenant',
+  },
+  {
+    key: 'tenant.payment-plans.update',
+    descricao: 'Atualizar planos de pagamento do tenant',
+    module: 'tenant',
+  },
+  {
+    key: 'tenant.payment-plans.delete',
+    descricao: 'Deletar planos de pagamento do tenant',
+    module: 'tenant',
+  },
+  {
     key: 'tenant.orders.view',
     descricao: 'Visualizar pedidos do tenant',
     module: 'tenant',

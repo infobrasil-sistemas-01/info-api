@@ -1621,6 +1621,62 @@
         ]
       }
     },
+    "/api/v1/payment-plans": {
+      "get": {
+        "description": "Retorna uma lista paginada de planos de pagamento associados às credenciais do usuário autenticado.",
+        "operationId": "PaymentPlanController_getPaymentPlans",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Número de página para paginação",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "description": "Número de itens por página",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de planos de pagamento retornada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PaymentPlanResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro de requisição, como pageSize excedendo o limite."
+          },
+          "401": {
+            "description": "Token de autenticação inválido ou ausente."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Listar planos de pagamento",
+        "tags": [
+          "Payment Plan"
+        ]
+      }
+    },
     "/status/data": {
       "get": {
         "operationId": "StatusController_getData",
@@ -3422,6 +3478,25 @@
           "PRE_IDENTIDADE",
           "PRE_SITUACAO",
           "LOJ_CODIGO"
+        ]
+      },
+      "PaymentPlanResponseDto": {
+        "type": "object",
+        "properties": {
+          "PLP_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código do plano de pagamento"
+          },
+          "PLP_DESCRICAO": {
+            "type": "string",
+            "example": "30 DIAS",
+            "description": "Descrição do plano de pagamento"
+          }
+        },
+        "required": [
+          "PLP_CODIGO",
+          "PLP_DESCRICAO"
         ]
       }
     }
