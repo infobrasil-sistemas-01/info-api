@@ -274,6 +274,7 @@ const LABEL_MAP = {
     'service-providers': 'Prestadores de Serviço',
     'announcement': 'Avisos & Notificações',
     'dbcredential': 'Credenciais DB',
+    'payment-plans': 'Planos de Pagamento',
 
     // Ações do painel de solicitação
     'approve': 'Aprovar',
@@ -661,12 +662,12 @@ const UI = {
 
 function switchTab(tab, updateHash = true) {
     if (!tab) return;
-    
+
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
-    
+
     // Find button by its onclick attribute containing the tab name
-    const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => 
+    const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b =>
         b.getAttribute('onclick')?.includes(`'${tab}'`)
     );
     if (btn) btn.classList.add('active');

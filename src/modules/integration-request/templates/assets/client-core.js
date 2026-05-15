@@ -12,6 +12,7 @@ const Translations = {
         'integration-request': 'Solicitações de Integração',
         'db-credentials': 'Credenciais de Banco',
         'payment-methods': 'Formas de Pagamento',
+        'payment-plans': 'Planos de Pagamento',
         'account-receivable': 'Contas a Receber',
         'clients': 'Clientes',
         'employees': 'Funcionários',
@@ -142,14 +143,14 @@ const UI = {
     renderAnnouncements() {
         const bar = document.getElementById('announcement-bar');
         const slider = document.getElementById('announcement-slider');
-        
+
         if (!this.announcements || this.announcements.length === 0) {
             bar.classList.add('hidden');
             return;
         }
 
         bar.classList.remove('hidden');
-        
+
         slider.innerHTML = this.announcements.map(ann => {
             const iconMap = {
                 'DOC': 'bx-book-open',
@@ -158,7 +159,7 @@ const UI = {
                 'ALERT': 'bx-alarm-exclamation'
             };
             const icon = iconMap[ann.type] || 'bx-bell';
-            
+
             return `
                 <div class="announcement-slide ${ann.type.toLowerCase()}">
                     <i class='bx ${icon}'></i>
@@ -171,7 +172,7 @@ const UI = {
         // Controls
         const prev = document.getElementById('announcement-prev');
         const next = document.getElementById('announcement-next');
-        
+
         if (this.announcements.length > 1) {
             prev.classList.remove('hidden');
             next.classList.remove('hidden');
@@ -388,8 +389,8 @@ const UI = {
                 const statusEl = document.getElementById('uptime-status');
                 if (statusEl && data.current) {
                     const isUp = data.current.apiStatus === 'UP';
-                    statusEl.innerHTML = isUp 
-                        ? '<span style="color: #10b981; font-weight: 700;">● Online</span>' 
+                    statusEl.innerHTML = isUp
+                        ? '<span style="color: #10b981; font-weight: 700;">● Online</span>'
                         : '<span style="color: #ef4444; font-weight: 700;">● Offline</span>';
                 }
             }
