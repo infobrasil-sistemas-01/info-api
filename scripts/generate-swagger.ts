@@ -27,9 +27,12 @@ async function generate() {
   }
 
   const outputPath = path.join(docsDir, `swagger-${version}.json`);
-
   fs.writeFileSync(outputPath, JSON.stringify(document, null, 2));
-  console.log(`✅ Swagger spec gerada com sucesso para a versão ${version} em: ${outputPath}`);
+
+  const rootOutputPath = path.join(process.cwd(), 'swagger-spec.json');
+  fs.writeFileSync(rootOutputPath, JSON.stringify(document, null, 2));
+
+  console.log(`✅ Swagger spec gerada com sucesso para a versão ${version} em: ${outputPath} e raiz`);
 
   await app.close();
   process.exit(0);
