@@ -2,39 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
-## [1.9.0](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.4.0...v1.9.0) (2026-05-15)
+## [1.9.0](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.8.0...v1.9.0) (2026-05-15)
 
 
 ### Features
 
-* clients options on request form ([623da51](https://github.com/infobrasil-sistemas/info-vendas-api/commit/623da515d142307960e19e08b2c81f0109920088))
-* filter tablePrice on GET products ([5fac242](https://github.com/infobrasil-sistemas/info-vendas-api/commit/5fac2427b68d6e04d2a4c1d37add5faad2d61453))
-* filters on GET orders ([781edbd](https://github.com/infobrasil-sistemas/info-vendas-api/commit/781edbd50dc8ab7a238882584fd35ddad5a69383))
-* filters on GET orders ([0ab3628](https://github.com/infobrasil-sistemas/info-vendas-api/commit/0ab36289be207bb6d8ef1cd592e49c2da2734a58))
-* GET /employees ([04e74cb](https://github.com/infobrasil-sistemas/info-vendas-api/commit/04e74cb1c96908c62a7c0cfcd02e21954313ab4c))
-* GET /order-items ([dc12498](https://github.com/infobrasil-sistemas/info-vendas-api/commit/dc12498c16272d72cbbc5d54d2e6537059b5133a))
 * GET /suppliers ([00b166c](https://github.com/infobrasil-sistemas/info-vendas-api/commit/00b166cada9b1cca32e50d80e7dde813a2935acc))
-* implement background monitoring service and status dashboard template ([2da7b1e](https://github.com/infobrasil-sistemas/info-vendas-api/commit/2da7b1eec07b618dd9e27bcd3cf356db33d7632d))
-* POST and PATCH /clients ([1ed9764](https://github.com/infobrasil-sistemas/info-vendas-api/commit/1ed9764bbbf0d38817d67330cd1ee7498966e79d))
-* status page ([5d9f94d](https://github.com/infobrasil-sistemas/info-vendas-api/commit/5d9f94db2330ee3189361cb4430942347a7db7af))
-* supports 129 password ([26e1c1c](https://github.com/infobrasil-sistemas/info-vendas-api/commit/26e1c1ccd0850c28b99faf73de40529ce8e2fcc2))
-* tabs management and refresh data in admin panel ([d010c5f](https://github.com/infobrasil-sistemas/info-vendas-api/commit/d010c5fc251417417185e72fc3fa6069b9e9110a))
-* test connection ([6f4a71b](https://github.com/infobrasil-sistemas/info-vendas-api/commit/6f4a71b4a998fd5bb446224586965640eaca1d1c))
-
-
-### Bug Fixes
-
-* api latency 0ms bug ([ab29a24](https://github.com/infobrasil-sistemas/info-vendas-api/commit/ab29a24ebccbb6c24a1c665f87659671d7a64ae7))
-* POST /user return JSON ([05be059](https://github.com/infobrasil-sistemas/info-vendas-api/commit/05be0596f2f08a10c86c8f31839d6cab2d65fe06))
-* prisma migrations ([b893091](https://github.com/infobrasil-sistemas/info-vendas-api/commit/b893091c508b331597c2138b307377b6085e7f92))
-* remove type `E` to /orders ([8b87c5a](https://github.com/infobrasil-sistemas/info-vendas-api/commit/8b87c5abe6b6ab49d462702abeb89eeff5f0d0da))
-* resolve merge conflicts in order controller and swagger spec ([ec930ce](https://github.com/infobrasil-sistemas/info-vendas-api/commit/ec930ced7cd2b8e376f7b3fb02bce4dddeacff32))
-* status controller ([f28f354](https://github.com/infobrasil-sistemas/info-vendas-api/commit/f28f354cf90f6680929a8714d79468f0895515fc))
-* status page template path for production ([a9ef81d](https://github.com/infobrasil-sistemas/info-vendas-api/commit/a9ef81dfa63615f29fe163e203431d26febdd736))
-* storeId on products ([18b7b1b](https://github.com/infobrasil-sistemas/info-vendas-api/commit/18b7b1b50052a5601b98c6ea52644893936cb051))
-* test connection treatment ([3fec66b](https://github.com/infobrasil-sistemas/info-vendas-api/commit/3fec66b1b147f902d3e2d0b3d6c1d32a87915a8b))
-* test connection treatment 2 ([a50b9d6](https://github.com/infobrasil-sistemas/info-vendas-api/commit/a50b9d63023fbd4a941ed331f3c8d47fa4d18716))
-* zod validation ([ff09578](https://github.com/infobrasil-sistemas/info-vendas-api/commit/ff09578d4b47f8d86ad5d2234611161d0460480b))
 
 ### [1.8.0](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.7.0...v1.8.0) (2026-05-15)
 

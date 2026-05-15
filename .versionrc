@@ -1,6 +1,7 @@
 {
   "compareStep": true,
   "scripts": {
-    "postbump": "npm run swagger:generate && git add docs/swagger"
+    "postbump": "npm run swagger:generate",
+    "precommit": "git add docs/swagger swagger-spec.json"
   }
 }
