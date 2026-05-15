@@ -168,6 +168,7 @@ export class OrderService {
       startDate?: string;
       endDate?: string;
       clientId?: number;
+      employeeId?: number;
     } = {},
   ) {
     let connection: any;
@@ -198,10 +199,17 @@ export class OrderService {
         params.push(filters.clientId);
       }
 
+      if (filters.employeeId) {
+        whereClause += ` AND V.FUN_CODIGO = ?`;
+        params.push(filters.employeeId);
+      }
+
       const query = `SELECT FIRST ? SKIP ?
                   VEN_NUMERO,
                   V.CLI_CODIGO,
                   C.CLI_NOME,
+                  V.FUN_CODIGO,
+                  F.FUN_NOME,
                   V.VEN_NUMSITE,
                   V.LOJ_CODIGO,
                   V.VEN_TIPO,
@@ -216,6 +224,7 @@ export class OrderService {
                LEFT JOIN formaspag FPG ON FPG.fpg_codigo = V.fp1_codigo
                LEFT JOIN planospag PLP ON PLP.plp_codigo = V.pp1_codigo
                LEFT JOIN clientes C ON C.cli_codigo = V.cli_codigo
+               LEFT JOIN funcionarios F ON F.fun_codigo = V.fun_codigo
                ${whereClause}
                ORDER BY V.VEN_NUMERO DESC`;
 

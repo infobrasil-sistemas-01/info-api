@@ -10,6 +10,12 @@ export class OrderResponseDto {
   @ApiProperty({ example: 1, description: 'Código da loja' })
   LOJ_CODIGO: number;
 
+  @ApiProperty({ example: 1, description: 'Código do funcionário' })
+  FUN_CODIGO: number;
+
+  @ApiProperty({ example: 'Funcionário Exemplo', description: 'Nome do funcionário' })
+  FUN_NOME: string;
+
   @ApiProperty({ example: 'E', description: 'Tipo da venda' })
   VEN_TIPO: string;
 

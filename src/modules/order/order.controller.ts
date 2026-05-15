@@ -166,7 +166,13 @@ export class OrderController {
     name: 'clientId',
     required: false,
     type: Number,
-    description: 'ID do cliente',
+    description: 'ID do cliente (CLI_CODIGO)',
+  })
+  @ApiQuery({
+    name: 'employeeId',
+    required: false,
+    type: Number,
+    description: 'ID do funcionário (FUN_CODIGO)',
   })
   getOrders(
     @Req() req: ReqWithAuthContext,
@@ -176,6 +182,7 @@ export class OrderController {
     @Query('startDate') startDate?: string,
     @Query('endDate') endDate?: string,
     @Query('clientId') clientId?: number,
+    @Query('employeeId') employeeId?: number,
   ) {
     const { credentialsId, storeId: storeIdToken } = req.authContext || {};
 
@@ -189,6 +196,7 @@ export class OrderController {
       startDate,
       endDate,
       clientId: clientId ? Number(clientId) : undefined,
+      employeeId: employeeId ? Number(employeeId) : undefined,
     });
   }
 

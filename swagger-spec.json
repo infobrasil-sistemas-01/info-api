@@ -531,7 +531,16 @@
             "name": "clientId",
             "required": false,
             "in": "query",
-            "description": "ID do cliente",
+            "description": "ID do cliente (CLI_CODIGO)",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "employeeId",
+            "required": false,
+            "in": "query",
+            "description": "ID do funcionário (FUN_CODIGO)",
             "schema": {
               "type": "number"
             }
@@ -1916,6 +1925,16 @@
             "example": 1,
             "description": "Código da loja"
           },
+          "FUN_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código do funcionário"
+          },
+          "FUN_NOME": {
+            "type": "string",
+            "example": "Funcionário Exemplo",
+            "description": "Nome do funcionário"
+          },
           "VEN_TIPO": {
             "type": "string",
             "example": "E",
@@ -1971,6 +1990,8 @@
           "VEN_NUMERO",
           "VEN_NUMSITE",
           "LOJ_CODIGO",
+          "FUN_CODIGO",
+          "FUN_NOME",
           "VEN_TIPO",
           "VEN_DATA",
           "VEN_HORA",
@@ -2031,6 +2052,16 @@
             "type": "number",
             "example": 1,
             "description": "Código da loja"
+          },
+          "FUN_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código do funcionário"
+          },
+          "FUN_NOME": {
+            "type": "string",
+            "example": "Funcionário Exemplo",
+            "description": "Nome do funcionário"
           },
           "VEN_TIPO": {
             "type": "string",
@@ -2114,6 +2145,8 @@
           "VEN_NUMERO",
           "VEN_NUMSITE",
           "LOJ_CODIGO",
+          "FUN_CODIGO",
+          "FUN_NOME",
           "VEN_TIPO",
           "VEN_DATA",
           "VEN_HORA",
