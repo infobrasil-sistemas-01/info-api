@@ -169,6 +169,26 @@ export const PERMISSIONS = [
     descricao: 'Deletar contas a receber do tenant',
     module: 'tenant'
   },
+  {
+    key: 'tenant.employees.view',
+    descricao: 'Visualizar funcionários do tenant',
+    module: 'tenant'
+  },
+  {
+    key: 'tenant.employees.create',
+    descricao: 'Criar funcionários do tenant',
+    module: 'tenant'
+  },
+  {
+    key: 'tenant.employees.update',
+    descricao: 'Atualizar funcionários do tenant',
+    module: 'tenant'
+  },
+  {
+    key: 'tenant.employees.delete',
+    descricao: 'Deletar funcionários do tenant',
+    module: 'tenant'
+  },
 
   // ========= SOLICITAÇÕES =========
   {

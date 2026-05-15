@@ -420,12 +420,13 @@
                 <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
                     <div class="form-group" style="margin-bottom: 0;">
                         <label>Módulo</label>
-                        <select id="scope-module">
+                        <select id="scope-module" onchange="updateAvailableActions()">
                             <option value="Produtos">Produtos</option>
                             <option value="Pedidos">Pedidos / Vendas</option>
                             <option value="Formas de Pagamento">Formas de Pagamento</option>
                             <option value="Contas a Receber">Contas a Receber</option>
                             <option value="Clientes">Clientes</option>
+                            <option value="Funcionários">Funcionários</option>
                         </select>
                     </div>
                     <div class="form-group" style="margin-bottom: 0;">
@@ -586,6 +587,31 @@
             renderScopes();
         }
 
+        const moduleConfig = {
+            "Produtos": { read: true, create: false, update: false, delete: false },
+            "Pedidos": { read: true, create: true, update: false, delete: false },
+            "Formas de Pagamento": { read: true, create: false, update: false, delete: false },
+            "Contas a Receber": { read: true, create: true, update: false, delete: false },
+            "Clientes": { read: true, create: true, update: true, delete: false },
+            "Funcionários": { read: true, create: false, update: false, delete: false }
+        };
+
+        function updateAvailableActions() {
+            const module = document.getElementById('scope-module').value;
+            const config = moduleConfig[module];
+
+            document.querySelectorAll('.scope-action').forEach(cb => {
+                const label = cb.closest('label');
+                if (config[cb.value]) {
+                    label.style.display = 'flex';
+                    if (cb.value === 'read') cb.checked = true;
+                } else {
+                    label.style.display = 'none';
+                    cb.checked = false;
+                }
+            });
+        }
+
         function removeScope(index) {
             selectedScopes.splice(index, 1);
             renderScopes();
@@ -675,6 +701,7 @@
             }
         };
         toggleDbSection();
+        updateAvailableActions();
     </script>
 </body>
 

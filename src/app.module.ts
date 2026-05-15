@@ -27,6 +27,7 @@ import { UptimeModule } from './modules/uptime/uptime.module';
 import { ClientModule } from './modules/client/client.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { StatusModule } from './modules/status/status.module';
+import { EmployeeModule } from './modules/employee/employee.module';
 
 import { AppController } from './app.controller';
 
@@ -53,6 +54,7 @@ import { AppController } from './app.controller';
     AnnouncementModule,
     UptimeModule,
     ClientModule,
+    EmployeeModule,
     ScheduleModule.forRoot(),
     StatusModule,
   ],
