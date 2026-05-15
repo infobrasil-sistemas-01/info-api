@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags, ApiOperation, ApiParam } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
@@ -7,6 +7,7 @@ import { ClientService } from './client.service';
 import { GetClientsQueryDto } from './dto/get-clients-query.dto';
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
+import { ClientResponseDto, ClientDetailResponseDto } from './dto/client-response.dto';
 import { CurrentUser } from 'src/modules/auth/decorators/current-user.decorator';
 
 @ApiTags('Client')
@@ -19,6 +20,7 @@ export class ClientController {
   @Get()
   @RequirePermissions({ allOf: ['tenant.clients.view'] })
   @ApiOperation({ summary: 'Listar clientes' })
+  @ApiResponse({ status: 200, description: 'Lista de clientes', type: [ClientResponseDto] })
   async get(
     @CurrentUser() user: any,
     @Query() query: GetClientsQueryDto,
@@ -38,6 +40,7 @@ export class ClientController {
   @RequirePermissions({ allOf: ['tenant.clients.view'] })
   @ApiOperation({ summary: 'Obter detalhe do cliente' })
   @ApiParam({ name: 'id', description: 'ID do cliente (CLI_CODIGO)', example: 1 })
+  @ApiResponse({ status: 200, description: 'Detalhes do cliente', type: ClientDetailResponseDto })
   async getById(
     @CurrentUser() user: any,
     @Param('id') id: number,
@@ -48,6 +51,7 @@ export class ClientController {
   @Post()
   @RequirePermissions({ allOf: ['tenant.clients.create'] })
   @ApiOperation({ summary: 'Criar cliente' })
+  @ApiResponse({ status: 201, description: 'Cliente criado com sucesso' })
   async create(
     @CurrentUser() user: any,
     @Body() body: CreateClientDto,
@@ -58,6 +62,7 @@ export class ClientController {
   @Patch(':id')
   @RequirePermissions({ allOf: ['tenant.clients.update'] })
   @ApiOperation({ summary: 'Atualizar cliente' })
+  @ApiResponse({ status: 200, description: 'Cliente atualizado com sucesso', type: ClientDetailResponseDto })
   async update(
     @CurrentUser() user: any,
     @Param('id') id: number,

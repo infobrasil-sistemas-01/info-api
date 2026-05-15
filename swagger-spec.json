@@ -1125,7 +1125,17 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Lista de clientes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClientResponseDto"
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1153,7 +1163,7 @@
         },
         "responses": {
           "201": {
-            "description": ""
+            "description": "Cliente criado com sucesso"
           }
         },
         "security": [
@@ -1184,7 +1194,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Detalhes do cliente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientDetailResponseDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1221,7 +1238,14 @@
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "Cliente atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientDetailResponseDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1295,7 +1319,17 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Lista de funcionários",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EmployeeResponseDto"
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1326,7 +1360,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Detalhes do funcionário",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeDetailResponseDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1398,7 +1439,17 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Lista de fornecedores",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SupplierResponseDto"
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1429,7 +1480,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Detalhes do fornecedor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SupplierDetailResponseDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -2388,6 +2446,190 @@
           "FPG_DESCRICAO"
         ]
       },
+      "ClientResponseDto": {
+        "type": "object",
+        "properties": {
+          "CLI_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código do cliente"
+          },
+          "CLI_SITUACAO": {
+            "type": "string",
+            "example": "A",
+            "description": "Situação (A = Ativo, I = Inativo)"
+          },
+          "CLI_NOME": {
+            "type": "string",
+            "example": "Maria de Souza",
+            "description": "Nome ou razão social"
+          },
+          "CLI_FANTASIA": {
+            "type": "string",
+            "example": "Mariazinha",
+            "description": "Nome fantasia ou apelido"
+          },
+          "CLI_SEXO": {
+            "type": "string",
+            "example": "F",
+            "description": "Sexo (M, F, O)"
+          },
+          "CLI_ENDERECO": {
+            "type": "string",
+            "example": "Av. Paulista, 1000",
+            "description": "Endereço principal"
+          },
+          "CLI_FONE": {
+            "type": "string",
+            "example": "11988887777",
+            "description": "Telefone"
+          },
+          "CLI_EMAIL": {
+            "type": "string",
+            "example": "maria@exemplo.com",
+            "description": "E-mail"
+          },
+          "CLI_DATANASC": {
+            "format": "date-time",
+            "type": "string",
+            "example": "1985-05-20",
+            "description": "Data de nascimento"
+          }
+        },
+        "required": [
+          "CLI_CODIGO",
+          "CLI_SITUACAO",
+          "CLI_NOME",
+          "CLI_FANTASIA",
+          "CLI_SEXO",
+          "CLI_ENDERECO",
+          "CLI_FONE",
+          "CLI_EMAIL",
+          "CLI_DATANASC"
+        ]
+      },
+      "ClientDetailResponseDto": {
+        "type": "object",
+        "properties": {
+          "CLI_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código do cliente"
+          },
+          "CLI_SITUACAO": {
+            "type": "string",
+            "example": "A",
+            "description": "Situação (A = Ativo, I = Inativo)"
+          },
+          "CLI_NOME": {
+            "type": "string",
+            "example": "Maria de Souza",
+            "description": "Nome ou razão social"
+          },
+          "CLI_FANTASIA": {
+            "type": "string",
+            "example": "Mariazinha",
+            "description": "Nome fantasia ou apelido"
+          },
+          "CLI_SEXO": {
+            "type": "string",
+            "example": "F",
+            "description": "Sexo (M, F, O)"
+          },
+          "CLI_ENDERECO": {
+            "type": "string",
+            "example": "Av. Paulista, 1000",
+            "description": "Endereço principal"
+          },
+          "CLI_FONE": {
+            "type": "string",
+            "example": "11988887777",
+            "description": "Telefone"
+          },
+          "CLI_EMAIL": {
+            "type": "string",
+            "example": "maria@exemplo.com",
+            "description": "E-mail"
+          },
+          "CLI_DATANASC": {
+            "format": "date-time",
+            "type": "string",
+            "example": "1985-05-20",
+            "description": "Data de nascimento"
+          },
+          "CLI_COMPL_ENDERECO": {
+            "type": "string",
+            "example": "Apto 101",
+            "description": "Complemento do endereço"
+          },
+          "CLI_CEP": {
+            "type": "string",
+            "example": "01310-100",
+            "description": "CEP"
+          },
+          "CLI_BAIRRO": {
+            "type": "string",
+            "example": "Bela Vista",
+            "description": "Bairro"
+          },
+          "CLI_UF": {
+            "type": "string",
+            "example": "SP",
+            "description": "UF"
+          },
+          "CLI_CPF_CNPJ": {
+            "type": "string",
+            "example": "111.222.333-44",
+            "description": "CPF ou CNPJ"
+          },
+          "CLI_IDENTIDADE": {
+            "type": "string",
+            "example": "12.345.678-9",
+            "description": "Identidade (RG)"
+          },
+          "CLI_MAE": {
+            "type": "string",
+            "example": "Ana de Souza",
+            "description": "Nome da mãe"
+          },
+          "CLI_PAI": {
+            "type": "string",
+            "example": "João de Souza",
+            "description": "Nome do pai"
+          },
+          "CLI_ESTADOCIVIL": {
+            "type": "string",
+            "example": "Solteiro(a)",
+            "description": "Estado civil"
+          },
+          "CLI_NATURALIDADE": {
+            "type": "string",
+            "example": "São Paulo - SP",
+            "description": "Naturalidade"
+          }
+        },
+        "required": [
+          "CLI_CODIGO",
+          "CLI_SITUACAO",
+          "CLI_NOME",
+          "CLI_FANTASIA",
+          "CLI_SEXO",
+          "CLI_ENDERECO",
+          "CLI_FONE",
+          "CLI_EMAIL",
+          "CLI_DATANASC",
+          "CLI_COMPL_ENDERECO",
+          "CLI_CEP",
+          "CLI_BAIRRO",
+          "CLI_UF",
+          "CLI_CPF_CNPJ",
+          "CLI_IDENTIDADE",
+          "CLI_MAE",
+          "CLI_PAI",
+          "CLI_ESTADOCIVIL",
+          "CLI_NATURALIDADE"
+        ]
+      },
       "CreateClientDto": {
         "type": "object",
         "properties": {
@@ -2509,6 +2751,520 @@
             "example": "85999998888"
           }
         }
+      },
+      "EmployeeResponseDto": {
+        "type": "object",
+        "properties": {
+          "FUN_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código do funcionário"
+          },
+          "FUN_NOME": {
+            "type": "string",
+            "example": "João da Silva",
+            "description": "Nome do funcionário"
+          },
+          "FUN_APELIDO": {
+            "type": "string",
+            "example": "João",
+            "description": "Apelido do funcionário"
+          },
+          "FUN_ENDERECO": {
+            "type": "string",
+            "example": "Rua das Flores, 123",
+            "description": "Endereço do funcionário"
+          },
+          "FUN_BAIRRO": {
+            "type": "string",
+            "example": "Centro",
+            "description": "Bairro"
+          },
+          "FUN_CIDADE": {
+            "type": "string",
+            "example": "São Paulo",
+            "description": "Cidade"
+          },
+          "FUN_UF": {
+            "type": "string",
+            "example": "SP",
+            "description": "UF"
+          },
+          "FUN_CEP": {
+            "type": "string",
+            "example": "01000-000",
+            "description": "CEP"
+          },
+          "FUN_FONE": {
+            "type": "string",
+            "example": "1133334444",
+            "description": "Telefone"
+          },
+          "FUN_CELULAR": {
+            "type": "string",
+            "example": "11999998888",
+            "description": "Celular"
+          },
+          "FUN_EMAIL": {
+            "type": "string",
+            "example": "joao@email.com",
+            "description": "E-mail"
+          },
+          "FUN_CPF": {
+            "type": "string",
+            "example": "123.456.789-00",
+            "description": "CPF"
+          },
+          "FUN_IDENTIDADE": {
+            "type": "string",
+            "example": "12.345.678-9",
+            "description": "Identidade (RG)"
+          },
+          "FUN_SITUACAO": {
+            "type": "string",
+            "example": "A",
+            "description": "Situação (A = Ativo, I = Inativo)"
+          },
+          "FUN_DATANASC": {
+            "format": "date-time",
+            "type": "string",
+            "example": "1990-01-01",
+            "description": "Data de nascimento"
+          },
+          "FUN_DATAADMISSAO": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2020-01-01",
+            "description": "Data de admissão"
+          },
+          "FUN_DATADEMISSAO": {
+            "format": "date-time",
+            "type": "string",
+            "example": null,
+            "description": "Data de demissão"
+          },
+          "LOJ_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código da loja associada"
+          }
+        },
+        "required": [
+          "FUN_CODIGO",
+          "FUN_NOME",
+          "FUN_APELIDO",
+          "FUN_ENDERECO",
+          "FUN_BAIRRO",
+          "FUN_CIDADE",
+          "FUN_UF",
+          "FUN_CEP",
+          "FUN_FONE",
+          "FUN_CELULAR",
+          "FUN_EMAIL",
+          "FUN_CPF",
+          "FUN_IDENTIDADE",
+          "FUN_SITUACAO",
+          "FUN_DATANASC",
+          "FUN_DATAADMISSAO",
+          "FUN_DATADEMISSAO",
+          "LOJ_CODIGO"
+        ]
+      },
+      "EmployeeDetailResponseDto": {
+        "type": "object",
+        "properties": {
+          "FUN_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código do funcionário"
+          },
+          "FUN_NOME": {
+            "type": "string",
+            "example": "João da Silva",
+            "description": "Nome do funcionário"
+          },
+          "FUN_APELIDO": {
+            "type": "string",
+            "example": "João",
+            "description": "Apelido do funcionário"
+          },
+          "FUN_ENDERECO": {
+            "type": "string",
+            "example": "Rua das Flores, 123",
+            "description": "Endereço do funcionário"
+          },
+          "FUN_BAIRRO": {
+            "type": "string",
+            "example": "Centro",
+            "description": "Bairro"
+          },
+          "FUN_CIDADE": {
+            "type": "string",
+            "example": "São Paulo",
+            "description": "Cidade"
+          },
+          "FUN_UF": {
+            "type": "string",
+            "example": "SP",
+            "description": "UF"
+          },
+          "FUN_CEP": {
+            "type": "string",
+            "example": "01000-000",
+            "description": "CEP"
+          },
+          "FUN_FONE": {
+            "type": "string",
+            "example": "1133334444",
+            "description": "Telefone"
+          },
+          "FUN_CELULAR": {
+            "type": "string",
+            "example": "11999998888",
+            "description": "Celular"
+          },
+          "FUN_EMAIL": {
+            "type": "string",
+            "example": "joao@email.com",
+            "description": "E-mail"
+          },
+          "FUN_CPF": {
+            "type": "string",
+            "example": "123.456.789-00",
+            "description": "CPF"
+          },
+          "FUN_IDENTIDADE": {
+            "type": "string",
+            "example": "12.345.678-9",
+            "description": "Identidade (RG)"
+          },
+          "FUN_SITUACAO": {
+            "type": "string",
+            "example": "A",
+            "description": "Situação (A = Ativo, I = Inativo)"
+          },
+          "FUN_DATANASC": {
+            "format": "date-time",
+            "type": "string",
+            "example": "1990-01-01",
+            "description": "Data de nascimento"
+          },
+          "FUN_DATAADMISSAO": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2020-01-01",
+            "description": "Data de admissão"
+          },
+          "FUN_DATADEMISSAO": {
+            "format": "date-time",
+            "type": "string",
+            "example": null,
+            "description": "Data de demissão"
+          },
+          "LOJ_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código da loja associada"
+          }
+        },
+        "required": [
+          "FUN_CODIGO",
+          "FUN_NOME",
+          "FUN_APELIDO",
+          "FUN_ENDERECO",
+          "FUN_BAIRRO",
+          "FUN_CIDADE",
+          "FUN_UF",
+          "FUN_CEP",
+          "FUN_FONE",
+          "FUN_CELULAR",
+          "FUN_EMAIL",
+          "FUN_CPF",
+          "FUN_IDENTIDADE",
+          "FUN_SITUACAO",
+          "FUN_DATANASC",
+          "FUN_DATAADMISSAO",
+          "FUN_DATADEMISSAO",
+          "LOJ_CODIGO"
+        ]
+      },
+      "SupplierResponseDto": {
+        "type": "object",
+        "properties": {
+          "CRE_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código do fornecedor"
+          },
+          "CRE_NOME": {
+            "type": "string",
+            "example": "Fornecedor Exemplo LTDA",
+            "description": "Razão social ou nome"
+          },
+          "CRE_FANTASIA": {
+            "type": "string",
+            "example": "Fornecedor Exemplo",
+            "description": "Nome fantasia"
+          },
+          "CRE_ENDERECO": {
+            "type": "string",
+            "example": "Av. Brasil, 1500",
+            "description": "Endereço"
+          },
+          "CRE_BAIRRO": {
+            "type": "string",
+            "example": "Jardim Paulista",
+            "description": "Bairro"
+          },
+          "CRE_UF": {
+            "type": "string",
+            "example": "SP",
+            "description": "UF"
+          },
+          "CRE_CONTATO": {
+            "type": "string",
+            "example": "Carlos",
+            "description": "Contato principal"
+          },
+          "CRE_CEP": {
+            "type": "string",
+            "example": "01431-000",
+            "description": "CEP"
+          },
+          "CRE_CNPJ": {
+            "type": "string",
+            "example": "12.345.678/0001-90",
+            "description": "CNPJ"
+          },
+          "CRE_CGF": {
+            "type": "string",
+            "example": "123456789",
+            "description": "Inscrição Estadual (CGF)"
+          },
+          "CRE_FONE": {
+            "type": "string",
+            "example": "1133334444",
+            "description": "Telefone"
+          },
+          "CRE_CELULAR": {
+            "type": "string",
+            "example": "11999998888",
+            "description": "Celular"
+          },
+          "CRE_FAX": {
+            "type": "string",
+            "example": "1133334445",
+            "description": "Fax"
+          },
+          "CRE_ZEROOITO": {
+            "type": "string",
+            "example": "0800-123-456",
+            "description": "Telefone 0800"
+          },
+          "CRE_EMAIL": {
+            "type": "string",
+            "example": "contato@fornecedor.com",
+            "description": "E-mail"
+          },
+          "CRE_SITE": {
+            "type": "string",
+            "example": "www.fornecedor.com.br",
+            "description": "Site"
+          },
+          "CRE_REPRESENTANTE": {
+            "type": "string",
+            "example": "Representante Zé",
+            "description": "Nome do representante"
+          },
+          "CRE_FONEREP": {
+            "type": "string",
+            "example": "1133334444",
+            "description": "Telefone do representante"
+          },
+          "CRE_CELULARREP": {
+            "type": "string",
+            "example": "11988887777",
+            "description": "Celular do representante"
+          },
+          "CRE_EMAILREP": {
+            "type": "string",
+            "example": "rep@fornecedor.com",
+            "description": "E-mail do representante"
+          },
+          "CRE_SITUACAO": {
+            "type": "string",
+            "example": "A",
+            "description": "Situação (A = Ativo, I = Inativo)"
+          },
+          "LOJ_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código da loja"
+          }
+        },
+        "required": [
+          "CRE_CODIGO",
+          "CRE_NOME",
+          "CRE_FANTASIA",
+          "CRE_ENDERECO",
+          "CRE_BAIRRO",
+          "CRE_UF",
+          "CRE_CONTATO",
+          "CRE_CEP",
+          "CRE_CNPJ",
+          "CRE_CGF",
+          "CRE_FONE",
+          "CRE_CELULAR",
+          "CRE_FAX",
+          "CRE_ZEROOITO",
+          "CRE_EMAIL",
+          "CRE_SITE",
+          "CRE_REPRESENTANTE",
+          "CRE_FONEREP",
+          "CRE_CELULARREP",
+          "CRE_EMAILREP",
+          "CRE_SITUACAO",
+          "LOJ_CODIGO"
+        ]
+      },
+      "SupplierDetailResponseDto": {
+        "type": "object",
+        "properties": {
+          "CRE_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código do fornecedor"
+          },
+          "CRE_NOME": {
+            "type": "string",
+            "example": "Fornecedor Exemplo LTDA",
+            "description": "Razão social ou nome"
+          },
+          "CRE_FANTASIA": {
+            "type": "string",
+            "example": "Fornecedor Exemplo",
+            "description": "Nome fantasia"
+          },
+          "CRE_ENDERECO": {
+            "type": "string",
+            "example": "Av. Brasil, 1500",
+            "description": "Endereço"
+          },
+          "CRE_BAIRRO": {
+            "type": "string",
+            "example": "Jardim Paulista",
+            "description": "Bairro"
+          },
+          "CRE_UF": {
+            "type": "string",
+            "example": "SP",
+            "description": "UF"
+          },
+          "CRE_CONTATO": {
+            "type": "string",
+            "example": "Carlos",
+            "description": "Contato principal"
+          },
+          "CRE_CEP": {
+            "type": "string",
+            "example": "01431-000",
+            "description": "CEP"
+          },
+          "CRE_CNPJ": {
+            "type": "string",
+            "example": "12.345.678/0001-90",
+            "description": "CNPJ"
+          },
+          "CRE_CGF": {
+            "type": "string",
+            "example": "123456789",
+            "description": "Inscrição Estadual (CGF)"
+          },
+          "CRE_FONE": {
+            "type": "string",
+            "example": "1133334444",
+            "description": "Telefone"
+          },
+          "CRE_CELULAR": {
+            "type": "string",
+            "example": "11999998888",
+            "description": "Celular"
+          },
+          "CRE_FAX": {
+            "type": "string",
+            "example": "1133334445",
+            "description": "Fax"
+          },
+          "CRE_ZEROOITO": {
+            "type": "string",
+            "example": "0800-123-456",
+            "description": "Telefone 0800"
+          },
+          "CRE_EMAIL": {
+            "type": "string",
+            "example": "contato@fornecedor.com",
+            "description": "E-mail"
+          },
+          "CRE_SITE": {
+            "type": "string",
+            "example": "www.fornecedor.com.br",
+            "description": "Site"
+          },
+          "CRE_REPRESENTANTE": {
+            "type": "string",
+            "example": "Representante Zé",
+            "description": "Nome do representante"
+          },
+          "CRE_FONEREP": {
+            "type": "string",
+            "example": "1133334444",
+            "description": "Telefone do representante"
+          },
+          "CRE_CELULARREP": {
+            "type": "string",
+            "example": "11988887777",
+            "description": "Celular do representante"
+          },
+          "CRE_EMAILREP": {
+            "type": "string",
+            "example": "rep@fornecedor.com",
+            "description": "E-mail do representante"
+          },
+          "CRE_SITUACAO": {
+            "type": "string",
+            "example": "A",
+            "description": "Situação (A = Ativo, I = Inativo)"
+          },
+          "LOJ_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código da loja"
+          }
+        },
+        "required": [
+          "CRE_CODIGO",
+          "CRE_NOME",
+          "CRE_FANTASIA",
+          "CRE_ENDERECO",
+          "CRE_BAIRRO",
+          "CRE_UF",
+          "CRE_CONTATO",
+          "CRE_CEP",
+          "CRE_CNPJ",
+          "CRE_CGF",
+          "CRE_FONE",
+          "CRE_CELULAR",
+          "CRE_FAX",
+          "CRE_ZEROOITO",
+          "CRE_EMAIL",
+          "CRE_SITE",
+          "CRE_REPRESENTANTE",
+          "CRE_FONEREP",
+          "CRE_CELULARREP",
+          "CRE_EMAILREP",
+          "CRE_SITUACAO",
+          "LOJ_CODIGO"
+        ]
       },
       "ServiceProviderResponseDto": {
         "type": "object",
