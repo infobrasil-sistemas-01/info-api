@@ -1,4 +1,5 @@
 {
+  "commitAll": true,
   "compareStep": true,
   "scripts": {
     "postbump": "npm run swagger:generate",
