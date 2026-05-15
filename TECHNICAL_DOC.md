@@ -47,17 +47,39 @@ O sistema opera com um modelo de **Banco de Dados Híbrido**:
 2.  **Firebird (Legacy Integration)**: Onde residem os dados reais de vendas e produtos.
     - *Connection Pool*: Gerenciado dinamicamente. A API abre conexões sob demanda usando as credenciais descriptografadas em tempo de execução.
 
+### 4.1 Configuração Crítica do Firebird (Prevenção de Crashes)
+Para garantir a compatibilidade com o driver `node-firebird` e evitar erros fatais de conexão do tipo `TypeError: Cannot read properties of undefined (reading 'readUInt16LE')`, é **estritamente necessário** configurar o arquivo `firebird.conf` do servidor do cliente com os seguintes parâmetros:
+- `WireCrypt = Disabled`
+- `AuthServer = Legacy_Auth, Srp, Srp256`
+
+> **Importante:** Sem essas configurações de autenticação e criptografia, a API não conseguirá estabelecer o handshake inicial com o banco, derrubando o processo Node.js.
+
 ---
 
 ## 5. Padrões de Desenvolvimento
 
-### 5.1. Design de Interface (Dashboards)
+### 5.1. Estrutura e Padrões de Backend
+A aplicação NestJS segue uma arquitetura fortemente modularizada e orientada a domínio:
+- **Organização de Diretórios**:
+  - `src/modules/`: Regras de negócio e endpoints. Cada pasta contém seu `Controller`, `Service`, `Module` e diretório de `dto/`.
+  - `src/infra/`: Camada de infraestrutura e conectores externos (PrismaService, TenantConnectionService do Firebird, Guards de RBAC).
+  - `src/config/`: Configurações globais e de ambiente (`EnvService`).
+- **Convenções Importantes**:
+  - O Prisma Client não é importado do `node_modules`, mas sim gerado no caminho customizado `src/generated/prisma/client` para isolamento.
+  - Todas as rotas de API obedecem obrigatoriamente a um prefixo global (ex: `api/v1`).
+- **Estratégia de Testes**: Padrão rigoroso de testes unitários (`*.spec.ts`) localizados na mesma pasta do arquivo fonte. Empregamos o `TestingModule` do NestJS para isolar o escopo com forte uso de Mocks (`jest.mock` e `useValue`) para simular os retornos de banco de dados e evitar I/O desnecessário.
+
+### 5.2. Design de Interface (Dashboards)
 Os dashboards (Admin e Cliente) são servidos diretamente pelo NestJS como arquivos HTML/JS puros.
 - **Aesthetics**: Design premium com Glassmorphism, tipografia `Outfit` e ícones `Boxicons`.
 - **Logic**: Comunicação assíncrona via Fetch API, mantendo o front-end leve e extremamente rápido.
 
-### 5.2. Validação de Dados
+### 5.3. Validação de Dados
 - **Zod**: Todas as variáveis de ambiente e DTOs de entrada são validados via Zod. O sistema falha propositalmente (Fail-Fast) se encontrar dados inconsistentes.
+
+### 5.4. Documentação e Versionamento da API
+- **Swagger / OpenAPI**: A API possui documentação interativa e detalhada. O retorno de sucesso (`200 OK`) das rotas de integração (como `products`, `service-providers`, `employees`, `suppliers` e `clients`) é rigorosamente estruturado através de *Response DTOs* específicos, garantindo exemplos e tipagens ricas na documentação gerada.
+- **Release Automatizado**: Utilizamos a ferramenta `commit-and-tag-version`. O arquivo `.versionrc` está configurado com `"commitAll": true` para garantir que os schemas do Swagger (`swagger-spec.json` e `docs/swagger/*.json`), criados no hook de `postbump`, sejam incluídos no commit de release de forma nativa e não fiquem órfãos (untracked).
 
 ---
 
