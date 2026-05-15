@@ -14,6 +14,7 @@ const Translations = {
         'payment-methods': 'Formas de Pagamento',
         'payment-plans': 'Planos de Pagamento',
         'account-receivable': 'Contas a Receber',
+        'account-payable': 'Contas a Pagar',
         'clients': 'Clientes',
         'employees': 'Funcionários',
         'suppliers': 'Fornecedores',

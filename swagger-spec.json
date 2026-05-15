@@ -1677,6 +1677,151 @@
         ]
       }
     },
+    "/api/v1/account-payable": {
+      "get": {
+        "description": "Retorna uma lista paginada e resumida de contas a pagar baseada nos filtros.",
+        "operationId": "AccountPayableController_getAccountPayable",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Página atual",
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "description": "Registros por página",
+            "schema": {
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "storeId",
+            "required": false,
+            "in": "query",
+            "description": "Código da loja (LOJ_CODIGO)",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "supplierId",
+            "required": false,
+            "in": "query",
+            "description": "Código do fornecedor/credor (CRE_CODIGO)",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "situation",
+            "required": false,
+            "in": "query",
+            "description": "Situação da conta (A - Aberto, L - Liquidado)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "A",
+                "L"
+              ]
+            }
+          },
+          {
+            "name": "startDate",
+            "required": false,
+            "in": "query",
+            "description": "Data de vencimento inicial (YYYY-MM-DD)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "endDate",
+            "required": false,
+            "in": "query",
+            "description": "Data de vencimento final (YYYY-MM-DD)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de contas a pagar.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AccountPayableSummaryResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro de validação nos filtros."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Listar contas a pagar (Resumo)",
+        "tags": [
+          "Account Payable"
+        ]
+      }
+    },
+    "/api/v1/account-payable/id/{id}": {
+      "get": {
+        "description": "Retorna os detalhes completos de uma conta a pagar pelo ID (PAG_NUMERO).",
+        "operationId": "AccountPayableController_getAccountPayableById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Número da conta a pagar (PAG_NUMERO)",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes da conta a pagar.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountPayableDetailResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Conta a pagar não encontrada."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Buscar detalhes da conta a pagar",
+        "tags": [
+          "Account Payable"
+        ]
+      }
+    },
     "/status/data": {
       "get": {
         "operationId": "StatusController_getData",
@@ -1744,6 +1889,22 @@
       "description": "Endpoints relacionados à autenticação e obtenção de token JWT"
     },
     {
+      "name": "Client",
+      "description": "Endpoints relacionados à gestão de clientes"
+    },
+    {
+      "name": "Employee",
+      "description": "Endpoints relacionados à gestão de funcionários"
+    },
+    {
+      "name": "Supplier",
+      "description": "Endpoints relacionados à gestão de fornecedores"
+    },
+    {
+      "name": "Service Providers (Prestadores)",
+      "description": "Endpoints relacionados à gestão de prestadores de serviço"
+    },
+    {
       "name": "Product",
       "description": "Endpoints relacionados à gestão de produtos"
     },
@@ -1756,16 +1917,40 @@
       "description": "Endpoints relacionados à gestão de grupos e produtos vinculados a grupos"
     },
     {
-      "name": "PaymentMethod",
-      "description": "Endpoints relacionados à gestão de meios de pagamento"
-    },
-    {
       "name": "Order",
       "description": "Endpoints relacionados à gestão de pedidos"
     },
     {
+      "name": "Order Items",
+      "description": "Endpoints relacionados à consulta de itens de pedido"
+    },
+    {
       "name": "AccountReceivable",
       "description": "Endpoints relacionados à gestão de contas a receber"
+    },
+    {
+      "name": "Account Payable",
+      "description": "Endpoints relacionados à gestão de contas a pagar"
+    },
+    {
+      "name": "PaymentMethod",
+      "description": "Endpoints relacionados à gestão de meios de pagamento"
+    },
+    {
+      "name": "Payment Plan",
+      "description": "Endpoints relacionados à gestão de planos de pagamento"
+    },
+    {
+      "name": "Status",
+      "description": "Endpoints de monitoramento de instâncias e telemetria"
+    },
+    {
+      "name": "Health",
+      "description": "Endpoints de verificação de integridade dos serviços"
+    },
+    {
+      "name": "Plans & Usage",
+      "description": "Endpoints relacionados aos planos comerciais da InfoAPI e métricas de uso"
     }
   ],
   "servers": [
@@ -3497,6 +3682,156 @@
         "required": [
           "PLP_CODIGO",
           "PLP_DESCRICAO"
+        ]
+      },
+      "AccountPayableSummaryResponseDto": {
+        "type": "object",
+        "properties": {
+          "PAG_NUMERO": {
+            "type": "number",
+            "example": 100,
+            "description": "Número do documento de conta a pagar"
+          },
+          "CRE_CODIGO": {
+            "type": "number",
+            "example": 50,
+            "description": "Código do credor"
+          },
+          "CRE_NOME": {
+            "type": "string",
+            "example": "Credor Teste",
+            "description": "Nome do credor"
+          },
+          "PAG_VALOR": {
+            "type": "number",
+            "example": 1500.5,
+            "description": "Valor da conta"
+          },
+          "PAG_SITUACAO": {
+            "type": "string",
+            "example": "A",
+            "description": "Situação (A - Aberto, L - Liquidado)"
+          },
+          "PAG_DATAVENC": {
+            "type": "string",
+            "example": "2024-12-31T00:00:00.000Z",
+            "description": "Data de vencimento"
+          }
+        },
+        "required": [
+          "PAG_NUMERO",
+          "CRE_CODIGO",
+          "CRE_NOME",
+          "PAG_VALOR",
+          "PAG_SITUACAO",
+          "PAG_DATAVENC"
+        ]
+      },
+      "AccountPayableDetailResponseDto": {
+        "type": "object",
+        "properties": {
+          "PAG_NUMERO": {
+            "type": "number",
+            "example": 100,
+            "description": "Número do documento de conta a pagar"
+          },
+          "CRE_CODIGO": {
+            "type": "number",
+            "example": 50,
+            "description": "Código do credor"
+          },
+          "CRE_NOME": {
+            "type": "string",
+            "example": "Credor Teste",
+            "description": "Nome do credor"
+          },
+          "PAG_VALOR": {
+            "type": "number",
+            "example": 1500.5,
+            "description": "Valor da conta"
+          },
+          "PAG_SITUACAO": {
+            "type": "string",
+            "example": "A",
+            "description": "Situação (A - Aberto, L - Liquidado)"
+          },
+          "PAG_DATAVENC": {
+            "type": "string",
+            "example": "2024-12-31T00:00:00.000Z",
+            "description": "Data de vencimento"
+          },
+          "LOJ_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código da loja"
+          },
+          "CEN_CODIGO": {
+            "type": "number",
+            "example": 10,
+            "description": "Código do centro de custo"
+          },
+          "FPG_CODIGO": {
+            "type": "number",
+            "example": 5,
+            "description": "Código da forma de pagamento"
+          },
+          "BAN_CONTA": {
+            "type": "string",
+            "example": "12345-6",
+            "description": "Conta bancária"
+          },
+          "PAG_DOCUMENTO": {
+            "type": "string",
+            "example": "NF 123",
+            "description": "Documento original"
+          },
+          "PAG_PORCONTA": {
+            "type": "number",
+            "example": 0,
+            "description": "Valor pago por conta"
+          },
+          "PAG_HISTORICO": {
+            "type": "string",
+            "example": "Pagamento referente à compra X",
+            "description": "Histórico da conta"
+          },
+          "PAG_DATAMOV": {
+            "type": "string",
+            "example": "2024-01-01T00:00:00.000Z",
+            "description": "Data do movimento"
+          },
+          "PAG_DATAPAG": {
+            "type": "string",
+            "example": "2024-12-31T00:00:00.000Z",
+            "description": "Data do pagamento"
+          },
+          "PAG_VALORTESOURARIA": {
+            "type": "number",
+            "example": 0,
+            "description": "Valor pago via tesouraria"
+          },
+          "PAG_VALORBANCO": {
+            "type": "number",
+            "example": 1500.5,
+            "description": "Valor pago via banco"
+          },
+          "PAG_TOTAL": {
+            "type": "number",
+            "example": 1500.5,
+            "description": "Valor total"
+          }
+        },
+        "required": [
+          "PAG_NUMERO",
+          "CRE_CODIGO",
+          "CRE_NOME",
+          "PAG_VALOR",
+          "PAG_SITUACAO",
+          "PAG_DATAVENC",
+          "LOJ_CODIGO",
+          "FPG_CODIGO",
+          "PAG_DATAMOV",
+          "PAG_TOTAL"
         ]
       }
     }

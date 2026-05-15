@@ -190,6 +190,26 @@ export const PERMISSIONS = [
     module: 'tenant'
   },
   {
+    key: 'tenant.account-payable.view',
+    descricao: 'Visualizar contas a pagar do tenant',
+    module: 'tenant'
+  },
+  {
+    key: 'tenant.account-payable.create',
+    descricao: 'Criar contas a pagar do tenant',
+    module: 'tenant'
+  },
+  {
+    key: 'tenant.account-payable.update',
+    descricao: 'Atualizar contas a pagar do tenant',
+    module: 'tenant'
+  },
+  {
+    key: 'tenant.account-payable.delete',
+    descricao: 'Deletar contas a pagar do tenant',
+    module: 'tenant'
+  },
+  {
     key: 'tenant.employees.view',
     descricao: 'Visualizar funcionários do tenant',
     module: 'tenant'

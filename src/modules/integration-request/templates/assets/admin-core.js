@@ -275,6 +275,7 @@ const LABEL_MAP = {
     'announcement': 'Avisos & Notificações',
     'dbcredential': 'Credenciais DB',
     'payment-plans': 'Planos de Pagamento',
+    'account-payable': 'Contas a Pagar',
 
     // Ações do painel de solicitação
     'approve': 'Aprovar',

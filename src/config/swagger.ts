@@ -23,25 +23,36 @@ export function getSwaggerConfigBuilder(packageVersion: string): DocumentBuilder
     .setVersion(packageVersion)
     .addBasicAuth() // 👈 Basic Auth for login
     .addBearerAuth() // 👈 JWT
-    .addTag(
-      'Auth',
-      'Endpoints relacionados à autenticação e obtenção de token JWT',
-    )
+    // --- Autenticação ---
+    .addTag('Auth', 'Endpoints relacionados à autenticação e obtenção de token JWT')
+
+    // --- Pessoas & Entidades ---
+    .addTag('Client', 'Endpoints relacionados à gestão de clientes')
+    .addTag('Employee', 'Endpoints relacionados à gestão de funcionários')
+    .addTag('Supplier', 'Endpoints relacionados à gestão de fornecedores')
+    .addTag('Service Providers (Prestadores)', 'Endpoints relacionados à gestão de prestadores de serviço')
+
+    // --- Catálogo ---
     .addTag('Product', 'Endpoints relacionados à gestão de produtos')
-    .addTag(
-      'Product / Brand',
-      'Endpoints relacionados à gestão de marcas e produtos vinculados a marcas',
-    )
-    .addTag(
-      'Product / Group',
-      'Endpoints relacionados à gestão de grupos e produtos vinculados a grupos',
-    )
-    .addTag(
-      'PaymentMethod',
-      'Endpoints relacionados à gestão de meios de pagamento',
-    )
+    .addTag('Product / Brand', 'Endpoints relacionados à gestão de marcas e produtos vinculados a marcas')
+    .addTag('Product / Group', 'Endpoints relacionados à gestão de grupos e produtos vinculados a grupos')
+
+    // --- Vendas ---
     .addTag('Order', 'Endpoints relacionados à gestão de pedidos')
-    .addTag('AccountReceivable', 'Endpoints relacionados à gestão de contas a receber');
+    .addTag('Order Items', 'Endpoints relacionados à consulta de itens de pedido')
+
+    // --- Financeiro ---
+    .addTag('AccountReceivable', 'Endpoints relacionados à gestão de contas a receber')
+    .addTag('Account Payable', 'Endpoints relacionados à gestão de contas a pagar')
+    .addTag('PaymentMethod', 'Endpoints relacionados à gestão de meios de pagamento')
+    .addTag('Payment Plan', 'Endpoints relacionados à gestão de planos de pagamento')
+
+    // --- Monitoramento & Saúde ---
+    .addTag('Status', 'Endpoints de monitoramento de instâncias e telemetria')
+    .addTag('Health', 'Endpoints de verificação de integridade dos serviços')
+
+    // --- Gestão do Plano ---
+    .addTag('Plans & Usage', 'Endpoints relacionados aos planos comerciais da InfoAPI e métricas de uso');
 
   if (process.env.NODE_ENV === 'development') {
     builder.addServer(
@@ -65,9 +76,9 @@ export function setupSwagger(app: INestApplication) {
     : '1.0.0';
 
   const docsDir = path.join(process.cwd(), 'docs', 'swagger');
-  
+
   // Lista todos os arquivos swagger-*.json para registrar as versões
-  const files = fs.existsSync(docsDir) 
+  const files = fs.existsSync(docsDir)
     ? fs.readdirSync(docsDir).filter(f => f.startsWith('swagger-') && f.endsWith('.json'))
     : [];
 
