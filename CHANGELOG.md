@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.10.0](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.9.0...v1.10.0) (2026-05-15)
+
+
+### Features
+
+* filter orders by employee ([a3f0d97](https://github.com/infobrasil-sistemas/info-vendas-api/commit/a3f0d97fbb2848dd3d86900d9ecbf87aa499daec))
+* GET /service-providers ([2bfd37c](https://github.com/infobrasil-sistemas/info-vendas-api/commit/2bfd37c1ef93a644f8ab5c71d2e73b45daf3e88a))
+
+
+### Bug Fixes
+
+* versioning scripts ([c5ef112](https://github.com/infobrasil-sistemas/info-vendas-api/commit/c5ef1128301fb265b3db0820e7567949967eb93d))
+
 ## [1.9.0](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.8.0...v1.9.0) (2026-05-15)
 
 
