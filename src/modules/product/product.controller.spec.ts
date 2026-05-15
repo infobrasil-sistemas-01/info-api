@@ -47,12 +47,14 @@ describe('ProductController', () => {
 
       const result = await controller.getProducts(
         mockReq,
-        2,
-        10,
-        1,
-        2,
-        5,
-        'search term',
+        1, // storeId
+        2, // page
+        10, // pageSize
+        1, // priceTable
+        2, // group
+        5, // brand
+        undefined, // minStock
+        'search term', // search
       );
 
       expect(productService.get).toHaveBeenCalledWith(
@@ -63,6 +65,7 @@ describe('ProductController', () => {
         1,
         2,
         5,
+        undefined,
         'search term',
       );
       expect(result).toEqual([{ id: 1 }, { id: 2 }]);
@@ -71,11 +74,12 @@ describe('ProductController', () => {
     it('should call productService.get without optional params', async () => {
       mockProductService.get.mockResolvedValue([]);
 
-      await controller.getProducts(mockReq);
+      await controller.getProducts(mockReq, 1);
 
       expect(productService.get).toHaveBeenCalledWith(
         'cred-1',
         1,
+        undefined,
         undefined,
         undefined,
         undefined,
@@ -91,12 +95,13 @@ describe('ProductController', () => {
       const mockProduct = { id: 123, name: 'Product 1' };
       mockProductService.getUnique.mockResolvedValue(mockProduct);
 
-      const result = await controller.getProductById(mockReq, 123);
+      const result = await controller.getProductById(mockReq, 123, undefined, 1);
 
       expect(productService.getUnique).toHaveBeenCalledWith(
         'cred-1',
         1,
         123,
+        undefined,
         undefined,
       );
       expect(result).toEqual(mockProduct);
@@ -116,13 +121,14 @@ describe('ProductController', () => {
       const mockProduct = { id: 1, barcode: '123456789' };
       mockProductService.getUnique.mockResolvedValue(mockProduct);
 
-      const result = await controller.getProductByBarcode(mockReq, 123456789);
+      const result = await controller.getProductByBarcode(mockReq, 123456789, undefined, 1);
 
       expect(productService.getUnique).toHaveBeenCalledWith(
         'cred-1',
         1,
         undefined,
         123456789,
+        undefined,
       );
       expect(result).toEqual(mockProduct);
     });

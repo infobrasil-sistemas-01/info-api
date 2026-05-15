@@ -118,7 +118,12 @@ describe('OrderController', () => {
 
       const result = await controller.getOrders(mockReq, 2, 10);
 
-      expect(orderService.get).toHaveBeenCalledWith('cred-1', 1, 2, 10);
+      expect(orderService.get).toHaveBeenCalledWith('cred-1', 1, 2, 10, {
+        clientId: undefined,
+        employeeId: undefined,
+        endDate: undefined,
+        startDate: undefined,
+      });
       expect(result).toEqual([{ id: 1 }, { id: 2 }]);
     });
 
@@ -132,6 +137,12 @@ describe('OrderController', () => {
         1,
         undefined,
         undefined,
+        {
+          clientId: undefined,
+          employeeId: undefined,
+          endDate: undefined,
+          startDate: undefined,
+        }
       );
     });
   });

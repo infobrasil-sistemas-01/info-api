@@ -20,7 +20,11 @@ describe('TenantConnectionService', () => {
   };
 
   beforeEach(async () => {
-    mockDb = { detach: jest.fn() };
+    mockDb = { 
+      detach: jest.fn(),
+      listenerCount: jest.fn().mockReturnValue(0),
+      on: jest.fn(),
+    };
     mockPool = {
       get: jest.fn().mockImplementation((callback) => callback(null, mockDb)),
       destroy: jest.fn().mockImplementation((callback) => callback()),

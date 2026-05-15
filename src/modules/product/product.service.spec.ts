@@ -55,7 +55,7 @@ describe('ProductService', () => {
         },
       );
 
-      await service.get('cred-1', 1, 1, 10, 5);
+      await service.get('cred-1', 1, 1, 10, 1, 5);
 
       expect(mockConnection.query).toHaveBeenCalledWith(
         expect.stringContaining('P.GRU_CODIGO = ?'),
@@ -66,7 +66,7 @@ describe('ProductService', () => {
 
     it('should throw BadRequestException when search has less than 3 characters', async () => {
       await expect(
-        service.get('cred-1', 1, 1, 10, undefined, undefined, undefined, 'ab'),
+        service.get('cred-1', 1, 1, 10, 1, undefined, undefined, undefined, 'ab'),
       ).rejects.toThrow(BadRequestException);
     });
 
@@ -82,6 +82,7 @@ describe('ProductService', () => {
         1,
         1,
         10,
+        1,
         undefined,
         undefined,
         undefined,
