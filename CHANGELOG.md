@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.12.0](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.11.0...v1.12.0) (2026-05-15)
+
+
+### Features
+
+* GET /account-payable ([6ff48b4](https://github.com/infobrasil-sistemas/info-vendas-api/commit/6ff48b422a1ca74b506f56030caf61fb23355654))
+
 ## [1.11.0](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.10.1...v1.11.0) (2026-05-15)
 
 
