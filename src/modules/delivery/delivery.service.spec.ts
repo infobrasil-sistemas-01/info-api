@@ -1,0 +1,127 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import { DeliveryService } from './delivery.service';
+import { TenantConnectionService } from 'src/infra/database/tenant-connection.service';
+
+describe('DeliveryService', () => {
+  let service: DeliveryService;
+  let mockTenantConnection: any;
+
+  const mockConnection = {
+    query: jest.fn(),
+  };
+
+  beforeAll(async () => {
+    mockTenantConnection = {
+      getConnection: jest.fn().mockResolvedValue(mockConnection),
+      releaseConnection: jest.fn().mockResolvedValue(undefined),
+    };
+
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        DeliveryService,
+        { provide: TenantConnectionService, useValue: mockTenantConnection },
+      ],
+    }).compile();
+
+    service = module.get<DeliveryService>(DeliveryService);
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  describe('get', () => {
+    it('should return paginated deliveries', async () => {
+      const mockDeliveries = [
+        { VEN_NUMERO: 12345, ENT_NUMERO: 100, PRE_CODIGO: 1 },
+        { VEN_NUMERO: 12346, ENT_NUMERO: 101, PRE_CODIGO: 2 },
+      ];
+      mockConnection.query.mockImplementation(
+        (query: string, params: any[], callback: Function) => {
+          callback(null, mockDeliveries);
+        },
+      );
+
+      const result = await service.get('cred-1', 1, 1, 10);
+
+      expect(result).toEqual(mockDeliveries);
+      expect(mockConnection.query).toHaveBeenCalledWith(
+        expect.stringContaining('SELECT FIRST ? SKIP ?'),
+        expect.arrayContaining([10, 0, 1]),
+        expect.any(Function),
+      );
+    });
+
+    it('should apply situation and vehiclePlate filters when provided', async () => {
+      mockConnection.query.mockImplementation(
+        (query: string, params: any[], callback: Function) => {
+          callback(null, []);
+        },
+      );
+
+      await service.get('cred-1', 1, 1, 10, {
+        situation: 2,
+        vehiclePlate: 'ABC-1234',
+      });
+
+      expect(mockConnection.query).toHaveBeenCalledWith(
+        expect.stringContaining('AND E.SIT_CODIGO = ?'),
+        expect.arrayContaining([2]),
+        expect.any(Function),
+      );
+      expect(mockConnection.query).toHaveBeenCalledWith(
+        expect.stringContaining('AND E.VEI_PLACA = ?'),
+        expect.arrayContaining(['ABC-1234']),
+        expect.any(Function),
+      );
+    });
+  });
+
+  describe('getById', () => {
+    it('should return delivery with items', async () => {
+      const mockDelivery = { VEN_NUMERO: 12345, ENT_NUMERO: 100, PRE_CODIGO: 1 };
+      const mockItems = [
+        { ETI_NUMERO: 1, IVD_NUMERO: 50, VEN_NUMERO: 12345, PRO_CODIGO: 'PROD-1' },
+      ];
+
+      mockConnection.query
+        .mockImplementationOnce((query: string, params: any[], callback: Function) => {
+          callback(null, [mockDelivery]);
+        })
+        .mockImplementationOnce((query: string, params: any[], callback: Function) => {
+          callback(null, mockItems);
+        });
+
+      const result = await service.getById('cred-1', 100, 1);
+
+      expect(result).toEqual({
+        ...mockDelivery,
+        items: mockItems,
+      });
+
+      expect(mockConnection.query).toHaveBeenNthCalledWith(
+        1,
+        expect.stringContaining('WHERE E.ENT_NUMERO = ?'),
+        expect.arrayContaining([100, 1]),
+        expect.any(Function),
+      );
+
+      expect(mockConnection.query).toHaveBeenNthCalledWith(
+        2,
+        expect.stringContaining('WHERE EI.VEN_NUMERO = ?'),
+        [12345],
+        expect.any(Function),
+      );
+    });
+
+    it('should return null if delivery is not found', async () => {
+      mockConnection.query.mockImplementation((query: string, params: any[], callback: Function) => {
+        callback(null, []);
+      });
+
+      const result = await service.getById('cred-1', 999, 1);
+
+      expect(result).toBeNull();
+    });
+  });
+});

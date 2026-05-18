@@ -40,6 +40,7 @@ export function getSwaggerConfigBuilder(packageVersion: string): DocumentBuilder
     // --- Vendas ---
     .addTag('Order', 'Endpoints relacionados à gestão de pedidos')
     .addTag('Order Items', 'Endpoints relacionados à consulta de itens de pedido')
+    .addTag('Delivery', 'Endpoints relacionados à gestão de entregas')
 
     // --- Financeiro ---
     .addTag('AccountReceivable', 'Endpoints relacionados à gestão de contas a receber')

@@ -269,6 +269,26 @@ export const PERMISSIONS = [
     descricao: 'Deletar prestadores do tenant',
     module: 'tenant'
   },
+  {
+    key: 'tenant.deliveries.view',
+    descricao: 'Visualizar entregas do tenant',
+    module: 'tenant'
+  },
+  {
+    key: 'tenant.deliveries.create',
+    descricao: 'Criar entregas do tenant',
+    module: 'tenant'
+  },
+  {
+    key: 'tenant.deliveries.update',
+    descricao: 'Atualizar entregas do tenant',
+    module: 'tenant'
+  },
+  {
+    key: 'tenant.deliveries.delete',
+    descricao: 'Deletar entregas do tenant',
+    module: 'tenant'
+  },
 
   // ========= SOLICITAÇÕES =========
   {
