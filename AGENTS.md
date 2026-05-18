@@ -20,6 +20,11 @@ npx prisma migrate deploy # Apply migrations (prod)
 
 ## Important Patterns
 
+### Implementation Plans Location
+
+All design, architecture, and development implementation plans created during the lifecycle of this project MUST be systematically saved in the project's documentation folder: `docs/implementation-plans/`. 
+Always normalize the filename as a lower_case_snake_case slug based on the plan's title (e.g., `modulo_de_newsletter_ajustes_administrativos.md`). Avoid writing plans outside of this directory or solely in transient agent memory.
+
 ### Prisma Client Location
 
 Generated client is at `src/generated/prisma/client.ts`, NOT `node_modules/@prisma/client`. Import from `src/generated/prisma/client` or re-export from a module.
