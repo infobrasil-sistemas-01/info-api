@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.13.0](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.12.1...v1.13.0) (2026-05-18)
+
+
+### Features
+
+* GET /employee-roles ([11d8b31](https://github.com/infobrasil-sistemas/info-vendas-api/commit/11d8b3176b23ec2783cd40acc25d7d86ec071e4a))
+
 ## [1.12.1](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.12.0...v1.12.1) (2026-05-18)
 
 
