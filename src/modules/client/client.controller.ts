@@ -8,6 +8,7 @@ import { GetClientsQueryDto } from './dto/get-clients-query.dto';
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
 import { ClientResponseDto, ClientDetailResponseDto } from './dto/client-response.dto';
+import { ClientCreateResponseDto } from './dto/client-create-response.dto';
 import { CurrentUser } from 'src/modules/auth/decorators/current-user.decorator';
 
 @ApiTags('Client')
@@ -51,7 +52,11 @@ export class ClientController {
   @Post()
   @RequirePermissions({ allOf: ['tenant.clients.create'] })
   @ApiOperation({ summary: 'Criar cliente' })
-  @ApiResponse({ status: 201, description: 'Cliente criado com sucesso' })
+  @ApiResponse({
+    status: 201,
+    description: 'Cliente criado com sucesso.',
+    type: ClientCreateResponseDto,
+  })
   async create(
     @CurrentUser() user: any,
     @Body() body: CreateClientDto,

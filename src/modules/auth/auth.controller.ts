@@ -24,6 +24,8 @@ import type { AuthConfig } from 'src/config/auth.config';
 import type { Request, Response } from 'express';
 import { RefreshDto } from './dto/refresh.dto';
 import { LoginResponseDto } from './dto/login-response.dto';
+import { UserProfileResponseDto } from './dto/user-profile-response.dto';
+import { RefreshResponseDto } from './dto/refresh-response.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { CurrentUser } from './decorators/current-user.decorator';
 import type { JwtPayload } from './types/jwt-payload';
@@ -42,6 +44,11 @@ export class AuthController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Obter perfil do usuário logado' })
+  @ApiResponse({
+    status: 200,
+    description: 'Perfil do usuário retornado com sucesso.',
+    type: UserProfileResponseDto,
+  })
   async me(@CurrentUser() user: JwtPayload) {
     const permissions = await this.permissionResolver.resolve(user.sub);
     return {
@@ -93,6 +100,11 @@ export class AuthController {
   @HttpCode(200)
   @ApiOperation({
     summary: 'Refresh do access token',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Access token renovado com sucesso.',
+    type: RefreshResponseDto,
   })
   async refresh(@Body() body: RefreshDto) {
     const result = await this.auth.refresh(body.refresh_token);

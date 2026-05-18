@@ -7,7 +7,14 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Perfil do usuário retornado com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProfileResponseDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -65,7 +72,14 @@
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "Access token renovado com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RefreshResponseDto"
+                }
+              }
+            }
           }
         },
         "summary": "Refresh do access token",
@@ -1040,7 +1054,14 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Estatísticas de uso e limites do plano retornadas com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserStatsResponseDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1060,7 +1081,17 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Lista de planos disponíveis retornada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PlanResponseDto"
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1170,7 +1201,14 @@
         },
         "responses": {
           "201": {
-            "description": "Cliente criado com sucesso"
+            "description": "Cliente criado com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientCreateResponseDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -2074,7 +2112,14 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Estatísticas de status da API e banco de dados retornadas com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusDataResponseDto"
+                }
+              }
+            }
           }
         },
         "summary": "Obter dados de status e histórico (Público)",
@@ -2089,7 +2134,14 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Verificação em tempo real da conexão com API, Postgres e Firebird.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MyConnectionStatusResponseDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -2109,7 +2161,7 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Página visual de status em HTML."
           }
         },
         "summary": "Página de Status visual (Pública)",
@@ -2226,6 +2278,49 @@
       }
     },
     "schemas": {
+      "UserProfileResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID do usuário",
+            "example": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d"
+          },
+          "username": {
+            "type": "string",
+            "description": "Nome de usuário",
+            "example": "infomobile"
+          },
+          "permissions": {
+            "description": "Lista de permissões permitidas",
+            "example": [
+              "tenant.orders.view",
+              "tenant.products.view"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "roles": {
+            "description": "Lista de papéis/roles do usuário",
+            "example": [
+              "admin",
+              "client"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "username",
+          "permissions",
+          "roles"
+        ]
+      },
       "LoginUserDto": {
         "type": "object",
         "properties": {
@@ -2302,6 +2397,19 @@
         },
         "required": [
           "refresh_token"
+        ]
+      },
+      "RefreshResponseDto": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "description": "Novo token de acesso JWT",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          }
+        },
+        "required": [
+          "access_token"
         ]
       },
       "ProductResponseDto": {
@@ -3003,6 +3111,142 @@
           "FPG_DESCRICAO"
         ]
       },
+      "PlanLimitsDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Nome do plano",
+            "example": "Bronze"
+          },
+          "reqMin": {
+            "type": "number",
+            "description": "Limite de requisições por minuto",
+            "example": 100
+          },
+          "reqMonth": {
+            "type": "number",
+            "description": "Limite de requisições por mês",
+            "example": 15000
+          },
+          "maxPageSize": {
+            "type": "number",
+            "description": "Tamanho máximo de página permitido",
+            "example": 50
+          },
+          "maxDateRangeDays": {
+            "type": "number",
+            "description": "Intervalo máximo de dias para filtros de data",
+            "example": 30
+          }
+        },
+        "required": [
+          "name",
+          "reqMin",
+          "reqMonth",
+          "maxPageSize",
+          "maxDateRangeDays"
+        ]
+      },
+      "PlanUsageDto": {
+        "type": "object",
+        "properties": {
+          "reqsMinute": {
+            "type": "number",
+            "description": "Requisições feitas no último minuto",
+            "example": 5
+          },
+          "reqsMonth": {
+            "type": "number",
+            "description": "Requisições feitas no mês corrente",
+            "example": 1200
+          },
+          "minutePercentage": {
+            "type": "number",
+            "description": "Porcentagem de uso do limite por minuto",
+            "example": 5
+          },
+          "monthPercentage": {
+            "type": "number",
+            "description": "Porcentagem de uso do limite mensal",
+            "example": 8
+          }
+        },
+        "required": [
+          "reqsMinute",
+          "reqsMonth",
+          "minutePercentage",
+          "monthPercentage"
+        ]
+      },
+      "UserStatsResponseDto": {
+        "type": "object",
+        "properties": {
+          "limits": {
+            "description": "Limites permitidos no plano do usuário",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PlanLimitsDto"
+              }
+            ]
+          },
+          "usage": {
+            "description": "Métricas de consumo e utilização",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PlanUsageDto"
+              }
+            ]
+          }
+        },
+        "required": [
+          "limits",
+          "usage"
+        ]
+      },
+      "PlanResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID do plano",
+            "example": "d3b07384-d113-49c5-a506-6997a9f60bc8"
+          },
+          "name": {
+            "type": "string",
+            "description": "Nome do plano",
+            "example": "Bronze"
+          },
+          "reqMin": {
+            "type": "number",
+            "description": "Limite de requisições por minuto",
+            "example": 100
+          },
+          "reqMonth": {
+            "type": "number",
+            "description": "Limite de requisições por mês",
+            "example": 15000
+          },
+          "maxPageSize": {
+            "type": "number",
+            "description": "Tamanho máximo de página permitido",
+            "example": 50
+          },
+          "maxDateRangeDays": {
+            "type": "number",
+            "description": "Intervalo máximo de dias para filtros de data",
+            "example": 30
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "reqMin",
+          "reqMonth",
+          "maxPageSize",
+          "maxDateRangeDays"
+        ]
+      },
       "ClientResponseDto": {
         "type": "object",
         "properties": {
@@ -3252,6 +3496,19 @@
           "LOJ_CODIGO",
           "CLI_NOME",
           "CLI_UF"
+        ]
+      },
+      "ClientCreateResponseDto": {
+        "type": "object",
+        "properties": {
+          "CLI_CODIGO": {
+            "type": "number",
+            "description": "Código identificador do cliente criado (CLI_CODIGO)",
+            "example": 105
+          }
+        },
+        "required": [
+          "CLI_CODIGO"
         ]
       },
       "UpdateClientDto": {
@@ -4433,6 +4690,119 @@
           "AJ2_CODIGO",
           "VEI_MODELO",
           "items"
+        ]
+      },
+      "StatusLogDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID do log de status",
+            "example": "d3b07384-d113-49c5-a506-6997a9f60bc8"
+          },
+          "apiStatus": {
+            "type": "string",
+            "description": "Status da API (UP/DOWN)",
+            "example": "UP"
+          },
+          "apiLatency": {
+            "type": "number",
+            "description": "Latência da API em milissegundos",
+            "example": 12
+          },
+          "dbStatus": {
+            "type": "string",
+            "description": "Status do Banco de Dados (UP/DOWN)",
+            "example": "UP"
+          },
+          "dbLatency": {
+            "type": "number",
+            "description": "Latência do Banco de Dados em milissegundos",
+            "example": 3
+          },
+          "timestamp": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Data/Hora em que o status foi capturado",
+            "example": "2026-05-18T16:20:00.000Z"
+          }
+        },
+        "required": [
+          "id",
+          "apiStatus",
+          "apiLatency",
+          "dbStatus",
+          "dbLatency",
+          "timestamp"
+        ]
+      },
+      "StatusDataResponseDto": {
+        "type": "object",
+        "properties": {
+          "current": {
+            "description": "Status mais recente capturado",
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/StatusLogDto"
+              }
+            ]
+          },
+          "history": {
+            "description": "Histórico de status capturados",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StatusLogDto"
+            }
+          }
+        },
+        "required": [
+          "current",
+          "history"
+        ]
+      },
+      "MyConnectionStatusResponseDto": {
+        "type": "object",
+        "properties": {
+          "api": {
+            "type": "string",
+            "description": "Status da API (UP/DOWN)",
+            "example": "UP"
+          },
+          "apiLatency": {
+            "type": "number",
+            "description": "Latência da API em milissegundos",
+            "example": 5
+          },
+          "postgres": {
+            "type": "string",
+            "description": "Status do Banco de Dados Postgres (UP/DOWN)",
+            "example": "UP"
+          },
+          "postgresLatency": {
+            "type": "number",
+            "description": "Latência do Banco de Dados Postgres em milissegundos",
+            "example": 2
+          },
+          "tenant": {
+            "type": "string",
+            "description": "Status do Banco de Dados Firebird (Tenant) (UP/DOWN)",
+            "example": "UP"
+          },
+          "tenantLatency": {
+            "type": "number",
+            "description": "Latência do Banco de Dados Firebird (Tenant) em milissegundos",
+            "example": 45
+          }
+        },
+        "required": [
+          "api",
+          "apiLatency",
+          "postgres",
+          "postgresLatency",
+          "tenant",
+          "tenantLatency"
         ]
       }
     }

@@ -3,9 +3,10 @@ import type { Response } from 'express';
 import { StatusService } from './status.service';
 import * as fs from 'fs';
 import * as path from 'path';
-import { ApiOperation, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiOperation, ApiTags, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { HealthService } from '../health/health.service';
 import { JwtAuthGuard, type ReqWithAuthContext } from '../auth/guards/jwt-auth.guard';
+import { StatusDataResponseDto, MyConnectionStatusResponseDto } from './dto/status-response.dto';
 
 @ApiTags('Status')
 @Controller('status')
@@ -18,6 +19,11 @@ export class StatusController {
   @Get('data')
   @Header('Cache-Control', 'no-store')
   @ApiOperation({ summary: 'Obter dados de status e histórico (Público)' })
+  @ApiResponse({
+    status: 200,
+    description: 'Estatísticas de status da API e banco de dados retornadas com sucesso.',
+    type: StatusDataResponseDto,
+  })
   async getData() {
     const latest = await this.statusService.getLatestStatus();
     const history = await this.statusService.getHistory();
@@ -32,6 +38,11 @@ export class StatusController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Verificar status da conexão do tenant (Usuário)' })
+  @ApiResponse({
+    status: 200,
+    description: 'Verificação em tempo real da conexão com API, Postgres e Firebird.',
+    type: MyConnectionStatusResponseDto,
+  })
   async getMyConnection(@Req() req: ReqWithAuthContext) {
     const start = Date.now();
     const credentialsId = req.authContext?.credentialsId;
@@ -64,6 +75,10 @@ export class StatusController {
 
   @Get()
   @ApiOperation({ summary: 'Página de Status visual (Pública)' })
+  @ApiResponse({
+    status: 200,
+    description: 'Página visual de status em HTML.',
+  })
   async getStatusPage(@Res() res: Response) {
     // Busca o template independente de estar em src (dev) ou dist (prod)
     const htmlPath = path.join(__dirname, 'templates', 'status.html');

@@ -727,7 +727,7 @@ async function main() {
   try {
     const page = await browser.newPage();
     console.log('📄 Loading HTML content...');
-    await page.goto(`file://${tempHtmlPath}`, { waitUntil: 'networkidle0' });
+    await page.goto(`file://${tempHtmlPath}`, { waitUntil: 'domcontentloaded', timeout: 60000 });
 
     console.log('⏳ Waiting for web fonts to load...');
     await page.evaluateHandle('document.fonts.ready');
