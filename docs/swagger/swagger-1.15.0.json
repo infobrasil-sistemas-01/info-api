@@ -23,12 +23,19 @@
     },
     "/auth/login": {
       "post": {
-        "description": "Autentica o usuário usando credenciais básicas e retorna um token de acesso JWT.",
+        "description": "Autentica o usuário usando credenciais básicas (Basic Auth) enviadas exclusivamente no cabeçalho HTTP Authorization, e retorna um token de acesso JWT.",
         "operationId": "AuthController_login",
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Login realizado com sucesso, retorna usuário e token de acesso."
+            "description": "Login realizado com sucesso, retorna usuário e token de acesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponseDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -2219,6 +2226,72 @@
       }
     },
     "schemas": {
+      "LoginUserDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID do usuário",
+            "example": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d"
+          },
+          "username": {
+            "type": "string",
+            "description": "Nome de usuário",
+            "example": "infomobile"
+          },
+          "role": {
+            "type": "object",
+            "description": "Função/Role do usuário",
+            "example": "client",
+            "nullable": true
+          },
+          "permissions": {
+            "description": "Lista de permissões permitidas",
+            "example": [
+              "tenant.orders.view",
+              "tenant.products.view"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "username",
+          "role",
+          "permissions"
+        ]
+      },
+      "LoginResponseDto": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "description": "Token de acesso JWT",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          },
+          "refresh_token": {
+            "type": "string",
+            "description": "Token de refresh para obter novos tokens de acesso",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          },
+          "user": {
+            "description": "Dados do usuário autenticado",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LoginUserDto"
+              }
+            ]
+          }
+        },
+        "required": [
+          "access_token",
+          "refresh_token",
+          "user"
+        ]
+      },
       "RefreshDto": {
         "type": "object",
         "properties": {

@@ -23,6 +23,7 @@ import { AUTH_CONFIG } from 'src/config/auth.config';
 import type { AuthConfig } from 'src/config/auth.config';
 import type { Request, Response } from 'express';
 import { RefreshDto } from './dto/refresh.dto';
+import { LoginResponseDto } from './dto/login-response.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { CurrentUser } from './decorators/current-user.decorator';
 import type { JwtPayload } from './types/jwt-payload';
@@ -57,12 +58,13 @@ export class AuthController {
   @ApiOperation({
     summary: 'Login do usuário',
     description:
-      'Autentica o usuário usando credenciais básicas e retorna um token de acesso JWT.',
+      'Autentica o usuário usando credenciais básicas (Basic Auth) enviadas exclusivamente no cabeçalho HTTP Authorization, e retorna um token de acesso JWT.',
   })
   @ApiResponse({
     status: 200,
     description:
       'Login realizado com sucesso, retorna usuário e token de acesso.',
+    type: LoginResponseDto,
   })
   async login(
     @Headers() headers: Record<string, string>,
@@ -72,7 +74,7 @@ export class AuthController {
     const authHeader = headers['authorization'] || headers['Authorization'];
     if (!authHeader || !authHeader.startsWith('Basic ')) {
       throw new UnauthorizedException(
-        'Authorization header missing or invalid',
+        'Cabeçalho de autorização (Basic Auth) ausente ou inválido.',
       );
     }
     const base64 = authHeader.slice(6);

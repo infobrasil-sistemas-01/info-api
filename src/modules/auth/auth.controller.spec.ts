@@ -50,20 +50,22 @@ describe('AuthController', () => {
       ...overrides,
     }) as any;
 
-    it('should call authService.login with base64 credentials and meta', async () => {
+    it('should call authService.login with base64 credentials from header and meta', async () => {
       const credentials = Buffer.from('user:pass').toString('base64');
       const headers = { authorization: `Basic ${credentials}` };
       const mockRequest = createMockRequest();
 
       mockAuthService.login.mockResolvedValue({
-        user: { id: '1', username: 'user' },
+        user: { id: '1', username: 'user', role: 'admin', permissions: [] },
         accessToken: 'access-token',
         refreshToken: 'refresh-token',
       });
 
-      const result = await controller.login(headers, mockRequest, {
-        passthrough: true,
-      } as any);
+      const result = await controller.login(
+        headers,
+        mockRequest,
+        { passthrough: true } as any,
+      );
 
       expect(authService.login).toHaveBeenCalledWith(
         credentials,
@@ -74,7 +76,7 @@ describe('AuthController', () => {
         }),
       );
       expect(result).toEqual({
-        user: { id: '1', username: 'user' },
+        user: { id: '1', username: 'user', role: 'admin', permissions: [] },
         access_token: 'access-token',
         refresh_token: 'refresh-token',
       });
@@ -106,6 +108,7 @@ describe('AuthController', () => {
 
       mockAuthService.refresh.mockResolvedValue({
         accessToken: 'new-access-token',
+        newRefreshToken: null,
       });
 
       const result = await controller.refresh(dto);

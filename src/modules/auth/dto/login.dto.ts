@@ -1,12 +1,11 @@
-import z, { email } from 'zod';
+import z from 'zod';
 
 export const loginSchema = z.object({
-  email: z.email,
+  username: z.string().min(1),
   password: z.string().min(6),
 });
 
 export class LoginDto {
   static schema = loginSchema;
-
   basic!: string;
 }
