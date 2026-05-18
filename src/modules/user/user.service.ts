@@ -234,6 +234,8 @@ export class UserService {
       select: {
         id: true,
         user: true,
+        email: true,
+        planId: true,
         status: true,
         roleId: true,
         role: { select: { name: true } },
