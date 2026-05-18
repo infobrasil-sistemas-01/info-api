@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.14.0](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.13.0...v1.14.0) (2026-05-18)
+
+
+### Features
+
+* implements GET /delivery ([7e4c590](https://github.com/infobrasil-sistemas/info-vendas-api/commit/7e4c59096b1b53b3b28c2ee1bbb38e4d7839ab68))
+* update frontend to supports delivery ([ecbab4c](https://github.com/infobrasil-sistemas/info-vendas-api/commit/ecbab4cd501e019497eca8c76fdab8f8ca61b2e2))
+
 ## [1.13.0](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.12.1...v1.13.0) (2026-05-18)
 
 
