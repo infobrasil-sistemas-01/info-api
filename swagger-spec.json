@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.0",
   "paths": {
-    "/auth/me": {
+    "/api/v1/auth/me": {
       "get": {
         "operationId": "AuthController_me",
         "parameters": [],
@@ -21,7 +21,7 @@
         ]
       }
     },
-    "/auth/login": {
+    "/api/v1/auth/login": {
       "post": {
         "description": "Autentica o usuário usando credenciais básicas e retorna um token de acesso JWT.",
         "operationId": "AuthController_login",
@@ -42,7 +42,7 @@
         ]
       }
     },
-    "/auth/refresh": {
+    "/api/v1/auth/refresh": {
       "post": {
         "operationId": "AuthController_refresh",
         "parameters": [],
@@ -67,7 +67,7 @@
         ]
       }
     },
-    "/products": {
+    "/api/v1/products": {
       "get": {
         "description": "Retorna uma lista paginada de produtos associados às credenciais do usuário autenticado.",
         "operationId": "ProductController_getProducts",
@@ -181,7 +181,7 @@
         ]
       }
     },
-    "/products/id/{id}": {
+    "/api/v1/products/id/{id}": {
       "get": {
         "description": "Retorna os detalhes de um produto específico com base no ID fornecido.",
         "operationId": "ProductController_getProductById",
@@ -247,7 +247,7 @@
         ]
       }
     },
-    "/products/barcode/{barcode}": {
+    "/api/v1/products/barcode/{barcode}": {
       "get": {
         "description": "Retorna os detalhes de um produto específico com base no código de barras fornecido.",
         "operationId": "ProductController_getProductByBarcode",
@@ -313,7 +313,7 @@
         ]
       }
     },
-    "/products/brands": {
+    "/api/v1/products/brands": {
       "get": {
         "description": "Retorna uma lista paginada de marcas de produtos associadas às credenciais do usuário autenticado.",
         "operationId": "ProductBrandController_getBrands",
@@ -369,7 +369,7 @@
         ]
       }
     },
-    "/products/groups": {
+    "/api/v1/products/groups": {
       "get": {
         "description": "Retorna uma lista paginada de grupos de produtos associadas às credenciais do usuário autenticado.",
         "operationId": "ProductGroupController_getBrands",
@@ -425,7 +425,7 @@
         ]
       }
     },
-    "/orders": {
+    "/api/v1/orders": {
       "post": {
         "description": "Cria um novo pedido com os pedidos vendidos e informações de pagamento.",
         "operationId": "OrderController_postOrder",
@@ -572,7 +572,7 @@
         ]
       }
     },
-    "/orders/{id}/receipt": {
+    "/api/v1/orders/{id}/receipt": {
       "post": {
         "description": "Gera um cupom fiscal para um pedido específico e envia para o email do cliente.",
         "operationId": "OrderController_postReceipt",
@@ -625,7 +625,7 @@
         ]
       }
     },
-    "/orders/{id}": {
+    "/api/v1/orders/{id}": {
       "get": {
         "description": "Retorna os detalhes de um pedido específico com base no ID fornecido.",
         "operationId": "OrderController_getOrderById",
@@ -678,7 +678,7 @@
         ]
       }
     },
-    "/order-items": {
+    "/api/v1/order-items": {
       "get": {
         "description": "Retorna uma lista de itens de pedidos com informações de marca e grupo.",
         "operationId": "OrderItemController_get",
@@ -786,7 +786,7 @@
         ]
       }
     },
-    "/payment-methods": {
+    "/api/v1/payment-methods": {
       "get": {
         "description": "Retorna uma lista paginada de formas de pagamento associados às credenciais do usuário autenticado.",
         "operationId": "PaymentMethodController_getPaymentMethods",
@@ -842,7 +842,7 @@
         ]
       }
     },
-    "/account-receivable": {
+    "/api/v1/account-receivable": {
       "get": {
         "description": "Obtém uma lista de contas a receber da loja.",
         "operationId": "AccountReceivableController_get",
@@ -977,7 +977,7 @@
         ]
       }
     },
-    "/health": {
+    "/api/v1/health": {
       "get": {
         "description": "Verifica o status da API e das dependências (PostgreSQL). Retorna 200 com `status: \"ok\"` quando tudo está operacional, ou `status: \"degraded\"` quando alguma dependência está indisponível.",
         "operationId": "HealthController_check",
@@ -1027,7 +1027,7 @@
         ]
       }
     },
-    "/plans/stats": {
+    "/api/v1/plans/stats": {
       "get": {
         "operationId": "StatsController_getStats",
         "parameters": [],
@@ -1047,7 +1047,7 @@
         ]
       }
     },
-    "/plans": {
+    "/api/v1/plans": {
       "get": {
         "operationId": "StatsController_findAll",
         "parameters": [],
@@ -1067,7 +1067,7 @@
         ]
       }
     },
-    "/clients": {
+    "/api/v1/clients": {
       "get": {
         "operationId": "ClientController_get",
         "parameters": [
@@ -1177,7 +1177,7 @@
         ]
       }
     },
-    "/clients/{id}": {
+    "/api/v1/clients/{id}": {
       "get": {
         "operationId": "ClientController_getById",
         "parameters": [
@@ -1259,7 +1259,7 @@
         ]
       }
     },
-    "/employees": {
+    "/api/v1/employees": {
       "get": {
         "operationId": "EmployeeController_get",
         "parameters": [
@@ -1353,7 +1353,7 @@
         ]
       }
     },
-    "/employees/{id}": {
+    "/api/v1/employees/{id}": {
       "get": {
         "operationId": "EmployeeController_getById",
         "parameters": [
@@ -1391,7 +1391,7 @@
         ]
       }
     },
-    "/suppliers": {
+    "/api/v1/suppliers": {
       "get": {
         "operationId": "SupplierController_get",
         "parameters": [
@@ -1473,7 +1473,7 @@
         ]
       }
     },
-    "/suppliers/{id}": {
+    "/api/v1/suppliers/{id}": {
       "get": {
         "operationId": "SupplierController_getById",
         "parameters": [
@@ -1511,7 +1511,7 @@
         ]
       }
     },
-    "/service-providers": {
+    "/api/v1/service-providers": {
       "get": {
         "operationId": "ServiceProviderController_get",
         "parameters": [
@@ -1593,7 +1593,7 @@
         ]
       }
     },
-    "/service-providers/{id}": {
+    "/api/v1/service-providers/{id}": {
       "get": {
         "operationId": "ServiceProviderController_getById",
         "parameters": [
@@ -1631,7 +1631,7 @@
         ]
       }
     },
-    "/payment-plans": {
+    "/api/v1/payment-plans": {
       "get": {
         "description": "Retorna uma lista paginada de planos de pagamento associados às credenciais do usuário autenticado.",
         "operationId": "PaymentPlanController_getPaymentPlans",
@@ -1687,7 +1687,7 @@
         ]
       }
     },
-    "/account-payable": {
+    "/api/v1/account-payable": {
       "get": {
         "description": "Retorna uma lista paginada e resumida de contas a pagar baseada nos filtros.",
         "operationId": "AccountPayableController_getAccountPayable",
@@ -1791,7 +1791,7 @@
         ]
       }
     },
-    "/account-payable/id/{id}": {
+    "/api/v1/account-payable/id/{id}": {
       "get": {
         "description": "Retorna os detalhes completos de uma conta a pagar pelo ID (PAG_NUMERO).",
         "operationId": "AccountPayableController_getAccountPayableById",
@@ -1832,7 +1832,7 @@
         ]
       }
     },
-    "/employee-roles": {
+    "/api/v1/employee-roles": {
       "get": {
         "operationId": "EmployeeRoleController_get",
         "parameters": [
@@ -1890,6 +1890,174 @@
         "summary": "Listar funções/cargos de funcionários",
         "tags": [
           "Employee"
+        ]
+      }
+    },
+    "/api/v1/deliveries": {
+      "get": {
+        "description": "Retorna uma lista paginada de entregas.",
+        "operationId": "DeliveryController_getDeliveries",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Página atual",
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "description": "Itens por página",
+            "schema": {
+              "example": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "storeId",
+            "required": false,
+            "in": "query",
+            "description": "ID da loja (LOJ_CODIGO)",
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "startDate",
+            "required": false,
+            "in": "query",
+            "description": "Data inicial (YYYY-MM-DD)",
+            "schema": {
+              "example": "2026-05-01",
+              "type": "string"
+            }
+          },
+          {
+            "name": "endDate",
+            "required": false,
+            "in": "query",
+            "description": "Data final (YYYY-MM-DD)",
+            "schema": {
+              "example": "2026-05-31",
+              "type": "string"
+            }
+          },
+          {
+            "name": "situation",
+            "required": false,
+            "in": "query",
+            "description": "Código da situação (SIT_CODIGO)",
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "vehiclePlate",
+            "required": false,
+            "in": "query",
+            "description": "Placa do veículo (VEI_PLACA)",
+            "schema": {
+              "example": "ABC-1234",
+              "type": "string"
+            }
+          },
+          {
+            "name": "providerId",
+            "required": false,
+            "in": "query",
+            "description": "Código do prestador (PRE_CODIGO)",
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de entregas retornada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DeliveryResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token de autenticação inválido ou ausente."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Obter entregas",
+        "tags": [
+          "Delivery"
+        ]
+      }
+    },
+    "/api/v1/deliveries/{id}": {
+      "get": {
+        "description": "Retorna os detalhes de uma entrega específica com os itens vinculados.",
+        "operationId": "DeliveryController_getDeliveryById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID da entrega (ENT_NUMERO) a ser retornada",
+            "schema": {
+              "example": 100,
+              "type": "number"
+            }
+          },
+          {
+            "name": "storeId",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes da entrega retornados com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeliveryDetailResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token de autenticação inválido ou ausente."
+          },
+          "404": {
+            "description": "Entrega não encontrada."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Obter detalhes de uma entrega pelo ID",
+        "tags": [
+          "Delivery"
         ]
       }
     },
@@ -1994,6 +2162,10 @@
     {
       "name": "Order Items",
       "description": "Endpoints relacionados à consulta de itens de pedido"
+    },
+    {
+      "name": "Delivery",
+      "description": "Endpoints relacionados à gestão de entregas"
     },
     {
       "name": "AccountReceivable",
@@ -3883,6 +4055,311 @@
         "required": [
           "FCA_CODIGO",
           "FCA_NOME"
+        ]
+      },
+      "DeliveryResponseDto": {
+        "type": "object",
+        "properties": {
+          "VEN_NUMERO": {
+            "type": "number",
+            "example": 12345,
+            "description": "Número da venda (VEN_NUMERO)"
+          },
+          "ENT_NUMERO": {
+            "type": "number",
+            "example": 100,
+            "description": "Número da entrega (ENT_NUMERO)"
+          },
+          "PRE_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código do prestador (PRE_CODIGO)"
+          },
+          "PRE_NOME": {
+            "type": "string",
+            "example": "Prestador Exemplo",
+            "description": "Nome do prestador (PRE_NOME)"
+          },
+          "SIT_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código da situação (SIT_CODIGO)"
+          },
+          "USU_CODIGO": {
+            "type": "number",
+            "example": 9999,
+            "description": "Código do usuário (USU_CODIGO)"
+          },
+          "ENT_DATA": {
+            "type": "string",
+            "example": "2026-05-18",
+            "description": "Data da entrega (ENT_DATA)"
+          },
+          "ENT_HORA": {
+            "type": "string",
+            "example": "14:30:00",
+            "description": "Hora da entrega (ENT_HORA)"
+          },
+          "ENT_KILOMETRAGEM": {
+            "type": "number",
+            "example": 120.5,
+            "description": "Kilometragem da entrega (ENT_KILOMETRAGEM)"
+          },
+          "VEI_PLACA": {
+            "type": "string",
+            "example": "ABC-1234",
+            "description": "Placa do veículo (VEI_PLACA)"
+          },
+          "ENT_DATABAIXA": {
+            "type": "string",
+            "example": "2026-05-18",
+            "description": "Data da baixa da entrega (ENT_DATABAIXA)"
+          },
+          "ENT_LOTEENTREGA": {
+            "type": "number",
+            "example": 5,
+            "description": "Lote da entrega (ENT_LOTEENTREGA)"
+          }
+        },
+        "required": [
+          "VEN_NUMERO",
+          "ENT_NUMERO",
+          "PRE_CODIGO",
+          "PRE_NOME",
+          "SIT_CODIGO",
+          "USU_CODIGO",
+          "ENT_DATA",
+          "ENT_HORA",
+          "ENT_KILOMETRAGEM",
+          "VEI_PLACA",
+          "ENT_DATABAIXA",
+          "ENT_LOTEENTREGA"
+        ]
+      },
+      "DeliveryItemResponseDto": {
+        "type": "object",
+        "properties": {
+          "ETI_NUMERO": {
+            "type": "number",
+            "example": 1,
+            "description": "Número do item da entrega (ETI_NUMERO)"
+          },
+          "IVD_NUMERO": {
+            "type": "number",
+            "example": 50,
+            "description": "Número do item de venda (IVD_NUMERO)"
+          },
+          "VEN_NUMERO": {
+            "type": "number",
+            "example": 12345,
+            "description": "Número da venda (VEN_NUMERO)"
+          },
+          "PRO_CODIGO": {
+            "type": "string",
+            "example": "PROD-123",
+            "description": "Código do produto (PRO_CODIGO)"
+          },
+          "PRO_DESCRICAO": {
+            "type": "string",
+            "example": "Produto de Teste",
+            "description": "Descrição do produto (PRO_DESCRICAO)"
+          },
+          "USU_CODIGO": {
+            "type": "number",
+            "example": 9999,
+            "description": "Código do usuário (USU_CODIGO)"
+          },
+          "ETI_DATA": {
+            "type": "string",
+            "example": "2026-05-18",
+            "description": "Data do item (ETI_DATA)"
+          },
+          "ETI_HORA": {
+            "type": "string",
+            "example": "14:30:00",
+            "description": "Hora do item (ETI_HORA)"
+          },
+          "ETI_QTDE": {
+            "type": "number",
+            "example": 2,
+            "description": "Quantidade do item (ETI_QTDE)"
+          },
+          "ETI_IMPRIMIR": {
+            "type": "string",
+            "example": "N",
+            "description": "Imprimir item (ETI_IMPRIMIR)"
+          },
+          "ETI_QTDECLIENTE": {
+            "type": "number",
+            "example": 2,
+            "description": "Quantidade do cliente (ETI_QTDECLIENTE)"
+          }
+        },
+        "required": [
+          "ETI_NUMERO",
+          "IVD_NUMERO",
+          "VEN_NUMERO",
+          "PRO_CODIGO",
+          "PRO_DESCRICAO",
+          "USU_CODIGO",
+          "ETI_DATA",
+          "ETI_HORA",
+          "ETI_QTDE",
+          "ETI_IMPRIMIR",
+          "ETI_QTDECLIENTE"
+        ]
+      },
+      "DeliveryDetailResponseDto": {
+        "type": "object",
+        "properties": {
+          "VEN_NUMERO": {
+            "type": "number",
+            "example": 12345,
+            "description": "Número da venda (VEN_NUMERO)"
+          },
+          "ENT_NUMERO": {
+            "type": "number",
+            "example": 100,
+            "description": "Número da entrega (ENT_NUMERO)"
+          },
+          "PRE_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código do prestador (PRE_CODIGO)"
+          },
+          "PRE_NOME": {
+            "type": "string",
+            "example": "Prestador Exemplo",
+            "description": "Nome do prestador (PRE_NOME)"
+          },
+          "SIT_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código da situação (SIT_CODIGO)"
+          },
+          "USU_CODIGO": {
+            "type": "number",
+            "example": 9999,
+            "description": "Código do usuário (USU_CODIGO)"
+          },
+          "ENT_DATA": {
+            "type": "string",
+            "example": "2026-05-18",
+            "description": "Data da entrega (ENT_DATA)"
+          },
+          "ENT_HORA": {
+            "type": "string",
+            "example": "14:30:00",
+            "description": "Hora da entrega (ENT_HORA)"
+          },
+          "ENT_KILOMETRAGEM": {
+            "type": "number",
+            "example": 120.5,
+            "description": "Kilometragem da entrega (ENT_KILOMETRAGEM)"
+          },
+          "VEI_PLACA": {
+            "type": "string",
+            "example": "ABC-1234",
+            "description": "Placa do veículo (VEI_PLACA)"
+          },
+          "ENT_DATABAIXA": {
+            "type": "string",
+            "example": "2026-05-18",
+            "description": "Data da baixa da entrega (ENT_DATABAIXA)"
+          },
+          "ENT_LOTEENTREGA": {
+            "type": "number",
+            "example": 5,
+            "description": "Lote da entrega (ENT_LOTEENTREGA)"
+          },
+          "ENT_OBS": {
+            "type": "string",
+            "example": "Entregar no período da tarde",
+            "description": "Observações da entrega (ENT_OBS)"
+          },
+          "ENT_IMPRIMIR": {
+            "type": "string",
+            "example": "S",
+            "description": "Imprimir entrega (ENT_IMPRIMIR)"
+          },
+          "AJU_CODIGO": {
+            "type": "number",
+            "example": 10,
+            "description": "Código do ajuste (AJU_CODIGO)"
+          },
+          "TBS_CODIGO": {
+            "type": "number",
+            "example": 2,
+            "description": "Código da tabela (TBS_CODIGO)"
+          },
+          "AJA_CODIGO": {
+            "type": "number",
+            "example": 3,
+            "description": "Código da agenda (AJA_CODIGO)"
+          },
+          "SEP_CODIGO": {
+            "type": "number",
+            "example": 4,
+            "description": "Código do separador (SEP_CODIGO)"
+          },
+          "ENT_LOTEPRODUTO": {
+            "type": "string",
+            "example": "LOTE-99",
+            "description": "Lote do produto (ENT_LOTEPRODUTO)"
+          },
+          "USU_CODIGOBXA": {
+            "type": "number",
+            "example": 9999,
+            "description": "Usuário de baixa da entrega (USU_CODIGOBXA)"
+          },
+          "ENT_GERARROTAS": {
+            "type": "string",
+            "example": "S",
+            "description": "Gerar rotas para entrega (ENT_GERARROTAS)"
+          },
+          "AJ2_CODIGO": {
+            "type": "number",
+            "example": 12,
+            "description": "Código do segundo ajuste (AJ2_CODIGO)"
+          },
+          "VEI_MODELO": {
+            "type": "string",
+            "example": "Volvo FH 540",
+            "description": "Modelo do veículo (VEI_MODELO)"
+          },
+          "items": {
+            "description": "Itens da entrega",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DeliveryItemResponseDto"
+            }
+          }
+        },
+        "required": [
+          "VEN_NUMERO",
+          "ENT_NUMERO",
+          "PRE_CODIGO",
+          "PRE_NOME",
+          "SIT_CODIGO",
+          "USU_CODIGO",
+          "ENT_DATA",
+          "ENT_HORA",
+          "ENT_KILOMETRAGEM",
+          "VEI_PLACA",
+          "ENT_DATABAIXA",
+          "ENT_LOTEENTREGA",
+          "ENT_OBS",
+          "ENT_IMPRIMIR",
+          "AJU_CODIGO",
+          "TBS_CODIGO",
+          "AJA_CODIGO",
+          "SEP_CODIGO",
+          "ENT_LOTEPRODUTO",
+          "USU_CODIGOBXA",
+          "ENT_GERARROTAS",
+          "AJ2_CODIGO",
+          "VEI_MODELO",
+          "items"
         ]
       }
     }

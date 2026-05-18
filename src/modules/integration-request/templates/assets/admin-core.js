@@ -272,6 +272,7 @@ const LABEL_MAP = {
     'employees': 'Funcionários',
     'suppliers': 'Fornecedores',
     'service-providers': 'Prestadores de Serviço',
+    'deliveries': 'Entregas',
     'announcement': 'Avisos & Notificações',
     'dbcredential': 'Credenciais DB',
     'payment-plans': 'Planos de Pagamento',
