@@ -1832,6 +1832,67 @@
         ]
       }
     },
+    "/api/v1/employee-roles": {
+      "get": {
+        "operationId": "EmployeeRoleController_get",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Página atual",
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "description": "Itens por página",
+            "schema": {
+              "example": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Busca por nome da função/cargo (FCA_NOME)",
+            "schema": {
+              "example": "Gerente",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de funções/cargos de funcionários",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EmployeeRoleResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Listar funções/cargos de funcionários",
+        "tags": [
+          "Employee"
+        ]
+      }
+    },
     "/status/data": {
       "get": {
         "operationId": "StatusController_getData",
@@ -3803,6 +3864,25 @@
           "FPG_CODIGO",
           "PAG_DATAMOV",
           "PAG_TOTAL"
+        ]
+      },
+      "EmployeeRoleResponseDto": {
+        "type": "object",
+        "properties": {
+          "FCA_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código da função/cargo (FCA_CODIGO)"
+          },
+          "FCA_NOME": {
+            "type": "string",
+            "example": "Vendedor",
+            "description": "Nome da função/cargo (FCA_NOME)"
+          }
+        },
+        "required": [
+          "FCA_CODIGO",
+          "FCA_NOME"
         ]
       }
     }

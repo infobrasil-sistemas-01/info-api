@@ -32,6 +32,7 @@ import { SupplierModule } from './modules/supplier/supplier.module';
 import { ServiceProviderModule } from './modules/service-provider/service-provider.module';
 import { PaymentPlanModule } from './modules/payment-plan/payment-plan.module';
 import { AccountPayableModule } from './modules/account-payable/account-payable.module';
+import { EmployeeRoleModule } from './modules/employee-role/employee-role.module';
 
 import { AppController } from './app.controller';
 
@@ -63,6 +64,7 @@ import { AppController } from './app.controller';
     ServiceProviderModule,
     PaymentPlanModule,
     AccountPayableModule,
+    EmployeeRoleModule,
     ScheduleModule.forRoot(),
     StatusModule,
   ],
