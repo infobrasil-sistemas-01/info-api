@@ -264,8 +264,13 @@ const Components = {
         };
         const type = typeLabels[ann.type] || typeLabels.INFO;
 
+        const checkboxHtml = ann.newsletterId 
+            ? `<span class="tag-pill" style="font-size:0.75rem; background: rgba(59, 130, 246, 0.1); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.2); padding: 2px 6px; border-radius: 4px;" title="Enviado na Newsletter #${ann.newsletterId}">News #${ann.newsletterId}</span>`
+            : `<input type="checkbox" class="ann-checkbox" value="${ann.id}" onchange="UI.updateNewsletterButtonState()" style="width: 16px; height: 16px; cursor: pointer; accent-color: var(--primary);">`;
+
         return `
         <tr>
+            <td style="width: 50px; text-align: center;">${checkboxHtml}</td>
             <td>
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <div class="ann-type-icon ${type.class}"><i class='bx ${type.icon}'></i></div>
@@ -296,16 +301,31 @@ const Components = {
     },
     AnnouncementTable: (anns) => `
         <div class="card">
-            <div class="card-header">
+            <div class="card-header" style="flex-wrap: wrap; gap: 12px;">
                 <h2>Gestão de Avisos do Sistema</h2>
-                <div style="display: flex; gap: 8px;">
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <button id="btn-prep-newsletter" class="btn btn-outline btn-sm" style="display: none; color: var(--primary); border-color: var(--primary);" onclick="UI.openNewsletterModal()">
+                        <i class='bx bx-envelope' style="font-size: 1.1rem; vertical-align: middle;"></i> Preparar para Newsletter
+                    </button>
                     <button class="btn btn-outline" onclick="Data.fetchAnnouncements()" title="Atualizar dados"><i class='bx bx-refresh'></i></button>
                     <button class="btn btn-primary" onclick="UI.openAnnouncementModal()">+ Novo Aviso</button>
                 </div>
             </div>
             <div class="table-container">
                 <table>
-                    <thead><tr><th>Conteúdo</th><th>Tipo</th><th>Validade</th><th>Vistos</th><th>Ativo</th><th>Ações</th></tr></thead>
+                    <thead>
+                        <tr>
+                            <th style="width: 50px; text-align: center;">
+                                <input type="checkbox" id="select-all-anns" onchange="UI.selectAllAnnouncements(this)" style="width: 16px; height: 16px; cursor: pointer; accent-color: var(--primary);">
+                            </th>
+                            <th>Conteúdo</th>
+                            <th>Tipo</th>
+                            <th>Validade</th>
+                            <th>Vistos</th>
+                            <th>Ativo</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
                     <tbody id="anns-table-body">${anns.map(Components.AnnouncementRow).join('')}</tbody>
                 </table>
             </div>

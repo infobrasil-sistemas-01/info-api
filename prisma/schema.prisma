@@ -143,19 +143,32 @@ enum AnnouncementType {
 }
 
 model Announcement {
-  id        String           @id @default(uuid())
-  type      AnnouncementType @default(INFO)
-  text      String           @db.Text
-  ctaText   String?          @map("cta_text") @db.VarChar(50)
-  ctaLink   String?          @map("cta_link") @db.VarChar(255)
-  startDate DateTime?        @map("start_date")
-  endDate   DateTime?        @map("end_date")
-  active    Boolean          @default(true)
-  createdAt DateTime         @default(now()) @map("created_at")
-  updatedAt DateTime         @updatedAt @map("updated_at")
-  views     AnnouncementView[]
+  id           String           @id @default(uuid())
+  type         AnnouncementType @default(INFO)
+  text         String           @db.Text
+  ctaText      String?          @map("cta_text") @db.VarChar(50)
+  ctaLink      String?          @map("cta_link") @db.VarChar(255)
+  startDate    DateTime?        @map("start_date")
+  endDate      DateTime?        @map("end_date")
+  active       Boolean          @default(true)
+  newsletterId Int?             @map("newsletter_id")
+  createdAt    DateTime         @default(now()) @map("created_at")
+  updatedAt    DateTime         @updatedAt @map("updated_at")
+  views        AnnouncementView[]
+  newsletter   Newsletter?      @relation(fields: [newsletterId], references: [id], onDelete: SetNull)
 
   @@map("announcements")
+}
+
+model Newsletter {
+  id             Int            @id @default(autoincrement())
+  subject        String         @db.VarChar(255)
+  initialMessage String?        @map("initial_message") @db.Text
+  finalMessage   String?        @map("final_message") @db.Text
+  sentAt         DateTime       @default(now()) @map("sent_at")
+  announcements  Announcement[]
+
+  @@map("newsletters")
 }
 
 model AnnouncementView {

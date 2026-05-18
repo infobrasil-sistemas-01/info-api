@@ -34,6 +34,7 @@ import { PaymentPlanModule } from './modules/payment-plan/payment-plan.module';
 import { AccountPayableModule } from './modules/account-payable/account-payable.module';
 import { EmployeeRoleModule } from './modules/employee-role/employee-role.module';
 import { DeliveryModule } from './modules/delivery/delivery.module';
+import { NewsletterModule } from './modules/newsletter/newsletter.module';
 
 import { AppController } from './app.controller';
 
@@ -67,6 +68,7 @@ import { AppController } from './app.controller';
     AccountPayableModule,
     EmployeeRoleModule,
     DeliveryModule,
+    NewsletterModule,
     ScheduleModule.forRoot(),
     StatusModule,
   ],

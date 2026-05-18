@@ -390,7 +390,7 @@ const UI = {
             </div>
             <form onsubmit="UI.saveUser(event, '${id || ''}')">
                 <div class="form-group"><label>Usuário</label><input type="text" id="u-name" required></div>
-                ${!id ? '<div class="form-group"><label>E-mail</label><input type="email" id="u-email" required placeholder="Para envio do convite"></div>' : ''}
+                <div class="form-group"><label>E-mail</label><input type="email" id="u-email" required placeholder="Ex: email@empresa.com"></div>
                 <div class="form-group"><label>Role</label><select id="u-role"></select></div>
                 <div class="form-group"><label>Plano</label><select id="u-plan"></select></div>
                 <div class="form-group"><label>Credenciais DB</label><select id="u-db" required></select></div>
@@ -659,6 +659,136 @@ const UI = {
             body: JSON.stringify(data)
         });
         if (res.ok) { this.closeModal(); Data.fetchAnnouncements(); }
+    },
+    selectAllAnnouncements(el) {
+        const checkboxes = document.querySelectorAll('.ann-checkbox');
+        checkboxes.forEach(cb => cb.checked = el.checked);
+        this.updateNewsletterButtonState();
+    },
+    updateNewsletterButtonState() {
+        const checkedCount = document.querySelectorAll('.ann-checkbox:checked').length;
+        const btn = document.getElementById('btn-prep-newsletter');
+        if (btn) {
+            btn.style.display = checkedCount > 0 ? 'inline-block' : 'none';
+        }
+    },
+    async openNewsletterModal() {
+        const selectedCheckboxes = document.querySelectorAll('.ann-checkbox:checked');
+        const announcementIds = Array.from(selectedCheckboxes).map(cb => cb.value);
+
+        if (announcementIds.length === 0) {
+            alert('Por favor, selecione ao menos um aviso para enviar.');
+            return;
+        }
+
+        // Fetch Next ID
+        const resId = await Data.fetch(`${API_URL}/newsletter/next-id`);
+        const { nextId } = await resId.json();
+
+        const modal = document.getElementById('newsletter-modal');
+        modal.innerHTML = `
+            <div class="modal-header">
+                <h3>Preparar InfoAPI News #${nextId}</h3>
+                <button onclick="UI.closeModal()" style="background: none; border: none; cursor: pointer; font-size: 1.5rem; color: white;">&times;</button>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 20px; height: 500px; overflow: hidden; background: var(--bg-card); color: var(--text-main);">
+                <!-- Config Formulário -->
+                <form onsubmit="UI.sendNewsletter(event)" style="display: flex; flex-direction: column; gap: 12px; overflow-y: auto; padding-right: 10px;">
+                    <input type="hidden" id="n-annIds" value='${JSON.stringify(announcementIds)}'>
+                    <div class="form-group">
+                        <label>Assunto do E-mail</label>
+                        <input type="text" id="n-subject" required value="InfoAPI News #${nextId} - Novidades e Atualizações" oninput="UI.updateNewsletterPreview()" style="width: 100%;">
+                    </div>
+                    <div class="form-group">
+                        <label>Mensagem Inicial (Padrão)</label>
+                        <textarea id="n-initial" rows="3" oninput="UI.updateNewsletterPreview()" style="width: 100%; resize: vertical;">Olá! Temos o prazer de compartilhar com você as últimas atualizações de recursos, novidades e alertas importantes do ecossistema InfoAPI.</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Mensagem Final (Padrão)</label>
+                        <textarea id="n-final" rows="3" oninput="UI.updateNewsletterPreview()" style="width: 100%; resize: vertical;">Para dúvidas ou suporte com essas novidades, nossa equipe técnica está sempre disponível através do e-mail suporte@infobrasilsistemas.com.br ou pelo nosso suporte oficial.</textarea>
+                    </div>
+                    <div style="margin-top: auto; display: flex; gap: 10px;">
+                        <button type="button" class="btn btn-outline" onclick="UI.closeModal()" style="flex: 1;">Cancelar</button>
+                        <button type="submit" class="btn btn-primary" style="flex: 1; background: #10b981; border-color: #10b981;">Disparar News</button>
+                    </div>
+                </form>
+
+                <!-- Live Preview (Iframe) -->
+                <div style="display: flex; flex-direction: column; border-left: 1px solid var(--border); padding-left: 20px; height: 100%;">
+                    <div style="font-weight: bold; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+                        <span>Pré-visualização do E-mail</span>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">Auto-atualizável</span>
+                    </div>
+                    <iframe id="newsletter-preview-frame" style="flex: 1; width: 100%; border: 1px solid var(--border); border-radius: 8px; background: white;"></iframe>
+                </div>
+            </div>
+        `;
+
+        modal.classList.remove('hidden');
+        document.getElementById('modal-container').classList.remove('hidden');
+
+        // Initial preview generation
+        this.updateNewsletterPreview();
+    },
+    async updateNewsletterPreview() {
+        const announcementIds = JSON.parse(document.getElementById('n-annIds').value);
+        const subject = document.getElementById('n-subject').value;
+        const initialMessage = document.getElementById('n-initial').value;
+        const finalMessage = document.getElementById('n-final').value;
+
+        const frame = document.getElementById('newsletter-preview-frame');
+        if (!frame) return;
+
+        try {
+            const res = await Data.fetch(`${API_URL}/newsletter/preview`, {
+                method: 'POST',
+                body: JSON.stringify({ announcementIds, subject, initialMessage, finalMessage })
+            });
+
+            if (res.ok) {
+                const { html } = await res.json();
+                const doc = frame.contentDocument || frame.contentWindow.document;
+                doc.open();
+                doc.write(html);
+                doc.close();
+            } else {
+                const err = await res.json();
+                console.error(err);
+            }
+        } catch (e) {
+            console.error('Erro ao gerar preview da newsletter:', e);
+        }
+    },
+    async sendNewsletter(e) {
+        e.preventDefault();
+        
+        if (!confirm('Deseja disparar esta newsletter agora para TODOS os usuários ativos cadastrados? Essa ação não pode ser desfeita.')) {
+            return;
+        }
+
+        const announcementIds = JSON.parse(document.getElementById('n-annIds').value);
+        const subject = document.getElementById('n-subject').value;
+        const initialMessage = document.getElementById('n-initial').value;
+        const finalMessage = document.getElementById('n-final').value;
+
+        try {
+            const res = await Data.fetch(`${API_URL}/newsletter/send`, {
+                method: 'POST',
+                body: JSON.stringify({ announcementIds, subject, initialMessage, finalMessage })
+            });
+
+            if (res.ok) {
+                alert('Newsletter enviada e disparada com sucesso para todos os usuários ativos!');
+                this.closeModal();
+                Data.fetchAnnouncements();
+            } else {
+                const err = await res.json();
+                alert(`Erro ao enviar: ${err.message}`);
+            }
+        } catch (e) {
+            console.error(e);
+            alert('Falha ao processar o envio da newsletter.');
+        }
     }
 };
 
