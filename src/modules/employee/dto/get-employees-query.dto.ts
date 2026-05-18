@@ -8,6 +8,7 @@ export const GetEmployeesQuerySchema = z.object({
   search: z.string().optional(),
   situation: z.enum(['A', 'I']).optional(),
   storeId: z.coerce.number().min(1).optional(),
+  functionId: z.coerce.number().min(1).optional(),
 });
 
 export class GetEmployeesQueryDto extends ZodDto(GetEmployeesQuerySchema) {
@@ -25,4 +26,7 @@ export class GetEmployeesQueryDto extends ZodDto(GetEmployeesQuerySchema) {
 
   @ApiPropertyOptional({ description: 'ID da loja (LOJ_CODIGO)', example: 1 })
   storeId?: number;
+
+  @ApiPropertyOptional({ description: 'ID da função (FCA_CODIGO)', example: 1 })
+  functionId?: number;
 }

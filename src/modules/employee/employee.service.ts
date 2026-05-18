@@ -16,6 +16,7 @@ export class EmployeeService {
     pageSize: number = 10,
     search?: string,
     situation?: string,
+    functionId?: number
   ) {
     const connection = await this.tenantConnectionService.getConnection(credentialsId);
 
@@ -26,12 +27,12 @@ export class EmployeeService {
         storeId,
       ];
       let query = `SELECT FIRST ? SKIP ? 
-                      FUN_CODIGO, FUN_NOME, FUN_APELIDO, FUN_ENDERECO, FUN_BAIRRO,
-                      FUN_CIDADE, FUN_UF, FUN_CEP, FUN_FONE, FUN_CELULAR, FUN_EMAIL,
-                      FUN_CPF, FUN_IDENTIDADE, FUN_SITUACAO, FUN_DATANASC,
-                      FUN_DATAADMISSAO, FUN_DATADEMISSAO, LOJ_CODIGO
-                      FROM funcionarios 
-                      WHERE LOJ_CODIGO = ?`;
+                      F.FUN_CODIGO, F.FUN_NOME, F.FUN_APELIDO, F.FCA_CODIGO, 
+                      FN.FCA_NOME, F.FUN_FONE, F.FUN_CELULAR, F.FUN_EMAIL,
+                      F.FUN_SITUACAO, F.LOJ_CODIGO
+                      FROM funcionarios F 
+                      INNER JOIN funcoes FN ON F.FCA_CODIGO = FN.FCA_CODIGO
+                      WHERE F.LOJ_CODIGO = ?`;
 
       if (situation) {
         query += ` AND FUN_SITUACAO = ?`;
@@ -44,6 +45,11 @@ export class EmployeeService {
         }
         query += ` AND (FUN_NOME LIKE ? OR FUN_APELIDO LIKE ?)`;
         params.push(`%${search}%`, `%${search}%`);
+      }
+
+      if (functionId) {
+        query += ` AND F.FCA_CODIGO = ?`;
+        params.push(functionId);
       }
 
       query += ` ORDER BY FUN_NOME`;
@@ -78,12 +84,14 @@ export class EmployeeService {
 
     try {
       const query = `SELECT 
-                      FUN_CODIGO, FUN_NOME, FUN_APELIDO, FUN_ENDERECO, FUN_BAIRRO,
-                      FUN_CIDADE, FUN_UF, FUN_CEP, FUN_FONE, FUN_CELULAR, FUN_EMAIL,
-                      FUN_CPF, FUN_IDENTIDADE, FUN_SITUACAO, FUN_DATANASC,
-                      FUN_DATAADMISSAO, FUN_DATADEMISSAO, LOJ_CODIGO
-                      FROM funcionarios 
-                      WHERE FUN_CODIGO = ?`;
+                      F.FUN_CODIGO, F.FUN_NOME, F.FUN_APELIDO, F.FUN_ENDERECO, F.FUN_BAIRRO,
+                      F.FCA_CODIGO, FN.FCA_NOME,
+                      F.FUN_CIDADE, F.FUN_UF, F.FUN_CEP, F.FUN_FONE, F.FUN_CELULAR, F.FUN_EMAIL,
+                      F.FUN_CPF, F.FUN_IDENTIDADE, F.FUN_SITUACAO, F.FUN_DATANASC,
+                      F.FUN_DATAADMISSAO, F.FUN_DATADEMISSAO, F.LOJ_CODIGO
+                      FROM funcionarios F
+                      INNER JOIN funcoes FN ON F.FCA_CODIGO = FN.FCA_CODIGO 
+                      WHERE F.FUN_CODIGO = ?`;
       const params = [id];
 
       const startTime = Date.now();

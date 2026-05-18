@@ -30,6 +30,7 @@ export class EmployeeController {
       query.pageSize,
       query.search,
       query.situation,
+      query.functionId,
     );
   }
 
