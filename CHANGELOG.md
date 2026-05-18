@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.15.0](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.14.0...v1.15.0) (2026-05-18)
+
+
+### Features
+
+* newsletter module ([c322040](https://github.com/infobrasil-sistemas/info-vendas-api/commit/c3220407a1cb16bc9edfb4219e9cab8317bd3c4a))
+
+
+### Bug Fixes
+
+* findOne user GET ([4e64c91](https://github.com/infobrasil-sistemas/info-vendas-api/commit/4e64c916e74a32e3a7c5cf69b6026a7912a28d5e))
+
 ## [1.14.0](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.13.0...v1.14.0) (2026-05-18)
 
 
