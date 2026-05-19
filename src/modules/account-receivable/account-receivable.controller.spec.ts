@@ -77,7 +77,9 @@ describe('AccountReceivableController', () => {
 
       expect(accountReceivableService.get).toHaveBeenCalledWith(
         'cred-1',
-        undefined,
+        1,
+        1,
+        10,
         1,
         undefined,
         undefined,
@@ -93,7 +95,9 @@ describe('AccountReceivableController', () => {
       );
 
       const result = await controller.get(mockReq, {
+        storeId: 2,
         page: 2,
+        pageSize: 20,
         clientId: 5,
         arId: 10,
         situation: 'A',
@@ -104,6 +108,8 @@ describe('AccountReceivableController', () => {
       expect(accountReceivableService.get).toHaveBeenCalledWith(
         'cred-1',
         2,
+        2,
+        20,
         5,
         10,
         'A',
@@ -122,7 +128,9 @@ describe('AccountReceivableController', () => {
 
       expect(accountReceivableService.get).toHaveBeenCalledWith(
         'cred-1',
-        undefined,
+        1,
+        1,
+        10,
         undefined,
         10,
         undefined,
@@ -141,7 +149,9 @@ describe('AccountReceivableController', () => {
 
       expect(accountReceivableService.get).toHaveBeenCalledWith(
         'cred-1',
-        undefined,
+        1,
+        1,
+        10,
         undefined,
         undefined,
         'L',
@@ -160,7 +170,9 @@ describe('AccountReceivableController', () => {
 
       expect(accountReceivableService.get).toHaveBeenCalledWith(
         'cred-1',
-        undefined,
+        1,
+        1,
+        10,
         undefined,
         undefined,
         undefined,

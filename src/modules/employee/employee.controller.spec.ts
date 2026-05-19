@@ -58,7 +58,8 @@ describe('EmployeeController', () => {
         2,
         20,
         'search term',
-        'A'
+        'A',
+        undefined
       );
       expect(result).toEqual([{ FUN_CODIGO: 1 }]);
     });

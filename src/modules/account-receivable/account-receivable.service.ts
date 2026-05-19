@@ -11,7 +11,9 @@ export class AccountReceivableService {
 
   async get(
     credentialsId: string,
+    storeId: number = 1,
     page: number = 1,
+    pageSize: number = 10,
     clientId?: number,
     arId?: number,
     situation?: string,
@@ -24,14 +26,16 @@ export class AccountReceivableService {
       await this.tenantConnectionService.getConnection(credentialsId);
 
     try {
-      const pageSize = 25;
-
       if (page < 1) {
         throw new BadRequestException('A página deve ser maior ou igual a 1');
       }
 
       if (page > 100) {
         throw new BadRequestException('A página deve ser menor ou igual a 100');
+      }
+
+      if (pageSize < 1) {
+        throw new BadRequestException('O tamanho da página deve ser maior ou igual a 1');
       }
 
       if (!clientId && !arId && !situation && !startDate && !endDate) {
@@ -79,9 +83,9 @@ export class AccountReceivableService {
       from
       contasreceber rec
       inner join clientes cli on cli.cli_codigo= rec.cli_codigo
-      WHERE 1 = 1`;
+      WHERE cli.loj_codigo = ?`;
 
-      let params: any[] = [pageSize, (page - 1) * pageSize];
+      let params: any[] = [pageSize, (page - 1) * pageSize, storeId];
 
       if (situation) {
         query += ` AND rec.rec_situacao = ?`;
@@ -114,7 +118,18 @@ export class AccountReceivableService {
       })) as any[];
 
       const queryEndTime = Date.now();
-      this.logger.log(`Busca de Contas a Receber executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify({ clientId, arId, situation, startDate, endDate })}, Itens: ${result.length}, Tempo SQL: ${queryEndTime - queryStartTime}ms`);
+      this.logger.log(
+        `Busca de Contas a Receber executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify({
+          storeId,
+          page,
+          pageSize,
+          clientId,
+          arId,
+          situation,
+          startDate,
+          endDate,
+        })}, Itens: ${result.length}, Tempo SQL: ${queryEndTime - queryStartTime}ms`
+      );
 
       return result;
     } finally {

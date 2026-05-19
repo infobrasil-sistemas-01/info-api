@@ -70,7 +70,7 @@ describe('EmployeeRoleService', () => {
 
       expect(mockConnection.query).toHaveBeenCalledWith(
         expect.stringContaining('FCA_NOME LIKE ?'),
-        expect.arrayContaining([10, 0, '%abc%']),
+        expect.arrayContaining([10, 0, '%ABC%']),
         expect.any(Function),
       );
     });

@@ -105,7 +105,7 @@ describe('EmployeeService', () => {
 
       expect(result).toEqual(mockEmployee);
       expect(mockConnection.query).toHaveBeenCalledWith(
-        expect.stringContaining('WHERE FUN_CODIGO = ?'),
+        expect.stringContaining('WHERE F.FUN_CODIGO = ?'),
         [1],
         expect.any(Function),
       );

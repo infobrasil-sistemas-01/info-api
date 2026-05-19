@@ -20,10 +20,24 @@ export class AccountReceivableController {
         description: 'Obtém uma lista de contas a receber da loja.',
     })
     @ApiQuery({
+        name: 'storeId',
+        default: 1,
+        type: Number,
+        description: 'Código da loja (LOJ_CODIGO)',
+        required: false,
+    })
+    @ApiQuery({
         name: 'page',
         default: 1,
         type: Number,
         description: 'Página a ser retornada (Máximo 100)',
+        required: false,
+    })
+    @ApiQuery({
+        name: 'pageSize',
+        default: 10,
+        type: Number,
+        description: 'Registros por página',
         required: false,
     })
     @ApiQuery({
@@ -86,17 +100,43 @@ export class AccountReceivableController {
         status: 403,
         description: 'Token de autenticação inválido ou ausente.',
     })
-    async get(@Req() req: ReqWithAuthContext, @Query() params: { page?: number, clientId?: number, arId?: number, situation?: string, startDate?: string, endDate?: string }) {
-        const { credentialsId, storeId } = req.authContext || {};
+    async get(
+        @Req() req: ReqWithAuthContext,
+        @Query() params: {
+            page?: number;
+            pageSize?: number;
+            storeId?: number;
+            clientId?: number;
+            arId?: number;
+            situation?: string;
+            startDate?: string;
+            endDate?: string;
+        }
+    ) {
+        const { credentialsId, storeId: tokenStoreId } = req.authContext || {};
 
         if (!credentialsId) {
             throw new Error('Credentials ID not found in token');
         }
 
-        if (!storeId) {
+        if (!tokenStoreId) {
             throw new Error('Store ID not found in token');
         }
 
-        return this.accountReceivableService.get(credentialsId, params.page, params.clientId, params.arId, params.situation, params.startDate, params.endDate);
+        const storeId = params.storeId !== undefined ? Number(params.storeId) : tokenStoreId;
+        const page = params.page !== undefined ? Number(params.page) : 1;
+        const pageSize = params.pageSize !== undefined ? Number(params.pageSize) : 10;
+
+        return this.accountReceivableService.get(
+            credentialsId,
+            storeId,
+            page,
+            pageSize,
+            params.clientId !== undefined ? Number(params.clientId) : undefined,
+            params.arId !== undefined ? Number(params.arId) : undefined,
+            params.situation,
+            params.startDate,
+            params.endDate
+        );
     }
 }
