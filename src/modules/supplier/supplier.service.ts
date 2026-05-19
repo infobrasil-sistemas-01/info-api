@@ -63,7 +63,13 @@ export class SupplierService {
       const endTime = Date.now();
 
       this.logger.log(
-        `Busca de fornecedores executada. Tenant: ${credentialsId}, Tempo SQL: ${endTime - startTime}ms`,
+        `Busca de fornecedores executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify({
+          storeId,
+          page,
+          pageSize,
+          search,
+          situation,
+        })}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${endTime - startTime}ms`,
       );
       return result;
     } catch (error) {

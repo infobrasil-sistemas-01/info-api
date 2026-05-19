@@ -47,7 +47,11 @@ export class EmployeeRoleService {
       const endTime = Date.now();
 
       this.logger.log(
-        `Busca de funções/cargos executada. Tenant: ${credentialsId}, Tempo SQL: ${endTime - startTime}ms`,
+        `Busca de funções/cargos executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify({
+          page,
+          pageSize,
+          search,
+        })}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${endTime - startTime}ms`,
       );
       return result;
     } catch (error) {

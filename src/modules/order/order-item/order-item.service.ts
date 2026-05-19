@@ -217,7 +217,7 @@ export class OrderItemService {
 
       this.logger.log(
         `Busca transversal de itens de venda executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
-          filters,
+          { storeId, ...filters },
         )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${queryEndTime - queryStartTime
         }ms`,
       );

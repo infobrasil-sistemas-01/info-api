@@ -89,7 +89,12 @@ export class DeliveryService {
       const endTime = Date.now();
 
       this.logger.log(
-        `Busca de entregas executada. Tenant: ${credentialsId}, Tempo SQL: ${endTime - startTime}ms`,
+        `Busca de entregas executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify({
+          storeId,
+          page,
+          pageSize,
+          ...filters,
+        })}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${endTime - startTime}ms`,
       );
       return result;
     } catch (error) {

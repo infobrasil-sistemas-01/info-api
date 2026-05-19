@@ -66,8 +66,14 @@ export class ClientService {
       const endTime = Date.now();
 
       this.logger.log(
-        `Busca de clientes executada. Tenant: ${credentialsId}, Tempo SQL: ${endTime - startTime
-        }ms`,
+        `Busca de clientes executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify({
+          storeId,
+          page,
+          pageSize,
+          search,
+          situation,
+          birthdate,
+        })}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${endTime - startTime}ms`,
       );
       return result;
     } finally {

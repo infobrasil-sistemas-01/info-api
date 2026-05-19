@@ -239,7 +239,7 @@ export class OrderService {
 
       this.logger.log(
         `Busca de pedidos executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
-          { storeId, page, pageSize },
+          { storeId, page, pageSize, ...filters },
         )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${queryEndTime - queryStartTime
         }ms`,
       );

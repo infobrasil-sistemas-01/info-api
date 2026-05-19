@@ -97,7 +97,7 @@ export class ProductService {
 
       this.logger.log(
         `Busca de produtos executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
-          { storeId, page, pageSize, group, brand, minStock, search },
+          { storeId, page, pageSize, priceTable, group, brand, minStock, search },
         )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${queryEndTime - queryStartTime
         }ms`,
       );
