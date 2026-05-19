@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.15.1](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.15.0...v1.15.1) (2026-05-19)
+
+
+### Features
+
+* generate pdf docs script ([352a935](https://github.com/infobrasil-sistemas/info-vendas-api/commit/352a9352d1804b6c713473e7c896b36994782527))
+* new query params on account receivable and employee modules ([d97998f](https://github.com/infobrasil-sistemas/info-vendas-api/commit/d97998fad09c6b201ef9b1fcc469cd735c628a09))
+
+
+### Bug Fixes
+
+* user login example ([b58c26d](https://github.com/infobrasil-sistemas/info-vendas-api/commit/b58c26d6df1fe639f43f4daae7797632695df0c5))
+
 ## [1.15.0](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.14.0...v1.15.0) (2026-05-18)
 
 
