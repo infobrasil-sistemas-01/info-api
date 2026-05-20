@@ -15,7 +15,6 @@ export const CreateIntegrationRequestSchema = z.object({
     port: z.number(),
     database: z.string(),
   }),
-  stores: z.array(z.number()),
   modules: z.array(z.string()).min(1, 'Selecione ao menos um módulo'),
   scopes: z.array(
     z.object({
@@ -62,9 +61,6 @@ export class CreateIntegrationRequestDto extends ZodDto(
     port: number;
     database: string;
   };
-
-  @ApiProperty({ example: [1, 2, 3] })
-  stores!: number[];
 
   @ApiProperty({ example: ['Estoque', 'Financeiro'] })
   modules!: string[];

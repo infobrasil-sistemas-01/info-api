@@ -29,7 +29,6 @@ export class IntegrationRequestService {
         hostingType: dto.hostingType,
         fixedIp: dto.fixedIp,
         database: dto.database as any,
-        stores: dto.stores,
         modules: dto.modules,
         scopes: dto.scopes as any,
         objective: dto.objective,

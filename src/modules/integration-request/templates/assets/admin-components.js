@@ -1,40 +1,47 @@
 const translateAction = (key) => {
-    const action = key.split('.').pop();
-    return {
-        'view': 'Ver',
-        'create': 'Criar',
-        'update': 'Edit',
-        'delete': 'Del',
-        'manage': 'Tudo',
-        'approve': 'Aprovar',
-        'reject': 'Recusar',
-        'read': 'Leitura'
-    }[action] || action;
+  const action = key.split('.').pop();
+  return (
+    {
+      view: 'Ver',
+      create: 'Criar',
+      update: 'Edit',
+      delete: 'Del',
+      manage: 'Tudo',
+      approve: 'Aprovar',
+      reject: 'Recusar',
+      read: 'Leitura',
+    }[action] || action
+  );
 };
 
-const translateStatus = (s) => ({
-    'AWAITING_CONFIRMATION': 'AGUARDANDO CONFIRMAÇÃO',
-    'PENDING': 'PENDENTE',
-    'APPROVED': 'APROVADO',
-    'REJECTED': 'RECUSADO'
-}[s] || s);
+const translateStatus = (s) =>
+  ({
+    AWAITING_CONFIRMATION: 'AGUARDANDO CONFIRMAÇÃO',
+    PENDING: 'PENDENTE',
+    APPROVED: 'APROVADO',
+    REJECTED: 'RECUSADO',
+  })[s] || s;
 
 // --- Components ---
 const Components = {
-    RequestCard: (req) => {
-        const db = req.database || {};
-        const contact = req.technicalContact || {};
-        return `
+  RequestCard: (req) => {
+    const db = req.database || {};
+    const contact = req.technicalContact || {};
+    return `
             <div class="card">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 16px;">
                     <div>
                         <span class="status ${req.status.toLowerCase()}">${translateStatus(req.status)}</span>
-                        ${req.status === 'REJECTED' && req.rejectionReason ? `
+                        ${
+                          req.status === 'REJECTED' && req.rejectionReason
+                            ? `
                             <div class="rejection-box">
                                 <strong class="rejection-box-title">Motivo da Recusa</strong> 
                                 ${req.rejectionReason}
                             </div>
-                        ` : ''}
+                        `
+                            : ''
+                        }
                     </div>
                     <small style="color: var(--text-muted)">${new Date(req.createdAt).toLocaleDateString()}</small>
                 </div>
@@ -42,17 +49,17 @@ const Components = {
                 <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">${req.cnpj || 'Sem CNPJ'}</p>
                 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
-                    <div>
+                    <div style="min-width: 0; overflow-wrap: anywhere;">
                         <small style="font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">RESPONSÁVEL</small>
-                        <p style="font-size: 0.9rem; font-weight: 600;">${req.responsiblePerson?.name || 'N/A'}</p>
-                        <p style="font-size: 0.85rem; color: var(--text-muted);">${req.responsiblePerson?.email || ''}</p>
-                        <p style="font-size: 0.85rem; color: var(--text-muted);">${req.responsiblePerson?.phone || ''}</p>
+                        <p style="font-size: 0.9rem; font-weight: 600; overflow-wrap: anywhere;">${req.responsiblePerson?.name || 'N/A'}</p>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); overflow-wrap: anywhere;">${req.responsiblePerson?.email || ''}</p>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); overflow-wrap: anywhere;">${req.responsiblePerson?.phone || ''}</p>
                     </div>
-                    <div>
+                    <div style="min-width: 0; overflow-wrap: anywhere;">
                         <small style="font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">CONTATO TÉCNICO</small>
-                        <p style="font-size: 0.9rem; font-weight: 600;">${contact.name || 'N/A'}</p>
-                        <p style="font-size: 0.85rem; color: var(--text-muted);">${contact.email || ''}</p>
-                        <p style="font-size: 0.85rem; color: var(--text-muted);">${contact.phone || ''}</p>
+                        <p style="font-size: 0.9rem; font-weight: 600; overflow-wrap: anywhere;">${contact.name || 'N/A'}</p>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); overflow-wrap: anywhere;">${contact.email || ''}</p>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); overflow-wrap: anywhere;">${contact.phone || ''}</p>
                     </div>
                 </div>
 
@@ -69,7 +76,6 @@ const Components = {
                         <div class="detail-box"><label>Razão Social</label><p>${req.legalName}</p></div>
                         <div class="detail-box"><label>Hospedagem</label><p>${req.hostingType === 'DATACENTER' ? 'DataCenter' : 'Servidor Cliente'}</p></div>
                         <div class="detail-box"><label>IP Fixo</label><p>${req.fixedIp || 'N/A'}</p></div>
-                        <div class="detail-box"><label>Lojas (IDs)</label><p>${req.stores.join(', ')}</p></div>
                     </div>
                     <div style="margin-bottom: 12px;">
                         <small style="font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">BANCO DE DADOS</small>
@@ -77,10 +83,10 @@ const Components = {
                     </div>
                     <div>
                         <div style="display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px;">
-                            ${req.modules.map(m => `<span class="tag-pill">${m}</span>`).join('')}
+                            ${req.modules.map((m) => `<span class="tag-pill">${m}</span>`).join('')}
                         </div>
                         <div style="font-size: 0.75rem;">
-                            ${req.scopes.map(s => `<strong>${s.resource}:</strong> ${s.actions.map(translateAction).join(', ')}`).join(' | ')}
+                            ${req.scopes.map((s) => `<strong>${s.resource}:</strong> ${s.actions.map(translateAction).join(', ')}`).join(' | ')}
                         </div>
                     </div>
                 </div>
@@ -98,25 +104,30 @@ const Components = {
                 </div>
             </div>
         `;
-    },
-    UserRow: (u) => {
-        const inv = u.invitation;
-        const hasInvite = !!inv;
-        const isExpired = hasInvite && new Date(inv.expiresAt) < new Date() && !inv.acceptedAt;
+  },
+  UserRow: (u) => {
+    const inv = u.invitation;
+    const hasInvite = !!inv;
+    const isExpired =
+      hasInvite && new Date(inv.expiresAt) < new Date() && !inv.acceptedAt;
 
-        console.log('UserRow data:', u);
+    console.log('UserRow data:', u);
 
-        return `
+    return `
         <tr class="user-main-row">
             <td>
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    ${hasInvite ? `
+                    ${
+                      hasInvite
+                        ? `
                         <button class="btn-icon" onclick="UI.toggleInvite('${u.id}')" id="btn-exp-${u.id}">
                             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.2s;" id="svg-exp-${u.id}">
                                 <polyline points="9 18 15 12 9 6"></polyline>
                             </svg>
                         </button>
-                    ` : '<div style="width: 24px;"></div>'}
+                    `
+                        : '<div style="width: 24px;"></div>'
+                    }
                     <span style="font-weight: 600;">${u.user}</span>
                 </div>
             </td>
@@ -136,7 +147,9 @@ const Components = {
                 </div>
             </td>
         </tr>
-        ${hasInvite ? `
+        ${
+          hasInvite
+            ? `
         <tr id="inv-row-${u.id}" class="invite-details-row hidden">
             <td colspan="7" class="invite-details-box">
                 <div style="display: flex; justify-content: space-between; align-items: flex-start;">
@@ -171,10 +184,12 @@ const Components = {
                 </div>
             </td>
         </tr>
-        ` : ''}
+        `
+            : ''
+        }
     `;
-    },
-    UserTable: (users) => `
+  },
+  UserTable: (users) => `
         <div class="card">
             <div class="card-header">
                 <h2>Gestão de Usuários</h2>
@@ -191,7 +206,7 @@ const Components = {
             </div>
         </div>
     `,
-    RoleRow: (r) => `
+  RoleRow: (r) => `
         <tr>
             <td style="font-weight: 600;">${r.name}</td>
             <td>${r.description || '-'}</td>
@@ -204,7 +219,7 @@ const Components = {
             </td>
         </tr>
     `,
-    RoleTable: (roles) => `
+  RoleTable: (roles) => `
         <div class="card">
             <div class="card-header">
                 <h2>Gestão de Perfis de Acesso</h2>
@@ -221,7 +236,7 @@ const Components = {
             </div>
         </div>
     `,
-    CredRow: (c) => `
+  CredRow: (c) => `
         <tr>
             <td style="font-weight: 600;">${c.host}</td>
             <td>${c.database}</td>
@@ -237,7 +252,7 @@ const Components = {
             </td>
         </tr>
     `,
-    CredTable: (creds) => `
+  CredTable: (creds) => `
         <div class="card">
             <div class="card-header">
                 <h2>Credenciais de Banco</h2>
@@ -255,20 +270,20 @@ const Components = {
             </div>
         </div>
     `,
-    AnnouncementRow: (ann) => {
-        const typeLabels = {
-            'INFO': { label: 'Informativo', class: 'info', icon: 'bx-info-circle' },
-            'WARNING': { label: 'Aviso', class: 'warning', icon: 'bx-error' },
-            'ALERT': { label: 'Alerta', class: 'alert', icon: 'bx-alarm' },
-            'DOC': { label: 'Doc', class: 'doc', icon: 'bx-book' }
-        };
-        const type = typeLabels[ann.type] || typeLabels.INFO;
+  AnnouncementRow: (ann) => {
+    const typeLabels = {
+      INFO: { label: 'Informativo', class: 'info', icon: 'bx-info-circle' },
+      WARNING: { label: 'Aviso', class: 'warning', icon: 'bx-error' },
+      ALERT: { label: 'Alerta', class: 'alert', icon: 'bx-alarm' },
+      DOC: { label: 'Doc', class: 'doc', icon: 'bx-book' },
+    };
+    const type = typeLabels[ann.type] || typeLabels.INFO;
 
-        const checkboxHtml = ann.newsletterId 
-            ? `<span class="tag-pill" style="font-size:0.75rem; background: rgba(59, 130, 246, 0.1); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.2); padding: 2px 6px; border-radius: 4px;" title="Enviado na Newsletter #${ann.newsletterId}">News #${ann.newsletterId}</span>`
-            : `<input type="checkbox" class="ann-checkbox" value="${ann.id}" onchange="UI.updateNewsletterButtonState()" style="width: 16px; height: 16px; cursor: pointer; accent-color: var(--primary);">`;
+    const checkboxHtml = ann.newsletterId
+      ? `<span class="tag-pill" style="font-size:0.75rem; background: rgba(59, 130, 246, 0.1); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.2); padding: 2px 6px; border-radius: 4px;" title="Enviado na Newsletter #${ann.newsletterId}">News #${ann.newsletterId}</span>`
+      : `<input type="checkbox" class="ann-checkbox" value="${ann.id}" onchange="UI.updateNewsletterButtonState()" style="width: 16px; height: 16px; cursor: pointer; accent-color: var(--primary);">`;
 
-        return `
+    return `
         <tr>
             <td style="width: 50px; text-align: center;">${checkboxHtml}</td>
             <td>
@@ -281,7 +296,7 @@ const Components = {
             <td>
                 <div style="font-size: 0.8rem; color: var(--text-muted);">
                     ${ann.startDate ? `De: ${new Date(ann.startDate).toLocaleDateString()}<br>` : ''}
-                    ${ann.endDate ? `Até: ${new Date(ann.endDate).toLocaleDateString()}` : (ann.startDate ? '' : 'Sempre ativo')}
+                    ${ann.endDate ? `Até: ${new Date(ann.endDate).toLocaleDateString()}` : ann.startDate ? '' : 'Sempre ativo'}
                 </div>
             </td>
             <td>
@@ -298,8 +313,8 @@ const Components = {
             </td>
         </tr>
         `;
-    },
-    AnnouncementTable: (anns) => `
+  },
+  AnnouncementTable: (anns) => `
         <div class="card">
             <div class="card-header" style="flex-wrap: wrap; gap: 12px;">
                 <h2>Gestão de Avisos do Sistema</h2>
@@ -331,19 +346,25 @@ const Components = {
             </div>
         </div>
     `,
-    RequestFilterTabs: (activeFilter = 'ALL') => {
-        const tabs = [
-            { id: 'ALL', label: 'Todas', icon: 'bx-list-ul' },
-            { id: 'PENDING', label: 'Pendentes', icon: 'bx-time-five' },
-            { id: 'AWAITING_CONFIRMATION', label: 'Aguardando E-mail', icon: 'bx-envelope' },
-            { id: 'APPROVED', label: 'Aprovadas', icon: 'bx-check-circle' },
-            { id: 'REJECTED', label: 'Recusadas', icon: 'bx-x-circle' }
-        ];
+  RequestFilterTabs: (activeFilter = 'ALL') => {
+    const tabs = [
+      { id: 'ALL', label: 'Todas', icon: 'bx-list-ul' },
+      { id: 'PENDING', label: 'Pendentes', icon: 'bx-time-five' },
+      {
+        id: 'AWAITING_CONFIRMATION',
+        label: 'Aguardando E-mail',
+        icon: 'bx-envelope',
+      },
+      { id: 'APPROVED', label: 'Aprovadas', icon: 'bx-check-circle' },
+      { id: 'REJECTED', label: 'Recusadas', icon: 'bx-x-circle' },
+    ];
 
-        return `
+    return `
             <div class="filter-tabs-wrapper" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem;">
                 <div class="filter-tabs" style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px;">
-                    ${tabs.map(t => `
+                    ${tabs
+                      .map(
+                        (t) => `
                         <button class="filter-tab ${activeFilter === t.id ? 'active' : ''}" 
                                 onclick="switchRequestFilter('${t.id}')"
                                 style="
@@ -364,15 +385,17 @@ const Components = {
                             <i class='bx ${t.icon}'></i>
                             ${t.label}
                         </button>
-                    `).join('')}
+                    `,
+                      )
+                      .join('')}
                 </div>
                 <button class="btn btn-outline" onclick="Data.fetchRequests()" title="Atualizar solicitações" style="padding: 10px; border-radius: 10px;">
                     <i class='bx bx-refresh' style="font-size: 1.2rem;"></i>
                 </button>
             </div>
         `;
-    },
-    LinksGrid: () => `
+  },
+  LinksGrid: () => `
 
     <div class="links-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; padding: 1rem 0;">
         <div class="card link-card" style="display: flex; flex-direction: column; gap: 1rem; padding: 2rem;">
@@ -418,5 +441,5 @@ const Components = {
                 <a href="mailto:suporte@infobrasilsistemas.com.br" class="btn btn-primary" style="text-align: center; text-decoration: none;">Enviar E-mail</a>
             </div>
         </div>
-    `
+    `,
 };

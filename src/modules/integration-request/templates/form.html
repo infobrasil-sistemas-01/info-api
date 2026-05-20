@@ -574,22 +574,13 @@
         </div>
 
         <div class="form-group">
-          <label for="stores">IDs das Lojas (separados por vírgula)</label>
-          <input
-            type="text"
-            id="stores"
-            name="stores"
-            required
-            placeholder="Ex: 1, 2, 5"
-          />
-        </div>
-        <div class="form-group">
           <label for="objective">Objetivo da Integração</label>
           <textarea
             id="objective"
             name="objective"
             rows="3"
             required
+            minlength="20"
             placeholder="Descreva brevemente o que deseja integrar..."
           ></textarea>
         </div>
@@ -861,11 +852,6 @@
                   port: 0,
                   database: 'DATACENTER',
                 },
-          stores: formData
-            .get('stores')
-            .split(',')
-            .map((s) => parseInt(s.trim()))
-            .filter((s) => !isNaN(s)),
           modules: selectedScopes.map((s) => s.resource),
           scopes: selectedScopes.map((s) => ({
             resource: s.resource,
