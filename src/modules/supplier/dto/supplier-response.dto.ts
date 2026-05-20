@@ -4,7 +4,10 @@ export class SupplierResponseDto {
   @ApiProperty({ example: 1, description: 'Código do fornecedor' })
   CRE_CODIGO: number;
 
-  @ApiProperty({ example: 'Fornecedor Exemplo LTDA', description: 'Razão social ou nome' })
+  @ApiProperty({
+    example: 'Fornecedor Exemplo LTDA',
+    description: 'Razão social ou nome',
+  })
   CRE_NOME: string;
 
   @ApiProperty({ example: 'Fornecedor Exemplo', description: 'Nome fantasia' })
@@ -28,7 +31,10 @@ export class SupplierResponseDto {
   @ApiProperty({ example: '12.345.678/0001-90', description: 'CNPJ' })
   CRE_CNPJ: string;
 
-  @ApiProperty({ example: '123456789', description: 'Inscrição Estadual (CGF)' })
+  @ApiProperty({
+    example: '123456789',
+    description: 'Inscrição Estadual (CGF)',
+  })
   CRE_CGF: string;
 
   @ApiProperty({ example: '1133334444', description: 'Telefone' })
@@ -49,24 +55,38 @@ export class SupplierResponseDto {
   @ApiProperty({ example: 'www.fornecedor.com.br', description: 'Site' })
   CRE_SITE: string;
 
-  @ApiProperty({ example: 'Representante Zé', description: 'Nome do representante' })
+  @ApiProperty({
+    example: 'Representante Zé',
+    description: 'Nome do representante',
+  })
   CRE_REPRESENTANTE: string;
 
-  @ApiProperty({ example: '1133334444', description: 'Telefone do representante' })
+  @ApiProperty({
+    example: '1133334444',
+    description: 'Telefone do representante',
+  })
   CRE_FONEREP: string;
 
-  @ApiProperty({ example: '11988887777', description: 'Celular do representante' })
+  @ApiProperty({
+    example: '11988887777',
+    description: 'Celular do representante',
+  })
   CRE_CELULARREP: string;
 
-  @ApiProperty({ example: 'rep@fornecedor.com', description: 'E-mail do representante' })
+  @ApiProperty({
+    example: 'rep@fornecedor.com',
+    description: 'E-mail do representante',
+  })
   CRE_EMAILREP: string;
 
-  @ApiProperty({ example: 'A', description: 'Situação (A = Ativo, I = Inativo)' })
+  @ApiProperty({
+    example: 'A',
+    description: 'Situação (A = Ativo, I = Inativo)',
+  })
   CRE_SITUACAO: string;
 
   @ApiProperty({ example: 1, description: 'Código da loja' })
   LOJ_CODIGO: number;
 }
 
-export class SupplierDetailResponseDto extends SupplierResponseDto {
-}
+export class SupplierDetailResponseDto extends SupplierResponseDto {}

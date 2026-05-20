@@ -10,12 +10,53 @@ export class AppController {
   @Get('favicon.ico')
   serveFavicon(@Res() res: any) {
     const paths = [
-      join(__dirname, 'modules', 'integration-request', 'templates', 'assets', 'favicon.ico'),
-      join(__dirname, '..', 'src', 'modules', 'integration-request', 'templates', 'assets', 'favicon.ico'),
-      join(process.cwd(), 'src', 'modules', 'integration-request', 'templates', 'assets', 'favicon.ico'),
+      join(
+        __dirname,
+        'modules',
+        'integration-request',
+        'templates',
+        'assets',
+        'favicon.ico',
+      ),
+      join(
+        __dirname,
+        '..',
+        'src',
+        'modules',
+        'integration-request',
+        'templates',
+        'assets',
+        'favicon.ico',
+      ),
+      join(
+        process.cwd(),
+        'src',
+        'modules',
+        'integration-request',
+        'templates',
+        'assets',
+        'favicon.ico',
+      ),
       // No dist em prod
-      join(__dirname, '..', 'modules', 'integration-request', 'templates', 'assets', 'favicon.ico'),
-      join(__dirname, '..', '..', 'modules', 'integration-request', 'templates', 'assets', 'favicon.ico'),
+      join(
+        __dirname,
+        '..',
+        'modules',
+        'integration-request',
+        'templates',
+        'assets',
+        'favicon.ico',
+      ),
+      join(
+        __dirname,
+        '..',
+        '..',
+        'modules',
+        'integration-request',
+        'templates',
+        'assets',
+        'favicon.ico',
+      ),
     ];
 
     for (const p of paths) {

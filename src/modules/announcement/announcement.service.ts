@@ -3,7 +3,7 @@ import { RegistryPrismaService } from 'src/infra/prisma/registry-prisma.service'
 
 @Injectable()
 export class AnnouncementService {
-  constructor(private prisma: RegistryPrismaService) { }
+  constructor(private prisma: RegistryPrismaService) {}
 
   async findAllForUser(userId: string) {
     const now = new Date();
@@ -59,9 +59,9 @@ export class AnnouncementService {
       orderBy: { createdAt: 'desc' },
       include: {
         _count: {
-          select: { views: true }
-        }
-      }
+          select: { views: true },
+        },
+      },
     });
   }
 

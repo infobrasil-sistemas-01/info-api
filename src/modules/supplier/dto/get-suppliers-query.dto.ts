@@ -20,7 +20,10 @@ export class GetSuppliersQueryDto extends ZodDto(GetSuppliersQuerySchema) {
   @ApiPropertyOptional({ description: 'Busca por nome ou fantasia' })
   search?: string;
 
-  @ApiPropertyOptional({ description: 'Situação do fornecedor', enum: ['A', 'I'] })
+  @ApiPropertyOptional({
+    description: 'Situação do fornecedor',
+    enum: ['A', 'I'],
+  })
   situation?: 'A' | 'I';
 
   @ApiPropertyOptional({ description: 'ID da loja' })

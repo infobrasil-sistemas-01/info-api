@@ -19,7 +19,7 @@ export class RbacContextService {
   constructor(
     @Inject(REQUEST) private readonly req: ReqWithCache,
     private readonly resolver: PermissionResolver,
-  ) { }
+  ) {}
 
   async getOrResolve(
     userId: string,

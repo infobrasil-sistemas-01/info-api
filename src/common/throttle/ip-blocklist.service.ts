@@ -53,9 +53,7 @@ export class IpBlocklistService implements OnModuleInit, OnModuleDestroy {
     const windowStart = now - IpBlocklistService.WINDOW_MS;
 
     // Poda timestamps fora da janela e adiciona o novo
-    const timestamps = (this.hits.get(ip) ?? []).filter(
-      (t) => t > windowStart,
-    );
+    const timestamps = (this.hits.get(ip) ?? []).filter((t) => t > windowStart);
     timestamps.push(now);
     this.hits.set(ip, timestamps);
 

@@ -13,13 +13,19 @@ export class OrderResponseDto {
   @ApiProperty({ example: 1, description: 'Código do funcionário' })
   FUN_CODIGO: number;
 
-  @ApiProperty({ example: 'Funcionário Exemplo', description: 'Nome do funcionário' })
+  @ApiProperty({
+    example: 'Funcionário Exemplo',
+    description: 'Nome do funcionário',
+  })
   FUN_NOME: string;
 
   @ApiProperty({ example: 'E', description: 'Tipo da venda' })
   VEN_TIPO: string;
 
-  @ApiProperty({ example: '2024-05-10T00:00:00.000Z', description: 'Data da venda' })
+  @ApiProperty({
+    example: '2024-05-10T00:00:00.000Z',
+    description: 'Data da venda',
+  })
   VEN_DATA: string;
 
   @ApiProperty({ example: '14:30:00', description: 'Hora da venda' })
@@ -28,16 +34,22 @@ export class OrderResponseDto {
   @ApiProperty({ example: 1, description: 'Código da forma de pagamento' })
   FP1_CODIGO: number;
 
-  @ApiProperty({ example: 'Dinheiro', description: 'Descrição da forma de pagamento' })
+  @ApiProperty({
+    example: 'Dinheiro',
+    description: 'Descrição da forma de pagamento',
+  })
   fpg_descricao: string;
 
   @ApiProperty({ example: 1, description: 'Código do plano de pagamento' })
   pp1_codigo: number;
 
-  @ApiProperty({ example: 'A Vista', description: 'Descrição do plano de pagamento' })
+  @ApiProperty({
+    example: 'A Vista',
+    description: 'Descrição do plano de pagamento',
+  })
   plp_descricao: string;
 
-  @ApiProperty({ example: 250.50, description: 'Valor total líquido' })
+  @ApiProperty({ example: 250.5, description: 'Valor total líquido' })
   ven_totalliquido: number;
 
   @ApiProperty({ example: 123, description: 'Código do cliente' })
@@ -57,7 +69,7 @@ export class OrderItemResponseDto {
   @ApiProperty({ example: 2, description: 'Quantidade' })
   ITE_QUANT: number;
 
-  @ApiProperty({ example: 150.00, description: 'Preço unitário' })
+  @ApiProperty({ example: 150.0, description: 'Preço unitário' })
   ITE_PRECO: number;
 }
 
@@ -65,10 +77,10 @@ export class OrderDetailResponseDto extends OrderResponseDto {
   @ApiProperty({ example: '1', description: 'Preço da venda' })
   VEN_PRECO: string;
 
-  @ApiProperty({ example: 300.00, description: 'Valor total bruto' })
+  @ApiProperty({ example: 300.0, description: 'Valor total bruto' })
   VEN_TOTALBRUTO: number;
 
-  @ApiProperty({ example: 49.50, description: 'Valor total de desconto' })
+  @ApiProperty({ example: 49.5, description: 'Valor total de desconto' })
   ven_totaldesc: number;
 
   @ApiProperty({ example: 2, description: 'Quantidade total de itens' })

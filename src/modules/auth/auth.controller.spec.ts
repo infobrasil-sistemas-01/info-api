@@ -43,12 +43,13 @@ describe('AuthController', () => {
   });
 
   describe('login', () => {
-    const createMockRequest = (overrides = {}) => ({
-      requestId: 'req-123',
-      ip: '127.0.0.1',
-      header: jest.fn().mockReturnValue('test-agent'),
-      ...overrides,
-    }) as any;
+    const createMockRequest = (overrides = {}) =>
+      ({
+        requestId: 'req-123',
+        ip: '127.0.0.1',
+        header: jest.fn().mockReturnValue('test-agent'),
+        ...overrides,
+      }) as any;
 
     it('should call authService.login with base64 credentials from header and meta', async () => {
       const credentials = Buffer.from('user:pass').toString('base64');
@@ -61,11 +62,9 @@ describe('AuthController', () => {
         refreshToken: 'refresh-token',
       });
 
-      const result = await controller.login(
-        headers,
-        mockRequest,
-        { passthrough: true } as any,
-      );
+      const result = await controller.login(headers, mockRequest, {
+        passthrough: true,
+      } as any);
 
       expect(authService.login).toHaveBeenCalledWith(
         credentials,

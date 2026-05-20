@@ -1,4 +1,10 @@
-import { BadRequestException, ForbiddenException, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { RegistryPrismaService } from 'src/infra/prisma/registry-prisma.service';
 import { CreateIntegrationRequestDto } from './dto/create-integration-request.dto';
 import { EmailService } from 'src/infra/email/email.service';
@@ -37,17 +43,19 @@ export class IntegrationRequestService {
       `Nova solicitação de integração (Aguardando Confirmação): ${request.id} - ${request.clientName}`,
     );
 
-    const baseUrl = this.env.get('NODE_ENV') === 'production' 
-      ? 'https://info-api.infobrasilsistemas.com.br' 
-      : `http://localhost:${this.env.get('PORT') || 3000}`;
+    const baseUrl =
+      this.env.get('NODE_ENV') === 'production'
+        ? 'https://info-api.infobrasilsistemas.com.br'
+        : `http://localhost:${this.env.get('PORT') || 3000}`;
 
     const confirmUrl = `${baseUrl}/integration/confirm/${request.id}`;
 
     // Notificar Cliente para Confirmar E-mail
-    this.emailService.sendEmail(
-      dto.technicalContact.email,
-      'Confirmação de E-mail - Solicitação de Integração InfoBrasil',
-      `
+    this.emailService
+      .sendEmail(
+        dto.technicalContact.email,
+        'Confirmação de E-mail - Solicitação de Integração InfoBrasil',
+        `
       <div style="font-family: sans-serif; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 8px; padding: 24px;">
         <h2 style="color: #059669; margin-top: 0;">Falta pouco!</h2>
         <p>Olá, <strong>${dto.technicalContact.name}</strong>.</p>
@@ -63,7 +71,10 @@ export class IntegrationRequestService {
         <p style="font-size: 0.8rem; color: #94a3b8; margin-top: 0;">Este é um e-mail automático, não é necessário responder.</p>
       </div>
       `,
-    ).catch(err => this.logger.error('Erro ao enviar e-mail de confirmação', err.stack));
+      )
+      .catch((err) =>
+        this.logger.error('Erro ao enviar e-mail de confirmação', err.stack),
+      );
 
     return request;
   }
@@ -78,7 +89,10 @@ export class IntegrationRequestService {
     }
 
     if (request.status !== 'AWAITING_CONFIRMATION') {
-      return { message: 'E-mail já confirmado ou solicitação em outro estado.', status: request.status };
+      return {
+        message: 'E-mail já confirmado ou solicitação em outro estado.',
+        status: request.status,
+      };
     }
 
     const updatedRequest = await this.prisma.integrationRequest.update({
@@ -86,7 +100,9 @@ export class IntegrationRequestService {
       data: { status: 'PENDING' },
     });
 
-    this.logger.log(`E-mail confirmado para solicitação: ${id} - ${request.clientName}`);
+    this.logger.log(
+      `E-mail confirmado para solicitação: ${id} - ${request.clientName}`,
+    );
 
     // Agora sim, notificar Suporte e Cliente que o processo começou
     this.notifyOnConfirmation(updatedRequest);
@@ -96,9 +112,10 @@ export class IntegrationRequestService {
 
   private async notifyOnConfirmation(request: any) {
     // Notificar Suporte
-    this.emailService.sendToSupport(
-      `Nova Solicitação de Integração: ${request.clientName}`,
-      `
+    this.emailService
+      .sendToSupport(
+        `Nova Solicitação de Integração: ${request.clientName}`,
+        `
       <div style="font-family: sans-serif; color: #333;">
         <h2 style="color: #059669;">Nova Solicitação de Integração</h2>
         <p>Uma nova solicitação foi <strong>confirmada via e-mail</strong> e está pronta para análise:</p>
@@ -111,13 +128,20 @@ export class IntegrationRequestService {
         <p><a href="https://info-api.infobrasilsistemas.com.br/integration/admin" style="background: #059669; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Acessar Painel Admin</a></p>
       </div>
       `,
-    ).catch(err => this.logger.error('Erro ao notificar suporte pós-confirmação', err.stack));
+      )
+      .catch((err) =>
+        this.logger.error(
+          'Erro ao notificar suporte pós-confirmação',
+          err.stack,
+        ),
+      );
 
     // Notificar Cliente
-    this.emailService.sendEmail(
-      request.technicalContact.email,
-      'Solicitação de Integração Recebida - InfoBrasil',
-      `
+    this.emailService
+      .sendEmail(
+        request.technicalContact.email,
+        'Solicitação de Integração Recebida - InfoBrasil',
+        `
       <div style="font-family: sans-serif; color: #333;">
         <h2 style="color: #059669;">Olá, ${request.technicalContact.name}</h2>
         <p>Seu e-mail foi confirmado com sucesso!</p>
@@ -127,7 +151,13 @@ export class IntegrationRequestService {
         <p style="font-weight: bold;">InfoBrasil Sistemas</p>
       </div>
       `,
-    ).catch(err => this.logger.error('Erro ao notificar cliente pós-confirmação', err.stack));
+      )
+      .catch((err) =>
+        this.logger.error(
+          'Erro ao notificar cliente pós-confirmação',
+          err.stack,
+        ),
+      );
   }
 
   async findAll() {
@@ -137,7 +167,9 @@ export class IntegrationRequestService {
   }
 
   async updateStatus(id: string, status: string, rejectionReason?: string) {
-    const existing = await this.prisma.integrationRequest.findUnique({ where: { id } });
+    const existing = await this.prisma.integrationRequest.findUnique({
+      where: { id },
+    });
     if (!existing) throw new NotFoundException('Solicitação não encontrada');
 
     if (existing.status === 'AWAITING_CONFIRMATION') {
@@ -155,17 +187,19 @@ export class IntegrationRequestService {
     const cor = status === 'APPROVED' ? '#059669' : '#ef4444';
 
     // Notificar Cliente sobre mudança de status
-    this.emailService.sendEmail(
-      (request.technicalContact as any).email,
-      `Sua solicitação de integração foi ${statusTraduzido}`,
-      `
+    this.emailService
+      .sendEmail(
+        (request.technicalContact as any).email,
+        `Sua solicitação de integração foi ${statusTraduzido}`,
+        `
       <div style="font-family: sans-serif; color: #333;">
         <h2 style="color: ${cor};">Solicitação ${statusTraduzido}</h2>
         <p>Olá, temos uma atualização sobre a solicitação de integração do cliente <strong>${request.clientName}</strong>.</p>
         <p>O status atual é: <span style="font-weight: bold; color: ${cor};">${statusTraduzido}</span></p>
-        ${status === 'APPROVED' 
-          ? '<p>Nossa equipe entrará em contato para fornecer as chaves de acesso e próximos passos.</p>' 
-          : `
+        ${
+          status === 'APPROVED'
+            ? '<p>Nossa equipe entrará em contato para fornecer as chaves de acesso e próximos passos.</p>'
+            : `
             <p>Infelizmente sua solicitação não foi aprovada neste momento.</p>
             ${rejectionReason ? `<p><strong>Motivo da recusa:</strong> ${rejectionReason}</p>` : ''}
             <p>Para mais detalhes ou para realizar uma nova solicitação corrigida, entre em contato com nosso suporte.</p>
@@ -174,8 +208,11 @@ export class IntegrationRequestService {
         <hr>
         <p style="font-weight: bold;">InfoBrasil Sistemas</p>
       </div>
-      `
-    ).catch(err => this.logger.error('Erro ao notificar cliente sobre status', err.stack));
+      `,
+      )
+      .catch((err) =>
+        this.logger.error('Erro ao notificar cliente sobre status', err.stack),
+      );
 
     return request;
   }

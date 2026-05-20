@@ -10,7 +10,10 @@ import {
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { PostOrderDto } from './dto/create-order.dto';
-import { OrderResponseDto, OrderDetailResponseDto } from './dto/order-response.dto';
+import {
+  OrderResponseDto,
+  OrderDetailResponseDto,
+} from './dto/order-response.dto';
 import {
   JwtAuthGuard,
   type ReqWithAuthContext,
@@ -32,7 +35,7 @@ export class OrderController {
   constructor(
     private readonly orderService: OrderService,
     private readonly orderItemService: OrderItemService,
-  ) { }
+  ) {}
 
   @Post()
   @UseGuards(JwtAuthGuard, PermissionsGuard)
@@ -49,9 +52,9 @@ export class OrderController {
     schema: {
       type: 'object',
       properties: {
-        orderId: { type: 'number', example: 12345 }
-      }
-    }
+        orderId: { type: 'number', example: 12345 },
+      },
+    },
   })
   @ApiResponse({
     status: 400,
@@ -90,9 +93,9 @@ export class OrderController {
     schema: {
       type: 'object',
       properties: {
-        receiptId: { type: 'number', example: 54321 }
-      }
-    }
+        receiptId: { type: 'number', example: 54321 },
+      },
+    },
   })
   postReceipt(
     @Req() req: ReqWithAuthContext,

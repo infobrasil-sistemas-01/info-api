@@ -3,7 +3,9 @@ import { ZodDto } from 'src/common/validation/zod-dto';
 import { z } from 'zod';
 
 export const SendNewsletterSchema = z.object({
-  announcementIds: z.array(z.string().uuid()).min(1, 'Selecione ao menos um aviso'),
+  announcementIds: z
+    .array(z.string().uuid())
+    .min(1, 'Selecione ao menos um aviso'),
   subject: z.string().min(3, 'Assunto muito curto'),
   initialMessage: z.string().optional().nullable(),
   finalMessage: z.string().optional().nullable(),
@@ -19,6 +21,9 @@ export class SendNewsletterDto extends ZodDto(SendNewsletterSchema) {
   @ApiProperty({ required: false, example: 'Olá! Veja o que mudou...' })
   initialMessage?: string | null;
 
-  @ApiProperty({ required: false, example: 'Ficou com alguma dúvida? Fale conosco.' })
+  @ApiProperty({
+    required: false,
+    example: 'Ficou com alguma dúvida? Fale conosco.',
+  })
   finalMessage?: string | null;
 }

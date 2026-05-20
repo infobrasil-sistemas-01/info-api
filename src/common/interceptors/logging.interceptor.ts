@@ -39,7 +39,9 @@ export class LoggingInterceptor implements NestInterceptor {
       tap({
         next: () => {
           const user = request.user;
-          const userDisplay = user ? ` [User: ${user.username} (${user.sub})]` : '';
+          const userDisplay = user
+            ? ` [User: ${user.username} (${user.sub})]`
+            : '';
           const response = context.switchToHttp().getResponse();
           const statusCode: number = response.statusCode;
           const delay = Date.now() - now;
@@ -75,7 +77,9 @@ export class LoggingInterceptor implements NestInterceptor {
         },
         error: (error: any) => {
           const user = request.user;
-          const userDisplay = user ? ` [User: ${user.username} (${user.sub})]` : '';
+          const userDisplay = user
+            ? ` [User: ${user.username} (${user.sub})]`
+            : '';
           const delay = Date.now() - now;
           const status = error?.status ?? 500;
 

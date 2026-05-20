@@ -1,6 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { RegistryPrismaService } from '../prisma/registry-prisma.service';
-import { FirebirdService, IConnectionOptions } from '../firebird/firebird.service';
+import {
+  FirebirdService,
+  IConnectionOptions,
+} from '../firebird/firebird.service';
 import * as firebird from 'node-firebird';
 
 @Injectable()
@@ -16,7 +19,7 @@ export class TenantConnectionService {
   constructor(
     private readonly prisma: RegistryPrismaService,
     private readonly firebirdService: FirebirdService,
-  ) { }
+  ) {}
 
   /**
    * Retorna uma conexão individual do pool do tenant.
@@ -38,12 +41,14 @@ export class TenantConnectionService {
         pool.get((err, db) => {
           clearTimeout(timeout);
           if (err) return reject(err);
-          
+
           // Previne crash por Unhandled 'error' event caso a conexão caia depois
           // Verifica se já tem listener para não vazar memória no pool (MaxListenersExceededWarning)
           if ((db as any).listenerCount('error') === 0) {
             (db as any).on('error', (dbErr: any) => {
-              this.logger.error(`Erro na conexão Firebird para o tenant ${credentialsId}: ${dbErr?.message}`);
+              this.logger.error(
+                `Erro na conexão Firebird para o tenant ${credentialsId}: ${dbErr?.message}`,
+              );
             });
           }
 
@@ -112,7 +117,9 @@ export class TenantConnectionService {
         });
       } catch (err: any) {
         clearTimeout(timeout);
-        this.logger.error(`Erro ao destruir pool para o tenant ${credentialsId}: ${err.message}`);
+        this.logger.error(
+          `Erro ao destruir pool para o tenant ${credentialsId}: ${err.message}`,
+        );
         resolve();
       }
     });
@@ -131,7 +138,11 @@ export class TenantConnectionService {
    * Retorna métricas sobre os caches de pools e credenciais.
    * Usado pelo health check sem fazer requisições ao banco.
    */
-  getPoolStats(): { activePools: number; cachedCredentials: number; tenantIds: string[] } {
+  getPoolStats(): {
+    activePools: number;
+    cachedCredentials: number;
+    tenantIds: string[];
+  } {
     return {
       activePools: this.poolCache.size,
       cachedCredentials: this.credentialsCache.size,
@@ -145,7 +156,12 @@ export class TenantConnectionService {
    * Timeout de 3s por pool para não bloquear o health check.
    */
   async pingActivePools(): Promise<
-    Array<{ credentialsId: string; status: 'up' | 'down'; responseTimeMs: number; error?: string }>
+    Array<{
+      credentialsId: string;
+      status: 'up' | 'down';
+      responseTimeMs: number;
+      error?: string;
+    }>
   > {
     const poolEntries = Array.from(this.poolCache.entries());
 
@@ -178,7 +194,10 @@ export class TenantConnectionService {
 
   private pingPool(pool: firebird.ConnectionPool): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-      const timeout = setTimeout(() => reject(new Error('Ping timeout (3s)')), 3000);
+      const timeout = setTimeout(
+        () => reject(new Error('Ping timeout (3s)')),
+        3000,
+      );
 
       pool.get((err, db) => {
         if (err) {
@@ -188,7 +207,9 @@ export class TenantConnectionService {
 
         if ((db as any).listenerCount('error') === 0) {
           (db as any).on('error', (dbErr: any) => {
-            this.logger.error(`Erro na conexão Firebird durante pingPool: ${dbErr?.message}`);
+            this.logger.error(
+              `Erro na conexão Firebird durante pingPool: ${dbErr?.message}`,
+            );
           });
         }
 
@@ -205,14 +226,18 @@ export class TenantConnectionService {
           });
         } catch (e) {
           clearTimeout(timeout);
-          try { db.detach(); } catch (err) {}
+          try {
+            db.detach();
+          } catch (err) {}
           reject(e);
         }
       });
     });
   }
 
-  private async getPool(credentialsId: string): Promise<firebird.ConnectionPool> {
+  private async getPool(
+    credentialsId: string,
+  ): Promise<firebird.ConnectionPool> {
     if (this.poolCache.has(credentialsId)) {
       return this.poolCache.get(credentialsId)!;
     }
@@ -220,7 +245,9 @@ export class TenantConnectionService {
     const connectionOptions = await this.getCredentials(credentialsId);
     const pool = this.firebirdService.createPool(connectionOptions);
 
-    this.logger.log(`Novo pool de conexões criado para o tenant: ${credentialsId} (${connectionOptions.host})`);
+    this.logger.log(
+      `Novo pool de conexões criado para o tenant: ${credentialsId} (${connectionOptions.host})`,
+    );
     this.poolCache.set(credentialsId, pool);
 
     return pool;
@@ -231,12 +258,16 @@ export class TenantConnectionService {
    * Consulta o banco (Prisma) apenas na primeira vez; nas chamadas seguintes,
    * retorna do cache em memória.
    */
-  private async getCredentials(credentialsId: string): Promise<IConnectionOptions> {
+  private async getCredentials(
+    credentialsId: string,
+  ): Promise<IConnectionOptions> {
     if (this.credentialsCache.has(credentialsId)) {
       return this.credentialsCache.get(credentialsId)!;
     }
 
-    this.logger.log(`Consultando credenciais no banco para o tenant: ${credentialsId}`);
+    this.logger.log(
+      `Consultando credenciais no banco para o tenant: ${credentialsId}`,
+    );
     const credentials = await this.prisma.dbCredentials.findUnique({
       where: { id: credentialsId },
     });

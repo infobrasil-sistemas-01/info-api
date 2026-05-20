@@ -110,7 +110,7 @@ describe('ClientService', () => {
           callback(null, [{ CLI_CODIGO: 1, CLI_NOME: 'Old Name' }]);
         },
       );
-      
+
       // Mock para UPDATE
       mockConnection.query.mockImplementationOnce(
         (query: string, params: any[], callback: Function) => {
@@ -132,7 +132,7 @@ describe('ClientService', () => {
       expect(mockConnection.query).toHaveBeenCalledWith(
         expect.stringContaining('UPDATE clientes SET CLI_NOME = ?'),
         ['Updated Name', 1, 1],
-        expect.any(Function)
+        expect.any(Function),
       );
     });
 
@@ -144,7 +144,9 @@ describe('ClientService', () => {
         },
       );
 
-      await expect(service.update('cred-1', 1, 999, { CLI_NOME: 'test' })).rejects.toThrow(NotFoundException);
+      await expect(
+        service.update('cred-1', 1, 999, { CLI_NOME: 'test' }),
+      ).rejects.toThrow(NotFoundException);
     });
   });
 });

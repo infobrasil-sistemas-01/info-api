@@ -25,19 +25,18 @@ export class StatusService {
     try {
       // Consome o Health Check oficial da API (Bypassing cache para medição real)
       const health = await this.healthService.check(true);
-      
+
       // DB Status: Especificamente o status do Postgres retornado pelo health check
       dbStatus = health.databases.postgres.status === 'up' ? 'UP' : 'DOWN';
       dbTime = health.databases.postgres.responseTimeMs || 0;
-      
+
       // API Status: Se o processo está rodando e o health check respondeu
       apiStatus = 'UP';
-      
+
       // Calcula a latência da API como o "overhead" de processamento (Total - DB)
       const totalTime = performance.now() - startTime;
       apiLatency = Math.max(1, Math.round(totalTime - dbTime));
       dbLatency = dbTime;
-      
     } catch (error) {
       this.logger.error(`Status check failed: ${error.message}`);
       apiStatus = 'DOWN';
@@ -57,7 +56,9 @@ export class StatusService {
       this.logger.error(`Failed to save status log: ${e.message}`);
     }
 
-    this.logger.log(`Monitor check - API: ${apiStatus} (${apiLatency}ms) | DB: ${dbStatus} (${dbLatency}ms)`);
+    this.logger.log(
+      `Monitor check - API: ${apiStatus} (${apiLatency}ms) | DB: ${dbStatus} (${dbLatency}ms)`,
+    );
   }
 
   /**

@@ -88,7 +88,9 @@ export class RoleService {
     // Verificar se existem usuários vinculados?
     const userCount = await this.prisma.user.count({ where: { roleId: id } });
     if (userCount > 0) {
-      throw new Error('Não é possível excluir uma role que possui usuários vinculados.');
+      throw new Error(
+        'Não é possível excluir uma role que possui usuários vinculados.',
+      );
     }
 
     return this.prisma.role.delete({

@@ -33,9 +33,7 @@ describe('SupplierService', () => {
 
   describe('get', () => {
     it('should return paginated suppliers', async () => {
-      const mockSuppliers = [
-        { CRE_CODIGO: 1, CRE_NOME: 'Supplier 1' },
-      ];
+      const mockSuppliers = [{ CRE_CODIGO: 1, CRE_NOME: 'Supplier 1' }];
       mockConnection.query.mockImplementation(
         (query: string, params: any[], callback: Function) => {
           callback(null, mockSuppliers);
@@ -69,9 +67,9 @@ describe('SupplierService', () => {
     });
 
     it('should throw BadRequestException when search has less than 3 characters', async () => {
-      await expect(
-        service.get('cred-1', 1, 1, 10, 'ab'),
-      ).rejects.toThrow(BadRequestException);
+      await expect(service.get('cred-1', 1, 1, 10, 'ab')).rejects.toThrow(
+        BadRequestException,
+      );
     });
   });
 

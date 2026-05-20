@@ -7,7 +7,7 @@ export class ProductGroupService {
 
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
-  ) { }
+  ) {}
 
   async get(credentialsId: string, page: number = 1, pageSize: number = 10) {
     let connection: any;

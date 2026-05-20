@@ -13,4 +13,4 @@ import { RbacModule } from 'src/infra/rbac/rbac.module';
   imports: [TenantConnectionModule, ProductModule, ReceiptModule, RbacModule],
   providers: [OrderService, OrderItemService],
 })
-export class OrderModule { }
+export class OrderModule {}

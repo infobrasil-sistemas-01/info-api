@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { RegistryPrismaService } from 'src/infra/prisma/registry-prisma.service';
 import { UserService } from './user.service';
 import { randomUUID } from 'crypto';
@@ -8,7 +12,7 @@ export class UserInvitationService {
   constructor(
     private readonly prisma: RegistryPrismaService,
     private readonly userService: UserService,
-  ) { }
+  ) {}
 
   async findAll() {
     return this.prisma.userInvitation.findMany({
@@ -17,8 +21,8 @@ export class UserInvitationService {
           select: {
             user: true,
             email: true,
-          }
-        }
+          },
+        },
       },
       orderBy: { createdAt: 'desc' },
     });
@@ -27,7 +31,7 @@ export class UserInvitationService {
   async revoke(id: string) {
     const invite = await this.prisma.userInvitation.findUnique({
       where: { id },
-      select: { userId: true }
+      select: { userId: true },
     });
 
     if (!invite) return;
@@ -48,7 +52,9 @@ export class UserInvitationService {
     }
 
     if (invite.acceptedAt) {
-      throw new BadRequestException('Este convite já foi aceito e não pode ser reenviado.');
+      throw new BadRequestException(
+        'Este convite já foi aceito e não pode ser reenviado.',
+      );
     }
 
     const newToken = randomUUID();
@@ -61,14 +67,14 @@ export class UserInvitationService {
         token: newToken,
         expiresAt: newExpiresAt,
         createdAt: new Date(), // Reinicia o contador de criação para exibição
-      }
+      },
     });
 
     if (invite.user.email) {
       await this.userService.sendInvitationEmail(
         invite.user.email,
         invite.user.user,
-        newToken
+        newToken,
       );
     }
 

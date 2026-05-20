@@ -7,7 +7,7 @@ export class ServiceProviderService {
 
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
-  ) { }
+  ) {}
 
   async get(
     credentialsId: string,
@@ -17,13 +17,11 @@ export class ServiceProviderService {
     search?: string,
     situation?: string,
   ) {
-    const connection = await this.tenantConnectionService.getConnection(credentialsId);
+    const connection =
+      await this.tenantConnectionService.getConnection(credentialsId);
 
     try {
-      const params: (number | string)[] = [
-        pageSize,
-        (page - 1) * pageSize
-      ];
+      const params: (number | string)[] = [pageSize, (page - 1) * pageSize];
       let query = `SELECT FIRST ? SKIP ? 
                       PRE_CODIGO, PRE_NOME, PRE_APELIDO, PRE_ENDERECO, PRE_FONE, PRE_CELULAR,
                       PRE_EMAIL, PRE_SITUACAO, LOJ_CODIGO
@@ -43,7 +41,9 @@ export class ServiceProviderService {
 
       if (search) {
         if (search.length < 3) {
-          throw new BadRequestException('Pesquisa precisa ter pelo menos 3 caracteres.');
+          throw new BadRequestException(
+            'Pesquisa precisa ter pelo menos 3 caracteres.',
+          );
         }
         query += ` AND (PRE_NOME LIKE ? OR PRE_APELIDO LIKE ?)`;
         params.push(`%${search}%`, `%${search}%`);
@@ -61,13 +61,15 @@ export class ServiceProviderService {
       const endTime = Date.now();
 
       this.logger.log(
-        `Busca de prestadores executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify({
-          storeId,
-          page,
-          pageSize,
-          search,
-          situation,
-        })}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${endTime - startTime}ms`,
+        `Busca de prestadores executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
+          {
+            storeId,
+            page,
+            pageSize,
+            search,
+            situation,
+          },
+        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${endTime - startTime}ms`,
       );
       return result;
     } catch (error) {
@@ -83,7 +85,8 @@ export class ServiceProviderService {
   }
 
   async getById(credentialsId: string, id: number) {
-    const connection = await this.tenantConnectionService.getConnection(credentialsId);
+    const connection =
+      await this.tenantConnectionService.getConnection(credentialsId);
 
     try {
       const query = `SELECT 

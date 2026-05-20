@@ -38,7 +38,7 @@ export class AuthController {
     private readonly auth: AuthService,
     @Inject(AUTH_CONFIG) private readonly authConfig: AuthConfig,
     private readonly permissionResolver: PermissionResolver,
-  ) { }
+  ) {}
 
   @Get('me')
   @ApiBearerAuth()

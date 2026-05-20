@@ -41,7 +41,13 @@ export class PlanService {
     };
   }
 
-  async logRequest(userId: string, method: string, path: string, status: number, ip?: string) {
+  async logRequest(
+    userId: string,
+    method: string,
+    path: string,
+    status: number,
+    ip?: string,
+  ) {
     await this.prisma.requestLog.create({
       data: {
         userId,
@@ -53,7 +59,10 @@ export class PlanService {
     });
   }
 
-  async getRequestCount(userId: string, timeframe: 'minute' | 'month'): Promise<number> {
+  async getRequestCount(
+    userId: string,
+    timeframe: 'minute' | 'month',
+  ): Promise<number> {
     const now = new Date();
     let startDate: Date;
 

@@ -10,7 +10,9 @@ export const GetServiceProvidersQuerySchema = z.object({
   storeId: z.coerce.number().optional(),
 });
 
-export class GetServiceProvidersQueryDto extends ZodDto(GetServiceProvidersQuerySchema) {
+export class GetServiceProvidersQueryDto extends ZodDto(
+  GetServiceProvidersQuerySchema,
+) {
   @ApiPropertyOptional({ description: 'Página atual', example: 1 })
   page?: number;
 
@@ -20,7 +22,10 @@ export class GetServiceProvidersQueryDto extends ZodDto(GetServiceProvidersQuery
   @ApiPropertyOptional({ description: 'Busca por nome ou apelido' })
   search?: string;
 
-  @ApiPropertyOptional({ description: 'Situação do prestador', enum: ['A', 'I'] })
+  @ApiPropertyOptional({
+    description: 'Situação do prestador',
+    enum: ['A', 'I'],
+  })
   situation?: 'A' | 'I';
 
   @ApiPropertyOptional({ description: 'ID da loja' })

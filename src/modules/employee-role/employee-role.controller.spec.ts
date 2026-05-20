@@ -19,7 +19,9 @@ describe('EmployeeRoleController', () => {
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [EmployeeRoleController],
-      providers: [{ provide: EmployeeRoleService, useValue: mockEmployeeRoleService }],
+      providers: [
+        { provide: EmployeeRoleService, useValue: mockEmployeeRoleService },
+      ],
     })
       .overrideGuard(JwtAuthGuard)
       .useValue({ canActivate: () => true })
@@ -37,16 +39,15 @@ describe('EmployeeRoleController', () => {
 
   describe('get', () => {
     it('should call employeeRoleService.get with all parameters', async () => {
-      mockEmployeeRoleService.get.mockResolvedValue([{ FCA_CODIGO: 1, FCA_NOME: 'Role 1' }]);
+      mockEmployeeRoleService.get.mockResolvedValue([
+        { FCA_CODIGO: 1, FCA_NOME: 'Role 1' },
+      ]);
 
-      const result = await controller.get(
-        mockReq,
-        {
-          page: 2,
-          pageSize: 20,
-          search: 'search term',
-        }
-      );
+      const result = await controller.get(mockReq, {
+        page: 2,
+        pageSize: 20,
+        search: 'search term',
+      });
 
       expect(employeeRoleService.get).toHaveBeenCalledWith(
         'cred-1',

@@ -95,4 +95,3 @@ export class AppModule implements NestModule {
     // consumer.apply(IpBlocklistMiddleware).forRoutes('*path');
   }
 }
-

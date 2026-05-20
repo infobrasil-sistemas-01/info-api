@@ -7,7 +7,7 @@ export class DeliveryService {
 
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
-  ) { }
+  ) {}
 
   async get(
     credentialsId: string,
@@ -22,7 +22,8 @@ export class DeliveryService {
       providerId?: number;
     } = {},
   ) {
-    const connection = await this.tenantConnectionService.getConnection(credentialsId);
+    const connection =
+      await this.tenantConnectionService.getConnection(credentialsId);
 
     try {
       let whereClause = 'WHERE 1=1';
@@ -89,12 +90,14 @@ export class DeliveryService {
       const endTime = Date.now();
 
       this.logger.log(
-        `Busca de entregas executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify({
-          storeId,
-          page,
-          pageSize,
-          ...filters,
-        })}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${endTime - startTime}ms`,
+        `Busca de entregas executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
+          {
+            storeId,
+            page,
+            pageSize,
+            ...filters,
+          },
+        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${endTime - startTime}ms`,
       );
       return result;
     } catch (error) {
@@ -109,12 +112,9 @@ export class DeliveryService {
     }
   }
 
-  async getById(
-    credentialsId: string,
-    id: number,
-    storeId?: number,
-  ) {
-    const connection = await this.tenantConnectionService.getConnection(credentialsId);
+  async getById(credentialsId: string, id: number, storeId?: number) {
+    const connection =
+      await this.tenantConnectionService.getConnection(credentialsId);
 
     try {
       let whereClause = 'WHERE E.ENT_NUMERO = ?';
@@ -175,7 +175,10 @@ export class DeliveryService {
       }
 
       // Buscar os itens da entrega filtrando pelo VEN_NUMERO da entrega na tabela ENTREGASITENS
-      const items = await this.getItemsByVendaNumero(connection, delivery.VEN_NUMERO);
+      const items = await this.getItemsByVendaNumero(
+        connection,
+        delivery.VEN_NUMERO,
+      );
 
       return {
         ...delivery,

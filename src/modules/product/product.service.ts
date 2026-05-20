@@ -7,7 +7,7 @@ export class ProductService {
 
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
-  ) { }
+  ) {}
 
   async get(
     credentialsId: string,
@@ -97,8 +97,18 @@ export class ProductService {
 
       this.logger.log(
         `Busca de produtos executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
-          { storeId, page, pageSize, priceTable, group, brand, minStock, search },
-        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${queryEndTime - queryStartTime
+          {
+            storeId,
+            page,
+            pageSize,
+            priceTable,
+            group,
+            brand,
+            minStock,
+            search,
+          },
+        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${
+          queryEndTime - queryStartTime
         }ms`,
       );
 

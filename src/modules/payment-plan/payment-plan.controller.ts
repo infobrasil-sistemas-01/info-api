@@ -1,11 +1,5 @@
 import type { ReqWithAuthContext } from './../auth/guards/jwt-auth.guard';
-import {
-  Controller,
-  Get,
-  Query,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Query, Req, UseGuards } from '@nestjs/common';
 import { PaymentPlanService } from './payment-plan.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import {
@@ -21,7 +15,7 @@ import { PaymentPlanResponseDto } from './dto/payment-plan-response.dto';
 
 @Controller('payment-plans')
 export class PaymentPlanController {
-  constructor(private readonly paymentPlanService: PaymentPlanService) { }
+  constructor(private readonly paymentPlanService: PaymentPlanService) {}
 
   @Get()
   @UseGuards(JwtAuthGuard, PermissionsGuard)

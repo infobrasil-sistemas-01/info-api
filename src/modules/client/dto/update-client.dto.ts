@@ -19,7 +19,10 @@ export class UpdateClientDto extends ZodDto(UpdateClientSchema) {
   @ApiPropertyOptional({ description: 'Código da loja', example: 1 })
   LOJ_CODIGO?: number;
 
-  @ApiPropertyOptional({ description: 'Nome do cliente', example: 'João Silva' })
+  @ApiPropertyOptional({
+    description: 'Nome do cliente',
+    example: 'João Silva',
+  })
   CLI_NOME?: string;
 
   @ApiPropertyOptional({ description: 'Nome fantasia', example: 'João ME' })

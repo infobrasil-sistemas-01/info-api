@@ -34,7 +34,9 @@ describe('AccountPayableService', () => {
   describe('get', () => {
     it('should return paginated account payables', async () => {
       const mockResult = [{ PAG_NUMERO: 1 }];
-      mockConnection.query.mockImplementation((query, params, cb) => cb(null, mockResult));
+      mockConnection.query.mockImplementation((query, params, cb) =>
+        cb(null, mockResult),
+      );
 
       const result = await service.get('cred-1', 1, 10);
       expect(result).toEqual(mockResult);
@@ -46,27 +48,45 @@ describe('AccountPayableService', () => {
     });
 
     it('should throw error when situation is invalid', async () => {
-      await expect(service.get('cred-1', 1, 10, undefined, undefined, 'X')).rejects.toThrow(BadRequestException);
+      await expect(
+        service.get('cred-1', 1, 10, undefined, undefined, 'X'),
+      ).rejects.toThrow(BadRequestException);
     });
 
     it('should throw error when only startDate is provided', async () => {
-      await expect(service.get('cred-1', 1, 10, undefined, undefined, undefined, '2024-01-01')).rejects.toThrow(BadRequestException);
+      await expect(
+        service.get(
+          'cred-1',
+          1,
+          10,
+          undefined,
+          undefined,
+          undefined,
+          '2024-01-01',
+        ),
+      ).rejects.toThrow(BadRequestException);
     });
   });
 
   describe('getById', () => {
     it('should return a specific account payable', async () => {
       const mockResult = [{ PAG_NUMERO: 1 }];
-      mockConnection.query.mockImplementation((query, params, cb) => cb(null, mockResult));
+      mockConnection.query.mockImplementation((query, params, cb) =>
+        cb(null, mockResult),
+      );
 
       const result = await service.getById('cred-1', 1);
       expect(result).toEqual(mockResult[0]);
     });
 
     it('should throw NotFoundException if account payable is not found', async () => {
-      mockConnection.query.mockImplementation((query, params, cb) => cb(null, []));
+      mockConnection.query.mockImplementation((query, params, cb) =>
+        cb(null, []),
+      );
 
-      await expect(service.getById('cred-1', 999)).rejects.toThrow(NotFoundException);
+      await expect(service.getById('cred-1', 999)).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 });

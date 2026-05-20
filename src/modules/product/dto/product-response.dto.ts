@@ -7,7 +7,10 @@ export class ProductResponseDto {
   @ApiProperty({ example: '7891234567890', description: 'Código de barras' })
   PRO_CODIGOBAR: string;
 
-  @ApiProperty({ example: 'Produto Exemplo', description: 'Descrição do produto' })
+  @ApiProperty({
+    example: 'Produto Exemplo',
+    description: 'Descrição do produto',
+  })
   PRO_DESCRICAO: string;
 
   @ApiProperty({ example: 1, description: 'Código da marca' })
@@ -31,7 +34,7 @@ export class ProductResponseDto {
   @ApiProperty({ example: 19.99, description: 'Preço 1' })
   PRECO: number;
 
-  @ApiProperty({ example: 17.50, description: 'Preço 2' })
+  @ApiProperty({ example: 17.5, description: 'Preço 2' })
   PRECO2: number;
 }
 
@@ -42,16 +45,16 @@ export class ProductDetailResponseDto {
   @ApiProperty({ example: '7891234567890', description: 'Código de barras' })
   PRO_CODIGOBAR: string;
 
-  @ApiProperty({ example: 10.00, description: 'Preço de compra' })
+  @ApiProperty({ example: 10.0, description: 'Preço de compra' })
   PRO_PRCCOMPRA: number;
 
-  @ApiProperty({ example: 12.50, description: 'Preço de custo' })
+  @ApiProperty({ example: 12.5, description: 'Preço de custo' })
   PRO_PRCCUSTO: number;
 
-  @ApiProperty({ example: 11.00, description: 'Preço de compra fiscal' })
+  @ApiProperty({ example: 11.0, description: 'Preço de compra fiscal' })
   PRO_PRCCOMPRAFISCAL: number;
 
-  @ApiProperty({ example: 13.00, description: 'Custo fiscal' })
+  @ApiProperty({ example: 13.0, description: 'Custo fiscal' })
   PRO_CUSTOFISCAL: number;
 
   @ApiProperty({ example: 19.99, description: 'Preço 1' })
@@ -65,7 +68,10 @@ export class ProductBarcodeResponseDto {
   @ApiProperty({ example: '7891234567890', description: 'Código de barras' })
   PRO_CODIGOBAR: string;
 
-  @ApiProperty({ example: 'Produto Exemplo', description: 'Descrição do produto' })
+  @ApiProperty({
+    example: 'Produto Exemplo',
+    description: 'Descrição do produto',
+  })
   PRO_DESCRICAO: string;
 
   @ApiProperty({ example: 1, description: 'Código da marca' })
@@ -86,7 +92,7 @@ export class ProductBarcodeResponseDto {
   @ApiProperty({ example: 19.99, description: 'Preço 1' })
   PRECO: number;
 
-  @ApiProperty({ example: 17.50, description: 'Preço 2' })
+  @ApiProperty({ example: 17.5, description: 'Preço 2' })
   PRECO2: number;
 }
 

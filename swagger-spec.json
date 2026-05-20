@@ -432,6 +432,63 @@
         ]
       }
     },
+    "/api/v1/products/brands/{id}": {
+      "patch": {
+        "description": "Atualiza os dados de uma marca de produto existente no tenant.",
+        "operationId": "ProductBrandController_updateBrand",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Código da marca (MAR_CODIGO) a ser atualizada",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBrandDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Marca atualizada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductBrandResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro de validação ou de requisição."
+          },
+          "401": {
+            "description": "Token de autenticação inválido ou ausente."
+          },
+          "404": {
+            "description": "Marca não encontrada."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Atualizar marca de produto",
+        "tags": [
+          "Product / Brand"
+        ]
+      }
+    },
     "/api/v1/products/groups": {
       "get": {
         "description": "Retorna uma lista paginada de grupos de produtos associadas às credenciais do usuário autenticado.",
@@ -2694,6 +2751,16 @@
         "required": [
           "MAR_DESCRICAO"
         ]
+      },
+      "UpdateBrandDto": {
+        "type": "object",
+        "properties": {
+          "MAR_DESCRICAO": {
+            "type": "string",
+            "description": "Descrição da marca",
+            "example": "Marca Atualizada"
+          }
+        }
       },
       "ProductGroupResponseDto": {
         "type": "object",

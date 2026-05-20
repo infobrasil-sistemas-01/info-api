@@ -24,7 +24,7 @@ import { ProductGroupResponseDto } from '../dto/product-response.dto';
 
 @Controller('products/groups')
 export class ProductGroupController {
-  constructor(private readonly groupService: ProductGroupService) { }
+  constructor(private readonly groupService: ProductGroupService) {}
 
   @Get()
   @UseGuards(JwtAuthGuard, PermissionsGuard)

@@ -6,7 +6,7 @@ import { EnvService } from '../../config/env/env.service';
 export class UptimeService {
   private readonly logger = new Logger(UptimeService.name);
 
-  constructor(private readonly envService: EnvService) { }
+  constructor(private readonly envService: EnvService) {}
 
   async getMonitorStatus() {
     const apiKey = this.envService.get('UPTIMEROBOT_APIKEY');
@@ -30,7 +30,9 @@ export class UptimeService {
 
       // If the error is from axios, log the response if available
       if (axios.isAxiosError(error) && error.response) {
-        this.logger.error(`Uptime Robot API error details: ${JSON.stringify(error.response.data)}`);
+        this.logger.error(
+          `Uptime Robot API error details: ${JSON.stringify(error.response.data)}`,
+        );
       }
 
       return { status: 0 }; // Unknown/Error

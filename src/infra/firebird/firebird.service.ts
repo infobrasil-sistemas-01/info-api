@@ -21,7 +21,10 @@ export class FirebirdService {
    * @param options Opções de conexão
    * @param poolSize Número máximo de conexões no pool (padrão: 5)
    */
-  createPool(options: IConnectionOptions, poolSize = 5): firebird.ConnectionPool {
+  createPool(
+    options: IConnectionOptions,
+    poolSize = 5,
+  ): firebird.ConnectionPool {
     const optionsFinal = {
       ...options,
       password: decrypt(ids(options.id)),

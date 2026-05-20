@@ -35,7 +35,7 @@ export const envSchema = z.object({
   SUPPORT_EMAIL: z.string().default('suporte@infobrasilsistemas.com.br'),
   UPTIMEROBOT_APIKEY: z.string(),
   UPTIMEROBOT_MONITOR_ID: z.string(),
-  UPTIMEROBOT_APIURL: z.string()
+  UPTIMEROBOT_APIURL: z.string(),
 });
 
 export type Env = z.infer<typeof envSchema>;

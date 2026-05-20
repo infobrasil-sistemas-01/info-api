@@ -13,9 +13,12 @@ import type { JwtPayload } from '../../auth/types/jwt-payload';
 
 @Injectable()
 export class PlanLimitInterceptor implements NestInterceptor {
-  constructor(private readonly planService: PlanService) { }
+  constructor(private readonly planService: PlanService) {}
 
-  async intercept(context: ExecutionContext, next: CallHandler): Promise<Observable<any>> {
+  async intercept(
+    context: ExecutionContext,
+    next: CallHandler,
+  ): Promise<Observable<any>> {
     const request = context.switchToHttp().getRequest();
     const user = request.user as JwtPayload;
 
@@ -38,7 +41,7 @@ export class PlanLimitInterceptor implements NestInterceptor {
       '/api/v1/announcements',
       '/integration',
       '/status',
-    ].some(excluded => path.startsWith(excluded));
+    ].some((excluded) => path.startsWith(excluded));
 
     if (isExcluded) {
       return next.handle();
@@ -99,25 +102,34 @@ export class PlanLimitInterceptor implements NestInterceptor {
     return next.handle().pipe(
       tap({
         next: () => {
-          this.planService.logRequest(
-            userId,
-            request.method,
-            request.url,
-            context.switchToHttp().getResponse().statusCode,
-            request.ip,
-          ).catch(() => { });
-        },
-        error: (err) => {
-          if (!(err instanceof HttpException && err.getStatus() === HttpStatus.TOO_MANY_REQUESTS)) {
-            this.planService.logRequest(
+          this.planService
+            .logRequest(
               userId,
               request.method,
               request.url,
-              err.status || 500,
+              context.switchToHttp().getResponse().statusCode,
               request.ip,
-            ).catch(() => { });
+            )
+            .catch(() => {});
+        },
+        error: (err) => {
+          if (
+            !(
+              err instanceof HttpException &&
+              err.getStatus() === HttpStatus.TOO_MANY_REQUESTS
+            )
+          ) {
+            this.planService
+              .logRequest(
+                userId,
+                request.method,
+                request.url,
+                err.status || 500,
+                request.ip,
+              )
+              .catch(() => {});
           }
-        }
+        },
       }),
     );
   }

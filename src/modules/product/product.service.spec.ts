@@ -66,7 +66,17 @@ describe('ProductService', () => {
 
     it('should throw BadRequestException when search has less than 3 characters', async () => {
       await expect(
-        service.get('cred-1', 1, 1, 10, 1, undefined, undefined, undefined, 'ab'),
+        service.get(
+          'cred-1',
+          1,
+          1,
+          10,
+          1,
+          undefined,
+          undefined,
+          undefined,
+          'ab',
+        ),
       ).rejects.toThrow(BadRequestException);
     });
 

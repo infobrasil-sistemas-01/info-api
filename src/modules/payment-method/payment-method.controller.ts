@@ -22,7 +22,7 @@ import { PaymentMethodResponseDto } from './dto/payment-method-response.dto';
 
 @Controller('payment-methods')
 export class PaymentMethodController {
-  constructor(private readonly paymentMethodService: PaymentMethodService) { }
+  constructor(private readonly paymentMethodService: PaymentMethodService) {}
 
   @Get()
   @UseGuards(JwtAuthGuard, PermissionsGuard)

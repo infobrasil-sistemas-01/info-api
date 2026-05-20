@@ -20,7 +20,7 @@ describe('TenantConnectionService', () => {
   };
 
   beforeEach(async () => {
-    mockDb = { 
+    mockDb = {
       detach: jest.fn(),
       listenerCount: jest.fn().mockReturnValue(0),
       on: jest.fn(),
@@ -111,11 +111,13 @@ describe('TenantConnectionService', () => {
 
     it('should retry once if pool.get times out', async () => {
       jest.useFakeTimers();
-      
+
       // Simula um hang perpétuo na primeira chamada e sucesso na segunda
-      mockPool.get.mockImplementationOnce(() => {
-        // Não chama o callback, simulando hang
-      }).mockImplementationOnce((callback) => callback(null, mockDb));
+      mockPool.get
+        .mockImplementationOnce(() => {
+          // Não chama o callback, simulando hang
+        })
+        .mockImplementationOnce((callback) => callback(null, mockDb));
 
       const promise = service.getConnection('cred-1');
 
@@ -128,7 +130,7 @@ describe('TenantConnectionService', () => {
       expect(conn).toBe(mockDb);
       expect(mockPool.get).toHaveBeenCalledTimes(2);
       expect(mockPool.destroy).toHaveBeenCalledTimes(1);
-      
+
       jest.useRealTimers();
     });
   });

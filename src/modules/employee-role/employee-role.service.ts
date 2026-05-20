@@ -7,7 +7,7 @@ export class EmployeeRoleService {
 
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
-  ) { }
+  ) {}
 
   async get(
     credentialsId: string,
@@ -15,13 +15,11 @@ export class EmployeeRoleService {
     pageSize: number = 10,
     search?: string,
   ) {
-    const connection = await this.tenantConnectionService.getConnection(credentialsId);
+    const connection =
+      await this.tenantConnectionService.getConnection(credentialsId);
 
     try {
-      const params: (number | string)[] = [
-        pageSize,
-        (page - 1) * pageSize,
-      ];
+      const params: (number | string)[] = [pageSize, (page - 1) * pageSize];
       let query = `SELECT FIRST ? SKIP ? 
                       FCA_CODIGO, FCA_NOME
                       FROM funcoes
@@ -29,7 +27,9 @@ export class EmployeeRoleService {
 
       if (search) {
         if (search.length < 3) {
-          throw new BadRequestException('Pesquisa precisa ter pelo menos 3 caracteres.');
+          throw new BadRequestException(
+            'Pesquisa precisa ter pelo menos 3 caracteres.',
+          );
         }
         query += ` AND FCA_NOME LIKE ?`;
         params.push(`%${search.toUpperCase()}%`);
@@ -47,11 +47,13 @@ export class EmployeeRoleService {
       const endTime = Date.now();
 
       this.logger.log(
-        `Busca de funções/cargos executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify({
-          page,
-          pageSize,
-          search,
-        })}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${endTime - startTime}ms`,
+        `Busca de funções/cargos executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
+          {
+            page,
+            pageSize,
+            search,
+          },
+        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${endTime - startTime}ms`,
       );
       return result;
     } catch (error) {

@@ -77,11 +77,17 @@ export class CreateIntegrationRequestDto extends ZodDto(
     actions: ('read' | 'create' | 'update' | 'delete')[];
   }[];
 
-  @ApiProperty({ example: 'Integração com ERP externo para sincronia de estoque' })
+  @ApiProperty({
+    example: 'Integração com ERP externo para sincronia de estoque',
+  })
   objective!: string;
 
   @ApiProperty({
-    example: { name: 'João Silva', email: 'joao@cliente.com', phone: '11999999999' },
+    example: {
+      name: 'João Silva',
+      email: 'joao@cliente.com',
+      phone: '11999999999',
+    },
   })
   technicalContact!: {
     name: string;
@@ -90,7 +96,11 @@ export class CreateIntegrationRequestDto extends ZodDto(
   };
 
   @ApiProperty({
-    example: { name: 'Maria Souza', email: 'maria@cliente.com', phone: '11888888888' },
+    example: {
+      name: 'Maria Souza',
+      email: 'maria@cliente.com',
+      phone: '11888888888',
+    },
   })
   responsiblePerson!: {
     name: string;

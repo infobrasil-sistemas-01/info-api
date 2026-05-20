@@ -79,18 +79,31 @@ describe('DeliveryService', () => {
 
   describe('getById', () => {
     it('should return delivery with items', async () => {
-      const mockDelivery = { VEN_NUMERO: 12345, ENT_NUMERO: 100, PRE_CODIGO: 1 };
+      const mockDelivery = {
+        VEN_NUMERO: 12345,
+        ENT_NUMERO: 100,
+        PRE_CODIGO: 1,
+      };
       const mockItems = [
-        { ETI_NUMERO: 1, IVD_NUMERO: 50, VEN_NUMERO: 12345, PRO_CODIGO: 'PROD-1' },
+        {
+          ETI_NUMERO: 1,
+          IVD_NUMERO: 50,
+          VEN_NUMERO: 12345,
+          PRO_CODIGO: 'PROD-1',
+        },
       ];
 
       mockConnection.query
-        .mockImplementationOnce((query: string, params: any[], callback: Function) => {
-          callback(null, [mockDelivery]);
-        })
-        .mockImplementationOnce((query: string, params: any[], callback: Function) => {
-          callback(null, mockItems);
-        });
+        .mockImplementationOnce(
+          (query: string, params: any[], callback: Function) => {
+            callback(null, [mockDelivery]);
+          },
+        )
+        .mockImplementationOnce(
+          (query: string, params: any[], callback: Function) => {
+            callback(null, mockItems);
+          },
+        );
 
       const result = await service.getById('cred-1', 100, 1);
 
@@ -115,9 +128,11 @@ describe('DeliveryService', () => {
     });
 
     it('should return null if delivery is not found', async () => {
-      mockConnection.query.mockImplementation((query: string, params: any[], callback: Function) => {
-        callback(null, []);
-      });
+      mockConnection.query.mockImplementation(
+        (query: string, params: any[], callback: Function) => {
+          callback(null, []);
+        },
+      );
 
       const result = await service.getById('cred-1', 999, 1);
 

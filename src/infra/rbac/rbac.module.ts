@@ -10,4 +10,4 @@ import { InfraRegistryModule } from '../prisma/infra-registry.module';
   providers: [PermissionResolver, RbacContextService, PermissionsGuard],
   exports: [PermissionResolver, RbacContextService, PermissionsGuard],
 })
-export class RbacModule { }
+export class RbacModule {}

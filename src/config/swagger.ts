@@ -4,7 +4,9 @@ import { apiReference } from '@scalar/nestjs-api-reference';
 import path from 'path';
 import fs from 'fs';
 
-export function getSwaggerConfigBuilder(packageVersion: string): DocumentBuilder {
+export function getSwaggerConfigBuilder(
+  packageVersion: string,
+): DocumentBuilder {
   const builder = new DocumentBuilder()
     .setTitle('InfoBrasil API')
     .setDescription(
@@ -19,41 +21,75 @@ export function getSwaggerConfigBuilder(packageVersion: string): DocumentBuilder
       <br><br>
       A API é organizada em módulos, cada um responsável por uma área específica do sistema, como produtos, clientes, vendas, etc.`,
     )
-    .setContact('InfoBrasil Sistemas', 'https://www.infobrasilsistemas.com.br', 'suporte@infobrasilsistemas.com.br')
+    .setContact(
+      'InfoBrasil Sistemas',
+      'https://www.infobrasilsistemas.com.br',
+      'suporte@infobrasilsistemas.com.br',
+    )
     .setVersion(packageVersion)
     .addBasicAuth() // 👈 Basic Auth for login
     .addBearerAuth() // 👈 JWT
     // --- Autenticação ---
-    .addTag('Auth', 'Endpoints relacionados à autenticação e obtenção de token JWT')
+    .addTag(
+      'Auth',
+      'Endpoints relacionados à autenticação e obtenção de token JWT',
+    )
 
     // --- Pessoas & Entidades ---
     .addTag('Client', 'Endpoints relacionados à gestão de clientes')
     .addTag('Employee', 'Endpoints relacionados à gestão de funcionários')
     .addTag('Supplier', 'Endpoints relacionados à gestão de fornecedores')
-    .addTag('Service Providers (Prestadores)', 'Endpoints relacionados à gestão de prestadores de serviço')
+    .addTag(
+      'Service Providers (Prestadores)',
+      'Endpoints relacionados à gestão de prestadores de serviço',
+    )
 
     // --- Catálogo ---
     .addTag('Product', 'Endpoints relacionados à gestão de produtos')
-    .addTag('Product / Brand', 'Endpoints relacionados à gestão de marcas e produtos vinculados a marcas')
-    .addTag('Product / Group', 'Endpoints relacionados à gestão de grupos e produtos vinculados a grupos')
+    .addTag(
+      'Product / Brand',
+      'Endpoints relacionados à gestão de marcas e produtos vinculados a marcas',
+    )
+    .addTag(
+      'Product / Group',
+      'Endpoints relacionados à gestão de grupos e produtos vinculados a grupos',
+    )
 
     // --- Vendas ---
     .addTag('Order', 'Endpoints relacionados à gestão de pedidos')
-    .addTag('Order Items', 'Endpoints relacionados à consulta de itens de pedido')
+    .addTag(
+      'Order Items',
+      'Endpoints relacionados à consulta de itens de pedido',
+    )
     .addTag('Delivery', 'Endpoints relacionados à gestão de entregas')
 
     // --- Financeiro ---
-    .addTag('AccountReceivable', 'Endpoints relacionados à gestão de contas a receber')
-    .addTag('Account Payable', 'Endpoints relacionados à gestão de contas a pagar')
-    .addTag('PaymentMethod', 'Endpoints relacionados à gestão de meios de pagamento')
-    .addTag('Payment Plan', 'Endpoints relacionados à gestão de planos de pagamento')
+    .addTag(
+      'AccountReceivable',
+      'Endpoints relacionados à gestão de contas a receber',
+    )
+    .addTag(
+      'Account Payable',
+      'Endpoints relacionados à gestão de contas a pagar',
+    )
+    .addTag(
+      'PaymentMethod',
+      'Endpoints relacionados à gestão de meios de pagamento',
+    )
+    .addTag(
+      'Payment Plan',
+      'Endpoints relacionados à gestão de planos de pagamento',
+    )
 
     // --- Monitoramento & Saúde ---
     .addTag('Status', 'Endpoints de monitoramento de instâncias e telemetria')
     .addTag('Health', 'Endpoints de verificação de integridade dos serviços')
 
     // --- Gestão do Plano ---
-    .addTag('Plans & Usage', 'Endpoints relacionados aos planos comerciais da InfoAPI e métricas de uso');
+    .addTag(
+      'Plans & Usage',
+      'Endpoints relacionados aos planos comerciais da InfoAPI e métricas de uso',
+    );
 
   if (process.env.NODE_ENV === 'development') {
     builder.addServer(
@@ -80,11 +116,13 @@ export function setupSwagger(app: INestApplication) {
 
   // Lista todos os arquivos swagger-*.json para registrar as versões
   const files = fs.existsSync(docsDir)
-    ? fs.readdirSync(docsDir).filter(f => f.startsWith('swagger-') && f.endsWith('.json'))
+    ? fs
+        .readdirSync(docsDir)
+        .filter((f) => f.startsWith('swagger-') && f.endsWith('.json'))
     : [];
 
   // Mapear versões encontradas
-  const swaggerVersions = files.map(f => {
+  const swaggerVersions = files.map((f) => {
     const version = f.replace('swagger-', '').replace('.json', '');
     const document = JSON.parse(fs.readFileSync(path.join(docsDir, f), 'utf8'));
     return { version, document };
@@ -100,9 +138,14 @@ export function setupSwagger(app: INestApplication) {
     fs.writeFileSync(outputPath, JSON.stringify(document, null, 2));
   }
 
-  const availableVersions = swaggerVersions.map(v => v.version).sort((a, b) => {
-    return b.localeCompare(a, undefined, { numeric: true, sensitivity: 'base' });
-  });
+  const availableVersions = swaggerVersions
+    .map((v) => v.version)
+    .sort((a, b) => {
+      return b.localeCompare(a, undefined, {
+        numeric: true,
+        sensitivity: 'base',
+      });
+    });
 
   const customJsCode = `
     (function() {

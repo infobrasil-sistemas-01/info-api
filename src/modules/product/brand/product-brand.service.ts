@@ -1,6 +1,12 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { TenantConnectionService } from 'src/infra/database/tenant-connection.service';
 import { CreateBrandDto } from './dto/create-brand.dto';
+import { UpdateBrandDto } from './dto/update-brand.dto';
 
 @Injectable()
 export class ProductBrandService {
@@ -8,7 +14,7 @@ export class ProductBrandService {
 
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
-  ) { }
+  ) {}
 
   async get(credentialsId: string, page: number = 1, pageSize: number = 10) {
     let connection: any;
@@ -86,6 +92,76 @@ export class ProductBrandService {
       );
 
       return result;
+    } finally {
+      this.tenantConnectionService.releaseConnection(connection);
+    }
+  }
+
+  async getById(credentialsId: string, id: number) {
+    const connection =
+      await this.tenantConnectionService.getConnection(credentialsId);
+
+    try {
+      const query = `SELECT 
+                      M.MAR_CODIGO, M.MAR_DESCRICAO
+                      FROM marcas M 
+                      WHERE M.MAR_CODIGO = ?`;
+      const params = [id];
+
+      const startTime = Date.now();
+      const result = (await new Promise((resolve, reject) => {
+        connection.query(query, params, (err: any, res: any) => {
+          if (err) return reject(err);
+          resolve(res[0]);
+        });
+      })) as any;
+      const endTime = Date.now();
+
+      this.logger.log(
+        `Busca de marca por ID executada. Tenant: ${credentialsId}, ID: ${id}, Tempo SQL: ${
+          endTime - startTime
+        }ms`,
+      );
+
+      return result;
+    } finally {
+      this.tenantConnectionService.releaseConnection(connection);
+    }
+  }
+
+  async update(credentialsId: string, id: number, data: UpdateBrandDto) {
+    const connection =
+      await this.tenantConnectionService.getConnection(credentialsId);
+
+    try {
+      const brand = await this.getById(credentialsId, id);
+      if (!brand) {
+        throw new NotFoundException('Marca não encontrada');
+      }
+
+      if (!data.MAR_DESCRICAO) {
+        return brand;
+      }
+
+      const query = `UPDATE marcas SET MAR_DESCRICAO = ? WHERE MAR_CODIGO = ?`;
+      const params = [data.MAR_DESCRICAO, id];
+
+      const startTime = Date.now();
+      await new Promise((resolve, reject) => {
+        connection.query(query, params, (err: any) => {
+          if (err) return reject(err);
+          resolve(true);
+        });
+      });
+      const endTime = Date.now();
+
+      this.logger.log(
+        `Marca de produto atualizada. Tenant: ${credentialsId}, ID: ${id}, Tempo SQL: ${
+          endTime - startTime
+        }ms`,
+      );
+
+      return this.getById(credentialsId, id);
     } finally {
       this.tenantConnectionService.releaseConnection(connection);
     }

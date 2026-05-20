@@ -70,9 +70,9 @@ describe('EmployeeService', () => {
     });
 
     it('should throw BadRequestException when search has less than 3 characters', async () => {
-      await expect(
-        service.get('cred-1', 1, 1, 10, 'ab'),
-      ).rejects.toThrow(BadRequestException);
+      await expect(service.get('cred-1', 1, 1, 10, 'ab')).rejects.toThrow(
+        BadRequestException,
+      );
     });
 
     it('should apply search filter when provided with 3+ characters', async () => {

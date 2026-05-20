@@ -51,11 +51,15 @@ export class HealthService {
   constructor(
     private readonly prisma: RegistryPrismaService,
     private readonly tenantConnections: TenantConnectionService,
-  ) { }
+  ) {}
 
   async check(bypassCache = false): Promise<HealthStatus> {
     const now = Date.now();
-    if (!bypassCache && this.lastCheck && now - this.lastCheckTime < this.CACHE_TTL) {
+    if (
+      !bypassCache &&
+      this.lastCheck &&
+      now - this.lastCheckTime < this.CACHE_TTL
+    ) {
       return {
         ...this.lastCheck,
         timestamp: new Date().toISOString(), // Mantém o timestamp atualizado

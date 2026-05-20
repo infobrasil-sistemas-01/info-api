@@ -152,174 +152,174 @@ export const PERMISSIONS = [
   {
     key: 'tenant.clients.create',
     descricao: 'Criar clientes do tenant',
-    module: 'tenant'
+    module: 'tenant',
   },
   {
     key: 'tenant.clients.update',
     descricao: 'Atualizar clientes do tenant',
-    module: 'tenant'
+    module: 'tenant',
   },
   {
     key: 'tenant.clients.delete',
     descricao: 'Deletar clientes do tenant',
-    module: 'tenant'
+    module: 'tenant',
   },
   {
     key: 'tenant.clients.view',
     descricao: 'Visualizar clientes do tenant',
-    module: 'tenant'
+    module: 'tenant',
   },
   {
     key: 'tenant.account-receivable.view',
     descricao: 'Visualizar contas a receber do tenant',
-    module: 'tenant'
+    module: 'tenant',
   },
   {
     key: 'tenant.account-receivable.create',
     descricao: 'Criar contas a receber do tenant',
-    module: 'tenant'
+    module: 'tenant',
   },
   {
     key: 'tenant.account-receivable.update',
     descricao: 'Atualizar contas a receber do tenant',
-    module: 'tenant'
+    module: 'tenant',
   },
   {
     key: 'tenant.account-receivable.delete',
     descricao: 'Deletar contas a receber do tenant',
-    module: 'tenant'
+    module: 'tenant',
   },
   {
     key: 'tenant.account-payable.view',
     descricao: 'Visualizar contas a pagar do tenant',
-    module: 'tenant'
+    module: 'tenant',
   },
   {
     key: 'tenant.account-payable.create',
     descricao: 'Criar contas a pagar do tenant',
-    module: 'tenant'
+    module: 'tenant',
   },
   {
     key: 'tenant.account-payable.update',
     descricao: 'Atualizar contas a pagar do tenant',
-    module: 'tenant'
+    module: 'tenant',
   },
   {
     key: 'tenant.account-payable.delete',
     descricao: 'Deletar contas a pagar do tenant',
-    module: 'tenant'
+    module: 'tenant',
   },
   {
     key: 'tenant.employees.view',
     descricao: 'Visualizar funcionários do tenant',
-    module: 'tenant'
+    module: 'tenant',
   },
   {
     key: 'tenant.employees.create',
     descricao: 'Criar funcionários do tenant',
-    module: 'tenant'
+    module: 'tenant',
   },
   {
     key: 'tenant.employees.update',
     descricao: 'Atualizar funcionários do tenant',
-    module: 'tenant'
+    module: 'tenant',
   },
   {
     key: 'tenant.employees.delete',
     descricao: 'Deletar funcionários do tenant',
-    module: 'tenant'
+    module: 'tenant',
   },
   {
     key: 'tenant.suppliers.view',
     descricao: 'Visualizar fornecedores do tenant',
-    module: 'tenant'
+    module: 'tenant',
   },
   {
     key: 'tenant.suppliers.create',
     descricao: 'Criar fornecedores do tenant',
-    module: 'tenant'
+    module: 'tenant',
   },
   {
     key: 'tenant.suppliers.update',
     descricao: 'Atualizar fornecedores do tenant',
-    module: 'tenant'
+    module: 'tenant',
   },
   {
     key: 'tenant.suppliers.delete',
     descricao: 'Deletar fornecedores do tenant',
-    module: 'tenant'
+    module: 'tenant',
   },
   {
     key: 'tenant.service-providers.view',
     descricao: 'Visualizar prestadores do tenant',
-    module: 'tenant'
+    module: 'tenant',
   },
   {
     key: 'tenant.service-providers.create',
     descricao: 'Criar prestadores do tenant',
-    module: 'tenant'
+    module: 'tenant',
   },
   {
     key: 'tenant.service-providers.update',
     descricao: 'Atualizar prestadores do tenant',
-    module: 'tenant'
+    module: 'tenant',
   },
   {
     key: 'tenant.service-providers.delete',
     descricao: 'Deletar prestadores do tenant',
-    module: 'tenant'
+    module: 'tenant',
   },
   {
     key: 'tenant.deliveries.view',
     descricao: 'Visualizar entregas do tenant',
-    module: 'tenant'
+    module: 'tenant',
   },
   {
     key: 'tenant.deliveries.create',
     descricao: 'Criar entregas do tenant',
-    module: 'tenant'
+    module: 'tenant',
   },
   {
     key: 'tenant.deliveries.update',
     descricao: 'Atualizar entregas do tenant',
-    module: 'tenant'
+    module: 'tenant',
   },
   {
     key: 'tenant.deliveries.delete',
     descricao: 'Deletar entregas do tenant',
-    module: 'tenant'
+    module: 'tenant',
   },
 
   // ========= SOLICITAÇÕES =========
   {
     key: 'integration-request.view',
     descricao: 'Visualizar solicitações de integração',
-    module: 'integration-request'
+    module: 'integration-request',
   },
   {
     key: 'integration-request.create',
     descricao: 'Criar solicitações de integração',
-    module: 'integration-request'
+    module: 'integration-request',
   },
   {
     key: 'integration-request.update',
     descricao: 'Atualizar solicitações de integração',
-    module: 'integration-request'
+    module: 'integration-request',
   },
   {
     key: 'integration-request.delete',
     descricao: 'Deletar solicitações de integração',
-    module: 'integration-request'
+    module: 'integration-request',
   },
   {
     key: 'integration-request.approve',
     descricao: 'Aprovar solicitações de integração',
-    module: 'integration-request'
+    module: 'integration-request',
   },
   {
     key: 'integration-request.reject',
     descricao: 'Recusar solicitações de integração',
-    module: 'integration-request'
+    module: 'integration-request',
   },
 
   // ========= AVISOS =========

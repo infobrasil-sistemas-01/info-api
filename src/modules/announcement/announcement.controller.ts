@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Param, UseGuards, Body, Patch, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  UseGuards,
+  Body,
+  Patch,
+  Delete,
+} from '@nestjs/common';
 import { AnnouncementService } from './announcement.service';
 import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
 import { CurrentUser } from 'src/modules/auth/decorators/current-user.decorator';
@@ -9,7 +18,7 @@ import { ApiExcludeController } from '@nestjs/swagger';
 @ApiExcludeController()
 @UseGuards(JwtAuthGuard)
 export class AnnouncementController {
-  constructor(private readonly announcementService: AnnouncementService) { }
+  constructor(private readonly announcementService: AnnouncementService) {}
 
   @Get()
   findAll(@CurrentUser() user: any) {
@@ -24,19 +33,19 @@ export class AnnouncementController {
   // --- ADMIN ROUTES ---
 
   @Get('admin/all')
-  @RequirePermissions({ allOf: ["core.announcement.view"] })
+  @RequirePermissions({ allOf: ['core.announcement.view'] })
   findAllAdmin() {
     return this.announcementService.findAll();
   }
 
   @Post()
-  @RequirePermissions({ allOf: ["core.announcement.create"] })
+  @RequirePermissions({ allOf: ['core.announcement.create'] })
   create(@Body() data: any) {
     return this.announcementService.create(data);
   }
 
   @Patch(':id')
-  @RequirePermissions({ allOf: ["core.announcement.update"] })
+  @RequirePermissions({ allOf: ['core.announcement.update'] })
   update(@Param('id') id: string, @Body() data: any) {
     return this.announcementService.update(id, data);
   }

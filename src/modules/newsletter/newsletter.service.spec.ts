@@ -112,11 +112,13 @@ describe('NewsletterService', () => {
     });
 
     it('should send newsletters and update announcements inside a transaction', async () => {
-      const mockAnnouncements = [{ id: '47ef5c20-7f2a-4db3-9824-2c6c39bb7f1a', newsletterId: null }];
+      const mockAnnouncements = [
+        { id: '47ef5c20-7f2a-4db3-9824-2c6c39bb7f1a', newsletterId: null },
+      ];
       mockPrisma.announcement.findMany.mockResolvedValue(mockAnnouncements);
-      
+
       const mockNewsletter = { id: 1, subject: 'Newsletter #1' };
-      
+
       mockPrisma.$transaction.mockImplementation(async (callback) => {
         const txMock = {
           newsletter: {
@@ -126,9 +128,11 @@ describe('NewsletterService', () => {
             updateMany: jest.fn().mockResolvedValue({ count: 1 }),
           },
           user: {
-            findMany: jest.fn().mockResolvedValue([
-              { user: 'Gabriel', email: 'gabriel@example.com' },
-            ]),
+            findMany: jest
+              .fn()
+              .mockResolvedValue([
+                { user: 'Gabriel', email: 'gabriel@example.com' },
+              ]),
           },
         };
         return callback(txMock);

@@ -7,7 +7,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 @ApiExcludeController()
 @Controller('uptime')
 export class UptimeController {
-  constructor(private readonly uptimeService: UptimeService) { }
+  constructor(private readonly uptimeService: UptimeService) {}
 
   @Get('status')
   @UseGuards(JwtAuthGuard)

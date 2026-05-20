@@ -8,6 +8,6 @@ import { JwtService } from '@nestjs/jwt';
 @Module({
   imports: [InfraRegistryModule, UserModule],
   controllers: [IntegrationRequestController],
-  providers: [IntegrationRequestService, JwtService]
+  providers: [IntegrationRequestService, JwtService],
 })
-export class IntegrationRequestModule { }
+export class IntegrationRequestModule {}

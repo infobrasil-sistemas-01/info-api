@@ -10,7 +10,10 @@ export class ServiceProviderResponseDto {
   @ApiProperty({ example: 'Joãozinho', description: 'Apelido do prestador' })
   PRE_APELIDO: string;
 
-  @ApiProperty({ example: 'Rua Exemplo, 123', description: 'Endereço do prestador' })
+  @ApiProperty({
+    example: 'Rua Exemplo, 123',
+    description: 'Endereço do prestador',
+  })
   PRE_ENDERECO: string;
 
   @ApiProperty({ example: '1144445555', description: 'Telefone do prestador' })
@@ -19,10 +22,16 @@ export class ServiceProviderResponseDto {
   @ApiProperty({ example: '11999998888', description: 'Celular do prestador' })
   PRE_CELULAR: string;
 
-  @ApiProperty({ example: 'joao@exemplo.com', description: 'E-mail do prestador' })
+  @ApiProperty({
+    example: 'joao@exemplo.com',
+    description: 'E-mail do prestador',
+  })
   PRE_EMAIL: string;
 
-  @ApiProperty({ example: 'A', description: 'Situação do prestador (A = Ativo, I = Inativo)' })
+  @ApiProperty({
+    example: 'A',
+    description: 'Situação do prestador (A = Ativo, I = Inativo)',
+  })
   PRE_SITUACAO: string;
 
   @ApiProperty({ example: 1, description: 'Código da loja associada' })
@@ -39,7 +48,10 @@ export class ServiceProviderDetailResponseDto {
   @ApiProperty({ example: 'Joãozinho', description: 'Apelido do prestador' })
   PRE_APELIDO: string;
 
-  @ApiProperty({ example: 'Rua Exemplo, 123', description: 'Endereço do prestador' })
+  @ApiProperty({
+    example: 'Rua Exemplo, 123',
+    description: 'Endereço do prestador',
+  })
   PRE_ENDERECO: string;
 
   @ApiProperty({ example: 'Centro', description: 'Bairro do prestador' })
@@ -60,16 +72,25 @@ export class ServiceProviderDetailResponseDto {
   @ApiProperty({ example: '11999998888', description: 'Celular do prestador' })
   PRE_CELULAR: string;
 
-  @ApiProperty({ example: 'joao@exemplo.com', description: 'E-mail do prestador' })
+  @ApiProperty({
+    example: 'joao@exemplo.com',
+    description: 'E-mail do prestador',
+  })
   PRE_EMAIL: string;
 
   @ApiProperty({ example: '123.456.789-00', description: 'CPF do prestador' })
   PRE_CPF: string;
 
-  @ApiProperty({ example: '12.345.678-9', description: 'Identidade (RG) do prestador' })
+  @ApiProperty({
+    example: '12.345.678-9',
+    description: 'Identidade (RG) do prestador',
+  })
   PRE_IDENTIDADE: string;
 
-  @ApiProperty({ example: 'A', description: 'Situação do prestador (A = Ativo, I = Inativo)' })
+  @ApiProperty({
+    example: 'A',
+    description: 'Situação do prestador (A = Ativo, I = Inativo)',
+  })
   PRE_SITUACAO: string;
 
   @ApiProperty({ example: 1, description: 'Código da loja associada' })

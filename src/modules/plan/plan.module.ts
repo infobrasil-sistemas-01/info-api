@@ -11,4 +11,4 @@ import { AuthModule } from '../auth/auth.module';
   controllers: [StatsController],
   exports: [PlanService],
 })
-export class PlanModule { }
+export class PlanModule {}

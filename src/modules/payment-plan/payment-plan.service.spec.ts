@@ -33,9 +33,7 @@ describe('PaymentPlanService', () => {
 
   describe('get', () => {
     it('should return paginated payment plans', async () => {
-      const mockPlans = [
-        { PLP_CODIGO: 1, PLP_DESCRICAO: 'A VISTA' },
-      ];
+      const mockPlans = [{ PLP_CODIGO: 1, PLP_DESCRICAO: 'A VISTA' }];
       mockConnection.query.mockImplementation(
         (query: string, params: any[], callback: Function) => {
           callback(null, mockPlans);
@@ -53,9 +51,9 @@ describe('PaymentPlanService', () => {
     });
 
     it('should throw BadRequestException when pageSize is greater than 25', async () => {
-      await expect(
-        service.get('cred-1', 1, 50),
-      ).rejects.toThrow(BadRequestException);
+      await expect(service.get('cred-1', 1, 50)).rejects.toThrow(
+        BadRequestException,
+      );
     });
   });
 });

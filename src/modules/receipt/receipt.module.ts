@@ -7,4 +7,4 @@ import { ReceiptService } from './receipt.service';
   providers: [ReceiptService],
   exports: [ReceiptService],
 })
-export class ReceiptModule { }
+export class ReceiptModule {}

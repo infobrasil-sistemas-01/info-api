@@ -3,6 +3,7 @@ import { BadRequestException } from '@nestjs/common';
 import { ProductBrandController } from './product-brand.controller';
 import { ProductBrandService } from './product-brand.service';
 import { CreateBrandDto } from './dto/create-brand.dto';
+import { UpdateBrandDto } from './dto/update-brand.dto';
 import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 
@@ -13,6 +14,7 @@ describe('ProductBrandController', () => {
   const mockBrandService = {
     get: jest.fn(),
     create: jest.fn(),
+    update: jest.fn(),
   };
 
   const mockReq = {
@@ -75,6 +77,22 @@ describe('ProductBrandController', () => {
 
       expect(brandService.create).toHaveBeenCalledWith('cred-1', payload);
       expect(result).toEqual(mockCreatedBrand);
+    });
+  });
+
+  describe('updateBrand', () => {
+    it('should call brandService.update and return the updated brand', async () => {
+      const mockUpdatedBrand = {
+        MAR_CODIGO: 1,
+        MAR_DESCRICAO: 'Updated Brand',
+      };
+      mockBrandService.update.mockResolvedValue(mockUpdatedBrand);
+
+      const payload: UpdateBrandDto = { MAR_DESCRICAO: 'Updated Brand' };
+      const result = await controller.updateBrand(mockReq, 1, payload);
+
+      expect(brandService.update).toHaveBeenCalledWith('cred-1', 1, payload);
+      expect(result).toEqual(mockUpdatedBrand);
     });
   });
 });

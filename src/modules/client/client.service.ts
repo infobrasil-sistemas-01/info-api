@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { TenantConnectionService } from 'src/infra/database/tenant-connection.service';
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
@@ -9,7 +14,7 @@ export class ClientService {
 
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
-  ) { }
+  ) {}
 
   async get(
     credentialsId: string,
@@ -66,14 +71,16 @@ export class ClientService {
       const endTime = Date.now();
 
       this.logger.log(
-        `Busca de clientes executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify({
-          storeId,
-          page,
-          pageSize,
-          search,
-          situation,
-          birthdate,
-        })}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${endTime - startTime}ms`,
+        `Busca de clientes executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
+          {
+            storeId,
+            page,
+            pageSize,
+            search,
+            situation,
+            birthdate,
+          },
+        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${endTime - startTime}ms`,
       );
       return result;
     } finally {
@@ -103,7 +110,8 @@ export class ClientService {
       const endTime = Date.now();
 
       this.logger.log(
-        `Busca de cliente por ID executada. Tenant: ${credentialsId}, ID: ${id}, Tempo SQL: ${endTime - startTime
+        `Busca de cliente por ID executada. Tenant: ${credentialsId}, ID: ${id}, Tempo SQL: ${
+          endTime - startTime
         }ms`,
       );
       return result;
@@ -220,7 +228,8 @@ export class ClientService {
       const endTime = Date.now();
 
       this.logger.log(
-        `Cliente atualizado. Tenant: ${credentialsId}, ID: ${id}, Tempo SQL: ${endTime - startTime
+        `Cliente atualizado. Tenant: ${credentialsId}, ID: ${id}, Tempo SQL: ${
+          endTime - startTime
         }ms`,
       );
 

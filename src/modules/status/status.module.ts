@@ -10,4 +10,4 @@ import { HealthModule } from '../health/health.module';
   providers: [StatusService],
   exports: [StatusService],
 })
-export class StatusModule { }
+export class StatusModule {}

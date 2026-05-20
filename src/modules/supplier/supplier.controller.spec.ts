@@ -41,16 +41,13 @@ describe('SupplierController', () => {
     it('should call supplierService.get with all parameters', async () => {
       mockSupplierService.get.mockResolvedValue([{ CRE_CODIGO: 1 }]);
 
-      const result = await controller.get(
-        mockReq,
-        {
-          storeId: 1,
-          page: 2,
-          pageSize: 20,
-          search: 'search term',
-          situation: 'A',
-        }
-      );
+      const result = await controller.get(mockReq, {
+        storeId: 1,
+        page: 2,
+        pageSize: 20,
+        search: 'search term',
+        situation: 'A',
+      });
 
       expect(supplierService.get).toHaveBeenCalledWith(
         'cred-1',
@@ -58,7 +55,7 @@ describe('SupplierController', () => {
         2,
         20,
         'search term',
-        'A'
+        'A',
       );
       expect(result).toEqual([{ CRE_CODIGO: 1 }]);
     });
@@ -71,10 +68,7 @@ describe('SupplierController', () => {
 
       const result = await controller.getById(mockReq, 123);
 
-      expect(supplierService.getById).toHaveBeenCalledWith(
-        'cred-1',
-        123
-      );
+      expect(supplierService.getById).toHaveBeenCalledWith('cred-1', 123);
       expect(result).toEqual(mockSupplier);
     });
   });

@@ -95,7 +95,12 @@ describe('ProductController', () => {
       const mockProduct = { id: 123, name: 'Product 1' };
       mockProductService.getUnique.mockResolvedValue(mockProduct);
 
-      const result = await controller.getProductById(mockReq, 123, undefined, 1);
+      const result = await controller.getProductById(
+        mockReq,
+        123,
+        undefined,
+        1,
+      );
 
       expect(productService.getUnique).toHaveBeenCalledWith(
         'cred-1',
@@ -121,7 +126,12 @@ describe('ProductController', () => {
       const mockProduct = { id: 1, barcode: '123456789' };
       mockProductService.getUnique.mockResolvedValue(mockProduct);
 
-      const result = await controller.getProductByBarcode(mockReq, 123456789, undefined, 1);
+      const result = await controller.getProductByBarcode(
+        mockReq,
+        123456789,
+        undefined,
+        1,
+      );
 
       expect(productService.getUnique).toHaveBeenCalledWith(
         'cred-1',

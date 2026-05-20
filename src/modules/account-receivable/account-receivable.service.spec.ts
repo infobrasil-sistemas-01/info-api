@@ -61,7 +61,15 @@ describe('AccountReceivableService', () => {
     });
 
     it('should return account receivables with situation filter', async () => {
-      const result = await service.get('cred-1', 1, 1, 10, undefined, undefined, 'A');
+      const result = await service.get(
+        'cred-1',
+        1,
+        1,
+        10,
+        undefined,
+        undefined,
+        'A',
+      );
 
       expect(result).toBeDefined();
     });
@@ -185,7 +193,9 @@ describe('AccountReceivableService', () => {
       ).rejects.toThrow(BadRequestException);
       await expect(
         service.get('cred-1', 1, 1, 10, undefined, undefined, 'X'),
-      ).rejects.toThrow('Situação inválida! Valores aceitos: A (Aberto) ou L (Liquidado)');
+      ).rejects.toThrow(
+        'Situação inválida! Valores aceitos: A (Aberto) ou L (Liquidado)',
+      );
     });
 
     it('should accept situation "A" as valid', async () => {
@@ -202,38 +212,118 @@ describe('AccountReceivableService', () => {
 
     it('should throw BadRequestException for invalid startDate', async () => {
       await expect(
-        service.get('cred-1', 1, 1, 10, undefined, undefined, undefined, 'invalid-date'),
+        service.get(
+          'cred-1',
+          1,
+          1,
+          10,
+          undefined,
+          undefined,
+          undefined,
+          'invalid-date',
+        ),
       ).rejects.toThrow(BadRequestException);
       await expect(
-        service.get('cred-1', 1, 1, 10, undefined, undefined, undefined, 'invalid-date'),
+        service.get(
+          'cred-1',
+          1,
+          1,
+          10,
+          undefined,
+          undefined,
+          undefined,
+          'invalid-date',
+        ),
       ).rejects.toThrow('Data inicial inválida');
     });
 
     it('should throw BadRequestException for invalid endDate', async () => {
       await expect(
-        service.get('cred-1', 1, 1, 10, undefined, undefined, undefined, undefined, 'not-a-date'),
+        service.get(
+          'cred-1',
+          1,
+          1,
+          10,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          'not-a-date',
+        ),
       ).rejects.toThrow(BadRequestException);
       await expect(
-        service.get('cred-1', 1, 1, 10, undefined, undefined, undefined, undefined, 'not-a-date'),
+        service.get(
+          'cred-1',
+          1,
+          1,
+          10,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          'not-a-date',
+        ),
       ).rejects.toThrow('Data final inválida');
     });
 
     it('should throw BadRequestException when startDate is provided without endDate', async () => {
       await expect(
-        service.get('cred-1', 1, 1, 10, undefined, undefined, undefined, '2024-01-01'),
+        service.get(
+          'cred-1',
+          1,
+          1,
+          10,
+          undefined,
+          undefined,
+          undefined,
+          '2024-01-01',
+        ),
       ).rejects.toThrow(BadRequestException);
       await expect(
-        service.get('cred-1', 1, 1, 10, undefined, undefined, undefined, '2024-01-01'),
-      ).rejects.toThrow('Data final é obrigatória quando a data inicial é informada');
+        service.get(
+          'cred-1',
+          1,
+          1,
+          10,
+          undefined,
+          undefined,
+          undefined,
+          '2024-01-01',
+        ),
+      ).rejects.toThrow(
+        'Data final é obrigatória quando a data inicial é informada',
+      );
     });
 
     it('should throw BadRequestException when endDate is provided without startDate', async () => {
       await expect(
-        service.get('cred-1', 1, 1, 10, undefined, undefined, undefined, undefined, '2024-12-31'),
+        service.get(
+          'cred-1',
+          1,
+          1,
+          10,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          '2024-12-31',
+        ),
       ).rejects.toThrow(BadRequestException);
       await expect(
-        service.get('cred-1', 1, 1, 10, undefined, undefined, undefined, undefined, '2024-12-31'),
-      ).rejects.toThrow('Data inicial é obrigatória quando a data final é informada');
+        service.get(
+          'cred-1',
+          1,
+          1,
+          10,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          '2024-12-31',
+        ),
+      ).rejects.toThrow(
+        'Data inicial é obrigatória quando a data final é informada',
+      );
     });
 
     it('should throw error when query fails', async () => {
@@ -241,7 +331,9 @@ describe('AccountReceivableService', () => {
         callback(new Error('Query error'), null);
       });
 
-      await expect(service.get('cred-1', 1, 1, 10, 1)).rejects.toThrow('Query error');
+      await expect(service.get('cred-1', 1, 1, 10, 1)).rejects.toThrow(
+        'Query error',
+      );
     });
   });
 });

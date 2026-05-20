@@ -18,10 +18,16 @@ export class GetEmployeesQueryDto extends ZodDto(GetEmployeesQuerySchema) {
   @ApiPropertyOptional({ description: 'Itens por página', example: 10 })
   pageSize?: number;
 
-  @ApiPropertyOptional({ description: 'Busca por nome ou apelido (FUN_NOME, FUN_APELIDO)', example: 'João' })
+  @ApiPropertyOptional({
+    description: 'Busca por nome ou apelido (FUN_NOME, FUN_APELIDO)',
+    example: 'João',
+  })
   search?: string;
 
-  @ApiPropertyOptional({ description: 'Situação do funcionário (FUN_SITUACAO)', enum: ['A', 'I'] })
+  @ApiPropertyOptional({
+    description: 'Situação do funcionário (FUN_SITUACAO)',
+    enum: ['A', 'I'],
+  })
   situation?: 'A' | 'I';
 
   @ApiPropertyOptional({ description: 'ID da loja (LOJ_CODIGO)', example: 1 })

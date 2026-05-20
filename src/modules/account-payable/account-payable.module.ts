@@ -8,4 +8,4 @@ import { TenantConnectionModule } from 'src/infra/database/tenant-connection.mod
   imports: [TenantConnectionModule],
   providers: [AccountPayableService],
 })
-export class AccountPayableModule { }
+export class AccountPayableModule {}

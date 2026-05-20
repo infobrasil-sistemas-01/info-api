@@ -22,14 +22,17 @@ import {
 import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
 import { GetDeliveriesQueryDto } from './dto/get-deliveries-query.dto';
-import { DeliveryResponseDto, DeliveryDetailResponseDto } from './dto/delivery-response.dto';
+import {
+  DeliveryResponseDto,
+  DeliveryDetailResponseDto,
+} from './dto/delivery-response.dto';
 
 @ApiTags('Delivery')
 @Controller('deliveries')
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 @ApiBearerAuth()
 export class DeliveryController {
-  constructor(private readonly deliveryService: DeliveryService) { }
+  constructor(private readonly deliveryService: DeliveryService) {}
 
   @Get()
   @RequirePermissions({ allOf: ['tenant.deliveries.view'] })
@@ -77,7 +80,8 @@ export class DeliveryController {
   @RequirePermissions({ allOf: ['tenant.deliveries.view'] })
   @ApiOperation({
     summary: 'Obter detalhes de uma entrega pelo ID',
-    description: 'Retorna os detalhes de uma entrega específica com os itens vinculados.',
+    description:
+      'Retorna os detalhes de uma entrega específica com os itens vinculados.',
   })
   @ApiParam({
     name: 'id',

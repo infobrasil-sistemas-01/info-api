@@ -1,5 +1,10 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+} from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
@@ -13,7 +18,7 @@ import { EmployeeRoleResponseDto } from './dto/employee-role-response.dto';
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 @Controller('employee-roles')
 export class EmployeeRoleController {
-  constructor(private readonly employeeRoleService: EmployeeRoleService) { }
+  constructor(private readonly employeeRoleService: EmployeeRoleService) {}
 
   @Get()
   @RequirePermissions({ allOf: ['tenant.employees.view'] })

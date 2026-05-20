@@ -30,7 +30,7 @@ export class AuthService {
     private readonly env: EnvService,
     @Inject(AUTH_CONFIG) private readonly authConfig: AuthConfig,
     private readonly permissionResolver: PermissionResolver,
-  ) { }
+  ) {}
 
   async login(basic: string, meta: RequestMeta) {
     const [username, password] = Buffer.from(basic, 'base64')
@@ -46,11 +46,13 @@ export class AuthService {
         dbCredentialsId: true,
         storeId: true,
         role: true,
-      }
+      },
     });
 
     if (!user) {
-      this.logger.warn(`Tentativa de login falhou: usuário "${username}" não encontrado. IP: ${meta.ip}`);
+      this.logger.warn(
+        `Tentativa de login falhou: usuário "${username}" não encontrado. IP: ${meta.ip}`,
+      );
       throw new UnauthorizedException('Credenciais inválidas.');
     }
 
@@ -62,7 +64,9 @@ export class AuthService {
     );
 
     if (!passwordIsValid) {
-      this.logger.warn(`Tentativa de login falhou: senha incorreta para o usuário "${username}". IP: ${meta.ip}`);
+      this.logger.warn(
+        `Tentativa de login falhou: senha incorreta para o usuário "${username}". IP: ${meta.ip}`,
+      );
       throw new UnauthorizedException('Credenciais inválidas.');
     }
 
@@ -81,9 +85,13 @@ export class AuthService {
       throw new UnauthorizedException('Falha ao gerar token.');
     }
 
-    this.logger.log(`Usuário logado com sucesso: "${user.user}" (ID: ${user.id}). IP: ${meta.ip}`);
+    this.logger.log(
+      `Usuário logado com sucesso: "${user.user}" (ID: ${user.id}). IP: ${meta.ip}`,
+    );
 
-    const permissions = await this.permissionResolver.resolve(user.id.toString());
+    const permissions = await this.permissionResolver.resolve(
+      user.id.toString(),
+    );
 
     return {
       accessToken,

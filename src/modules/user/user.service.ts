@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException, ConflictException, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+  Logger,
+} from '@nestjs/common';
 import { RegistryPrismaService } from 'src/infra/prisma/registry-prisma.service';
 import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
 import * as argon2 from 'argon2';
@@ -15,7 +20,7 @@ export class UserService {
     private readonly prisma: RegistryPrismaService,
     private readonly emailService: EmailService,
     private readonly env: EnvService,
-  ) { }
+  ) {}
 
   async create(data: CreateUserDto) {
     const existing = await this.prisma.user.findUnique({
@@ -66,7 +71,7 @@ export class UserService {
           userId: user.id,
           token,
           expiresAt,
-        }
+        },
       });
 
       await this.sendInvitationEmail(data.email, user.user, token);
@@ -75,10 +80,15 @@ export class UserService {
     return user;
   }
 
-  public async sendInvitationEmail(to: string, username: string, token: string) {
-    const baseUrl = this.env.get('NODE_ENV') === 'production'
-      ? 'https://info-api.infobrasilsistemas.com.br'
-      : `http://localhost:${this.env.get('PORT') || 3000}`;
+  public async sendInvitationEmail(
+    to: string,
+    username: string,
+    token: string,
+  ) {
+    const baseUrl =
+      this.env.get('NODE_ENV') === 'production'
+        ? 'https://info-api.infobrasilsistemas.com.br'
+        : `http://localhost:${this.env.get('PORT') || 3000}`;
 
     const setupUrl = `${baseUrl}/integration/setup-password/${token}`;
 
@@ -99,23 +109,32 @@ export class UserService {
       </div>
     `;
 
-    await this.emailService.sendEmail(to, 'Convite de Acesso - InfoAPI', html)
-      .catch(err => this.logger.error(`Erro ao enviar convite para ${to}: ${err.message}`));
+    await this.emailService
+      .sendEmail(to, 'Convite de Acesso - InfoAPI', html)
+      .catch((err) =>
+        this.logger.error(`Erro ao enviar convite para ${to}: ${err.message}`),
+      );
   }
 
-  public async sendWelcomeEmail(to: string, username: string, permissions: string[]) {
-    const baseUrl = this.env.get('NODE_ENV') === 'production'
-      ? 'https://info-api.infobrasilsistemas.com.br'
-      : `http://localhost:${this.env.get('PORT') || 3000}`;
+  public async sendWelcomeEmail(
+    to: string,
+    username: string,
+    permissions: string[],
+  ) {
+    const baseUrl =
+      this.env.get('NODE_ENV') === 'production'
+        ? 'https://info-api.infobrasilsistemas.com.br'
+        : `http://localhost:${this.env.get('PORT') || 3000}`;
 
     const clientUrl = `${baseUrl}/integration/client`;
     const docsUrl = `${baseUrl}/docs`;
 
-    const permissionsHtml = permissions.length > 0
-      ? `<ul style="padding-left: 20px; color: #475569; font-size: 0.9rem;">
-          ${permissions.map(p => `<li style="margin-bottom: 4px;">${p}</li>`).join('')}
+    const permissionsHtml =
+      permissions.length > 0
+        ? `<ul style="padding-left: 20px; color: #475569; font-size: 0.9rem;">
+          ${permissions.map((p) => `<li style="margin-bottom: 4px;">${p}</li>`).join('')}
          </ul>`
-      : '<p style="color: #666; font-size: 0.9rem;">Nenhuma permissão específica atribuída.</p>';
+        : '<p style="color: #666; font-size: 0.9rem;">Nenhuma permissão específica atribuída.</p>';
 
     const html = `
       <div style="font-family: sans-serif; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 8px; padding: 24px; background: #fff;">
@@ -151,8 +170,13 @@ export class UserService {
       </div>
     `;
 
-    await this.emailService.sendEmail(to, 'Bem-vindo ao InfoAPI - Sua conta está pronta!', html)
-      .catch(err => this.logger.error(`Erro ao enviar e-mail de boas-vindas para ${to}: ${err.message}`));
+    await this.emailService
+      .sendEmail(to, 'Bem-vindo ao InfoAPI - Sua conta está pronta!', html)
+      .catch((err) =>
+        this.logger.error(
+          `Erro ao enviar e-mail de boas-vindas para ${to}: ${err.message}`,
+        ),
+      );
   }
 
   async setupPasswordByToken(token: string) {
@@ -165,18 +189,24 @@ export class UserService {
               include: {
                 rolePermissions: {
                   include: {
-                    permission: true
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
+                    permission: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
     });
 
-    if (!invitation || invitation.acceptedAt || invitation.expiresAt < new Date()) {
-      throw new NotFoundException('Convite inválido, expirado ou já utilizado.');
+    if (
+      !invitation ||
+      invitation.acceptedAt ||
+      invitation.expiresAt < new Date()
+    ) {
+      throw new NotFoundException(
+        'Convite inválido, expirado ou já utilizado.',
+      );
     }
 
     const plainPassword = generateApiPassword();
@@ -192,14 +222,20 @@ export class UserService {
       }),
       this.prisma.userInvitation.update({
         where: { id: invitation.id },
-        data: { acceptedAt: new Date() }
-      })
+        data: { acceptedAt: new Date() },
+      }),
     ]);
 
     // Enviar e-mail de boas-vindas
     if (invitation.user.email) {
-      const perms = invitation.user.role?.rolePermissions.map(rp => rp.permission.name) || [];
-      await this.sendWelcomeEmail(invitation.user.email, invitation.user.user, perms);
+      const perms =
+        invitation.user.role?.rolePermissions.map((rp) => rp.permission.name) ||
+        [];
+      await this.sendWelcomeEmail(
+        invitation.user.email,
+        invitation.user.user,
+        perms,
+      );
     }
 
     return {

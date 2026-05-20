@@ -24,7 +24,9 @@ export class EmailService implements OnModuleInit {
     try {
       const { token } = await this.oauth2Client.getAccessToken();
       if (!token) throw new Error('Não foi possível obter o Access Token');
-      this.logger.log(`Gmail API OAuth2 validada para: ${this.env.get('GMAIL_USER')}`);
+      this.logger.log(
+        `Gmail API OAuth2 validada para: ${this.env.get('GMAIL_USER')}`,
+      );
     } catch (error: any) {
       this.logger.error(
         `Falha na validação do Gmail OAuth2 (${this.env.get('GMAIL_USER')}): ${error.message}`,
@@ -67,7 +69,10 @@ export class EmailService implements OnModuleInit {
       this.logger.log(`E-mail enviado via API para ${to}: ${result.data.id}`);
       return result;
     } catch (error) {
-      this.logger.error(`Erro ao enviar e-mail via API para ${to}`, error.stack);
+      this.logger.error(
+        `Erro ao enviar e-mail via API para ${to}`,
+        error.stack,
+      );
       throw error;
     }
   }

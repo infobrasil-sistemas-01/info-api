@@ -1,7 +1,12 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { PlanService } from './plan.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { ApiBearerAuth, ApiOperation, ApiTags, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiTags,
+  ApiResponse,
+} from '@nestjs/swagger';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import type { JwtPayload } from '../auth/types/jwt-payload';
 import { RegistryPrismaService } from 'src/infra/prisma/registry-prisma.service';
@@ -14,15 +19,18 @@ import { PlanResponseDto } from './dto/plan-response.dto';
 export class StatsController {
   constructor(
     private readonly planService: PlanService,
-    private readonly prisma: RegistryPrismaService
-  ) { }
+    private readonly prisma: RegistryPrismaService,
+  ) {}
 
   @Get('stats')
   @UseGuards(JwtAuthGuard)
-  @ApiOperation({ summary: 'Obtém estatísticas de uso e limites do plano do usuário logado' })
+  @ApiOperation({
+    summary: 'Obtém estatísticas de uso e limites do plano do usuário logado',
+  })
   @ApiResponse({
     status: 200,
-    description: 'Estatísticas de uso e limites do plano retornadas com sucesso.',
+    description:
+      'Estatísticas de uso e limites do plano retornadas com sucesso.',
     type: UserStatsResponseDto,
   })
   async getStats(@CurrentUser() user: JwtPayload) {
@@ -38,7 +46,7 @@ export class StatsController {
   })
   async findAll() {
     return this.prisma.plan.findMany({
-      orderBy: { reqMonth: 'asc' }
+      orderBy: { reqMonth: 'asc' },
     });
   }
 }

@@ -3,7 +3,11 @@ import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { PostOrderDto } from 'src/modules/order/dto/create-order.dto';
-import { generateDate, generateHour, generateId } from 'src/utils/generators.util';
+import {
+  generateDate,
+  generateHour,
+  generateId,
+} from 'src/utils/generators.util';
 
 describe('API E2E Tests', () => {
   let app: INestApplication;
@@ -243,7 +247,7 @@ describe('API E2E Tests', () => {
           products_sold: [
             {
               product_id: 1,
-              quantity: 1
+              quantity: 1,
             },
           ],
         };
@@ -275,9 +279,7 @@ describe('API E2E Tests', () => {
       });
 
       it('should return 401 without token', async () => {
-        await request(app.getHttpServer())
-          .get('/api/v1/orders')
-          .expect(401);
+        await request(app.getHttpServer()).get('/api/v1/orders').expect(401);
       });
     });
 
@@ -302,7 +304,7 @@ describe('API E2E Tests', () => {
           .post(`/api/v1/orders/${orderId}/receipt`)
           .send({
             email: 'teste@email.com',
-            cpf: '12345678909'
+            cpf: '12345678909',
           })
           .set(authHeader())
           .expect(201);
@@ -313,7 +315,7 @@ describe('API E2E Tests', () => {
           .post(`/api/v1/orders/${orderId}/receipt`)
           .send({
             email: 'teste@email.com',
-            cpf: '12345678909'
+            cpf: '12345678909',
           })
           .expect(401);
       });
@@ -336,7 +338,9 @@ describe('API E2E Tests', () => {
 
       it('should return 200 with all query params', async () => {
         await request(app.getHttpServer())
-          .get('/api/v1/account-receivable?page=1&clientId=1&arId=1&situation=A&startDate=2022-01-01&endDate=2022-12-31')
+          .get(
+            '/api/v1/account-receivable?page=1&clientId=1&arId=1&situation=A&startDate=2022-01-01&endDate=2022-12-31',
+          )
           .set(authHeader())
           .expect(200);
       });

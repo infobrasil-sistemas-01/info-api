@@ -62,7 +62,7 @@ describe('AccountPayableController', () => {
         5,
         'A',
         '2024-01-01',
-        '2024-12-31'
+        '2024-12-31',
       );
       expect(result).toEqual([{ PAG_NUMERO: 1 }]);
     });

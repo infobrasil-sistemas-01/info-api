@@ -17,7 +17,11 @@ export class GetOrderItemsQueryDto extends ZodDto(GetOrderItemsQuerySchema) {
   @ApiPropertyOptional({ description: 'Página atual', example: 1, default: 1 })
   page?: number;
 
-  @ApiPropertyOptional({ description: 'Itens por página', example: 10, default: 10 })
+  @ApiPropertyOptional({
+    description: 'Itens por página',
+    example: 10,
+    default: 10,
+  })
   pageSize?: number;
 
   @ApiPropertyOptional({ description: 'ID da venda (VEN_NUMERO)' })

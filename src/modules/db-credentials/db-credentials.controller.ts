@@ -8,12 +8,20 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiExcludeController, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiExcludeController,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
 import { DbCredentialsService } from './db-credentials.service';
-import type { CreateDbCredentialsDto, UpdateDbCredentialsDto } from './dto/db-credentials.dto';
+import type {
+  CreateDbCredentialsDto,
+  UpdateDbCredentialsDto,
+} from './dto/db-credentials.dto';
 import { HealthService } from '../health/health.service';
 
 @ApiTags('DbCredentials')

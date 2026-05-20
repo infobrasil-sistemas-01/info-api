@@ -44,33 +44,24 @@ describe('DeliveryController', () => {
     it('should call deliveryService.get with correct parameters', async () => {
       mockDeliveryService.get.mockResolvedValue([{ VEN_NUMERO: 12345 }]);
 
-      const result = await controller.getDeliveries(
-        mockReq,
-        {
-          page: 2,
-          pageSize: 20,
-          storeId: 1,
-          startDate: '2026-05-01',
-          endDate: '2026-05-31',
-          situation: 1,
-          vehiclePlate: 'ABC-1234',
-          providerId: 5,
-        }
-      );
+      const result = await controller.getDeliveries(mockReq, {
+        page: 2,
+        pageSize: 20,
+        storeId: 1,
+        startDate: '2026-05-01',
+        endDate: '2026-05-31',
+        situation: 1,
+        vehiclePlate: 'ABC-1234',
+        providerId: 5,
+      });
 
-      expect(deliveryService.get).toHaveBeenCalledWith(
-        'cred-1',
-        1,
-        2,
-        20,
-        {
-          startDate: '2026-05-01',
-          endDate: '2026-05-31',
-          situation: 1,
-          vehiclePlate: 'ABC-1234',
-          providerId: 5,
-        }
-      );
+      expect(deliveryService.get).toHaveBeenCalledWith('cred-1', 1, 2, 20, {
+        startDate: '2026-05-01',
+        endDate: '2026-05-31',
+        situation: 1,
+        vehiclePlate: 'ABC-1234',
+        providerId: 5,
+      });
       expect(result).toEqual([{ VEN_NUMERO: 12345 }]);
     });
   });
@@ -82,20 +73,16 @@ describe('DeliveryController', () => {
 
       const result = await controller.getDeliveryById(mockReq, 100, 1);
 
-      expect(deliveryService.getById).toHaveBeenCalledWith(
-        'cred-1',
-        100,
-        1,
-      );
+      expect(deliveryService.getById).toHaveBeenCalledWith('cred-1', 100, 1);
       expect(result).toEqual(mockDelivery);
     });
 
     it('should throw NotFoundException if delivery is not found', async () => {
       mockDeliveryService.getById.mockResolvedValue(null);
 
-      await expect(
-        controller.getDeliveryById(mockReq, 999, 1),
-      ).rejects.toThrow(NotFoundException);
+      await expect(controller.getDeliveryById(mockReq, 999, 1)).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 });

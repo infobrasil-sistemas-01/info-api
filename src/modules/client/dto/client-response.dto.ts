@@ -4,19 +4,31 @@ export class ClientResponseDto {
   @ApiProperty({ example: 1, description: 'Código do cliente' })
   CLI_CODIGO: number;
 
-  @ApiProperty({ example: 'A', description: 'Situação (A = Ativo, I = Inativo)' })
+  @ApiProperty({
+    example: 'A',
+    description: 'Situação (A = Ativo, I = Inativo)',
+  })
   CLI_SITUACAO: string;
 
-  @ApiProperty({ example: 'Maria de Souza', description: 'Nome ou razão social' })
+  @ApiProperty({
+    example: 'Maria de Souza',
+    description: 'Nome ou razão social',
+  })
   CLI_NOME: string;
 
-  @ApiProperty({ example: 'Mariazinha', description: 'Nome fantasia ou apelido' })
+  @ApiProperty({
+    example: 'Mariazinha',
+    description: 'Nome fantasia ou apelido',
+  })
   CLI_FANTASIA: string;
 
   @ApiProperty({ example: 'F', description: 'Sexo (M, F, O)' })
   CLI_SEXO: string;
 
-  @ApiProperty({ example: 'Av. Paulista, 1000', description: 'Endereço principal' })
+  @ApiProperty({
+    example: 'Av. Paulista, 1000',
+    description: 'Endereço principal',
+  })
   CLI_ENDERECO: string;
 
   @ApiProperty({ example: '11988887777', description: 'Telefone' })

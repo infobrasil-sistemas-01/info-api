@@ -18,7 +18,7 @@ import { AccountPayableQueryDto } from './dto/account-payable-query.dto';
 
 @Controller('account-payable')
 export class AccountPayableController {
-  constructor(private readonly accountPayableService: AccountPayableService) { }
+  constructor(private readonly accountPayableService: AccountPayableService) {}
 
   @Get()
   @UseGuards(JwtAuthGuard, PermissionsGuard)
@@ -67,7 +67,8 @@ export class AccountPayableController {
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Buscar detalhes da conta a pagar',
-    description: 'Retorna os detalhes completos de uma conta a pagar pelo ID (PAG_NUMERO).',
+    description:
+      'Retorna os detalhes completos de uma conta a pagar pelo ID (PAG_NUMERO).',
     tags: ['Account Payable'],
   })
   @ApiResponse({
@@ -84,7 +85,10 @@ export class AccountPayableController {
     type: Number,
     description: 'Número da conta a pagar (PAG_NUMERO)',
   })
-  getAccountPayableById(@Req() req: ReqWithAuthContext, @Param('id') id: number) {
+  getAccountPayableById(
+    @Req() req: ReqWithAuthContext,
+    @Param('id') id: number,
+  ) {
     const credentialsId = req.authContext?.credentialsId;
 
     if (!credentialsId) {

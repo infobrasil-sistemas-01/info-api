@@ -1,13 +1,13 @@
-import { BadRequestException, Injectable, Logger } from "@nestjs/common";
-import { TenantConnectionService } from "src/infra/database/tenant-connection.service";
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { TenantConnectionService } from 'src/infra/database/tenant-connection.service';
 
 @Injectable()
 export class AccountReceivableService {
   private readonly logger = new Logger(AccountReceivableService.name);
 
   constructor(
-    private readonly tenantConnectionService: TenantConnectionService
-  ) { }
+    private readonly tenantConnectionService: TenantConnectionService,
+  ) {}
 
   async get(
     credentialsId: string,
@@ -18,7 +18,7 @@ export class AccountReceivableService {
     arId?: number,
     situation?: string,
     startDate?: string,
-    endDate?: string
+    endDate?: string,
   ) {
     let connection: any;
     const startTime = Date.now();
@@ -35,16 +35,22 @@ export class AccountReceivableService {
       }
 
       if (pageSize < 1) {
-        throw new BadRequestException('O tamanho da página deve ser maior ou igual a 1');
+        throw new BadRequestException(
+          'O tamanho da página deve ser maior ou igual a 1',
+        );
       }
 
       if (!clientId && !arId && !situation && !startDate && !endDate) {
-        throw new BadRequestException('Pelo menos um filtro deve ser informado');
+        throw new BadRequestException(
+          'Pelo menos um filtro deve ser informado',
+        );
       }
 
       if (situation) {
         if (situation != 'A' && situation != 'L') {
-          throw new BadRequestException('Situação inválida! Valores aceitos: A (Aberto) ou L (Liquidado)');
+          throw new BadRequestException(
+            'Situação inválida! Valores aceitos: A (Aberto) ou L (Liquidado)',
+          );
         }
       }
 
@@ -63,11 +69,15 @@ export class AccountReceivableService {
       }
 
       if (startDate && !endDate) {
-        throw new BadRequestException('Data final é obrigatória quando a data inicial é informada');
+        throw new BadRequestException(
+          'Data final é obrigatória quando a data inicial é informada',
+        );
       }
 
       if (!startDate && endDate) {
-        throw new BadRequestException('Data inicial é obrigatória quando a data final é informada');
+        throw new BadRequestException(
+          'Data inicial é obrigatória quando a data final é informada',
+        );
       }
 
       let query = `select FIRST ? SKIP ?
@@ -119,16 +129,18 @@ export class AccountReceivableService {
 
       const queryEndTime = Date.now();
       this.logger.log(
-        `Busca de Contas a Receber executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify({
-          storeId,
-          page,
-          pageSize,
-          clientId,
-          arId,
-          situation,
-          startDate,
-          endDate,
-        })}, Itens: ${result.length}, Tempo SQL: ${queryEndTime - queryStartTime}ms`
+        `Busca de Contas a Receber executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
+          {
+            storeId,
+            page,
+            pageSize,
+            clientId,
+            arId,
+            situation,
+            startDate,
+            endDate,
+          },
+        )}, Itens: ${result.length}, Tempo SQL: ${queryEndTime - queryStartTime}ms`,
       );
 
       return result;

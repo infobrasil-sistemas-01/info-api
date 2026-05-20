@@ -8,7 +8,7 @@ export class OrderItemService {
 
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
-  ) { }
+  ) {}
 
   async insertSoldProductOnDb(
     transaction: any,
@@ -131,7 +131,8 @@ export class OrderItemService {
       this.logger.log(
         `Busca de itens do pedido executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
           { orderId },
-        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${queryEndTime - queryStartTime
+        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${
+          queryEndTime - queryStartTime
         }ms`,
       );
 
@@ -218,7 +219,8 @@ export class OrderItemService {
       this.logger.log(
         `Busca transversal de itens de venda executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
           { storeId, ...filters },
-        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${queryEndTime - queryStartTime
+        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${
+          queryEndTime - queryStartTime
         }ms`,
       );
 

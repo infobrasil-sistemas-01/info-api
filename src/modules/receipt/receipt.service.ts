@@ -5,7 +5,7 @@ import { TenantConnectionService } from 'src/infra/database/tenant-connection.se
 export class ReceiptService {
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
-  ) { }
+  ) {}
 
   async post(credentialsId: string, storeId: number = 1, orderId: number) {
     let connection: any;

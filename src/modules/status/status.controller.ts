@@ -3,10 +3,21 @@ import type { Response } from 'express';
 import { StatusService } from './status.service';
 import * as fs from 'fs';
 import * as path from 'path';
-import { ApiOperation, ApiTags, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiTags,
+  ApiBearerAuth,
+  ApiResponse,
+} from '@nestjs/swagger';
 import { HealthService } from '../health/health.service';
-import { JwtAuthGuard, type ReqWithAuthContext } from '../auth/guards/jwt-auth.guard';
-import { StatusDataResponseDto, MyConnectionStatusResponseDto } from './dto/status-response.dto';
+import {
+  JwtAuthGuard,
+  type ReqWithAuthContext,
+} from '../auth/guards/jwt-auth.guard';
+import {
+  StatusDataResponseDto,
+  MyConnectionStatusResponseDto,
+} from './dto/status-response.dto';
 
 @ApiTags('Status')
 @Controller('status')
@@ -14,14 +25,15 @@ export class StatusController {
   constructor(
     private readonly statusService: StatusService,
     private readonly healthService: HealthService,
-  ) { }
+  ) {}
 
   @Get('data')
   @Header('Cache-Control', 'no-store')
   @ApiOperation({ summary: 'Obter dados de status e histórico (Público)' })
   @ApiResponse({
     status: 200,
-    description: 'Estatísticas de status da API e banco de dados retornadas com sucesso.',
+    description:
+      'Estatísticas de status da API e banco de dados retornadas com sucesso.',
     type: StatusDataResponseDto,
   })
   async getData() {
@@ -40,7 +52,8 @@ export class StatusController {
   @ApiOperation({ summary: 'Verificar status da conexão do tenant (Usuário)' })
   @ApiResponse({
     status: 200,
-    description: 'Verificação em tempo real da conexão com API, Postgres e Firebird.',
+    description:
+      'Verificação em tempo real da conexão com API, Postgres e Firebird.',
     type: MyConnectionStatusResponseDto,
   })
   async getMyConnection(@Req() req: ReqWithAuthContext) {
@@ -53,13 +66,13 @@ export class StatusController {
 
     const [postgresHealth, tenantHealth] = await Promise.all([
       this.healthService.checkPostgres(),
-      this.healthService.checkTenant(credentialsId)
+      this.healthService.checkTenant(credentialsId),
     ]);
 
     const totalTime = Date.now() - start;
     const maxDbWait = Math.max(
       tenantHealth.responseTimeMs,
-      postgresHealth.responseTimeMs || 0
+      postgresHealth.responseTimeMs || 0,
     );
     const apiOverhead = totalTime - maxDbWait;
 
@@ -69,7 +82,7 @@ export class StatusController {
       postgres: postgresHealth.status === 'up' ? 'UP' : 'DOWN',
       postgresLatency: postgresHealth.responseTimeMs,
       tenant: tenantHealth.status === 'up' ? 'UP' : 'DOWN',
-      tenantLatency: tenantHealth.responseTimeMs
+      tenantLatency: tenantHealth.responseTimeMs,
     };
   }
 
@@ -85,7 +98,10 @@ export class StatusController {
 
     if (!fs.existsSync(htmlPath)) {
       // Fallback para quando o path pode variar dependendo da build
-      const altPath = path.join(process.cwd(), 'dist/modules/status/templates/status.html');
+      const altPath = path.join(
+        process.cwd(),
+        'dist/modules/status/templates/status.html',
+      );
       if (fs.existsSync(altPath)) {
         const html = fs.readFileSync(altPath, 'utf8');
         return res.type('text/html').send(html);

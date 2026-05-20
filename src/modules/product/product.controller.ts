@@ -22,12 +22,12 @@ import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
 import {
   ProductResponseDto,
   ProductDetailResponseDto,
-  ProductBarcodeResponseDto
+  ProductBarcodeResponseDto,
 } from './dto/product-response.dto';
 
 @Controller('products')
 export class ProductController {
-  constructor(private readonly productService: ProductService) { }
+  constructor(private readonly productService: ProductService) {}
 
   @Get()
   @UseGuards(JwtAuthGuard, PermissionsGuard)
@@ -94,15 +94,16 @@ export class ProductController {
     type: Number,
     description: 'Código da loja para buscar os estoques dos produtos',
     default: 1,
-    example: 1
+    example: 1,
   })
   @ApiQuery({
     name: 'priceTable',
     required: false,
     type: Number,
-    description: 'Código da tabela de preço para buscar os preços dos produtos. Se não informado, será usado o valor 1.',
+    description:
+      'Código da tabela de preço para buscar os preços dos produtos. Se não informado, será usado o valor 1.',
     default: 1,
-    example: 1
+    example: 1,
   })
   getProducts(
     @Req() req: ReqWithAuthContext,
@@ -153,17 +154,19 @@ export class ProductController {
     name: 'priceTable',
     required: false,
     type: Number,
-    description: 'Código da tabela de preço para buscar os preços dos produtos. Se não informado, será usado o valor 1.',
+    description:
+      'Código da tabela de preço para buscar os preços dos produtos. Se não informado, será usado o valor 1.',
     default: 1,
-    example: 1
+    example: 1,
   })
   @ApiQuery({
     name: 'storeId',
     required: false,
     type: Number,
-    description: 'Código da loja para buscar os estoques dos produtos. Se não informado, será usado o valor 1.',
+    description:
+      'Código da loja para buscar os estoques dos produtos. Se não informado, será usado o valor 1.',
     default: 1,
-    example: 1
+    example: 1,
   })
   @ApiResponse({
     status: 200,
@@ -200,7 +203,7 @@ export class ProductController {
       storeId,
       id,
       undefined,
-      priceTable
+      priceTable,
     );
 
     if (!product) {
@@ -241,17 +244,19 @@ export class ProductController {
     name: 'priceTable',
     required: false,
     type: Number,
-    description: 'Código da tabela de preço para buscar os preços dos produtos. Se não informado, será usado o valor 1.',
+    description:
+      'Código da tabela de preço para buscar os preços dos produtos. Se não informado, será usado o valor 1.',
     default: 1,
-    example: 1
+    example: 1,
   })
   @ApiQuery({
     name: 'storeId',
     required: false,
     type: Number,
-    description: 'Código da loja para buscar os estoques dos produtos. Se não informado, será usado o valor 1.',
+    description:
+      'Código da loja para buscar os estoques dos produtos. Se não informado, será usado o valor 1.',
     default: 1,
-    example: 1
+    example: 1,
   })
   async getProductByBarcode(
     @Req() req: ReqWithAuthContext,
@@ -275,7 +280,7 @@ export class ProductController {
       storeId,
       undefined,
       barcode,
-      priceTable
+      priceTable,
     );
 
     if (!product) {

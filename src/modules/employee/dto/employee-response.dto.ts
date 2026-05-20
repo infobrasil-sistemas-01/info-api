@@ -7,7 +7,10 @@ export class EmployeeResponseDto {
   @ApiProperty({ example: 1, description: 'Código da função' })
   FCA_CODIGO: number;
 
-  @ApiProperty({ example: 'Vendedor', description: 'Descrição da função (Cargo)' })
+  @ApiProperty({
+    example: 'Vendedor',
+    description: 'Descrição da função (Cargo)',
+  })
   FCA_NOME: string;
 
   @ApiProperty({ example: 'João da Silva', description: 'Nome do funcionário' })
@@ -25,7 +28,10 @@ export class EmployeeResponseDto {
   @ApiProperty({ example: 'joao@email.com', description: 'E-mail' })
   FUN_EMAIL: string;
 
-  @ApiProperty({ example: 'A', description: 'Situação (A = Ativo, I = Inativo)' })
+  @ApiProperty({
+    example: 'A',
+    description: 'Situação (A = Ativo, I = Inativo)',
+  })
   FUN_SITUACAO: string;
 
   @ApiProperty({ example: 1, description: 'Código da loja associada' })
@@ -33,7 +39,10 @@ export class EmployeeResponseDto {
 }
 
 export class EmployeeDetailResponseDto extends EmployeeResponseDto {
-  @ApiProperty({ example: 'Rua das Flores, 123', description: 'Endereço do funcionário' })
+  @ApiProperty({
+    example: 'Rua das Flores, 123',
+    description: 'Endereço do funcionário',
+  })
   FUN_ENDERECO: string;
 
   @ApiProperty({ example: 'Centro', description: 'Bairro' })

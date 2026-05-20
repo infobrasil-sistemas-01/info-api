@@ -1,5 +1,10 @@
 import { TenantConnectionService } from 'src/infra/database/tenant-connection.service';
-import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 
 @Injectable()
 export class AccountPayableService {
@@ -7,7 +12,7 @@ export class AccountPayableService {
 
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
-  ) { }
+  ) {}
 
   async get(
     credentialsId: string,
@@ -20,7 +25,8 @@ export class AccountPayableService {
     endDate?: string,
   ) {
     let connection: any;
-    connection = await this.tenantConnectionService.getConnection(credentialsId);
+    connection =
+      await this.tenantConnectionService.getConnection(credentialsId);
 
     try {
       let query = `SELECT FIRST ? SKIP ? 
@@ -40,7 +46,9 @@ export class AccountPayableService {
 
       if (situation) {
         if (situation !== 'A' && situation !== 'L') {
-          throw new BadRequestException('Situação inválida! Valores aceitos: A ou L');
+          throw new BadRequestException(
+            'Situação inválida! Valores aceitos: A ou L',
+          );
         }
         query += ' AND PAG_SITUACAO = ?';
         params.push(situation);
@@ -50,7 +58,9 @@ export class AccountPayableService {
         query += ' AND PAG_DATAVENC BETWEEN ? AND ?';
         params.push(startDate, endDate);
       } else if (startDate || endDate) {
-        throw new BadRequestException('Informe startDate e endDate juntos para filtrar por data de vencimento.');
+        throw new BadRequestException(
+          'Informe startDate e endDate juntos para filtrar por data de vencimento.',
+        );
       }
 
       const queryStartTime = Date.now();
@@ -64,8 +74,17 @@ export class AccountPayableService {
 
       this.logger.log(
         `Busca de contas a pagar executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
-          { page, pageSize, storeId, supplierId, situation, startDate, endDate },
-        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${queryEndTime - queryStartTime
+          {
+            page,
+            pageSize,
+            storeId,
+            supplierId,
+            situation,
+            startDate,
+            endDate,
+          },
+        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${
+          queryEndTime - queryStartTime
         }ms`,
       );
 
@@ -77,7 +96,8 @@ export class AccountPayableService {
 
   async getById(credentialsId: string, id: number) {
     let connection: any;
-    connection = await this.tenantConnectionService.getConnection(credentialsId);
+    connection =
+      await this.tenantConnectionService.getConnection(credentialsId);
 
     try {
       const query = `SELECT 

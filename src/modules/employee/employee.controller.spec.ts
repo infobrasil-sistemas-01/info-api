@@ -41,16 +41,13 @@ describe('EmployeeController', () => {
     it('should call employeeService.get with all parameters', async () => {
       mockEmployeeService.get.mockResolvedValue([{ FUN_CODIGO: 1 }]);
 
-      const result = await controller.get(
-        mockReq,
-        {
-          storeId: 1,
-          page: 2,
-          pageSize: 20,
-          search: 'search term',
-          situation: 'A',
-        }
-      );
+      const result = await controller.get(mockReq, {
+        storeId: 1,
+        page: 2,
+        pageSize: 20,
+        search: 'search term',
+        situation: 'A',
+      });
 
       expect(employeeService.get).toHaveBeenCalledWith(
         'cred-1',
@@ -59,7 +56,7 @@ describe('EmployeeController', () => {
         20,
         'search term',
         'A',
-        undefined
+        undefined,
       );
       expect(result).toEqual([{ FUN_CODIGO: 1 }]);
     });
@@ -72,10 +69,7 @@ describe('EmployeeController', () => {
 
       const result = await controller.getById(mockReq, 123);
 
-      expect(employeeService.getById).toHaveBeenCalledWith(
-        'cred-1',
-        123
-      );
+      expect(employeeService.getById).toHaveBeenCalledWith('cred-1', 123);
       expect(result).toEqual(mockEmployee);
     });
   });

@@ -25,7 +25,7 @@ describe('AuthService', () => {
     status: true,
     dbCredentialsId: 'cred-1',
     storeId: 1,
-    role: { name: 'admin' }
+    role: { name: 'admin' },
   };
 
   beforeAll(async () => {

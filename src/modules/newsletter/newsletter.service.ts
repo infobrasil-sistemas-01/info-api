@@ -12,7 +12,7 @@ export class NewsletterService {
   constructor(
     private readonly prisma: RegistryPrismaService,
     private readonly emailService: EmailService,
-  ) { }
+  ) {}
 
   private getApiVersion(): string {
     try {
@@ -59,11 +59,38 @@ export class NewsletterService {
     const logoBase64 = this.getLogoBase64();
     const version = this.getApiVersion();
 
-    const typeStyles: Record<string, { label: string; bg: string; border: string; text: string; icon: string }> = {
-      INFO: { label: 'Informativo', bg: '#ecfdf5', border: '#10b981', text: '#047857', icon: 'ℹ️' },
-      WARNING: { label: 'Aviso', bg: '#fffbeb', border: '#f59e0b', text: '#b45309', icon: '⚠️' },
-      ALERT: { label: 'Alerta', bg: '#fef2f2', border: '#ef4444', text: '#b91c1c', icon: '🚨' },
-      DOC: { label: 'Documentação', bg: '#f5f3ff', border: '#8b5cf6', text: '#6d28d9', icon: '📚' },
+    const typeStyles: Record<
+      string,
+      { label: string; bg: string; border: string; text: string; icon: string }
+    > = {
+      INFO: {
+        label: 'Informativo',
+        bg: '#ecfdf5',
+        border: '#10b981',
+        text: '#047857',
+        icon: 'ℹ️',
+      },
+      WARNING: {
+        label: 'Aviso',
+        bg: '#fffbeb',
+        border: '#f59e0b',
+        text: '#b45309',
+        icon: '⚠️',
+      },
+      ALERT: {
+        label: 'Alerta',
+        bg: '#fef2f2',
+        border: '#ef4444',
+        text: '#b91c1c',
+        icon: '🚨',
+      },
+      DOC: {
+        label: 'Documentação',
+        bg: '#f5f3ff',
+        border: '#8b5cf6',
+        text: '#6d28d9',
+        icon: '📚',
+      },
     };
 
     const annsHtml = announcements
@@ -105,10 +132,11 @@ export class NewsletterService {
               <tr style="background-color: #0f172a; padding: 24px;">
                 <td style="padding: 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #1e293b;">
                   <div>
-                    ${logoBase64
-        ? `<img src="${logoBase64}" alt="InfoAPI" style="height: 32px; display: block;" />`
-        : `<span style="font-size: 1.5rem; font-weight: bold; color: #ffffff;">Info<span style="color: #10b981;">API</span></span>`
-      }
+                    ${
+                      logoBase64
+                        ? `<img src="${logoBase64}" alt="InfoAPI" style="height: 32px; display: block;" />`
+                        : `<span style="font-size: 1.5rem; font-weight: bold; color: #ffffff;">Info<span style="color: #10b981;">API</span></span>`
+                    }
                   </div>
                   <span style="background-color: rgba(16, 185, 129, 0.15); color: #34d399; font-size: 0.75rem; font-weight: bold; padding: 4px 10px; border-radius: 9999px; border: 1px solid rgba(16, 185, 129, 0.25);">v${version}</span>
                 </td>
@@ -149,7 +177,9 @@ export class NewsletterService {
     </html>`;
   }
 
-  async getPreview(dto: SendNewsletterDto): Promise<{ html: string; subject: string; nextId: number }> {
+  async getPreview(
+    dto: SendNewsletterDto,
+  ): Promise<{ html: string; subject: string; nextId: number }> {
     const nextId = await this.getNextId();
     const announcements = await this.prisma.announcement.findMany({
       where: { id: { in: dto.announcementIds } },
@@ -157,7 +187,9 @@ export class NewsletterService {
     });
 
     if (announcements.length === 0) {
-      throw new BadRequestException('Nenhum aviso encontrado para gerar preview.');
+      throw new BadRequestException(
+        'Nenhum aviso encontrado para gerar preview.',
+      );
     }
 
     const initial =
@@ -167,7 +199,13 @@ export class NewsletterService {
       dto.finalMessage ||
       'Para dúvidas ou suporte com essas novidades, nossa equipe técnica está sempre disponível através do e-mail suporte@infobrasilsistemas.com.br ou pelo nosso suporte oficial.';
 
-    const html = this.generateHtml('[Nome do Usuário]', dto.subject, initial, final, announcements);
+    const html = this.generateHtml(
+      '[Nome do Usuário]',
+      dto.subject,
+      initial,
+      final,
+      announcements,
+    );
     return { html, subject: dto.subject, nextId };
   }
 
@@ -213,7 +251,9 @@ export class NewsletterService {
       });
 
       if (activeUsers.length === 0) {
-        this.logger.warn('Nenhum usuário ativo com e-mail cadastrado foi encontrado para receber a newsletter.');
+        this.logger.warn(
+          'Nenhum usuário ativo com e-mail cadastrado foi encontrado para receber a newsletter.',
+        );
         return newsletter;
       }
 
@@ -231,11 +271,19 @@ export class NewsletterService {
       // Envia em lote assíncrono para os usuários
       for (const u of activeUsers) {
         if (!u.email) continue;
-        const personalizedHtml = this.generateHtml(u.user, dto.subject, initial, final, announcements);
+        const personalizedHtml = this.generateHtml(
+          u.user,
+          dto.subject,
+          initial,
+          final,
+          announcements,
+        );
         this.emailService
           .sendEmail(u.email, dto.subject, personalizedHtml)
           .catch((err) =>
-            this.logger.error(`Erro ao disparar newsletter para usuário ${u.user} (${u.email}): ${err.message}`),
+            this.logger.error(
+              `Erro ao disparar newsletter para usuário ${u.user} (${u.email}): ${err.message}`,
+            ),
           );
       }
 

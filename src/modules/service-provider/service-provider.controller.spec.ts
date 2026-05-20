@@ -21,7 +21,12 @@ describe('ServiceProviderController', () => {
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ServiceProviderController],
-      providers: [{ provide: ServiceProviderService, useValue: mockServiceProviderService }],
+      providers: [
+        {
+          provide: ServiceProviderService,
+          useValue: mockServiceProviderService,
+        },
+      ],
     })
       .overrideGuard(JwtAuthGuard)
       .useValue({ canActivate: () => true })
@@ -29,7 +34,9 @@ describe('ServiceProviderController', () => {
       .useValue({ canActivate: () => true })
       .compile();
 
-    controller = module.get<ServiceProviderController>(ServiceProviderController);
+    controller = module.get<ServiceProviderController>(
+      ServiceProviderController,
+    );
     serviceProviderService = module.get(ServiceProviderService);
   });
 
@@ -39,18 +46,18 @@ describe('ServiceProviderController', () => {
 
   describe('get', () => {
     it('should call serviceProviderService.get with all parameters', async () => {
-      mockServiceProviderService.get.mockResolvedValue([{ PRE_CODIGO: 1 }, { PRE_CODIGO: 2 }]);
+      mockServiceProviderService.get.mockResolvedValue([
+        { PRE_CODIGO: 1 },
+        { PRE_CODIGO: 2 },
+      ]);
 
-      const result = await controller.get(
-        mockReq,
-        {
-          storeId: 1,
-          page: 2,
-          pageSize: 20,
-          search: 'search term',
-          situation: 'A',
-        }
-      );
+      const result = await controller.get(mockReq, {
+        storeId: 1,
+        page: 2,
+        pageSize: 20,
+        search: 'search term',
+        situation: 'A',
+      });
 
       expect(serviceProviderService.get).toHaveBeenCalledWith(
         'cred-1',
@@ -58,7 +65,7 @@ describe('ServiceProviderController', () => {
         2,
         20,
         'search term',
-        'A'
+        'A',
       );
       expect(result).toEqual([{ PRE_CODIGO: 1 }, { PRE_CODIGO: 2 }]);
     });
@@ -74,7 +81,7 @@ describe('ServiceProviderController', () => {
         undefined,
         undefined,
         undefined,
-        undefined
+        undefined,
       );
     });
   });
@@ -88,7 +95,7 @@ describe('ServiceProviderController', () => {
 
       expect(serviceProviderService.getById).toHaveBeenCalledWith(
         'cred-1',
-        123
+        123,
       );
       expect(result).toEqual(mockProvider);
     });

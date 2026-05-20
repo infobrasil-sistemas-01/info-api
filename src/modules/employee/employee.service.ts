@@ -7,7 +7,7 @@ export class EmployeeService {
 
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
-  ) { }
+  ) {}
 
   async get(
     credentialsId: string,
@@ -16,9 +16,10 @@ export class EmployeeService {
     pageSize: number = 10,
     search?: string,
     situation?: string,
-    functionId?: number
+    functionId?: number,
   ) {
-    const connection = await this.tenantConnectionService.getConnection(credentialsId);
+    const connection =
+      await this.tenantConnectionService.getConnection(credentialsId);
 
     try {
       const params: (number | string)[] = [
@@ -41,7 +42,9 @@ export class EmployeeService {
 
       if (search) {
         if (search.length < 3) {
-          throw new BadRequestException('Pesquisa precisa ter pelo menos 3 caracteres.');
+          throw new BadRequestException(
+            'Pesquisa precisa ter pelo menos 3 caracteres.',
+          );
         }
         query += ` AND (FUN_NOME LIKE ? OR FUN_APELIDO LIKE ?)`;
         params.push(`%${search}%`, `%${search}%`);
@@ -64,14 +67,16 @@ export class EmployeeService {
       const endTime = Date.now();
 
       this.logger.log(
-        `Busca de funcionários executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify({
-          storeId,
-          page,
-          pageSize,
-          search,
-          situation,
-          functionId,
-        })}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${endTime - startTime}ms`,
+        `Busca de funcionários executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
+          {
+            storeId,
+            page,
+            pageSize,
+            search,
+            situation,
+            functionId,
+          },
+        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${endTime - startTime}ms`,
       );
       return result;
     } catch (error) {
@@ -87,7 +92,8 @@ export class EmployeeService {
   }
 
   async getById(credentialsId: string, id: number) {
-    const connection = await this.tenantConnectionService.getConnection(credentialsId);
+    const connection =
+      await this.tenantConnectionService.getConnection(credentialsId);
 
     try {
       const query = `SELECT 

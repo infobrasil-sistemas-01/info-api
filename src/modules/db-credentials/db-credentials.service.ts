@@ -1,10 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { RegistryPrismaService } from 'src/infra/prisma/registry-prisma.service';
-import { CreateDbCredentialsDto, UpdateDbCredentialsDto } from './dto/db-credentials.dto';
+import {
+  CreateDbCredentialsDto,
+  UpdateDbCredentialsDto,
+} from './dto/db-credentials.dto';
 
 @Injectable()
 export class DbCredentialsService {
-  constructor(private readonly prisma: RegistryPrismaService) { }
+  constructor(private readonly prisma: RegistryPrismaService) {}
 
   async create(data: CreateDbCredentialsDto) {
     return this.prisma.dbCredentials.create({

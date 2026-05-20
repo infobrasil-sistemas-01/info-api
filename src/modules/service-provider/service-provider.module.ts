@@ -9,4 +9,4 @@ import { TenantConnectionModule } from 'src/infra/database/tenant-connection.mod
   providers: [ServiceProviderService],
   exports: [ServiceProviderService],
 })
-export class ServiceProviderModule { }
+export class ServiceProviderModule {}

@@ -212,9 +212,9 @@ describe('AccountReceivableController', () => {
         new Error('Service error'),
       );
 
-      await expect(
-        controller.get(mockReq, { clientId: 1 }),
-      ).rejects.toThrow('Service error');
+      await expect(controller.get(mockReq, { clientId: 1 })).rejects.toThrow(
+        'Service error',
+      );
     });
 
     it('should return empty array when no records found', async () => {
