@@ -74,6 +74,123 @@ describe('ProductGroupService', () => {
     });
   });
 
+  describe('getById', () => {
+    it('should return a group when found', async () => {
+      const mockGroup = { GRU_CODIGO: 1, GRU_DESCRICAO: 'Group 1' };
+      mockConnection.query.mockImplementation(
+        (query: string, params: any[], callback: Function) => {
+          callback(null, [mockGroup]);
+        },
+      );
+
+      const result = await service.getById('cred-1', 1);
+
+      expect(result).toEqual(mockGroup);
+      expect(mockConnection.query).toHaveBeenCalledWith(
+        expect.stringContaining('WHERE M.GRU_CODIGO = ?'),
+        [1],
+        expect.any(Function),
+      );
+    });
+
+    it('should return undefined when group is not found', async () => {
+      mockConnection.query.mockImplementation(
+        (query: string, params: any[], callback: Function) => {
+          callback(null, []);
+        },
+      );
+
+      const result = await service.getById('cred-1', 999);
+
+      expect(result).toBeUndefined();
+    });
+  });
+
+  describe('create', () => {
+    it('should insert and return new product group', async () => {
+      const inputDto = { GRU_DESCRICAO: 'New Group' };
+      const expectedResult = { GRU_CODIGO: 5, GRU_DESCRICAO: 'New Group' };
+
+      mockConnection.query.mockImplementation(
+        (query: string, params: any[], callback: Function) => {
+          callback(null, expectedResult);
+        },
+      );
+
+      const result = await service.create('cred-1', inputDto);
+
+      expect(result).toEqual(expectedResult);
+      expect(mockConnection.query).toHaveBeenCalledWith(
+        expect.stringContaining('INSERT INTO grupospro'),
+        ['New Group'],
+        expect.any(Function),
+      );
+    });
+  });
+
+  describe('update', () => {
+    it('should update and return updated product group', async () => {
+      const inputDto = { GRU_DESCRICAO: 'Updated Group' };
+      const existingGroup = { GRU_CODIGO: 1, GRU_DESCRICAO: 'Old Group' };
+      const updatedGroup = { GRU_CODIGO: 1, GRU_DESCRICAO: 'Updated Group' };
+
+      let callCount = 0;
+      mockConnection.query.mockImplementation(
+        (query: string, params: any[], callback: Function) => {
+          if (query.includes('SELECT')) {
+            if (callCount === 0) {
+              callCount++;
+              callback(null, [existingGroup]);
+            } else {
+              callback(null, [updatedGroup]);
+            }
+          } else if (query.includes('UPDATE')) {
+            callback(null, true);
+          }
+        },
+      );
+
+      const result = await service.update('cred-1', 1, inputDto);
+
+      expect(result).toEqual(updatedGroup);
+      expect(mockConnection.query).toHaveBeenCalledWith(
+        expect.stringContaining('UPDATE grupospro SET GRU_DESCRICAO = ?'),
+        ['Updated Group', 1],
+        expect.any(Function),
+      );
+    });
+
+    it('should throw NotFoundException if group does not exist', async () => {
+      mockConnection.query.mockImplementation(
+        (query: string, params: any[], callback: Function) => {
+          callback(null, []);
+        },
+      );
+
+      await expect(
+        service.update('cred-1', 999, { GRU_DESCRICAO: 'Updated' }),
+      ).rejects.toThrow('Grupo não encontrado');
+    });
+
+    it('should return existing group if no updates are passed', async () => {
+      const existingGroup = { GRU_CODIGO: 1, GRU_DESCRICAO: 'Old Group' };
+      mockConnection.query.mockImplementation(
+        (query: string, params: any[], callback: Function) => {
+          callback(null, [existingGroup]);
+        },
+      );
+
+      const result = await service.update('cred-1', 1, {});
+
+      expect(result).toEqual(existingGroup);
+      expect(mockConnection.query).not.toHaveBeenCalledWith(
+        expect.stringContaining('UPDATE'),
+        expect.any(Array),
+        expect.any(Function),
+      );
+    });
+  });
+
   describe('FAILING: product group edge cases', () => {
     it('should throw error when page number is negative', async () => {
       mockConnection.query.mockImplementation(
