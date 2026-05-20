@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.16.1](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.16.0...v1.16.1) (2026-05-20)
+
+
+### Features
+
+* **announcement:** implement notifications drawer system with read/unread tabs ([8d8fa73](https://github.com/infobrasil-sistemas/info-vendas-api/commit/8d8fa7315f0541ce70173a908e253c16f9339487))
+
+
+### Bug Fixes
+
+* remove stores to form ([47195cf](https://github.com/infobrasil-sistemas/info-vendas-api/commit/47195cfe1688a8a44f5305d1ab790ddf371eb7b6))
+
 ## [1.16.0](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.15.1...v1.16.0) (2026-05-20)
 
 
