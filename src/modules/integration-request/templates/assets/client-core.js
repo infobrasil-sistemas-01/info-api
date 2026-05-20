@@ -126,19 +126,151 @@ const UI = {
     },
 
     announcements: [],
+    unreadAnnouncements: [],
+    readAnnouncements: [],
+    activeDrawerTab: 'unread',
     currentAnnIndex: 0,
 
     async loadAnnouncements() {
         try {
-            const res = await fetch(`${API_URL}/announcements`, {
-                headers: { 'Authorization': `Bearer ${Auth.getToken()}` }
-            });
-            if (res.ok) {
-                this.announcements = await res.json();
+            const token = Auth.getToken();
+            const [resUnread, resRead] = await Promise.all([
+                fetch(`${API_URL}/announcements`, { headers: { 'Authorization': `Bearer ${token}` } }),
+                fetch(`${API_URL}/announcements/read`, { headers: { 'Authorization': `Bearer ${token}` } })
+            ]);
+
+            if (resUnread.ok) {
+                this.unreadAnnouncements = await resUnread.json();
+                this.announcements = this.unreadAnnouncements;
                 this.renderAnnouncements();
+                this.updateNotificationsBadge();
             }
+
+            if (resRead.ok) {
+                this.readAnnouncements = await resRead.json();
+            }
+
+            this.renderNotificationsDrawer();
         } catch (e) {
             console.error('Erro ao carregar avisos', e);
+        }
+    },
+
+    updateNotificationsBadge() {
+        const badge = document.getElementById('notifications-badge');
+        const count = this.unreadAnnouncements.length;
+        if (badge) {
+            if (count > 0) {
+                badge.textContent = count;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+    },
+
+    toggleNotificationsMenu(open) {
+        const drawer = document.getElementById('notifications-drawer');
+        const overlay = document.getElementById('drawer-overlay');
+        if (open) {
+            drawer.classList.add('open');
+            overlay.classList.add('open');
+            this.loadAnnouncements();
+        } else {
+            drawer.classList.remove('open');
+            overlay.classList.remove('open');
+        }
+    },
+
+    switchDrawerTab(tabId) {
+        this.activeDrawerTab = tabId;
+        const tabUnread = document.getElementById('drawer-tab-unread');
+        const tabRead = document.getElementById('drawer-tab-read');
+
+        if (tabId === 'unread') {
+            tabUnread.classList.add('active');
+            tabRead.classList.remove('active');
+        } else {
+            tabRead.classList.add('active');
+            tabUnread.classList.remove('active');
+        }
+
+        this.renderNotificationsDrawer();
+    },
+
+    renderNotificationsDrawer() {
+        const listEl = document.getElementById('notifications-list');
+        if (!listEl) return;
+
+        const list = this.activeDrawerTab === 'unread' ? this.unreadAnnouncements : this.readAnnouncements;
+
+        if (!list || list.length === 0) {
+            listEl.innerHTML = `
+                <div class="empty-notifications">
+                    <i class='bx bx-bell-off'></i>
+                    <p>Nenhum aviso por aqui.</p>
+                </div>
+            `;
+            return;
+        }
+
+        listEl.innerHTML = list.map(ann => {
+            const iconMap = {
+                'DOC': 'bx-book-open',
+                'INFO': 'bx-info-circle',
+                'WARNING': 'bx-error-alt',
+                'ALERT': 'bx-alarm-exclamation'
+            };
+            const icon = iconMap[ann.type] || 'bx-bell';
+            
+            const date = new Date(ann.createdAt);
+            const dateStr = date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+
+            const isUnread = this.activeDrawerTab === 'unread';
+
+            return `
+                <div class="notification-item ${ann.type.toLowerCase()} ${isUnread ? 'unread' : ''}">
+                    <div class="notification-icon">
+                        <i class='bx ${icon}'></i>
+                    </div>
+                    <div class="notification-body">
+                        <div class="notification-text">${ann.text}</div>
+                        ${ann.ctaText ? `<a href="${ann.ctaLink || '#'}" target="_blank" class="notification-link">${ann.ctaText}</a>` : ''}
+                        <div class="notification-time">${dateStr}</div>
+                    </div>
+                    ${isUnread ? `
+                        <div class="notification-actions">
+                            <button class="btn-mark-read" onclick="UI.dismissAnnouncementById('${ann.id}')" title="Marcar como lida">
+                                <i class='bx bx-check'></i>
+                            </button>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }).join('');
+    },
+
+    async dismissAnnouncementById(id) {
+        try {
+            // Chamada otimista
+            const indexUnread = this.unreadAnnouncements.findIndex(ann => ann.id === id);
+            if (indexUnread !== -1) {
+                const [ann] = this.unreadAnnouncements.splice(indexUnread, 1);
+                this.readAnnouncements.unshift(ann);
+                this.announcements = this.unreadAnnouncements;
+                
+                this.renderAnnouncements();
+                this.updateNotificationsBadge();
+                this.renderNotificationsDrawer();
+            }
+
+            await fetch(`${API_URL}/announcements/${id}/view`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${Auth.getToken()}` }
+            });
+        } catch (e) {
+            console.error('Erro ao dispensar aviso no drawer', e);
+            this.loadAnnouncements();
         }
     },
 
@@ -205,19 +337,7 @@ const UI = {
     async dismissAnnouncement() {
         const ann = this.announcements[this.currentAnnIndex];
         if (!ann) return;
-
-        try {
-            // Chamada otimista
-            this.announcements.splice(this.currentAnnIndex, 1);
-            this.renderAnnouncements();
-
-            await fetch(`${API_URL}/announcements/${ann.id}/view`, {
-                method: 'POST',
-                headers: { 'Authorization': `Bearer ${Auth.getToken()}` }
-            });
-        } catch (e) {
-            console.error('Erro ao dispensar aviso', e);
-        }
+        await this.dismissAnnouncementById(ann.id);
     },
     async loadStats() {
         try {

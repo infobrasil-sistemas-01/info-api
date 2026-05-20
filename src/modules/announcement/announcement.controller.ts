@@ -25,6 +25,11 @@ export class AnnouncementController {
     return this.announcementService.findAllForUser(user.sub);
   }
 
+  @Get('read')
+  findReadForUser(@CurrentUser() user: any) {
+    return this.announcementService.findReadForUser(user.sub);
+  }
+
   @Post(':id/view')
   markAsViewed(@CurrentUser() user: any, @Param('id') id: string) {
     return this.announcementService.markAsViewed(user.sub, id);

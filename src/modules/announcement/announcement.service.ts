@@ -38,6 +38,39 @@ export class AnnouncementService {
     });
   }
 
+  async findReadForUser(userId: string) {
+    const now = new Date();
+
+    return this.prisma.announcement.findMany({
+      where: {
+        active: true,
+        OR: [
+          { startDate: null, endDate: null },
+          {
+            startDate: { lte: now },
+            endDate: { gte: now },
+          },
+          {
+            startDate: { lte: now },
+            endDate: null,
+          },
+          {
+            startDate: null,
+            endDate: { gte: now },
+          },
+        ],
+        views: {
+          some: {
+            userId: userId,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+  }
+
   async markAsViewed(userId: string, announcementId: string) {
     return this.prisma.announcementView.upsert({
       where: {

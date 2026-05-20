@@ -66,6 +66,10 @@
                         <i class='bx bx-code-alt'></i>
                         <span>Docs</span>
                     </a>
+                    <button id="btn-notifications" class="btn-notifications" title="Notificações" onclick="UI.toggleNotificationsMenu(true)">
+                        <i class='bx bx-bell'></i>
+                        <span id="notifications-badge" class="notifications-badge hidden">0</span>
+                    </button>
                     <div class="brand-divider"></div>
                     <div class="user-profile">
                         <div class="user-text">
@@ -545,6 +549,26 @@ print(f'Basic {auth}')</code></pre>
                 </div>
             </div>
         </footer>
+    </div>
+
+    <!-- Notifications Drawer -->
+    <div id="drawer-overlay" class="drawer-overlay" onclick="UI.toggleNotificationsMenu(false)"></div>
+    <div id="notifications-drawer" class="notifications-drawer">
+        <div class="drawer-header">
+            <h3><i class='bx bx-bell'></i> Notificações</h3>
+            <button class="btn-close-drawer" onclick="UI.toggleNotificationsMenu(false)">
+                <i class='bx bx-x'></i>
+            </button>
+        </div>
+        <div class="drawer-tabs">
+            <button id="drawer-tab-unread" class="drawer-tab-btn active" onclick="UI.switchDrawerTab('unread')">Não Lidas</button>
+            <button id="drawer-tab-read" class="drawer-tab-btn" onclick="UI.switchDrawerTab('read')">Lidas</button>
+        </div>
+        <div class="drawer-content">
+            <div id="notifications-list" class="notifications-list">
+                <!-- Dinâmico via client-core.js -->
+            </div>
+        </div>
     </div>
 
     <script src="/integration/assets/client-core.js"></script>
