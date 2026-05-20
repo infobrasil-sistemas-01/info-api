@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ProductBrandService } from './product-brand.service';
 import { TenantConnectionService } from 'src/infra/database/tenant-connection.service';
+import { CreateBrandDto } from './dto/create-brand.dto';
 
 describe('ProductBrandService', () => {
   let service: ProductBrandService;
@@ -71,6 +72,38 @@ describe('ProductBrandService', () => {
       );
 
       await expect(service.get('cred-1')).rejects.toThrow('DB error');
+    });
+  });
+
+  describe('create', () => {
+    it('should insert a new product brand', async () => {
+      const mockCreatedBrand = { MAR_CODIGO: 3, MAR_DESCRICAO: 'New Brand' };
+      mockConnection.query.mockImplementation(
+        (query: string, params: any[], callback: Function) => {
+          callback(null, mockCreatedBrand);
+        },
+      );
+
+      const payload: CreateBrandDto = { MAR_DESCRICAO: 'New Brand' };
+      const result = await service.create('cred-1', payload);
+
+      expect(result).toEqual(mockCreatedBrand);
+      expect(mockConnection.query).toHaveBeenCalledWith(
+        expect.stringContaining('INSERT INTO marcas'),
+        ['New Brand'],
+        expect.any(Function),
+      );
+    });
+
+    it('should throw error when database insertion fails', async () => {
+      mockConnection.query.mockImplementation(
+        (query: string, params: any[], callback: Function) => {
+          callback(new Error('Insert error'), null);
+        },
+      );
+
+      const payload: CreateBrandDto = { MAR_DESCRICAO: 'New Brand' };
+      await expect(service.create('cred-1', payload)).rejects.toThrow('Insert error');
     });
   });
 

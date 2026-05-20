@@ -2,6 +2,8 @@ import {
   BadRequestException,
   Controller,
   Get,
+  Post,
+  Body,
   Query,
   Req,
   UseGuards,
@@ -21,6 +23,7 @@ import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
 
 import { ProductBrandResponseDto } from '../dto/product-response.dto';
+import { CreateBrandDto } from './dto/create-brand.dto';
 
 @Controller('products/brands')
 export class ProductBrandController {
@@ -75,5 +78,40 @@ export class ProductBrandController {
 
 
     return this.brandService.get(credentialsId, page, pageSize);
+  }
+
+  @Post()
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @RequirePermissions({ allOf: ['tenant.brands.create'] })
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Criar marca de produto',
+    description: 'Cria uma nova marca de produto associada ao tenant.',
+    tags: ['Product / Brand'],
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Marca criada com sucesso.',
+    type: ProductBrandResponseDto,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Erro de validação ou de requisição.',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Token de autenticação inválido ou ausente.',
+  })
+  async createBrand(
+    @Req() req: ReqWithAuthContext,
+    @Body() body: CreateBrandDto,
+  ) {
+    const credentialsId = req.authContext?.credentialsId;
+
+    if (!credentialsId) {
+      throw new Error('Credentials ID not found in token');
+    }
+
+    return this.brandService.create(credentialsId, body);
   }
 }

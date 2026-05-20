@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { BadRequestException } from '@nestjs/common';
 import { ProductBrandController } from './product-brand.controller';
 import { ProductBrandService } from './product-brand.service';
+import { CreateBrandDto } from './dto/create-brand.dto';
 import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 
@@ -11,6 +12,7 @@ describe('ProductBrandController', () => {
 
   const mockBrandService = {
     get: jest.fn(),
+    create: jest.fn(),
   };
 
   const mockReq = {
@@ -60,6 +62,19 @@ describe('ProductBrandController', () => {
         undefined,
         undefined,
       );
+    });
+  });
+
+  describe('createBrand', () => {
+    it('should call brandService.create and return the created brand', async () => {
+      const mockCreatedBrand = { MAR_CODIGO: 3, MAR_DESCRICAO: 'New Brand' };
+      mockBrandService.create.mockResolvedValue(mockCreatedBrand);
+
+      const payload: CreateBrandDto = { MAR_DESCRICAO: 'New Brand' };
+      const result = await controller.createBrand(mockReq, payload);
+
+      expect(brandService.create).toHaveBeenCalledWith('cred-1', payload);
+      expect(result).toEqual(mockCreatedBrand);
     });
   });
 });

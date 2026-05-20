@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { TenantConnectionService } from 'src/infra/database/tenant-connection.service';
+import { CreateBrandDto } from './dto/create-brand.dto';
 
 @Injectable()
 export class ProductBrandService {
@@ -47,6 +48,40 @@ export class ProductBrandService {
           { page, pageSize },
         )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${
           queryEndTime - queryStartTime
+        }ms`,
+      );
+
+      return result;
+    } finally {
+      this.tenantConnectionService.releaseConnection(connection);
+    }
+  }
+
+  async create(credentialsId: string, data: CreateBrandDto) {
+    const connection =
+      await this.tenantConnectionService.getConnection(credentialsId);
+
+    try {
+      const query = `INSERT INTO marcas (
+                      MAR_DESCRICAO, MAR_CODIGO
+                    ) VALUES (
+                      ?, GEN_ID(GEN_CODIGOMAR, 1)
+                    ) RETURNING MAR_CODIGO, MAR_DESCRICAO`;
+
+      const params = [data.MAR_DESCRICAO];
+
+      const startTime = Date.now();
+      const result = (await new Promise((resolve, reject) => {
+        connection.query(query, params, (err: any, res: any) => {
+          if (err) return reject(err);
+          resolve(res);
+        });
+      })) as any;
+      const endTime = Date.now();
+
+      this.logger.log(
+        `Marca de produto criada. Tenant: ${credentialsId}, ID: ${result?.MAR_CODIGO}, Tempo SQL: ${
+          endTime - startTime
         }ms`,
       );
 
