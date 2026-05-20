@@ -492,7 +492,7 @@
     "/api/v1/products/groups": {
       "get": {
         "description": "Retorna uma lista paginada de grupos de produtos associadas às credenciais do usuário autenticado.",
-        "operationId": "ProductGroupController_getBrands",
+        "operationId": "ProductGroupController_getGroups",
         "parameters": [
           {
             "name": "page",
@@ -540,6 +540,105 @@
           }
         ],
         "summary": "Listar grupos de produtos",
+        "tags": [
+          "Product / Group"
+        ]
+      },
+      "post": {
+        "description": "Cria um novo grupo de produto associado ao tenant.",
+        "operationId": "ProductGroupController_createGroup",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateGroupDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Grupo criado com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductGroupResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro de validação ou de requisição."
+          },
+          "401": {
+            "description": "Token de autenticação inválido ou ausente."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Criar grupo de produto",
+        "tags": [
+          "Product / Group"
+        ]
+      }
+    },
+    "/api/v1/products/groups/{id}": {
+      "patch": {
+        "description": "Atualiza os dados de um grupo de produto existente no tenant.",
+        "operationId": "ProductGroupController_updateGroup",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Código do grupo (GRU_CODIGO) a ser atualizado",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateGroupDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Grupo atualizado com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductGroupResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro de validação ou de requisição."
+          },
+          "401": {
+            "description": "Token de autenticação inválido ou ausente."
+          },
+          "404": {
+            "description": "Grupo não encontrado."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Atualizar grupo de produto",
         "tags": [
           "Product / Group"
         ]
@@ -2780,6 +2879,29 @@
           "GRU_CODIGO",
           "GRU_DESCRICAO"
         ]
+      },
+      "CreateGroupDto": {
+        "type": "object",
+        "properties": {
+          "GRU_DESCRICAO": {
+            "type": "string",
+            "description": "Descrição do grupo",
+            "example": "Grupo Novo"
+          }
+        },
+        "required": [
+          "GRU_DESCRICAO"
+        ]
+      },
+      "UpdateGroupDto": {
+        "type": "object",
+        "properties": {
+          "GRU_DESCRICAO": {
+            "type": "string",
+            "description": "Descrição do grupo",
+            "example": "Grupo Atualizado"
+          }
+        }
       },
       "SoldProductDto": {
         "type": "object",
