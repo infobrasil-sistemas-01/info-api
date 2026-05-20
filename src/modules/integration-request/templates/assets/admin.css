@@ -13,6 +13,33 @@
     --radius: 12px;
 }
 
+/* CUSTOM PREMIUM SCROLLBARS FOR INTERNAL ELEMENTS */
+*:not(html):not(body) {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(16, 185, 129, 0.25) rgba(6, 17, 13, 0.4);
+}
+
+*:not(html):not(body)::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+*:not(html):not(body)::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 99px;
+}
+
+*:not(html):not(body)::-webkit-scrollbar-thumb {
+    background: rgba(16, 185, 129, 0.25);
+    border-radius: 99px;
+    border: 1px solid rgba(255, 255, 255, 0.02);
+    transition: background 0.2s ease;
+}
+
+*:not(html):not(body)::-webkit-scrollbar-thumb:hover {
+    background: rgba(16, 185, 129, 0.5);
+}
+
 #admin-wrapper:not(.hidden) {
     min-height: 100vh;
     display: flex;
