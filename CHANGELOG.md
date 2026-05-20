@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.16.0](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.15.1...v1.16.0) (2026-05-20)
+
+
+### Features
+
+* **group:** implement POST and PATCH /products/groups ([92a8104](https://github.com/infobrasil-sistemas/info-vendas-api/commit/92a810411aa50df289509f63966ae624ef3b048c))
+* patch /products/brands && lint ([dfe9786](https://github.com/infobrasil-sistemas/info-vendas-api/commit/dfe978663ad58f504aa524fb0786d1b3623c7d73))
+* post /products/brands ([975058a](https://github.com/infobrasil-sistemas/info-vendas-api/commit/975058a4848320e748351774dc8803b5727ebf4e))
+
 ## [1.15.1](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.15.0...v1.15.1) (2026-05-19)
 
 
