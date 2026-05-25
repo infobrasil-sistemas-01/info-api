@@ -32,6 +32,15 @@ export class OrderService {
         throw new BadRequestException('Formato de data inválido');
       }
 
+      if (
+        orderData.price_table_id &&
+        (orderData.price_table_id < 1 || orderData.price_table_id > 12)
+      ) {
+        throw new BadRequestException(
+          'A tabela de preços deve ser entre 1 e 12.',
+        );
+      }
+
       const transaction: any = await new Promise((resolve, reject) => {
         connection.startTransaction((err: any, transaction: any) => {
           if (err) {
@@ -328,11 +337,11 @@ export class OrderService {
             : orderData.id.toString(),
         SIT_CODIGO: 1,
         LOJ_CODIGO: storeId,
-        USU_CODIGO: 9999,
-        FUN_CODIGO: 9999,
-        CLI_CODIGO: 1,
-        VEN_TIPO: 'E',
-        VEN_PRECO: '1',
+        USU_CODIGO: 9999, // TODO: Estudar a possibilidade de criar um usuário específico para pedidos realizados através da API
+        FUN_CODIGO: 9999, // TODO: Estudar a possibilidade de criar um funcionário específico para pedidos realizados através da API
+        CLI_CODIGO: orderData.client_id || 1,
+        VEN_TIPO: 'I',
+        VEN_PRECO: orderData.price_table_id?.toString() || '1',
         VEN_DATA: orderData.date,
         VEN_HORA: orderData.hour,
         VEN_OBS: orderData.store_note,

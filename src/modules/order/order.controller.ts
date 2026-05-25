@@ -78,7 +78,7 @@ export class OrderController {
     return this.orderService.post(credentialsId, dto, storeId);
   }
 
-  @Post(':id/receipt')
+  /* @Post(':id/receipt')
   @UseGuards(JwtAuthGuard, PermissionsGuard)
   @RequirePermissions({ allOf: ['tenant.orders.view'] })
   @ApiBearerAuth()
@@ -116,7 +116,7 @@ export class OrderController {
       email: dto.email,
       cpf: dto.cpf,
     });
-  }
+  } */
 
   @Get()
   @UseGuards(JwtAuthGuard, PermissionsGuard)

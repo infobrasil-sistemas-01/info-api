@@ -791,59 +791,6 @@
         ]
       }
     },
-    "/api/v1/orders/{id}/receipt": {
-      "post": {
-        "description": "Gera um cupom fiscal para um pedido específico e envia para o email do cliente.",
-        "operationId": "OrderController_postReceipt",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GenerateReceiptDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Cupom fiscal gerado e email enviado.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "receiptId": {
-                      "type": "number",
-                      "example": 54321
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Gerar cupom fiscal para um pedido",
-        "tags": [
-          "Order"
-        ]
-      }
-    },
     "/api/v1/orders/{id}": {
       "get": {
         "description": "Retorna os detalhes de um pedido específico com base no ID fornecido.",
@@ -2931,6 +2878,14 @@
             "type": "number",
             "description": "ID do pedido"
           },
+          "client_id": {
+            "type": "number",
+            "description": "ID do cliente (opcional)"
+          },
+          "price_table_id": {
+            "type": "number",
+            "description": "ID da tabela de preços (opcional)"
+          },
           "date": {
             "type": "string",
             "description": "Data do pedido"
@@ -2995,23 +2950,6 @@
           "payment_date",
           "has_payment",
           "has_invoice"
-        ]
-      },
-      "GenerateReceiptDto": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string",
-            "description": "Email do cliente para envio do cupom fiscal"
-          },
-          "cpf": {
-            "type": "string",
-            "description": "CPF do cliente (opcional, para fins fiscais)"
-          }
-        },
-        "required": [
-          "email",
-          "cpf"
         ]
       },
       "OrderResponseDto": {

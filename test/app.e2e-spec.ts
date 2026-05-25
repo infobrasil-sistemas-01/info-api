@@ -238,6 +238,8 @@ describe('API E2E Tests', () => {
           id: generateId(),
           date: generateDate(),
           hour: generateHour(),
+          client_id: 1,
+          price_table_id: 1,
           store_note: 'Teste automatizado (E2E)',
           installment: 1,
           payment_method: '1',
@@ -298,7 +300,7 @@ describe('API E2E Tests', () => {
       });
     });
 
-    describe('POST /api/v1/orders/:id/receipt', () => {
+    /* describe('POST /api/v1/orders/:id/receipt', () => {
       it('should return 200 with valid token and order id', async () => {
         await request(app.getHttpServer())
           .post(`/api/v1/orders/${orderId}/receipt`)
@@ -320,7 +322,8 @@ describe('API E2E Tests', () => {
           .expect(401);
       });
     });
-
+ROTA NÃO UTILIZADA 
+    */
     describe('GET /api/v1/account-receivable', () => {
       it('should return 400 when no filter is provided', async () => {
         await request(app.getHttpServer())
@@ -339,7 +342,7 @@ describe('API E2E Tests', () => {
       it('should return 200 with all query params', async () => {
         await request(app.getHttpServer())
           .get(
-            '/api/v1/account-receivable?page=1&clientId=1&arId=1&situation=A&startDate=2022-01-01&endDate=2022-12-31',
+            '/api/v1/account-receivable?page=1&clientId=1&arId=1&situation=A&startDate=2022-01-01&endDate=2022-01-07&storeId=1',
           )
           .set(authHeader())
           .expect(200);

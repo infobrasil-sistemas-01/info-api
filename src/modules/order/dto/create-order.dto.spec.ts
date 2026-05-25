@@ -127,6 +127,44 @@ describe('PostOrderDto', () => {
       });
     });
 
+    describe('price_table_id validation', () => {
+      test.each([
+        ['price_table_id = 1', { ...validOrder, price_table_id: 1 }],
+        ['price_table_id = 6', { ...validOrder, price_table_id: 6 }],
+        ['price_table_id = 12', { ...validOrder, price_table_id: 12 }],
+      ])('should accept valid %s', (_, input) => {
+        expect(() => PostOrderSchema.parse(input)).not.toThrow();
+      });
+
+      it('should reject price_table_id = 0 with custom message', () => {
+        const input = { ...validOrder, price_table_id: 0 };
+        expect(() => PostOrderSchema.parse(input)).toThrow(
+          'A tabela de preços deve ser entre 1 e 12.',
+        );
+      });
+
+      it('should reject price_table_id = 13 with custom message', () => {
+        const input = { ...validOrder, price_table_id: 13 };
+        expect(() => PostOrderSchema.parse(input)).toThrow(
+          'A tabela de preços deve ser entre 1 e 12.',
+        );
+      });
+
+      it('should reject price_table_id = -1 with custom message', () => {
+        const input = { ...validOrder, price_table_id: -1 };
+        expect(() => PostOrderSchema.parse(input)).toThrow(
+          'A tabela de preços deve ser entre 1 e 12.',
+        );
+      });
+
+      it('should reject price_table_id = 100 with custom message', () => {
+        const input = { ...validOrder, price_table_id: 100 };
+        expect(() => PostOrderSchema.parse(input)).toThrow(
+          'A tabela de preços deve ser entre 1 e 12.',
+        );
+      });
+    });
+
     describe('products_sold validation', () => {
       test.each([
         [
