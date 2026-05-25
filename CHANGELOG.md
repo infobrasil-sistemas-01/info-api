@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.16.2](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.16.1...v1.16.2) (2026-05-25)
+
+
+### Features
+
+* more options on POST order and disable POST receipt ([3f7d172](https://github.com/infobrasil-sistemas/info-vendas-api/commit/3f7d172769f0ec4bc451f6aa26c95b6777d6d64f))
+
 ## [1.16.1](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.16.0...v1.16.1) (2026-05-20)
 
 
