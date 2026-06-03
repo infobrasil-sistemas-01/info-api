@@ -215,6 +215,7 @@ export class OrderService {
 
       const query = `SELECT FIRST ? SKIP ?
                   VEN_NUMERO,
+                  V.SIT_CODIGO,
                   V.CLI_CODIGO,
                   C.CLI_NOME,
                   V.FUN_CODIGO,
@@ -280,6 +281,7 @@ export class OrderService {
 
       const query = `SELECT
                   VEN_NUMERO,
+                  V.SIT_CODIGO,
                   V.VEN_NUMSITE,
                   V.LOJ_CODIGO,
                   V.VEN_TIPO,

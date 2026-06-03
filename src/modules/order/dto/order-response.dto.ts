@@ -4,6 +4,9 @@ export class OrderResponseDto {
   @ApiProperty({ example: 12345, description: 'Número da venda' })
   VEN_NUMERO: number;
 
+  @ApiProperty({ example: 1, description: 'Código da situação da venda' })
+  SIT_CODIGO: number;
+
   @ApiProperty({ example: 'WEB-12345', description: 'Número da venda no site' })
   VEN_NUMSITE: string;
 
