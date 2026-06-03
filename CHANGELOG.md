@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.16.3](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.16.2...v1.16.3) (2026-06-03)
+
+
+### Features
+
+* return sit_codigo on order ([844b1e8](https://github.com/infobrasil-sistemas/info-vendas-api/commit/844b1e84a03ab4d36aecb0ec134410e5b55df637))
+
 ## [1.16.2](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.16.1...v1.16.2) (2026-05-25)
 
 
