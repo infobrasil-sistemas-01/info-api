@@ -16,7 +16,7 @@ export class OrderService {
     private readonly orderItemService: OrderItemService,
     private readonly productService: ProductService,
     private readonly receiptService: ReceiptService,
-  ) {}
+  ) { }
 
   async post(credentialsId: string, data: PostOrderDto, storeId: number) {
     let connection: any;
@@ -250,8 +250,7 @@ export class OrderService {
       this.logger.log(
         `Busca de pedidos executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
           { storeId, page, pageSize, ...filters },
-        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${
-          queryEndTime - queryStartTime
+        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${queryEndTime - queryStartTime
         }ms`,
       );
 
@@ -338,9 +337,9 @@ export class OrderService {
             ? orderData.id
             : orderData.id.toString(),
         SIT_CODIGO: 1,
-        LOJ_CODIGO: storeId,
-        USU_CODIGO: 9999, // TODO: Estudar a possibilidade de criar um usuário específico para pedidos realizados através da API
-        FUN_CODIGO: 9999, // TODO: Estudar a possibilidade de criar um funcionário específico para pedidos realizados através da API
+        LOJ_CODIGO: orderData.store_id || storeId,
+        USU_CODIGO: orderData.employee_id || 9999,
+        FUN_CODIGO: orderData.employee_id || 9999,
         CLI_CODIGO: orderData.client_id || 1,
         VEN_TIPO: 'I',
         VEN_PRECO: orderData.price_table_id?.toString() || '1',
