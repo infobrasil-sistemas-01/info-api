@@ -23,6 +23,7 @@ export const PostOrderSchema = z.object({
   payment_method_rate: z.number().optional(), // Taxa do meio de pagamento
   installment: z.number().optional(), // Quantidade de parcelas
   payment_method: z.string(), // Meio de pagamento
+  payment_plan_code: z.number().optional(), // Código do plano de pagamento
   payment_date: z.string(), // Data de pagamento
   interest: z.number().optional(), // Juros do pedido
   has_payment: z.boolean(), // Indica se existe pagamento confirmado
@@ -78,6 +79,9 @@ export class PostOrderDto extends ZodDto(PostOrderSchema) {
 
   @ApiProperty({ description: 'Meio de pagamento' })
   payment_method!: string;
+
+  @ApiPropertyOptional({ description: 'Código do plano de pagamento' })
+  payment_plan_code?: number;
 
   @ApiProperty({ description: 'Data de pagamento' })
   payment_date!: string;
