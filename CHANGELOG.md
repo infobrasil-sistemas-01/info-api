@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.16.4](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.16.3...v1.16.4) (2026-06-09)
+
+
+### Features
+
+* add provider_id to POST /orders ([822edcb](https://github.com/infobrasil-sistemas/info-vendas-api/commit/822edcbc05cee2cc2051281b635db31c364aad9e))
+
+
+### Bug Fixes
+
+* loj_codigo && usu_codigo && fun_codigo by field on endpoint ([368aaea](https://github.com/infobrasil-sistemas/info-vendas-api/commit/368aaea38abec9169ce23d40e9a2e9835eb769c5))
+
 ## [1.16.3](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.16.2...v1.16.3) (2026-06-03)
 
 
