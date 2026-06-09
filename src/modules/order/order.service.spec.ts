@@ -62,6 +62,12 @@ describe('OrderService', () => {
   describe('post', () => {
     const mockOrderData = {
       id: 123,
+      client_id: 1,
+      employee_id: 1,
+      store_id: 1,
+      provider_id: 1,
+      price_table_id: 1,
+      user_id: 1,
       date: '2024-01-15',
       hour: '10:30:00',
       store_note: 'Test note',
