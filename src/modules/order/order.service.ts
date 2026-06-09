@@ -339,7 +339,7 @@ export class OrderService {
         SIT_CODIGO: 1,
         PRE_CODIGO: orderData.provider_id || 1,
         LOJ_CODIGO: orderData.store_id || storeId,
-        USU_CODIGO: orderData.employee_id || 9999,
+        USU_CODIGO: orderData.user_id || orderData.employee_id || 9999,
         FUN_CODIGO: orderData.employee_id || 9999,
         CLI_CODIGO: orderData.client_id || 1,
         VEN_TIPO: 'I',
