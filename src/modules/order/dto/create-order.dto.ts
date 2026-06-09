@@ -5,6 +5,7 @@ import { SoldProductDto, SoldProductSchema } from './sold-product.dto';
 
 export const PostOrderSchema = z.object({
   id: z.number(),
+  store_id: z.number().optional(),
   client_id: z.number().optional(),
   provider_id: z.number().optional(),
   employee_id: z.number().optional(),
