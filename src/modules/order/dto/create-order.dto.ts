@@ -6,6 +6,8 @@ import { SoldProductDto, SoldProductSchema } from './sold-product.dto';
 export const PostOrderSchema = z.object({
   id: z.number(),
   client_id: z.number().optional(),
+  provider_id: z.number().optional(),
+  employee_id: z.number().optional(),
   price_table_id: z
     .number()
     .min(1, { message: 'A tabela de preços deve ser entre 1 e 12.' })
@@ -32,6 +34,12 @@ export class PostOrderDto extends ZodDto(PostOrderSchema) {
 
   @ApiPropertyOptional({ description: 'ID do cliente (opcional)' })
   client_id?: number;
+
+  @ApiPropertyOptional({ description: 'ID do prestador de serviços (opcional)' })
+  provider_id?: number;
+
+  @ApiPropertyOptional({ description: 'ID do funcionário (opcional)' })
+  employee_id?: number;
 
   @ApiPropertyOptional({ description: 'ID da tabela de preços (opcional)' })
   price_table_id?: number;

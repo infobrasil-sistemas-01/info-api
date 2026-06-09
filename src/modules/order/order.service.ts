@@ -337,6 +337,7 @@ export class OrderService {
             ? orderData.id
             : orderData.id.toString(),
         SIT_CODIGO: 1,
+        PRE_CODIGO: orderData.provider_id || 1,
         LOJ_CODIGO: orderData.store_id || storeId,
         USU_CODIGO: orderData.employee_id || 9999,
         FUN_CODIGO: orderData.employee_id || 9999,
@@ -354,6 +355,7 @@ export class OrderService {
                 VEN_ID_ECOMMERCE,
                 VEN_NUMSITE,
                 SIT_CODIGO,               
+                PRE_CODIGO,
                 LOJ_CODIGO,
                 USU_CODIGO,
                 FUN_CODIGO,
@@ -364,13 +366,14 @@ export class OrderService {
                 VEN_HORA,
                 VEN_OBS
             )
-            VALUES (${VEN_NUMERO}, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (${VEN_NUMERO}, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             RETURNING VEN_NUMERO`;
 
       const params = [
         orderInsert.VEN_ID_ECOMMERCE,
         orderInsert.VEN_NUMSITE,
         orderInsert.SIT_CODIGO,
+        orderInsert.PRE_CODIGO,
         orderInsert.LOJ_CODIGO,
         orderInsert.USU_CODIGO,
         orderInsert.FUN_CODIGO,
