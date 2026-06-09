@@ -402,7 +402,7 @@ export class OrderService {
   ) {
     try {
       const FP1_CODIGO = orderData.payment_method;
-      const PP1_CODIGO = orderData.installment || 99;
+      const PP1_CODIGO = orderData.payment_plan_code || 1;
       const data = dayjs(orderData.date).format('YYYY-MM-DD');
 
       // else {

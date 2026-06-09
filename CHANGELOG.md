@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.16.5](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.16.4...v1.16.5) (2026-06-09)
+
+
+### Features
+
+* add user_id to POST /orders ([26d3704](https://github.com/infobrasil-sistemas/info-vendas-api/commit/26d3704511d55b4437145b0a92f3b528996aa92b))
+* payment_plan_code on CreateOrderDTO ([ef6fd32](https://github.com/infobrasil-sistemas/info-vendas-api/commit/ef6fd3250c20de4a399f324d14e91339fe202246))
+
+
+### Bug Fixes
+
+* order_id on CreateOrderDTO ([c9e0456](https://github.com/infobrasil-sistemas/info-vendas-api/commit/c9e04564c7bcd6c37598356558c2775a543359ce))
+
 ## [1.16.4](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.16.3...v1.16.4) (2026-06-09)
 
 
