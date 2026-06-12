@@ -3,8 +3,8 @@ set -e
 
 GATEWAY_CONTAINER="api-gateway"
 
-BLUE_SERVICE="api-blue"
-GREEN_SERVICE="api-green"
+BLUE_SERVICE="infoapi-blue"
+GREEN_SERVICE="infoapi-green"
 
 APP_PORT=3336
 
@@ -12,12 +12,14 @@ HEALTH_PATH="/api/v1/health"
 
 echo "Detectando ambiente ativo..."
 
-if docker ps --format '{{.Names}}' | grep -q "^api-blue$"; then
-LIVE_SERVICE=$BLUE_SERVICE
-TARGET_SERVICE=$GREEN_SERVICE
+if docker ps --format '{{.Names}}' | grep -q -E "^(api-blue|infoapi-blue)$"; then
+  LIVE_SERVICE=$BLUE_SERVICE
+  TARGET_SERVICE=$GREEN_SERVICE
+  LEGACY_LIVE_CONTAINER="api-blue"
 else
-LIVE_SERVICE=$GREEN_SERVICE
-TARGET_SERVICE=$BLUE_SERVICE
+  LIVE_SERVICE=$GREEN_SERVICE
+  TARGET_SERVICE=$BLUE_SERVICE
+  LEGACY_LIVE_CONTAINER="api-green"
 fi
 
 TARGET_PORT=$APP_PORT
@@ -55,11 +57,15 @@ echo "Nova versão saudável."
 
 echo "Atualizando upstream do nginx..."
 
-docker exec $GATEWAY_CONTAINER sh -c "sed -i 's/$LIVE_SERVICE/$TARGET_SERVICE/g' /etc/nginx/conf.d/default.conf && nginx -s reload"
+docker exec $GATEWAY_CONTAINER sh -c "sed -i -E 's/(api-blue|infoapi-blue|api-green|infoapi-green)/$TARGET_SERVICE/g' /etc/nginx/conf.d/default.conf && nginx -s reload"
 
 echo "Derrubando ambiente antigo..."
 docker compose stop $LIVE_SERVICE
 docker compose rm -f $LIVE_SERVICE
+if [ ! -z "$LEGACY_LIVE_CONTAINER" ]; then
+  docker stop $LEGACY_LIVE_CONTAINER 2>/dev/null || true
+  docker rm -f $LEGACY_LIVE_CONTAINER 2>/dev/null || true
+fi
 
 echo "Deploy concluído com sucesso."
 echo "Ambiente ativo atual: $TARGET_SERVICE"

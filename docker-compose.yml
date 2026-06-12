@@ -1,9 +1,9 @@
 services:
-  api-blue:
+  infoapi-blue:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: api-blue
+    container_name: infoapi-blue
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://127.0.0.1:${PORT}/api/v1/health || exit 1"]
       interval: 10s
@@ -22,11 +22,11 @@ services:
       - infoapi-network
     restart: unless-stopped
 
-  api-green:
+  infoapi-green:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: api-green
+    container_name: infoapi-green
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://127.0.0.1:${PORT}/api/v1/health || exit 1"]
       interval: 10s
@@ -54,9 +54,9 @@ services:
       - ./nginx.conf.template:/etc/nginx/templates/default.conf.template
     environment:
       - PORT=${PORT}
-      - ACTIVE_UPSTREAM=api-blue
+      - ACTIVE_UPSTREAM=infoapi-blue
     depends_on:
-      api-blue:
+      infoapi-blue:
         condition: service_healthy
     networks:
       - infoapi-network
