@@ -10,6 +10,7 @@ export interface IConnectionOptions {
   user: string;
   id: number;
   pageSize: number;
+  wireCrypt?: number;
 }
 
 @Injectable()
@@ -29,6 +30,10 @@ export class FirebirdService {
       ...options,
       password: decrypt(ids(options.id)),
     };
+
+    if (options.wireCrypt) {
+      optionsFinal.wireCrypt = options.wireCrypt;
+    }
 
     return firebird.pool(poolSize, optionsFinal);
   }
