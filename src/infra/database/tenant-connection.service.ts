@@ -290,7 +290,7 @@ export class TenantConnectionService {
     const options: IConnectionOptions = {
       host: credentials.host,
       database: credentials.database,
-      wireCrypt: firebird.WIRE_CRYPT_DISABLE,
+      wireCrypt: firebird.WIRE_CRYPT_ENABLE,
       user: credentials.user,
       id: credentials?.dbId,
       port: credentials.port,
