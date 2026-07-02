@@ -48,6 +48,19 @@ describe('DashboardService', () => {
         rateLimitHits: 5,
       });
 
+      expect(mockPrisma.requestLog.count).toHaveBeenNthCalledWith(1, {
+        where: {
+          createdAt: { gte: start, lte: end },
+          path: { not: { startsWith: '/api/v1/dashboard' } },
+        },
+      });
+      expect(mockPrisma.requestLog.groupBy).toHaveBeenCalledWith({
+        by: ['userId'],
+        where: {
+          createdAt: { gte: start, lte: end },
+          path: { not: { startsWith: '/api/v1/dashboard' } },
+        },
+      });
       expect(mockPrisma.requestLog.count).toHaveBeenCalledTimes(3);
       expect(mockPrisma.requestLog.groupBy).toHaveBeenCalledTimes(1);
     });
@@ -83,7 +96,7 @@ describe('DashboardService', () => {
 
       expect(result).toEqual(mockResult);
       expect(mockPrisma.$queryRawUnsafe).toHaveBeenCalledWith(
-        expect.stringContaining('LIMIT $3'),
+        expect.stringContaining("AND rl.path NOT LIKE '/api/v1/dashboard%'"),
         start,
         end,
         5
@@ -102,7 +115,7 @@ describe('DashboardService', () => {
 
       expect(result).toEqual(mockResult);
       expect(mockPrisma.$queryRawUnsafe).toHaveBeenCalledWith(
-        expect.stringContaining('regexp_replace'),
+        expect.stringContaining("AND path NOT LIKE '/api/v1/dashboard%'"),
         start,
         end,
         10

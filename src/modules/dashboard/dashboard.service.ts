@@ -12,6 +12,11 @@ export class DashboardService {
           gte: startDate,
           lte: endDate,
         },
+        path: {
+          not: {
+            startsWith: '/api/v1/dashboard',
+          },
+        },
       },
     });
 
@@ -21,6 +26,11 @@ export class DashboardService {
         createdAt: {
           gte: startDate,
           lte: endDate,
+        },
+        path: {
+          not: {
+            startsWith: '/api/v1/dashboard',
+          },
         },
       },
     });
@@ -36,6 +46,11 @@ export class DashboardService {
           gte: 200,
           lt: 300,
         },
+        path: {
+          not: {
+            startsWith: '/api/v1/dashboard',
+          },
+        },
       },
     });
 
@@ -48,6 +63,11 @@ export class DashboardService {
           lte: endDate,
         },
         status: 429,
+        path: {
+          not: {
+            startsWith: '/api/v1/dashboard',
+          },
+        },
       },
     });
 
@@ -75,11 +95,13 @@ export class DashboardService {
           FROM request_logs m
           WHERE m.user_id = rl.user_id
             AND m.created_at >= DATE_TRUNC('month', CURRENT_DATE)
+            AND m.path NOT LIKE '/api/v1/dashboard%'
         ) as "monthlyRequests"
       FROM request_logs rl
       JOIN users u ON rl.user_id = u.id
       LEFT JOIN plans p ON u.plan_id = p.id
       WHERE rl.created_at >= $1 AND rl.created_at <= $2
+        AND rl.path NOT LIKE '/api/v1/dashboard%'
       GROUP BY rl.user_id, u.user, u.email, u.status, p.name, p.req_month
       ORDER BY "totalRequests" DESC
       LIMIT $3
@@ -100,6 +122,7 @@ export class DashboardService {
         ROUND((SUM(CASE WHEN status >= 200 AND status < 300 THEN 1 ELSE 0 END)::float / COUNT(id) * 100)::numeric, 2)::float as "successRate"
       FROM request_logs
       WHERE created_at >= $1 AND created_at <= $2
+        AND path NOT LIKE '/api/v1/dashboard%'
       GROUP BY method, 2
       ORDER BY "totalRequests" DESC
       LIMIT $3
@@ -122,6 +145,7 @@ export class DashboardService {
         COUNT(id)::int as "count"
       FROM request_logs
       WHERE created_at >= $1 AND created_at <= $2
+        AND path NOT LIKE '/api/v1/dashboard%'
       GROUP BY 1
       ORDER BY "count" DESC
     `;
@@ -143,6 +167,7 @@ export class DashboardService {
         SUM(CASE WHEN status >= 400 THEN 1 ELSE 0 END)::int as "error"
       FROM request_logs
       WHERE created_at >= $2 AND created_at <= $3
+        AND path NOT LIKE '/api/v1/dashboard%'
       GROUP BY 1
       ORDER BY 1 ASC
     `;
@@ -163,6 +188,7 @@ export class DashboardService {
       JOIN users u ON rl.user_id = u.id
       JOIN plans p ON u.plan_id = p.id
       WHERE rl.created_at >= DATE_TRUNC('month', CURRENT_DATE)
+        AND rl.path NOT LIKE '/api/v1/dashboard%'
       GROUP BY u.user, u.email, p.name, p.req_month
       HAVING COUNT(rl.id)::float / p.req_month >= 0.8
       ORDER BY "usagePercentage" DESC
@@ -178,6 +204,7 @@ export class DashboardService {
         COUNT(id)::int as "totalRequests"
       FROM request_logs
       WHERE created_at >= $1 AND created_at <= $2 AND ip IS NOT NULL
+        AND path NOT LIKE '/api/v1/dashboard%'
       GROUP BY ip
       ORDER BY "totalRequests" DESC
       LIMIT $3
@@ -196,6 +223,7 @@ export class DashboardService {
       JOIN users u ON rl.user_id = u.id
       JOIN db_credentials dc ON u.db_credentials_id = dc.id
       WHERE rl.created_at >= $1 AND rl.created_at <= $2
+        AND rl.path NOT LIKE '/api/v1/dashboard%'
       GROUP BY dc.host, dc.database
       ORDER BY "totalRequests" DESC
       LIMIT $3
@@ -213,6 +241,7 @@ export class DashboardService {
       JOIN users u ON rl.user_id = u.id
       LEFT JOIN plans p ON u.plan_id = p.id
       WHERE rl.created_at >= $1 AND rl.created_at <= $2
+        AND rl.path NOT LIKE '/api/v1/dashboard%'
       GROUP BY p.name
       ORDER BY "totalRequests" DESC
     `;
