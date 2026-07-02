@@ -8,7 +8,8 @@ const State = {
     allPlans: [],
     allRequests: [],
     allAnnouncements: [],
-    currentRequestFilter: 'ALL'
+    currentRequestFilter: 'ALL',
+    dashboardIntervalId: null
 };
 
 const Data = {
@@ -199,6 +200,291 @@ const Data = {
         } catch (e) {
             console.error('Erro ao buscar status do sistema', e);
         }
+    },
+    async fetchDashboard() {
+        const dateFilter = document.getElementById('dashboard-date-filter')?.value || '30days';
+        let startDate, endDate;
+        const now = new Date();
+        if (dateFilter === '24h') {
+            startDate = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+        } else if (dateFilter === '7days') {
+            startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        } else {
+            startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+        }
+        endDate = now;
+
+        const startStr = startDate.toISOString();
+        const endStr = endDate.toISOString();
+
+        try {
+            const [resSummary, resUsers, resEndpoints, resStatus, resTimeSeries, resAlerts, resIPs, resDBLoad, resPlanDist] = await Promise.all([
+                this.fetch(`${API_URL}/dashboard/summary?startDate=${startStr}&endDate=${endStr}`),
+                this.fetch(`${API_URL}/dashboard/top-users?startDate=${startStr}&endDate=${endStr}&limit=10`),
+                this.fetch(`${API_URL}/dashboard/top-endpoints?startDate=${startStr}&endDate=${endStr}&limit=10`),
+                this.fetch(`${API_URL}/dashboard/status-distribution?startDate=${startStr}&endDate=${endStr}`),
+                this.fetch(`${API_URL}/dashboard/time-series?startDate=${startStr}&endDate=${endStr}`),
+                this.fetch(`${API_URL}/dashboard/proactive-alerts`),
+                this.fetch(`${API_URL}/dashboard/top-ips?startDate=${startStr}&endDate=${endStr}&limit=10`),
+                this.fetch(`${API_URL}/dashboard/database-load?startDate=${startStr}&endDate=${endStr}&limit=10`),
+                this.fetch(`${API_URL}/dashboard/plan-distribution?startDate=${startStr}&endDate=${endStr}`)
+            ]);
+
+            if (!resSummary.ok || !resUsers.ok || !resEndpoints.ok || !resStatus.ok || !resTimeSeries.ok || !resAlerts.ok || !resIPs.ok || !resDBLoad.ok || !resPlanDist.ok) {
+                throw new Error("Erro ao carregar os dados do dashboard.");
+            }
+
+            const summary = await resSummary.json();
+            const topUsers = await resUsers.json();
+            const topEndpoints = await resEndpoints.json();
+            const statusDist = await resStatus.json();
+            const timeSeries = await resTimeSeries.json();
+            const proactiveAlerts = await resAlerts.json();
+            const topIPs = await resIPs.json();
+            const databaseLoad = await resDBLoad.json();
+            const planDist = await resPlanDist.json();
+
+            const section = document.getElementById('section-dashboard');
+            if (section) {
+                const prevFilter = dateFilter;
+                section.innerHTML = Components.DashboardContent(summary, topUsers, topEndpoints, proactiveAlerts, topIPs, databaseLoad, planDist);
+                document.getElementById('dashboard-date-filter').value = prevFilter;
+
+                this.renderDashboardCharts(statusDist, timeSeries);
+                this.startDashboardRefresh();
+            }
+        } catch (error) {
+            console.error('Erro ao buscar dados do dashboard:', error);
+            const section = document.getElementById('section-dashboard');
+            if (section) {
+                section.innerHTML = `
+                    <div class="card" style="text-align: center; padding: 2rem; color: var(--danger);">
+                        <i class='bx bx-error-circle' style="font-size: 2rem;"></i>
+                        <p>Erro ao carregar o dashboard. Verifique a conexão com o servidor.</p>
+                    </div>
+                `;
+            }
+        }
+    },
+
+    stopDashboardRefresh() {
+        if (State.dashboardIntervalId) {
+            clearInterval(State.dashboardIntervalId);
+            State.dashboardIntervalId = null;
+        }
+        const countdownEl = document.getElementById('dashboard-refresh-countdown');
+        if (countdownEl) {
+            countdownEl.style.display = 'none';
+        }
+    },
+
+    startDashboardRefresh() {
+        this.stopDashboardRefresh();
+        if (localStorage.getItem('dashboard-auto-refresh') !== 'true') return;
+
+        let timeLeft = 30 * 60; // 30 minutos em segundos
+        const countdownEl = document.getElementById('dashboard-refresh-countdown');
+        if (countdownEl) {
+            countdownEl.style.display = 'inline';
+            const formatTime = (s) => {
+                const m = Math.floor(s / 60);
+                const sec = s % 60;
+                return `(${m.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')})`;
+            };
+            countdownEl.innerText = formatTime(timeLeft);
+
+            State.dashboardIntervalId = setInterval(() => {
+                timeLeft--;
+                if (timeLeft <= 0) {
+                    timeLeft = 30 * 60;
+                    this.fetchDashboard();
+                } else {
+                    countdownEl.innerText = formatTime(timeLeft);
+                }
+            }, 1000);
+        }
+    },
+
+    toggleDashboardRefresh(checkbox) {
+        localStorage.setItem('dashboard-auto-refresh', checkbox.checked ? 'true' : 'false');
+        if (checkbox.checked) {
+            this.startDashboardRefresh();
+        } else {
+            this.stopDashboardRefresh();
+        }
+    },
+
+    renderDashboardCharts(statusDist, timeSeries) {
+        const statusLabels = statusDist.map(s => s.statusClass);
+        const statusSeries = statusDist.map(s => s.count);
+        const statusColors = statusLabels.map(label => {
+            if (label === '2xx') return '#10B981';
+            if (label === '3xx') return '#6B7280';
+            if (label === '429') return '#F59E0B';
+            if (label === '4xx') return '#EF4444';
+            if (label === '5xx') return '#8B5CF6';
+            return '#9CA3AF';
+        });
+
+        const statusOptions = {
+            series: statusSeries,
+            labels: statusLabels,
+            chart: {
+                type: 'donut',
+                height: 300,
+                foreColor: '#9CA3AF',
+                background: 'transparent'
+            },
+            colors: statusColors,
+            dataLabels: {
+                enabled: false
+            },
+            legend: {
+                position: 'bottom',
+                horizontalAlign: 'center',
+                labels: {
+                    colors: '#9CA3AF'
+                }
+            },
+            theme: {
+                mode: 'dark'
+            },
+            stroke: {
+                colors: ['var(--card-bg)']
+            },
+            plotOptions: {
+                pie: {
+                    donut: {
+                        size: '70%',
+                        background: 'transparent',
+                        labels: {
+                            show: true,
+                            name: {
+                                show: true,
+                                color: '#9CA3AF'
+                            },
+                            value: {
+                                show: true,
+                                color: 'white',
+                                formatter: (val) => Number(val).toLocaleString()
+                            },
+                            total: {
+                                show: true,
+                                label: 'Total',
+                                color: '#9CA3AF',
+                                formatter: (w) => {
+                                    return w.globals.seriesTotals.reduce((a, b) => a + b, 0).toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        const chartStatusEl = document.querySelector("#chart-status-dist");
+        if (chartStatusEl) {
+            chartStatusEl.innerHTML = '';
+            const chartStatus = new ApexCharts(chartStatusEl, statusOptions);
+            chartStatus.render();
+        }
+
+        const tsCategories = timeSeries.map(t => {
+            const d = new Date(t.timestamp);
+            const filterVal = document.getElementById('dashboard-date-filter')?.value;
+            if (filterVal === '24h') {
+                return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            }
+            return d.toLocaleDateString([], { day: '2-digit', month: '2-digit' });
+        });
+        const tsCountSeries = timeSeries.map(t => t.count);
+        const tsSuccessSeries = timeSeries.map(t => t.success);
+        const tsErrorSeries = timeSeries.map(t => t.error);
+
+        const tsOptions = {
+            series: [
+                {
+                    name: 'Total de Requisições',
+                    data: tsCountSeries
+                },
+                {
+                    name: 'Sucesso (2xx)',
+                    data: tsSuccessSeries
+                },
+                {
+                    name: 'Falhas (4xx/5xx)',
+                    data: tsErrorSeries
+                }
+            ],
+            chart: {
+                type: 'area',
+                height: 300,
+                toolbar: {
+                    show: false
+                },
+                foreColor: '#9CA3AF',
+                background: 'transparent'
+            },
+            colors: ['#3B82F6', '#10B981', '#EF4444'],
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'smooth',
+                width: 2
+            },
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shadeIntensity: 1,
+                    opacityFrom: 0.2,
+                    opacityTo: 0.02,
+                    stops: [0, 90, 100]
+                }
+            },
+            grid: {
+                borderColor: 'rgba(255,255,255,0.05)'
+            },
+            xaxis: {
+                categories: tsCategories,
+                labels: {
+                    style: {
+                        colors: '#9CA3AF'
+                    }
+                },
+                axisBorder: {
+                    show: false
+                },
+                axisTicks: {
+                    show: false
+                }
+            },
+            yaxis: {
+                labels: {
+                    style: {
+                        colors: '#9CA3AF'
+                    },
+                    formatter: (val) => Math.round(val).toLocaleString()
+                }
+            },
+            tooltip: {
+                theme: 'dark'
+            },
+            legend: {
+                position: 'top',
+                horizontalAlign: 'right',
+                labels: {
+                    colors: '#9CA3AF'
+                }
+            }
+        };
+
+        const chartTimeSeriesEl = document.querySelector("#chart-time-series");
+        if (chartTimeSeriesEl) {
+            chartTimeSeriesEl.innerHTML = '';
+            const chartTimeSeries = new ApexCharts(chartTimeSeriesEl, tsOptions);
+            chartTimeSeries.render();
+        }
     }
 };
 
@@ -294,9 +580,10 @@ const UI = {
     setup() {
         const canViewRequests = State.currentUser.permissions.includes('integration-request.view');
         const canViewUsers = State.currentUser.permissions.includes('core.user.view');
+        const canViewDashboard = State.currentUser.permissions.includes('core.dashboard.view');
 
         // Security check: If user has no business here, send them to the Client Portal
-        if (!canViewRequests && !canViewUsers) {
+        if (!canViewRequests && !canViewUsers && !canViewDashboard) {
             window.location.href = '/integration/client';
             return;
         }
@@ -317,13 +604,17 @@ const UI = {
         const hash = window.location.hash.replace('#', '');
         let defaultTab = 'links';
 
+        if (canViewDashboard) {
+            document.getElementById('tab-dashboard').classList.remove('hidden');
+            defaultTab = 'dashboard';
+        }
         if (canViewRequests) {
             document.getElementById('tab-requests').classList.remove('hidden');
-            defaultTab = 'requests';
+            if (defaultTab === 'links') defaultTab = 'requests';
         }
         if (canViewUsers) {
             ['tab-users', 'tab-roles', 'tab-creds'].forEach(id => document.getElementById(id).classList.remove('hidden'));
-            if (!canViewRequests) defaultTab = 'users';
+            if (defaultTab === 'links') defaultTab = 'users';
         }
 
         const canViewAnns = State.currentUser.permissions.includes('core.announcement.view');
@@ -813,6 +1104,11 @@ function switchTab(tab, updateHash = true) {
         }
         if (tab === 'announcements') {
             Data.fetchAnnouncements();
+        }
+        if (tab === 'dashboard') {
+            Data.fetchDashboard();
+        } else {
+            Data.stopDashboardRefresh();
         }
     }
 

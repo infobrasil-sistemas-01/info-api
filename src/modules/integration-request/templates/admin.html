@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="/integration/assets/admin.css">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 </head>
 
 <body>
@@ -62,6 +63,7 @@
             </header>
 
             <nav class="tabs">
+                <div id="tab-dashboard" class="tab-btn hidden" onclick="switchTab('dashboard')">Dashboard</div>
                 <div id="tab-requests" class="tab-btn hidden" onclick="switchTab('requests')">Solicitações</div>
                 <div id="tab-users" class="tab-btn hidden" onclick="switchTab('users')">Usuários</div>
                 <div id="tab-roles" class="tab-btn hidden" onclick="switchTab('roles')">Perfis de Acesso</div>
@@ -71,6 +73,7 @@
             </nav>
 
             <!-- Sections -->
+            <section id="section-dashboard" class="tab-content hidden"></section>
             <section id="section-requests" class="tab-content hidden"></section>
             <section id="section-users" class="tab-content hidden"></section>
             <section id="section-roles" class="tab-content hidden"></section>

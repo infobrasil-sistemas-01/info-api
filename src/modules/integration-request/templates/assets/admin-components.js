@@ -442,4 +442,299 @@ const Components = {
             </div>
         </div>
     `,
+
+  DashboardTopUserRow: (u) => {
+    const usagePercent = Math.min(100, Math.round((u.monthlyRequests / (u.planReqMonth || 1)) * 100));
+    const statusBadge = u.status
+      ? `<span class="tag-pill" style="background: rgba(16, 185, 129, 0.1); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.2);">Ativo</span>`
+      : `<span class="tag-pill" style="background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.2);">Inativo</span>`;
+
+    return `
+      <tr>
+          <td style="padding: 10px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                  <div style="width: 32px; height: 32px; background: var(--primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: white; font-size: 0.85rem;">
+                      ${(u.username || 'U').charAt(0).toUpperCase()}
+                  </div>
+                  <div>
+                      <div style="font-weight: 600; color: white;">${u.username}</div>
+                      <div style="font-size: 0.75rem; color: var(--text-muted);">${u.email || 'Sem e-mail'}</div>
+                  </div>
+              </div>
+          </td>
+          <td style="padding: 10px;"><span class="tag-pill">${u.planName || 'Sem Plano'}</span></td>
+          <td style="font-weight: 600; color: white; text-align: center; padding: 10px;">${u.totalRequests.toLocaleString()}</td>
+          <td style="padding: 10px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                  <div style="flex-grow: 1; height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1);">
+                      <div style="width: ${usagePercent}%; height: 100%; background: ${usagePercent > 80 ? 'var(--danger)' : 'var(--primary)'}; border-radius: 4px;"></div>
+                  </div>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: ${usagePercent > 80 ? 'var(--danger)' : 'var(--text-muted)'}; min-width: 35px; text-align: right;">
+                      ${usagePercent}%
+                  </span>
+              </div>
+              <small style="font-size: 0.7rem; color: var(--text-muted); display: block; margin-top: 2px;">
+                  ${u.monthlyRequests.toLocaleString()} / ${(u.planReqMonth || 0).toLocaleString()}
+              </small>
+          </td>
+          <td style="color: ${u.errorRate > 10 ? 'var(--danger)' : 'var(--success)'}; font-weight: 600; text-align: center; padding: 10px;">
+              ${u.errorRate}%
+          </td>
+          <td style="padding: 10px;">${statusBadge}</td>
+      </tr>
+    `;
+  },
+
+  DashboardTopEndpointRow: (e) => {
+    const methodColor = {
+      GET: 'var(--primary)',
+      POST: 'var(--success)',
+      PATCH: 'var(--warning)',
+      DELETE: 'var(--danger)',
+    }[e.method] || 'var(--text-muted)';
+
+    return `
+      <tr>
+          <td style="width: 80px; padding: 10px;"><span class="tag-pill" style="background: rgba(255,255,255,0.05); color: ${methodColor}; border: 1px solid ${methodColor}; font-weight: 700; width: 60px; text-align: center; display: inline-block;">${e.method}</span></td>
+          <td style="font-family: monospace; font-size: 0.85rem; color: white; padding: 10px;">${e.path}</td>
+          <td style="font-weight: 600; color: white; text-align: center; padding: 10px;">${e.totalRequests.toLocaleString()}</td>
+          <td style="color: ${e.successRate > 90 ? 'var(--success)' : e.successRate > 75 ? 'var(--warning)' : 'var(--danger)'}; font-weight: 600; text-align: center; padding: 10px;">
+              ${e.successRate}%
+          </td>
+      </tr>
+    `;
+  },
+
+  DashboardContent: (summary, topUsers, topEndpoints, proactiveAlerts, topIPs, databaseLoad, planDist) => {
+    const activeRefresh = localStorage.getItem('dashboard-auto-refresh') === 'true' ? 'checked' : '';
+
+    const proactiveRows = proactiveAlerts.map(a => `
+          <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+              <td style="padding: 10px 0;"><strong style="color: white;">${a.username}</strong><br><small style="color: var(--text-muted);">${a.email || ''}</small></td>
+              <td style="padding: 10px 0;"><span class="tag-pill">${a.planName}</span></td>
+              <td style="color: var(--danger); font-weight: 700; text-align: right; padding: 10px 0;">${a.usagePercentage}%</td>
+          </tr>
+      `).join('') || `<tr><td colspan="3" style="text-align: center; color: var(--text-muted); padding: 20px;">Nenhum usuário crítico no momento (>80%)</td></tr>`;
+
+    const ipRows = topIPs.map(i => `
+          <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+              <td style="padding: 10px 0; font-family: monospace; color: white;">${i.ip}</td>
+              <td style="font-weight: 600; text-align: right; color: white; padding: 10px 0;">${i.totalRequests.toLocaleString()}</td>
+          </tr>
+      `).join('') || `<tr><td colspan="2" style="text-align: center; color: var(--text-muted); padding: 20px;">Sem dados</td></tr>`;
+
+    const dbRows = databaseLoad.map(d => `
+          <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+              <td style="padding: 10px 0; font-family: monospace; color: white;">${d.host}</td>
+              <td style="color: var(--text-muted); font-size: 0.85rem; padding: 10px 0;">${d.database}</td>
+              <td style="font-weight: 600; text-align: right; color: white; padding: 10px 0;">${d.totalRequests.toLocaleString()}</td>
+          </tr>
+      `).join('') || `<tr><td colspan="3" style="text-align: center; color: var(--text-muted); padding: 20px;">Sem dados</td></tr>`;
+
+    return `
+      <!-- Toolbar de Controles -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 15px;">
+          <div>
+              <h1 style="margin: 0; color: white;">Dashboard de Uso da API</h1>
+              <p style="color: var(--text-muted); margin: 5px 0 0 0; font-size: 0.9rem;">Métricas de consumo, tráfego e usuários em tempo real.</p>
+          </div>
+          <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+              <!-- Auto Refresh Control -->
+              <div style="display: flex; align-items: center; gap: 8px; background: var(--card-bg); border: 1px solid var(--border); padding: 8px 16px; border-radius: 10px;">
+                  <label class="switch" style="position: relative; display: inline-block; width: 36px; height: 18px; margin: 0;">
+                      <input type="checkbox" id="dashboard-refresh-toggle" onchange="Data.toggleDashboardRefresh(this)" ${activeRefresh} style="width: 100%; height: 100%; cursor: pointer; accent-color: var(--primary);">
+                  </label>
+                  <span style="font-size: 0.85rem; font-weight: 500; color: var(--text-muted);">
+                      Auto-refresh (30m)
+                  </span>
+                  <span id="dashboard-refresh-countdown" style="font-size: 0.85rem; font-weight: 600; color: var(--primary); margin-left: 5px; display: none;"></span>
+              </div>
+
+              <!-- Filtro de Período -->
+              <select id="dashboard-date-filter" onchange="Data.fetchDashboard()" 
+                  style="
+                      padding: 10px 16px; 
+                      border-radius: 10px; 
+                      border: 1px solid var(--border); 
+                      background: var(--card-bg); 
+                      color: white; 
+                      cursor: pointer;
+                      font-weight: 500;
+                      outline: none;
+                  ">
+                  <option value="24h">Últimas 24 horas</option>
+                  <option value="7days">Últimos 7 dias</option>
+                  <option value="30days" selected>Últimos 30 dias</option>
+              </select>
+              <button class="btn btn-outline" onclick="Data.fetchDashboard()" title="Atualizar dados" style="padding: 10px; border-radius: 10px;">
+                  <i class='bx bx-refresh' style="font-size: 1.2rem;"></i>
+              </button>
+          </div>
+      </div>
+
+      <!-- Cards de Visão Executiva -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+          <div class="card" style="padding: 1.5rem; display: flex; align-items: center; gap: 1.5rem;">
+              <div style="font-size: 2.2rem; color: var(--primary); background: rgba(16, 185, 129, 0.1); width: 60px; height: 60px; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
+                  <i class='bx bx-data'></i>
+              </div>
+              <div>
+                  <small style="color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 4px;">TOTAL DE REQUISIÇÕES</small>
+                  <h2 style="margin: 0; font-size: 1.6rem; color: white;">${summary.totalRequests.toLocaleString()}</h2>
+              </div>
+          </div>
+          <div class="card" style="padding: 1.5rem; display: flex; align-items: center; gap: 1.5rem;">
+              <div style="font-size: 2.2rem; color: var(--primary); background: rgba(16, 185, 129, 0.1); width: 60px; height: 60px; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
+                  <i class='bx bx-group'></i>
+              </div>
+              <div>
+                  <small style="color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 4px;">USUÁRIOS ATIVOS</small>
+                  <h2 style="margin: 0; font-size: 1.6rem; color: white;">${summary.activeUsers.toLocaleString()}</h2>
+              </div>
+          </div>
+          <div class="card" style="padding: 1.5rem; display: flex; align-items: center; gap: 1.5rem;">
+              <div style="font-size: 2.2rem; color: var(--success); background: rgba(16, 185, 129, 0.1); width: 60px; height: 60px; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
+                  <i class='bx bx-check-double'></i>
+              </div>
+              <div>
+                  <small style="color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 4px;">TAXA DE SUCESSO</small>
+                  <h2 style="margin: 0; font-size: 1.6rem; color: white;">${summary.successRate.toFixed(2)}%</h2>
+              </div>
+          </div>
+          <div class="card" style="padding: 1.5rem; display: flex; align-items: center; gap: 1.5rem;">
+              <div style="font-size: 2.2rem; color: var(--danger); background: rgba(239, 68, 68, 0.1); width: 60px; height: 60px; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
+                  <i class='bx bx-shield-quarter'></i>
+              </div>
+              <div>
+                  <small style="color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 4px;">LIMITES EXCEDIDOS (429)</small>
+                  <h2 style="margin: 0; font-size: 1.6rem; color: white;">${summary.rateLimitHits.toLocaleString()}</h2>
+              </div>
+          </div>
+      </div>
+
+      <!-- Linha 1: Evolução Temporal & Status Codes -->
+      <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 2rem; min-height: 350px; flex-wrap: wrap;">
+          <!-- Gráfico de Linha de requisições -->
+          <div class="card" style="padding: 1.5rem; display: flex; flex-direction: column;">
+              <h3 style="margin-top: 0; margin-bottom: 1rem; color: white;">Evolução Temporal das Requisições</h3>
+              <div id="chart-time-series" style="flex-grow: 1; width: 100%; min-height: 300px;"></div>
+          </div>
+          <!-- Gráfico Donut de Status Codes -->
+          <div class="card" style="padding: 1.5rem; display: flex; flex-direction: column;">
+              <h3 style="margin-top: 0; margin-bottom: 1rem; color: white;">Distribuição de Status HTTP</h3>
+              <div id="chart-status-dist" style="flex-grow: 1; width: 100%; min-height: 300px; display: flex; align-items: center; justify-content: center;"></div>
+          </div>
+      </div>
+
+      <!-- Linha 2: Top Usuários -->
+      <div class="card" style="margin-bottom: 2rem; padding: 1.5rem;">
+          <h3 style="margin-top: 0; margin-bottom: 1rem; color: white;">Top Usuários (Maior Consumo)</h3>
+          <div class="table-container" style="max-height: 400px; overflow-y: auto;">
+              <table style="width: 100%; border-collapse: collapse;">
+                  <thead>
+                      <tr style="border-bottom: 1px solid var(--border);">
+                          <th style="text-align: left; padding: 10px; color: var(--text-muted);">Usuário / Cliente</th>
+                          <th style="text-align: left; padding: 10px; color: var(--text-muted);">Plano</th>
+                          <th style="text-align: center; padding: 10px; width: 150px; color: var(--text-muted);">Total Requisições</th>
+                          <th style="text-align: left; padding: 10px; width: 220px; color: var(--text-muted);">Progresso do Limite Mensal</th>
+                          <th style="text-align: center; padding: 10px; width: 100px; color: var(--text-muted);">Taxa Erro</th>
+                          <th style="text-align: left; padding: 10px; width: 100px; color: var(--text-muted);">Status</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      ${topUsers.map(Components.DashboardTopUserRow).join('') || '<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 20px;">Nenhum log de requisição encontrado.</td></tr>'}
+                  </tbody>
+              </table>
+          </div>
+      </div>
+
+      <!-- Linha 3: Top Endpoints -->
+      <div class="card" style="margin-bottom: 2rem; padding: 1.5rem;">
+          <h3 style="margin-top: 0; margin-bottom: 1rem; color: white;">Top Endpoints (Mais Requisitados)</h3>
+          <div class="table-container" style="max-height: 400px; overflow-y: auto;">
+              <table style="width: 100%; border-collapse: collapse;">
+                  <thead>
+                      <tr style="border-bottom: 1px solid var(--border);">
+                          <th style="text-align: left; padding: 10px; width: 80px; color: var(--text-muted);">Método</th>
+                          <th style="text-align: left; padding: 10px; color: var(--text-muted);">Rota / Endpoint Sanitizado</th>
+                          <th style="text-align: center; padding: 10px; width: 180px; color: var(--text-muted);">Total Chamadas</th>
+                          <th style="text-align: center; padding: 10px; width: 150px; color: var(--text-muted);">Taxa de Sucesso</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      ${topEndpoints.map(Components.DashboardTopEndpointRow).join('') || '<tr><td colspan="4" style="text-align: center; color: var(--text-muted); padding: 20px;">Nenhum log de requisição encontrado.</td></tr>'}
+                  </tbody>
+              </table>
+          </div>
+      </div>
+
+      <!-- Linha 4: Tabelas Menores Auxiliares -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+          <!-- Alertas Proativos -->
+          <div class="card" style="padding: 1.5rem; display: flex; flex-direction: column;">
+              <h3 style="margin-top: 0; margin-bottom: 0.5rem; color: var(--danger); display: flex; align-items: center; gap: 8px;">
+                  <i class='bx bx-bell'></i> Alertas Críticos (>80% do Limite)
+              </h3>
+              <p style="color: var(--text-muted); font-size: 0.8rem; margin: 0 0 1rem 0;">Usuários próximos ao estouro mensal do plano.</p>
+              <div style="flex-grow: 1; overflow-y: auto; max-height: 250px;">
+                  <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+                      <thead>
+                          <tr style="border-bottom: 1px solid var(--border); color: var(--text-muted);">
+                              <th style="text-align: left; padding: 8px 0; color: var(--text-muted);">Usuário</th>
+                              <th style="text-align: left; padding: 8px 0; color: var(--text-muted);">Plano</th>
+                              <th style="text-align: right; padding: 8px 0; color: var(--text-muted);">Uso %</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          ${proactiveRows}
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+
+          <!-- Banco de Dados Load -->
+          <div class="card" style="padding: 1.5rem; display: flex; flex-direction: column;">
+              <h3 style="margin-top: 0; margin-bottom: 0.5rem; color: white; display: flex; align-items: center; gap: 8px;">
+                  <i class='bx bx-server'></i> Carga por Banco de Dados
+              </h3>
+              <p style="color: var(--text-muted); font-size: 0.8rem; margin: 0 0 1rem 0;">Acessos consolidados por servidor/banco de dados.</p>
+              <div style="flex-grow: 1; overflow-y: auto; max-height: 250px;">
+                  <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+                      <thead>
+                          <tr style="border-bottom: 1px solid var(--border); color: var(--text-muted);">
+                              <th style="text-align: left; padding: 8px 0; color: var(--text-muted);">Host</th>
+                              <th style="text-align: left; padding: 8px 0; color: var(--text-muted);">Database</th>
+                              <th style="text-align: right; padding: 8px 0; color: var(--text-muted);">Chamadas</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          ${dbRows}
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+
+          <!-- Top IPs -->
+          <div class="card" style="padding: 1.5rem; display: flex; flex-direction: column;">
+              <h3 style="margin-top: 0; margin-bottom: 0.5rem; color: white; display: flex; align-items: center; gap: 8px;">
+                  <i class='bx bx-fingerprint'></i> IPs de Origem mais Ativos
+              </h3>
+              <p style="color: var(--text-muted); font-size: 0.8rem; margin: 0 0 1rem 0;">Top 10 IPs de origem gerando tráfego.</p>
+              <div style="flex-grow: 1; overflow-y: auto; max-height: 250px;">
+                  <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+                      <thead>
+                          <tr style="border-bottom: 1px solid var(--border); color: var(--text-muted);">
+                              <th style="text-align: left; padding: 8px 0; color: var(--text-muted);">IP</th>
+                              <th style="text-align: right; padding: 8px 0; color: var(--text-muted);">Requisições</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          ${ipRows}
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+      </div>
+      `;
+  },
 };

@@ -348,6 +348,14 @@ export const PERMISSIONS = [
     descricao: 'Deletar avisos',
     module: 'core',
   },
+
+  // ========= DASHBOARD DE USO =========
+  {
+    key: 'core.dashboard.view',
+    descricao: 'Visualizar dashboard de uso da API',
+    module: 'core',
+  },
 ] as const satisfies readonly PermissionDefinition[];
 
 export type PermissionKey = (typeof PERMISSIONS)[number]['key'];
+
