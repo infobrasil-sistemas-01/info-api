@@ -122,4 +122,36 @@ describe('DashboardService', () => {
       );
     });
   });
+
+  describe('getTimeSeries', () => {
+    it('should calculate intervals and query time series data', async () => {
+      const start = new Date('2026-07-02T12:00:00Z');
+      const end = new Date('2026-07-02T13:00:00Z'); // 1 hour difference -> interval 1m
+      const mockResult = [{ timestamp: '2026-07-02T12:00:00Z', count: 5, success: 5, error: 0 }];
+      mockPrisma.$queryRawUnsafe.mockResolvedValue(mockResult);
+
+      const result = await service.getTimeSeries(start, end);
+
+      expect(result).toEqual(mockResult);
+      expect(mockPrisma.$queryRawUnsafe).toHaveBeenCalledWith(
+        expect.stringContaining("DATE_TRUNC('minute', created_at)"),
+        start,
+        end
+      );
+    });
+
+    it('should respect custom interval when provided', async () => {
+      const start = new Date('2026-07-02T12:00:00Z');
+      const end = new Date('2026-07-02T13:00:00Z');
+      mockPrisma.$queryRawUnsafe.mockResolvedValue([]);
+
+      await service.getTimeSeries(start, end, '15m');
+
+      expect(mockPrisma.$queryRawUnsafe).toHaveBeenCalledWith(
+        expect.stringContaining("floor(extract(epoch from created_at) / 900)"),
+        start,
+        end
+      );
+    });
+  });
 });

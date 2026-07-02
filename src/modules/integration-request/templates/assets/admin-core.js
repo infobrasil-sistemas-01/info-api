@@ -9,7 +9,8 @@ const State = {
     allRequests: [],
     allAnnouncements: [],
     currentRequestFilter: 'ALL',
-    dashboardIntervalId: null
+    dashboardIntervalId: null,
+    currentZoomRange: null
 };
 
 const Data = {
@@ -202,10 +203,15 @@ const Data = {
         }
     },
     async fetchDashboard() {
+        State.currentZoomRange = null;
         const dateFilter = document.getElementById('dashboard-date-filter')?.value || '30days';
         let startDate, endDate;
         const now = new Date();
-        if (dateFilter === '24h') {
+        if (dateFilter === '1h') {
+            startDate = new Date(now.getTime() - 1 * 60 * 60 * 1000);
+        } else if (dateFilter === '6h') {
+            startDate = new Date(now.getTime() - 6 * 60 * 60 * 1000);
+        } else if (dateFilter === '24h') {
             startDate = new Date(now.getTime() - 24 * 60 * 60 * 1000);
         } else if (dateFilter === '7days') {
             startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
@@ -314,89 +320,115 @@ const Data = {
         }
     },
 
-    renderDashboardCharts(statusDist, timeSeries) {
-        const statusLabels = statusDist.map(s => s.statusClass);
-        const statusSeries = statusDist.map(s => s.count);
-        const statusColors = statusLabels.map(label => {
-            if (label === '2xx') return '#10B981';
-            if (label === '3xx') return '#6B7280';
-            if (label === '429') return '#F59E0B';
-            if (label === '4xx') return '#EF4444';
-            if (label === '5xx') return '#8B5CF6';
-            return '#9CA3AF';
-        });
+    async fetchZoomedTimeSeries(startStr, endStr) {
+        try {
+            const res = await this.fetch(`${API_URL}/dashboard/time-series?startDate=${startStr}&endDate=${endStr}`);
+            if (res.ok) {
+                const timeSeries = await res.json();
+                this.renderDashboardCharts(null, timeSeries);
+            }
+        } catch (error) {
+            console.error('Erro ao buscar dados de zoom:', error);
+        }
+    },
 
-        const statusOptions = {
-            series: statusSeries,
-            labels: statusLabels,
-            chart: {
-                type: 'donut',
-                height: 300,
-                foreColor: '#9CA3AF',
-                background: 'transparent'
-            },
-            colors: statusColors,
-            dataLabels: {
-                enabled: false
-            },
-            legend: {
-                position: 'bottom',
-                horizontalAlign: 'center',
-                labels: {
-                    colors: '#9CA3AF'
-                }
-            },
-            theme: {
-                mode: 'dark'
-            },
-            stroke: {
-                colors: ['var(--card-bg)']
-            },
-            plotOptions: {
-                pie: {
-                    donut: {
-                        size: '70%',
-                        background: 'transparent',
-                        labels: {
-                            show: true,
-                            name: {
+    renderDashboardCharts(statusDist, timeSeries) {
+        if (statusDist) {
+            const statusLabels = statusDist.map(s => s.statusClass);
+            const statusSeries = statusDist.map(s => s.count);
+            const statusColors = statusLabels.map(label => {
+                if (label === '2xx') return '#10B981';
+                if (label === '3xx') return '#6B7280';
+                if (label === '429') return '#F59E0B';
+                if (label === '4xx') return '#EF4444';
+                if (label === '5xx') return '#8B5CF6';
+                return '#9CA3AF';
+            });
+
+            const statusOptions = {
+                series: statusSeries,
+                labels: statusLabels,
+                chart: {
+                    type: 'donut',
+                    height: 300,
+                    foreColor: '#9CA3AF',
+                    background: 'transparent'
+                },
+                colors: statusColors,
+                dataLabels: {
+                    enabled: false
+                },
+                legend: {
+                    position: 'bottom',
+                    horizontalAlign: 'center',
+                    labels: {
+                        colors: '#9CA3AF'
+                    }
+                },
+                theme: {
+                    mode: 'dark'
+                },
+                stroke: {
+                    colors: ['var(--card-bg)']
+                },
+                plotOptions: {
+                    pie: {
+                        donut: {
+                            size: '70%',
+                            background: 'transparent',
+                            labels: {
                                 show: true,
-                                color: '#9CA3AF'
-                            },
-                            value: {
-                                show: true,
-                                color: 'white',
-                                formatter: (val) => Number(val).toLocaleString()
-                            },
-                            total: {
-                                show: true,
-                                label: 'Total',
-                                color: '#9CA3AF',
-                                formatter: (w) => {
-                                    return w.globals.seriesTotals.reduce((a, b) => a + b, 0).toLocaleString();
+                                name: {
+                                    show: true,
+                                    color: '#9CA3AF'
+                                },
+                                value: {
+                                    show: true,
+                                    color: 'white',
+                                    formatter: (val) => Number(val).toLocaleString()
+                                },
+                                total: {
+                                    show: true,
+                                    label: 'Total',
+                                    color: '#9CA3AF',
+                                    formatter: (w) => {
+                                        return w.globals.seriesTotals.reduce((a, b) => a + b, 0).toLocaleString();
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            }
-        };
+            };
 
-        const chartStatusEl = document.querySelector("#chart-status-dist");
-        if (chartStatusEl) {
-            chartStatusEl.innerHTML = '';
-            const chartStatus = new ApexCharts(chartStatusEl, statusOptions);
-            chartStatus.render();
+            const chartStatusEl = document.querySelector("#chart-status-dist");
+            if (chartStatusEl) {
+                chartStatusEl.innerHTML = '';
+                const chartStatus = new ApexCharts(chartStatusEl, statusOptions);
+                chartStatus.render();
+            }
         }
 
-        const tsCategories = timeSeries.map(t => {
-            const d = new Date(t.timestamp);
-            const filterVal = document.getElementById('dashboard-date-filter')?.value;
-            if (filterVal === '24h') {
-                return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            }
-            return d.toLocaleDateString([], { day: '2-digit', month: '2-digit' });
-        });
+        let tsCategories = [];
+        if (timeSeries.length > 0) {
+            const firstDate = new Date(timeSeries[0].timestamp);
+            const lastDate = new Date(timeSeries[timeSeries.length - 1].timestamp);
+            const diffHours = (lastDate - firstDate) / (1000 * 60 * 60);
+
+            tsCategories = timeSeries.map(t => {
+                const d = new Date(t.timestamp);
+                if (diffHours <= 6) {
+                    return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                } else if (diffHours <= 24) {
+                    return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                } else if (diffHours <= 72) {
+                    return d.toLocaleDateString([], { day: '2-digit', month: '2-digit' }) + ' ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                } else {
+                    return d.toLocaleDateString([], { day: '2-digit', month: '2-digit' });
+                }
+            });
+        }
+
         const tsCountSeries = timeSeries.map(t => t.count);
         const tsSuccessSeries = timeSeries.map(t => t.success);
         const tsErrorSeries = timeSeries.map(t => t.error);
@@ -420,10 +452,36 @@ const Data = {
                 type: 'area',
                 height: 300,
                 toolbar: {
-                    show: false
+                    show: true,
+                    tools: {
+                        download: false,
+                        selection: true,
+                        zoom: true,
+                        zoomin: true,
+                        zoomout: true,
+                        pan: true,
+                        reset: true
+                    },
+                    autoSelected: 'zoom'
                 },
                 foreColor: '#9CA3AF',
-                background: 'transparent'
+                background: 'transparent',
+                events: {
+                    zoomed: async (chartContext, { xaxis }) => {
+                        if (xaxis.min && xaxis.max) {
+                            const startStr = new Date(xaxis.min).toISOString();
+                            const endStr = new Date(xaxis.max).toISOString();
+                            
+                            if (State.currentZoomRange && 
+                                Math.abs(State.currentZoomRange.min - xaxis.min) < 1000 && 
+                                Math.abs(State.currentZoomRange.max - xaxis.max) < 1000) {
+                                return;
+                            }
+                            State.currentZoomRange = { min: xaxis.min, max: xaxis.max };
+                            await Data.fetchZoomedTimeSeries(startStr, endStr);
+                        }
+                    }
+                }
             },
             colors: ['#3B82F6', '#10B981', '#EF4444'],
             dataLabels: {

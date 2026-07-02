@@ -153,26 +153,53 @@ export class DashboardService {
     return this.prisma.$queryRawUnsafe<any[]>(query, startDate, endDate);
   }
 
-  async getTimeSeries(startDate: Date, endDate: Date) {
-    // Se a diferença for <= 2 dias, agrupar por hora. Senão, agrupar por dia.
-    const diffMs = endDate.getTime() - startDate.getTime();
-    const diffDays = diffMs / (1000 * 60 * 60 * 24);
-    const interval = diffDays <= 2 ? 'hour' : 'day';
+  async getTimeSeries(startDate: Date, endDate: Date, customInterval?: string) {
+    let interval = customInterval;
+
+    if (!interval) {
+      const diffMs = endDate.getTime() - startDate.getTime();
+      const diffHours = diffMs / (1000 * 60 * 60);
+
+      if (diffHours <= 2) {
+        interval = '1m';
+      } else if (diffHours <= 12) {
+        interval = '15m';
+      } else if (diffHours <= 24) {
+        interval = '30m';
+      } else if (diffHours <= 72) {
+        interval = 'hour';
+      } else {
+        interval = 'day';
+      }
+    }
+
+    let sqlTimestampExpr = "DATE_TRUNC('day', created_at)";
+    if (interval === '1m' || interval === 'minute') {
+      sqlTimestampExpr = "DATE_TRUNC('minute', created_at)";
+    } else if (interval === '15m' || interval === '15minute') {
+      sqlTimestampExpr = "to_timestamp(floor(extract(epoch from created_at) / 900) * 900) AT TIME ZONE 'UTC'";
+    } else if (interval === '30m' || interval === '30minute') {
+      sqlTimestampExpr = "to_timestamp(floor(extract(epoch from created_at) / 1800) * 1800) AT TIME ZONE 'UTC'";
+    } else if (interval === 'hour') {
+      sqlTimestampExpr = "DATE_TRUNC('hour', created_at)";
+    } else if (interval === 'day') {
+      sqlTimestampExpr = "DATE_TRUNC('day', created_at)";
+    }
 
     const query = `
       SELECT
-        DATE_TRUNC($1, created_at) as "timestamp",
+        ${sqlTimestampExpr} as "timestamp",
         COUNT(id)::int as "count",
         SUM(CASE WHEN status >= 200 AND status < 300 THEN 1 ELSE 0 END)::int as "success",
         SUM(CASE WHEN status >= 400 THEN 1 ELSE 0 END)::int as "error"
       FROM request_logs
-      WHERE created_at >= $2 AND created_at <= $3
+      WHERE created_at >= $1 AND created_at <= $2
         AND path NOT LIKE '/api/v1/dashboard%'
       GROUP BY 1
       ORDER BY 1 ASC
     `;
 
-    return this.prisma.$queryRawUnsafe<any[]>(query, interval, startDate, endDate);
+    return this.prisma.$queryRawUnsafe<any[]>(query, startDate, endDate);
   }
 
   async getProactiveAlerts() {

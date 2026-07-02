@@ -562,6 +562,8 @@ const Components = {
                       font-weight: 500;
                       outline: none;
                   ">
+                  <option value="1h">Última 1 hora</option>
+                  <option value="6h">Últimas 6 horas</option>
                   <option value="24h">Últimas 24 horas</option>
                   <option value="7days">Últimos 7 dias</option>
                   <option value="30days" selected>Últimos 30 dias</option>

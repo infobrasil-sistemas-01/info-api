@@ -75,9 +75,10 @@ export class DashboardController {
   async getTimeSeries(
     @Query('startDate') startDateStr?: string,
     @Query('endDate') endDateStr?: string,
+    @Query('interval') interval?: string,
   ) {
     const { startDate, endDate } = this.parseDates(startDateStr, endDateStr);
-    return this.dashboardService.getTimeSeries(startDate, endDate);
+    return this.dashboardService.getTimeSeries(startDate, endDate, interval);
   }
 
   @Get('proactive-alerts')
