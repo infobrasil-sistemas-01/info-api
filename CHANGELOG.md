@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.16.6](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.16.5...v1.16.6) (2026-07-02)
+
+
+### Features
+
+* GET /stores ([b5ef903](https://github.com/infobrasil-sistemas/info-vendas-api/commit/b5ef9032d32731547b35649baba683a77f8b252f))
+
+
+### Bug Fixes
+
+* checkboxes ([d80dd95](https://github.com/infobrasil-sistemas/info-vendas-api/commit/d80dd954f650b9c39b5395782396da542645cd69))
+* update node-firebird ([a3e90e0](https://github.com/infobrasil-sistemas/info-vendas-api/commit/a3e90e071c2a2b3982b1b04354ff88dee0ca565e))
+* wirecrypt on firebird ([ebf67ee](https://github.com/infobrasil-sistemas/info-vendas-api/commit/ebf67ee9e79c10fbe75afb0bd23340bb7522f704))
+* wirecrypt on firebird - ENABLE ([1db11f4](https://github.com/infobrasil-sistemas/info-vendas-api/commit/1db11f4aad67cd3efe7c8a7f455df6fcc9ca0990))
+
 ## [1.16.5](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.16.4...v1.16.5) (2026-06-09)
 
 
