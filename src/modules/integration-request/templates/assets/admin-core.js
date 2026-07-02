@@ -10,7 +10,8 @@ const State = {
     allAnnouncements: [],
     currentRequestFilter: 'ALL',
     dashboardIntervalId: null,
-    currentZoomRange: null
+    currentZoomRange: null,
+    isUpdatingChart: false
 };
 
 const Data = {
@@ -409,29 +410,18 @@ const Data = {
             }
         }
 
-        let tsCategories = [];
-        if (timeSeries.length > 0) {
-            const firstDate = new Date(timeSeries[0].timestamp);
-            const lastDate = new Date(timeSeries[timeSeries.length - 1].timestamp);
-            const diffHours = (lastDate - firstDate) / (1000 * 60 * 60);
-
-            tsCategories = timeSeries.map(t => {
-                const d = new Date(t.timestamp);
-                if (diffHours <= 6) {
-                    return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                } else if (diffHours <= 24) {
-                    return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                } else if (diffHours <= 72) {
-                    return d.toLocaleDateString([], { day: '2-digit', month: '2-digit' }) + ' ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                } else {
-                    return d.toLocaleDateString([], { day: '2-digit', month: '2-digit' });
-                }
-            });
-        }
-
-        const tsCountSeries = timeSeries.map(t => t.count);
-        const tsSuccessSeries = timeSeries.map(t => t.success);
-        const tsErrorSeries = timeSeries.map(t => t.error);
+        const tsCountSeries = timeSeries.map(t => ({
+            x: new Date(t.timestamp).getTime(),
+            y: t.count
+        }));
+        const tsSuccessSeries = timeSeries.map(t => ({
+            x: new Date(t.timestamp).getTime(),
+            y: t.success
+        }));
+        const tsErrorSeries = timeSeries.map(t => ({
+            x: new Date(t.timestamp).getTime(),
+            y: t.error
+        }));
 
         const tsOptions = {
             series: [
@@ -468,17 +458,26 @@ const Data = {
                 background: 'transparent',
                 events: {
                     zoomed: async (chartContext, { xaxis }) => {
+                        if (State.isUpdatingChart) return;
                         if (xaxis.min && xaxis.max) {
                             const startStr = new Date(xaxis.min).toISOString();
                             const endStr = new Date(xaxis.max).toISOString();
                             
                             if (State.currentZoomRange && 
-                                Math.abs(State.currentZoomRange.min - xaxis.min) < 1000 && 
-                                Math.abs(State.currentZoomRange.max - xaxis.max) < 1000) {
+                                Math.abs(State.currentZoomRange.min - xaxis.min) < 10000 && 
+                                Math.abs(State.currentZoomRange.max - xaxis.max) < 10000) {
                                 return;
                             }
                             State.currentZoomRange = { min: xaxis.min, max: xaxis.max };
-                            await Data.fetchZoomedTimeSeries(startStr, endStr);
+                            
+                            State.isUpdatingChart = true;
+                            try {
+                                await Data.fetchZoomedTimeSeries(startStr, endStr);
+                            } finally {
+                                setTimeout(() => {
+                                    State.isUpdatingChart = false;
+                                }, 300);
+                            }
                         }
                     }
                 }
@@ -504,11 +503,12 @@ const Data = {
                 borderColor: 'rgba(255,255,255,0.05)'
             },
             xaxis: {
-                categories: tsCategories,
+                type: 'datetime',
                 labels: {
                     style: {
                         colors: '#9CA3AF'
-                    }
+                    },
+                    datetimeUTC: false
                 },
                 axisBorder: {
                     show: false
@@ -529,11 +529,14 @@ const Data = {
                 theme: 'dark'
             },
             legend: {
-                position: 'top',
-                horizontalAlign: 'right',
+                position: 'bottom',
+                horizontalAlign: 'center',
                 labels: {
                     colors: '#9CA3AF'
                 }
+            },
+            theme: {
+                mode: 'dark'
             }
         };
 

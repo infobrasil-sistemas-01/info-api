@@ -12,9 +12,10 @@ Propomos:
 1. **No Backend**: Adicionar suporte a intervalos customizados (`1m`, `15m`, `30m`, `hour`, `day`) no serviço de evolução temporal e determinar automaticamente a melhor granularidade se nenhum intervalo for fornecido.
 2. **No Frontend**:
    - Habilitar ferramentas de zoom e pan no ApexCharts.
-   - Tratar o evento `zoomed` para fazer uma requisição mais granular ao backend para o intervalo de datas selecionado pelo zoom.
+   - Migrar o eixo X de `category` para `datetime` e alimentar as séries de dados usando coordenadas `{ x: timestamp, y: valor }`. Isso garante que o evento `zoomed` do ApexCharts forneça timestamps corretos em vez de índices de array (0, 1, 2...).
+   - Tratar o evento `zoomed` para fazer uma requisição mais granular ao backend para o intervalo de datas selecionado pelo zoom, utilizando uma trava de estado `State.isUpdatingChart` para evitar loops recursivos de renderização.
    - Adicionar filtros rápidos de períodos menores ("Última 1 hora" e "Últimas 6 horas") no dropdown de datas para carregar dados detalhados imediatamente.
-   - Formatar de forma adaptativa o eixo X e tooltips do gráfico dependendo do intervalo exibido.
+   - Reposicionar a legenda no rodapé central e aplicar o tema escuro (`mode: 'dark'`) para melhor visibilidade e encaixe da barra de ferramentas de zoom.
 
 ---
 
@@ -56,6 +57,7 @@ Propomos:
 * **Adicionar novas faixas de datas** no cálculo do `fetchDashboard()`:
   - Se `dateFilter === '1h'`, buscar de 1 hora atrás.
   - Se `dateFilter === '6h'`, buscar de 6 horas atrás.
+* **Declarar a flag de estado** `State.isUpdatingChart` para controle do fluxo de zoom.
 * **Habilitar o Toolbar de Zoom** no objeto de opções do ApexCharts (`tsOptions`):
   ```javascript
   toolbar: {
@@ -72,33 +74,42 @@ Propomos:
       autoSelected: 'zoom'
   }
   ```
+* **Converter e Mapear Dados**:
+  - Utilizar coordenadas `{ x: Date.getTime(), y: Valor }` para as séries.
+  - Configurar `xaxis.type = 'datetime'`.
 * **Adicionar o evento `zoomed`**:
   ```javascript
   events: {
       zoomed: async (chartContext, { xaxis }) => {
+          if (State.isUpdatingChart) return;
           if (xaxis.min && xaxis.max) {
               const startStr = new Date(xaxis.min).toISOString();
               const endStr = new Date(xaxis.max).toISOString();
               
-              // Impedir loops infinitos
               if (State.currentZoomRange && 
-                  Math.abs(State.currentZoomRange.min - xaxis.min) < 1000 && 
-                  Math.abs(State.currentZoomRange.max - xaxis.max) < 1000) {
+                  Math.abs(State.currentZoomRange.min - xaxis.min) < 10000 && 
+                  Math.abs(State.currentZoomRange.max - xaxis.max) < 10000) {
                   return;
               }
               State.currentZoomRange = { min: xaxis.min, max: xaxis.max };
-              await Data.fetchZoomedTimeSeries(startStr, endStr);
+              
+              State.isUpdatingChart = true;
+              try {
+                  await Data.fetchZoomedTimeSeries(startStr, endStr);
+              } finally {
+                  setTimeout(() => {
+                      State.isUpdatingChart = false;
+                  }, 300);
+              }
           }
       }
   }
   ```
 * **Implementar método de atualização parcial do gráfico**:
   - `fetchZoomedTimeSeries(startStr, endStr)`: Busca apenas a evolução temporal para a nova janela de tempo e atualiza a série de dados e rótulos do gráfico temporal.
-* **Formatação Inteligente do Eixo X**:
-  - Ajustar `tsCategories` para formatar os rótulos de tempo de forma dinâmica baseando-se no tamanho do intervalo de dados recebido:
-    - $\le$ 24 horas: `HH:mm`
-    - $\le$ 48 horas: `DD/MM HH:mm`
-    - Caso contrário: `DD/MM`
+* **Correções Visuais de Legenda e Tema**:
+  - Reposicionar a legenda no rodapé central: `legend: { position: 'bottom', horizontalAlign: 'center' }`.
+  - Configurar `theme: { mode: 'dark' }` para alinhar as cores da barra de ferramentas e do gráfico com o restante do dashboard.
 
 ---
 
