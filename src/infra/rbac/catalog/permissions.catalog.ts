@@ -30,6 +30,11 @@ export const PERMISSIONS = [
   },
   // ========= TENANT =========
   {
+    key: 'tenant.stores.view',
+    descricao: 'Visualizar lojas do tenant',
+    module: 'tenant',
+  },
+  {
     key: 'tenant.products.view',
     descricao: 'Visualizar produtos do tenant',
     module: 'tenant',

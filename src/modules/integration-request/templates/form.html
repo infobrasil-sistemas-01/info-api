@@ -473,6 +473,7 @@
               <label>Módulo</label>
               <select id="scope-module" onchange="updateAvailableActions()">
                 <option value="Produtos">Produtos</option>
+                <option value="Lojas">Lojas</option>
                 <option value="Grupos de Produtos">Grupos de Produtos</option>
                 <option value="Marcas de Produtos">Marcas de Produtos</option>
                 <option value="Pedidos">Pedidos / Vendas</option>
@@ -722,6 +723,7 @@
 
       const moduleConfig = {
         Produtos: { read: true, create: false, update: false, delete: false },
+        Lojas: { read: true, create: false, update: false, delete: false },
         'Grupos de Produtos': {
           read: true,
           create: true,

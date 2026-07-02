@@ -6,6 +6,7 @@ const Translations = {
         'role': 'Cargos (Roles)',
         'permission': 'Permissões',
         'products': 'Produtos',
+        'stores': 'Lojas',
         'brands': 'Marcas',
         'groups': 'Grupos',
         'orders': 'Pedidos',

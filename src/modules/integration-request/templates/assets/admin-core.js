@@ -263,6 +263,7 @@ const LABEL_MAP = {
     // Entidades
     'user': 'Usuários & Roles',
     'products': 'Produtos',
+    'stores': 'Lojas',
     'payment-methods': 'Meios de Pagamento',
     'orders': 'Pedidos / Vendas',
     'brands': 'Marcas',

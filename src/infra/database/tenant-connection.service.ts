@@ -19,7 +19,7 @@ export class TenantConnectionService {
   constructor(
     private readonly prisma: RegistryPrismaService,
     private readonly firebirdService: FirebirdService,
-  ) { }
+  ) {}
 
   /**
    * Retorna uma conexão individual do pool do tenant.
@@ -228,7 +228,7 @@ export class TenantConnectionService {
           clearTimeout(timeout);
           try {
             db.detach();
-          } catch (err) { }
+          } catch (err) {}
           reject(e);
         }
       });

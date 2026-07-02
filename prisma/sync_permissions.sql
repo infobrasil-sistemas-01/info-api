@@ -15,6 +15,7 @@ INSERT INTO permissions (id, key, name, description) VALUES
 (gen_random_uuid(), 'core.user.view', 'Visualizar usuários/roles', 'Visualizar usuários/roles'),
 (gen_random_uuid(), 'core.user.update', 'Atualizar usuário/role', 'Atualizar usuário/role'),
 (gen_random_uuid(), 'core.user.delete', 'Deletar usuário/role', 'Deletar usuário/role'),
+(gen_random_uuid(), 'tenant.stores.view', 'Visualizar lojas', 'Visualizar lojas do tenant'),
 (gen_random_uuid(), 'tenant.products.view', 'Visualizar produtos', 'Visualizar produtos do tenant'),
 (gen_random_uuid(), 'tenant.products.create', 'Criar produtos', 'Criar produtos do tenant'),
 (gen_random_uuid(), 'tenant.products.update', 'Atualizar produtos', 'Atualizar produtos do tenant'),

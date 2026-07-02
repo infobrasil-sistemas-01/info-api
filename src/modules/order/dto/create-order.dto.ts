@@ -38,7 +38,9 @@ export class PostOrderDto extends ZodDto(PostOrderSchema) {
   @ApiPropertyOptional({ description: 'ID do cliente (opcional)' })
   client_id?: number;
 
-  @ApiPropertyOptional({ description: 'ID do prestador de serviços (opcional)' })
+  @ApiPropertyOptional({
+    description: 'ID do prestador de serviços (opcional)',
+  })
   provider_id?: number;
 
   @ApiPropertyOptional({ description: 'ID do funcionário (opcional)' })

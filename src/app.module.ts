@@ -5,6 +5,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ProductModule } from './modules/product/product.module';
 import { OrderModule } from './modules/order/order.module';
 import { PaymentMethodModule } from './modules/payment-method/payment-method.module';
+import { StoreModule } from './modules/store/store.module';
 import { ReceiptModule } from './modules/receipt/receipt.module';
 import { AccountReceivableModule } from './modules/account-receivable/account-receivable.module';
 import { HealthModule } from './modules/health/health.module';
@@ -49,6 +50,7 @@ import { AppController } from './app.controller';
     ProductModule,
     OrderModule,
     PaymentMethodModule,
+    StoreModule,
     ReceiptModule,
     AccountReceivableModule,
     HealthModule,
