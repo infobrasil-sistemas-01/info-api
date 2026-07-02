@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.0",
   "paths": {
-    "/auth/me": {
+    "/api/v1/auth/me": {
       "get": {
         "operationId": "AuthController_me",
         "parameters": [],
@@ -28,7 +28,7 @@
         ]
       }
     },
-    "/auth/login": {
+    "/api/v1/auth/login": {
       "post": {
         "description": "Autentica o usuário usando credenciais básicas (Basic Auth) enviadas exclusivamente no cabeçalho HTTP Authorization, e retorna um token de acesso JWT.",
         "operationId": "AuthController_login",
@@ -56,7 +56,7 @@
         ]
       }
     },
-    "/auth/refresh": {
+    "/api/v1/auth/refresh": {
       "post": {
         "operationId": "AuthController_refresh",
         "parameters": [],
@@ -88,7 +88,7 @@
         ]
       }
     },
-    "/products": {
+    "/api/v1/products": {
       "get": {
         "description": "Retorna uma lista paginada de produtos associados às credenciais do usuário autenticado.",
         "operationId": "ProductController_getProducts",
@@ -202,7 +202,7 @@
         ]
       }
     },
-    "/products/id/{id}": {
+    "/api/v1/products/id/{id}": {
       "get": {
         "description": "Retorna os detalhes de um produto específico com base no ID fornecido.",
         "operationId": "ProductController_getProductById",
@@ -268,7 +268,7 @@
         ]
       }
     },
-    "/products/barcode/{barcode}": {
+    "/api/v1/products/barcode/{barcode}": {
       "get": {
         "description": "Retorna os detalhes de um produto específico com base no código de barras fornecido.",
         "operationId": "ProductController_getProductByBarcode",
@@ -334,7 +334,7 @@
         ]
       }
     },
-    "/products/brands": {
+    "/api/v1/products/brands": {
       "get": {
         "description": "Retorna uma lista paginada de marcas de produtos associadas às credenciais do usuário autenticado.",
         "operationId": "ProductBrandController_getBrands",
@@ -432,7 +432,7 @@
         ]
       }
     },
-    "/products/brands/{id}": {
+    "/api/v1/products/brands/{id}": {
       "patch": {
         "description": "Atualiza os dados de uma marca de produto existente no tenant.",
         "operationId": "ProductBrandController_updateBrand",
@@ -489,7 +489,7 @@
         ]
       }
     },
-    "/products/groups": {
+    "/api/v1/products/groups": {
       "get": {
         "description": "Retorna uma lista paginada de grupos de produtos associadas às credenciais do usuário autenticado.",
         "operationId": "ProductGroupController_getGroups",
@@ -587,7 +587,7 @@
         ]
       }
     },
-    "/products/groups/{id}": {
+    "/api/v1/products/groups/{id}": {
       "patch": {
         "description": "Atualiza os dados de um grupo de produto existente no tenant.",
         "operationId": "ProductGroupController_updateGroup",
@@ -644,7 +644,7 @@
         ]
       }
     },
-    "/orders": {
+    "/api/v1/orders": {
       "post": {
         "description": "Cria um novo pedido com os pedidos vendidos e informações de pagamento.",
         "operationId": "OrderController_postOrder",
@@ -791,7 +791,7 @@
         ]
       }
     },
-    "/orders/{id}": {
+    "/api/v1/orders/{id}": {
       "get": {
         "description": "Retorna os detalhes de um pedido específico com base no ID fornecido.",
         "operationId": "OrderController_getOrderById",
@@ -844,7 +844,7 @@
         ]
       }
     },
-    "/order-items": {
+    "/api/v1/order-items": {
       "get": {
         "description": "Retorna uma lista de itens de pedidos com informações de marca e grupo.",
         "operationId": "OrderItemController_get",
@@ -952,7 +952,7 @@
         ]
       }
     },
-    "/payment-methods": {
+    "/api/v1/payment-methods": {
       "get": {
         "description": "Retorna uma lista paginada de formas de pagamento associados às credenciais do usuário autenticado.",
         "operationId": "PaymentMethodController_getPaymentMethods",
@@ -1008,7 +1008,7 @@
         ]
       }
     },
-    "/account-receivable": {
+    "/api/v1/account-receivable": {
       "get": {
         "description": "Obtém uma lista de contas a receber da loja.",
         "operationId": "AccountReceivableController_get",
@@ -1163,7 +1163,7 @@
         ]
       }
     },
-    "/health": {
+    "/api/v1/health": {
       "get": {
         "description": "Verifica o status da API e das dependências (PostgreSQL). Retorna 200 com `status: \"ok\"` quando tudo está operacional, ou `status: \"degraded\"` quando alguma dependência está indisponível.",
         "operationId": "HealthController_check",
@@ -1213,7 +1213,7 @@
         ]
       }
     },
-    "/plans/stats": {
+    "/api/v1/plans/stats": {
       "get": {
         "operationId": "StatsController_getStats",
         "parameters": [],
@@ -1240,7 +1240,7 @@
         ]
       }
     },
-    "/plans": {
+    "/api/v1/plans": {
       "get": {
         "operationId": "StatsController_findAll",
         "parameters": [],
@@ -1270,7 +1270,7 @@
         ]
       }
     },
-    "/clients": {
+    "/api/v1/clients": {
       "get": {
         "operationId": "ClientController_get",
         "parameters": [
@@ -1387,7 +1387,7 @@
         ]
       }
     },
-    "/clients/{id}": {
+    "/api/v1/clients/{id}": {
       "get": {
         "operationId": "ClientController_getById",
         "parameters": [
@@ -1469,7 +1469,7 @@
         ]
       }
     },
-    "/employees": {
+    "/api/v1/employees": {
       "get": {
         "operationId": "EmployeeController_get",
         "parameters": [
@@ -1563,7 +1563,7 @@
         ]
       }
     },
-    "/employees/{id}": {
+    "/api/v1/employees/{id}": {
       "get": {
         "operationId": "EmployeeController_getById",
         "parameters": [
@@ -1601,7 +1601,7 @@
         ]
       }
     },
-    "/suppliers": {
+    "/api/v1/suppliers": {
       "get": {
         "operationId": "SupplierController_get",
         "parameters": [
@@ -1683,7 +1683,7 @@
         ]
       }
     },
-    "/suppliers/{id}": {
+    "/api/v1/suppliers/{id}": {
       "get": {
         "operationId": "SupplierController_getById",
         "parameters": [
@@ -1721,7 +1721,7 @@
         ]
       }
     },
-    "/service-providers": {
+    "/api/v1/service-providers": {
       "get": {
         "operationId": "ServiceProviderController_get",
         "parameters": [
@@ -1803,7 +1803,7 @@
         ]
       }
     },
-    "/service-providers/{id}": {
+    "/api/v1/service-providers/{id}": {
       "get": {
         "operationId": "ServiceProviderController_getById",
         "parameters": [
@@ -1841,7 +1841,7 @@
         ]
       }
     },
-    "/payment-plans": {
+    "/api/v1/payment-plans": {
       "get": {
         "description": "Retorna uma lista paginada de planos de pagamento associados às credenciais do usuário autenticado.",
         "operationId": "PaymentPlanController_getPaymentPlans",
@@ -1897,7 +1897,7 @@
         ]
       }
     },
-    "/account-payable": {
+    "/api/v1/account-payable": {
       "get": {
         "description": "Retorna uma lista paginada e resumida de contas a pagar baseada nos filtros.",
         "operationId": "AccountPayableController_getAccountPayable",
@@ -2001,7 +2001,7 @@
         ]
       }
     },
-    "/account-payable/id/{id}": {
+    "/api/v1/account-payable/id/{id}": {
       "get": {
         "description": "Retorna os detalhes completos de uma conta a pagar pelo ID (PAG_NUMERO).",
         "operationId": "AccountPayableController_getAccountPayableById",
@@ -2042,7 +2042,7 @@
         ]
       }
     },
-    "/employee-roles": {
+    "/api/v1/employee-roles": {
       "get": {
         "operationId": "EmployeeRoleController_get",
         "parameters": [
@@ -2103,7 +2103,7 @@
         ]
       }
     },
-    "/deliveries": {
+    "/api/v1/deliveries": {
       "get": {
         "description": "Retorna uma lista paginada de entregas.",
         "operationId": "DeliveryController_getDeliveries",
@@ -2218,7 +2218,7 @@
         ]
       }
     },
-    "/deliveries/{id}": {
+    "/api/v1/deliveries/{id}": {
       "get": {
         "description": "Retorna os detalhes de uma entrega específica com os itens vinculados.",
         "operationId": "DeliveryController_getDeliveryById",
