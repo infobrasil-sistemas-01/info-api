@@ -48,7 +48,9 @@ export class PlanService {
     status: number,
     ip?: string,
     durationMs?: number,
+    success?: boolean,
   ) {
+    const isSuccess = success !== undefined ? success : status < 400;
     await this.prisma.requestLog.create({
       data: {
         userId,
@@ -57,6 +59,7 @@ export class PlanService {
         status,
         ip,
         durationMs,
+        success: isSuccess,
       },
     });
   }
@@ -78,6 +81,7 @@ export class PlanService {
       where: {
         userId,
         createdAt: { gte: startDate },
+        success: true,
       },
     });
   }

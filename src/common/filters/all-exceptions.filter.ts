@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import * as Sentry from '@sentry/node';
 import { IpBlocklistService } from '../throttle/ip-blocklist.service';
+import { PlanService } from '../../modules/plan/plan.service';
 
 /**
  * AllExceptionsFilter
@@ -21,7 +22,10 @@ import { IpBlocklistService } from '../throttle/ip-blocklist.service';
 @Injectable()
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
-  constructor(private readonly ipBlocklist: IpBlocklistService) {}
+  constructor(
+    private readonly ipBlocklist: IpBlocklistService,
+    private readonly planService: PlanService,
+  ) {}
 
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
@@ -54,6 +58,60 @@ export class AllExceptionsFilter implements ExceptionFilter {
         request.socket?.remoteAddress ??
         'unknown';
       // this.ipBlocklist.record404(ip);
+    }
+
+    // Tenta obter o userId do request.user ou decodificando o header Authorization
+    let userId = request.user?.sub;
+    if (!userId) {
+      const authHeader = request.headers['authorization'];
+      if (authHeader && authHeader.startsWith('Bearer ')) {
+        const token = authHeader.substring(7);
+        try {
+          const parts = token.split('.');
+          if (parts.length === 3) {
+            const payloadDecoded = Buffer.from(parts[1], 'base64').toString('utf8');
+            const payload = JSON.parse(payloadDecoded);
+            userId = payload.sub || payload.userId;
+          }
+        } catch {}
+      }
+    }
+
+    // Isentar rotas de gestão operacional e autenticação da gravação de log
+    const urlPath: string = request.url || '';
+    const isExcluded = [
+      '/api/v1/auth',
+      '/api/v1/plans',
+      '/api/v1/users',
+      '/api/v1/roles',
+      '/api/v1/permissions',
+      '/api/v1/db-credentials',
+      '/api/v1/announcements',
+      '/api/v1/dashboard',
+      '/api/v1/newsletter',
+      '/integration',
+      '/status',
+    ].some((excluded) => urlPath.startsWith(excluded));
+
+    // Grava o log de erro no banco de dados se não tiver sido gravado pelo interceptor
+    if (userId && !request.logged && !isExcluded) {
+      const ip: string =
+        request.ip ??
+        (request.headers['x-real-ip'] as string) ??
+        request.socket?.remoteAddress ??
+        'unknown';
+
+      this.planService
+        .logRequest(
+          userId,
+          request.method,
+          request.url,
+          status,
+          ip,
+          undefined, // durationMs
+          false,     // success
+        )
+        .catch(() => {});
     }
 
     const user = request.user;

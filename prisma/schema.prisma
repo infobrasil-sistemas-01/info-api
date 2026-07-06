@@ -48,6 +48,7 @@ model RequestLog {
   status     Int
   ip         String?
   durationMs Float?   @map("duration_ms")
+  success    Boolean  @default(true)
   createdAt  DateTime @default(now()) @map("created_at")
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 

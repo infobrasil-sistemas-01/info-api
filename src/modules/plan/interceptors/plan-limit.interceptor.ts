@@ -105,6 +105,7 @@ export class PlanLimitInterceptor implements NestInterceptor {
     return next.handle().pipe(
       tap({
         next: () => {
+          request.logged = true;
           const diff = process.hrtime(startTime);
           const durationMs = parseFloat(
             (diff[0] * 1e3 + diff[1] / 1e6).toFixed(2),
@@ -121,6 +122,7 @@ export class PlanLimitInterceptor implements NestInterceptor {
             .catch(() => {});
         },
         error: (err) => {
+          request.logged = true;
           if (
             !(
               err instanceof HttpException &&
