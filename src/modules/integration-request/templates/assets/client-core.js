@@ -1,3 +1,53 @@
+// Interceptor global de requisições para silent token refresh
+const originalFetch = window.fetch;
+window.fetch = async function (url, options = {}) {
+    let res = await originalFetch(url, options);
+
+    const isApiRequest = typeof url === 'string' && url.includes('/api/v1');
+    const isAuthRequest = typeof url === 'string' && (url.includes('/auth/login') || url.includes('/auth/refresh'));
+
+    if (res.status === 401 && isApiRequest && !isAuthRequest) {
+        const refreshToken = localStorage.getItem('refresh_token');
+        if (refreshToken) {
+            try {
+                const refreshRes = await originalFetch('/api/v1/auth/refresh', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ refresh_token: refreshToken })
+                });
+
+                if (refreshRes.ok) {
+                    const data = await refreshRes.json();
+                    localStorage.setItem('token', data.access_token);
+
+                    // Atualiza o header Authorization nas opções
+                    const newOptions = { ...options };
+                    if (!newOptions.headers) {
+                        newOptions.headers = {};
+                    }
+
+                    if (newOptions.headers instanceof Headers) {
+                        newOptions.headers.set('Authorization', 'Bearer ' + data.access_token);
+                    } else if (Array.isArray(newOptions.headers)) {
+                        newOptions.headers = newOptions.headers.map(h => 
+                            h[0].toLowerCase() === 'authorization' ? [h[0], 'Bearer ' + data.access_token] : h
+                        );
+                    } else {
+                        newOptions.headers = { ...newOptions.headers };
+                        newOptions.headers['Authorization'] = 'Bearer ' + data.access_token;
+                    }
+
+                    // Refaz a requisição original com o novo token
+                    res = await originalFetch(url, newOptions);
+                }
+            } catch (err) {
+                console.error('Erro silencioso na tentativa de refresh:', err);
+            }
+        }
+    }
+    return res;
+};
+
 const API_URL = '/api/v1';
 
 const Translations = {
@@ -56,6 +106,7 @@ const Auth = {
     setToken: (t) => localStorage.setItem('token', t),
     logout: () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('refresh_token');
         location.reload();
     },
     async check() {
@@ -528,6 +579,7 @@ document.getElementById('login-form').onsubmit = async (e) => {
     e.preventDefault();
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
+    const rememberMe = document.getElementById('remember-me')?.checked;
 
     try {
         const res = await fetch(`${API_URL}/auth/login`, {
@@ -541,6 +593,11 @@ document.getElementById('login-form').onsubmit = async (e) => {
         if (res.ok) {
             const data = await res.json();
             Auth.setToken(data.access_token);
+            if (rememberMe) {
+                localStorage.setItem('refresh_token', data.refresh_token);
+            } else {
+                localStorage.removeItem('refresh_token');
+            }
             Auth.check();
         } else {
             document.getElementById('login-error').classList.remove('hidden');
