@@ -226,7 +226,7 @@ const Data = {
         const endStr = endDate.toISOString();
 
         try {
-            const [resSummary, resUsers, resEndpoints, resStatus, resTimeSeries, resAlerts, resDBLoad, resPlanDist] = await Promise.all([
+            const [resSummary, resUsers, resEndpoints, resStatus, resTimeSeries, resAlerts, resDBLoad, resPlanDist, resHeartbeat, resRequestLogs] = await Promise.all([
                 this.fetch(`${API_URL}/dashboard/summary?startDate=${startStr}&endDate=${endStr}`),
                 this.fetch(`${API_URL}/dashboard/top-users?startDate=${startStr}&endDate=${endStr}&limit=10`),
                 this.fetch(`${API_URL}/dashboard/top-endpoints?startDate=${startStr}&endDate=${endStr}&limit=10`),
@@ -234,10 +234,12 @@ const Data = {
                 this.fetch(`${API_URL}/dashboard/time-series?startDate=${startStr}&endDate=${endStr}`),
                 this.fetch(`${API_URL}/dashboard/proactive-alerts`),
                 this.fetch(`${API_URL}/dashboard/database-load?startDate=${startStr}&endDate=${endStr}&limit=10`),
-                this.fetch(`${API_URL}/dashboard/plan-distribution?startDate=${startStr}&endDate=${endStr}`)
+                this.fetch(`${API_URL}/dashboard/plan-distribution?startDate=${startStr}&endDate=${endStr}`),
+                this.fetch(`${API_URL}/dashboard/heartbeat`),
+                this.fetch(`${API_URL}/dashboard/request-logs?startDate=${startStr}&endDate=${endStr}&limit=50`)
             ]);
 
-            if (!resSummary.ok || !resUsers.ok || !resEndpoints.ok || !resStatus.ok || !resTimeSeries.ok || !resAlerts.ok || !resDBLoad.ok || !resPlanDist.ok) {
+            if (!resSummary.ok || !resUsers.ok || !resEndpoints.ok || !resStatus.ok || !resTimeSeries.ok || !resAlerts.ok || !resDBLoad.ok || !resPlanDist.ok || !resHeartbeat.ok || !resRequestLogs.ok) {
                 throw new Error("Erro ao carregar os dados do dashboard.");
             }
 
@@ -249,11 +251,13 @@ const Data = {
             const proactiveAlerts = await resAlerts.json();
             const databaseLoad = await resDBLoad.json();
             const planDist = await resPlanDist.json();
+            const heartbeat = await resHeartbeat.json();
+            const requestLogs = await resRequestLogs.json();
 
             const section = document.getElementById('section-dashboard');
             if (section) {
                 const prevFilter = dateFilter;
-                section.innerHTML = Components.DashboardContent(summary, topUsers, topEndpoints, proactiveAlerts, databaseLoad, planDist);
+                section.innerHTML = Components.DashboardContent(summary, topUsers, topEndpoints, proactiveAlerts, databaseLoad, planDist, heartbeat, requestLogs);
                 document.getElementById('dashboard-date-filter').value = prevFilter;
 
                 this.renderDashboardCharts(statusDist, timeSeries);

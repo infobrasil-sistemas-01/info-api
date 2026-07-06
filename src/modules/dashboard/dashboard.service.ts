@@ -68,11 +68,23 @@ export class DashboardService {
       },
     });
 
+    const latencyResult = await this.prisma.$queryRawUnsafe<any[]>(
+      `SELECT PERCENTILE_CONT(0.95) WITHIN GROUP (ORDER BY duration_ms)::float as "p95"
+       FROM request_logs
+       WHERE created_at >= $1 AND created_at <= $2
+         AND path NOT LIKE '/api/v1/dashboard%'
+         AND path NOT LIKE '/api/v1/newsletter%'`,
+      startDate,
+      endDate,
+    );
+    const p95Latency = (latencyResult && latencyResult[0]) ? latencyResult[0].p95 || 0 : 0;
+
     return {
       totalRequests,
       activeUsers,
       successRate,
       rateLimitHits,
+      p95Latency: Math.round(p95Latency),
     };
   }
 
@@ -118,7 +130,9 @@ export class DashboardService {
           '/[0-9]+', '/:id', 'g'
         ) as "path",
         COUNT(id)::int as "totalRequests",
-        ROUND((SUM(CASE WHEN status >= 200 AND status < 300 THEN 1 ELSE 0 END)::float / COUNT(id) * 100)::numeric, 2)::float as "successRate"
+        ROUND((SUM(CASE WHEN status >= 200 AND status < 300 THEN 1 ELSE 0 END)::float / COUNT(id) * 100)::numeric, 2)::float as "successRate",
+        ROUND(AVG(duration_ms)::numeric, 2)::float as "avgLatency",
+        ROUND(PERCENTILE_CONT(0.95) WITHIN GROUP (ORDER BY duration_ms)::numeric, 2)::float as "p95Latency"
       FROM request_logs
       WHERE created_at >= $1 AND created_at <= $2
         AND path NOT LIKE '/api/v1/dashboard%'
@@ -227,6 +241,45 @@ export class DashboardService {
     `;
 
     return this.prisma.$queryRawUnsafe<any[]>(query);
+  }
+
+  async getHeartbeatStatus() {
+    try {
+      const hb = await this.prisma.systemHeartbeat.findUnique({
+        where: { service: 'log-processor' },
+      });
+      if (!hb) {
+        return { status: 'INACTIVE', lastSeen: null };
+      }
+      const diffMin = (new Date().getTime() - hb.timestamp.getTime()) / (1000 * 60);
+      return {
+        status: diffMin <= 2 ? 'ACTIVE' : 'INACTIVE',
+        lastSeen: hb.timestamp,
+      };
+    } catch (e) {
+      return { status: 'INACTIVE', lastSeen: null };
+    }
+  }
+
+  async getRequestLogs(startDate: Date, endDate: Date, limit = 50) {
+    const query = `
+      SELECT
+        rl.created_at as "timestamp",
+        rl.method as "method",
+        rl.path as "path",
+        rl.status as "status",
+        rl.duration_ms as "durationMs",
+        u.user as "username",
+        u.email as "email"
+      FROM request_logs rl
+      JOIN users u ON rl.user_id = u.id
+      WHERE rl.created_at >= $1 AND rl.created_at <= $2
+        AND rl.path NOT LIKE '/api/v1/dashboard%'
+        AND rl.path NOT LIKE '/api/v1/newsletter%'
+      ORDER BY rl.created_at DESC
+      LIMIT $3
+    `;
+    return this.prisma.$queryRawUnsafe<any[]>(query, startDate, endDate, limit);
   }
 
 

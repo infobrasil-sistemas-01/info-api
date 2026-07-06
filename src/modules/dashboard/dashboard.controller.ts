@@ -97,9 +97,25 @@ export class DashboardController {
   async getProactiveAlerts() {
     return this.dashboardService.getProactiveAlerts();
   }
+  @Get('heartbeat')
+  @RequirePermissions({ allOf: ['core.dashboard.view'] })
+  @ApiOperation({ summary: 'Obtém o status de integridade do consumer log-processor' })
+  async getHeartbeat() {
+    return this.dashboardService.getHeartbeatStatus();
+  }
 
-
-
+  @Get('request-logs')
+  @RequirePermissions({ allOf: ['core.dashboard.view'] })
+  @ApiOperation({ summary: 'Obtém a lista de logs de requisições HTTP do período' })
+  async getRequestLogs(
+    @Query('startDate') startDateStr?: string,
+    @Query('endDate') endDateStr?: string,
+    @Query('limit') limitStr?: string,
+  ) {
+    const { startDate, endDate } = this.parseDates(startDateStr, endDateStr);
+    const limit = limitStr ? parseInt(limitStr, 10) : 50;
+    return this.dashboardService.getRequestLogs(startDate, endDate, limit);
+  }
   @Get('database-load')
   @RequirePermissions({ allOf: ['core.dashboard.view'] })
   @ApiOperation({

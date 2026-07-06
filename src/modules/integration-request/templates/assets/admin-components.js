@@ -501,11 +501,40 @@ const Components = {
           <td style="color: ${e.successRate > 90 ? 'var(--success)' : e.successRate > 75 ? 'var(--warning)' : 'var(--danger)'}; font-weight: 600; text-align: center; padding: 10px;">
               ${e.successRate}%
           </td>
+          <td style="color: white; text-align: center; padding: 10px; font-family: monospace;">
+              ${e.avgLatency ? e.avgLatency + ' ms' : '-'}
+          </td>
+          <td style="color: white; text-align: center; padding: 10px; font-family: monospace; font-weight: 600;">
+              ${e.p95Latency ? e.p95Latency + ' ms' : '-'}
+          </td>
       </tr>
     `;
   },
 
-  DashboardContent: (summary, topUsers, topEndpoints, proactiveAlerts, databaseLoad, planDist) => {
+  DashboardRequestLogRow: (log) => {
+    const methodColor = {
+      GET: 'var(--primary)',
+      POST: 'var(--success)',
+      PATCH: 'var(--warning)',
+      DELETE: 'var(--danger)',
+    }[log.method] || 'var(--text-muted)';
+
+    const statusColor = log.status >= 500 ? 'var(--danger)' : log.status >= 400 ? 'var(--warning)' : 'var(--success)';
+    const dateStr = new Date(log.timestamp).toLocaleString('pt-BR');
+
+    return `
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+          <td style="padding: 10px; font-family: monospace; color: var(--text-muted);">${dateStr}</td>
+          <td style="padding: 10px;"><span class="tag-pill" style="background: rgba(255,255,255,0.05); color: ${methodColor}; border: 1px solid ${methodColor}; font-weight: 700; width: 60px; text-align: center; display: inline-block;">${log.method}</span></td>
+          <td style="padding: 10px; font-family: monospace; color: white;">${log.path}</td>
+          <td style="padding: 10px;"><span style="color: ${statusColor}; font-weight: 700;">${log.status}</span></td>
+          <td style="padding: 10px; font-family: monospace; color: white;">${log.durationMs ? log.durationMs.toFixed(2) + ' ms' : '-'}</td>
+          <td style="padding: 10px; color: white;"><strong>${log.username}</strong> <span style="color: var(--text-muted); font-size: 0.8rem;">(${log.email})</span></td>
+      </tr>
+    `;
+  },
+
+  DashboardContent: (summary, topUsers, topEndpoints, proactiveAlerts, databaseLoad, planDist, heartbeat, requestLogs) => {
     const activeRefresh = localStorage.getItem('dashboard-auto-refresh') === 'true' ? 'checked' : '';
 
     const proactiveRows = proactiveAlerts.map(a => `
@@ -528,7 +557,15 @@ const Components = {
       <!-- Toolbar de Controles -->
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 15px;">
           <div>
-              <h1 style="margin: 0; color: white;">Dashboard de Uso da API</h1>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                  <h1 style="margin: 0; color: white;">Dashboard de Uso da API</h1>
+                  ${heartbeat ? `
+                  <div style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 20px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border); font-size: 0.75rem; font-weight: 600;">
+                      <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: ${heartbeat.status === 'ACTIVE' ? '#10b981' : '#ef4444'}; box-shadow: 0 0 8px ${heartbeat.status === 'ACTIVE' ? '#10b981' : '#ef4444'};"></span>
+                      <span style="color: ${heartbeat.status === 'ACTIVE' ? '#10b981' : '#ef4444'};">${heartbeat.status === 'ACTIVE' ? 'Consumer Ativo' : 'Consumer Inativo'}</span>
+                  </div>
+                  ` : ''}
+              </div>
               <p style="color: var(--text-muted); margin: 5px 0 0 0; font-size: 0.9rem;">Métricas de consumo, tráfego e usuários em tempo real.</p>
           </div>
           <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
@@ -605,6 +642,15 @@ const Components = {
                   <h2 style="margin: 0; font-size: 1.6rem; color: white;">${summary.rateLimitHits.toLocaleString()}</h2>
               </div>
           </div>
+          <div class="card" style="padding: 1.5rem; display: flex; align-items: center; gap: 1.5rem;">
+              <div style="font-size: 2.2rem; color: #f59e0b; background: rgba(245, 158, 11, 0.1); width: 60px; height: 60px; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
+                  <i class='bx bx-time-five'></i>
+              </div>
+              <div>
+                  <small style="color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 4px;">LATÊNCIA P95</small>
+                  <h2 style="margin: 0; font-size: 1.6rem; color: white;">${summary.p95Latency ? summary.p95Latency + ' ms' : '0 ms'}</h2>
+              </div>
+          </div>
       </div>
 
       <!-- Linha 1: Evolução Temporal & Status Codes -->
@@ -645,19 +691,21 @@ const Components = {
 
       <!-- Linha 3: Top Endpoints -->
       <div class="card" style="margin-bottom: 2rem; padding: 1.5rem;">
-          <h3 style="margin-top: 0; margin-bottom: 1rem; color: white;">Top Endpoints (Mais Requisitados)</h3>
+          <h3 style="margin-top: 0; margin-bottom: 1rem; color: white;">Top Endpoints (Mais Requisitados & Latência)</h3>
           <div class="table-container" style="max-height: 400px; overflow-y: auto;">
               <table style="width: 100%; border-collapse: collapse;">
                   <thead>
                       <tr style="border-bottom: 1px solid var(--border);">
                           <th style="text-align: left; padding: 10px; width: 80px; color: var(--text-muted);">Método</th>
                           <th style="text-align: left; padding: 10px; color: var(--text-muted);">Rota / Endpoint Sanitizado</th>
-                          <th style="text-align: center; padding: 10px; width: 180px; color: var(--text-muted);">Total Chamadas</th>
-                          <th style="text-align: center; padding: 10px; width: 150px; color: var(--text-muted);">Taxa de Sucesso</th>
+                          <th style="text-align: center; padding: 10px; width: 140px; color: var(--text-muted);">Total Chamadas</th>
+                          <th style="text-align: center; padding: 10px; width: 120px; color: var(--text-muted);">Taxa de Sucesso</th>
+                          <th style="text-align: center; padding: 10px; width: 120px; color: var(--text-muted);">Média Latência</th>
+                          <th style="text-align: center; padding: 10px; width: 120px; color: var(--text-muted);">Latência P95</th>
                       </tr>
                   </thead>
                   <tbody>
-                      ${topEndpoints.map(Components.DashboardTopEndpointRow).join('') || '<tr><td colspan="4" style="text-align: center; color: var(--text-muted); padding: 20px;">Nenhum log de requisição encontrado.</td></tr>'}
+                      ${topEndpoints.map(Components.DashboardTopEndpointRow).join('') || '<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 20px;">Nenhum log de requisição encontrado.</td></tr>'}
                   </tbody>
               </table>
           </div>
@@ -707,6 +755,36 @@ const Components = {
                       </tbody>
                   </table>
               </div>
+          </div>
+      </div>
+
+      <!-- Linha 5: HTTP Request Logs (Sentry Style) -->
+      <div class="card" style="margin-top: 2rem; padding: 1.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 10px;">
+              <div>
+                  <h3 style="margin: 0; color: white; display: flex; align-items: center; gap: 8px;">
+                      <i class='bx bx-list-ul' style="color: var(--primary);"></i> Log de Requisições HTTP (Real-Time)
+                  </h3>
+                  <p style="color: var(--text-muted); font-size: 0.8rem; margin: 4px 0 0 0;">Histórico recente de requisições de clientes do período selecionado.</p>
+              </div>
+              <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; background: rgba(255,255,255,0.05); padding: 4px 12px; border-radius: 20px;">Mostrando as últimas 50 requisições</span>
+          </div>
+          <div class="table-container" style="max-height: 450px; overflow-y: auto;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+                  <thead>
+                      <tr style="border-bottom: 1px solid var(--border); text-align: left; color: var(--text-muted);">
+                          <th style="padding: 10px; width: 180px; color: var(--text-muted);">Timestamp</th>
+                          <th style="padding: 10px; width: 80px; color: var(--text-muted);">Método</th>
+                          <th style="padding: 10px; color: var(--text-muted);">Endpoint</th>
+                          <th style="padding: 10px; width: 80px; color: var(--text-muted);">Status</th>
+                          <th style="padding: 10px; width: 120px; color: var(--text-muted);">Tempo Resposta</th>
+                          <th style="padding: 10px; color: var(--text-muted);">Usuário Chamador</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      ${requestLogs.map(Components.DashboardRequestLogRow).join('') || '<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 20px;">Nenhum log de requisição no período.</td></tr>'}
+                  </tbody>
+              </table>
           </div>
       </div>
       `;

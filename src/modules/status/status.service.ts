@@ -61,6 +61,19 @@ export class StatusService {
     );
   }
 
+  @Cron(CronExpression.EVERY_MINUTE)
+  async updateConsumerHeartbeat() {
+    try {
+      await this.prisma.systemHeartbeat.upsert({
+        where: { service: 'log-processor' },
+        update: { timestamp: new Date() },
+        create: { service: 'log-processor', timestamp: new Date() },
+      });
+    } catch (e) {
+      this.logger.error(`Failed to update heartbeat: ${e.message}`);
+    }
+  }
+
   /**
    * Limpa logs mais antigos que 7 dias para evitar inchaço do banco de dados.
    * Roda todos os dias às 03:00 AM.

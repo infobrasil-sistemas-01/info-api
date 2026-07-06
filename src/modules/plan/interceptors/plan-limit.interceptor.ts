@@ -19,6 +19,7 @@ export class PlanLimitInterceptor implements NestInterceptor {
     context: ExecutionContext,
     next: CallHandler,
   ): Promise<Observable<any>> {
+    const startTime = process.hrtime();
     const request = context.switchToHttp().getRequest();
     const user = request.user as JwtPayload;
 
@@ -104,6 +105,10 @@ export class PlanLimitInterceptor implements NestInterceptor {
     return next.handle().pipe(
       tap({
         next: () => {
+          const diff = process.hrtime(startTime);
+          const durationMs = parseFloat(
+            (diff[0] * 1e3 + diff[1] / 1e6).toFixed(2),
+          );
           this.planService
             .logRequest(
               userId,
@@ -111,6 +116,7 @@ export class PlanLimitInterceptor implements NestInterceptor {
               request.url,
               context.switchToHttp().getResponse().statusCode,
               request.ip,
+              durationMs,
             )
             .catch(() => {});
         },
@@ -121,6 +127,10 @@ export class PlanLimitInterceptor implements NestInterceptor {
               err.getStatus() === HttpStatus.TOO_MANY_REQUESTS
             )
           ) {
+            const diff = process.hrtime(startTime);
+            const durationMs = parseFloat(
+              (diff[0] * 1e3 + diff[1] / 1e6).toFixed(2),
+            );
             this.planService
               .logRequest(
                 userId,
@@ -128,6 +138,7 @@ export class PlanLimitInterceptor implements NestInterceptor {
                 request.url,
                 err.status || 500,
                 request.ip,
+                durationMs,
               )
               .catch(() => {});
           }

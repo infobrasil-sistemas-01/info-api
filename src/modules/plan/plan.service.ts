@@ -47,6 +47,7 @@ export class PlanService {
     path: string,
     status: number,
     ip?: string,
+    durationMs?: number,
   ) {
     await this.prisma.requestLog.create({
       data: {
@@ -55,6 +56,7 @@ export class PlanService {
         path,
         status,
         ip,
+        durationMs,
       },
     });
   }

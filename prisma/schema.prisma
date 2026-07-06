@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -41,14 +42,15 @@ model Plan {
 }
 
 model RequestLog {
-  id        String   @id @default(uuid())
-  userId    String   @map("user_id")
-  method    String
-  path      String
-  status    Int
-  ip        String?
-  createdAt DateTime @default(now()) @map("created_at")
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id         String   @id @default(uuid())
+  userId     String   @map("user_id")
+  method     String
+  path       String
+  status     Int
+  ip         String?
+  durationMs Float?   @map("duration_ms")
+  createdAt  DateTime @default(now()) @map("created_at")
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, createdAt])
   @@map("request_logs")
@@ -192,4 +194,12 @@ model StatusLog {
 
   @@index([timestamp])
   @@map("status_logs")
+}
+
+model SystemHeartbeat {
+  id        String   @id @default(uuid())
+  service   String   @unique
+  timestamp DateTime @updatedAt @map("timestamp")
+
+  @@map("system_heartbeats")
 }

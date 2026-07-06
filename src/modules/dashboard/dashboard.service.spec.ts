@@ -12,6 +12,9 @@ describe('DashboardService', () => {
         count: jest.fn(),
         groupBy: jest.fn(),
       },
+      systemHeartbeat: {
+        findUnique: jest.fn(),
+      },
       $queryRawUnsafe: jest.fn(),
     };
 
@@ -41,6 +44,7 @@ describe('DashboardService', () => {
       ]); // Active
       mockPrisma.requestLog.count.mockResolvedValueOnce(90); // Success (2xx)
       mockPrisma.requestLog.count.mockResolvedValueOnce(5); // Rate limits (429)
+      mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([{ p95: 15.5 }]); // p95 latency
 
       const result = await service.getSummary(start, end);
 
@@ -49,6 +53,7 @@ describe('DashboardService', () => {
         activeUsers: 2,
         successRate: 90,
         rateLimitHits: 5,
+        p95Latency: 16,
       });
 
       expect(mockPrisma.requestLog.count).toHaveBeenNthCalledWith(1, {
@@ -82,6 +87,7 @@ describe('DashboardService', () => {
       mockPrisma.requestLog.groupBy.mockResolvedValueOnce([]); // Active
       mockPrisma.requestLog.count.mockResolvedValueOnce(0); // Success (2xx)
       mockPrisma.requestLog.count.mockResolvedValueOnce(0); // Rate limits (429)
+      mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([]); // Latency
 
       const result = await service.getSummary(start, end);
 
@@ -90,6 +96,7 @@ describe('DashboardService', () => {
         activeUsers: 0,
         successRate: 100,
         rateLimitHits: 0,
+        p95Latency: 0,
       });
     });
   });
@@ -164,6 +171,78 @@ describe('DashboardService', () => {
         expect.stringContaining('floor(extract(epoch from created_at) / 900)'),
         start,
         end,
+      );
+    });
+  });
+
+  describe('getHeartbeatStatus', () => {
+    it('should return ACTIVE if heartbeat timestamp is recent', async () => {
+      const recentDate = new Date();
+      mockPrisma.systemHeartbeat.findUnique.mockResolvedValueOnce({
+        service: 'log-processor',
+        timestamp: recentDate,
+      });
+
+      const result = await service.getHeartbeatStatus();
+      expect(result).toEqual({
+        status: 'ACTIVE',
+        lastSeen: recentDate,
+      });
+      expect(mockPrisma.systemHeartbeat.findUnique).toHaveBeenCalledWith({
+        where: { service: 'log-processor' },
+      });
+    });
+
+    it('should return INACTIVE if heartbeat timestamp is old', async () => {
+      const oldDate = new Date(Date.now() - 5 * 60 * 1000); // 5 mins ago
+      mockPrisma.systemHeartbeat.findUnique.mockResolvedValueOnce({
+        service: 'log-processor',
+        timestamp: oldDate,
+      });
+
+      const result = await service.getHeartbeatStatus();
+      expect(result).toEqual({
+        status: 'INACTIVE',
+        lastSeen: oldDate,
+      });
+    });
+
+    it('should return INACTIVE if no heartbeat record found', async () => {
+      mockPrisma.systemHeartbeat.findUnique.mockResolvedValueOnce(null);
+
+      const result = await service.getHeartbeatStatus();
+      expect(result).toEqual({
+        status: 'INACTIVE',
+        lastSeen: null,
+      });
+    });
+  });
+
+  describe('getRequestLogs', () => {
+    it('should return recent HTTP request logs', async () => {
+      const start = new Date('2026-07-01');
+      const end = new Date('2026-07-02');
+      const mockResult = [
+        {
+          timestamp: '2026-07-02T12:00:00Z',
+          method: 'GET',
+          path: '/api/v1/receipts',
+          status: 200,
+          durationMs: 15.4,
+          username: 'admin',
+          email: 'admin@test.com',
+        },
+      ];
+      mockPrisma.$queryRawUnsafe.mockResolvedValueOnce(mockResult);
+
+      const result = await service.getRequestLogs(start, end, 50);
+
+      expect(result).toEqual(mockResult);
+      expect(mockPrisma.$queryRawUnsafe).toHaveBeenCalledWith(
+        expect.stringContaining('FROM request_logs rl'),
+        start,
+        end,
+        50,
       );
     });
   });
