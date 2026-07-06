@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { TenantConnectionService } from 'src/infra/database/tenant-connection.service';
+import { CreateDeliveryDto } from './dto/create-delivery.dto';
 
 @Injectable()
 export class DeliveryService {
@@ -188,6 +189,138 @@ export class DeliveryService {
       console.error(error);
       this.logger.error(
         `Erro ao buscar entrega por ID. Tenant: ${credentialsId}, ID: ${id}`,
+        error,
+      );
+      throw error;
+    } finally {
+      this.tenantConnectionService.releaseConnection(connection);
+    }
+  }
+
+  async create(credentialsId: string, data: CreateDeliveryDto) {
+    const connection: any =
+      await this.tenantConnectionService.getConnection(credentialsId);
+
+    const today = new Date();
+    const defaultDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    const defaultTime = `${String(today.getHours()).padStart(2, '0')}:${String(today.getMinutes()).padStart(2, '0')}:${String(today.getSeconds()).padStart(2, '0')}`;
+
+    const dateVal = data.ENT_DATA || defaultDate;
+    const timeVal = data.ENT_HORA || defaultTime;
+
+    const transaction: any = await new Promise((resolve, reject) => {
+      connection.startTransaction((err: any, tx: any) => {
+        if (err) return reject(err);
+        resolve(tx);
+      });
+    });
+
+    try {
+      const queryDelivery = `
+        INSERT INTO entregas (
+          ENT_NUMERO, VEN_NUMERO, PRE_CODIGO, SIT_CODIGO, USU_CODIGO,
+          ENT_DATA, ENT_HORA, ENT_KILOMETRAGEM, VEI_PLACA, ENT_OBS,
+          ENT_IMPRIMIR, AJU_CODIGO, TBS_CODIGO, AJA_CODIGO, ENT_LOTEENTREGA,
+          SEP_CODIGO, ENT_LOTEPRODUTO, ENT_GERARROTAS, AJ2_CODIGO
+        ) VALUES (
+          GEN_ID(GEN_NUMEROENT, 1), ?, ?, ?, ?,
+          ?, ?, ?, ?, ?,
+          ?, ?, ?, ?, ?,
+          ?, ?, ?, ?
+        ) RETURNING ENT_NUMERO
+      `;
+
+      const paramsDelivery = [
+        data.VEN_NUMERO,
+        data.PRE_CODIGO ?? null,
+        data.SIT_CODIGO ?? 1,
+        data.USU_CODIGO ?? 9999,
+        dateVal,
+        timeVal,
+        data.ENT_KILOMETRAGEM ?? null,
+        data.VEI_PLACA ?? null,
+        data.ENT_OBS ?? null,
+        data.ENT_IMPRIMIR ?? 'S',
+        data.AJU_CODIGO ?? null,
+        data.TBS_CODIGO ?? null,
+        data.AJA_CODIGO ?? null,
+        data.ENT_LOTEENTREGA ?? null,
+        data.SEP_CODIGO ?? null,
+        data.ENT_LOTEPRODUTO ?? null,
+        data.ENT_GERARROTAS ?? 'N',
+        data.AJ2_CODIGO ?? null,
+      ];
+
+      const startTime = Date.now();
+      const insertResult = (await new Promise((resolve, reject) => {
+        transaction.query(
+          queryDelivery,
+          paramsDelivery,
+          (err: any, res: any) => {
+            if (err) return reject(err);
+            resolve(res);
+          },
+        );
+      })) as any;
+
+      const entNumero = insertResult?.ENT_NUMERO;
+      if (!entNumero) {
+        throw new Error('Falha ao obter número da entrega gerado');
+      }
+
+      if (data.items && data.items.length > 0) {
+        const queryItem = `
+          INSERT INTO entregasitens (
+            ETI_NUMERO, IVD_NUMERO, VEN_NUMERO, PRO_CODIGO, USU_CODIGO,
+            ETI_DATA, ETI_HORA, ETI_QTDE, ETI_IMPRIMIR, ETI_QTDECLIENTE
+          ) VALUES (
+            GEN_ID(GEN_NUMEROETI, 1), ?, ?, ?, ?,
+            ?, ?, ?, ?, ?
+          )
+        `;
+
+        for (const item of data.items) {
+          const itemParams = [
+            item.IVD_NUMERO,
+            data.VEN_NUMERO,
+            item.PRO_CODIGO,
+            item.USU_CODIGO ?? 9999,
+            dateVal,
+            timeVal,
+            item.ETI_QTDE,
+            item.ETI_IMPRIMIR ?? 'S',
+            item.ETI_QTDECLIENTE ?? item.ETI_QTDE,
+          ];
+
+          await new Promise((resolve, reject) => {
+            transaction.query(queryItem, itemParams, (err: any) => {
+              if (err) return reject(err);
+              resolve(true);
+            });
+          });
+        }
+      }
+
+      await new Promise((resolve, reject) => {
+        transaction.commit((err: any) => {
+          if (err) {
+            transaction.rollback();
+            return reject(err);
+          }
+          resolve(true);
+        });
+      });
+
+      const endTime = Date.now();
+      this.logger.log(
+        `Entrega inserida com sucesso. Tenant: ${credentialsId}, ENT_NUMERO: ${entNumero}, Tempo SQL: ${endTime - startTime}ms`,
+      );
+
+      return this.getById(credentialsId, entNumero);
+    } catch (error) {
+      transaction.rollback();
+      this.logger.error(
+        `Erro ao inserir entrega. Tenant: ${credentialsId}`,
         error,
       );
       throw error;

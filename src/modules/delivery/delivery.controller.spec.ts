@@ -12,6 +12,7 @@ describe('DeliveryController', () => {
   const mockDeliveryService = {
     get: jest.fn(),
     getById: jest.fn(),
+    create: jest.fn(),
   };
 
   const mockReq = {
@@ -83,6 +84,19 @@ describe('DeliveryController', () => {
       await expect(controller.getDeliveryById(mockReq, 999, 1)).rejects.toThrow(
         NotFoundException,
       );
+    });
+  });
+
+  describe('createDelivery', () => {
+    it('should call deliveryService.create with correct parameters', async () => {
+      const mockInput = { VEN_NUMERO: 12345 };
+      const mockResult = { VEN_NUMERO: 12345, ENT_NUMERO: 100 };
+      mockDeliveryService.create.mockResolvedValue(mockResult);
+
+      const result = await controller.createDelivery(mockReq, mockInput as any);
+
+      expect(deliveryService.create).toHaveBeenCalledWith('cred-1', mockInput);
+      expect(result).toEqual(mockResult);
     });
   });
 });

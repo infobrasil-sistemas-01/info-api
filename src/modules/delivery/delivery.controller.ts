@@ -1,6 +1,8 @@
 import {
   Controller,
   Get,
+  Post,
+  Body,
   Param,
   Query,
   Req,
@@ -22,6 +24,7 @@ import {
 import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
 import { GetDeliveriesQueryDto } from './dto/get-deliveries-query.dto';
+import { CreateDeliveryDto } from './dto/create-delivery.dto';
 import {
   DeliveryResponseDto,
   DeliveryDetailResponseDto,
@@ -126,5 +129,37 @@ export class DeliveryController {
     }
 
     return delivery;
+  }
+
+  @Post()
+  @RequirePermissions({ allOf: ['tenant.deliveries.create'] })
+  @ApiOperation({
+    summary: 'Inserir entrega',
+    description: 'Cria uma nova entrega no banco de dados do tenant.',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Entrega criada com sucesso.',
+    type: DeliveryDetailResponseDto,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Erro de validação ou requisição inválida.',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Token de autenticação inválido ou ausente.',
+  })
+  async createDelivery(
+    @Req() req: ReqWithAuthContext,
+    @Body() body: CreateDeliveryDto,
+  ) {
+    const { credentialsId } = req.authContext || {};
+
+    if (!credentialsId) {
+      throw new Error('Credentials ID not found in token');
+    }
+
+    return this.deliveryService.create(credentialsId, body);
   }
 }

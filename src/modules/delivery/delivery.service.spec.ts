@@ -8,6 +8,13 @@ describe('DeliveryService', () => {
 
   const mockConnection = {
     query: jest.fn(),
+    startTransaction: jest.fn(),
+  };
+
+  const mockTransaction = {
+    query: jest.fn(),
+    commit: jest.fn(),
+    rollback: jest.fn(),
   };
 
   beforeAll(async () => {
@@ -137,6 +144,118 @@ describe('DeliveryService', () => {
       const result = await service.getById('cred-1', 999, 1);
 
       expect(result).toBeNull();
+    });
+  });
+
+  describe('create', () => {
+    const mockDeliveryInput = {
+      VEN_NUMERO: 12345,
+      PRE_CODIGO: 1,
+      SIT_CODIGO: 1,
+      USU_CODIGO: 9999,
+      ENT_DATA: '2026-05-18',
+      ENT_HORA: '14:30:00',
+      items: [
+        {
+          IVD_NUMERO: 50,
+          PRO_CODIGO: 'PROD-1',
+          ETI_QTDE: 2,
+        },
+      ],
+    };
+
+    beforeEach(() => {
+      mockConnection.startTransaction.mockImplementation((callback) => {
+        callback(null, mockTransaction);
+      });
+
+      mockTransaction.query.mockImplementation((query, params, callback) => {
+        if (query.includes('INSERT INTO entregas')) {
+          callback(null, { ENT_NUMERO: 100 });
+        } else {
+          callback(null, {});
+        }
+      });
+
+      mockTransaction.commit.mockImplementation((callback) => {
+        callback(null);
+      });
+
+      mockTransaction.rollback.mockImplementation(() => {});
+    });
+
+    it('should insert a delivery and its items successfully', async () => {
+      const mockDeliveryDetail = {
+        VEN_NUMERO: 12345,
+        ENT_NUMERO: 100,
+        PRE_CODIGO: 1,
+      };
+      const mockItems = [
+        {
+          ETI_NUMERO: 1,
+          IVD_NUMERO: 50,
+          VEN_NUMERO: 12345,
+          PRO_CODIGO: 'PROD-1',
+          ETI_QTDE: 2,
+        },
+      ];
+
+      // getById mocks
+      mockConnection.query
+        .mockImplementationOnce((query, params, callback) => {
+          callback(null, [mockDeliveryDetail]);
+        })
+        .mockImplementationOnce((query, params, callback) => {
+          callback(null, mockItems);
+        });
+
+      const result = await service.create('cred-1', mockDeliveryInput as any);
+
+      expect(result).toEqual({
+        ...mockDeliveryDetail,
+        items: mockItems,
+      });
+
+      expect(mockConnection.startTransaction).toHaveBeenCalled();
+      expect(mockTransaction.query).toHaveBeenCalledWith(
+        expect.stringContaining('INSERT INTO entregas'),
+        expect.any(Array),
+        expect.any(Function),
+      );
+      expect(mockTransaction.query).toHaveBeenCalledWith(
+        expect.stringContaining('INSERT INTO entregasitens'),
+        expect.any(Array),
+        expect.any(Function),
+      );
+      expect(mockTransaction.commit).toHaveBeenCalled();
+    });
+
+    it('should rollback transaction and throw error if inserting delivery fails', async () => {
+      mockTransaction.query.mockImplementation((query, params, callback) => {
+        if (query.includes('INSERT INTO entregas')) {
+          callback(new Error('Insert error'), null);
+        } else {
+          callback(null, {});
+        }
+      });
+
+      await expect(
+        service.create('cred-1', mockDeliveryInput as any),
+      ).rejects.toThrow('Insert error');
+
+      expect(mockTransaction.rollback).toHaveBeenCalled();
+    });
+
+    it('should rollback transaction and throw error if commit fails', async () => {
+      mockTransaction.commit.mockImplementation((callback) => {
+        callback(new Error('Commit error'));
+      });
+
+      await expect(
+        service.create('cred-1', mockDeliveryInput as any),
+      ).rejects.toThrow('Commit error');
+
+      expect(mockTransaction.rollback).toHaveBeenCalled();
     });
   });
 });
