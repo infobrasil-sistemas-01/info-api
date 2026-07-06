@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.16.8](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.16.7...v1.16.8) (2026-07-06)
+
+
+### Features
+
+* new cards on dashboard ([3b0fbe1](https://github.com/infobrasil-sistemas/info-vendas-api/commit/3b0fbe12649e1c3c52f5050e1f3998f8b360de4f))
+* **validation:** enforce strict validation for query parameters ([59060cf](https://github.com/infobrasil-sistemas/info-vendas-api/commit/59060cfc91527ae6939be3b572f0f0d2e050a6da))
+
 ## [1.16.7](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.16.6...v1.16.7) (2026-07-06)
 
 
