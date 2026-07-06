@@ -358,4 +358,3 @@ export const PERMISSIONS = [
 ] as const satisfies readonly PermissionDefinition[];
 
 export type PermissionKey = (typeof PERMISSIONS)[number]['key'];
-

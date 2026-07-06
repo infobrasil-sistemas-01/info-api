@@ -54,7 +54,8 @@ export class DashboardService {
       },
     });
 
-    const successRate = totalRequests > 0 ? (successRequests / totalRequests) * 100 : 100;
+    const successRate =
+      totalRequests > 0 ? (successRequests / totalRequests) * 100 : 100;
 
     const rateLimitHits = await this.prisma.requestLog.count({
       where: {
@@ -177,9 +178,11 @@ export class DashboardService {
     if (interval === '1m' || interval === 'minute') {
       sqlTimestampExpr = "DATE_TRUNC('minute', created_at)";
     } else if (interval === '15m' || interval === '15minute') {
-      sqlTimestampExpr = "to_timestamp(floor(extract(epoch from created_at) / 900) * 900) AT TIME ZONE 'UTC'";
+      sqlTimestampExpr =
+        "to_timestamp(floor(extract(epoch from created_at) / 900) * 900) AT TIME ZONE 'UTC'";
     } else if (interval === '30m' || interval === '30minute') {
-      sqlTimestampExpr = "to_timestamp(floor(extract(epoch from created_at) / 1800) * 1800) AT TIME ZONE 'UTC'";
+      sqlTimestampExpr =
+        "to_timestamp(floor(extract(epoch from created_at) / 1800) * 1800) AT TIME ZONE 'UTC'";
     } else if (interval === 'hour') {
       sqlTimestampExpr = "DATE_TRUNC('hour', created_at)";
     } else if (interval === 'day') {

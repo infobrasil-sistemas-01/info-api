@@ -1,5 +1,10 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags, ApiExcludeController } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiTags,
+  ApiExcludeController,
+} from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
@@ -15,8 +20,8 @@ export class DashboardController {
 
   private parseDates(startDateStr?: string, endDateStr?: string) {
     const endDate = endDateStr ? new Date(endDateStr) : new Date();
-    const startDate = startDateStr 
-      ? new Date(startDateStr) 
+    const startDate = startDateStr
+      ? new Date(startDateStr)
       : new Date(endDate.getTime() - 30 * 24 * 60 * 60 * 1000); // 30 dias atrás por padrão
     return { startDate, endDate };
   }
@@ -34,7 +39,9 @@ export class DashboardController {
 
   @Get('top-users')
   @RequirePermissions({ allOf: ['core.dashboard.view'] })
-  @ApiOperation({ summary: 'Obtém o ranking de usuários por volume de requisições' })
+  @ApiOperation({
+    summary: 'Obtém o ranking de usuários por volume de requisições',
+  })
   async getTopUsers(
     @Query('startDate') startDateStr?: string,
     @Query('endDate') endDateStr?: string,
@@ -83,7 +90,10 @@ export class DashboardController {
 
   @Get('proactive-alerts')
   @RequirePermissions({ allOf: ['core.dashboard.view'] })
-  @ApiOperation({ summary: 'Obtém lista de usuários que atingiram mais de 80% do limite mensal' })
+  @ApiOperation({
+    summary:
+      'Obtém lista de usuários que atingiram mais de 80% do limite mensal',
+  })
   async getProactiveAlerts() {
     return this.dashboardService.getProactiveAlerts();
   }
@@ -103,7 +113,9 @@ export class DashboardController {
 
   @Get('database-load')
   @RequirePermissions({ allOf: ['core.dashboard.view'] })
-  @ApiOperation({ summary: 'Obtém a carga de requisições por banco de dados/host' })
+  @ApiOperation({
+    summary: 'Obtém a carga de requisições por banco de dados/host',
+  })
   async getDatabaseLoad(
     @Query('startDate') startDateStr?: string,
     @Query('endDate') endDateStr?: string,
@@ -116,7 +128,9 @@ export class DashboardController {
 
   @Get('plan-distribution')
   @RequirePermissions({ allOf: ['core.dashboard.view'] })
-  @ApiOperation({ summary: 'Obtém a distribuição de requisições por tipo de plano' })
+  @ApiOperation({
+    summary: 'Obtém a distribuição de requisições por tipo de plano',
+  })
   async getPlanDistribution(
     @Query('startDate') startDateStr?: string,
     @Query('endDate') endDateStr?: string,

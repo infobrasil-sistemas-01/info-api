@@ -35,7 +35,10 @@ describe('DashboardService', () => {
       const end = new Date('2026-07-02');
 
       mockPrisma.requestLog.count.mockResolvedValueOnce(100); // Total
-      mockPrisma.requestLog.groupBy.mockResolvedValueOnce([{ userId: '1' }, { userId: '2' }]); // Active
+      mockPrisma.requestLog.groupBy.mockResolvedValueOnce([
+        { userId: '1' },
+        { userId: '2' },
+      ]); // Active
       mockPrisma.requestLog.count.mockResolvedValueOnce(90); // Success (2xx)
       mockPrisma.requestLog.count.mockResolvedValueOnce(5); // Rate limits (429)
 
@@ -89,7 +92,9 @@ describe('DashboardService', () => {
     it('should query top users with custom limit', async () => {
       const start = new Date('2026-07-01');
       const end = new Date('2026-07-02');
-      const mockResult = [{ userId: '1', username: 'client1', totalRequests: 50 }];
+      const mockResult = [
+        { userId: '1', username: 'client1', totalRequests: 50 },
+      ];
       mockPrisma.$queryRawUnsafe.mockResolvedValue(mockResult);
 
       const result = await service.getTopUsers(start, end, 5);
@@ -99,7 +104,7 @@ describe('DashboardService', () => {
         expect.stringContaining("AND rl.path NOT LIKE '/api/v1/dashboard%'"),
         start,
         end,
-        5
+        5,
       );
     });
   });
@@ -118,7 +123,7 @@ describe('DashboardService', () => {
         expect.stringContaining("AND path NOT LIKE '/api/v1/dashboard%'"),
         start,
         end,
-        10
+        10,
       );
     });
   });
@@ -127,7 +132,9 @@ describe('DashboardService', () => {
     it('should calculate intervals and query time series data', async () => {
       const start = new Date('2026-07-02T12:00:00Z');
       const end = new Date('2026-07-02T13:00:00Z'); // 1 hour difference -> interval 1m
-      const mockResult = [{ timestamp: '2026-07-02T12:00:00Z', count: 5, success: 5, error: 0 }];
+      const mockResult = [
+        { timestamp: '2026-07-02T12:00:00Z', count: 5, success: 5, error: 0 },
+      ];
       mockPrisma.$queryRawUnsafe.mockResolvedValue(mockResult);
 
       const result = await service.getTimeSeries(start, end);
@@ -136,7 +143,7 @@ describe('DashboardService', () => {
       expect(mockPrisma.$queryRawUnsafe).toHaveBeenCalledWith(
         expect.stringContaining("DATE_TRUNC('minute', created_at)"),
         start,
-        end
+        end,
       );
     });
 
@@ -148,9 +155,9 @@ describe('DashboardService', () => {
       await service.getTimeSeries(start, end, '15m');
 
       expect(mockPrisma.$queryRawUnsafe).toHaveBeenCalledWith(
-        expect.stringContaining("floor(extract(epoch from created_at) / 900)"),
+        expect.stringContaining('floor(extract(epoch from created_at) / 900)'),
         start,
-        end
+        end,
       );
     });
   });
