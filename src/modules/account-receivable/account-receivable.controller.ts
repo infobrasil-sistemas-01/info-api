@@ -12,6 +12,7 @@ import {
 } from '../auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
+import { GetAccountReceivablesQueryDto } from './dto/get-account-receivables-query.dto';
 
 @Controller('/account-receivable')
 export class AccountReceivableController {
@@ -111,16 +112,7 @@ export class AccountReceivableController {
   async get(
     @Req() req: ReqWithAuthContext,
     @Query()
-    params: {
-      page?: number;
-      pageSize?: number;
-      storeId?: number;
-      clientId?: number;
-      arId?: number;
-      situation?: string;
-      startDate?: string;
-      endDate?: string;
-    },
+    params: GetAccountReceivablesQueryDto,
   ) {
     const { credentialsId, storeId: tokenStoreId } = req.authContext || {};
 
@@ -133,18 +125,18 @@ export class AccountReceivableController {
     }
 
     const storeId =
-      params.storeId !== undefined ? Number(params.storeId) : tokenStoreId;
-    const page = params.page !== undefined ? Number(params.page) : 1;
+      params.storeId !== undefined ? params.storeId : tokenStoreId;
+    const page = params.page !== undefined ? params.page : 1;
     const pageSize =
-      params.pageSize !== undefined ? Number(params.pageSize) : 10;
+      params.pageSize !== undefined ? params.pageSize : 10;
 
     return this.accountReceivableService.get(
       credentialsId,
       storeId,
       page,
       pageSize,
-      params.clientId !== undefined ? Number(params.clientId) : undefined,
-      params.arId !== undefined ? Number(params.arId) : undefined,
+      params.clientId,
+      params.arId,
       params.situation,
       params.startDate,
       params.endDate,

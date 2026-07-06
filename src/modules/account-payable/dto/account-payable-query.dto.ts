@@ -1,11 +1,23 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
+import { ZodDto } from 'src/common/validation/zod-dto';
+import { z } from 'zod';
 
 export enum AccountPayableSituation {
   ABERTO = 'A',
   LIQUIDADO = 'L',
 }
 
-export class AccountPayableQueryDto {
+export const AccountPayableQuerySchema = z.object({
+  page: z.coerce.number().min(1).optional(),
+  pageSize: z.coerce.number().min(1).max(100).optional(),
+  storeId: z.coerce.number().optional(),
+  supplierId: z.coerce.number().optional(),
+  situation: z.nativeEnum(AccountPayableSituation).optional(),
+  startDate: z.string().optional(),
+  endDate: z.string().optional(),
+});
+
+export class AccountPayableQueryDto extends ZodDto(AccountPayableQuerySchema) {
   @ApiPropertyOptional({
     description: 'Página atual',
     default: 1,
