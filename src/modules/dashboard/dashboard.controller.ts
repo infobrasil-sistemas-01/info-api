@@ -110,11 +110,13 @@ export class DashboardController {
   async getRequestLogs(
     @Query('startDate') startDateStr?: string,
     @Query('endDate') endDateStr?: string,
+    @Query('page') pageStr?: string,
     @Query('limit') limitStr?: string,
   ) {
     const { startDate, endDate } = this.parseDates(startDateStr, endDateStr);
+    const page = pageStr ? parseInt(pageStr, 10) : 1;
     const limit = limitStr ? parseInt(limitStr, 10) : 50;
-    return this.dashboardService.getRequestLogs(startDate, endDate, limit);
+    return this.dashboardService.getRequestLogs(startDate, endDate, page, limit);
   }
   @Get('database-load')
   @RequirePermissions({ allOf: ['core.dashboard.view'] })

@@ -261,7 +261,8 @@ export class DashboardService {
     }
   }
 
-  async getRequestLogs(startDate: Date, endDate: Date, limit = 50) {
+  async getRequestLogs(startDate: Date, endDate: Date, page = 1, limit = 50) {
+    const offset = (page - 1) * limit;
     const query = `
       SELECT
         rl.created_at as "timestamp",
@@ -277,9 +278,33 @@ export class DashboardService {
         AND rl.path NOT LIKE '/api/v1/dashboard%'
         AND rl.path NOT LIKE '/api/v1/newsletter%'
       ORDER BY rl.created_at DESC
-      LIMIT $3
+      LIMIT $3 OFFSET $4
     `;
-    return this.prisma.$queryRawUnsafe<any[]>(query, startDate, endDate, limit);
+
+    const countQuery = `
+      SELECT COUNT(rl.id)::int as "total"
+      FROM request_logs rl
+      WHERE rl.created_at >= $1 AND rl.created_at <= $2
+        AND rl.path NOT LIKE '/api/v1/dashboard%'
+        AND rl.path NOT LIKE '/api/v1/newsletter%'
+    `;
+
+    const [data, totalResult] = await Promise.all([
+      this.prisma.$queryRawUnsafe<any[]>(query, startDate, endDate, limit, offset),
+      this.prisma.$queryRawUnsafe<any[]>(countQuery, startDate, endDate),
+    ]);
+
+    const total = totalResult[0]?.total || 0;
+
+    return {
+      data,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
   }
 
 

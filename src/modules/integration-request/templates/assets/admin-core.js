@@ -12,7 +12,8 @@ const State = {
     dashboardIntervalId: null,
     currentZoomRange: null,
     isUpdatingChart: false,
-    previewTimeoutId: null
+    previewTimeoutId: null,
+    logsCurrentPage: 1
 };
 
 const Data = {
@@ -204,7 +205,14 @@ const Data = {
             console.error('Erro ao buscar status do sistema', e);
         }
     },
-    async fetchDashboard() {
+    changeLogsPage(page) {
+        State.logsCurrentPage = page;
+        this.fetchDashboard(true);
+    },
+    async fetchDashboard(isPagination = false) {
+        if (!isPagination) {
+            State.logsCurrentPage = 1;
+        }
         State.currentZoomRange = null;
         const dateFilter = document.getElementById('dashboard-date-filter')?.value || '30days';
         let startDate, endDate;
@@ -236,7 +244,7 @@ const Data = {
                 this.fetch(`${API_URL}/dashboard/database-load?startDate=${startStr}&endDate=${endStr}&limit=10`),
                 this.fetch(`${API_URL}/dashboard/plan-distribution?startDate=${startStr}&endDate=${endStr}`),
                 this.fetch(`${API_URL}/dashboard/heartbeat`),
-                this.fetch(`${API_URL}/dashboard/request-logs?startDate=${startStr}&endDate=${endStr}&limit=50`)
+                this.fetch(`${API_URL}/dashboard/request-logs?startDate=${startStr}&endDate=${endStr}&page=${State.logsCurrentPage}&limit=50`)
             ]);
 
             if (!resSummary.ok || !resUsers.ok || !resEndpoints.ok || !resStatus.ok || !resTimeSeries.ok || !resAlerts.ok || !resDBLoad.ok || !resPlanDist.ok || !resHeartbeat.ok || !resRequestLogs.ok) {

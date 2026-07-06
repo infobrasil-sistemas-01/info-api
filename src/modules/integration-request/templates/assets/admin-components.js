@@ -689,6 +689,49 @@ const Components = {
           </div>
       </div>
 
+      <!-- Linha 3: Log de Requisições HTTP (Real-Time) com Paginação -->
+      <div class="card" style="margin-bottom: 2rem; padding: 1.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 10px;">
+              <div>
+                  <h3 style="margin: 0; color: white; display: flex; align-items: center; gap: 8px;">
+                      <i class='bx bx-list-ul' style="color: var(--primary);"></i> Log de Requisições HTTP (Real-Time)
+                  </h3>
+                  <p style="color: var(--text-muted); font-size: 0.8rem; margin: 4px 0 0 0;">Histórico recente de requisições de clientes do período selecionado.</p>
+              </div>
+              <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; background: rgba(255,255,255,0.05); padding: 4px 12px; border-radius: 20px;">Auditoria de Performance</span>
+          </div>
+          <div class="table-container" style="max-height: 450px; overflow-y: auto;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+                  <thead>
+                      <tr style="border-bottom: 1px solid var(--border); text-align: left; color: var(--text-muted);">
+                          <th style="padding: 10px; width: 180px; color: var(--text-muted);">Timestamp</th>
+                          <th style="padding: 10px; width: 80px; color: var(--text-muted);">Método</th>
+                          <th style="padding: 10px; color: var(--text-muted);">Endpoint</th>
+                          <th style="padding: 10px; width: 80px; color: var(--text-muted);">Status</th>
+                          <th style="padding: 10px; width: 120px; color: var(--text-muted);">Tempo Resposta</th>
+                          <th style="padding: 10px; color: var(--text-muted);">Usuário Chamador</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      ${requestLogs.data.map(Components.DashboardRequestLogRow).join('') || '<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 20px;">Nenhum log de requisição no período.</td></tr>'}
+                  </tbody>
+              </table>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 10px;">
+              <span style="color: var(--text-muted); font-size: 0.8rem; font-weight: 500;">
+                  Página <strong style="color: white;">${requestLogs.meta.page}</strong> de <strong style="color: white;">${requestLogs.meta.totalPages || 1}</strong> (Total: ${requestLogs.meta.total})
+              </span>
+              <div style="display: flex; gap: 8px;">
+                  <button class="btn btn-outline" onclick="Data.changeLogsPage(${requestLogs.meta.page - 1})" ${requestLogs.meta.page <= 1 ? 'disabled style="opacity: 0.4; cursor: not-allowed;"' : ''} style="padding: 6px 14px; font-size: 0.8rem; font-weight: 600; border-radius: 6px;">
+                      Anterior
+                  </button>
+                  <button class="btn btn-outline" onclick="Data.changeLogsPage(${requestLogs.meta.page + 1})" ${requestLogs.meta.page >= requestLogs.meta.totalPages ? 'disabled style="opacity: 0.4; cursor: not-allowed;"' : ''} style="padding: 6px 14px; font-size: 0.8rem; font-weight: 600; border-radius: 6px;">
+                      Próxima
+                  </button>
+              </div>
+          </div>
+      </div>
+
       <!-- Linha 3: Top Endpoints -->
       <div class="card" style="margin-bottom: 2rem; padding: 1.5rem;">
           <h3 style="margin-top: 0; margin-bottom: 1rem; color: white;">Top Endpoints (Mais Requisitados & Latência)</h3>
@@ -760,33 +803,6 @@ const Components = {
 
       <!-- Linha 5: HTTP Request Logs (Sentry Style) -->
       <div class="card" style="margin-top: 2rem; padding: 1.5rem;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 10px;">
-              <div>
-                  <h3 style="margin: 0; color: white; display: flex; align-items: center; gap: 8px;">
-                      <i class='bx bx-list-ul' style="color: var(--primary);"></i> Log de Requisições HTTP (Real-Time)
-                  </h3>
-                  <p style="color: var(--text-muted); font-size: 0.8rem; margin: 4px 0 0 0;">Histórico recente de requisições de clientes do período selecionado.</p>
-              </div>
-              <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; background: rgba(255,255,255,0.05); padding: 4px 12px; border-radius: 20px;">Mostrando as últimas 50 requisições</span>
-          </div>
-          <div class="table-container" style="max-height: 450px; overflow-y: auto;">
-              <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
-                  <thead>
-                      <tr style="border-bottom: 1px solid var(--border); text-align: left; color: var(--text-muted);">
-                          <th style="padding: 10px; width: 180px; color: var(--text-muted);">Timestamp</th>
-                          <th style="padding: 10px; width: 80px; color: var(--text-muted);">Método</th>
-                          <th style="padding: 10px; color: var(--text-muted);">Endpoint</th>
-                          <th style="padding: 10px; width: 80px; color: var(--text-muted);">Status</th>
-                          <th style="padding: 10px; width: 120px; color: var(--text-muted);">Tempo Resposta</th>
-                          <th style="padding: 10px; color: var(--text-muted);">Usuário Chamador</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      ${requestLogs.map(Components.DashboardRequestLogRow).join('') || '<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 20px;">Nenhum log de requisição no período.</td></tr>'}
-                  </tbody>
-              </table>
-          </div>
-      </div>
       `;
   },
 };

@@ -219,7 +219,7 @@ describe('DashboardService', () => {
   });
 
   describe('getRequestLogs', () => {
-    it('should return recent HTTP request logs', async () => {
+    it('should return recent HTTP request logs with pagination', async () => {
       const start = new Date('2026-07-01');
       const end = new Date('2026-07-02');
       const mockResult = [
@@ -233,16 +233,33 @@ describe('DashboardService', () => {
           email: 'admin@test.com',
         },
       ];
-      mockPrisma.$queryRawUnsafe.mockResolvedValueOnce(mockResult);
+      mockPrisma.$queryRawUnsafe.mockResolvedValueOnce(mockResult); // Data query
+      mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([{ total: 100 }]); // Count query
 
-      const result = await service.getRequestLogs(start, end, 50);
+      const result = await service.getRequestLogs(start, end, 1, 50);
 
-      expect(result).toEqual(mockResult);
-      expect(mockPrisma.$queryRawUnsafe).toHaveBeenCalledWith(
-        expect.stringContaining('FROM request_logs rl'),
+      expect(result).toEqual({
+        data: mockResult,
+        meta: {
+          total: 100,
+          page: 1,
+          limit: 50,
+          totalPages: 2,
+        },
+      });
+      expect(mockPrisma.$queryRawUnsafe).toHaveBeenNthCalledWith(
+        1,
+        expect.stringContaining('LIMIT $3 OFFSET $4'),
         start,
         end,
         50,
+        0,
+      );
+      expect(mockPrisma.$queryRawUnsafe).toHaveBeenNthCalledWith(
+        2,
+        expect.stringContaining('SELECT COUNT(rl.id)'),
+        start,
+        end,
       );
     });
   });
