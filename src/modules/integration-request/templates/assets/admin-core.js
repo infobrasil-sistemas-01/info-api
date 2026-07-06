@@ -11,7 +11,8 @@ const State = {
     currentRequestFilter: 'ALL',
     dashboardIntervalId: null,
     currentZoomRange: null,
-    isUpdatingChart: false
+    isUpdatingChart: false,
+    previewTimeoutId: null
 };
 
 const Data = {
@@ -225,19 +226,18 @@ const Data = {
         const endStr = endDate.toISOString();
 
         try {
-            const [resSummary, resUsers, resEndpoints, resStatus, resTimeSeries, resAlerts, resIPs, resDBLoad, resPlanDist] = await Promise.all([
+            const [resSummary, resUsers, resEndpoints, resStatus, resTimeSeries, resAlerts, resDBLoad, resPlanDist] = await Promise.all([
                 this.fetch(`${API_URL}/dashboard/summary?startDate=${startStr}&endDate=${endStr}`),
                 this.fetch(`${API_URL}/dashboard/top-users?startDate=${startStr}&endDate=${endStr}&limit=10`),
                 this.fetch(`${API_URL}/dashboard/top-endpoints?startDate=${startStr}&endDate=${endStr}&limit=10`),
                 this.fetch(`${API_URL}/dashboard/status-distribution?startDate=${startStr}&endDate=${endStr}`),
                 this.fetch(`${API_URL}/dashboard/time-series?startDate=${startStr}&endDate=${endStr}`),
                 this.fetch(`${API_URL}/dashboard/proactive-alerts`),
-                this.fetch(`${API_URL}/dashboard/top-ips?startDate=${startStr}&endDate=${endStr}&limit=10`),
                 this.fetch(`${API_URL}/dashboard/database-load?startDate=${startStr}&endDate=${endStr}&limit=10`),
                 this.fetch(`${API_URL}/dashboard/plan-distribution?startDate=${startStr}&endDate=${endStr}`)
             ]);
 
-            if (!resSummary.ok || !resUsers.ok || !resEndpoints.ok || !resStatus.ok || !resTimeSeries.ok || !resAlerts.ok || !resIPs.ok || !resDBLoad.ok || !resPlanDist.ok) {
+            if (!resSummary.ok || !resUsers.ok || !resEndpoints.ok || !resStatus.ok || !resTimeSeries.ok || !resAlerts.ok || !resDBLoad.ok || !resPlanDist.ok) {
                 throw new Error("Erro ao carregar os dados do dashboard.");
             }
 
@@ -247,14 +247,13 @@ const Data = {
             const statusDist = await resStatus.json();
             const timeSeries = await resTimeSeries.json();
             const proactiveAlerts = await resAlerts.json();
-            const topIPs = await resIPs.json();
             const databaseLoad = await resDBLoad.json();
             const planDist = await resPlanDist.json();
 
             const section = document.getElementById('section-dashboard');
             if (section) {
                 const prevFilter = dateFilter;
-                section.innerHTML = Components.DashboardContent(summary, topUsers, topEndpoints, proactiveAlerts, topIPs, databaseLoad, planDist);
+                section.innerHTML = Components.DashboardContent(summary, topUsers, topEndpoints, proactiveAlerts, databaseLoad, planDist);
                 document.getElementById('dashboard-date-filter').value = prevFilter;
 
                 this.renderDashboardCharts(statusDist, timeSeries);
@@ -1084,33 +1083,38 @@ const UI = {
         this.updateNewsletterPreview();
     },
     async updateNewsletterPreview() {
-        const announcementIds = JSON.parse(document.getElementById('n-annIds').value);
-        const subject = document.getElementById('n-subject').value;
-        const initialMessage = document.getElementById('n-initial').value;
-        const finalMessage = document.getElementById('n-final').value;
-
-        const frame = document.getElementById('newsletter-preview-frame');
-        if (!frame) return;
-
-        try {
-            const res = await Data.fetch(`${API_URL}/newsletter/preview`, {
-                method: 'POST',
-                body: JSON.stringify({ announcementIds, subject, initialMessage, finalMessage })
-            });
-
-            if (res.ok) {
-                const { html } = await res.json();
-                const doc = frame.contentDocument || frame.contentWindow.document;
-                doc.open();
-                doc.write(html);
-                doc.close();
-            } else {
-                const err = await res.json();
-                console.error(err);
-            }
-        } catch (e) {
-            console.error('Erro ao gerar preview da newsletter:', e);
+        if (State.previewTimeoutId) {
+            clearTimeout(State.previewTimeoutId);
         }
+        State.previewTimeoutId = setTimeout(async () => {
+            const announcementIds = JSON.parse(document.getElementById('n-annIds').value);
+            const subject = document.getElementById('n-subject').value;
+            const initialMessage = document.getElementById('n-initial').value;
+            const finalMessage = document.getElementById('n-final').value;
+
+            const frame = document.getElementById('newsletter-preview-frame');
+            if (!frame) return;
+
+            try {
+                const res = await Data.fetch(`${API_URL}/newsletter/preview`, {
+                    method: 'POST',
+                    body: JSON.stringify({ announcementIds, subject, initialMessage, finalMessage })
+                });
+
+                if (res.ok) {
+                    const { html } = await res.json();
+                    const doc = frame.contentDocument || frame.contentWindow.document;
+                    doc.open();
+                    doc.write(html);
+                    doc.close();
+                } else {
+                    const err = await res.json();
+                    console.error(err);
+                }
+            } catch (e) {
+                console.error('Erro ao gerar preview da newsletter:', e);
+            }
+        }, 500);
     },
     async sendNewsletter(e) {
         e.preventDefault();

@@ -40,6 +40,7 @@ export class PlanLimitInterceptor implements NestInterceptor {
       '/api/v1/db-credentials',
       '/api/v1/announcements',
       '/api/v1/dashboard',
+      '/api/v1/newsletter',
       '/integration',
       '/status',
     ].some((excluded) => path.startsWith(excluded));

@@ -54,14 +54,20 @@ describe('DashboardService', () => {
       expect(mockPrisma.requestLog.count).toHaveBeenNthCalledWith(1, {
         where: {
           createdAt: { gte: start, lte: end },
-          path: { not: { startsWith: '/api/v1/dashboard' } },
+          NOT: [
+            { path: { startsWith: '/api/v1/dashboard' } },
+            { path: { startsWith: '/api/v1/newsletter' } },
+          ],
         },
       });
       expect(mockPrisma.requestLog.groupBy).toHaveBeenCalledWith({
         by: ['userId'],
         where: {
           createdAt: { gte: start, lte: end },
-          path: { not: { startsWith: '/api/v1/dashboard' } },
+          NOT: [
+            { path: { startsWith: '/api/v1/dashboard' } },
+            { path: { startsWith: '/api/v1/newsletter' } },
+          ],
         },
       });
       expect(mockPrisma.requestLog.count).toHaveBeenCalledTimes(3);

@@ -12,11 +12,10 @@ export class DashboardService {
           gte: startDate,
           lte: endDate,
         },
-        path: {
-          not: {
-            startsWith: '/api/v1/dashboard',
-          },
-        },
+        NOT: [
+          { path: { startsWith: '/api/v1/dashboard' } },
+          { path: { startsWith: '/api/v1/newsletter' } },
+        ],
       },
     });
 
@@ -27,11 +26,10 @@ export class DashboardService {
           gte: startDate,
           lte: endDate,
         },
-        path: {
-          not: {
-            startsWith: '/api/v1/dashboard',
-          },
-        },
+        NOT: [
+          { path: { startsWith: '/api/v1/dashboard' } },
+          { path: { startsWith: '/api/v1/newsletter' } },
+        ],
       },
     });
     const activeUsers = activeUsersResult.length;
@@ -46,11 +44,10 @@ export class DashboardService {
           gte: 200,
           lt: 300,
         },
-        path: {
-          not: {
-            startsWith: '/api/v1/dashboard',
-          },
-        },
+        NOT: [
+          { path: { startsWith: '/api/v1/dashboard' } },
+          { path: { startsWith: '/api/v1/newsletter' } },
+        ],
       },
     });
 
@@ -64,11 +61,10 @@ export class DashboardService {
           lte: endDate,
         },
         status: 429,
-        path: {
-          not: {
-            startsWith: '/api/v1/dashboard',
-          },
-        },
+        NOT: [
+          { path: { startsWith: '/api/v1/dashboard' } },
+          { path: { startsWith: '/api/v1/newsletter' } },
+        ],
       },
     });
 
@@ -97,12 +93,14 @@ export class DashboardService {
           WHERE m.user_id = rl.user_id
             AND m.created_at >= DATE_TRUNC('month', CURRENT_DATE)
             AND m.path NOT LIKE '/api/v1/dashboard%'
+            AND m.path NOT LIKE '/api/v1/newsletter%'
         ) as "monthlyRequests"
       FROM request_logs rl
       JOIN users u ON rl.user_id = u.id
       LEFT JOIN plans p ON u.plan_id = p.id
       WHERE rl.created_at >= $1 AND rl.created_at <= $2
         AND rl.path NOT LIKE '/api/v1/dashboard%'
+        AND rl.path NOT LIKE '/api/v1/newsletter%'
       GROUP BY rl.user_id, u.user, u.email, u.status, p.name, p.req_month
       ORDER BY "totalRequests" DESC
       LIMIT $3
@@ -124,6 +122,7 @@ export class DashboardService {
       FROM request_logs
       WHERE created_at >= $1 AND created_at <= $2
         AND path NOT LIKE '/api/v1/dashboard%'
+        AND path NOT LIKE '/api/v1/newsletter%'
       GROUP BY method, 2
       ORDER BY "totalRequests" DESC
       LIMIT $3
@@ -147,6 +146,7 @@ export class DashboardService {
       FROM request_logs
       WHERE created_at >= $1 AND created_at <= $2
         AND path NOT LIKE '/api/v1/dashboard%'
+        AND path NOT LIKE '/api/v1/newsletter%'
       GROUP BY 1
       ORDER BY "count" DESC
     `;
@@ -198,6 +198,7 @@ export class DashboardService {
       FROM request_logs
       WHERE created_at >= $1 AND created_at <= $2
         AND path NOT LIKE '/api/v1/dashboard%'
+        AND path NOT LIKE '/api/v1/newsletter%'
       GROUP BY 1
       ORDER BY 1 ASC
     `;
@@ -219,6 +220,7 @@ export class DashboardService {
       JOIN plans p ON u.plan_id = p.id
       WHERE rl.created_at >= DATE_TRUNC('month', CURRENT_DATE)
         AND rl.path NOT LIKE '/api/v1/dashboard%'
+        AND rl.path NOT LIKE '/api/v1/newsletter%'
       GROUP BY u.user, u.email, p.name, p.req_month
       HAVING COUNT(rl.id)::float / p.req_month >= 0.8
       ORDER BY "usagePercentage" DESC
@@ -227,21 +229,6 @@ export class DashboardService {
     return this.prisma.$queryRawUnsafe<any[]>(query);
   }
 
-  async getTopIPs(startDate: Date, endDate: Date, limit = 10) {
-    const query = `
-      SELECT
-        ip as "ip",
-        COUNT(id)::int as "totalRequests"
-      FROM request_logs
-      WHERE created_at >= $1 AND created_at <= $2 AND ip IS NOT NULL
-        AND path NOT LIKE '/api/v1/dashboard%'
-      GROUP BY ip
-      ORDER BY "totalRequests" DESC
-      LIMIT $3
-    `;
-
-    return this.prisma.$queryRawUnsafe<any[]>(query, startDate, endDate, limit);
-  }
 
   async getDatabaseLoad(startDate: Date, endDate: Date, limit = 10) {
     const query = `
@@ -254,6 +241,7 @@ export class DashboardService {
       JOIN db_credentials dc ON u.db_credentials_id = dc.id
       WHERE rl.created_at >= $1 AND rl.created_at <= $2
         AND rl.path NOT LIKE '/api/v1/dashboard%'
+        AND rl.path NOT LIKE '/api/v1/newsletter%'
       GROUP BY dc.host, dc.database
       ORDER BY "totalRequests" DESC
       LIMIT $3
@@ -272,6 +260,7 @@ export class DashboardService {
       LEFT JOIN plans p ON u.plan_id = p.id
       WHERE rl.created_at >= $1 AND rl.created_at <= $2
         AND rl.path NOT LIKE '/api/v1/dashboard%'
+        AND rl.path NOT LIKE '/api/v1/newsletter%'
       GROUP BY p.name
       ORDER BY "totalRequests" DESC
     `;

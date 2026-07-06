@@ -98,18 +98,7 @@ export class DashboardController {
     return this.dashboardService.getProactiveAlerts();
   }
 
-  @Get('top-ips')
-  @RequirePermissions({ allOf: ['core.dashboard.view'] })
-  @ApiOperation({ summary: 'Obtém a lista de IPs de origem mais ativos' })
-  async getTopIPs(
-    @Query('startDate') startDateStr?: string,
-    @Query('endDate') endDateStr?: string,
-    @Query('limit') limitStr?: string,
-  ) {
-    const { startDate, endDate } = this.parseDates(startDateStr, endDateStr);
-    const limit = limitStr ? parseInt(limitStr, 10) : 10;
-    return this.dashboardService.getTopIPs(startDate, endDate, limit);
-  }
+
 
   @Get('database-load')
   @RequirePermissions({ allOf: ['core.dashboard.view'] })

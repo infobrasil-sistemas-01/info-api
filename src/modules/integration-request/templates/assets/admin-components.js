@@ -505,7 +505,7 @@ const Components = {
     `;
   },
 
-  DashboardContent: (summary, topUsers, topEndpoints, proactiveAlerts, topIPs, databaseLoad, planDist) => {
+  DashboardContent: (summary, topUsers, topEndpoints, proactiveAlerts, databaseLoad, planDist) => {
     const activeRefresh = localStorage.getItem('dashboard-auto-refresh') === 'true' ? 'checked' : '';
 
     const proactiveRows = proactiveAlerts.map(a => `
@@ -515,13 +515,6 @@ const Components = {
               <td style="color: var(--danger); font-weight: 700; text-align: right; padding: 10px 0;">${a.usagePercentage}%</td>
           </tr>
       `).join('') || `<tr><td colspan="3" style="text-align: center; color: var(--text-muted); padding: 20px;">Nenhum usuário crítico no momento (>80%)</td></tr>`;
-
-    const ipRows = topIPs.map(i => `
-          <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-              <td style="padding: 10px 0; font-family: monospace; color: white;">${i.ip}</td>
-              <td style="font-weight: 600; text-align: right; color: white; padding: 10px 0;">${i.totalRequests.toLocaleString()}</td>
-          </tr>
-      `).join('') || `<tr><td colspan="2" style="text-align: center; color: var(--text-muted); padding: 20px;">Sem dados</td></tr>`;
 
     const dbRows = databaseLoad.map(d => `
           <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
@@ -711,27 +704,6 @@ const Components = {
                       </thead>
                       <tbody>
                           ${dbRows}
-                      </tbody>
-                  </table>
-              </div>
-          </div>
-
-          <!-- Top IPs -->
-          <div class="card" style="padding: 1.5rem; display: flex; flex-direction: column;">
-              <h3 style="margin-top: 0; margin-bottom: 0.5rem; color: white; display: flex; align-items: center; gap: 8px;">
-                  <i class='bx bx-fingerprint'></i> IPs de Origem mais Ativos
-              </h3>
-              <p style="color: var(--text-muted); font-size: 0.8rem; margin: 0 0 1rem 0;">Top 10 IPs de origem gerando tráfego.</p>
-              <div style="flex-grow: 1; overflow-y: auto; max-height: 250px;">
-                  <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
-                      <thead>
-                          <tr style="border-bottom: 1px solid var(--border); color: var(--text-muted);">
-                              <th style="text-align: left; padding: 8px 0; color: var(--text-muted);">IP</th>
-                              <th style="text-align: right; padding: 8px 0; color: var(--text-muted);">Requisições</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          ${ipRows}
                       </tbody>
                   </table>
               </div>
