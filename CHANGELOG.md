@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.16.7](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.16.6...v1.16.7) (2026-07-06)
+
+
+### Features
+
+* admin dash granular graph ([af465ab](https://github.com/infobrasil-sistemas/info-vendas-api/commit/af465ab52a25839fdcc3e821d0dc252044325f22))
+* admin usage dashboard ([3a730f1](https://github.com/infobrasil-sistemas/info-vendas-api/commit/3a730f17bc66a07491ad4e43a87c1fc65c34c068))
+* POST /deliveries ([9fdc492](https://github.com/infobrasil-sistemas/info-vendas-api/commit/9fdc492e9585d7528cb9e6a04da3f659235e498b))
+
+
+### Bug Fixes
+
+* admin dash ([7665592](https://github.com/infobrasil-sistemas/info-vendas-api/commit/76655923b4785a0be9ce8c92f52117a8daa9bb06))
+* no count dashboard requests on dashboard panel ([0b5ebdd](https://github.com/infobrasil-sistemas/info-vendas-api/commit/0b5ebddafcd8c820a578d5ef9b66333edf65c4f2))
+
 ## [1.16.6](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.16.5...v1.16.6) (2026-07-02)
 
 
