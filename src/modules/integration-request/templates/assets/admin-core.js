@@ -884,6 +884,97 @@ const UI = {
         document.getElementById('modal-container').classList.add('hidden');
         document.querySelectorAll('.modal').forEach(m => m.classList.add('hidden'));
     },
+    openDossierRangeModal(userId, username) {
+        document.getElementById('modal-container').classList.remove('hidden');
+        const modal = document.getElementById('dossier-modal');
+        modal.classList.remove('hidden');
+        modal.innerHTML = `
+            <div class="modal-header">
+                <h3>Exportar Dossiê do Cliente</h3>
+                <button onclick="UI.closeModal()" style="background: none; border: none; cursor: pointer; font-size: 1.5rem; color: white;">&times;</button>
+            </div>
+            <form onsubmit="UI.submitClientDossierExport(event)">
+                <input type="hidden" id="export-dossier-userId" value="${userId}">
+                <input type="hidden" id="export-dossier-username" value="${username}">
+                <div class="form-group">
+                    <label>Cliente / Empresa</label>
+                    <div style="font-weight: 600; color: white; padding: 8px 0;">${username}</div>
+                </div>
+                <div class="form-group" style="margin-top: 15px;">
+                    <label>Período do Dossiê</label>
+                    <select id="export-dossier-range" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--card-bg); color: white; font-weight: 500; outline: none; margin-top: 6px;">
+                        <option value="1h">Última 1 hora</option>
+                        <option value="6h">Últimas 6 horas</option>
+                        <option value="24h">Últimas 24 horas</option>
+                        <option value="7days">Últimos 7 dias</option>
+                        <option value="30days" selected>Últimos 30 dias</option>
+                    </select>
+                </div>
+                <div style="display: flex; gap: 8px; margin-top: 24px;">
+                    <button type="button" class="btn btn-outline" onclick="UI.closeModal()" style="flex: 1; padding: 10px; font-weight: 600;">Cancelar</button>
+                    <button type="submit" id="btn-export-dossier-submit" class="btn" style="background: #f59e0b; color: white; flex: 1; font-weight: 600; padding: 10px; justify-content: center; align-items: center; gap: 8px; width: auto; display: inline-flex;">
+                        <i class='bx bxs-file-pdf' style="font-size: 1.2rem;"></i> Exportar PDF
+                    </button>
+                </div>
+            </form>
+        `;
+    },
+    async submitClientDossierExport(event) {
+        event.preventDefault();
+        const userId = document.getElementById('export-dossier-userId').value;
+        const username = document.getElementById('export-dossier-username').value;
+        const range = document.getElementById('export-dossier-range').value;
+
+        const btn = document.getElementById('btn-export-dossier-submit');
+        let originalHtml = '';
+        if (btn) {
+            originalHtml = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<i class='bx bx-loader-alt bx-spin' style="font-size: 1.2rem;"></i> Gerando...`;
+        }
+
+        try {
+            let startDate, endDate;
+            const now = new Date();
+            if (range === '1h') {
+                startDate = new Date(now.getTime() - 1 * 60 * 60 * 1000);
+            } else if (range === '6h') {
+                startDate = new Date(now.getTime() - 6 * 60 * 60 * 1000);
+            } else if (range === '24h') {
+                startDate = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+            } else if (range === '7days') {
+                startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+            } else {
+                startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+            }
+            endDate = now;
+
+            const startStr = startDate.toISOString();
+            const endStr = endDate.toISOString();
+
+            const res = await Data.fetch(`${API_URL}/dashboard/dossier?type=client&userId=${userId}&startDate=${startStr}&endDate=${endStr}`);
+            if (res.ok) {
+                const blob = await res.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `dossie-cliente-${username.toLowerCase()}-${new Date().toISOString().slice(0, 10)}.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url);
+                UI.closeModal();
+            }
+        } catch (error) {
+            console.error('Erro ao baixar dossiê do cliente:', error);
+            alert(`Erro ao gerar e baixar o dossiê para ${username}.`);
+        } finally {
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+            }
+        }
+    },
     copyInvitationLink(event, token) {
         event.stopPropagation();
         const url = `${window.location.origin}/integration/setup-password/${token}`;

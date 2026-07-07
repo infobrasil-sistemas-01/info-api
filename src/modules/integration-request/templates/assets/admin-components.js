@@ -143,7 +143,7 @@ const Components = {
             <td>
                 <div style="display: flex; gap: 8px;">
                     <button class="btn btn-outline btn-sm" onclick="UI.openUserModal('${u.id}')">Editar</button>
-                    <button id="btn-export-user-${u.id}" class="btn btn-outline btn-sm" onclick="Data.downloadClientDossier('${u.id}', '${u.user}')" title="Exportar Dossiê do Cliente (PDF)" style="display: inline-flex; align-items: center; justify-content: center; padding: 4px 8px;">
+                    <button id="btn-export-user-${u.id}" class="btn btn-outline btn-sm" onclick="UI.openDossierRangeModal('${u.id}', '${u.user}')" title="Exportar Dossiê do Cliente (PDF)" style="display: inline-flex; align-items: center; justify-content: center; padding: 4px 8px;">
                         <i class='bx bxs-file-pdf' style="font-size: 1.1rem; color: #f59e0b;"></i>
                     </button>
                     <button class="btn btn-danger btn-sm" onclick="Data.deleteUser('${u.id}')">Excluir</button>
