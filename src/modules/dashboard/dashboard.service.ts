@@ -5,49 +5,38 @@ import { RegistryPrismaService } from 'src/infra/prisma/registry-prisma.service'
 export class DashboardService {
   constructor(private readonly prisma: RegistryPrismaService) {}
 
-  async getSummary(startDate: Date, endDate: Date) {
-    const totalRequests = await this.prisma.requestLog.count({
-      where: {
-        createdAt: {
-          gte: startDate,
-          lte: endDate,
-        },
-        NOT: [
-          { path: { startsWith: '/api/v1/dashboard' } },
-          { path: { startsWith: '/api/v1/newsletter' } },
-        ],
+  async getSummary(startDate: Date, endDate: Date, userId?: string) {
+    const whereClause: any = {
+      createdAt: {
+        gte: startDate,
+        lte: endDate,
       },
+      NOT: [
+        { path: { startsWith: '/api/v1/dashboard' } },
+        { path: { startsWith: '/api/v1/newsletter' } },
+      ],
+    };
+    if (userId) {
+      whereClause.userId = userId;
+    }
+
+    const totalRequests = await this.prisma.requestLog.count({
+      where: whereClause,
     });
 
     const activeUsersResult = await this.prisma.requestLog.groupBy({
       by: ['userId'],
-      where: {
-        createdAt: {
-          gte: startDate,
-          lte: endDate,
-        },
-        NOT: [
-          { path: { startsWith: '/api/v1/dashboard' } },
-          { path: { startsWith: '/api/v1/newsletter' } },
-        ],
-      },
+      where: whereClause,
     });
     const activeUsers = activeUsersResult.length;
 
     const successRequests = await this.prisma.requestLog.count({
       where: {
-        createdAt: {
-          gte: startDate,
-          lte: endDate,
-        },
+        ...whereClause,
         status: {
           gte: 200,
           lt: 300,
         },
-        NOT: [
-          { path: { startsWith: '/api/v1/dashboard' } },
-          { path: { startsWith: '/api/v1/newsletter' } },
-        ],
       },
     });
 
@@ -56,15 +45,8 @@ export class DashboardService {
 
     const rateLimitHits = await this.prisma.requestLog.count({
       where: {
-        createdAt: {
-          gte: startDate,
-          lte: endDate,
-        },
+        ...whereClause,
         status: 429,
-        NOT: [
-          { path: { startsWith: '/api/v1/dashboard' } },
-          { path: { startsWith: '/api/v1/newsletter' } },
-        ],
       },
     });
 
@@ -72,10 +54,10 @@ export class DashboardService {
       `SELECT PERCENTILE_CONT(0.95) WITHIN GROUP (ORDER BY duration_ms)::float as "p95"
        FROM request_logs
        WHERE created_at >= $1 AND created_at <= $2
+         ${userId ? 'AND user_id = $3' : ''}
          AND path NOT LIKE '/api/v1/dashboard%'
          AND path NOT LIKE '/api/v1/newsletter%'`,
-      startDate,
-      endDate,
+      ...[startDate, endDate, ...(userId ? [userId] : [])],
     );
     const p95Latency = (latencyResult && latencyResult[0]) ? latencyResult[0].p95 || 0 : 0;
 
@@ -121,7 +103,7 @@ export class DashboardService {
     return this.prisma.$queryRawUnsafe<any[]>(query, startDate, endDate, limit);
   }
 
-  async getTopEndpoints(startDate: Date, endDate: Date, limit = 10) {
+  async getTopEndpoints(startDate: Date, endDate: Date, limit = 10, userId?: string) {
     const query = `
       SELECT
         method as "method",
@@ -135,17 +117,19 @@ export class DashboardService {
         ROUND(PERCENTILE_CONT(0.95) WITHIN GROUP (ORDER BY duration_ms)::numeric, 2)::float as "p95Latency"
       FROM request_logs
       WHERE created_at >= $1 AND created_at <= $2
+        ${userId ? 'AND user_id = $3' : ''}
         AND path NOT LIKE '/api/v1/dashboard%'
         AND path NOT LIKE '/api/v1/newsletter%'
       GROUP BY method, 2
       ORDER BY "totalRequests" DESC
-      LIMIT $3
+      LIMIT ${userId ? '$4' : '$3'}
     `;
 
-    return this.prisma.$queryRawUnsafe<any[]>(query, startDate, endDate, limit);
+    const params = userId ? [startDate, endDate, userId, limit] : [startDate, endDate, limit];
+    return this.prisma.$queryRawUnsafe<any[]>(query, ...params);
   }
 
-  async getStatusDistribution(startDate: Date, endDate: Date) {
+  async getStatusDistribution(startDate: Date, endDate: Date, userId?: string) {
     const query = `
       SELECT
         CASE
@@ -159,16 +143,18 @@ export class DashboardService {
         COUNT(id)::int as "count"
       FROM request_logs
       WHERE created_at >= $1 AND created_at <= $2
+        ${userId ? 'AND user_id = $3' : ''}
         AND path NOT LIKE '/api/v1/dashboard%'
         AND path NOT LIKE '/api/v1/newsletter%'
       GROUP BY 1
       ORDER BY "count" DESC
     `;
 
-    return this.prisma.$queryRawUnsafe<any[]>(query, startDate, endDate);
+    const params = userId ? [startDate, endDate, userId] : [startDate, endDate];
+    return this.prisma.$queryRawUnsafe<any[]>(query, ...params);
   }
 
-  async getTimeSeries(startDate: Date, endDate: Date, customInterval?: string) {
+  async getTimeSeries(startDate: Date, endDate: Date, customInterval?: string, userId?: string) {
     let interval = customInterval;
 
     if (!interval) {
@@ -211,13 +197,15 @@ export class DashboardService {
         SUM(CASE WHEN status >= 400 THEN 1 ELSE 0 END)::int as "error"
       FROM request_logs
       WHERE created_at >= $1 AND created_at <= $2
+        ${userId ? 'AND user_id = $3' : ''}
         AND path NOT LIKE '/api/v1/dashboard%'
         AND path NOT LIKE '/api/v1/newsletter%'
       GROUP BY 1
       ORDER BY 1 ASC
     `;
 
-    return this.prisma.$queryRawUnsafe<any[]>(query, startDate, endDate);
+    const params = userId ? [startDate, endDate, userId] : [startDate, endDate];
+    return this.prisma.$queryRawUnsafe<any[]>(query, ...params);
   }
 
   async getProactiveAlerts() {
@@ -344,5 +332,77 @@ export class DashboardService {
     `;
 
     return this.prisma.$queryRawUnsafe<any[]>(query, startDate, endDate);
+  }
+
+  async getDossierData(type: 'internal' | 'client', startDate: Date, endDate: Date, userId?: string) {
+    if (type === 'client') {
+      if (!userId) {
+        throw new Error('userId é obrigatório para dossiê do cliente');
+      }
+
+      const user = await this.prisma.user.findUnique({
+        where: { id: userId },
+        include: { plan: true },
+      });
+
+      if (!user) {
+        throw new Error('Usuário não encontrado');
+      }
+
+      const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+      const monthlyRequests = await this.prisma.requestLog.count({
+        where: {
+          userId,
+          createdAt: { gte: startOfMonth },
+          NOT: [
+            { path: { startsWith: '/api/v1/dashboard' } },
+            { path: { startsWith: '/api/v1/newsletter' } },
+          ],
+        },
+      });
+
+      const [summary, topEndpoints, statusDistribution, timeSeries] = await Promise.all([
+        this.getSummary(startDate, endDate, userId),
+        this.getTopEndpoints(startDate, endDate, 10, userId),
+        this.getStatusDistribution(startDate, endDate, userId),
+        this.getTimeSeries(startDate, endDate, undefined, userId),
+      ]);
+
+      return {
+        type: 'client',
+        user: {
+          id: user.id,
+          username: user.user,
+          email: user.email,
+          status: user.status,
+          planName: user.plan?.name || 'Sem Plano',
+          planReqMonth: user.plan?.reqMonth || 0,
+          monthlyRequests,
+        },
+        summary,
+        topEndpoints,
+        statusDistribution,
+        timeSeries,
+      };
+    } else {
+      const [summary, topUsers, topEndpoints, statusDistribution, databaseLoad, proactiveAlerts] = await Promise.all([
+        this.getSummary(startDate, endDate),
+        this.getTopUsers(startDate, endDate, 10),
+        this.getTopEndpoints(startDate, endDate, 10),
+        this.getStatusDistribution(startDate, endDate),
+        this.getDatabaseLoad(startDate, endDate, 10),
+        this.getProactiveAlerts(),
+      ]);
+
+      return {
+        type: 'internal',
+        summary,
+        topUsers,
+        topEndpoints,
+        statusDistribution,
+        databaseLoad,
+        proactiveAlerts,
+      };
+    }
   }
 }

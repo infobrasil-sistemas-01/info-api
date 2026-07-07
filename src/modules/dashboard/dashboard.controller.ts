@@ -1,4 +1,7 @@
-import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Query, UseGuards, Res, BadRequestException } from '@nestjs/common';
+import type { Response } from 'express';
+import { format } from 'date-fns';
+import { DossierPdfService } from './dossier-pdf.service';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -16,7 +19,10 @@ import { DashboardService } from './dashboard.service';
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 @ApiBearerAuth()
 export class DashboardController {
-  constructor(private readonly dashboardService: DashboardService) {}
+  constructor(
+    private readonly dashboardService: DashboardService,
+    private readonly dossierPdfService: DossierPdfService,
+  ) {}
 
   private parseDates(startDateStr?: string, endDateStr?: string) {
     const endDate = endDateStr ? new Date(endDateStr) : new Date();
@@ -144,5 +150,48 @@ export class DashboardController {
   ) {
     const { startDate, endDate } = this.parseDates(startDateStr, endDateStr);
     return this.dashboardService.getPlanDistribution(startDate, endDate);
+  }
+
+  @Get('dossier')
+  @RequirePermissions({ allOf: ['core.dashboard.view'] })
+  @ApiOperation({
+    summary: 'Gera e faz o download de um dossiê executivo em PDF',
+  })
+  async downloadDossier(
+    @Res() res: Response,
+    @Query('type') type: 'internal' | 'client',
+    @Query('userId') userId?: string,
+    @Query('startDate') startDateStr?: string,
+    @Query('endDate') endDateStr?: string,
+  ) {
+    if (type === 'client' && !userId) {
+      throw new BadRequestException(
+        'userId é obrigatório para dossiê do tipo "client"',
+      );
+    }
+
+    const { startDate, endDate } = this.parseDates(startDateStr, endDateStr);
+    const data = await this.dashboardService.getDossierData(
+      type,
+      startDate,
+      endDate,
+      userId,
+    );
+    const pdfBuffer = await this.dossierPdfService.generateDossierPdf(
+      type,
+      data,
+      startDate,
+      endDate,
+    );
+
+    const filename = `dossie-${type}-${userId || 'geral'}-${format(
+      new Date(),
+      'yyyyMMdd',
+    )}.pdf`;
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
+    res.setHeader('Content-Length', pdfBuffer.length);
+    res.end(pdfBuffer);
   }
 }

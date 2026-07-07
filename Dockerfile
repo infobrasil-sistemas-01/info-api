@@ -30,8 +30,18 @@ FROM node:22-alpine
 
 WORKDIR /app
 
-# Utilitário para healthcheck
-RUN apk add --no-cache curl
+# Utilitário e dependências do Chromium para geração de PDF
+RUN apk add --no-cache \
+      curl \
+      chromium \
+      nss \
+      freetype \
+      harfbuzz \
+      ca-certificates \
+      ttf-freefont
+
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
+    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 
 # Dependências de produção
 COPY package*.json ./

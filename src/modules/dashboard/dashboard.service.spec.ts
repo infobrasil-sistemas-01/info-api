@@ -15,6 +15,9 @@ describe('DashboardService', () => {
       systemHeartbeat: {
         findUnique: jest.fn(),
       },
+      user: {
+        findUnique: jest.fn(),
+      },
       $queryRawUnsafe: jest.fn(),
     };
 
@@ -261,6 +264,110 @@ describe('DashboardService', () => {
         start,
         end,
       );
+    });
+  });
+
+  describe('getDossierData', () => {
+    const start = new Date('2026-07-01');
+    const end = new Date('2026-07-02');
+
+    describe('internal dossier', () => {
+      it('should return aggregated data for all metrics', async () => {
+        // mock for getSummary
+        mockPrisma.requestLog.count.mockResolvedValueOnce(100); // Total
+        mockPrisma.requestLog.groupBy.mockResolvedValueOnce([]); // Active
+        mockPrisma.requestLog.count.mockResolvedValueOnce(95); // Success (2xx)
+        mockPrisma.requestLog.count.mockResolvedValueOnce(0); // Rate limits (429)
+        mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([{ p95: 12 }]); // Latency (getSummary)
+
+        // mock for getTopUsers
+        mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([{ userId: '1', totalRequests: 50 }]); 
+
+        // mock for getTopEndpoints
+        mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([{ path: '/test', totalRequests: 50 }]); 
+
+        // mock for getStatusDistribution
+        mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([{ statusClass: '2xx', count: 95 }]); 
+
+        // mock for getDatabaseLoad
+        mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([{ host: 'localhost', database: 'db', totalRequests: 100 }]); 
+
+        // mock for getProactiveAlerts
+        mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([]);
+
+        const result = await service.getDossierData('internal', start, end);
+
+        expect(result.type).toBe('internal');
+        expect(result.summary).toBeDefined();
+        expect(result.topUsers).toBeDefined();
+        expect(result.topEndpoints).toBeDefined();
+        expect(result.statusDistribution).toBeDefined();
+        expect(result.databaseLoad).toBeDefined();
+        expect(result.proactiveAlerts).toBeDefined();
+      });
+    });
+
+    describe('client dossier', () => {
+      it('should throw error if userId is missing', async () => {
+        await expect(service.getDossierData('client', start, end)).rejects.toThrow(
+          'userId é obrigatório para dossiê do cliente',
+        );
+      });
+
+      it('should throw error if user does not exist', async () => {
+        mockPrisma.user.findUnique.mockResolvedValueOnce(null);
+        await expect(service.getDossierData('client', start, end, 'user-id')).rejects.toThrow(
+          'Usuário não encontrado',
+        );
+      });
+
+      it('should return user metrics if user exists', async () => {
+        const mockUser = {
+          id: 'user-id',
+          user: 'test-client',
+          email: 'test@client.com',
+          status: true,
+          plan: {
+            name: 'Plano Pro',
+            reqMonth: 10000,
+          },
+        };
+        mockPrisma.user.findUnique.mockResolvedValueOnce(mockUser);
+        mockPrisma.requestLog.count.mockResolvedValueOnce(500); // monthlyRequests count
+
+        // mock for getSummary(userId)
+        mockPrisma.requestLog.count.mockResolvedValueOnce(200); // Total
+        mockPrisma.requestLog.groupBy.mockResolvedValueOnce([]); // Active
+        mockPrisma.requestLog.count.mockResolvedValueOnce(190); // Success (2xx)
+        mockPrisma.requestLog.count.mockResolvedValueOnce(2); // Rate limits (429)
+        mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([{ p95: 10 }]); // Latency
+
+        // mock for getTopEndpoints(userId)
+        mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([{ path: '/test', totalRequests: 200 }]);
+
+        // mock for getStatusDistribution(userId)
+        mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([{ statusClass: '2xx', count: 190 }]);
+
+        // mock for getTimeSeries(userId)
+        mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([{ timestamp: '2026-07-01', count: 200, success: 190, error: 10 }]);
+
+        const result = await service.getDossierData('client', start, end, 'user-id');
+
+        expect(result.type).toBe('client');
+        expect(result.user).toEqual({
+          id: 'user-id',
+          username: 'test-client',
+          email: 'test@client.com',
+          status: true,
+          planName: 'Plano Pro',
+          planReqMonth: 10000,
+          monthlyRequests: 500,
+        });
+        expect(result.summary).toBeDefined();
+        expect(result.topEndpoints).toBeDefined();
+        expect(result.statusDistribution).toBeDefined();
+        expect(result.timeSeries).toBeDefined();
+      });
     });
   });
 });
