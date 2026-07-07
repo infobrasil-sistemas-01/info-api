@@ -26,8 +26,6 @@ export class DossierPdfService {
         '--disable-setuid-sandbox',
         '--disable-dev-shm-usage',
         '--disable-gpu',
-        '--no-zygote',
-        '--single-process',
         '--font-render-hinting=none',
         '--enable-font-antialiasing',
         '--enable-subpixel-positioning',
