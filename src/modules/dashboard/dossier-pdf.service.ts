@@ -286,10 +286,10 @@ export class DossierPdfService {
       <tr>
         <td style="font-family: monospace; font-weight: 600; color: var(--slate-900);">${ep.method}</td>
         <td style="font-family: monospace;">${ep.path}</td>
-        <td class="text-right">${ep.totalRequests.toLocaleString()}</td>
-        <td class="text-right ${ep.successRate >= 95 ? 'text-success' : 'text-error'}">${ep.successRate.toFixed(1)}%</td>
-        <td class="text-right">${ep.avgLatency.toFixed(0)} ms</td>
-        <td class="text-right">${ep.p95Latency.toFixed(0)} ms</td>
+        <td class="text-right">${(ep.totalRequests ?? 0).toLocaleString()}</td>
+        <td class="text-right ${(ep.successRate ?? 0) >= 95 ? 'text-success' : 'text-error'}">${(ep.successRate ?? 0).toFixed(1)}%</td>
+        <td class="text-right">${(ep.avgLatency ?? 0).toFixed(0)} ms</td>
+        <td class="text-right">${(ep.p95Latency ?? 0).toFixed(0)} ms</td>
       </tr>
     `).join('');
 
@@ -419,8 +419,8 @@ export class DossierPdfService {
         <td style="font-weight: 600; color: var(--slate-900);">${user.username}</td>
         <td>${user.email || '-'}</td>
         <td>${user.planName}</td>
-        <td class="text-right">${user.monthlyRequests.toLocaleString()} / ${user.planReqMonth.toLocaleString()}</td>
-        <td class="text-right" style="font-weight: 700; color: var(--red-600);">${user.usagePercentage.toFixed(1)}%</td>
+        <td class="text-right">${(user.monthlyRequests ?? 0).toLocaleString()} / ${(user.planReqMonth ?? 0).toLocaleString()}</td>
+        <td class="text-right" style="font-weight: 700; color: var(--red-600);">${(user.usagePercentage ?? 0).toFixed(1)}%</td>
       </tr>
     `).join('');
 
@@ -428,9 +428,9 @@ export class DossierPdfService {
       <tr>
         <td style="font-weight: 600; color: var(--slate-900);">${user.username}</td>
         <td>${user.planName || 'Sem Plano'}</td>
-        <td class="text-right">${user.totalRequests.toLocaleString()}</td>
-        <td class="text-right ${user.errorRate >= 5 ? 'text-error' : 'text-success'}">${user.errorRate.toFixed(1)}%</td>
-        <td class="text-right">${user.monthlyRequests.toLocaleString()}</td>
+        <td class="text-right">${(user.totalRequests ?? 0).toLocaleString()}</td>
+        <td class="text-right ${(user.errorRate ?? 0) >= 5 ? 'text-error' : 'text-success'}">${(user.errorRate ?? 0).toFixed(1)}%</td>
+        <td class="text-right">${(user.monthlyRequests ?? 0).toLocaleString()}</td>
       </tr>
     `).join('');
 
@@ -446,10 +446,10 @@ export class DossierPdfService {
       <tr>
         <td style="font-family: monospace; font-weight: 600; color: var(--slate-900);">${ep.method}</td>
         <td style="font-family: monospace;">${ep.path}</td>
-        <td class="text-right">${ep.totalRequests.toLocaleString()}</td>
-        <td class="text-right ${ep.successRate >= 95 ? 'text-success' : 'text-error'}">${ep.successRate.toFixed(1)}%</td>
-        <td class="text-right">${ep.avgLatency.toFixed(0)} ms</td>
-        <td class="text-right">${ep.p95Latency.toFixed(0)} ms</td>
+        <td class="text-right">${(ep.totalRequests ?? 0).toLocaleString()}</td>
+        <td class="text-right ${(ep.successRate ?? 0) >= 95 ? 'text-success' : 'text-error'}">${(ep.successRate ?? 0).toFixed(1)}%</td>
+        <td class="text-right">${(ep.avgLatency ?? 0).toFixed(0)} ms</td>
+        <td class="text-right">${(ep.p95Latency ?? 0).toFixed(0)} ms</td>
       </tr>
     `).join('');
 
