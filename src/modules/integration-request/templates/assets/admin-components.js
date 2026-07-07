@@ -143,6 +143,9 @@ const Components = {
             <td>
                 <div style="display: flex; gap: 8px;">
                     <button class="btn btn-outline btn-sm" onclick="UI.openUserModal('${u.id}')">Editar</button>
+                    <button id="btn-export-user-${u.id}" class="btn btn-outline btn-sm" onclick="Data.downloadClientDossier('${u.id}', '${u.user}')" title="Exportar Dossiê do Cliente (PDF)" style="display: inline-flex; align-items: center; justify-content: center; padding: 4px 8px;">
+                        <i class='bx bxs-file-pdf' style="font-size: 1.1rem; color: #ef4444;"></i>
+                    </button>
                     <button class="btn btn-danger btn-sm" onclick="Data.deleteUser('${u.id}')">Excluir</button>
                 </div>
             </td>
@@ -481,6 +484,11 @@ const Components = {
               ${u.errorRate}%
           </td>
           <td style="padding: 10px;">${statusBadge}</td>
+          <td style="padding: 10px; text-align: center;">
+              <button id="btn-export-client-${u.userId}" class="btn btn-outline" onclick="Data.downloadClientDossier('${u.userId}', '${u.username}')" title="Exportar Dossiê do Cliente (PDF)" style="padding: 6px 10px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center;">
+                  <i class='bx bxs-file-pdf' style="font-size: 1.1rem; color: #ef4444;"></i>
+              </button>
+          </td>
       </tr>
     `;
   },
@@ -601,6 +609,9 @@ const Components = {
               <button class="btn btn-outline" onclick="Data.fetchDashboard()" title="Atualizar dados" style="padding: 10px; border-radius: 10px;">
                   <i class='bx bx-refresh' style="font-size: 1.2rem;"></i>
               </button>
+              <button id="btn-export-dossier" class="btn btn-primary" onclick="Data.downloadInternalDossier()" title="Exportar Dossiê Geral (PDF)" style="padding: 10px 16px; border-radius: 10px; display: flex; align-items: center; gap: 8px; font-weight: 600;">
+                  <i class='bx bxs-file-pdf' style="font-size: 1.2rem;"></i> Exportar Dossiê
+              </button>
           </div>
       </div>
 
@@ -680,10 +691,11 @@ const Components = {
                           <th style="text-align: left; padding: 10px; width: 220px; color: var(--text-muted);">Progresso do Limite Mensal</th>
                           <th style="text-align: center; padding: 10px; width: 100px; color: var(--text-muted);">Taxa Erro</th>
                           <th style="text-align: left; padding: 10px; width: 100px; color: var(--text-muted);">Status</th>
+                          <th style="text-align: center; padding: 10px; width: 100px; color: var(--text-muted);">Dossiê</th>
                       </tr>
                   </thead>
                   <tbody>
-                      ${topUsers.map(Components.DashboardTopUserRow).join('') || '<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 20px;">Nenhum log de requisição encontrado.</td></tr>'}
+                      ${topUsers.map(Components.DashboardTopUserRow).join('') || '<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 20px;">Nenhum log de requisição encontrado.</td></tr>'}
                   </tbody>
               </table>
           </div>
@@ -801,8 +813,6 @@ const Components = {
           </div>
       </div>
 
-      <!-- Linha 5: HTTP Request Logs (Sentry Style) -->
-      <div class="card" style="margin-top: 2rem; padding: 1.5rem;">
       `;
   },
 };

@@ -394,6 +394,95 @@ const Data = {
         }
     },
 
+    getDateRange() {
+        const dateFilter = document.getElementById('dashboard-date-filter')?.value || '30days';
+        let startDate, endDate;
+        const now = new Date();
+        if (dateFilter === '1h') {
+            startDate = new Date(now.getTime() - 1 * 60 * 60 * 1000);
+        } else if (dateFilter === '6h') {
+            startDate = new Date(now.getTime() - 6 * 60 * 60 * 1000);
+        } else if (dateFilter === '24h') {
+            startDate = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+        } else if (dateFilter === '7days') {
+            startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        } else {
+            startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+        }
+        endDate = now;
+        return { startStr: startDate.toISOString(), endStr: endDate.toISOString() };
+    },
+
+    async downloadInternalDossier() {
+        const btn = document.getElementById('btn-export-dossier');
+        let originalHtml = '';
+        if (btn) {
+            originalHtml = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<i class='bx bx-loader-alt bx-spin' style="font-size: 1.2rem;"></i> Gerando...`;
+        }
+
+        try {
+            const { startStr, endStr } = this.getDateRange();
+            const res = await this.fetch(`${API_URL}/dashboard/dossier?type=internal&startDate=${startStr}&endDate=${endStr}`);
+            if (res.ok) {
+                const blob = await res.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `dossie-interno-${new Date().toISOString().slice(0, 10)}.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url);
+            }
+        } catch (error) {
+            console.error('Erro ao baixar dossiê:', error);
+            alert('Erro ao gerar e baixar o dossiê interno.');
+        } finally {
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+            }
+        }
+    },
+
+    async downloadClientDossier(userId, username) {
+        const btnTop = document.getElementById(`btn-export-client-${userId}`);
+        const btnUser = document.getElementById(`btn-export-user-${userId}`);
+        const btns = [btnTop, btnUser].filter(b => b !== null);
+        const originalHtmls = btns.map(b => b.innerHTML);
+
+        btns.forEach(b => {
+            b.disabled = true;
+            b.innerHTML = `<i class='bx bx-loader-alt bx-spin' style="font-size: 1.1rem;"></i>`;
+        });
+
+        try {
+            const { startStr, endStr } = this.getDateRange();
+            const res = await this.fetch(`${API_URL}/dashboard/dossier?type=client&userId=${userId}&startDate=${startStr}&endDate=${endStr}`);
+            if (res.ok) {
+                const blob = await res.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `dossie-cliente-${username.toLowerCase()}-${new Date().toISOString().slice(0, 10)}.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url);
+            }
+        } catch (error) {
+            console.error('Erro ao baixar dossiê do cliente:', error);
+            alert(`Erro ao gerar e baixar o dossiê para ${username}.`);
+        } finally {
+            btns.forEach((b, index) => {
+                b.disabled = false;
+                b.innerHTML = originalHtmls[index];
+            });
+        }
+    },
+
     renderDashboardCharts(statusDist, timeSeries) {
         if (statusDist) {
             const statusLabels = statusDist.map(s => s.statusClass);
