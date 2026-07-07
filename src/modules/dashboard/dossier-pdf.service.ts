@@ -24,6 +24,10 @@ export class DossierPdfService {
       args: [
         '--no-sandbox',
         '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-gpu',
+        '--no-zygote',
+        '--single-process',
         '--font-render-hinting=none',
         '--enable-font-antialiasing',
         '--enable-subpixel-positioning',
@@ -46,7 +50,7 @@ export class DossierPdfService {
           headerTemplate: `
             <div style="font-family: 'Inter', sans-serif; font-size: 8px; width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; color: #64748b; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; margin-top: 10px;">
               <span style="font-weight: 700; color: #0f172a;">Info<span style="color: #059669;">API</span> - ${title}</span>
-              <span>Período: ${format(startDate, 'dd/MM/yyyy')} a ${format(endDate, 'dd/MM/yyyy')}</span>
+              <span>Período: ${this.safeFormat(startDate, 'dd/MM/yyyy')} a ${this.safeFormat(endDate, 'dd/MM/yyyy')}</span>
             </div>
           `,
           footerTemplate: `
@@ -75,8 +79,8 @@ export class DossierPdfService {
   }
 
   private compileHtml(type: 'internal' | 'client', data: any, startDate: Date, endDate: Date): string {
-    const formattedStart = format(startDate, "dd 'de' MMMM 'de' yyyy", { locale: ptBR });
-    const formattedEnd = format(endDate, "dd 'de' MMMM 'de' yyyy", { locale: ptBR });
+    const formattedStart = this.safeFormat(startDate, "dd 'de' MMMM 'de' yyyy", { locale: ptBR });
+    const formattedEnd = this.safeFormat(endDate, "dd 'de' MMMM 'de' yyyy", { locale: ptBR });
 
     const brandingStyles = `
       :root {
@@ -674,7 +678,7 @@ export class DossierPdfService {
     const xLabelsHtml = timeSeries.map((d, i) => {
       if (i % xLabelStep !== 0 && i !== timeSeries.length - 1) return '';
       const x = getX(i);
-      const labelDate = format(new Date(d.timestamp), 'dd/MM');
+      const labelDate = this.safeFormat(d.timestamp, 'dd/MM');
       return `
         <text x="${x}" y="${height - 5}" fill="#94a3b8" font-size="8" text-anchor="middle" font-family="Inter">${labelDate}</text>
         <line x1="${x}" y1="${padding.top + chartHeight}" x2="${x}" y2="${padding.top + chartHeight + 4}" stroke="#cbd5e1" stroke-width="1" />
@@ -722,5 +726,17 @@ export class DossierPdfService {
         ` : ''}
       </div>
     `;
+  }
+
+  private safeFormat(date: Date | string | number, formatStr: string, options?: any): string {
+    try {
+      const parsed = new Date(date);
+      if (!date || isNaN(parsed.getTime())) {
+        return '--/--/----';
+      }
+      return format(parsed, formatStr, options);
+    } catch {
+      return '--/--/----';
+    }
   }
 }
