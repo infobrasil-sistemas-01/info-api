@@ -144,7 +144,7 @@ const Components = {
                 <div style="display: flex; gap: 8px;">
                     <button class="btn btn-outline btn-sm" onclick="UI.openUserModal('${u.id}')">Editar</button>
                     <button id="btn-export-user-${u.id}" class="btn btn-outline btn-sm" onclick="Data.downloadClientDossier('${u.id}', '${u.user}')" title="Exportar Dossiê do Cliente (PDF)" style="display: inline-flex; align-items: center; justify-content: center; padding: 4px 8px;">
-                        <i class='bx bxs-file-pdf' style="font-size: 1.1rem; color: #ef4444;"></i>
+                        <i class='bx bxs-file-pdf' style="font-size: 1.1rem; color: #f59e0b;"></i>
                     </button>
                     <button class="btn btn-danger btn-sm" onclick="Data.deleteUser('${u.id}')">Excluir</button>
                 </div>
@@ -486,7 +486,7 @@ const Components = {
           <td style="padding: 10px;">${statusBadge}</td>
           <td style="padding: 10px; text-align: center;">
               <button id="btn-export-client-${u.userId}" class="btn btn-outline" onclick="Data.downloadClientDossier('${u.userId}', '${u.username}')" title="Exportar Dossiê do Cliente (PDF)" style="padding: 6px 10px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center;">
-                  <i class='bx bxs-file-pdf' style="font-size: 1.1rem; color: #ef4444;"></i>
+                  <i class='bx bxs-file-pdf' style="font-size: 1.1rem; color: #f59e0b;"></i>
               </button>
           </td>
       </tr>
@@ -606,11 +606,11 @@ const Components = {
                   <option value="7days">Últimos 7 dias</option>
                   <option value="30days" selected>Últimos 30 dias</option>
               </select>
+              <button id="btn-export-dossier" class="btn" onclick="Data.downloadInternalDossier()" title="Exportar Dossiê Geral (PDF)" style="background: #f59e0b; color: white; padding: 10px 16px; border-radius: 10px; display: flex; align-items: center; gap: 8px; font-weight: 600; width: auto;">
+                  <i class='bx bxs-file-pdf' style="font-size: 1.2rem;"></i> Exportar Dossiê
+              </button>
               <button class="btn btn-outline" onclick="Data.fetchDashboard()" title="Atualizar dados" style="padding: 10px; border-radius: 10px;">
                   <i class='bx bx-refresh' style="font-size: 1.2rem;"></i>
-              </button>
-              <button id="btn-export-dossier" class="btn btn-primary" onclick="Data.downloadInternalDossier()" title="Exportar Dossiê Geral (PDF)" style="padding: 10px 16px; border-radius: 10px; display: flex; align-items: center; gap: 8px; font-weight: 600;">
-                  <i class='bx bxs-file-pdf' style="font-size: 1.2rem;"></i> Exportar Dossiê
               </button>
           </div>
       </div>
