@@ -25,6 +25,9 @@ import {
   ProductBarcodeResponseDto,
 } from './dto/product-response.dto';
 
+import { GetProductsQueryDto } from './dto/get-products-query.dto';
+import { GetProductQueryDto } from './dto/get-product-query.dto';
+
 @Controller('products')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
@@ -52,69 +55,9 @@ export class ProductController {
     status: 401,
     description: 'Token de autenticação inválido ou ausente.',
   })
-  @ApiQuery({
-    name: 'page',
-    required: false,
-    type: Number,
-    description: 'Número de página para paginação',
-  })
-  @ApiQuery({
-    name: 'pageSize',
-    required: false,
-    type: Number,
-    description: 'Número de itens por página',
-  })
-  @ApiQuery({
-    name: 'group',
-    required: false,
-    type: Number,
-    description: 'Código do grupo para filtrar produtos',
-  })
-  @ApiQuery({
-    name: 'brand',
-    required: false,
-    type: Number,
-    description: 'Código da marca para filtrar produtos',
-  })
-  @ApiQuery({
-    name: 'minStock',
-    required: false,
-    type: Number,
-    description: 'Quantidade mínima em estoque para filtrar produtos',
-  })
-  @ApiQuery({
-    name: 'search',
-    required: false,
-    type: String,
-    description: 'Termo de busca para filtrar produtos por descrição',
-  })
-  @ApiQuery({
-    name: 'storeId',
-    required: true,
-    type: Number,
-    description: 'Código da loja para buscar os estoques dos produtos',
-    default: 1,
-    example: 1,
-  })
-  @ApiQuery({
-    name: 'priceTable',
-    required: false,
-    type: Number,
-    description:
-      'Código da tabela de preço para buscar os preços dos produtos. Se não informado, será usado o valor 1.',
-    default: 1,
-    example: 1,
-  })
   getProducts(
     @Req() req: ReqWithAuthContext,
-    @Query('storeId') storeId: number,
-    @Query('page') page?: number,
-    @Query('pageSize') pageSize?: number,
-    @Query('priceTable') priceTable?: number,
-    @Query('group') group?: number,
-    @Query('brand') brand?: number,
-    @Query('minStock') minStock?: number,
-    @Query('search') search?: string,
+    @Query() query: GetProductsQueryDto,
   ) {
     const credentialsId = req.authContext?.credentialsId;
 
@@ -124,14 +67,14 @@ export class ProductController {
 
     return this.productService.get(
       credentialsId,
-      storeId,
-      page,
-      pageSize,
-      priceTable,
-      group,
-      brand,
-      minStock,
-      search,
+      query.storeId,
+      query.page,
+      query.pageSize,
+      query.priceTable,
+      query.group,
+      query.brand,
+      query.minStock,
+      query.search,
     );
   }
 
@@ -150,24 +93,6 @@ export class ProductController {
     type: Number,
     description: 'ID do produto a ser retornado',
   })
-  @ApiQuery({
-    name: 'priceTable',
-    required: false,
-    type: Number,
-    description:
-      'Código da tabela de preço para buscar os preços dos produtos. Se não informado, será usado o valor 1.',
-    default: 1,
-    example: 1,
-  })
-  @ApiQuery({
-    name: 'storeId',
-    required: false,
-    type: Number,
-    description:
-      'Código da loja para buscar os estoques dos produtos. Se não informado, será usado o valor 1.',
-    default: 1,
-    example: 1,
-  })
   @ApiResponse({
     status: 200,
     description: 'Detalhes do produto retornados com sucesso.',
@@ -184,11 +109,10 @@ export class ProductController {
   async getProductById(
     @Req() req: ReqWithAuthContext,
     @Param('id') id: number,
-    @Query('priceTable') priceTable?: number,
-    @Query('storeId') storeId?: number,
+    @Query() query: GetProductQueryDto,
   ) {
     const credentialsId = req.authContext?.credentialsId;
-    // const storeId = req.authContext?.storeId;
+    let storeId = query.storeId;
 
     if (!credentialsId) {
       throw new Error('Credentials ID not found in token');
@@ -203,7 +127,7 @@ export class ProductController {
       storeId,
       id,
       undefined,
-      priceTable,
+      query.priceTable,
     );
 
     if (!product) {
@@ -240,32 +164,13 @@ export class ProductController {
     status: 401,
     description: 'Token de autenticação inválido ou ausente.',
   })
-  @ApiQuery({
-    name: 'priceTable',
-    required: false,
-    type: Number,
-    description:
-      'Código da tabela de preço para buscar os preços dos produtos. Se não informado, será usado o valor 1.',
-    default: 1,
-    example: 1,
-  })
-  @ApiQuery({
-    name: 'storeId',
-    required: false,
-    type: Number,
-    description:
-      'Código da loja para buscar os estoques dos produtos. Se não informado, será usado o valor 1.',
-    default: 1,
-    example: 1,
-  })
   async getProductByBarcode(
     @Req() req: ReqWithAuthContext,
     @Param('barcode') barcode: number,
-    @Query('priceTable') priceTable?: number,
-    @Query('storeId') storeId?: number,
+    @Query() query: GetProductQueryDto,
   ) {
     const credentialsId = req.authContext?.credentialsId;
-    // const storeId = req.authContext?.storeId;
+    let storeId = query.storeId;
 
     if (!credentialsId) {
       throw new Error('Credentials ID not found in token');
@@ -280,7 +185,7 @@ export class ProductController {
       storeId,
       undefined,
       barcode,
-      priceTable,
+      query.priceTable,
     );
 
     if (!product) {

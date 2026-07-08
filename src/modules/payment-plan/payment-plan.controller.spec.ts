@@ -43,7 +43,7 @@ describe('PaymentPlanController', () => {
     it('should call paymentPlanService.get with parameters', async () => {
       mockPaymentPlanService.get.mockResolvedValue([{ PLP_CODIGO: 1 }]);
 
-      const result = await controller.getPaymentPlans(mockReq, 2, 20);
+      const result = await controller.getPaymentPlans(mockReq, { page: 2, pageSize: 20 });
 
       expect(paymentPlanService.get).toHaveBeenCalledWith('cred-1', 2, 20);
       expect(result).toEqual([{ PLP_CODIGO: 1 }]);

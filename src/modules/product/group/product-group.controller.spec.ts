@@ -46,7 +46,7 @@ describe('ProductGroupController', () => {
     it('should call groupService.get with pagination params', async () => {
       mockGroupService.get.mockResolvedValue([{ id: 1 }, { id: 2 }]);
 
-      const result = await controller.getGroups(mockReq, 2, 10);
+      const result = await controller.getGroups(mockReq, { page: 2, pageSize: 10 });
 
       expect(groupService.get).toHaveBeenCalledWith('cred-1', 2, 10);
       expect(result).toEqual([{ id: 1 }, { id: 2 }]);
@@ -55,7 +55,7 @@ describe('ProductGroupController', () => {
     it('should call groupService.get without pagination when not provided', async () => {
       mockGroupService.get.mockResolvedValue([]);
 
-      await controller.getGroups(mockReq);
+      await controller.getGroups(mockReq, {});
 
       expect(groupService.get).toHaveBeenCalledWith(
         'cred-1',

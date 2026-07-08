@@ -29,6 +29,8 @@ import { ProductBrandResponseDto } from '../dto/product-response.dto';
 import { CreateBrandDto } from './dto/create-brand.dto';
 import { UpdateBrandDto } from './dto/update-brand.dto';
 
+import { GetProductBrandsQueryDto } from './dto/get-product-brands-query.dto';
+
 @Controller('products/brands')
 export class ProductBrandController {
   constructor(private readonly brandService: ProductBrandService) {}
@@ -56,22 +58,9 @@ export class ProductBrandController {
     status: 401,
     description: 'Token de autenticação inválido ou ausente.',
   })
-  @ApiQuery({
-    name: 'page',
-    required: false,
-    type: Number,
-    description: 'Número de página para paginação',
-  })
-  @ApiQuery({
-    name: 'pageSize',
-    required: false,
-    type: Number,
-    description: 'Número de itens por página',
-  })
   getBrands(
     @Req() req: ReqWithAuthContext,
-    @Query('page') page?: number,
-    @Query('pageSize') pageSize?: number,
+    @Query() query: GetProductBrandsQueryDto,
   ) {
     const credentialsId = req.authContext?.credentialsId;
 
@@ -79,7 +68,7 @@ export class ProductBrandController {
       throw new Error('Credentials ID not found in token');
     }
 
-    return this.brandService.get(credentialsId, page, pageSize);
+    return this.brandService.get(credentialsId, query.page, query.pageSize);
   }
 
   @Post()

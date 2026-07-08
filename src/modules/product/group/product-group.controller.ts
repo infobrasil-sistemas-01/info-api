@@ -29,6 +29,8 @@ import { ProductGroupResponseDto } from '../dto/product-response.dto';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
 
+import { GetProductGroupsQueryDto } from './dto/get-product-groups-query.dto';
+
 @Controller('products/groups')
 export class ProductGroupController {
   constructor(private readonly groupService: ProductGroupService) {}
@@ -56,22 +58,9 @@ export class ProductGroupController {
     status: 401,
     description: 'Token de autenticação inválido ou ausente.',
   })
-  @ApiQuery({
-    name: 'page',
-    required: false,
-    type: Number,
-    description: 'Número de página para paginação',
-  })
-  @ApiQuery({
-    name: 'pageSize',
-    required: false,
-    type: Number,
-    description: 'Número de itens por página',
-  })
   getGroups(
     @Req() req: ReqWithAuthContext,
-    @Query('page') page?: number,
-    @Query('pageSize') pageSize?: number,
+    @Query() query: GetProductGroupsQueryDto,
   ) {
     const credentialsId = req.authContext?.credentialsId;
 
@@ -79,7 +68,7 @@ export class ProductGroupController {
       throw new Error('Credentials ID not found in token');
     }
 
-    return this.groupService.get(credentialsId, page, pageSize);
+    return this.groupService.get(credentialsId, query.page, query.pageSize);
   }
 
   @Post()

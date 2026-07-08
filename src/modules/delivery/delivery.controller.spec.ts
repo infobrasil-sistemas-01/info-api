@@ -72,7 +72,7 @@ describe('DeliveryController', () => {
       const mockDelivery = { VEN_NUMERO: 12345, ENT_NUMERO: 100, items: [] };
       mockDeliveryService.getById.mockResolvedValue(mockDelivery);
 
-      const result = await controller.getDeliveryById(mockReq, 100, 1);
+      const result = await controller.getDeliveryById(mockReq, 100, { storeId: 1 });
 
       expect(deliveryService.getById).toHaveBeenCalledWith('cred-1', 100, 1);
       expect(result).toEqual(mockDelivery);
@@ -81,7 +81,7 @@ describe('DeliveryController', () => {
     it('should throw NotFoundException if delivery is not found', async () => {
       mockDeliveryService.getById.mockResolvedValue(null);
 
-      await expect(controller.getDeliveryById(mockReq, 999, 1)).rejects.toThrow(
+      await expect(controller.getDeliveryById(mockReq, 999, { storeId: 1 })).rejects.toThrow(
         NotFoundException,
       );
     });

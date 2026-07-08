@@ -13,6 +13,8 @@ import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
 
 import { PaymentPlanResponseDto } from './dto/payment-plan-response.dto';
 
+import { GetPaymentPlansQueryDto } from './dto/get-payment-plans-query.dto';
+
 @Controller('payment-plans')
 export class PaymentPlanController {
   constructor(private readonly paymentPlanService: PaymentPlanService) {}
@@ -40,22 +42,9 @@ export class PaymentPlanController {
     status: 401,
     description: 'Token de autenticação inválido ou ausente.',
   })
-  @ApiQuery({
-    name: 'page',
-    required: false,
-    type: Number,
-    description: 'Número de página para paginação',
-  })
-  @ApiQuery({
-    name: 'pageSize',
-    required: false,
-    type: Number,
-    description: 'Número de itens por página',
-  })
   getPaymentPlans(
     @Req() req: ReqWithAuthContext,
-    @Query('page') page?: number,
-    @Query('pageSize') pageSize?: number,
+    @Query() query: GetPaymentPlansQueryDto,
   ) {
     const credentialsId = req.authContext?.credentialsId;
 
@@ -63,6 +52,6 @@ export class PaymentPlanController {
       throw new Error('Credentials ID not found in token');
     }
 
-    return this.paymentPlanService.get(credentialsId, page, pageSize);
+    return this.paymentPlanService.get(credentialsId, query.page, query.pageSize);
   }
 }

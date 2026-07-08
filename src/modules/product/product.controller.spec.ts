@@ -45,17 +45,16 @@ describe('ProductController', () => {
     it('should call productService.get with all parameters', async () => {
       mockProductService.get.mockResolvedValue([{ id: 1 }, { id: 2 }]);
 
-      const result = await controller.getProducts(
-        mockReq,
-        1, // storeId
-        2, // page
-        10, // pageSize
-        1, // priceTable
-        2, // group
-        5, // brand
-        undefined, // minStock
-        'search term', // search
-      );
+      const result = await controller.getProducts(mockReq, {
+        storeId: 1,
+        page: 2,
+        pageSize: 10,
+        priceTable: 1,
+        group: 2,
+        brand: 5,
+        minStock: undefined,
+        search: 'search term',
+      });
 
       expect(productService.get).toHaveBeenCalledWith(
         'cred-1',
@@ -74,7 +73,7 @@ describe('ProductController', () => {
     it('should call productService.get without optional params', async () => {
       mockProductService.get.mockResolvedValue([]);
 
-      await controller.getProducts(mockReq, 1);
+      await controller.getProducts(mockReq, { storeId: 1 });
 
       expect(productService.get).toHaveBeenCalledWith(
         'cred-1',
@@ -95,12 +94,9 @@ describe('ProductController', () => {
       const mockProduct = { id: 123, name: 'Product 1' };
       mockProductService.getUnique.mockResolvedValue(mockProduct);
 
-      const result = await controller.getProductById(
-        mockReq,
-        123,
-        undefined,
-        1,
-      );
+      const result = await controller.getProductById(mockReq, 123, {
+        storeId: 1,
+      });
 
       expect(productService.getUnique).toHaveBeenCalledWith(
         'cred-1',
@@ -115,7 +111,7 @@ describe('ProductController', () => {
     it('should throw NotFoundException when product not found', async () => {
       mockProductService.getUnique.mockResolvedValue(null);
 
-      await expect(controller.getProductById(mockReq, 999)).rejects.toThrow(
+      await expect(controller.getProductById(mockReq, 999, {})).rejects.toThrow(
         NotFoundException,
       );
     });
@@ -126,12 +122,9 @@ describe('ProductController', () => {
       const mockProduct = { id: 1, barcode: '123456789' };
       mockProductService.getUnique.mockResolvedValue(mockProduct);
 
-      const result = await controller.getProductByBarcode(
-        mockReq,
-        123456789,
-        undefined,
-        1,
-      );
+      const result = await controller.getProductByBarcode(mockReq, 123456789, {
+        storeId: 1,
+      });
 
       expect(productService.getUnique).toHaveBeenCalledWith(
         'cred-1',
@@ -147,7 +140,7 @@ describe('ProductController', () => {
       mockProductService.getUnique.mockResolvedValue(null);
 
       await expect(
-        controller.getProductByBarcode(mockReq, 999),
+        controller.getProductByBarcode(mockReq, 999, {}),
       ).rejects.toThrow(NotFoundException);
     });
   });

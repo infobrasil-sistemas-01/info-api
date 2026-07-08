@@ -30,6 +30,9 @@ import { GenerateReceiptDto } from './dto/generate-receipt.dto';
 import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
 
+import { GetOrdersQueryDto } from './dto/get-orders-query.dto';
+import { GetOrderByIdQueryDto } from './dto/get-order-by-id-query.dto';
+
 @Controller('orders')
 export class OrderController {
   constructor(
@@ -131,61 +134,9 @@ export class OrderController {
     description: 'Lista de pedidos retornada com sucesso.',
     type: [OrderResponseDto],
   })
-  @ApiQuery({
-    name: 'page',
-    required: false,
-    type: Number,
-    description: 'Página atual',
-    example: 1,
-    default: 1,
-  })
-  @ApiQuery({
-    name: 'pageSize',
-    required: false,
-    type: Number,
-    description: 'Quantidade de itens por página',
-    example: 10,
-    default: 10,
-  })
-  @ApiQuery({
-    name: 'storeId',
-    required: false,
-    type: Number,
-    description: 'ID da loja (LOJ_CODIGO)',
-  })
-  @ApiQuery({
-    name: 'startDate',
-    required: false,
-    type: String,
-    description: 'Data inicial (YYYY-MM-DD)',
-  })
-  @ApiQuery({
-    name: 'endDate',
-    required: false,
-    type: String,
-    description: 'Data final (YYYY-MM-DD)',
-  })
-  @ApiQuery({
-    name: 'clientId',
-    required: false,
-    type: Number,
-    description: 'ID do cliente (CLI_CODIGO)',
-  })
-  @ApiQuery({
-    name: 'employeeId',
-    required: false,
-    type: Number,
-    description: 'ID do funcionário (FUN_CODIGO)',
-  })
   getOrders(
     @Req() req: ReqWithAuthContext,
-    @Query('page') page?: number,
-    @Query('pageSize') pageSize?: number,
-    @Query('storeId') storeIdQuery?: number,
-    @Query('startDate') startDate?: string,
-    @Query('endDate') endDate?: string,
-    @Query('clientId') clientId?: number,
-    @Query('employeeId') employeeId?: number,
+    @Query() query: GetOrdersQueryDto,
   ) {
     const { credentialsId, storeId: storeIdToken } = req.authContext || {};
 
@@ -193,13 +144,13 @@ export class OrderController {
       throw new Error('Credentials ID not found in token');
     }
 
-    const finalStoreId = storeIdQuery ? Number(storeIdQuery) : storeIdToken;
+    const finalStoreId = query.storeId ? Number(query.storeId) : storeIdToken;
 
-    return this.orderService.get(credentialsId, finalStoreId, page, pageSize, {
-      startDate,
-      endDate,
-      clientId: clientId ? Number(clientId) : undefined,
-      employeeId: employeeId ? Number(employeeId) : undefined,
+    return this.orderService.get(credentialsId, finalStoreId, query.page, query.pageSize, {
+      startDate: query.startDate,
+      endDate: query.endDate,
+      clientId: query.clientId ? Number(query.clientId) : undefined,
+      employeeId: query.employeeId ? Number(query.employeeId) : undefined,
     });
   }
 
@@ -217,12 +168,6 @@ export class OrderController {
     type: Number,
     description: 'ID do pedido a ser retornado',
   })
-  @ApiQuery({
-    name: 'storeId',
-    required: false,
-    type: Number,
-    description: 'ID da loja (LOJ_CODIGO)',
-  })
   @ApiResponse({
     status: 200,
     description: 'Detalhes do pedido retornados com sucesso.',
@@ -239,7 +184,7 @@ export class OrderController {
   async getOrderById(
     @Req() req: ReqWithAuthContext,
     @Param('id') id: number,
-    @Query('storeId') storeIdQuery?: number,
+    @Query() query: GetOrderByIdQueryDto,
   ) {
     const { credentialsId, storeId: storeIdToken } = req.authContext || {};
 
@@ -247,7 +192,7 @@ export class OrderController {
       throw new Error('Credentials ID not found in token');
     }
 
-    const finalStoreId = storeIdQuery ? Number(storeIdQuery) : storeIdToken;
+    const finalStoreId = query.storeId ? Number(query.storeId) : storeIdToken;
 
     const orderData = await this.orderService.getById(
       credentialsId,

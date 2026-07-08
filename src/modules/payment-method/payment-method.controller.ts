@@ -20,6 +20,8 @@ import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
 
 import { PaymentMethodResponseDto } from './dto/payment-method-response.dto';
 
+import { GetPaymentMethodsQueryDto } from './dto/get-payment-methods-query.dto';
+
 @Controller('payment-methods')
 export class PaymentMethodController {
   constructor(private readonly paymentMethodService: PaymentMethodService) {}
@@ -46,22 +48,9 @@ export class PaymentMethodController {
     status: 401,
     description: 'Token de autenticação inválido ou ausente.',
   })
-  @ApiQuery({
-    name: 'page',
-    required: false,
-    type: Number,
-    description: 'Número de página para paginação',
-  })
-  @ApiQuery({
-    name: 'pageSize',
-    required: false,
-    type: Number,
-    description: 'Número de itens por página',
-  })
   getPaymentMethods(
     @Req() req: ReqWithAuthContext,
-    @Query('page') page?: number,
-    @Query('pageSize') pageSize?: number,
+    @Query() query: GetPaymentMethodsQueryDto,
   ) {
     const credentialsId = req.authContext?.credentialsId;
 
@@ -69,6 +58,6 @@ export class PaymentMethodController {
       throw new Error('Credentials ID not found in token');
     }
 
-    return this.paymentMethodService.get(credentialsId, page, pageSize);
+    return this.paymentMethodService.get(credentialsId, query.page, query.pageSize);
   }
 }

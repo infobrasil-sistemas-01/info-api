@@ -24,6 +24,7 @@ import {
 import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
 import { GetDeliveriesQueryDto } from './dto/get-deliveries-query.dto';
+import { GetDeliveryByIdQueryDto } from './dto/get-delivery-by-id-query.dto';
 import { CreateDeliveryDto } from './dto/create-delivery.dto';
 import {
   DeliveryResponseDto,
@@ -108,7 +109,7 @@ export class DeliveryController {
   async getDeliveryById(
     @Req() req: ReqWithAuthContext,
     @Param('id') id: number,
-    @Query('storeId') storeIdQuery?: number,
+    @Query() query: GetDeliveryByIdQueryDto,
   ) {
     const { credentialsId, storeId: storeIdToken } = req.authContext || {};
 
@@ -116,7 +117,7 @@ export class DeliveryController {
       throw new Error('Credentials ID not found in token');
     }
 
-    const finalStoreId = storeIdQuery ? Number(storeIdQuery) : storeIdToken;
+    const finalStoreId = query.storeId ? Number(query.storeId) : storeIdToken;
 
     const delivery = await this.deliveryService.getById(
       credentialsId,

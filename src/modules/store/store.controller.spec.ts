@@ -43,7 +43,12 @@ describe('StoreController', () => {
     it('should call storeService.get with pagination and filter params', async () => {
       mockStoreService.get.mockResolvedValue([{ LOJ_CODIGO: 1 }]);
 
-      const result = await controller.get(mockReq, 2, 10, 5, '12345678000100');
+      const result = await controller.get(mockReq, {
+        page: 2,
+        pageSize: 10,
+        storeId: 5,
+        storeCnpj: '12345678000100',
+      });
 
       expect(storeService.get).toHaveBeenCalledWith(
         'cred-1',
@@ -58,7 +63,7 @@ describe('StoreController', () => {
     it('should call storeService.get with undefined when no query params are provided', async () => {
       mockStoreService.get.mockResolvedValue([]);
 
-      await controller.get(mockReq);
+      await controller.get(mockReq, {});
 
       expect(storeService.get).toHaveBeenCalledWith(
         'cred-1',
@@ -72,7 +77,7 @@ describe('StoreController', () => {
     it('should throw error when credentialsId is missing', async () => {
       const invalidReq = { authContext: {} } as any;
 
-      expect(() => controller.get(invalidReq)).toThrow(
+      expect(() => controller.get(invalidReq, {})).toThrow(
         'Credentials ID not found in token',
       );
     });

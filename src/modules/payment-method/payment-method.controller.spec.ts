@@ -46,7 +46,7 @@ describe('PaymentMethodController', () => {
     it('should call paymentMethodService.get with pagination params', async () => {
       mockPaymentMethodService.get.mockResolvedValue([{ id: 1 }, { id: 2 }]);
 
-      const result = await controller.getPaymentMethods(mockReq, 2, 10);
+      const result = await controller.getPaymentMethods(mockReq, { page: 2, pageSize: 10 });
 
       expect(paymentMethodService.get).toHaveBeenCalledWith('cred-1', 2, 10);
       expect(result).toEqual([{ id: 1 }, { id: 2 }]);
@@ -55,7 +55,7 @@ describe('PaymentMethodController', () => {
     it('should call paymentMethodService.get without pagination when not provided', async () => {
       mockPaymentMethodService.get.mockResolvedValue([]);
 
-      await controller.getPaymentMethods(mockReq);
+      await controller.getPaymentMethods(mockReq, {});
 
       expect(paymentMethodService.get).toHaveBeenCalledWith(
         'cred-1',

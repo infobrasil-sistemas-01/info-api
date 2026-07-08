@@ -13,6 +13,8 @@ import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
 import { StoreResponseDto } from './dto/store-response.dto';
 
+import { GetStoresQueryDto } from './dto/get-stores-query.dto';
+
 @ApiTags('Store')
 @Controller('stores')
 export class StoreController {
@@ -40,36 +42,9 @@ export class StoreController {
     status: 401,
     description: 'Token de autenticação inválido ou ausente.',
   })
-  @ApiQuery({
-    name: 'page',
-    required: false,
-    type: Number,
-    description: 'Número de página para paginação',
-  })
-  @ApiQuery({
-    name: 'pageSize',
-    required: false,
-    type: Number,
-    description: 'Número de itens por página',
-  })
-  @ApiQuery({
-    name: 'storeId',
-    required: false,
-    type: Number,
-    description: 'Código da loja para filtrar',
-  })
-  @ApiQuery({
-    name: 'storeCnpj',
-    required: false,
-    type: String,
-    description: 'CNPJ da loja para filtrar',
-  })
   get(
     @Req() req: ReqWithAuthContext,
-    @Query('page') page?: number,
-    @Query('pageSize') pageSize?: number,
-    @Query('storeId') storeId?: number,
-    @Query('storeCnpj') storeCnpj?: string,
+    @Query() query: GetStoresQueryDto,
   ) {
     const credentialsId = req.authContext?.credentialsId;
 
@@ -79,10 +54,10 @@ export class StoreController {
 
     return this.storeService.get(
       credentialsId,
-      page ? Number(page) : undefined,
-      pageSize ? Number(pageSize) : undefined,
-      storeId ? Number(storeId) : undefined,
-      storeCnpj,
+      query.page ? Number(query.page) : undefined,
+      query.pageSize ? Number(query.pageSize) : undefined,
+      query.storeId ? Number(query.storeId) : undefined,
+      query.storeCnpj,
     );
   }
 }

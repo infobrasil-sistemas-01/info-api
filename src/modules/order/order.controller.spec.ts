@@ -164,7 +164,7 @@ describe('OrderController', () => {
     it('should call orderService.get with pagination params', async () => {
       mockOrderService.get.mockResolvedValue([{ id: 1 }, { id: 2 }]);
 
-      const result = await controller.getOrders(mockReq, 2, 10);
+      const result = await controller.getOrders(mockReq, { page: 2, pageSize: 10 });
 
       expect(orderService.get).toHaveBeenCalledWith('cred-1', 1, 2, 10, {
         clientId: undefined,
@@ -178,7 +178,7 @@ describe('OrderController', () => {
     it('should call orderService.get without pagination when not provided', async () => {
       mockOrderService.get.mockResolvedValue([]);
 
-      await controller.getOrders(mockReq);
+      await controller.getOrders(mockReq, {});
 
       expect(orderService.get).toHaveBeenCalledWith(
         'cred-1',
@@ -203,7 +203,7 @@ describe('OrderController', () => {
       mockOrderService.getById.mockResolvedValue(mockOrder);
       mockOrderItemService.getByOrderId.mockResolvedValue(mockItems);
 
-      const result = await controller.getOrderById(mockReq, 123);
+      const result = await controller.getOrderById(mockReq, 123, {});
 
       expect(orderService.getById).toHaveBeenCalledWith('cred-1', 1, 123);
       expect(orderItemService.getByOrderId).toHaveBeenCalledWith('cred-1', 123);
