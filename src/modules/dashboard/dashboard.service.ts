@@ -385,13 +385,26 @@ export class DashboardService {
         timeSeries,
       };
     } else {
-      const [summary, topUsers, topEndpoints, statusDistribution, databaseLoad, proactiveAlerts] = await Promise.all([
+      const [
+        summary,
+        topUsers,
+        topEndpoints,
+        statusDistribution,
+        databaseLoad,
+        proactiveAlerts,
+        planDistribution,
+        timeSeries,
+        heartbeat,
+      ] = await Promise.all([
         this.getSummary(startDate, endDate),
         this.getTopUsers(startDate, endDate, 10),
         this.getTopEndpoints(startDate, endDate, 10),
         this.getStatusDistribution(startDate, endDate),
         this.getDatabaseLoad(startDate, endDate, 10),
         this.getProactiveAlerts(),
+        this.getPlanDistribution(startDate, endDate),
+        this.getTimeSeries(startDate, endDate),
+        this.getHeartbeatStatus(),
       ]);
 
       return {
@@ -402,6 +415,9 @@ export class DashboardService {
         statusDistribution,
         databaseLoad,
         proactiveAlerts,
+        planDistribution,
+        timeSeries,
+        heartbeat,
       };
     }
   }

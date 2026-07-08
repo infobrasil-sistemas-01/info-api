@@ -295,6 +295,18 @@ describe('DashboardService', () => {
         // mock for getProactiveAlerts
         mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([]);
 
+        // mock for getPlanDistribution
+        mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([{ planName: 'Bronze', totalRequests: 100 }]);
+
+        // mock for getTimeSeries
+        mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([{ timestamp: '2026-07-01', count: 100, success: 95, error: 5 }]);
+
+        // mock for getHeartbeatStatus
+        mockPrisma.systemHeartbeat.findUnique.mockResolvedValueOnce({
+          service: 'log-processor',
+          timestamp: new Date(),
+        });
+
         const result = await service.getDossierData('internal', start, end);
 
         expect(result.type).toBe('internal');
@@ -304,6 +316,9 @@ describe('DashboardService', () => {
         expect(result.statusDistribution).toBeDefined();
         expect(result.databaseLoad).toBeDefined();
         expect(result.proactiveAlerts).toBeDefined();
+        expect(result.planDistribution).toBeDefined();
+        expect(result.timeSeries).toBeDefined();
+        expect(result.heartbeat).toBeDefined();
       });
     });
 

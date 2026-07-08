@@ -143,6 +143,12 @@ export class DossierPdfService {
         background-color: var(--primary-light);
         color: var(--primary-dark);
       }
+      .grid-4 {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+        margin-bottom: 25px;
+      }
       .grid-3 {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -412,6 +418,13 @@ export class DossierPdfService {
   private renderInternalHtml(data: any, start: string, end: string, styles: string): string {
     const successRateStr = data.summary.successRate.toFixed(2);
 
+    const hbStatus = data.heartbeat?.status === 'ACTIVE' ? 'Ativo' : 'Inativo';
+    const hbColor = data.heartbeat?.status === 'ACTIVE' ? 'var(--primary)' : 'var(--red-600)';
+    const hbBg = data.heartbeat?.status === 'ACTIVE' ? 'var(--primary-light)' : 'var(--red-100)';
+    const hbLastSeen = data.heartbeat?.lastSeen
+      ? this.safeFormat(data.heartbeat.lastSeen, 'dd/MM/yyyy HH:mm:ss')
+      : 'Nunca visto';
+
     const alertRows = data.proactiveAlerts.map((user: any) => `
       <tr>
         <td style="font-weight: 600; color: var(--slate-900);">${user.username}</td>
@@ -439,6 +452,19 @@ export class DossierPdfService {
         <td class="text-right" style="font-weight: 700; color: var(--slate-900);">${db.totalRequests.toLocaleString()}</td>
       </tr>
     `).join('');
+
+    const planDistributionRows = (data.planDistribution || []).map((plan: any) => {
+      const pct = data.summary.totalRequests > 0
+        ? (plan.totalRequests / data.summary.totalRequests) * 100
+        : 0;
+      return `
+        <tr>
+          <td style="font-weight: 600; color: var(--slate-900);">${plan.planName}</td>
+          <td class="text-right">${(plan.totalRequests ?? 0).toLocaleString()}</td>
+          <td class="text-right">${pct.toFixed(1)}%</td>
+        </tr>
+      `;
+    }).join('');
 
     const endpointRows = data.topEndpoints.map((ep: any) => `
       <tr>
@@ -478,20 +504,34 @@ export class DossierPdfService {
             </div>
           </div>
 
-          <div style="margin-bottom: 25px;">
-            <p style="margin: 0; color: var(--slate-600);">
-              Este relatório apresenta a visão consolidade e global do uso de APIs corporativas integradas. Compila dados de tráfego, latência, erros, bancos de dados mais exigidos e os clientes que demandam maior suporte comercial devido à proximidade de estouro do limite dos planos.
-              <strong>Período analisado:</strong> ${start} a ${end}.
-            </p>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; background: var(--slate-50); border: 1px solid var(--slate-100); padding: 12px 15px; border-radius: 8px;">
+            <div style="max-width: 70%;">
+              <p style="margin: 0; color: var(--slate-600); font-size: 12px; line-height: 1.6;">
+                Este relatório apresenta a visão consolidada e global do uso de APIs corporativas integradas. Compila dados de tráfego, latência, erros, bancos de dados mais exigidos e os clientes que demandam maior suporte comercial.
+                <strong>Período analisado:</strong> ${start} a ${end}.
+              </p>
+            </div>
+            <div style="text-align: right; border-left: 1px solid var(--slate-200); padding-left: 15px;">
+              <div style="font-size: 9px; color: var(--slate-500); text-transform: uppercase; font-weight: 600;">Status do Log Processor</div>
+              <span class="badge" style="background-color: ${hbBg}; color: ${hbColor}; display: inline-block; margin-top: 4px; font-weight: 700;">
+                ${hbStatus}
+              </span>
+              <div style="font-size: 8px; color: var(--slate-500); margin-top: 4px;">Último pulso: ${hbLastSeen}</div>
+            </div>
           </div>
 
           <!-- Resumo Executivo Geral -->
           <h3 style="border-left: 3px solid var(--slate-900); padding-left: 8px; margin-bottom: 12px; font-size: 14px;">Resumo Operacional Global</h3>
-          <div class="grid-3">
+          <div class="grid-4">
             <div class="card card-stat">
               <div class="stat-label">Volume Geral Reqs</div>
               <div class="stat-val">${data.summary.totalRequests.toLocaleString()}</div>
               <div style="font-size: 9px; color: var(--slate-500);">Todas as integrações</div>
+            </div>
+            <div class="card card-stat">
+              <div class="stat-label">Clientes Ativos</div>
+              <div class="stat-val">${(data.summary.activeUsers ?? 0).toLocaleString()}</div>
+              <div style="font-size: 9px; color: var(--slate-500);">No período selecionado</div>
             </div>
             <div class="card card-stat">
               <div class="stat-label">Disponibilidade / Sucesso</div>
@@ -503,6 +543,12 @@ export class DossierPdfService {
               <div class="stat-val">${data.summary.p95Latency} ms</div>
               <div style="font-size: 9px; color: var(--slate-500);">Média p95 global</div>
             </div>
+          </div>
+
+          <!-- Histórico Temporal de Requisições -->
+          <h3 style="border-left: 3px solid var(--slate-900); padding-left: 8px; margin-bottom: 12px; font-size: 14px;">Evolução Temporal do Consumo Global</h3>
+          <div class="chart-container" style="margin-bottom: 25px;">
+            ${this.generateTimeSeriesSvg(data.timeSeries)}
           </div>
 
           <!-- Alertas Comerciais Proativos (Clientes batendo 80%) -->
@@ -541,20 +587,39 @@ export class DossierPdfService {
             </tbody>
           </table>
 
-          <!-- Carga por Banco de Dados -->
-          <h3 style="border-left: 3px solid var(--slate-900); padding-left: 8px; margin-bottom: 12px; font-size: 14px;">Carga Operacional nos Bancos de Dados (Clientes/Tenants)</h3>
-          <table class="table" style="margin-bottom: 25px;">
-            <thead>
-              <tr>
-                <th>Servidor / Host</th>
-                <th>Nome do Banco de Dados</th>
-                <th class="text-right" style="width: 150px;">Total Requisições</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${dbLoadRows || '<tr><td colspan="3" class="text-center">Nenhum acesso computado.</td></tr>'}
-            </tbody>
-          </table>
+          <!-- Carga Operacional e Distribuição por Planos -->
+          <div class="grid-2" style="margin-top: 15px; margin-bottom: 25px;">
+            <div>
+              <h3 style="border-left: 3px solid var(--slate-900); padding-left: 8px; margin-bottom: 12px; font-size: 14px;">Carga Operacional nos Bancos de Dados (Clientes/Tenants)</h3>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Servidor / Host</th>
+                    <th>Banco de Dados</th>
+                    <th class="text-right">Total Reqs</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${dbLoadRows || '<tr><td colspan="3" class="text-center">Nenhum acesso computado.</td></tr>'}
+                </tbody>
+              </table>
+            </div>
+            <div>
+              <h3 style="border-left: 3px solid var(--slate-900); padding-left: 8px; margin-bottom: 12px; font-size: 14px;">Consumo por Plano Comercial</h3>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Plano</th>
+                    <th class="text-right">Total Acessos</th>
+                    <th class="text-right">Participação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${planDistributionRows || '<tr><td colspan="3" class="text-center">Nenhum plano computado.</td></tr>'}
+                </tbody>
+              </table>
+            </div>
+          </div>
 
           <div class="page-break"></div>
 
