@@ -29,7 +29,7 @@ window.fetch = async function (url, options = {}) {
                     if (newOptions.headers instanceof Headers) {
                         newOptions.headers.set('Authorization', 'Bearer ' + data.access_token);
                     } else if (Array.isArray(newOptions.headers)) {
-                        newOptions.headers = newOptions.headers.map(h => 
+                        newOptions.headers = newOptions.headers.map(h =>
                             h[0].toLowerCase() === 'authorization' ? [h[0], 'Bearer ' + data.access_token] : h
                         );
                     } else {
@@ -430,7 +430,7 @@ const Data = {
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `dossie-interno-${new Date().toISOString().slice(0, 10)}.pdf`;
+                a.download = `dossie-interno-de-${startStr}-a-${endStr}.pdf`;
                 document.body.appendChild(a);
                 a.click();
                 a.remove();
@@ -612,14 +612,14 @@ const Data = {
                         if (xaxis.min && xaxis.max) {
                             const startStr = new Date(xaxis.min).toISOString();
                             const endStr = new Date(xaxis.max).toISOString();
-                            
-                            if (State.currentZoomRange && 
-                                Math.abs(State.currentZoomRange.min - xaxis.min) < 10000 && 
+
+                            if (State.currentZoomRange &&
+                                Math.abs(State.currentZoomRange.min - xaxis.min) < 10000 &&
                                 Math.abs(State.currentZoomRange.max - xaxis.max) < 10000) {
                                 return;
                             }
                             State.currentZoomRange = { min: xaxis.min, max: xaxis.max };
-                            
+
                             State.isUpdatingChart = true;
                             try {
                                 await Data.fetchZoomedTimeSeries(startStr, endStr);
@@ -1367,7 +1367,7 @@ const UI = {
     },
     async sendNewsletter(e) {
         e.preventDefault();
-        
+
         if (!confirm('Deseja disparar esta newsletter agora para TODOS os usuários ativos cadastrados? Essa ação não pode ser desfeita.')) {
             return;
         }
