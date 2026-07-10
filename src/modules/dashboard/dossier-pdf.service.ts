@@ -273,13 +273,13 @@ export class DossierPdfService {
     if (usagePercent >= 100) {
       alertBoxHtml = `
         <div class="alert-box alert-box-danger">
-          <strong>Atenção:</strong> Esta empresa atingiu <strong>${usagePercent.toFixed(1)}%</strong> da franquia mensal do plano (${data.user.monthlyRequests.toLocaleString()} de ${data.user.planReqMonth.toLocaleString()} requisições). O acesso pode sofrer limitações de acordo com a política comercial.
+          <strong>Atenção:</strong> Esta empresa atingiu <strong>${usagePercent.toFixed(1)}%</strong> da franquia mensal do plano (${data.user.monthlyRequests.toLocaleString('pt-BR')} de ${data.user.planReqMonth.toLocaleString('pt-BR')} requisições). O acesso pode sofrer limitações de acordo com a política comercial.
         </div>
       `;
     } else if (usagePercent >= 80) {
       alertBoxHtml = `
         <div class="alert-box alert-box-warning">
-          <strong>Atenção:</strong> Esta empresa atingiu <strong>${usagePercent.toFixed(1)}%</strong> da franquia mensal do plano (${data.user.monthlyRequests.toLocaleString()} de ${data.user.planReqMonth.toLocaleString()} requisições). Sugere-se iniciar negociações de upgrade.
+          <strong>Atenção:</strong> Esta empresa atingiu <strong>${usagePercent.toFixed(1)}%</strong> da franquia mensal do plano (${data.user.monthlyRequests.toLocaleString('pt-BR')} de ${data.user.planReqMonth.toLocaleString('pt-BR')} requisições). Sugere-se iniciar negociações de upgrade.
         </div>
       `;
     }
@@ -290,7 +290,7 @@ export class DossierPdfService {
       <tr>
         <td style="font-family: monospace; font-weight: 600; color: var(--slate-900);">${ep.method}</td>
         <td style="font-family: monospace;">${ep.path}</td>
-        <td class="text-right">${(ep.totalRequests ?? 0).toLocaleString()}</td>
+        <td class="text-right">${(ep.totalRequests ?? 0).toLocaleString('pt-BR')}</td>
         <td class="text-right ${(ep.successRate ?? 0) >= 95 ? 'text-success' : 'text-error'}">${(ep.successRate ?? 0).toFixed(1)}%</td>
         <td class="text-right">${(ep.avgLatency ?? 0).toFixed(0)} ms</td>
         <td class="text-right">${(ep.p95Latency ?? 0).toFixed(0)} ms</td>
@@ -336,17 +336,17 @@ export class DossierPdfService {
           <div class="grid-3">
             <div class="card card-stat">
               <div class="stat-label">Requisições no Período</div>
-              <div class="stat-val">${data.summary.totalRequests.toLocaleString()}</div>
+              <div class="stat-val">${data.summary.totalRequests.toLocaleString('pt-BR')}</div>
               <div style="font-size: 9px; color: var(--slate-500);">Período selecionado</div>
             </div>
             <div class="card card-stat">
               <div class="stat-label">Taxa de Sucesso</div>
               <div class="stat-val ${data.summary.successRate >= 98 ? 'text-success' : 'text-error'}">${successRateStr}%</div>
-              <div style="font-size: 9px; color: var(--slate-500);">${data.summary.rateLimitHits} bloqueios de limite</div>
+              <div style="font-size: 9px; color: var(--slate-500);">${data.summary.rateLimitHits.toLocaleString('pt-BR')} bloqueios de limite</div>
             </div>
             <div class="card card-stat">
               <div class="stat-label">Latência p95</div>
-              <div class="stat-val">${data.summary.p95Latency} ms</div>
+              <div class="stat-val">${data.summary.p95Latency.toLocaleString('pt-BR')} ms</div>
               <div style="font-size: 9px; color: var(--slate-500);">Tempo máximo para 95% das reqs</div>
             </div>
           </div>
@@ -361,11 +361,11 @@ export class DossierPdfService {
               </div>
               <div>
                 <div style="font-size: 9px; color: var(--slate-500); text-transform: uppercase;">Franquia Mensal</div>
-                <div style="font-weight: 700; font-size: 13px; color: var(--slate-900);">${data.user.planReqMonth.toLocaleString()} reqs</div>
+                <div style="font-weight: 700; font-size: 13px; color: var(--slate-900);">${data.user.planReqMonth.toLocaleString('pt-BR')} reqs</div>
               </div>
               <div>
                 <div style="font-size: 9px; color: var(--slate-500); text-transform: uppercase;">Consumo Atual do Mês</div>
-                <div style="font-weight: 700; font-size: 13px; color: var(--slate-900);">${data.user.monthlyRequests.toLocaleString()} reqs</div>
+                <div style="font-weight: 700; font-size: 13px; color: var(--slate-900);">${data.user.monthlyRequests.toLocaleString('pt-BR')} reqs</div>
               </div>
               <div>
                 <div style="font-size: 9px; color: var(--slate-500); text-transform: uppercase;">Utilização</div>
@@ -409,6 +409,49 @@ export class DossierPdfService {
               ${endpointRows || '<tr><td colspan="6" class="text-center">Nenhum endpoint acessado no período.</td></tr>'}
             </tbody>
           </table>
+
+          <!-- Glossário -->
+          <div class="page-break"></div>
+          <h3 style="border-left: 3px solid var(--primary); padding-left: 8px; margin-bottom: 15px; font-size: 14px;">Glossário de Termos</h3>
+          <p style="font-size: 11px; color: var(--slate-600); margin-bottom: 20px; line-height: 1.6;">
+            Este glossário auxilia na interpretação técnica e comercial dos indicadores apresentados neste dossiê de uso.
+          </p>
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div>
+              <strong style="color: var(--slate-900); font-size: 12px;">Requisição (Request)</strong>
+              <p style="margin: 2px 0 0 0; color: var(--slate-600); font-size: 11px; line-height: 1.5;">Qualquer chamada de API realizada pelos sistemas do cliente para consultar ou enviar informações ao Info Vendas.</p>
+            </div>
+            <div>
+              <strong style="color: var(--slate-900); font-size: 12px;">Taxa de Sucesso / Disponibilidade</strong>
+              <p style="margin: 2px 0 0 0; color: var(--slate-600); font-size: 11px; line-height: 1.5;">Percentual de requisições que retornaram resposta bem-sucedida (códigos HTTP da família 2xx/3xx), sem erros graves de sistema.</p>
+            </div>
+            <div>
+              <strong style="color: var(--slate-900); font-size: 12px;">Latência Média</strong>
+              <p style="margin: 2px 0 0 0; color: var(--slate-600); font-size: 11px; line-height: 1.5;">Tempo médio que a API leva para processar uma requisição e enviar a resposta de volta ao cliente, medido em milissegundos (ms).</p>
+            </div>
+            <div>
+              <strong style="color: var(--slate-900); font-size: 12px;">Latência p95</strong>
+              <p style="margin: 2px 0 0 0; color: var(--slate-600); font-size: 11px; line-height: 1.5;">Métrica estatística que representa o tempo de resposta máximo observado em 95% das requisições mais rápidas. Indica a experiência de uso na maioria absoluta das chamadas, ignorando picos de tráfego atípicos.</p>
+            </div>
+            <div>
+              <strong style="color: var(--slate-900); font-size: 12px;">Bloqueios de Limite (Rate Limit / Hit Limit)</strong>
+              <p style="margin: 2px 0 0 0; color: var(--slate-600); font-size: 11px; line-height: 1.5;">Ocorrências em que o cliente ultrapassa o limite acordado de requisições por segundo ou minuto, resultando em bloqueios temporários (HTTP 429) para preservar a estabilidade da infraestrutura.</p>
+            </div>
+            <div>
+              <strong style="color: var(--slate-900); font-size: 12px;">Franquia Mensal (Limite de Contrato)</strong>
+              <p style="margin: 2px 0 0 0; color: var(--slate-600); font-size: 11px; line-height: 1.5;">Volume máximo de requisições mensais acordado no plano comercial do cliente. Consumos acima de 80% do limite sugerem a necessidade de upgrades.</p>
+            </div>
+            <div>
+              <strong style="color: var(--slate-900); font-size: 12px;">Status HTTP (Códigos de Retorno)</strong>
+              <p style="margin: 2px 0 0 0; color: var(--slate-600); font-size: 11px; line-height: 1.5;">Respostas padronizadas do servidor que indicam o resultado do processamento de uma requisição:</p>
+              <ul style="margin: 4px 0 0 15px; padding: 0; color: var(--slate-600); font-size: 11px; list-style-type: disc; line-height: 1.5;">
+                <li><strong>2xx (Sucesso)</strong>: A operação foi realizada corretamente (ex: 200 OK).</li>
+                <li><strong>4xx (Erro do Cliente)</strong>: A requisição contém dados incorretos, faltantes ou o recurso solicitado não existe (ex: 400 Bad Request, 404 Not Found).</li>
+                <li><strong>429 (Too Many Requests)</strong>: Limite de taxa de requisições temporariamente excedido pelo cliente.</li>
+                <li><strong>5xx (Erro do Servidor)</strong>: Ocorreu uma falha inesperada na infraestrutura ou no processamento interno da InfoAPI.</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </body>
       </html>
@@ -430,7 +473,7 @@ export class DossierPdfService {
         <td style="font-weight: 600; color: var(--slate-900);">${user.username}</td>
         <td>${user.email || '-'}</td>
         <td>${user.planName}</td>
-        <td class="text-right">${(user.monthlyRequests ?? 0).toLocaleString()} / ${(user.planReqMonth ?? 0).toLocaleString()}</td>
+        <td class="text-right">${(user.monthlyRequests ?? 0).toLocaleString('pt-BR')} / ${(user.planReqMonth ?? 0).toLocaleString('pt-BR')}</td>
         <td class="text-right" style="font-weight: 700; color: var(--red-600);">${(user.usagePercentage ?? 0).toFixed(1)}%</td>
       </tr>
     `).join('');
@@ -439,9 +482,9 @@ export class DossierPdfService {
       <tr>
         <td style="font-weight: 600; color: var(--slate-900);">${user.username}</td>
         <td>${user.planName || 'Sem Plano'}</td>
-        <td class="text-right">${(user.totalRequests ?? 0).toLocaleString()}</td>
+        <td class="text-right">${(user.totalRequests ?? 0).toLocaleString('pt-BR')}</td>
         <td class="text-right ${(user.errorRate ?? 0) >= 5 ? 'text-error' : 'text-success'}">${(user.errorRate ?? 0).toFixed(1)}%</td>
-        <td class="text-right">${(user.monthlyRequests ?? 0).toLocaleString()}</td>
+        <td class="text-right">${(user.monthlyRequests ?? 0).toLocaleString('pt-BR')}</td>
       </tr>
     `).join('');
 
@@ -449,7 +492,7 @@ export class DossierPdfService {
       <tr>
         <td style="font-family: monospace; font-weight: 600;">${db.host}</td>
         <td>${db.database}</td>
-        <td class="text-right" style="font-weight: 700; color: var(--slate-900);">${db.totalRequests.toLocaleString()}</td>
+        <td class="text-right" style="font-weight: 700; color: var(--slate-900);">${db.totalRequests.toLocaleString('pt-BR')}</td>
       </tr>
     `).join('');
 
@@ -460,7 +503,7 @@ export class DossierPdfService {
       return `
         <tr>
           <td style="font-weight: 600; color: var(--slate-900);">${plan.planName}</td>
-          <td class="text-right">${(plan.totalRequests ?? 0).toLocaleString()}</td>
+          <td class="text-right">${(plan.totalRequests ?? 0).toLocaleString('pt-BR')}</td>
           <td class="text-right">${pct.toFixed(1)}%</td>
         </tr>
       `;
@@ -470,7 +513,7 @@ export class DossierPdfService {
       <tr>
         <td style="font-family: monospace; font-weight: 600; color: var(--slate-900);">${ep.method}</td>
         <td style="font-family: monospace;">${ep.path}</td>
-        <td class="text-right">${(ep.totalRequests ?? 0).toLocaleString()}</td>
+        <td class="text-right">${(ep.totalRequests ?? 0).toLocaleString('pt-BR')}</td>
         <td class="text-right ${(ep.successRate ?? 0) >= 95 ? 'text-success' : 'text-error'}">${(ep.successRate ?? 0).toFixed(1)}%</td>
         <td class="text-right">${(ep.avgLatency ?? 0).toFixed(0)} ms</td>
         <td class="text-right">${(ep.p95Latency ?? 0).toFixed(0)} ms</td>
@@ -525,22 +568,22 @@ export class DossierPdfService {
           <div class="grid-4">
             <div class="card card-stat">
               <div class="stat-label">Volume Geral Reqs</div>
-              <div class="stat-val">${data.summary.totalRequests.toLocaleString()}</div>
+              <div class="stat-val">${data.summary.totalRequests.toLocaleString('pt-BR')}</div>
               <div style="font-size: 9px; color: var(--slate-500);">Todas as integrações</div>
             </div>
             <div class="card card-stat">
               <div class="stat-label">Clientes Ativos</div>
-              <div class="stat-val">${(data.summary.activeUsers ?? 0).toLocaleString()}</div>
+              <div class="stat-val">${(data.summary.activeUsers ?? 0).toLocaleString('pt-BR')}</div>
               <div style="font-size: 9px; color: var(--slate-500);">No período selecionado</div>
             </div>
             <div class="card card-stat">
               <div class="stat-label">Disponibilidade / Sucesso</div>
               <div class="stat-val text-success">${successRateStr}%</div>
-              <div style="font-size: 9px; color: var(--slate-500);">${data.summary.rateLimitHits} hits de Rate Limit</div>
+              <div style="font-size: 9px; color: var(--slate-500);">${data.summary.rateLimitHits.toLocaleString('pt-BR')} hits de Rate Limit</div>
             </div>
             <div class="card card-stat">
               <div class="stat-label">Latência p95 Média</div>
-              <div class="stat-val">${data.summary.p95Latency} ms</div>
+              <div class="stat-val">${data.summary.p95Latency.toLocaleString('pt-BR')} ms</div>
               <div style="font-size: 9px; color: var(--slate-500);">Média p95 global</div>
             </div>
           </div>
@@ -646,6 +689,53 @@ export class DossierPdfService {
               ${endpointRows || '<tr><td colspan="6" class="text-center">Sem dados de acesso no período.</td></tr>'}
             </tbody>
           </table>
+
+          <!-- Glossário -->
+          <div class="page-break"></div>
+          <h3 style="border-left: 3px solid var(--slate-900); padding-left: 8px; margin-bottom: 15px; font-size: 14px;">Glossário de Termos</h3>
+          <p style="font-size: 11px; color: var(--slate-600); margin-bottom: 20px; line-height: 1.6;">
+            Este glossário auxilia na interpretação técnica e comercial dos indicadores apresentados neste dossiê operacional global.
+          </p>
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div>
+              <strong style="color: var(--slate-900); font-size: 12px;">Volume Geral Reqs (Requisições Globais)</strong>
+              <p style="margin: 2px 0 0 0; color: var(--slate-600); font-size: 11px; line-height: 1.5;">O volume acumulado de todas as chamadas de API realizadas por qualquer cliente ou integração ao ecossistema da InfoAPI.</p>
+            </div>
+            <div>
+              <strong style="color: var(--slate-900); font-size: 12px;">Clientes Ativos</strong>
+              <p style="margin: 2px 0 0 0; color: var(--slate-600); font-size: 11px; line-height: 1.5;">Número total de empresas ou chaves de integração únicas que realizaram pelo menos uma requisição no período selecionado.</p>
+            </div>
+            <div>
+              <strong style="color: var(--slate-900); font-size: 12px;">Disponibilidade / Sucesso</strong>
+              <p style="margin: 2px 0 0 0; color: var(--slate-600); font-size: 11px; line-height: 1.5;">Percentual de requisições que retornaram status HTTP de sucesso (família 2xx/3xx), refletindo a estabilidade global do sistema.</p>
+            </div>
+            <div>
+              <strong style="color: var(--slate-900); font-size: 12px;">Latência p95 Média</strong>
+              <p style="margin: 2px 0 0 0; color: var(--slate-600); font-size: 11px; line-height: 1.5;">A média ponderada da métrica p95 em todos os clientes. Representa o limite superior de tempo de resposta para 95% do volume global de requisições.</p>
+            </div>
+            <div>
+              <strong style="color: var(--slate-900); font-size: 12px;">Log Processor</strong>
+              <p style="margin: 2px 0 0 0; color: var(--slate-600); font-size: 11px; line-height: 1.5;">Serviço assíncrono responsável por ler, estruturar e gravar os logs de acesso para gerar as métricas de faturamento e auditoria operacional.</p>
+            </div>
+            <div>
+              <strong style="color: var(--slate-900); font-size: 12px;">Carga Operacional nos Bancos de Dados (Tenants)</strong>
+              <p style="margin: 2px 0 0 0; color: var(--slate-600); font-size: 11px; line-height: 1.5;">Volume de requisições roteadas para cada servidor/banco de dados individual dos clientes, útil para dimensionamento de infraestrutura.</p>
+            </div>
+            <div>
+              <strong style="color: var(--slate-900); font-size: 12px;">Alertas Comerciais</strong>
+              <p style="margin: 2px 0 0 0; color: var(--slate-600); font-size: 11px; line-height: 1.5;">Monitoramento proativo que indica quais clientes já consumiram 80% ou mais da sua franquia de requisições contratada para o mês vigente.</p>
+            </div>
+            <div>
+              <strong style="color: var(--slate-900); font-size: 12px;">Status HTTP (Códigos de Retorno)</strong>
+              <p style="margin: 2px 0 0 0; color: var(--slate-600); font-size: 11px; line-height: 1.5;">Respostas padronizadas que indicam o resultado do processamento:</p>
+              <ul style="margin: 4px 0 0 15px; padding: 0; color: var(--slate-600); font-size: 11px; list-style-type: disc; line-height: 1.5;">
+                <li><strong>2xx (Sucesso)</strong>: A operação foi concluída com êxito.</li>
+                <li><strong>4xx (Erro do Cliente)</strong>: Erros de requisição malformada ou recursos inexistentes.</li>
+                <li><strong>429 (Too Many Requests)</strong>: Bloqueios de segurança aplicados quando um cliente ultrapassa a taxa de limite operacional.</li>
+                <li><strong>5xx (Erro do Servidor)</strong>: Falhas internas imprevistas no processamento ou na comunicação da API.</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </body>
       </html>
@@ -668,7 +758,7 @@ export class DossierPdfService {
         <div style="margin-bottom: 10px;">
           <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 2px;">
             <span style="font-weight: 700; color: ${colorClass};">${item.statusClass}</span>
-            <span><strong>${item.count.toLocaleString()}</strong> (${pct.toFixed(1)}%)</span>
+            <span><strong>${item.count.toLocaleString('pt-BR')}</strong> (${pct.toFixed(1)}%)</span>
           </div>
           <div class="progress-bar-container" style="height: 5px;">
             <div class="progress-bar" style="width: ${pct}%; background-color: ${colorClass};"></div>

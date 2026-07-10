@@ -36,8 +36,8 @@ describe('DossierPdfService', () => {
   describe('generateDossierPdf', () => {
     it('should launch puppeteer, set page content, generate PDF and close browser', async () => {
       const data = {
-        user: { username: 'test-user', monthlyRequests: 50, planReqMonth: 100 },
-        summary: { totalRequests: 10, successRate: 100, p95Latency: 15, rateLimitHits: 0 },
+        user: { username: 'test-user', monthlyRequests: 50000, planReqMonth: 100000 },
+        summary: { totalRequests: 10000, successRate: 100, p95Latency: 15, rateLimitHits: 0 },
         timeSeries: [{ timestamp: '2026-07-01', count: 10, success: 10, error: 0 }],
         statusDistribution: [{ statusClass: '2xx', count: 10 }],
         topEndpoints: [],
@@ -58,6 +58,22 @@ describe('DossierPdfService', () => {
       
       const mockPage = await mockBrowser.newPage.mock.results[0].value;
       expect(mockPage.setContent).toHaveBeenCalled();
+      expect(mockPage.setContent).toHaveBeenCalledWith(
+        expect.stringContaining('Glossário de Termos'),
+        expect.any(Object),
+      );
+      expect(mockPage.setContent).toHaveBeenCalledWith(
+        expect.stringContaining('50.000'),
+        expect.any(Object),
+      );
+      expect(mockPage.setContent).toHaveBeenCalledWith(
+        expect.stringContaining('100.000'),
+        expect.any(Object),
+      );
+      expect(mockPage.setContent).toHaveBeenCalledWith(
+        expect.stringContaining('10.000'),
+        expect.any(Object),
+      );
       expect(mockPage.evaluateHandle).toHaveBeenCalledWith('document.fonts.ready');
       expect(mockPage.pdf).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -71,26 +87,26 @@ describe('DossierPdfService', () => {
 
     it('should generate internal dossier PDF with operational and commercial metrics', async () => {
       const data = {
-        summary: { totalRequests: 100, successRate: 90, p95Latency: 15, rateLimitHits: 2, activeUsers: 5 },
+        summary: { totalRequests: 100000, successRate: 90, p95Latency: 15, rateLimitHits: 2000, activeUsers: 5 },
         proactiveAlerts: [
-          { username: 'alert-user', email: 'alert@test.com', planName: 'Gold', monthlyRequests: 90, planReqMonth: 100, usagePercentage: 90 }
+          { username: 'alert-user', email: 'alert@test.com', planName: 'Gold', monthlyRequests: 9000, planReqMonth: 10000, usagePercentage: 90 }
         ],
         topUsers: [
-          { username: 'top-user', planName: 'Bronze', totalRequests: 100, errorRate: 2, monthlyRequests: 120 }
+          { username: 'top-user', planName: 'Bronze', totalRequests: 10000, errorRate: 2, monthlyRequests: 12000 }
         ],
         databaseLoad: [
-          { host: 'localhost', database: 'test-db', totalRequests: 150 }
+          { host: 'localhost', database: 'test-db', totalRequests: 15000 }
         ],
         topEndpoints: [
           { method: 'GET', path: '/api/v1/test', totalRequests: 50, successRate: 98, avgLatency: 12, p95Latency: 20 }
         ],
         statusDistribution: [
-          { statusClass: '2xx', count: 90 },
-          { statusClass: '4xx', count: 10 }
+          { statusClass: '2xx', count: 9000 },
+          { statusClass: '4xx', count: 1000 }
         ],
         planDistribution: [
-          { planName: 'Gold', totalRequests: 90 },
-          { planName: 'Bronze', totalRequests: 10 }
+          { planName: 'Gold', totalRequests: 9000 },
+          { planName: 'Bronze', totalRequests: 1000 }
         ],
         timeSeries: [
           { timestamp: '2026-07-01T00:00:00.000Z', count: 100, success: 90, error: 10 },
@@ -117,6 +133,39 @@ describe('DossierPdfService', () => {
       
       const mockPage = await mockBrowser.newPage.mock.results[0].value;
       expect(mockPage.setContent).toHaveBeenCalled();
+      expect(mockPage.setContent).toHaveBeenCalledWith(
+        expect.stringContaining('Glossário de Termos'),
+        expect.any(Object),
+      );
+      // Volume Geral Reqs
+      expect(mockPage.setContent).toHaveBeenCalledWith(
+        expect.stringContaining('100.000'),
+        expect.any(Object),
+      );
+      // Alerta comercial (9.000 / 10.000)
+      expect(mockPage.setContent).toHaveBeenCalledWith(
+        expect.stringContaining('9.000 / 10.000'),
+        expect.any(Object),
+      );
+      // Top 10 Clientes (Bronze 10.000)
+      expect(mockPage.setContent).toHaveBeenCalledWith(
+        expect.stringContaining('10.000'),
+        expect.any(Object),
+      );
+      // Carga BD (15.000)
+      expect(mockPage.setContent).toHaveBeenCalledWith(
+        expect.stringContaining('15.000'),
+        expect.any(Object),
+      );
+      // Status Distribution (9.000 e 1.000)
+      expect(mockPage.setContent).toHaveBeenCalledWith(
+        expect.stringContaining('9.000'),
+        expect.any(Object),
+      );
+      expect(mockPage.setContent).toHaveBeenCalledWith(
+        expect.stringContaining('1.000'),
+        expect.any(Object),
+      );
       expect(mockBrowser.close).toHaveBeenCalled();
     });
   });
