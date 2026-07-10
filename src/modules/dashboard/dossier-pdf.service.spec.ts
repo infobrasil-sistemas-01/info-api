@@ -46,8 +46,8 @@ describe('DossierPdfService', () => {
       const result = await service.generateDossierPdf(
         'client',
         data,
-        new Date('2026-07-01'),
-        new Date('2026-07-02'),
+        new Date(2026, 6, 1, 8, 0, 0),
+        new Date(2026, 6, 2, 18, 30, 0),
       );
 
       expect(result).toEqual(Buffer.from('pdf-data'));
@@ -72,6 +72,14 @@ describe('DossierPdfService', () => {
       );
       expect(mockPage.setContent).toHaveBeenCalledWith(
         expect.stringContaining('10.000'),
+        expect.any(Object),
+      );
+      expect(mockPage.setContent).toHaveBeenCalledWith(
+        expect.stringContaining('01 de julho de 2026 às 08:00'),
+        expect.any(Object),
+      );
+      expect(mockPage.setContent).toHaveBeenCalledWith(
+        expect.stringContaining('02 de julho de 2026 às 18:30'),
         expect.any(Object),
       );
       expect(mockPage.evaluateHandle).toHaveBeenCalledWith('document.fonts.ready');
@@ -121,8 +129,8 @@ describe('DossierPdfService', () => {
       const result = await service.generateDossierPdf(
         'internal',
         data,
-        new Date('2026-07-01'),
-        new Date('2026-07-02'),
+        new Date(2026, 6, 1, 9, 15, 0),
+        new Date(2026, 6, 2, 21, 45, 0),
       );
 
       expect(result).toEqual(Buffer.from('pdf-data'));
@@ -164,6 +172,14 @@ describe('DossierPdfService', () => {
       );
       expect(mockPage.setContent).toHaveBeenCalledWith(
         expect.stringContaining('1.000'),
+        expect.any(Object),
+      );
+      expect(mockPage.setContent).toHaveBeenCalledWith(
+        expect.stringContaining('01 de julho de 2026 às 09:15'),
+        expect.any(Object),
+      );
+      expect(mockPage.setContent).toHaveBeenCalledWith(
+        expect.stringContaining('02 de julho de 2026 às 21:45'),
         expect.any(Object),
       );
       expect(mockBrowser.close).toHaveBeenCalled();

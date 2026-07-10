@@ -48,7 +48,7 @@ export class DossierPdfService {
           headerTemplate: `
             <div style="font-family: 'Inter', sans-serif; font-size: 8px; width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; color: #64748b; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; margin-top: 10px;">
               <span style="font-weight: 700; color: #0f172a;">Info<span style="color: #059669;">API</span> - ${title}</span>
-              <span>Período: ${this.safeFormat(startDate, 'dd/MM/yyyy')} a ${this.safeFormat(endDate, 'dd/MM/yyyy')}</span>
+              <span>Período: ${this.safeFormat(startDate, 'dd/MM/yyyy HH:mm')} a ${this.safeFormat(endDate, 'dd/MM/yyyy HH:mm')}</span>
             </div>
           `,
           footerTemplate: `
@@ -77,8 +77,8 @@ export class DossierPdfService {
   }
 
   private compileHtml(type: 'internal' | 'client', data: any, startDate: Date, endDate: Date): string {
-    const formattedStart = this.safeFormat(startDate, "dd 'de' MMMM 'de' yyyy", { locale: ptBR });
-    const formattedEnd = this.safeFormat(endDate, "dd 'de' MMMM 'de' yyyy", { locale: ptBR });
+    const formattedStart = this.safeFormat(startDate, "dd 'de' MMMM 'de' yyyy 'às' HH:mm", { locale: ptBR });
+    const formattedEnd = this.safeFormat(endDate, "dd 'de' MMMM 'de' yyyy 'às' HH:mm", { locale: ptBR });
 
     const brandingStyles = `
       :root {

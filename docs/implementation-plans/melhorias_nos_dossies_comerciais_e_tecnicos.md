@@ -1,6 +1,6 @@
 # Plano de Implementação: Melhorias nos Dossiês (Glossário e Formatação)
 
-Este plano detalha as melhorias a serem introduzidas nos dossiês em formato PDF (Dossiê Interno e Dossiê por Cliente) gerados pela API Info Vendas. Como o documento é consumido tanto por perfis técnicos quanto comerciais, o objetivo é aumentar a clareza através de um glossário de termos e padronizar a exibição numérica de milhares com ponto (`.`).
+Este plano detalha as melhorias a serem introduzidas nos dossiês em formato PDF (Dossiê Interno e Dossiê por Cliente) gerados pela API Info Vendas. Como o documento é consumido tanto por perfis técnicos quanto comerciais, o objetivo é aumentar a clareza através de um glossário de termos, padronizar a exibição numérica de milhares com ponto (`.`) e incluir detalhes de horas e minutos no range do período analisado.
 
 ## Proposed Changes
 
@@ -11,6 +11,9 @@ Este plano detalha as melhorias a serem introduzidas nos dossiês em formato PDF
 #### [MODIFY] [dossier-pdf.service.ts](file:///c:/dev/infoapi/src/modules/dashboard/dossier-pdf.service.ts)
 
 - **Substituir todas as chamadas de `.toLocaleString()`** por `.toLocaleString('pt-BR')` para garantir que o separador de milhares seja o ponto (`.`).
+- **Inclusão de Hora no Range do Período:**
+  - Alterar o formato do período no cabeçalho do PDF (`headerTemplate`) para incluir as horas e minutos (`dd/MM/yyyy HH:mm`).
+  - Alterar a compilação do HTML (`compileHtml`) nos termos `formattedStart` e `formattedEnd` para usar o formato com horas e minutos (`dd 'de' MMMM 'de' yyyy 'às' HH:mm`).
 - **Adicionar uma nova página de Glossário** no final de `renderClientHtml` e `renderInternalHtml` contendo os termos comerciais e técnicos usados no relatório.
 
 ##### Glossário para Dossiê de Cliente:
@@ -37,6 +40,7 @@ Este plano detalha as melhorias a serem introduzidas nos dossiês em formato PDF
 - Atualizar e enriquecer os testes unitários existentes para verificar que o HTML injetado no Puppeteer contém:
   - O cabeçalho "Glossário de Termos".
   - A formatação de milhares com ponto (por exemplo, buscando `10.000` em vez de `10,000` ou `10000` nas strings renderizadas).
+  - A inclusão da data e hora formatada no range do período (ex: `01 de julho de 2026 às 08:00` e `02 de julho de 2026 às 18:30`).
 
 ## Verification Plan
 
