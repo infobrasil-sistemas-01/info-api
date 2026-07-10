@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.16.9](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.16.8...v1.16.9) (2026-07-10)
+
+
+### Features
+
+* add extended session checkbox and silent token refresh for admin and client logins ([8de012e](https://github.com/infobrasil-sistemas/info-vendas-api/commit/8de012ef7a3975c89edfd5f18562f02bbbb3f7da))
+* add pagination to HTTP logs and move section to third row ([3602fd8](https://github.com/infobrasil-sistemas/info-vendas-api/commit/3602fd8b2bc8c5172e99910ec5df12143345696a))
+* dossie buttons style ([3b7b658](https://github.com/infobrasil-sistemas/info-vendas-api/commit/3b7b658dec2d842bd48594385831d4e6d12f7411))
+* log 404/routing errors and ignore them in rate limiting via success flag ([41e1041](https://github.com/infobrasil-sistemas/info-vendas-api/commit/41e1041ec3c0a699bc51baa6b8ba4cac3403b09e))
+* metrics dossie on admin dash ([5ad7d5e](https://github.com/infobrasil-sistemas/info-vendas-api/commit/5ad7d5e78e8caef3e008a44d9333c2b49b089284))
+* metrics dossie on admin dash in front ([a546175](https://github.com/infobrasil-sistemas/info-vendas-api/commit/a546175c73ef19f76532688e29705f2a6036e919))
+* more data on dossies ([b0e5f63](https://github.com/infobrasil-sistemas/info-vendas-api/commit/b0e5f63eb154965c443d1f8020ddf515710c1b72))
+* more info o general dossie ([0540850](https://github.com/infobrasil-sistemas/info-vendas-api/commit/05408505484097d32a9f24f213746c4ae14c67aa))
+* range on dossie by user ([08f288c](https://github.com/infobrasil-sistemas/info-vendas-api/commit/08f288c3568dee9182ce0bcc7414f38a6b10f834))
+* sanitize all DTOs ([1ee1088](https://github.com/infobrasil-sistemas/info-vendas-api/commit/1ee10882828dae001980d77c41bb83f295bc3d47))
+
+
+### Bug Fixes
+
+* add try-catch with NestJS logger to downloadDossier controller endpoint ([986c78d](https://github.com/infobrasil-sistemas/info-vendas-api/commit/986c78d6ed2a358ecebcb0ac640f8a30c662d67c))
+* intermitent dossie generation 500 error ([2a23c56](https://github.com/infobrasil-sistemas/info-vendas-api/commit/2a23c5648ae8163151ffffce57090934ba0585f9))
+* prisma ([210beea](https://github.com/infobrasil-sistemas/info-vendas-api/commit/210beeac21704031d504b0d6d15f7d72d4aa4347))
+* remove --single-process and --no-zygote flags to prevent Puppeteer TargetCloseError ([d05f295](https://github.com/infobrasil-sistemas/info-vendas-api/commit/d05f29548076f381f96891e17b2f46128857ed13))
+* safeguard against null avgLatency and p95Latency in topEndpoints table templates ([7390945](https://github.com/infobrasil-sistemas/info-vendas-api/commit/73909459296edad8f77c07354ffa509f566463ad))
+
 ## [1.16.8](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.16.7...v1.16.8) (2026-07-06)
 
 
