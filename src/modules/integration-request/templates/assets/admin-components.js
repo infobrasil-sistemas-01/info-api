@@ -618,7 +618,7 @@ const Components = {
       <!-- Cards de Visão Executiva -->
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
           <div class="card" style="padding: 1.5rem; display: flex; align-items: center; gap: 1.5rem;">
-              <div style="font-size: 2.2rem; color: var(--primary); background: rgba(16, 185, 129, 0.1); width: 60px; height: 60px; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
+              <div style="font-size: 2.2rem; color: var(--primary); background: rgba(16, 185, 129, 0.1); width: 60px; height: 60px; flex-shrink: 0; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
                   <i class='bx bx-data'></i>
               </div>
               <div>
@@ -627,7 +627,7 @@ const Components = {
               </div>
           </div>
           <div class="card" style="padding: 1.5rem; display: flex; align-items: center; gap: 1.5rem;">
-              <div style="font-size: 2.2rem; color: var(--primary); background: rgba(16, 185, 129, 0.1); width: 60px; height: 60px; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
+              <div style="font-size: 2.2rem; color: var(--primary); background: rgba(16, 185, 129, 0.1); width: 60px; height: 60px; flex-shrink: 0; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
                   <i class='bx bx-group'></i>
               </div>
               <div>
@@ -636,7 +636,7 @@ const Components = {
               </div>
           </div>
           <div class="card" style="padding: 1.5rem; display: flex; align-items: center; gap: 1.5rem;">
-              <div style="font-size: 2.2rem; color: var(--success); background: rgba(16, 185, 129, 0.1); width: 60px; height: 60px; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
+              <div style="font-size: 2.2rem; color: var(--success); background: rgba(16, 185, 129, 0.1); width: 60px; height: 60px; flex-shrink: 0; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
                   <i class='bx bx-check-double'></i>
               </div>
               <div>
@@ -645,7 +645,7 @@ const Components = {
               </div>
           </div>
           <div class="card" style="padding: 1.5rem; display: flex; align-items: center; gap: 1.5rem;">
-              <div style="font-size: 2.2rem; color: var(--danger); background: rgba(239, 68, 68, 0.1); width: 60px; height: 60px; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
+              <div style="font-size: 2.2rem; color: var(--danger); background: rgba(239, 68, 68, 0.1); width: 60px; height: 60px; flex-shrink: 0; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
                   <i class='bx bx-shield-quarter'></i>
               </div>
               <div>
@@ -654,7 +654,7 @@ const Components = {
               </div>
           </div>
           <div class="card" style="padding: 1.5rem; display: flex; align-items: center; gap: 1.5rem;">
-              <div style="font-size: 2.2rem; color: #f59e0b; background: rgba(245, 158, 11, 0.1); width: 60px; height: 60px; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
+              <div style="font-size: 2.2rem; color: #f59e0b; background: rgba(245, 158, 11, 0.1); width: 60px; height: 60px; flex-shrink: 0; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
                   <i class='bx bx-time-five'></i>
               </div>
               <div>

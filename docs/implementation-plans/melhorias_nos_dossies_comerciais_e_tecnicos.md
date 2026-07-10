@@ -1,10 +1,16 @@
-# Plano de Implementação: Melhorias nos Dossiês (Glossário, Formatação e Timezone)
+# Plano de Implementação: Melhorias nos Dossiês (Glossário, Formatação e Timezone) & Dashboard Icons
 
-Este plano detalha as melhorias a serem introduzidas nos dossiês em formato PDF (Dossiê Interno e Dossiê por Cliente) gerados pela API Info Vendas. Como o documento é consumido tanto por perfis técnicos quanto comerciais, o objetivo é aumentar a clareza através de um glossário de termos, padronizar a exibição numérica de milhares com ponto (`.`), incluir detalhes de horas e minutos no range do período analisado e garantir que todas as datas e horas sejam exibidas no fuso horário do Brasil (`America/Sao_Paulo`).
+Este plano detalha as melhorias a serem introduzidas nos dossiês em formato PDF (Dossiê Interno e Dossiê por Cliente) gerados pela API Info Vendas, bem como correções no layout dos cards principais do Dashboard executivo. O objetivo é aumentar a clareza através de um glossário de termos, padronizar a exibição numérica de milhares com ponto (`.`), incluir detalhes de horas e minutos no range do período analisado, garantir que todas as datas e horas sejam exibidas no fuso horário do Brasil (`America/Sao_Paulo`) e corrigir o formato dos ícones dos cards para que permaneçam sempre em formato quadrado e estável.
 
 ## Proposed Changes
 
 ### Dashboard Module
+
+---
+
+#### [MODIFY] [admin-components.js](file:///c:/dev/infoapi/src/modules/integration-request/templates/assets/admin-components.js)
+
+- **Garantir formato quadrado de ícones:** Adicionar `flex-shrink: 0;` nos containers inline de estilo dos ícones de todos os 5 cards principais da visão executiva do Dashboard. Isso impede que os containers flexíveis sejam esmagados horizontalmente por textos ou tamanhos longos de valores.
 
 ---
 
@@ -60,3 +66,4 @@ Este plano detalha as melhorias a serem introduzidas nos dossiês em formato PDF
 
 ### Manual Verification
 - O Puppeteer compilará o PDF corretamente sem erros de renderização ou estilização.
+- O Dashboard do painel de administração exibirá os ícones perfeitamente quadrados, mesmo com fontes grandes ou redimensionamento de telas.
