@@ -37,7 +37,7 @@ export class DossierPdfService {
       await page.setContent(htmlContent, { waitUntil: 'domcontentloaded' });
       await page.evaluateHandle('document.fonts.ready');
 
-      const dateStr = format(new Date(), 'dd/MM/yyyy HH:mm');
+      const dateStr = this.safeFormat(new Date(), 'dd/MM/yyyy HH:mm');
       const title = type === 'internal' ? 'Dossiê Executivo Interno' : `Dossiê de Uso - ${data.user?.username}`;
 
       const pdfBuffer = Buffer.from(
@@ -883,10 +883,12 @@ export class DossierPdfService {
 
   private safeFormat(date: Date | string | number, formatStr: string, options?: any): string {
     try {
-      const parsed = new Date(date);
+      let parsed = new Date(date);
       if (!date || isNaN(parsed.getTime())) {
         return '--/--/----';
       }
+      const tzString = parsed.toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' });
+      parsed = new Date(tzString);
       return format(parsed, formatStr, options);
     } catch {
       return '--/--/----';

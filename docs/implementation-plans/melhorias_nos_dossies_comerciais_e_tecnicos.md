@@ -1,6 +1,6 @@
-# Plano de Implementação: Melhorias nos Dossiês (Glossário e Formatação)
+# Plano de Implementação: Melhorias nos Dossiês (Glossário, Formatação e Timezone)
 
-Este plano detalha as melhorias a serem introduzidas nos dossiês em formato PDF (Dossiê Interno e Dossiê por Cliente) gerados pela API Info Vendas. Como o documento é consumido tanto por perfis técnicos quanto comerciais, o objetivo é aumentar a clareza através de um glossário de termos, padronizar a exibição numérica de milhares com ponto (`.`) e incluir detalhes de horas e minutos no range do período analisado.
+Este plano detalha as melhorias a serem introduzidas nos dossiês em formato PDF (Dossiê Interno e Dossiê por Cliente) gerados pela API Info Vendas. Como o documento é consumido tanto por perfis técnicos quanto comerciais, o objetivo é aumentar a clareza através de um glossário de termos, padronizar a exibição numérica de milhares com ponto (`.`), incluir detalhes de horas e minutos no range do período analisado e garantir que todas as datas e horas sejam exibidas no fuso horário do Brasil (`America/Sao_Paulo`).
 
 ## Proposed Changes
 
@@ -11,6 +11,9 @@ Este plano detalha as melhorias a serem introduzidas nos dossiês em formato PDF
 #### [MODIFY] [dossier-pdf.service.ts](file:///c:/dev/infoapi/src/modules/dashboard/dossier-pdf.service.ts)
 
 - **Substituir todas as chamadas de `.toLocaleString()`** por `.toLocaleString('pt-BR')` para garantir que o separador de milhares seja o ponto (`.`).
+- **Ajuste de Timezone (Fuso Horário de Brasília/São Paulo):**
+  - Adaptar o método `safeFormat` para converter deterministicamente a data recebida para o fuso `'America/Sao_Paulo'` antes de formatar com o `date-fns` (usando `toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' })`).
+  - Atualizar a geração do rodapé/cabeçalho (`dateStr` da data de emissão) para usar o `this.safeFormat()` em vez de formatar a data do sistema operacional diretamente.
 - **Inclusão de Hora no Range do Período:**
   - Alterar o formato do período no cabeçalho do PDF (`headerTemplate`) para incluir as horas e minutos (`dd/MM/yyyy HH:mm`).
   - Alterar a compilação do HTML (`compileHtml`) nos termos `formattedStart` e `formattedEnd` para usar o formato com horas e minutos (`dd 'de' MMMM 'de' yyyy 'às' HH:mm`).
@@ -41,6 +44,7 @@ Este plano detalha as melhorias a serem introduzidas nos dossiês em formato PDF
   - O cabeçalho "Glossário de Termos".
   - A formatação de milhares com ponto (por exemplo, buscando `10.000` em vez de `10,000` ou `10000` nas strings renderizadas).
   - A inclusão da data e hora formatada no range do período (ex: `01 de julho de 2026 às 08:00` e `02 de julho de 2026 às 18:30`).
+  - **Uso de datas UTC estáveis:** Definir as datas de teste com strings UTC explícitas (`2026-07-01T11:00:00Z` e `2026-07-02T21:30:00Z`), garantindo que a formatação em `'America/Sao_Paulo'` produza resultados idênticos em qualquer servidor ou máquina local de teste.
 
 ## Verification Plan
 

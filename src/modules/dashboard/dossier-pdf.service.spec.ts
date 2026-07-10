@@ -46,8 +46,8 @@ describe('DossierPdfService', () => {
       const result = await service.generateDossierPdf(
         'client',
         data,
-        new Date(2026, 6, 1, 8, 0, 0),
-        new Date(2026, 6, 2, 18, 30, 0),
+        new Date('2026-07-01T11:00:00Z'),
+        new Date('2026-07-02T21:30:00Z'),
       );
 
       expect(result).toEqual(Buffer.from('pdf-data'));
@@ -129,8 +129,8 @@ describe('DossierPdfService', () => {
       const result = await service.generateDossierPdf(
         'internal',
         data,
-        new Date(2026, 6, 1, 9, 15, 0),
-        new Date(2026, 6, 2, 21, 45, 0),
+        new Date('2026-07-01T12:15:00Z'),
+        new Date('2026-07-03T00:45:00Z'),
       );
 
       expect(result).toEqual(Buffer.from('pdf-data'));
