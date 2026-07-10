@@ -430,7 +430,7 @@ const Data = {
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `dossie-interno-de-${startStr}-a-${endStr}.pdf`;
+                a.download = `dossie-interno-de-${startStr.slice(0, 9)}-a-${endStr.slice(0, 9)}.pdf`;
                 document.body.appendChild(a);
                 a.click();
                 a.remove();
