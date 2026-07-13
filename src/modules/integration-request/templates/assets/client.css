@@ -339,11 +339,27 @@ header {
     top: 20px;
     z-index: 1000;
     border-radius: 20px;
-    margin: 0 auto;
+    margin: 20px auto 0;
     max-width: 1200px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+header.scrolled {
+    top: 0;
+    max-width: 100%;
+    border-radius: 0;
+    margin-top: 0;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    background: rgba(12, 31, 24, 0.95);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
 .header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
     padding: 0 24px;
     display: flex;
     justify-content: space-between;

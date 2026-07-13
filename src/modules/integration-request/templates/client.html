@@ -717,6 +717,18 @@ print(f'Basic {auth}')</code></pre>
                 refreshTenantStatus();
             }
         }, 60000);
+
+        // Control sticky header scrolled state
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (header) {
+                if (window.scrollY > 0) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            }
+        });
     </script>
 </body>
 

@@ -42,29 +42,29 @@
 
     <!-- Main Dashboard Wrapper -->
     <div id="admin-wrapper" class="hidden">
-        <div id="admin-content" class="dashboard">
-            <header>
-                <div class="header-content">
-                    <div class="brand">
-                        <span class="brand-name">Info<span>API</span></span>
-                        <span class="brand-divider"></span>
-                        <span class="panel-name">Administração</span>
-                    </div>
-                    <div class="header-right">
-                        <div class="user-info">
-                            <span id="user-display"
-                                style="font-weight: 600; color: var(--text-muted); font-size: 0.9rem;"></span>
-                            <div class="avatar" id="user-avatar"
-                                style="width: 38px; height: 38px; background: var(--primary); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: white;">
-                                A</div>
-                        </div>
-                        <button class="btn-logout" onclick="Auth.logout()" title="Sair"
-                            style="background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.2); padding: 8px; border-radius: 10px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center;">
-                            <i class='bx bx-log-out bx-flip-horizontal' style="font-size: 1.3rem;"></i>
-                        </button>
-                    </div>
+        <header>
+            <div class="header-content">
+                <div class="brand">
+                    <span class="brand-name">Info<span>API</span></span>
+                    <span class="brand-divider"></span>
+                    <span class="panel-name">Administração</span>
                 </div>
-            </header>
+                <div class="header-right">
+                    <div class="user-info">
+                        <span id="user-display"
+                            style="font-weight: 600; color: var(--text-muted); font-size: 0.9rem;"></span>
+                        <div class="avatar" id="user-avatar"
+                            style="width: 38px; height: 38px; background: var(--primary); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: white;">
+                            A</div>
+                    </div>
+                    <button class="btn-logout" onclick="Auth.logout()" title="Sair"
+                        style="background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.2); padding: 8px; border-radius: 10px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center;">
+                        <i class='bx bx-log-out bx-flip-horizontal' style="font-size: 1.3rem;"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+        <div id="admin-content" class="dashboard">
 
             <nav class="tabs">
                 <div id="tab-dashboard" class="tab-btn hidden" onclick="switchTab('dashboard')">Dashboard</div>
@@ -118,7 +118,21 @@
     <script>const API_URL = '/api/v1';</script>
     <script src="/integration/assets/admin-components.js"></script>
     <script src="/integration/assets/admin-core.js"></script>
-    <script>Auth.check();</script>
+    <script>
+        Auth.check();
+
+        // Control sticky header scrolled state
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (header) {
+                if (window.scrollY > 0) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            }
+        });
+    </script>
 </body>
 
 </html>
