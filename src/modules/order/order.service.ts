@@ -16,7 +16,7 @@ export class OrderService {
     private readonly orderItemService: OrderItemService,
     private readonly productService: ProductService,
     private readonly receiptService: ReceiptService,
-  ) {}
+  ) { }
 
   async post(credentialsId: string, data: PostOrderDto, storeId: number) {
     let connection: any;
@@ -172,7 +172,7 @@ export class OrderService {
     credentialsId: string,
     storeId?: number,
     page: number = 1,
-    pageSize: number = 10,
+    pageSize: number = 100,
     filters: {
       startDate?: string;
       endDate?: string;
@@ -250,8 +250,7 @@ export class OrderService {
       this.logger.log(
         `Busca de pedidos executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
           { storeId, page, pageSize, ...filters },
-        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${
-          queryEndTime - queryStartTime
+        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${queryEndTime - queryStartTime
         }ms`,
       );
 
