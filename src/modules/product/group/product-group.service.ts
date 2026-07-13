@@ -14,9 +14,9 @@ export class ProductGroupService {
 
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
-  ) {}
+  ) { }
 
-  async get(credentialsId: string, page: number = 1, pageSize: number = 10) {
+  async get(credentialsId: string, page: number = 1, pageSize: number = 100) {
     let connection: any;
     connection =
       await this.tenantConnectionService.getConnection(credentialsId);
@@ -44,8 +44,7 @@ export class ProductGroupService {
       this.logger.log(
         `Busca de grupos de produtos executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
           { page, pageSize },
-        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${
-          queryEndTime - queryStartTime
+        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${queryEndTime - queryStartTime
         }ms`,
       );
 
@@ -76,8 +75,7 @@ export class ProductGroupService {
       const endTime = Date.now();
 
       this.logger.log(
-        `Busca de grupo por ID executada. Tenant: ${credentialsId}, ID: ${id}, Tempo SQL: ${
-          endTime - startTime
+        `Busca de grupo por ID executada. Tenant: ${credentialsId}, ID: ${id}, Tempo SQL: ${endTime - startTime
         }ms`,
       );
 
@@ -110,8 +108,7 @@ export class ProductGroupService {
       const endTime = Date.now();
 
       this.logger.log(
-        `Grupo de produto criado. Tenant: ${credentialsId}, ID: ${result?.GRU_CODIGO}, Tempo SQL: ${
-          endTime - startTime
+        `Grupo de produto criado. Tenant: ${credentialsId}, ID: ${result?.GRU_CODIGO}, Tempo SQL: ${endTime - startTime
         }ms`,
       );
 
@@ -148,8 +145,7 @@ export class ProductGroupService {
       const endTime = Date.now();
 
       this.logger.log(
-        `Grupo de produto atualizado. Tenant: ${credentialsId}, ID: ${id}, Tempo SQL: ${
-          endTime - startTime
+        `Grupo de produto atualizado. Tenant: ${credentialsId}, ID: ${id}, Tempo SQL: ${endTime - startTime
         }ms`,
       );
 

@@ -7,13 +7,13 @@ export class ProductService {
 
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
-  ) {}
+  ) { }
 
   async get(
     credentialsId: string,
     storeId: number,
     page: number = 1,
-    pageSize: number = 10,
+    pageSize: number = 100,
     priceTable: number = 1,
     group?: number,
     brand?: number,
@@ -107,8 +107,7 @@ export class ProductService {
             minStock,
             search,
           },
-        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${
-          queryEndTime - queryStartTime
+        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${queryEndTime - queryStartTime
         }ms`,
       );
 

@@ -8,13 +8,13 @@ export class DeliveryService {
 
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
-  ) {}
+  ) { }
 
   async get(
     credentialsId: string,
     storeId?: number,
     page: number = 1,
-    pageSize: number = 10,
+    pageSize: number = 100,
     filters: {
       startDate?: string;
       endDate?: string;

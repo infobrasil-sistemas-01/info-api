@@ -14,9 +14,9 @@ export class ProductBrandService {
 
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
-  ) {}
+  ) { }
 
-  async get(credentialsId: string, page: number = 1, pageSize: number = 10) {
+  async get(credentialsId: string, page: number = 1, pageSize: number = 100) {
     let connection: any;
     connection =
       await this.tenantConnectionService.getConnection(credentialsId);
@@ -52,8 +52,7 @@ export class ProductBrandService {
       this.logger.log(
         `Busca de marcas de produtos executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
           { page, pageSize },
-        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${
-          queryEndTime - queryStartTime
+        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${queryEndTime - queryStartTime
         }ms`,
       );
 
@@ -86,8 +85,7 @@ export class ProductBrandService {
       const endTime = Date.now();
 
       this.logger.log(
-        `Marca de produto criada. Tenant: ${credentialsId}, ID: ${result?.MAR_CODIGO}, Tempo SQL: ${
-          endTime - startTime
+        `Marca de produto criada. Tenant: ${credentialsId}, ID: ${result?.MAR_CODIGO}, Tempo SQL: ${endTime - startTime
         }ms`,
       );
 
@@ -118,8 +116,7 @@ export class ProductBrandService {
       const endTime = Date.now();
 
       this.logger.log(
-        `Busca de marca por ID executada. Tenant: ${credentialsId}, ID: ${id}, Tempo SQL: ${
-          endTime - startTime
+        `Busca de marca por ID executada. Tenant: ${credentialsId}, ID: ${id}, Tempo SQL: ${endTime - startTime
         }ms`,
       );
 
@@ -156,8 +153,7 @@ export class ProductBrandService {
       const endTime = Date.now();
 
       this.logger.log(
-        `Marca de produto atualizada. Tenant: ${credentialsId}, ID: ${id}, Tempo SQL: ${
-          endTime - startTime
+        `Marca de produto atualizada. Tenant: ${credentialsId}, ID: ${id}, Tempo SQL: ${endTime - startTime
         }ms`,
       );
 

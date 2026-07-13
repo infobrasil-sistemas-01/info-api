@@ -12,12 +12,12 @@ export class AccountPayableService {
 
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
-  ) {}
+  ) { }
 
   async get(
     credentialsId: string,
     page: number = 1,
-    pageSize: number = 10,
+    pageSize: number = 100,
     storeId?: number,
     supplierId?: number,
     situation?: string,
@@ -83,8 +83,7 @@ export class AccountPayableService {
             startDate,
             endDate,
           },
-        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${
-          queryEndTime - queryStartTime
+        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${queryEndTime - queryStartTime
         }ms`,
       );
 

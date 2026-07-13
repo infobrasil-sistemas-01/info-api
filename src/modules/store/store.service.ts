@@ -7,12 +7,12 @@ export class StoreService {
 
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
-  ) {}
+  ) { }
 
   async get(
     credentialsId: string,
     page: number = 1,
-    pageSize: number = 10,
+    pageSize: number = 100,
     storeId?: number,
     storeCnpj?: string,
   ) {
@@ -64,8 +64,7 @@ export class StoreService {
       this.logger.log(
         `Busca de lojas executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
           { page, pageSize, storeId, storeCnpj },
-        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${
-          queryEndTime - queryStartTime
+        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${queryEndTime - queryStartTime
         }ms`,
       );
 

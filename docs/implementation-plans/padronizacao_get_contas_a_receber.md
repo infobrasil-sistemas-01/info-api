@@ -21,7 +21,7 @@ Este plano de implementação descreve as alterações realizadas para padroniza
     credentialsId: string,
     storeId: number = 1,
     page: number = 1,
-    pageSize: number = 10,
+    pageSize: number = 100,
     clientId?: number,
     arId?: number,
     situation?: string,
