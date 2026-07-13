@@ -36,9 +36,7 @@ Não há dúvidas em aberto. O escopo das alterações foi mapeado e validado.
       max-width: 100%;
       border-radius: 0;
       margin-top: 0;
-      border-left: none;
-      border-right: none;
-      border-top: none;
+      border-color: transparent transparent var(--border) transparent;
       background: rgba(12, 31, 24, 0.95);
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   }
@@ -62,9 +60,7 @@ Não há dúvidas em aberto. O escopo das alterações foi mapeado e validado.
       max-width: 100%;
       border-radius: 0;
       margin-top: 0;
-      border-left: none;
-      border-right: none;
-      border-top: none;
+      border-color: transparent transparent var(--border) transparent;
       background: rgba(12, 31, 24, 0.95);
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   }
