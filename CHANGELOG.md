@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.16.10](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.16.9...v1.16.10) (2026-07-13)
+
+
+### Features
+
+* **dossie:** add date range to filename1 ([f2d8962](https://github.com/infobrasil-sistemas/info-vendas-api/commit/f2d89622903dd808eaf8bc473095d405387efb96))
+* mail send of 80% usage ([3f0166b](https://github.com/infobrasil-sistemas/info-vendas-api/commit/3f0166b3e99830c9935d2bc754204d20d808ff86))
+* **range:** add hour on data range ([02b5307](https://github.com/infobrasil-sistemas/info-vendas-api/commit/02b53077560d8aed8d458f664cd0a5c4472ffff8))
+
+
+### Bug Fixes
+
+* **dashboard:** icons ([7aaa3f4](https://github.com/infobrasil-sistemas/info-vendas-api/commit/7aaa3f4ae13694cf0c196a8b7a01fe6b10e30483))
+* **dossie:** add date range to filename 2 ([298dfb4](https://github.com/infobrasil-sistemas/info-vendas-api/commit/298dfb46f62646d7c1dda50eba0dc8ebd7ff6ed9))
+* **dossie:** add date range to filename1 ([1264d74](https://github.com/infobrasil-sistemas/info-vendas-api/commit/1264d74dc48ce636b388f9072b457e489c1518c3))
+* **dossie:** timezone ([514303a](https://github.com/infobrasil-sistemas/info-vendas-api/commit/514303a0b59ebd1a9e5d9fa6c203255a660f6dea))
+* header on scroll (admin && client dash) ([82b6e36](https://github.com/infobrasil-sistemas/info-vendas-api/commit/82b6e36d22d964e9ff07184801486d74c805801f))
+
 ## [1.16.9](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.16.8...v1.16.9) (2026-07-10)
 
 
