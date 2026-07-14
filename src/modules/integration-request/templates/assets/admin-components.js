@@ -587,16 +587,34 @@ const Components = {
       }
       .summary-grid {
           display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 1.5rem;
+          grid-template-columns: repeat(6, 1fr);
+          gap: 1rem;
           margin-bottom: 2rem;
       }
-      @media (max-width: 1024px) {
+      .summary-grid .card {
+          padding: 1.2rem 1rem !important;
+          gap: 1rem !important;
+      }
+      .summary-grid .card > div:first-child {
+          width: 48px !important;
+          height: 48px !important;
+          font-size: 1.8rem !important;
+          border-radius: 10px !important;
+      }
+      .summary-grid .card h2 {
+          font-size: 1.4rem !important;
+      }
+      @media (max-width: 1400px) {
+          .summary-grid {
+              grid-template-columns: repeat(3, 1fr);
+          }
+      }
+      @media (max-width: 768px) {
           .summary-grid {
               grid-template-columns: repeat(2, 1fr);
           }
       }
-      @media (max-width: 640px) {
+      @media (max-width: 480px) {
           .summary-grid {
               grid-template-columns: 1fr;
           }
