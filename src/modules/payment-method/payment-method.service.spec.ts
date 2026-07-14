@@ -70,7 +70,7 @@ describe('PaymentMethodService', () => {
         },
       );
 
-      await expect(service.get('cred-1')).rejects.toThrow('DB error');
+      await expect(service.get('cred-1', 1, 10)).rejects.toThrow('DB error');
     });
   });
 

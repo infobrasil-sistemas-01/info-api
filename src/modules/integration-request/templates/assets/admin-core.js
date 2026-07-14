@@ -335,6 +335,47 @@ const Data = {
         }
     },
 
+    async resendAlert(userId, iconElement) {
+        if (!confirm('Deseja realmente enviar o e-mail de alerta para este usuário?')) {
+            return;
+        }
+
+        const originalClass = iconElement.className;
+        const originalColor = iconElement.style.color;
+        const originalOpacity = iconElement.style.opacity;
+
+        iconElement.className = 'bx bx-loader-alt bx-spin';
+        iconElement.style.color = 'var(--warning)';
+        iconElement.style.opacity = '1';
+        iconElement.style.pointerEvents = 'none';
+
+        try {
+            const res = await this.fetch(`${API_URL}/dashboard/proactive-alerts/resend`, {
+                method: 'POST',
+                body: JSON.stringify({ userId })
+            });
+
+            if (res.ok) {
+                alert('E-mail de alerta enviado com sucesso!');
+                this.fetchDashboard();
+            } else {
+                const err = await res.json();
+                alert('Erro ao enviar alerta: ' + (err.message || 'Erro interno'));
+                iconElement.className = originalClass;
+                iconElement.style.color = originalColor;
+                iconElement.style.opacity = originalOpacity;
+                iconElement.style.pointerEvents = 'auto';
+            }
+        } catch (error) {
+            console.error('Erro ao enviar e-mail de alerta:', error);
+            alert('Erro de rede ao enviar e-mail de alerta.');
+            iconElement.className = originalClass;
+            iconElement.style.color = originalColor;
+            iconElement.style.opacity = originalOpacity;
+            iconElement.style.pointerEvents = 'auto';
+        }
+    },
+
     stopDashboardRefresh() {
         if (State.dashboardIntervalId) {
             clearInterval(State.dashboardIntervalId);

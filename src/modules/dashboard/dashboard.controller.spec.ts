@@ -5,6 +5,7 @@ import { DossierPdfService } from './dossier-pdf.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 import { BadRequestException } from '@nestjs/common';
+import { PlanService } from '../plan/plan.service';
 
 jest.mock('puppeteer');
 
@@ -12,6 +13,7 @@ describe('DashboardController', () => {
   let controller: DashboardController;
   let service: jest.Mocked<DashboardService>;
   let pdfService: jest.Mocked<DossierPdfService>;
+  let planService: jest.Mocked<PlanService>;
 
   beforeEach(async () => {
     const mockDashboardService = {
@@ -32,11 +34,16 @@ describe('DashboardController', () => {
       generateDossierPdf: jest.fn(),
     };
 
+    const mockPlanService = {
+      sendManualUsageAlert: jest.fn(),
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       controllers: [DashboardController],
       providers: [
         { provide: DashboardService, useValue: mockDashboardService },
         { provide: DossierPdfService, useValue: mockDossierPdfService },
+        { provide: PlanService, useValue: mockPlanService },
       ],
     })
       .overrideGuard(JwtAuthGuard)
@@ -48,6 +55,7 @@ describe('DashboardController', () => {
     controller = module.get<DashboardController>(DashboardController);
     service = module.get(DashboardService) as any;
     pdfService = module.get(DossierPdfService) as any;
+    planService = module.get(PlanService) as any;
   });
 
   describe('downloadDossier', () => {
@@ -120,6 +128,21 @@ describe('DashboardController', () => {
         expect.any(Date),
       );
       expect(mockRes.end).toHaveBeenCalledWith(mockPdfBuffer);
+    });
+  });
+
+  describe('resendProactiveAlert', () => {
+    it('should successfully call planService.sendManualUsageAlert', async () => {
+      planService.sendManualUsageAlert.mockResolvedValueOnce(undefined);
+
+      const result = await controller.resendProactiveAlert('test-user-id');
+      
+      expect(planService.sendManualUsageAlert).toHaveBeenCalledWith('test-user-id');
+      expect(result).toEqual({ message: 'Alerta enviado com sucesso' });
+    });
+
+    it('should throw BadRequestException if userId is missing', async () => {
+      await expect(controller.resendProactiveAlert('')).rejects.toThrow(BadRequestException);
     });
   });
 });

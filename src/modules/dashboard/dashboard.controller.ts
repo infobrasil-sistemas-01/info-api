@@ -1,4 +1,4 @@
-import { Controller, Get, Query, UseGuards, Res, BadRequestException, Logger, HttpException } from '@nestjs/common';
+import { Controller, Get, Post, Body, HttpCode, HttpStatus, Query, UseGuards, Res, BadRequestException, Logger, HttpException } from '@nestjs/common';
 import type { Response } from 'express';
 import { format } from 'date-fns';
 import { DossierPdfService } from './dossier-pdf.service';
@@ -12,6 +12,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
 import { DashboardService } from './dashboard.service';
+import { PlanService } from '../plan/plan.service';
 
 @ApiTags('Admin Dashboard')
 @ApiExcludeController()
@@ -24,6 +25,7 @@ export class DashboardController {
   constructor(
     private readonly dashboardService: DashboardService,
     private readonly dossierPdfService: DossierPdfService,
+    private readonly planService: PlanService,
   ) {}
 
   private parseDates(startDateStr?: string, endDateStr?: string) {
@@ -104,6 +106,20 @@ export class DashboardController {
   })
   async getProactiveAlerts() {
     return this.dashboardService.getProactiveAlerts();
+  }
+
+  @Post('proactive-alerts/resend')
+  @RequirePermissions({ allOf: ['core.dashboard.view'] })
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Dispara manualmente o e-mail de alerta de limite de uso para um cliente',
+  })
+  async resendProactiveAlert(@Body('userId') userId: string) {
+    if (!userId) {
+      throw new BadRequestException('userId é obrigatório');
+    }
+    await this.planService.sendManualUsageAlert(userId);
+    return { message: 'Alerta enviado com sucesso' };
   }
   @Get('heartbeat')
   @RequirePermissions({ allOf: ['core.dashboard.view'] })

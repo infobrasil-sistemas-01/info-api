@@ -553,7 +553,7 @@ const Components = {
               <td style="text-align: center; padding: 10px 0;">
                   ${a.notified ? 
                       `<i class='bx bx-mail-send' style='color: var(--success); font-size: 1.25rem;' title='Notificação enviada'></i>` : 
-                      `<i class='bx bx-envelope' style='color: var(--text-muted); opacity: 0.4; font-size: 1.25rem;' title='Não notificado'></i>`
+                      `<i class='bx bx-envelope' style='color: var(--text-muted); opacity: 0.8; font-size: 1.25rem; cursor: pointer;' title='Clique para enviar notificação de alerta' onclick="Data.resendAlert('${a.userId}', this)"></i>`
                   }
               </td>
           </tr>

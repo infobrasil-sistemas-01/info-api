@@ -1,193 +1,117 @@
 <!doctype html>
 <html lang="pt-br">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Solicitação de Integração | InfoBrasil</title>
-    <link
-      rel="icon"
-      type="image/x-icon"
-      href="/integration/assets/favicon.ico"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      :root {
-        --primary: #059669;
-        /* Emerald Green */
-        --primary-hover: #047857;
-        --accent: #eab308;
-        /* Gold/Yellow */
-        --bg: #f0fdf4;
-        --primary: #10b981;
-        --primary-hover: #059669;
-        --card-bg: #0c1f18;
-        --text: #f0fdf4;
-        --text-muted: #94a3b8;
-        --danger: #ef4444;
-      }
 
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Outfit', sans-serif;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Solicitação de Integração | InfoBrasil</title>
+  <link rel="icon" type="image/x-icon" href="/integration/assets/favicon.ico" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #059669;
+      /* Emerald Green */
+      --primary-hover: #047857;
+      --accent: #eab308;
+      /* Gold/Yellow */
+      --bg: #f0fdf4;
+      --primary: #10b981;
+      --primary-hover: #059669;
+      --card-bg: #0c1f18;
+      --text: #f0fdf4;
+      --text-muted: #94a3b8;
+      --danger: #ef4444;
+    }
 
-      body {
-        background-color: var(--bg);
-        background: radial-gradient(circle at top right, #064e3b, #06110d);
-        color: var(--text);
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-      }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Outfit', sans-serif;
+    }
 
-      .container {
-        background: var(--card-bg);
-        width: 100%;
-        max-width: 800px;
-        padding: 48px;
-        border-radius: 24px;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        margin: 40px auto;
-      }
+    body {
+      background-color: var(--bg);
+      background: radial-gradient(circle at top right, #064e3b, #06110d);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
 
-      header {
-        margin-bottom: 32px;
-        text-align: center;
-      }
+    .container {
+      background: var(--card-bg);
+      width: 100%;
+      max-width: 800px;
+      padding: 48px;
+      border-radius: 24px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      margin: 40px auto;
+    }
 
-      h1 {
-        font-size: 1.75rem;
-        margin-bottom: 8px;
-        text-align: center;
-      }
+    header {
+      margin-bottom: 32px;
+      text-align: center;
+    }
 
-      .brand-name {
-        font-size: 1.8rem;
-        font-weight: 700;
-        color: white;
-        letter-spacing: -0.02em;
-        margin-bottom: 8px;
-        display: block;
-      }
+    h1 {
+      font-size: 1.75rem;
+      margin-bottom: 8px;
+      text-align: center;
+    }
 
-      .brand-name span {
-        color: var(--primary);
-      }
+    .brand-name {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: white;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+      display: block;
+    }
 
-      p.subtitle {
-        color: var(--text-muted);
-        text-align: center;
-        margin-bottom: 32px;
-        font-size: 0.95rem;
-      }
+    .brand-name span {
+      color: var(--primary);
+    }
 
-      .section-title {
-        font-size: 1.1rem;
-        font-weight: 600;
-        margin: 24px 0 16px;
-        padding-bottom: 8px;
-        border-bottom: 2px solid var(--bg);
-        color: var(--text);
-      }
+    p.subtitle {
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 32px;
+      font-size: 0.95rem;
+    }
 
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 24px 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--bg);
+      color: var(--text);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 600px) {
       .grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-      }
-
-      @media (max-width: 600px) {
-        .grid {
-          grid-template-columns: 1fr;
-        }
-
-        .form-group {
-          margin-bottom: 20px;
-        }
-
-        label {
-          display: block;
-          font-size: 0.9rem;
-          font-weight: 600;
-          margin-bottom: 8px;
-          color: var(--text-muted);
-        }
-
-        input,
-        select,
-        textarea {
-          width: 100%;
-          padding: 12px 16px;
-          background: rgba(0, 0, 0, 0.2);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 12px;
-          color: white;
-          font-size: 1rem;
-          transition: all 0.2s;
-        }
-
-        select {
-          appearance: none;
-          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-          background-repeat: no-repeat;
-          background-position: right 1rem center;
-          background-size: 1em;
-        }
-
-        input:focus,
-        select:focus,
-        textarea:focus {
-          outline: none;
-          border-color: var(--primary);
-          background: rgba(0, 0, 0, 0.3);
-        }
-
-        input[type='checkbox'] {
-          width: 1.2rem;
-          height: 1.2rem;
-          border-radius: 4px;
-          cursor: pointer;
-          accent-color: var(--primary);
-        }
-
-        button {
-          width: 100%;
-          padding: 16px;
-          background-color: var(--primary);
-          color: white;
-          border: none;
-          border-radius: 12px;
-          font-size: 1.1rem;
-          font-weight: 700;
-          cursor: pointer;
-          transition: all 0.2s;
-          margin-top: 20px;
-        }
-
-        button:hover {
-          background-color: var(--primary-hover);
-          transform: translateY(-2px);
-          box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.2);
-        }
+        grid-template-columns: 1fr;
       }
 
       .form-group {
-        margin-bottom: 16px;
+        margin-bottom: 20px;
       }
 
       label {
         display: block;
-        font-size: 0.875rem;
-        font-weight: 500;
-        margin-bottom: 6px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 8px;
         color: var(--text-muted);
       }
 
@@ -196,12 +120,20 @@
       textarea {
         width: 100%;
         padding: 12px 16px;
-        border: 1px solid var(--border);
-        border-radius: 8px;
+        background: rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        color: white;
         font-size: 1rem;
-        transition:
-          border-color 0.2s,
-          box-shadow 0.2s;
+        transition: all 0.2s;
+      }
+
+      select {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 1em;
       }
 
       input:focus,
@@ -209,606 +141,580 @@
       textarea:focus {
         outline: none;
         border-color: var(--primary);
-        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        background: rgba(0, 0, 0, 0.3);
       }
 
-      .actions-group {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        margin-top: 8px;
-      }
-
-      .action-chip {
-        padding: 6px 16px;
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 20px;
-        font-size: 0.85rem;
-        font-weight: 500;
+      input[type='checkbox'] {
+        width: 1.2rem;
+        height: 1.2rem;
+        border-radius: 4px;
         cursor: pointer;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        color: var(--text-muted);
-        transition: all 0.2s;
+        accent-color: var(--primary);
       }
 
-      .action-chip:hover {
-        background: rgba(255, 255, 255, 0.1);
-        color: var(--text);
-      }
-
-      .action-chip.active {
-        background: var(--primary);
-        color: white;
-        border-color: var(--primary);
-        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
-      }
-
-      .scope-selector {
-        background: rgba(0, 0, 0, 0.2);
-        padding: 24px;
-        border-radius: 16px;
-        border: 1px dashed rgba(255, 255, 255, 0.1);
-        margin-bottom: 24px;
-      }
-
-      .scope-list {
-        margin-top: 24px;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-
-      .scope-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background: rgba(255, 255, 255, 0.02);
-        padding: 14px 20px;
-        border-radius: 12px;
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        font-size: 0.95rem;
-        transition: all 0.2s;
-      }
-
-      .scope-item:hover {
-        border-color: rgba(16, 185, 129, 0.3);
-        background: rgba(255, 255, 255, 0.04);
-      }
-
-      .scope-item .remove {
-        color: #ef4444;
-        cursor: pointer;
-        font-weight: 600;
-        font-size: 0.85rem;
-        padding: 4px 8px;
-        border-radius: 6px;
-        transition: background 0.2s;
-      }
-
-      .scope-item .remove:hover {
-        background: rgba(239, 68, 68, 0.1);
-      }
-
-      .scope-tags {
-        display: flex;
-        gap: 6px;
-        margin-top: 6px;
-      }
-
-      .scope-tag {
-        background: rgba(16, 185, 129, 0.1);
-        color: #34d399;
-        padding: 2px 10px;
-        border-radius: 6px;
-        font-size: 0.75rem;
-        font-weight: 600;
-        border: 1px solid rgba(16, 185, 129, 0.2);
-      }
-
-      button.add-scope {
-        background: transparent;
-        color: var(--primary);
-        border: 1px solid var(--primary);
-        padding: 10px 20px;
-        border-radius: 10px;
-        font-weight: 600;
-        cursor: pointer;
-        margin-top: 16px;
-        width: auto;
-        transition: all 0.2s;
-      }
-
-      button.add-scope:hover {
-        background: rgba(16, 185, 129, 0.1);
-        transform: translateY(-1px);
-      }
-
-      button.submit {
+      button {
         width: 100%;
         padding: 16px;
-        background: var(--primary);
+        background-color: var(--primary);
         color: white;
         border: none;
         border-radius: 12px;
         font-size: 1.1rem;
         font-weight: 700;
         cursor: pointer;
-        margin-top: 40px;
         transition: all 0.2s;
+        margin-top: 20px;
+      }
+
+      button:hover {
+        background-color: var(--primary-hover);
+        transform: translateY(-2px);
         box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.2);
       }
+    }
 
-      button.submit:hover {
-        background: var(--primary-hover);
-        transform: translateY(-2px);
-      }
+    .form-group {
+      margin-bottom: 16px;
+    }
 
-      button.submit:active {
-        transform: translateY(0);
-      }
+    label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: var(--text-muted);
+    }
 
-      button.submit:disabled {
-        background: #1e293b;
-        color: #64748b;
-        cursor: not-allowed;
-        transform: none;
-        box-shadow: none;
-      }
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 1rem;
+      transition:
+        border-color 0.2s,
+        box-shadow 0.2s;
+    }
 
-      .success-overlay {
-        display: none;
-        text-align: center;
-        padding: 40px;
-      }
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
 
-      .success-overlay h2 {
-        color: var(--primary);
-        margin-bottom: 10px;
-      }
-    </style>
-  </head>
+    .actions-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
 
-  <body>
-    <div class="container" id="form-container">
-      <header>
-        <div class="brand-login">
-          <span class="brand-name">Info<span>API</span></span>
+    .action-chip {
+      padding: 6px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+
+    .action-chip:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text);
+    }
+
+    .action-chip.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+    }
+
+    .scope-selector {
+      background: rgba(0, 0, 0, 0.2);
+      padding: 24px;
+      border-radius: 16px;
+      border: 1px dashed rgba(255, 255, 255, 0.1);
+      margin-bottom: 24px;
+    }
+
+    .scope-list {
+      margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .scope-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.02);
+      padding: 14px 20px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.95rem;
+      transition: all 0.2s;
+    }
+
+    .scope-item:hover {
+      border-color: rgba(16, 185, 129, 0.3);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .scope-item .remove {
+      color: #ef4444;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      padding: 4px 8px;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+
+    .scope-item .remove:hover {
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    .scope-tags {
+      display: flex;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .scope-tag {
+      background: rgba(16, 185, 129, 0.1);
+      color: #34d399;
+      padding: 2px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    button.add-scope {
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 16px;
+      width: auto;
+      transition: all 0.2s;
+    }
+
+    button.add-scope:hover {
+      background: rgba(16, 185, 129, 0.1);
+      transform: translateY(-1px);
+    }
+
+    button.submit {
+      width: 100%;
+      padding: 16px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 40px;
+      transition: all 0.2s;
+      box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.2);
+    }
+
+    button.submit:hover {
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+    }
+
+    button.submit:active {
+      transform: translateY(0);
+    }
+
+    button.submit:disabled {
+      background: #1e293b;
+      color: #64748b;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .success-overlay {
+      display: none;
+      text-align: center;
+      padding: 40px;
+    }
+
+    .success-overlay h2 {
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container" id="form-container">
+    <header>
+      <div class="brand-login">
+        <span class="brand-name">Info<span>API</span></span>
+      </div>
+      <h1>Solicitar Integração</h1>
+      <p class="subtitle">
+        Preencha os detalhes técnicos para iniciar o processo.
+      </p>
+    </header>
+
+    <form id="integration-form">
+      <div class="section-title">Dados do Cliente</div>
+      <div class="grid">
+        <div class="form-group">
+          <label for="clientName">Nome Fantasia / Cliente</label>
+          <input type="text" id="clientName" name="clientName" required placeholder="Ex: Mercado Central" />
         </div>
-        <h1>Solicitar Integração</h1>
-        <p class="subtitle">
-          Preencha os detalhes técnicos para iniciar o processo.
-        </p>
-      </header>
+        <div class="form-group">
+          <label for="cnpj">CNPJ</label>
+          <input type="text" id="cnpj" name="cnpj" required placeholder="00.000.000/0000-00" maxlength="18" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="legalName">Razão Social</label>
+        <input type="text" id="legalName" name="legalName" required placeholder="Ex: Mercado Central LTDA" />
+      </div>
 
-      <form id="integration-form">
-        <div class="section-title">Dados do Cliente</div>
+      <div class="grid">
+        <div class="form-group">
+          <label for="hostingType">Tipo de Hospedagem</label>
+          <select id="hostingType" name="hostingType" required onchange="toggleDbSection()">
+            <option value="DATACENTER">Datacenter (Nuvem)</option>
+            <option value="CLIENT_SERVER">Servidor do Cliente (Local)</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="db-section">
+        <div class="section-title">Banco de Dados (Firebird)</div>
         <div class="grid">
           <div class="form-group">
-            <label for="clientName">Nome Fantasia / Cliente</label>
-            <input
-              type="text"
-              id="clientName"
-              name="clientName"
-              required
-              placeholder="Ex: Mercado Central"
-            />
+            <label for="dbHost">Host / IP</label>
+            <input type="text" id="dbHost" name="dbHost" placeholder="Ex: 192.168.0.100" />
           </div>
           <div class="form-group">
-            <label for="cnpj">CNPJ</label>
-            <input
-              type="text"
-              id="cnpj"
-              name="cnpj"
-              required
-              placeholder="00.000.000/0000-00"
-              maxlength="18"
-            />
+            <label for="dbPort">Porta</label>
+            <input type="number" id="dbPort" name="dbPort" value="3050" />
           </div>
         </div>
         <div class="form-group">
-          <label for="legalName">Razão Social</label>
-          <input
-            type="text"
-            id="legalName"
-            name="legalName"
-            required
-            placeholder="Ex: Mercado Central LTDA"
-          />
+          <label for="dbName">Caminho do Banco (Database)</label>
+          <input type="text" id="dbName" name="dbName" placeholder="Ex: C:\InfoBrasil\DADOS.FDB" />
         </div>
+      </div>
 
-        <div class="grid">
-          <div class="form-group">
-            <label for="hostingType">Tipo de Hospedagem</label>
-            <select
-              id="hostingType"
-              name="hostingType"
-              required
-              onchange="toggleDbSection()"
-            >
-              <option value="DATACENTER">Datacenter (Nuvem)</option>
-              <option value="CLIENT_SERVER">Servidor do Cliente (Local)</option>
-            </select>
-          </div>
-        </div>
-
-        <div id="db-section">
-          <div class="section-title">Banco de Dados (Firebird)</div>
-          <div class="grid">
-            <div class="form-group">
-              <label for="dbHost">Host / IP</label>
-              <input
-                type="text"
-                id="dbHost"
-                name="dbHost"
-                placeholder="Ex: 192.168.0.100"
-              />
-            </div>
-            <div class="form-group">
-              <label for="dbPort">Porta</label>
-              <input type="number" id="dbPort" name="dbPort" value="3050" />
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="dbName">Caminho do Banco (Database)</label>
-            <input
-              type="text"
-              id="dbName"
-              name="dbName"
-              placeholder="Ex: C:\InfoBrasil\DADOS.FDB"
-            />
-          </div>
-        </div>
-
-        <div class="section-title">Escopo e Permissões</div>
-        <div class="scope-selector">
-          <div
-            class="grid"
-            style="
+      <div class="section-title">Escopo e Permissões</div>
+      <div class="scope-selector">
+        <div class="grid" style="
               grid-template-columns: 1fr 1fr;
               gap: 10px;
               margin-bottom: 10px;
-            "
-          >
-            <div class="form-group" style="margin-bottom: 0">
-              <label>Módulo</label>
-              <select id="scope-module" onchange="updateAvailableActions()">
-                <option value="Produtos">Produtos</option>
-                <option value="Lojas">Lojas</option>
-                <option value="Grupos de Produtos">Grupos de Produtos</option>
-                <option value="Marcas de Produtos">Marcas de Produtos</option>
-                <option value="Pedidos">Pedidos / Vendas</option>
-                <option value="Formas de Pagamento">Formas de Pagamento</option>
-                <option value="Planos de Pagamento">Planos de Pagamento</option>
-                <option value="Contas a Receber">Contas a Receber</option>
-                <option value="Contas a Pagar">Contas a Pagar</option>
-                <option value="Clientes">Clientes</option>
-                <option value="Funcionários">Funcionários</option>
-                <option value="Fornecedores">Fornecedores</option>
-                <option value="Prestadores de Serviço">
-                  Prestadores de Serviço
-                </option>
-                <option value="Entregas">Entregas</option>
-              </select>
-            </div>
-            <div class="form-group" style="margin-bottom: 0">
-              <label>Ações</label>
-              <div class="actions-group">
-                <label
-                  style="
+            ">
+          <div class="form-group" style="margin-bottom: 0">
+            <label>Módulo</label>
+            <select id="scope-module" onchange="updateAvailableActions()">
+              <option value="Produtos">Produtos</option>
+              <option value="Lojas">Lojas</option>
+              <option value="Grupos de Produtos">Grupos de Produtos</option>
+              <option value="Marcas de Produtos">Marcas de Produtos</option>
+              <option value="Vendas">Vendas</option>
+              <option value="Formas de Pagamento">Formas de Pagamento</option>
+              <option value="Planos de Pagamento">Planos de Pagamento</option>
+              <option value="Contas a Receber">Contas a Receber</option>
+              <option value="Contas a Pagar">Contas a Pagar</option>
+              <option value="Clientes">Clientes</option>
+              <option value="Funcionários">Funcionários</option>
+              <option value="Fornecedores">Fornecedores</option>
+              <option value="Prestadores de Serviço">
+                Prestadores de Serviço
+              </option>
+              <option value="Entregas">Entregas</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom: 0">
+            <label>Ações</label>
+            <div class="actions-group">
+              <label style="
                     display: flex;
                     align-items: center;
                     gap: 4px;
                     font-weight: 400;
-                  "
-                >
-                  <input
-                    type="checkbox"
-                    class="scope-action"
-                    value="read"
-                    data-label="Ver"
-                    checked
-                    style="width: auto"
-                  />
-                  Ver
-                </label>
-                <label
-                  style="
+                  ">
+                <input type="checkbox" class="scope-action" value="read" data-label="Ver" checked style="width: auto" />
+                Ver
+              </label>
+              <label style="
                     display: flex;
                     align-items: center;
                     gap: 4px;
                     font-weight: 400;
-                  "
-                >
-                  <input
-                    type="checkbox"
-                    class="scope-action"
-                    value="create"
-                    data-label="Criar"
-                    style="width: auto"
-                  />
-                  Criar
-                </label>
-                <label
-                  style="
+                  ">
+                <input type="checkbox" class="scope-action" value="create" data-label="Criar" style="width: auto" />
+                Criar
+              </label>
+              <label style="
                     display: flex;
                     align-items: center;
                     gap: 4px;
                     font-weight: 400;
-                  "
-                >
-                  <input
-                    type="checkbox"
-                    class="scope-action"
-                    value="update"
-                    data-label="Editar"
-                    style="width: auto"
-                  />
-                  Editar
-                </label>
-                <label
-                  style="
+                  ">
+                <input type="checkbox" class="scope-action" value="update" data-label="Editar" style="width: auto" />
+                Editar
+              </label>
+              <label style="
                     display: flex;
                     align-items: center;
                     gap: 4px;
                     font-weight: 400;
-                  "
-                >
-                  <input
-                    type="checkbox"
-                    class="scope-action"
-                    value="delete"
-                    data-label="Excluir"
-                    style="width: auto"
-                  />
-                  Excluir
-                </label>
-              </div>
+                  ">
+                <input type="checkbox" class="scope-action" value="delete" data-label="Excluir" style="width: auto" />
+                Excluir
+              </label>
             </div>
           </div>
-          <button type="button" class="add-scope" onclick="addScope()">
-            + Adicionar Módulo
-          </button>
-
-          <div class="scope-list" id="scope-list">
-            <!-- Dynamic items here -->
-          </div>
         </div>
-
-        <div class="form-group">
-          <label for="objective">Objetivo da Integração</label>
-          <textarea
-            id="objective"
-            name="objective"
-            rows="3"
-            required
-            minlength="20"
-            placeholder="Descreva brevemente o que deseja integrar..."
-          ></textarea>
-        </div>
-
-        <div class="section-title">Contato Técnico</div>
-        <div class="grid">
-          <div class="form-group">
-            <label for="techName">Nome</label>
-            <input type="text" id="techName" name="techName" required />
-          </div>
-          <div class="form-group">
-            <label for="techEmail">E-mail</label>
-            <input type="email" id="techEmail" name="techEmail" required />
-          </div>
-          <div class="form-group">
-            <label for="techPhone">Telefone / WhatsApp</label>
-            <input
-              type="text"
-              id="techPhone"
-              name="techPhone"
-              required
-              placeholder="(00) 00000-0000"
-              class="phone-mask"
-            />
-          </div>
-        </div>
-
-        <div class="section-title">Responsável pela Empresa</div>
-        <div class="grid">
-          <div class="form-group">
-            <label for="respName">Nome</label>
-            <input type="text" id="respName" name="respName" required />
-          </div>
-          <div class="form-group">
-            <label for="respEmail">E-mail</label>
-            <input type="email" id="respEmail" name="respEmail" required />
-          </div>
-          <div class="form-group">
-            <label for="respPhone">Telefone / WhatsApp</label>
-            <input
-              type="text"
-              id="respPhone"
-              name="respPhone"
-              required
-              placeholder="(00) 00000-0000"
-              class="phone-mask"
-            />
-          </div>
-        </div>
-
-        <button type="submit" class="submit" id="submit-btn">
-          Enviar Solicitação
+        <button type="button" class="add-scope" onclick="addScope()">
+          + Adicionar Módulo
         </button>
-      </form>
-    </div>
 
-    <div class="container success-overlay" id="success-container">
-      <h2>Solicitação Enviada!</h2>
-      <p>
-        Agora você receberá um e-mail para confirmar a solicitação de
-        integração. Após isso, nossa equipe entrará em contato em breve.
-      </p>
-    </div>
+        <div class="scope-list" id="scope-list">
+          <!-- Dynamic items here -->
+        </div>
+      </div>
 
-    <script>
-      const form = document.getElementById('integration-form');
-      const submitBtn = document.getElementById('submit-btn');
-      const formContainer = document.getElementById('form-container');
-      const successContainer = document.getElementById('success-container');
-      const cnpjInput = document.getElementById('cnpj');
-      const dbSection = document.getElementById('db-section');
+      <div class="form-group">
+        <label for="objective">Objetivo da Integração</label>
+        <textarea id="objective" name="objective" rows="3" required minlength="20"
+          placeholder="Descreva brevemente o que deseja integrar..."></textarea>
+      </div>
 
-      function toggleDbSection() {
-        const type = document.getElementById('hostingType').value;
-        dbSection.style.display = type === 'CLIENT_SERVER' ? 'block' : 'none';
+      <div class="section-title">Contato Técnico</div>
+      <div class="grid">
+        <div class="form-group">
+          <label for="techName">Nome</label>
+          <input type="text" id="techName" name="techName" required />
+        </div>
+        <div class="form-group">
+          <label for="techEmail">E-mail</label>
+          <input type="email" id="techEmail" name="techEmail" required />
+        </div>
+        <div class="form-group">
+          <label for="techPhone">Telefone / WhatsApp</label>
+          <input type="text" id="techPhone" name="techPhone" required placeholder="(00) 00000-0000"
+            class="phone-mask" />
+        </div>
+      </div>
+
+      <div class="section-title">Responsável pela Empresa</div>
+      <div class="grid">
+        <div class="form-group">
+          <label for="respName">Nome</label>
+          <input type="text" id="respName" name="respName" required />
+        </div>
+        <div class="form-group">
+          <label for="respEmail">E-mail</label>
+          <input type="email" id="respEmail" name="respEmail" required />
+        </div>
+        <div class="form-group">
+          <label for="respPhone">Telefone / WhatsApp</label>
+          <input type="text" id="respPhone" name="respPhone" required placeholder="(00) 00000-0000"
+            class="phone-mask" />
+        </div>
+      </div>
+
+      <button type="submit" class="submit" id="submit-btn">
+        Enviar Solicitação
+      </button>
+    </form>
+  </div>
+
+  <div class="container success-overlay" id="success-container">
+    <h2>Solicitação Enviada!</h2>
+    <p>
+      Agora você receberá um e-mail para confirmar a solicitação de
+      integração. Após isso, nossa equipe entrará em contato em breve.
+    </p>
+  </div>
+
+  <script>
+    const form = document.getElementById('integration-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const formContainer = document.getElementById('form-container');
+    const successContainer = document.getElementById('success-container');
+    const cnpjInput = document.getElementById('cnpj');
+    const dbSection = document.getElementById('db-section');
+
+    function toggleDbSection() {
+      const type = document.getElementById('hostingType').value;
+      dbSection.style.display = type === 'CLIENT_SERVER' ? 'block' : 'none';
+    }
+
+    cnpjInput.addEventListener('input', (e) => {
+      let value = e.target.value.replace(/\D/g, '');
+      if (value.length > 14) value = value.slice(0, 14);
+
+      value = value.replace(/^(\d{2})(\d)/, '$1.$2');
+      value = value.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
+      value = value.replace(/\.(\d{3})(\d)/, '.$1/$2');
+      value = value.replace(/(\d{4})(\d)/, '$1-$2');
+
+      e.target.value = value;
+    });
+
+    // Phone Mask Logic
+    function applyPhoneMask(e) {
+      let value = e.target.value.replace(/\D/g, '');
+      if (value.length > 11) value = value.slice(0, 11);
+
+      if (value.length > 10) {
+        // (00) 00000-0000
+        value = value.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3');
+      } else if (value.length > 6) {
+        // (00) 0000-0000
+        value = value.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
+      } else if (value.length > 2) {
+        // (00) 0000
+        value = value.replace(/^(\d{2})(\d{0,5})/, '($1) $2');
+      } else if (value.length > 0) {
+        // (00
+        value = value.replace(/^(\d{0,2})/, '($1');
+      }
+      e.target.value = value;
+    }
+
+    document.querySelectorAll('.phone-mask').forEach((input) => {
+      input.addEventListener('input', applyPhoneMask);
+    });
+
+    let selectedScopes = [];
+
+    function addScope() {
+      const module = document.getElementById('scope-module').value;
+      const actionEls = document.querySelectorAll('.scope-action:checked');
+      const actions = Array.from(actionEls).map((el) => ({
+        value: el.value,
+        label: el.getAttribute('data-label'),
+      }));
+
+      if (actions.length === 0) {
+        alert('Selecione ao menos uma ação');
+        return;
       }
 
-      cnpjInput.addEventListener('input', (e) => {
-        let value = e.target.value.replace(/\D/g, '');
-        if (value.length > 14) value = value.slice(0, 14);
+      // Verifica se já existe
+      if (selectedScopes.find((s) => s.resource === module)) {
+        alert('Módulo já adicionado');
+        return;
+      }
 
-        value = value.replace(/^(\d{2})(\d)/, '$1.$2');
-        value = value.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
-        value = value.replace(/\.(\d{3})(\d)/, '.$1/$2');
-        value = value.replace(/(\d{4})(\d)/, '$1-$2');
+      selectedScopes.push({ resource: module, actions });
+      renderScopes();
+    }
 
-        e.target.value = value;
+    const moduleConfig = {
+      Produtos: { read: true, create: false, update: false, delete: false },
+      Lojas: { read: true, create: false, update: false, delete: false },
+      'Grupos de Produtos': {
+        read: true,
+        create: true,
+        update: true,
+        delete: false,
+      },
+      'Marcas de Produtos': {
+        read: true,
+        create: true,
+        update: true,
+        delete: false,
+      },
+      Vendas: { read: true, create: true, update: false, delete: false },
+      'Formas de Pagamento': {
+        read: true,
+        create: false,
+        update: false,
+        delete: false,
+      },
+      'Planos de Pagamento': {
+        read: true,
+        create: false,
+        update: false,
+        delete: false,
+      },
+      'Contas a Receber': {
+        read: true,
+        create: false,
+        update: false,
+        delete: false,
+      },
+      'Contas a Pagar': {
+        read: true,
+        create: false,
+        update: false,
+        delete: false,
+      },
+      Clientes: { read: true, create: true, update: true, delete: false },
+      Funcionários: {
+        read: true,
+        create: false,
+        update: false,
+        delete: false,
+      },
+      Fornecedores: {
+        read: true,
+        create: false,
+        update: false,
+        delete: false,
+      },
+      'Prestadores de Serviço': {
+        read: true,
+        create: false,
+        update: false,
+        delete: false,
+      },
+      Entregas: { read: true, create: true, update: true, delete: true },
+    };
+
+    function updateAvailableActions() {
+      const module = document.getElementById('scope-module').value;
+      const config = moduleConfig[module];
+
+      document.querySelectorAll('.scope-action').forEach((cb) => {
+        const label = cb.closest('label');
+        if (config[cb.value]) {
+          label.style.display = 'flex';
+          if (cb.value === 'read') cb.checked = true;
+        } else {
+          label.style.display = 'none';
+          cb.checked = false;
+        }
       });
+    }
 
-      // Phone Mask Logic
-      function applyPhoneMask(e) {
-        let value = e.target.value.replace(/\D/g, '');
-        if (value.length > 11) value = value.slice(0, 11);
+    function removeScope(index) {
+      selectedScopes.splice(index, 1);
+      renderScopes();
+    }
 
-        if (value.length > 10) {
-          // (00) 00000-0000
-          value = value.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3');
-        } else if (value.length > 6) {
-          // (00) 0000-0000
-          value = value.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
-        } else if (value.length > 2) {
-          // (00) 0000
-          value = value.replace(/^(\d{2})(\d{0,5})/, '($1) $2');
-        } else if (value.length > 0) {
-          // (00
-          value = value.replace(/^(\d{0,2})/, '($1');
-        }
-        e.target.value = value;
-      }
-
-      document.querySelectorAll('.phone-mask').forEach((input) => {
-        input.addEventListener('input', applyPhoneMask);
-      });
-
-      let selectedScopes = [];
-
-      function addScope() {
-        const module = document.getElementById('scope-module').value;
-        const actionEls = document.querySelectorAll('.scope-action:checked');
-        const actions = Array.from(actionEls).map((el) => ({
-          value: el.value,
-          label: el.getAttribute('data-label'),
-        }));
-
-        if (actions.length === 0) {
-          alert('Selecione ao menos uma ação');
-          return;
-        }
-
-        // Verifica se já existe
-        if (selectedScopes.find((s) => s.resource === module)) {
-          alert('Módulo já adicionado');
-          return;
-        }
-
-        selectedScopes.push({ resource: module, actions });
-        renderScopes();
-      }
-
-      const moduleConfig = {
-        Produtos: { read: true, create: false, update: false, delete: false },
-        Lojas: { read: true, create: false, update: false, delete: false },
-        'Grupos de Produtos': {
-          read: true,
-          create: true,
-          update: true,
-          delete: false,
-        },
-        'Marcas de Produtos': {
-          read: true,
-          create: true,
-          update: true,
-          delete: false,
-        },
-        Pedidos: { read: true, create: true, update: false, delete: false },
-        'Formas de Pagamento': {
-          read: true,
-          create: false,
-          update: false,
-          delete: false,
-        },
-        'Planos de Pagamento': {
-          read: true,
-          create: false,
-          update: false,
-          delete: false,
-        },
-        'Contas a Receber': {
-          read: true,
-          create: false,
-          update: false,
-          delete: false,
-        },
-        'Contas a Pagar': {
-          read: true,
-          create: false,
-          update: false,
-          delete: false,
-        },
-        Clientes: { read: true, create: true, update: true, delete: false },
-        Funcionários: {
-          read: true,
-          create: false,
-          update: false,
-          delete: false,
-        },
-        Fornecedores: {
-          read: true,
-          create: false,
-          update: false,
-          delete: false,
-        },
-        'Prestadores de Serviço': {
-          read: true,
-          create: false,
-          update: false,
-          delete: false,
-        },
-        Entregas: { read: true, create: true, update: true, delete: true },
-      };
-
-      function updateAvailableActions() {
-        const module = document.getElementById('scope-module').value;
-        const config = moduleConfig[module];
-
-        document.querySelectorAll('.scope-action').forEach((cb) => {
-          const label = cb.closest('label');
-          if (config[cb.value]) {
-            label.style.display = 'flex';
-            if (cb.value === 'read') cb.checked = true;
-          } else {
-            label.style.display = 'none';
-            cb.checked = false;
-          }
-        });
-      }
-
-      function removeScope(index) {
-        selectedScopes.splice(index, 1);
-        renderScopes();
-      }
-
-      function renderScopes() {
-        const list = document.getElementById('scope-list');
-        list.innerHTML = selectedScopes
-          .map(
-            (s, i) => `
+    function renderScopes() {
+      const list = document.getElementById('scope-list');
+      list.innerHTML = selectedScopes
+        .map(
+          (s, i) => `
               <div class="scope-item">
                   <div>
                       <strong>${s.resource}</strong>
@@ -819,82 +725,83 @@
                   <span class="remove" onclick="removeScope(${i})">Remover</span>
               </div>
           `,
-          )
-          .join('');
+        )
+        .join('');
+    }
+
+    form.onsubmit = async (e) => {
+      e.preventDefault();
+
+      if (selectedScopes.length === 0) {
+        alert('Adicione ao menos um módulo ao escopo');
+        return;
       }
 
-      form.onsubmit = async (e) => {
-        e.preventDefault();
+      submitBtn.disabled = true;
+      submitBtn.innerText = 'Enviando...';
 
-        if (selectedScopes.length === 0) {
-          alert('Adicione ao menos um módulo ao escopo');
-          return;
-        }
+      const formData = new FormData(form);
+      const hostingType = formData.get('hostingType');
 
-        submitBtn.disabled = true;
-        submitBtn.innerText = 'Enviando...';
-
-        const formData = new FormData(form);
-        const hostingType = formData.get('hostingType');
-
-        const data = {
-          clientName: formData.get('clientName'),
-          legalName: formData.get('legalName'),
-          cnpj: formData.get('cnpj'),
-          hostingType: hostingType,
-          database:
-            hostingType === 'CLIENT_SERVER'
-              ? {
-                  host: formData.get('dbHost'),
-                  port: parseInt(formData.get('dbPort')),
-                  database: formData.get('dbName'),
-                }
-              : {
-                  host: 'DATACENTER',
-                  port: 0,
-                  database: 'DATACENTER',
-                },
-          modules: selectedScopes.map((s) => s.resource),
-          scopes: selectedScopes.map((s) => ({
-            resource: s.resource,
-            actions: s.actions.map((a) => a.value),
-          })),
-          objective: formData.get('objective'),
-          technicalContact: {
-            name: formData.get('techName'),
-            email: formData.get('techEmail'),
-            phone: formData.get('techPhone'),
-          },
-          responsiblePerson: {
-            name: formData.get('respName'),
-            email: formData.get('respEmail'),
-            phone: formData.get('respPhone'),
-          },
-        };
-
-        try {
-          const response = await fetch('/integration', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
-          });
-
-          if (response.ok) {
-            formContainer.style.display = 'none';
-            successContainer.style.display = 'block';
-          } else {
-            const err = await response.json();
-            alert('Erro ao enviar: ' + (err.message || 'Verifique os dados'));
-          }
-        } catch (err) {
-          alert('Erro de conexão com o servidor');
-        } finally {
-          submitBtn.disabled = false;
-          submitBtn.innerText = 'Enviar Solicitação';
-        }
+      const data = {
+        clientName: formData.get('clientName'),
+        legalName: formData.get('legalName'),
+        cnpj: formData.get('cnpj'),
+        hostingType: hostingType,
+        database:
+          hostingType === 'CLIENT_SERVER'
+            ? {
+              host: formData.get('dbHost'),
+              port: parseInt(formData.get('dbPort')),
+              database: formData.get('dbName'),
+            }
+            : {
+              host: 'DATACENTER',
+              port: 0,
+              database: 'DATACENTER',
+            },
+        modules: selectedScopes.map((s) => s.resource),
+        scopes: selectedScopes.map((s) => ({
+          resource: s.resource,
+          actions: s.actions.map((a) => a.value),
+        })),
+        objective: formData.get('objective'),
+        technicalContact: {
+          name: formData.get('techName'),
+          email: formData.get('techEmail'),
+          phone: formData.get('techPhone'),
+        },
+        responsiblePerson: {
+          name: formData.get('respName'),
+          email: formData.get('respEmail'),
+          phone: formData.get('respPhone'),
+        },
       };
-      toggleDbSection();
-      updateAvailableActions();
-    </script>
-  </body>
+
+      try {
+        const response = await fetch('/integration', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+
+        if (response.ok) {
+          formContainer.style.display = 'none';
+          successContainer.style.display = 'block';
+        } else {
+          const err = await response.json();
+          alert('Erro ao enviar: ' + (err.message || 'Verifique os dados'));
+        }
+      } catch (err) {
+        alert('Erro de conexão com o servidor');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerText = 'Enviar Solicitação';
+      }
+    };
+    toggleDbSection();
+    updateAvailableActions();
+  </script>
+</body>
+
 </html>

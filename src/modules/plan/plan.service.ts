@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, BadRequestException } from '@nestjs/common';
 import { RegistryPrismaService } from 'src/infra/prisma/registry-prisma.service';
 import { EmailService } from 'src/infra/email/email.service';
 import { EnvService } from 'src/config/env/env.service';
@@ -136,8 +136,8 @@ export class PlanService {
       const reqsMonth = await this.getRequestCount(userId, 'month');
       const limit = limits.reqMonth;
 
-      // Se atingir 80% do limite mensal mas ainda não estourou o limite (100%)
-      if (reqsMonth >= limit * 0.8 && reqsMonth < limit) {
+      // Se atingir pelo menos 80% do limite mensal
+      if (reqsMonth >= limit * 0.8) {
         const alreadySent = await this.hasSentUsageAlertThisMonth(userId);
         if (alreadySent) {
           return;
@@ -154,6 +154,31 @@ export class PlanService {
         `Erro ao verificar ou enviar alerta de limite de uso para o usuário ${userId}: ${e.message}`,
       );
     }
+  }
+
+  async sendManualUsageAlert(userId: string): Promise<void> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      include: { plan: true },
+    });
+
+    if (!user) {
+      throw new BadRequestException('Usuário não encontrado');
+    }
+
+    if (!user.email) {
+      throw new BadRequestException('O usuário não possui e-mail cadastrado');
+    }
+
+    const limits = user.plan || this.DEFAULT_FREE_LIMITS;
+    const reqsMonth = await this.getRequestCount(userId, 'month');
+    const limit = limits.reqMonth;
+
+    const html = this.generateUsageAlertHtml(user.user, reqsMonth, limit);
+    const subject = 'Alerta de Uso: Limite de Requisições Mensais Atingido em 80%';
+    
+    await this.emailService.sendEmail(user.email, subject, html);
+    await this.markUsageAlertSent(userId);
   }
 
   private async hasSentUsageAlertThisMonth(userId: string): Promise<boolean> {
