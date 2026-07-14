@@ -76,7 +76,7 @@ describe('DashboardController', () => {
         end: jest.fn(),
       } as any;
 
-      const mockData = { type: 'internal' };
+      const mockData = { type: 'internal' } as any;
       const mockPdfBuffer = Buffer.from('pdf-content');
 
       service.getDossierData.mockResolvedValueOnce(mockData);
@@ -107,7 +107,7 @@ describe('DashboardController', () => {
         end: jest.fn(),
       } as any;
 
-      const mockData = { type: 'client', user: { username: 'test-user' } };
+      const mockData = { type: 'client', user: { username: 'test-user' } } as any;
       const mockPdfBuffer = Buffer.from('pdf-content');
 
       service.getDossierData.mockResolvedValueOnce(mockData);
