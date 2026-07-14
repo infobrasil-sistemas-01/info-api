@@ -587,30 +587,39 @@ const Components = {
       }
       .summary-grid {
           display: flex;
-          gap: 1.5rem;
-          margin-bottom: 2rem;
+          gap: 1rem;
           overflow-x: auto;
-          padding-bottom: 10px;
+          padding: 8px 0;
           scroll-behavior: smooth;
           -webkit-overflow-scrolling: touch;
+          -ms-overflow-style: none;  /* IE and Edge */
+          scrollbar-width: none;  /* Firefox */
       }
       .summary-grid::-webkit-scrollbar {
-          height: 6px;
-      }
-      .summary-grid::-webkit-scrollbar-track {
-          background: rgba(0, 0, 0, 0.2);
-          border-radius: 99px;
-      }
-      .summary-grid::-webkit-scrollbar-thumb {
-          background: rgba(16, 185, 129, 0.25);
-          border-radius: 99px;
-      }
-      .summary-grid::-webkit-scrollbar-thumb:hover {
-          background: rgba(16, 185, 129, 0.5);
+          display: none; /* Hide scrollbar for Chrome, Safari and Opera */
       }
       .summary-grid .card {
-          flex: 1 0 250px;
+          flex: 0 0 230px;
+          padding: 1.2rem !important;
+          gap: 1.2rem !important;
           margin-bottom: 0 !important;
+      }
+      .summary-grid .card > div:first-child {
+          width: 52px !important;
+          height: 52px !important;
+          font-size: 2rem !important;
+          border-radius: 12px !important;
+          flex-shrink: 0;
+      }
+      .summary-grid .card h2 {
+          font-size: 1.45rem !important;
+      }
+      .slider-arrow:hover {
+          background: var(--primary) !important;
+          border-color: var(--primary) !important;
+      }
+      .slider-arrow:hover i {
+          color: white !important;
       }
       </style>
       <!-- Toolbar de Controles -->
@@ -667,65 +676,121 @@ const Components = {
       </div>
 
       <!-- Cards de Visão Executiva -->
-      <div class="summary-grid">
-          <div class="card" style="padding: 1.5rem; display: flex; align-items: center; gap: 1.5rem;">
-              <div style="font-size: 2.2rem; color: var(--primary); background: rgba(16, 185, 129, 0.1); width: 60px; height: 60px; flex-shrink: 0; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
-                  <i class='bx bx-data'></i>
+      <div class="summary-grid-wrapper" style="position: relative; margin-bottom: 2rem;">
+          <!-- Botão Seta Esquerda -->
+          <button onclick="document.getElementById('summary-grid-id').scrollBy({ left: -240, behavior: 'smooth' })" 
+                  class="slider-arrow arrow-left" 
+                  title="Anterior"
+                  style="
+                      position: absolute; 
+                      left: -18px; 
+                      top: 50%; 
+                      transform: translateY(-50%); 
+                      width: 36px; 
+                      height: 36px; 
+                      border-radius: 50%; 
+                      background: var(--card-bg); 
+                      border: 1px solid var(--border); 
+                      color: white; 
+                      display: flex; 
+                      align-items: center; 
+                      justify-content: center; 
+                      cursor: pointer; 
+                      z-index: 10; 
+                      box-shadow: 0 4px 12px rgba(0,0,0,0.5); 
+                      transition: all 0.2s ease;
+                      outline: none;
+                  ">
+              <i class='bx bx-chevron-left' style="font-size: 1.6rem; color: var(--text-muted); transition: color 0.2s;"></i>
+          </button>
+
+          <div id="summary-grid-id" class="summary-grid" style="margin-bottom: 0;">
+              <div class="card" style="padding: 1.5rem; display: flex; align-items: center; gap: 1.5rem;">
+                  <div style="font-size: 2.2rem; color: var(--primary); background: rgba(16, 185, 129, 0.1); width: 60px; height: 60px; flex-shrink: 0; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
+                      <i class='bx bx-data'></i>
+                  </div>
+                  <div>
+                      <small style="color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 4px;">TOTAL DE REQUISIÇÕES</small>
+                      <h2 style="margin: 0; font-size: 1.6rem; color: white;">${summary.totalRequests.toLocaleString()}</h2>
+                  </div>
               </div>
-              <div>
-                  <small style="color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 4px;">TOTAL DE REQUISIÇÕES</small>
-                  <h2 style="margin: 0; font-size: 1.6rem; color: white;">${summary.totalRequests.toLocaleString()}</h2>
+              <div class="card" style="padding: 1.5rem; display: flex; align-items: center; gap: 1.5rem;">
+                  <div style="font-size: 2.2rem; color: var(--primary); background: rgba(16, 185, 129, 0.1); width: 60px; height: 60px; flex-shrink: 0; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
+                      <i class='bx bx-group'></i>
+                  </div>
+                  <div>
+                      <small style="color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 4px;">USUÁRIOS ATIVOS</small>
+                      <h2 style="margin: 0; font-size: 1.6rem; color: white;">${summary.activeUsers.toLocaleString()}</h2>
+                  </div>
+              </div>
+              <div class="card" style="padding: 1.5rem; display: flex; align-items: center; gap: 1.5rem;">
+                  <div style="font-size: 2.2rem; color: var(--success); background: rgba(16, 185, 129, 0.1); width: 60px; height: 60px; flex-shrink: 0; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
+                      <i class='bx bx-check-double'></i>
+                  </div>
+                  <div>
+                      <small style="color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 4px;">TAXA DE SUCESSO</small>
+                      <h2 style="margin: 0; font-size: 1.6rem; color: white;">${summary.successRate.toFixed(2)}%</h2>
+                  </div>
+              </div>
+              <div class="card" style="padding: 1.5rem; display: flex; align-items: center; gap: 1.5rem;">
+                  <div style="font-size: 2.2rem; color: var(--danger); background: rgba(239, 68, 68, 0.1); width: 60px; height: 60px; flex-shrink: 0; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
+                      <i class='bx bx-shield-quarter'></i>
+                  </div>
+                  <div>
+                      <small style="color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 4px;">LIMITES EXCEDIDOS (429)</small>
+                      <h2 style="margin: 0; font-size: 1.6rem; color: white;">${summary.rateLimitHits.toLocaleString()}</h2>
+                  </div>
+              </div>
+              <div class="card" style="padding: 1.5rem; display: flex; align-items: center; gap: 1.5rem;">
+                  <div style="font-size: 2.2rem; color: #f59e0b; background: rgba(245, 158, 11, 0.1); width: 60px; height: 60px; flex-shrink: 0; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
+                      <i class='bx bx-time-five'></i>
+                  </div>
+                  <div>
+                      <small style="color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 4px;">LATÊNCIA P95</small>
+                      <h2 style="margin: 0; font-size: 1.6rem; color: white;">${summary.p95Latency ? summary.p95Latency + ' ms' : '0 ms'}</h2>
+                  </div>
+              </div>
+              <div class="card" style="padding: 1.5rem; display: flex; align-items: center; gap: 1.5rem;">
+                  <div style="font-size: 2.2rem; color: #6366f1; background: rgba(99, 102, 241, 0.1); width: 60px; height: 60px; flex-shrink: 0; border-radius: 14px; display: flex; align-items: center; justify-content: center; position: relative;">
+                      <i class='bx bx-pulse'></i>
+                      <span class="pulse-dot" style="position: absolute; top: 12px; right: 12px;"></span>
+                  </div>
+                  <div>
+                      <small style="color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 4px;">REQUISIÇÕES / MINUTO (RPM)</small>
+                      <h2 style="margin: 0; font-size: 1.6rem; color: white;">${(summary.currentRpm ?? 0).toLocaleString()} RPM</h2>
+                      <span style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-top: 4px;">
+                          Média no período: ${(summary.averageRpm ?? 0).toLocaleString()}
+                      </span>
+                  </div>
               </div>
           </div>
-          <div class="card" style="padding: 1.5rem; display: flex; align-items: center; gap: 1.5rem;">
-              <div style="font-size: 2.2rem; color: var(--primary); background: rgba(16, 185, 129, 0.1); width: 60px; height: 60px; flex-shrink: 0; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
-                  <i class='bx bx-group'></i>
-              </div>
-              <div>
-                  <small style="color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 4px;">USUÁRIOS ATIVOS</small>
-                  <h2 style="margin: 0; font-size: 1.6rem; color: white;">${summary.activeUsers.toLocaleString()}</h2>
-              </div>
-          </div>
-          <div class="card" style="padding: 1.5rem; display: flex; align-items: center; gap: 1.5rem;">
-              <div style="font-size: 2.2rem; color: var(--success); background: rgba(16, 185, 129, 0.1); width: 60px; height: 60px; flex-shrink: 0; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
-                  <i class='bx bx-check-double'></i>
-              </div>
-              <div>
-                  <small style="color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 4px;">TAXA DE SUCESSO</small>
-                  <h2 style="margin: 0; font-size: 1.6rem; color: white;">${summary.successRate.toFixed(2)}%</h2>
-              </div>
-          </div>
-          <div class="card" style="padding: 1.5rem; display: flex; align-items: center; gap: 1.5rem;">
-              <div style="font-size: 2.2rem; color: var(--danger); background: rgba(239, 68, 68, 0.1); width: 60px; height: 60px; flex-shrink: 0; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
-                  <i class='bx bx-shield-quarter'></i>
-              </div>
-              <div>
-                  <small style="color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 4px;">LIMITES EXCEDIDOS (429)</small>
-                  <h2 style="margin: 0; font-size: 1.6rem; color: white;">${summary.rateLimitHits.toLocaleString()}</h2>
-              </div>
-          </div>
-          <div class="card" style="padding: 1.5rem; display: flex; align-items: center; gap: 1.5rem;">
-              <div style="font-size: 2.2rem; color: #f59e0b; background: rgba(245, 158, 11, 0.1); width: 60px; height: 60px; flex-shrink: 0; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
-                  <i class='bx bx-time-five'></i>
-              </div>
-              <div>
-                  <small style="color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 4px;">LATÊNCIA P95</small>
-                  <h2 style="margin: 0; font-size: 1.6rem; color: white;">${summary.p95Latency ? summary.p95Latency + ' ms' : '0 ms'}</h2>
-              </div>
-          </div>
-          <div class="card" style="padding: 1.5rem; display: flex; align-items: center; gap: 1.5rem;">
-              <div style="font-size: 2.2rem; color: #6366f1; background: rgba(99, 102, 241, 0.1); width: 60px; height: 60px; flex-shrink: 0; border-radius: 14px; display: flex; align-items: center; justify-content: center; position: relative;">
-                  <i class='bx bx-pulse'></i>
-                  <span class="pulse-dot" style="position: absolute; top: 12px; right: 12px;"></span>
-              </div>
-              <div>
-                  <small style="color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 4px;">REQUISIÇÕES / MINUTO (RPM)</small>
-                  <h2 style="margin: 0; font-size: 1.6rem; color: white;">${(summary.currentRpm ?? 0).toLocaleString()} RPM</h2>
-                  <span style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-top: 4px;">
-                      Média no período: ${(summary.averageRpm ?? 0).toLocaleString()}
-                  </span>
-              </div>
-          </div>
+
+          <!-- Botão Seta Direita -->
+          <button onclick="document.getElementById('summary-grid-id').scrollBy({ left: 240, behavior: 'smooth' })" 
+                  class="slider-arrow arrow-right" 
+                  title="Próximo"
+                  style="
+                      position: absolute; 
+                      right: -18px; 
+                      top: 50%; 
+                      transform: translateY(-50%); 
+                      width: 36px; 
+                      height: 36px; 
+                      border-radius: 50%; 
+                      background: var(--card-bg); 
+                      border: 1px solid var(--border); 
+                      color: white; 
+                      display: flex; 
+                      align-items: center; 
+                      justify-content: center; 
+                      cursor: pointer; 
+                      z-index: 10; 
+                      box-shadow: 0 4px 12px rgba(0,0,0,0.5); 
+                      transition: all 0.2s ease;
+                      outline: none;
+                  ">
+              <i class='bx bx-chevron-right' style="font-size: 1.6rem; color: var(--text-muted); transition: color 0.2s;"></i>
+          </button>
       </div>
 
       <!-- Linha 1: Evolução Temporal & Status Codes -->
