@@ -4,6 +4,8 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { ZodError } from 'zod';
+import './zod-error-map';
+
 
 export class ZodValidationPipe implements PipeTransform {
   transform(value: any, metadata: ArgumentMetadata) {
