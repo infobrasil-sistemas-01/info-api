@@ -97,7 +97,7 @@ describe('DossierPdfService', () => {
       const data = {
         summary: { totalRequests: 100000, successRate: 90, p95Latency: 15, rateLimitHits: 2000, activeUsers: 5, currentRpm: 150, averageRpm: 75.2 },
         proactiveAlerts: [
-          { username: 'alert-user', email: 'alert@test.com', planName: 'Gold', monthlyRequests: 9000, planReqMonth: 10000, usagePercentage: 90 }
+          { username: 'alert-user', email: 'alert@test.com', planName: 'Gold', monthlyRequests: 9000, planReqMonth: 10000, usagePercentage: 90, notified: true }
         ],
         topUsers: [
           { username: 'top-user', planName: 'Bronze', totalRequests: 10000, errorRate: 2, monthlyRequests: 12000 }

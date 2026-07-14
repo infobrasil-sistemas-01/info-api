@@ -143,6 +143,14 @@ export class DossierPdfService {
         background-color: var(--primary-light);
         color: var(--primary-dark);
       }
+      .badge-success {
+        background-color: var(--primary-light);
+        color: var(--primary-dark);
+      }
+      .badge-muted {
+        background-color: var(--slate-100);
+        color: var(--slate-500);
+      }
       .grid-5 {
         display: grid;
         grid-template-columns: repeat(5, 1fr);
@@ -486,6 +494,12 @@ export class DossierPdfService {
         <td>${user.planName}</td>
         <td class="text-right">${(user.monthlyRequests ?? 0).toLocaleString('pt-BR')} / ${(user.planReqMonth ?? 0).toLocaleString('pt-BR')}</td>
         <td class="text-right" style="font-weight: 700; color: var(--red-600);">${(user.usagePercentage ?? 0).toFixed(1)}%</td>
+        <td class="text-center">
+          ${user.notified ? 
+            `<span class="badge badge-success">Sim</span>` : 
+            `<span class="badge badge-muted">Não</span>`
+          }
+        </td>
       </tr>
     `).join('');
 
@@ -620,10 +634,11 @@ export class DossierPdfService {
                 <th>Plano</th>
                 <th class="text-right">Consumo / Limite Mensal</th>
                 <th class="text-right">Utilização</th>
+                <th class="text-center" style="width: 80px;">Notificado</th>
               </tr>
             </thead>
             <tbody>
-              ${alertRows || '<tr><td colspan="5" class="text-center" style="color: var(--primary);">Nenhuma empresa atingiu mais de 80% do limite de franquia no mês atual.</td></tr>'}
+              ${alertRows || '<tr><td colspan="6" class="text-center" style="color: var(--primary);">Nenhuma empresa atingiu mais de 80% do limite de franquia no mês atual.</td></tr>'}
             </tbody>
           </table>
 

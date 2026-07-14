@@ -550,8 +550,14 @@ const Components = {
               <td style="padding: 10px 0;"><strong style="color: white;">${a.username}</strong><br><small style="color: var(--text-muted);">${a.email || ''}</small></td>
               <td style="padding: 10px 0;"><span class="tag-pill">${a.planName}</span></td>
               <td style="color: var(--danger); font-weight: 700; text-align: right; padding: 10px 0;">${a.usagePercentage}%</td>
+              <td style="text-align: center; padding: 10px 0;">
+                  ${a.notified ? 
+                      `<i class='bx bx-mail-send' style='color: var(--success); font-size: 1.25rem;' title='Notificação enviada'></i>` : 
+                      `<i class='bx bx-envelope' style='color: var(--text-muted); opacity: 0.4; font-size: 1.25rem;' title='Não notificado'></i>`
+                  }
+              </td>
           </tr>
-      `).join('') || `<tr><td colspan="3" style="text-align: center; color: var(--text-muted); padding: 20px;">Nenhum usuário crítico no momento (>80%)</td></tr>`;
+      `).join('') || `<tr><td colspan="4" style="text-align: center; color: var(--text-muted); padding: 20px;">Nenhum usuário crítico no momento (>80%)</td></tr>`;
 
     const dbRows = databaseLoad.map(d => `
           <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
@@ -910,6 +916,7 @@ const Components = {
                               <th style="text-align: left; padding: 8px 0; color: var(--text-muted);">Usuário</th>
                               <th style="text-align: left; padding: 8px 0; color: var(--text-muted);">Plano</th>
                               <th style="text-align: right; padding: 8px 0; color: var(--text-muted);">Uso %</th>
+                              <th style="text-align: center; padding: 8px 0; color: var(--text-muted); width: 80px;">Notificado</th>
                           </tr>
                       </thead>
                       <tbody>

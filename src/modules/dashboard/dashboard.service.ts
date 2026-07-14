@@ -230,19 +230,25 @@ export class DashboardService {
   async getProactiveAlerts() {
     const query = `
       SELECT
+        u.id as "userId",
         u.user as "username",
         u.email as "email",
         p.name as "planName",
         p.req_month as "planReqMonth",
         COUNT(rl.id)::int as "monthlyRequests",
-        ROUND((COUNT(rl.id)::float / p.req_month * 100)::numeric, 2)::float as "usagePercentage"
+        ROUND((COUNT(rl.id)::float / p.req_month * 100)::numeric, 2)::float as "usagePercentage",
+        EXISTS (
+          SELECT 1 FROM usage_alert_logs ual
+          WHERE ual.user_id = u.id
+            AND ual.sent_at >= DATE_TRUNC('month', CURRENT_DATE)
+        ) as "notified"
       FROM request_logs rl
       JOIN users u ON rl.user_id = u.id
       JOIN plans p ON u.plan_id = p.id
       WHERE rl.created_at >= DATE_TRUNC('month', CURRENT_DATE)
         AND rl.path NOT LIKE '/api/v1/dashboard%'
         AND rl.path NOT LIKE '/api/v1/newsletter%'
-      GROUP BY u.user, u.email, p.name, p.req_month
+      GROUP BY u.id, u.user, u.email, p.name, p.req_month
       HAVING COUNT(rl.id)::float / p.req_month >= 0.8
       ORDER BY "usagePercentage" DESC
     `;
