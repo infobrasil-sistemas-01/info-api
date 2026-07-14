@@ -61,12 +61,31 @@ export class DashboardService {
     );
     const p95Latency = (latencyResult && latencyResult[0]) ? latencyResult[0].p95 || 0 : 0;
 
+    const oneMinuteAgo = new Date(Date.now() - 60 * 1000);
+    const currentRpm = await this.prisma.requestLog.count({
+      where: {
+        createdAt: {
+          gte: oneMinuteAgo,
+        },
+        NOT: [
+          { path: { startsWith: '/api/v1/dashboard' } },
+          { path: { startsWith: '/api/v1/newsletter' } },
+        ],
+        ...(userId ? { userId } : {}),
+      },
+    });
+
+    const diffMinutes = Math.max(1, (endDate.getTime() - startDate.getTime()) / (1000 * 60));
+    const averageRpm = Number((totalRequests / diffMinutes).toFixed(2));
+
     return {
       totalRequests,
       activeUsers,
       successRate,
       rateLimitHits,
       p95Latency: Math.round(p95Latency),
+      currentRpm,
+      averageRpm,
     };
   }
 

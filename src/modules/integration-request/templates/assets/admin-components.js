@@ -562,6 +562,30 @@ const Components = {
       `).join('') || `<tr><td colspan="3" style="text-align: center; color: var(--text-muted); padding: 20px;">Sem dados</td></tr>`;
 
     return `
+      <style>
+      @keyframes pulse-dot-anim {
+          0% {
+              transform: scale(0.9);
+              box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+          }
+          70% {
+              transform: scale(1.1);
+              box-shadow: 0 0 0 5px rgba(16, 185, 129, 0);
+          }
+          100% {
+              transform: scale(0.9);
+              box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+          }
+      }
+      .pulse-dot {
+          display: inline-block;
+          width: 8px;
+          height: 8px;
+          background-color: #10b981;
+          border-radius: 50%;
+          animation: pulse-dot-anim 2s infinite;
+      }
+      </style>
       <!-- Toolbar de Controles -->
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 15px;">
           <div>
@@ -660,6 +684,22 @@ const Components = {
               <div>
                   <small style="color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 4px;">LATÊNCIA P95</small>
                   <h2 style="margin: 0; font-size: 1.6rem; color: white;">${summary.p95Latency ? summary.p95Latency + ' ms' : '0 ms'}</h2>
+              </div>
+          </div>
+          <div class="card" style="padding: 1.5rem; display: flex; align-items: center; gap: 1.5rem;">
+              <div style="font-size: 2.2rem; color: #6366f1; background: rgba(99, 102, 241, 0.1); width: 60px; height: 60px; flex-shrink: 0; border-radius: 14px; display: flex; align-items: center; justify-content: center; position: relative;">
+                  <i class='bx bx-pulse'></i>
+                  <span class="pulse-dot" style="position: absolute; top: 12px; right: 12px;"></span>
+              </div>
+              <div style="flex-grow: 1;">
+                  <small style="color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 4px;">REQUISIÇÕES / MINUTO (RPM)</small>
+                  <h2 style="margin: 0; font-size: 1.6rem; color: white; display: flex; align-items: baseline; gap: 6px;">
+                      ${(summary.currentRpm ?? 0).toLocaleString()}
+                      <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: normal;">atual</span>
+                  </h2>
+                  <span style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-top: 2px;">
+                      Média no período: <strong style="color: var(--text-muted);">${(summary.averageRpm ?? 0).toLocaleString()}</strong>
+                  </span>
               </div>
           </div>
       </div>

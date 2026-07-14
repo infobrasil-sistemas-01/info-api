@@ -48,6 +48,7 @@ describe('DashboardService', () => {
       mockPrisma.requestLog.count.mockResolvedValueOnce(90); // Success (2xx)
       mockPrisma.requestLog.count.mockResolvedValueOnce(5); // Rate limits (429)
       mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([{ p95: 15.5 }]); // p95 latency
+      mockPrisma.requestLog.count.mockResolvedValueOnce(12); // currentRpm
 
       const result = await service.getSummary(start, end);
 
@@ -57,6 +58,8 @@ describe('DashboardService', () => {
         successRate: 90,
         rateLimitHits: 5,
         p95Latency: 16,
+        currentRpm: 12,
+        averageRpm: 0.07,
       });
 
       expect(mockPrisma.requestLog.count).toHaveBeenNthCalledWith(1, {
@@ -78,7 +81,7 @@ describe('DashboardService', () => {
           ],
         },
       });
-      expect(mockPrisma.requestLog.count).toHaveBeenCalledTimes(3);
+      expect(mockPrisma.requestLog.count).toHaveBeenCalledTimes(4);
       expect(mockPrisma.requestLog.groupBy).toHaveBeenCalledTimes(1);
     });
 
@@ -91,6 +94,7 @@ describe('DashboardService', () => {
       mockPrisma.requestLog.count.mockResolvedValueOnce(0); // Success (2xx)
       mockPrisma.requestLog.count.mockResolvedValueOnce(0); // Rate limits (429)
       mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([]); // Latency
+      mockPrisma.requestLog.count.mockResolvedValueOnce(0); // currentRpm
 
       const result = await service.getSummary(start, end);
 
@@ -100,6 +104,8 @@ describe('DashboardService', () => {
         successRate: 100,
         rateLimitHits: 0,
         p95Latency: 0,
+        currentRpm: 0,
+        averageRpm: 0,
       });
     });
   });
@@ -279,6 +285,7 @@ describe('DashboardService', () => {
         mockPrisma.requestLog.count.mockResolvedValueOnce(95); // Success (2xx)
         mockPrisma.requestLog.count.mockResolvedValueOnce(0); // Rate limits (429)
         mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([{ p95: 12 }]); // Latency (getSummary)
+        mockPrisma.requestLog.count.mockResolvedValueOnce(8); // Current RPM
 
         // mock for getTopUsers
         mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([{ userId: '1', totalRequests: 50 }]); 
@@ -356,6 +363,7 @@ describe('DashboardService', () => {
         mockPrisma.requestLog.count.mockResolvedValueOnce(190); // Success (2xx)
         mockPrisma.requestLog.count.mockResolvedValueOnce(2); // Rate limits (429)
         mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([{ p95: 10 }]); // Latency
+        mockPrisma.requestLog.count.mockResolvedValueOnce(15); // Current RPM
 
         // mock for getTopEndpoints(userId)
         mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([{ path: '/test', totalRequests: 200 }]);
