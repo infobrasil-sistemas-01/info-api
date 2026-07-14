@@ -37,7 +37,7 @@ describe('DossierPdfService', () => {
     it('should launch puppeteer, set page content, generate PDF and close browser', async () => {
       const data = {
         user: { username: 'test-user', monthlyRequests: 50000, planReqMonth: 100000 },
-        summary: { totalRequests: 10000, successRate: 100, p95Latency: 15, rateLimitHits: 0 },
+        summary: { totalRequests: 10000, successRate: 100, p95Latency: 15, rateLimitHits: 0, currentRpm: 15, averageRpm: 5.5 },
         timeSeries: [{ timestamp: '2026-07-01', count: 10, success: 10, error: 0 }],
         statusDistribution: [{ statusClass: '2xx', count: 10 }],
         topEndpoints: [],
@@ -95,7 +95,7 @@ describe('DossierPdfService', () => {
 
     it('should generate internal dossier PDF with operational and commercial metrics', async () => {
       const data = {
-        summary: { totalRequests: 100000, successRate: 90, p95Latency: 15, rateLimitHits: 2000, activeUsers: 5 },
+        summary: { totalRequests: 100000, successRate: 90, p95Latency: 15, rateLimitHits: 2000, activeUsers: 5, currentRpm: 150, averageRpm: 75.2 },
         proactiveAlerts: [
           { username: 'alert-user', email: 'alert@test.com', planName: 'Gold', monthlyRequests: 9000, planReqMonth: 10000, usagePercentage: 90 }
         ],

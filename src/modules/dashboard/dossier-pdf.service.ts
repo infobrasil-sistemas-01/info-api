@@ -143,6 +143,12 @@ export class DossierPdfService {
         background-color: var(--primary-light);
         color: var(--primary-dark);
       }
+      .grid-5 {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 10px;
+        margin-bottom: 25px;
+      }
       .grid-4 {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -333,7 +339,7 @@ export class DossierPdfService {
 
           <!-- Quadro de Resumo de Uso -->
           <h3 style="border-left: 3px solid var(--primary); padding-left: 8px; margin-bottom: 12px; font-size: 14px;">Resumo Executivo</h3>
-          <div class="grid-3">
+          <div class="grid-4">
             <div class="card card-stat">
               <div class="stat-label">Requisições no Período</div>
               <div class="stat-val">${data.summary.totalRequests.toLocaleString('pt-BR')}</div>
@@ -348,6 +354,11 @@ export class DossierPdfService {
               <div class="stat-label">Latência p95</div>
               <div class="stat-val">${data.summary.p95Latency.toLocaleString('pt-BR')} ms</div>
               <div style="font-size: 9px; color: var(--slate-500);">Tempo máximo para 95% das reqs</div>
+            </div>
+            <div class="card card-stat">
+              <div class="stat-label">Requisições / Minuto (RPM)</div>
+              <div class="stat-val">${(data.summary.currentRpm ?? 0).toLocaleString('pt-BR')} RPM</div>
+              <div style="font-size: 9px; color: var(--slate-500);">Média no período: ${(data.summary.averageRpm ?? 0).toLocaleString('pt-BR')}</div>
             </div>
           </div>
 
@@ -565,7 +576,7 @@ export class DossierPdfService {
 
           <!-- Resumo Executivo Geral -->
           <h3 style="border-left: 3px solid var(--slate-900); padding-left: 8px; margin-bottom: 12px; font-size: 14px;">Resumo Operacional Global</h3>
-          <div class="grid-4">
+          <div class="grid-5">
             <div class="card card-stat">
               <div class="stat-label">Volume Geral Reqs</div>
               <div class="stat-val">${data.summary.totalRequests.toLocaleString('pt-BR')}</div>
@@ -585,6 +596,11 @@ export class DossierPdfService {
               <div class="stat-label">Latência p95 Média</div>
               <div class="stat-val">${data.summary.p95Latency.toLocaleString('pt-BR')} ms</div>
               <div style="font-size: 9px; color: var(--slate-500);">Média p95 global</div>
+            </div>
+            <div class="card card-stat">
+              <div class="stat-label">Requisições / Minuto (RPM)</div>
+              <div class="stat-val">${(data.summary.currentRpm ?? 0).toLocaleString('pt-BR')} RPM</div>
+              <div style="font-size: 9px; color: var(--slate-500);">Média no período: ${(data.summary.averageRpm ?? 0).toLocaleString('pt-BR')}</div>
             </div>
           </div>
 
