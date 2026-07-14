@@ -100,7 +100,6 @@ export class PlanService {
       where: {
         userId,
         createdAt: { gte: startDate },
-        success: true,
       },
     });
   }
