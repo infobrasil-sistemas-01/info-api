@@ -3,28 +3,14 @@ import { PlanService } from './plan.service';
 import { RegistryPrismaService } from 'src/infra/prisma/registry-prisma.service';
 import { EmailService } from 'src/infra/email/email.service';
 import { EnvService } from 'src/config/env/env.service';
-import * as fs from 'fs';
-
-jest.mock('fs');
 
 describe('PlanService', () => {
   let service: PlanService;
   let mockPrisma: any;
   let mockEmailService: any;
   let mockEnvService: any;
-  let mockFs: jest.Mocked<typeof fs>;
 
   beforeEach(async () => {
-    mockFs = fs as jest.Mocked<typeof fs>;
-    mockFs.existsSync.mockReset();
-    mockFs.readFileSync.mockReset();
-    mockFs.writeFileSync.mockReset();
-    mockFs.mkdirSync.mockReset();
-
-    // Default mock behaviors for fs to avoid crashing
-    mockFs.existsSync.mockReturnValue(false);
-    mockFs.readFileSync.mockReturnValue('{}');
-
     mockPrisma = {
       user: {
         findUnique: jest.fn(),
@@ -32,6 +18,10 @@ describe('PlanService', () => {
       requestLog: {
         create: jest.fn(),
         count: jest.fn(),
+      },
+      usageAlertLog: {
+        findFirst: jest.fn(),
+        create: jest.fn(),
       },
     };
 
@@ -124,7 +114,9 @@ describe('PlanService', () => {
       });
       mockPrisma.requestLog.count.mockResolvedValue(8500); // 85%
       
-      mockFs.existsSync.mockReturnValue(false);
+      // Simulate no alert sent this month
+      mockPrisma.usageAlertLog.findFirst.mockResolvedValue(null);
+      mockPrisma.usageAlertLog.create.mockResolvedValue({});
 
       await (service as any).checkAndSendUsageAlert('user1');
 
@@ -133,7 +125,12 @@ describe('PlanService', () => {
         'Alerta de Uso: Limite de Requisições Mensais Atingido em 80%',
         expect.stringContaining('testuser'),
       );
-      expect(mockFs.writeFileSync).toHaveBeenCalled();
+      expect(mockPrisma.usageAlertLog.create).toHaveBeenCalledWith({
+        data: {
+          userId: 'user1',
+          alertType: 'MONTHLY_80',
+        },
+      });
     });
 
     it('should not send email if user is at 80% but was already alerted this month', async () => {
@@ -146,16 +143,19 @@ describe('PlanService', () => {
       mockPrisma.requestLog.count.mockResolvedValue(8500);
 
       // Simulate alert already sent this month
-      mockFs.existsSync.mockReturnValue(true);
-      const currentMonthIso = new Date().toISOString();
-      mockFs.readFileSync.mockReturnValue(JSON.stringify({ user1: currentMonthIso }));
+      mockPrisma.usageAlertLog.findFirst.mockResolvedValue({
+        id: 'log1',
+        userId: 'user1',
+        alertType: 'MONTHLY_80',
+        sentAt: new Date(),
+      });
 
       await (service as any).checkAndSendUsageAlert('user1');
 
       expect(mockEmailService.sendEmail).not.toHaveBeenCalled();
     });
 
-    it('should send email if user is at 80% and last alert was sent in a previous month', async () => {
+    it('should send email if user is at 80% and last alert was sent in a previous month (current month findFirst returns null)', async () => {
       mockPrisma.user.findUnique.mockResolvedValue({
         id: 'user1',
         user: 'testuser',
@@ -164,16 +164,14 @@ describe('PlanService', () => {
       });
       mockPrisma.requestLog.count.mockResolvedValue(8500);
 
-      // Simulate alert sent last month
-      mockFs.existsSync.mockReturnValue(true);
-      const lastMonth = new Date();
-      lastMonth.setMonth(lastMonth.getMonth() - 1);
-      mockFs.readFileSync.mockReturnValue(JSON.stringify({ user1: lastMonth.toISOString() }));
+      // Simulate no alert sent in the current month (findFirst returns null)
+      mockPrisma.usageAlertLog.findFirst.mockResolvedValue(null);
+      mockPrisma.usageAlertLog.create.mockResolvedValue({});
 
       await (service as any).checkAndSendUsageAlert('user1');
 
       expect(mockEmailService.sendEmail).toHaveBeenCalled();
-      expect(mockFs.writeFileSync).toHaveBeenCalled();
+      expect(mockPrisma.usageAlertLog.create).toHaveBeenCalled();
     });
   });
 });

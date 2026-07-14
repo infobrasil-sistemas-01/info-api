@@ -83,6 +83,11 @@ export type StatusLog = $Result.DefaultSelection<Prisma.$StatusLogPayload>
  * 
  */
 export type SystemHeartbeat = $Result.DefaultSelection<Prisma.$SystemHeartbeatPayload>
+/**
+ * Model UsageAlertLog
+ * 
+ */
+export type UsageAlertLog = $Result.DefaultSelection<Prisma.$UsageAlertLogPayload>
 
 /**
  * Enums
@@ -375,6 +380,16 @@ export class PrismaClient<
     * ```
     */
   get systemHeartbeat(): Prisma.SystemHeartbeatDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.usageAlertLog`: Exposes CRUD operations for the **UsageAlertLog** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UsageAlertLogs
+    * const usageAlertLogs = await prisma.usageAlertLog.findMany()
+    * ```
+    */
+  get usageAlertLog(): Prisma.UsageAlertLogDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -822,7 +837,8 @@ export namespace Prisma {
     Newsletter: 'Newsletter',
     AnnouncementView: 'AnnouncementView',
     StatusLog: 'StatusLog',
-    SystemHeartbeat: 'SystemHeartbeat'
+    SystemHeartbeat: 'SystemHeartbeat',
+    UsageAlertLog: 'UsageAlertLog'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -838,7 +854,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "plan" | "requestLog" | "userInvitation" | "dbCredentials" | "role" | "permission" | "rolePermission" | "integrationRequest" | "announcement" | "newsletter" | "announcementView" | "statusLog" | "systemHeartbeat"
+      modelProps: "user" | "plan" | "requestLog" | "userInvitation" | "dbCredentials" | "role" | "permission" | "rolePermission" | "integrationRequest" | "announcement" | "newsletter" | "announcementView" | "statusLog" | "systemHeartbeat" | "usageAlertLog"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1878,6 +1894,80 @@ export namespace Prisma {
           }
         }
       }
+      UsageAlertLog: {
+        payload: Prisma.$UsageAlertLogPayload<ExtArgs>
+        fields: Prisma.UsageAlertLogFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.UsageAlertLogFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UsageAlertLogPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.UsageAlertLogFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UsageAlertLogPayload>
+          }
+          findFirst: {
+            args: Prisma.UsageAlertLogFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UsageAlertLogPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.UsageAlertLogFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UsageAlertLogPayload>
+          }
+          findMany: {
+            args: Prisma.UsageAlertLogFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UsageAlertLogPayload>[]
+          }
+          create: {
+            args: Prisma.UsageAlertLogCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UsageAlertLogPayload>
+          }
+          createMany: {
+            args: Prisma.UsageAlertLogCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.UsageAlertLogCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UsageAlertLogPayload>[]
+          }
+          delete: {
+            args: Prisma.UsageAlertLogDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UsageAlertLogPayload>
+          }
+          update: {
+            args: Prisma.UsageAlertLogUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UsageAlertLogPayload>
+          }
+          deleteMany: {
+            args: Prisma.UsageAlertLogDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.UsageAlertLogUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.UsageAlertLogUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UsageAlertLogPayload>[]
+          }
+          upsert: {
+            args: Prisma.UsageAlertLogUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UsageAlertLogPayload>
+          }
+          aggregate: {
+            args: Prisma.UsageAlertLogAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUsageAlertLog>
+          }
+          groupBy: {
+            args: Prisma.UsageAlertLogGroupByArgs<ExtArgs>
+            result: $Utils.Optional<UsageAlertLogGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.UsageAlertLogCountArgs<ExtArgs>
+            result: $Utils.Optional<UsageAlertLogCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2000,6 +2090,7 @@ export namespace Prisma {
     announcementView?: AnnouncementViewOmit
     statusLog?: StatusLogOmit
     systemHeartbeat?: SystemHeartbeatOmit
+    usageAlertLog?: UsageAlertLogOmit
   }
 
   /* Types for Logging */
@@ -2082,11 +2173,13 @@ export namespace Prisma {
   export type UserCountOutputType = {
     requestLogs: number
     announcementViews: number
+    usageAlertLogs: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     requestLogs?: boolean | UserCountOutputTypeCountRequestLogsArgs
     announcementViews?: boolean | UserCountOutputTypeCountAnnouncementViewsArgs
+    usageAlertLogs?: boolean | UserCountOutputTypeCountUsageAlertLogsArgs
   }
 
   // Custom InputTypes
@@ -2112,6 +2205,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountAnnouncementViewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AnnouncementViewWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountUsageAlertLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UsageAlertLogWhereInput
   }
 
 
@@ -2566,6 +2666,7 @@ export namespace Prisma {
     invitation?: boolean | User$invitationArgs<ExtArgs>
     requestLogs?: boolean | User$requestLogsArgs<ExtArgs>
     announcementViews?: boolean | User$announcementViewsArgs<ExtArgs>
+    usageAlertLogs?: boolean | User$usageAlertLogsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2625,6 +2726,7 @@ export namespace Prisma {
     invitation?: boolean | User$invitationArgs<ExtArgs>
     requestLogs?: boolean | User$requestLogsArgs<ExtArgs>
     announcementViews?: boolean | User$announcementViewsArgs<ExtArgs>
+    usageAlertLogs?: boolean | User$usageAlertLogsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2647,6 +2749,7 @@ export namespace Prisma {
       invitation: Prisma.$UserInvitationPayload<ExtArgs> | null
       requestLogs: Prisma.$RequestLogPayload<ExtArgs>[]
       announcementViews: Prisma.$AnnouncementViewPayload<ExtArgs>[]
+      usageAlertLogs: Prisma.$UsageAlertLogPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3060,6 +3163,7 @@ export namespace Prisma {
     invitation<T extends User$invitationArgs<ExtArgs> = {}>(args?: Subset<T, User$invitationArgs<ExtArgs>>): Prisma__UserInvitationClient<$Result.GetResult<Prisma.$UserInvitationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     requestLogs<T extends User$requestLogsArgs<ExtArgs> = {}>(args?: Subset<T, User$requestLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RequestLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     announcementViews<T extends User$announcementViewsArgs<ExtArgs> = {}>(args?: Subset<T, User$announcementViewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnnouncementViewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    usageAlertLogs<T extends User$usageAlertLogsArgs<ExtArgs> = {}>(args?: Subset<T, User$usageAlertLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UsageAlertLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3603,6 +3707,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AnnouncementViewScalarFieldEnum | AnnouncementViewScalarFieldEnum[]
+  }
+
+  /**
+   * User.usageAlertLogs
+   */
+  export type User$usageAlertLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageAlertLog
+     */
+    select?: UsageAlertLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageAlertLog
+     */
+    omit?: UsageAlertLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageAlertLogInclude<ExtArgs> | null
+    where?: UsageAlertLogWhereInput
+    orderBy?: UsageAlertLogOrderByWithRelationInput | UsageAlertLogOrderByWithRelationInput[]
+    cursor?: UsageAlertLogWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UsageAlertLogScalarFieldEnum | UsageAlertLogScalarFieldEnum[]
   }
 
   /**
@@ -4788,6 +4916,7 @@ export namespace Prisma {
     status: number | null
     ip: string | null
     durationMs: number | null
+    success: boolean | null
     createdAt: Date | null
   }
 
@@ -4799,6 +4928,7 @@ export namespace Prisma {
     status: number | null
     ip: string | null
     durationMs: number | null
+    success: boolean | null
     createdAt: Date | null
   }
 
@@ -4810,6 +4940,7 @@ export namespace Prisma {
     status: number
     ip: number
     durationMs: number
+    success: number
     createdAt: number
     _all: number
   }
@@ -4833,6 +4964,7 @@ export namespace Prisma {
     status?: true
     ip?: true
     durationMs?: true
+    success?: true
     createdAt?: true
   }
 
@@ -4844,6 +4976,7 @@ export namespace Prisma {
     status?: true
     ip?: true
     durationMs?: true
+    success?: true
     createdAt?: true
   }
 
@@ -4855,6 +4988,7 @@ export namespace Prisma {
     status?: true
     ip?: true
     durationMs?: true
+    success?: true
     createdAt?: true
     _all?: true
   }
@@ -4953,6 +5087,7 @@ export namespace Prisma {
     status: number
     ip: string | null
     durationMs: number | null
+    success: boolean
     createdAt: Date
     _count: RequestLogCountAggregateOutputType | null
     _avg: RequestLogAvgAggregateOutputType | null
@@ -4983,6 +5118,7 @@ export namespace Prisma {
     status?: boolean
     ip?: boolean
     durationMs?: boolean
+    success?: boolean
     createdAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["requestLog"]>
@@ -4995,6 +5131,7 @@ export namespace Prisma {
     status?: boolean
     ip?: boolean
     durationMs?: boolean
+    success?: boolean
     createdAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["requestLog"]>
@@ -5007,6 +5144,7 @@ export namespace Prisma {
     status?: boolean
     ip?: boolean
     durationMs?: boolean
+    success?: boolean
     createdAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["requestLog"]>
@@ -5019,10 +5157,11 @@ export namespace Prisma {
     status?: boolean
     ip?: boolean
     durationMs?: boolean
+    success?: boolean
     createdAt?: boolean
   }
 
-  export type RequestLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "method" | "path" | "status" | "ip" | "durationMs" | "createdAt", ExtArgs["result"]["requestLog"]>
+  export type RequestLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "method" | "path" | "status" | "ip" | "durationMs" | "success" | "createdAt", ExtArgs["result"]["requestLog"]>
   export type RequestLogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -5046,6 +5185,7 @@ export namespace Prisma {
       status: number
       ip: string | null
       durationMs: number | null
+      success: boolean
       createdAt: Date
     }, ExtArgs["result"]["requestLog"]>
     composites: {}
@@ -5478,6 +5618,7 @@ export namespace Prisma {
     readonly status: FieldRef<"RequestLog", 'Int'>
     readonly ip: FieldRef<"RequestLog", 'String'>
     readonly durationMs: FieldRef<"RequestLog", 'Float'>
+    readonly success: FieldRef<"RequestLog", 'Boolean'>
     readonly createdAt: FieldRef<"RequestLog", 'DateTime'>
   }
     
@@ -17811,6 +17952,1056 @@ export namespace Prisma {
 
 
   /**
+   * Model UsageAlertLog
+   */
+
+  export type AggregateUsageAlertLog = {
+    _count: UsageAlertLogCountAggregateOutputType | null
+    _min: UsageAlertLogMinAggregateOutputType | null
+    _max: UsageAlertLogMaxAggregateOutputType | null
+  }
+
+  export type UsageAlertLogMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    alertType: string | null
+    sentAt: Date | null
+  }
+
+  export type UsageAlertLogMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    alertType: string | null
+    sentAt: Date | null
+  }
+
+  export type UsageAlertLogCountAggregateOutputType = {
+    id: number
+    userId: number
+    alertType: number
+    sentAt: number
+    _all: number
+  }
+
+
+  export type UsageAlertLogMinAggregateInputType = {
+    id?: true
+    userId?: true
+    alertType?: true
+    sentAt?: true
+  }
+
+  export type UsageAlertLogMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    alertType?: true
+    sentAt?: true
+  }
+
+  export type UsageAlertLogCountAggregateInputType = {
+    id?: true
+    userId?: true
+    alertType?: true
+    sentAt?: true
+    _all?: true
+  }
+
+  export type UsageAlertLogAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UsageAlertLog to aggregate.
+     */
+    where?: UsageAlertLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UsageAlertLogs to fetch.
+     */
+    orderBy?: UsageAlertLogOrderByWithRelationInput | UsageAlertLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: UsageAlertLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UsageAlertLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UsageAlertLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned UsageAlertLogs
+    **/
+    _count?: true | UsageAlertLogCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UsageAlertLogMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UsageAlertLogMaxAggregateInputType
+  }
+
+  export type GetUsageAlertLogAggregateType<T extends UsageAlertLogAggregateArgs> = {
+        [P in keyof T & keyof AggregateUsageAlertLog]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUsageAlertLog[P]>
+      : GetScalarType<T[P], AggregateUsageAlertLog[P]>
+  }
+
+
+
+
+  export type UsageAlertLogGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UsageAlertLogWhereInput
+    orderBy?: UsageAlertLogOrderByWithAggregationInput | UsageAlertLogOrderByWithAggregationInput[]
+    by: UsageAlertLogScalarFieldEnum[] | UsageAlertLogScalarFieldEnum
+    having?: UsageAlertLogScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UsageAlertLogCountAggregateInputType | true
+    _min?: UsageAlertLogMinAggregateInputType
+    _max?: UsageAlertLogMaxAggregateInputType
+  }
+
+  export type UsageAlertLogGroupByOutputType = {
+    id: string
+    userId: string
+    alertType: string
+    sentAt: Date
+    _count: UsageAlertLogCountAggregateOutputType | null
+    _min: UsageAlertLogMinAggregateOutputType | null
+    _max: UsageAlertLogMaxAggregateOutputType | null
+  }
+
+  type GetUsageAlertLogGroupByPayload<T extends UsageAlertLogGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UsageAlertLogGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UsageAlertLogGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UsageAlertLogGroupByOutputType[P]>
+            : GetScalarType<T[P], UsageAlertLogGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UsageAlertLogSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    alertType?: boolean
+    sentAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["usageAlertLog"]>
+
+  export type UsageAlertLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    alertType?: boolean
+    sentAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["usageAlertLog"]>
+
+  export type UsageAlertLogSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    alertType?: boolean
+    sentAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["usageAlertLog"]>
+
+  export type UsageAlertLogSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    alertType?: boolean
+    sentAt?: boolean
+  }
+
+  export type UsageAlertLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "alertType" | "sentAt", ExtArgs["result"]["usageAlertLog"]>
+  export type UsageAlertLogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type UsageAlertLogIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type UsageAlertLogIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $UsageAlertLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "UsageAlertLog"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      alertType: string
+      sentAt: Date
+    }, ExtArgs["result"]["usageAlertLog"]>
+    composites: {}
+  }
+
+  type UsageAlertLogGetPayload<S extends boolean | null | undefined | UsageAlertLogDefaultArgs> = $Result.GetResult<Prisma.$UsageAlertLogPayload, S>
+
+  type UsageAlertLogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<UsageAlertLogFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: UsageAlertLogCountAggregateInputType | true
+    }
+
+  export interface UsageAlertLogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UsageAlertLog'], meta: { name: 'UsageAlertLog' } }
+    /**
+     * Find zero or one UsageAlertLog that matches the filter.
+     * @param {UsageAlertLogFindUniqueArgs} args - Arguments to find a UsageAlertLog
+     * @example
+     * // Get one UsageAlertLog
+     * const usageAlertLog = await prisma.usageAlertLog.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends UsageAlertLogFindUniqueArgs>(args: SelectSubset<T, UsageAlertLogFindUniqueArgs<ExtArgs>>): Prisma__UsageAlertLogClient<$Result.GetResult<Prisma.$UsageAlertLogPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one UsageAlertLog that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {UsageAlertLogFindUniqueOrThrowArgs} args - Arguments to find a UsageAlertLog
+     * @example
+     * // Get one UsageAlertLog
+     * const usageAlertLog = await prisma.usageAlertLog.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends UsageAlertLogFindUniqueOrThrowArgs>(args: SelectSubset<T, UsageAlertLogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UsageAlertLogClient<$Result.GetResult<Prisma.$UsageAlertLogPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UsageAlertLog that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UsageAlertLogFindFirstArgs} args - Arguments to find a UsageAlertLog
+     * @example
+     * // Get one UsageAlertLog
+     * const usageAlertLog = await prisma.usageAlertLog.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends UsageAlertLogFindFirstArgs>(args?: SelectSubset<T, UsageAlertLogFindFirstArgs<ExtArgs>>): Prisma__UsageAlertLogClient<$Result.GetResult<Prisma.$UsageAlertLogPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UsageAlertLog that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UsageAlertLogFindFirstOrThrowArgs} args - Arguments to find a UsageAlertLog
+     * @example
+     * // Get one UsageAlertLog
+     * const usageAlertLog = await prisma.usageAlertLog.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends UsageAlertLogFindFirstOrThrowArgs>(args?: SelectSubset<T, UsageAlertLogFindFirstOrThrowArgs<ExtArgs>>): Prisma__UsageAlertLogClient<$Result.GetResult<Prisma.$UsageAlertLogPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more UsageAlertLogs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UsageAlertLogFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UsageAlertLogs
+     * const usageAlertLogs = await prisma.usageAlertLog.findMany()
+     * 
+     * // Get first 10 UsageAlertLogs
+     * const usageAlertLogs = await prisma.usageAlertLog.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const usageAlertLogWithIdOnly = await prisma.usageAlertLog.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends UsageAlertLogFindManyArgs>(args?: SelectSubset<T, UsageAlertLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UsageAlertLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a UsageAlertLog.
+     * @param {UsageAlertLogCreateArgs} args - Arguments to create a UsageAlertLog.
+     * @example
+     * // Create one UsageAlertLog
+     * const UsageAlertLog = await prisma.usageAlertLog.create({
+     *   data: {
+     *     // ... data to create a UsageAlertLog
+     *   }
+     * })
+     * 
+     */
+    create<T extends UsageAlertLogCreateArgs>(args: SelectSubset<T, UsageAlertLogCreateArgs<ExtArgs>>): Prisma__UsageAlertLogClient<$Result.GetResult<Prisma.$UsageAlertLogPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many UsageAlertLogs.
+     * @param {UsageAlertLogCreateManyArgs} args - Arguments to create many UsageAlertLogs.
+     * @example
+     * // Create many UsageAlertLogs
+     * const usageAlertLog = await prisma.usageAlertLog.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends UsageAlertLogCreateManyArgs>(args?: SelectSubset<T, UsageAlertLogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many UsageAlertLogs and returns the data saved in the database.
+     * @param {UsageAlertLogCreateManyAndReturnArgs} args - Arguments to create many UsageAlertLogs.
+     * @example
+     * // Create many UsageAlertLogs
+     * const usageAlertLog = await prisma.usageAlertLog.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many UsageAlertLogs and only return the `id`
+     * const usageAlertLogWithIdOnly = await prisma.usageAlertLog.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends UsageAlertLogCreateManyAndReturnArgs>(args?: SelectSubset<T, UsageAlertLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UsageAlertLogPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a UsageAlertLog.
+     * @param {UsageAlertLogDeleteArgs} args - Arguments to delete one UsageAlertLog.
+     * @example
+     * // Delete one UsageAlertLog
+     * const UsageAlertLog = await prisma.usageAlertLog.delete({
+     *   where: {
+     *     // ... filter to delete one UsageAlertLog
+     *   }
+     * })
+     * 
+     */
+    delete<T extends UsageAlertLogDeleteArgs>(args: SelectSubset<T, UsageAlertLogDeleteArgs<ExtArgs>>): Prisma__UsageAlertLogClient<$Result.GetResult<Prisma.$UsageAlertLogPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one UsageAlertLog.
+     * @param {UsageAlertLogUpdateArgs} args - Arguments to update one UsageAlertLog.
+     * @example
+     * // Update one UsageAlertLog
+     * const usageAlertLog = await prisma.usageAlertLog.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends UsageAlertLogUpdateArgs>(args: SelectSubset<T, UsageAlertLogUpdateArgs<ExtArgs>>): Prisma__UsageAlertLogClient<$Result.GetResult<Prisma.$UsageAlertLogPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more UsageAlertLogs.
+     * @param {UsageAlertLogDeleteManyArgs} args - Arguments to filter UsageAlertLogs to delete.
+     * @example
+     * // Delete a few UsageAlertLogs
+     * const { count } = await prisma.usageAlertLog.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends UsageAlertLogDeleteManyArgs>(args?: SelectSubset<T, UsageAlertLogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UsageAlertLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UsageAlertLogUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UsageAlertLogs
+     * const usageAlertLog = await prisma.usageAlertLog.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends UsageAlertLogUpdateManyArgs>(args: SelectSubset<T, UsageAlertLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UsageAlertLogs and returns the data updated in the database.
+     * @param {UsageAlertLogUpdateManyAndReturnArgs} args - Arguments to update many UsageAlertLogs.
+     * @example
+     * // Update many UsageAlertLogs
+     * const usageAlertLog = await prisma.usageAlertLog.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more UsageAlertLogs and only return the `id`
+     * const usageAlertLogWithIdOnly = await prisma.usageAlertLog.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends UsageAlertLogUpdateManyAndReturnArgs>(args: SelectSubset<T, UsageAlertLogUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UsageAlertLogPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one UsageAlertLog.
+     * @param {UsageAlertLogUpsertArgs} args - Arguments to update or create a UsageAlertLog.
+     * @example
+     * // Update or create a UsageAlertLog
+     * const usageAlertLog = await prisma.usageAlertLog.upsert({
+     *   create: {
+     *     // ... data to create a UsageAlertLog
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UsageAlertLog we want to update
+     *   }
+     * })
+     */
+    upsert<T extends UsageAlertLogUpsertArgs>(args: SelectSubset<T, UsageAlertLogUpsertArgs<ExtArgs>>): Prisma__UsageAlertLogClient<$Result.GetResult<Prisma.$UsageAlertLogPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of UsageAlertLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UsageAlertLogCountArgs} args - Arguments to filter UsageAlertLogs to count.
+     * @example
+     * // Count the number of UsageAlertLogs
+     * const count = await prisma.usageAlertLog.count({
+     *   where: {
+     *     // ... the filter for the UsageAlertLogs we want to count
+     *   }
+     * })
+    **/
+    count<T extends UsageAlertLogCountArgs>(
+      args?: Subset<T, UsageAlertLogCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UsageAlertLogCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a UsageAlertLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UsageAlertLogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UsageAlertLogAggregateArgs>(args: Subset<T, UsageAlertLogAggregateArgs>): Prisma.PrismaPromise<GetUsageAlertLogAggregateType<T>>
+
+    /**
+     * Group by UsageAlertLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UsageAlertLogGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UsageAlertLogGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UsageAlertLogGroupByArgs['orderBy'] }
+        : { orderBy?: UsageAlertLogGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UsageAlertLogGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUsageAlertLogGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the UsageAlertLog model
+   */
+  readonly fields: UsageAlertLogFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UsageAlertLog.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UsageAlertLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the UsageAlertLog model
+   */
+  interface UsageAlertLogFieldRefs {
+    readonly id: FieldRef<"UsageAlertLog", 'String'>
+    readonly userId: FieldRef<"UsageAlertLog", 'String'>
+    readonly alertType: FieldRef<"UsageAlertLog", 'String'>
+    readonly sentAt: FieldRef<"UsageAlertLog", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * UsageAlertLog findUnique
+   */
+  export type UsageAlertLogFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageAlertLog
+     */
+    select?: UsageAlertLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageAlertLog
+     */
+    omit?: UsageAlertLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageAlertLogInclude<ExtArgs> | null
+    /**
+     * Filter, which UsageAlertLog to fetch.
+     */
+    where: UsageAlertLogWhereUniqueInput
+  }
+
+  /**
+   * UsageAlertLog findUniqueOrThrow
+   */
+  export type UsageAlertLogFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageAlertLog
+     */
+    select?: UsageAlertLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageAlertLog
+     */
+    omit?: UsageAlertLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageAlertLogInclude<ExtArgs> | null
+    /**
+     * Filter, which UsageAlertLog to fetch.
+     */
+    where: UsageAlertLogWhereUniqueInput
+  }
+
+  /**
+   * UsageAlertLog findFirst
+   */
+  export type UsageAlertLogFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageAlertLog
+     */
+    select?: UsageAlertLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageAlertLog
+     */
+    omit?: UsageAlertLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageAlertLogInclude<ExtArgs> | null
+    /**
+     * Filter, which UsageAlertLog to fetch.
+     */
+    where?: UsageAlertLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UsageAlertLogs to fetch.
+     */
+    orderBy?: UsageAlertLogOrderByWithRelationInput | UsageAlertLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UsageAlertLogs.
+     */
+    cursor?: UsageAlertLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UsageAlertLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UsageAlertLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UsageAlertLogs.
+     */
+    distinct?: UsageAlertLogScalarFieldEnum | UsageAlertLogScalarFieldEnum[]
+  }
+
+  /**
+   * UsageAlertLog findFirstOrThrow
+   */
+  export type UsageAlertLogFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageAlertLog
+     */
+    select?: UsageAlertLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageAlertLog
+     */
+    omit?: UsageAlertLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageAlertLogInclude<ExtArgs> | null
+    /**
+     * Filter, which UsageAlertLog to fetch.
+     */
+    where?: UsageAlertLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UsageAlertLogs to fetch.
+     */
+    orderBy?: UsageAlertLogOrderByWithRelationInput | UsageAlertLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UsageAlertLogs.
+     */
+    cursor?: UsageAlertLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UsageAlertLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UsageAlertLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UsageAlertLogs.
+     */
+    distinct?: UsageAlertLogScalarFieldEnum | UsageAlertLogScalarFieldEnum[]
+  }
+
+  /**
+   * UsageAlertLog findMany
+   */
+  export type UsageAlertLogFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageAlertLog
+     */
+    select?: UsageAlertLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageAlertLog
+     */
+    omit?: UsageAlertLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageAlertLogInclude<ExtArgs> | null
+    /**
+     * Filter, which UsageAlertLogs to fetch.
+     */
+    where?: UsageAlertLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UsageAlertLogs to fetch.
+     */
+    orderBy?: UsageAlertLogOrderByWithRelationInput | UsageAlertLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing UsageAlertLogs.
+     */
+    cursor?: UsageAlertLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UsageAlertLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UsageAlertLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UsageAlertLogs.
+     */
+    distinct?: UsageAlertLogScalarFieldEnum | UsageAlertLogScalarFieldEnum[]
+  }
+
+  /**
+   * UsageAlertLog create
+   */
+  export type UsageAlertLogCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageAlertLog
+     */
+    select?: UsageAlertLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageAlertLog
+     */
+    omit?: UsageAlertLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageAlertLogInclude<ExtArgs> | null
+    /**
+     * The data needed to create a UsageAlertLog.
+     */
+    data: XOR<UsageAlertLogCreateInput, UsageAlertLogUncheckedCreateInput>
+  }
+
+  /**
+   * UsageAlertLog createMany
+   */
+  export type UsageAlertLogCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many UsageAlertLogs.
+     */
+    data: UsageAlertLogCreateManyInput | UsageAlertLogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * UsageAlertLog createManyAndReturn
+   */
+  export type UsageAlertLogCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageAlertLog
+     */
+    select?: UsageAlertLogSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageAlertLog
+     */
+    omit?: UsageAlertLogOmit<ExtArgs> | null
+    /**
+     * The data used to create many UsageAlertLogs.
+     */
+    data: UsageAlertLogCreateManyInput | UsageAlertLogCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageAlertLogIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UsageAlertLog update
+   */
+  export type UsageAlertLogUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageAlertLog
+     */
+    select?: UsageAlertLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageAlertLog
+     */
+    omit?: UsageAlertLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageAlertLogInclude<ExtArgs> | null
+    /**
+     * The data needed to update a UsageAlertLog.
+     */
+    data: XOR<UsageAlertLogUpdateInput, UsageAlertLogUncheckedUpdateInput>
+    /**
+     * Choose, which UsageAlertLog to update.
+     */
+    where: UsageAlertLogWhereUniqueInput
+  }
+
+  /**
+   * UsageAlertLog updateMany
+   */
+  export type UsageAlertLogUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update UsageAlertLogs.
+     */
+    data: XOR<UsageAlertLogUpdateManyMutationInput, UsageAlertLogUncheckedUpdateManyInput>
+    /**
+     * Filter which UsageAlertLogs to update
+     */
+    where?: UsageAlertLogWhereInput
+    /**
+     * Limit how many UsageAlertLogs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * UsageAlertLog updateManyAndReturn
+   */
+  export type UsageAlertLogUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageAlertLog
+     */
+    select?: UsageAlertLogSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageAlertLog
+     */
+    omit?: UsageAlertLogOmit<ExtArgs> | null
+    /**
+     * The data used to update UsageAlertLogs.
+     */
+    data: XOR<UsageAlertLogUpdateManyMutationInput, UsageAlertLogUncheckedUpdateManyInput>
+    /**
+     * Filter which UsageAlertLogs to update
+     */
+    where?: UsageAlertLogWhereInput
+    /**
+     * Limit how many UsageAlertLogs to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageAlertLogIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UsageAlertLog upsert
+   */
+  export type UsageAlertLogUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageAlertLog
+     */
+    select?: UsageAlertLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageAlertLog
+     */
+    omit?: UsageAlertLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageAlertLogInclude<ExtArgs> | null
+    /**
+     * The filter to search for the UsageAlertLog to update in case it exists.
+     */
+    where: UsageAlertLogWhereUniqueInput
+    /**
+     * In case the UsageAlertLog found by the `where` argument doesn't exist, create a new UsageAlertLog with this data.
+     */
+    create: XOR<UsageAlertLogCreateInput, UsageAlertLogUncheckedCreateInput>
+    /**
+     * In case the UsageAlertLog was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UsageAlertLogUpdateInput, UsageAlertLogUncheckedUpdateInput>
+  }
+
+  /**
+   * UsageAlertLog delete
+   */
+  export type UsageAlertLogDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageAlertLog
+     */
+    select?: UsageAlertLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageAlertLog
+     */
+    omit?: UsageAlertLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageAlertLogInclude<ExtArgs> | null
+    /**
+     * Filter which UsageAlertLog to delete.
+     */
+    where: UsageAlertLogWhereUniqueInput
+  }
+
+  /**
+   * UsageAlertLog deleteMany
+   */
+  export type UsageAlertLogDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UsageAlertLogs to delete
+     */
+    where?: UsageAlertLogWhereInput
+    /**
+     * Limit how many UsageAlertLogs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * UsageAlertLog without action
+   */
+  export type UsageAlertLogDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UsageAlertLog
+     */
+    select?: UsageAlertLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UsageAlertLog
+     */
+    omit?: UsageAlertLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UsageAlertLogInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -17861,6 +19052,7 @@ export namespace Prisma {
     status: 'status',
     ip: 'ip',
     durationMs: 'durationMs',
+    success: 'success',
     createdAt: 'createdAt'
   };
 
@@ -17997,6 +19189,16 @@ export namespace Prisma {
   };
 
   export type SystemHeartbeatScalarFieldEnum = (typeof SystemHeartbeatScalarFieldEnum)[keyof typeof SystemHeartbeatScalarFieldEnum]
+
+
+  export const UsageAlertLogScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    alertType: 'alertType',
+    sentAt: 'sentAt'
+  };
+
+  export type UsageAlertLogScalarFieldEnum = (typeof UsageAlertLogScalarFieldEnum)[keyof typeof UsageAlertLogScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -18173,6 +19375,7 @@ export namespace Prisma {
     invitation?: XOR<UserInvitationNullableScalarRelationFilter, UserInvitationWhereInput> | null
     requestLogs?: RequestLogListRelationFilter
     announcementViews?: AnnouncementViewListRelationFilter
+    usageAlertLogs?: UsageAlertLogListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -18193,6 +19396,7 @@ export namespace Prisma {
     invitation?: UserInvitationOrderByWithRelationInput
     requestLogs?: RequestLogOrderByRelationAggregateInput
     announcementViews?: AnnouncementViewOrderByRelationAggregateInput
+    usageAlertLogs?: UsageAlertLogOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -18216,6 +19420,7 @@ export namespace Prisma {
     invitation?: XOR<UserInvitationNullableScalarRelationFilter, UserInvitationWhereInput> | null
     requestLogs?: RequestLogListRelationFilter
     announcementViews?: AnnouncementViewListRelationFilter
+    usageAlertLogs?: UsageAlertLogListRelationFilter
   }, "id" | "user">
 
   export type UserOrderByWithAggregationInput = {
@@ -18327,6 +19532,7 @@ export namespace Prisma {
     status?: IntFilter<"RequestLog"> | number
     ip?: StringNullableFilter<"RequestLog"> | string | null
     durationMs?: FloatNullableFilter<"RequestLog"> | number | null
+    success?: BoolFilter<"RequestLog"> | boolean
     createdAt?: DateTimeFilter<"RequestLog"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
@@ -18339,6 +19545,7 @@ export namespace Prisma {
     status?: SortOrder
     ip?: SortOrderInput | SortOrder
     durationMs?: SortOrderInput | SortOrder
+    success?: SortOrder
     createdAt?: SortOrder
     user?: UserOrderByWithRelationInput
   }
@@ -18354,6 +19561,7 @@ export namespace Prisma {
     status?: IntFilter<"RequestLog"> | number
     ip?: StringNullableFilter<"RequestLog"> | string | null
     durationMs?: FloatNullableFilter<"RequestLog"> | number | null
+    success?: BoolFilter<"RequestLog"> | boolean
     createdAt?: DateTimeFilter<"RequestLog"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id">
@@ -18366,6 +19574,7 @@ export namespace Prisma {
     status?: SortOrder
     ip?: SortOrderInput | SortOrder
     durationMs?: SortOrderInput | SortOrder
+    success?: SortOrder
     createdAt?: SortOrder
     _count?: RequestLogCountOrderByAggregateInput
     _avg?: RequestLogAvgOrderByAggregateInput
@@ -18385,6 +19594,7 @@ export namespace Prisma {
     status?: IntWithAggregatesFilter<"RequestLog"> | number
     ip?: StringNullableWithAggregatesFilter<"RequestLog"> | string | null
     durationMs?: FloatNullableWithAggregatesFilter<"RequestLog"> | number | null
+    success?: BoolWithAggregatesFilter<"RequestLog"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"RequestLog"> | Date | string
   }
 
@@ -19061,6 +20271,56 @@ export namespace Prisma {
     timestamp?: DateTimeWithAggregatesFilter<"SystemHeartbeat"> | Date | string
   }
 
+  export type UsageAlertLogWhereInput = {
+    AND?: UsageAlertLogWhereInput | UsageAlertLogWhereInput[]
+    OR?: UsageAlertLogWhereInput[]
+    NOT?: UsageAlertLogWhereInput | UsageAlertLogWhereInput[]
+    id?: StringFilter<"UsageAlertLog"> | string
+    userId?: StringFilter<"UsageAlertLog"> | string
+    alertType?: StringFilter<"UsageAlertLog"> | string
+    sentAt?: DateTimeFilter<"UsageAlertLog"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type UsageAlertLogOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    alertType?: SortOrder
+    sentAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type UsageAlertLogWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: UsageAlertLogWhereInput | UsageAlertLogWhereInput[]
+    OR?: UsageAlertLogWhereInput[]
+    NOT?: UsageAlertLogWhereInput | UsageAlertLogWhereInput[]
+    userId?: StringFilter<"UsageAlertLog"> | string
+    alertType?: StringFilter<"UsageAlertLog"> | string
+    sentAt?: DateTimeFilter<"UsageAlertLog"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type UsageAlertLogOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    alertType?: SortOrder
+    sentAt?: SortOrder
+    _count?: UsageAlertLogCountOrderByAggregateInput
+    _max?: UsageAlertLogMaxOrderByAggregateInput
+    _min?: UsageAlertLogMinOrderByAggregateInput
+  }
+
+  export type UsageAlertLogScalarWhereWithAggregatesInput = {
+    AND?: UsageAlertLogScalarWhereWithAggregatesInput | UsageAlertLogScalarWhereWithAggregatesInput[]
+    OR?: UsageAlertLogScalarWhereWithAggregatesInput[]
+    NOT?: UsageAlertLogScalarWhereWithAggregatesInput | UsageAlertLogScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"UsageAlertLog"> | string
+    userId?: StringWithAggregatesFilter<"UsageAlertLog"> | string
+    alertType?: StringWithAggregatesFilter<"UsageAlertLog"> | string
+    sentAt?: DateTimeWithAggregatesFilter<"UsageAlertLog"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     user: string
@@ -19076,6 +20336,7 @@ export namespace Prisma {
     invitation?: UserInvitationCreateNestedOneWithoutUserInput
     requestLogs?: RequestLogCreateNestedManyWithoutUserInput
     announcementViews?: AnnouncementViewCreateNestedManyWithoutUserInput
+    usageAlertLogs?: UsageAlertLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -19093,6 +20354,7 @@ export namespace Prisma {
     invitation?: UserInvitationUncheckedCreateNestedOneWithoutUserInput
     requestLogs?: RequestLogUncheckedCreateNestedManyWithoutUserInput
     announcementViews?: AnnouncementViewUncheckedCreateNestedManyWithoutUserInput
+    usageAlertLogs?: UsageAlertLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -19110,6 +20372,7 @@ export namespace Prisma {
     invitation?: UserInvitationUpdateOneWithoutUserNestedInput
     requestLogs?: RequestLogUpdateManyWithoutUserNestedInput
     announcementViews?: AnnouncementViewUpdateManyWithoutUserNestedInput
+    usageAlertLogs?: UsageAlertLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -19127,6 +20390,7 @@ export namespace Prisma {
     invitation?: UserInvitationUncheckedUpdateOneWithoutUserNestedInput
     requestLogs?: RequestLogUncheckedUpdateManyWithoutUserNestedInput
     announcementViews?: AnnouncementViewUncheckedUpdateManyWithoutUserNestedInput
+    usageAlertLogs?: UsageAlertLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -19242,6 +20506,7 @@ export namespace Prisma {
     status: number
     ip?: string | null
     durationMs?: number | null
+    success?: boolean
     createdAt?: Date | string
     user: UserCreateNestedOneWithoutRequestLogsInput
   }
@@ -19254,6 +20519,7 @@ export namespace Prisma {
     status: number
     ip?: string | null
     durationMs?: number | null
+    success?: boolean
     createdAt?: Date | string
   }
 
@@ -19264,6 +20530,7 @@ export namespace Prisma {
     status?: IntFieldUpdateOperationsInput | number
     ip?: NullableStringFieldUpdateOperationsInput | string | null
     durationMs?: NullableFloatFieldUpdateOperationsInput | number | null
+    success?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutRequestLogsNestedInput
   }
@@ -19276,6 +20543,7 @@ export namespace Prisma {
     status?: IntFieldUpdateOperationsInput | number
     ip?: NullableStringFieldUpdateOperationsInput | string | null
     durationMs?: NullableFloatFieldUpdateOperationsInput | number | null
+    success?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -19287,6 +20555,7 @@ export namespace Prisma {
     status: number
     ip?: string | null
     durationMs?: number | null
+    success?: boolean
     createdAt?: Date | string
   }
 
@@ -19297,6 +20566,7 @@ export namespace Prisma {
     status?: IntFieldUpdateOperationsInput | number
     ip?: NullableStringFieldUpdateOperationsInput | string | null
     durationMs?: NullableFloatFieldUpdateOperationsInput | number | null
+    success?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -19308,6 +20578,7 @@ export namespace Prisma {
     status?: IntFieldUpdateOperationsInput | number
     ip?: NullableStringFieldUpdateOperationsInput | string | null
     durationMs?: NullableFloatFieldUpdateOperationsInput | number | null
+    success?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -20020,6 +21291,54 @@ export namespace Prisma {
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type UsageAlertLogCreateInput = {
+    id?: string
+    alertType: string
+    sentAt?: Date | string
+    user: UserCreateNestedOneWithoutUsageAlertLogsInput
+  }
+
+  export type UsageAlertLogUncheckedCreateInput = {
+    id?: string
+    userId: string
+    alertType: string
+    sentAt?: Date | string
+  }
+
+  export type UsageAlertLogUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    alertType?: StringFieldUpdateOperationsInput | string
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutUsageAlertLogsNestedInput
+  }
+
+  export type UsageAlertLogUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    alertType?: StringFieldUpdateOperationsInput | string
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UsageAlertLogCreateManyInput = {
+    id?: string
+    userId: string
+    alertType: string
+    sentAt?: Date | string
+  }
+
+  export type UsageAlertLogUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    alertType?: StringFieldUpdateOperationsInput | string
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UsageAlertLogUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    alertType?: StringFieldUpdateOperationsInput | string
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -20109,6 +21428,12 @@ export namespace Prisma {
     none?: AnnouncementViewWhereInput
   }
 
+  export type UsageAlertLogListRelationFilter = {
+    every?: UsageAlertLogWhereInput
+    some?: UsageAlertLogWhereInput
+    none?: UsageAlertLogWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -20119,6 +21444,10 @@ export namespace Prisma {
   }
 
   export type AnnouncementViewOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type UsageAlertLogOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -20321,6 +21650,7 @@ export namespace Prisma {
     status?: SortOrder
     ip?: SortOrder
     durationMs?: SortOrder
+    success?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -20337,6 +21667,7 @@ export namespace Prisma {
     status?: SortOrder
     ip?: SortOrder
     durationMs?: SortOrder
+    success?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -20348,6 +21679,7 @@ export namespace Prisma {
     status?: SortOrder
     ip?: SortOrder
     durationMs?: SortOrder
+    success?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -20888,6 +22220,27 @@ export namespace Prisma {
     timestamp?: SortOrder
   }
 
+  export type UsageAlertLogCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    alertType?: SortOrder
+    sentAt?: SortOrder
+  }
+
+  export type UsageAlertLogMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    alertType?: SortOrder
+    sentAt?: SortOrder
+  }
+
+  export type UsageAlertLogMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    alertType?: SortOrder
+    sentAt?: SortOrder
+  }
+
   export type DbCredentialsCreateNestedOneWithoutUsersInput = {
     create?: XOR<DbCredentialsCreateWithoutUsersInput, DbCredentialsUncheckedCreateWithoutUsersInput>
     connectOrCreate?: DbCredentialsCreateOrConnectWithoutUsersInput
@@ -20926,6 +22279,13 @@ export namespace Prisma {
     connect?: AnnouncementViewWhereUniqueInput | AnnouncementViewWhereUniqueInput[]
   }
 
+  export type UsageAlertLogCreateNestedManyWithoutUserInput = {
+    create?: XOR<UsageAlertLogCreateWithoutUserInput, UsageAlertLogUncheckedCreateWithoutUserInput> | UsageAlertLogCreateWithoutUserInput[] | UsageAlertLogUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UsageAlertLogCreateOrConnectWithoutUserInput | UsageAlertLogCreateOrConnectWithoutUserInput[]
+    createMany?: UsageAlertLogCreateManyUserInputEnvelope
+    connect?: UsageAlertLogWhereUniqueInput | UsageAlertLogWhereUniqueInput[]
+  }
+
   export type UserInvitationUncheckedCreateNestedOneWithoutUserInput = {
     create?: XOR<UserInvitationCreateWithoutUserInput, UserInvitationUncheckedCreateWithoutUserInput>
     connectOrCreate?: UserInvitationCreateOrConnectWithoutUserInput
@@ -20944,6 +22304,13 @@ export namespace Prisma {
     connectOrCreate?: AnnouncementViewCreateOrConnectWithoutUserInput | AnnouncementViewCreateOrConnectWithoutUserInput[]
     createMany?: AnnouncementViewCreateManyUserInputEnvelope
     connect?: AnnouncementViewWhereUniqueInput | AnnouncementViewWhereUniqueInput[]
+  }
+
+  export type UsageAlertLogUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<UsageAlertLogCreateWithoutUserInput, UsageAlertLogUncheckedCreateWithoutUserInput> | UsageAlertLogCreateWithoutUserInput[] | UsageAlertLogUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UsageAlertLogCreateOrConnectWithoutUserInput | UsageAlertLogCreateOrConnectWithoutUserInput[]
+    createMany?: UsageAlertLogCreateManyUserInputEnvelope
+    connect?: UsageAlertLogWhereUniqueInput | UsageAlertLogWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -21036,6 +22403,20 @@ export namespace Prisma {
     deleteMany?: AnnouncementViewScalarWhereInput | AnnouncementViewScalarWhereInput[]
   }
 
+  export type UsageAlertLogUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UsageAlertLogCreateWithoutUserInput, UsageAlertLogUncheckedCreateWithoutUserInput> | UsageAlertLogCreateWithoutUserInput[] | UsageAlertLogUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UsageAlertLogCreateOrConnectWithoutUserInput | UsageAlertLogCreateOrConnectWithoutUserInput[]
+    upsert?: UsageAlertLogUpsertWithWhereUniqueWithoutUserInput | UsageAlertLogUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UsageAlertLogCreateManyUserInputEnvelope
+    set?: UsageAlertLogWhereUniqueInput | UsageAlertLogWhereUniqueInput[]
+    disconnect?: UsageAlertLogWhereUniqueInput | UsageAlertLogWhereUniqueInput[]
+    delete?: UsageAlertLogWhereUniqueInput | UsageAlertLogWhereUniqueInput[]
+    connect?: UsageAlertLogWhereUniqueInput | UsageAlertLogWhereUniqueInput[]
+    update?: UsageAlertLogUpdateWithWhereUniqueWithoutUserInput | UsageAlertLogUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UsageAlertLogUpdateManyWithWhereWithoutUserInput | UsageAlertLogUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UsageAlertLogScalarWhereInput | UsageAlertLogScalarWhereInput[]
+  }
+
   export type UserInvitationUncheckedUpdateOneWithoutUserNestedInput = {
     create?: XOR<UserInvitationCreateWithoutUserInput, UserInvitationUncheckedCreateWithoutUserInput>
     connectOrCreate?: UserInvitationCreateOrConnectWithoutUserInput
@@ -21072,6 +22453,20 @@ export namespace Prisma {
     update?: AnnouncementViewUpdateWithWhereUniqueWithoutUserInput | AnnouncementViewUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: AnnouncementViewUpdateManyWithWhereWithoutUserInput | AnnouncementViewUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: AnnouncementViewScalarWhereInput | AnnouncementViewScalarWhereInput[]
+  }
+
+  export type UsageAlertLogUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UsageAlertLogCreateWithoutUserInput, UsageAlertLogUncheckedCreateWithoutUserInput> | UsageAlertLogCreateWithoutUserInput[] | UsageAlertLogUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UsageAlertLogCreateOrConnectWithoutUserInput | UsageAlertLogCreateOrConnectWithoutUserInput[]
+    upsert?: UsageAlertLogUpsertWithWhereUniqueWithoutUserInput | UsageAlertLogUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UsageAlertLogCreateManyUserInputEnvelope
+    set?: UsageAlertLogWhereUniqueInput | UsageAlertLogWhereUniqueInput[]
+    disconnect?: UsageAlertLogWhereUniqueInput | UsageAlertLogWhereUniqueInput[]
+    delete?: UsageAlertLogWhereUniqueInput | UsageAlertLogWhereUniqueInput[]
+    connect?: UsageAlertLogWhereUniqueInput | UsageAlertLogWhereUniqueInput[]
+    update?: UsageAlertLogUpdateWithWhereUniqueWithoutUserInput | UsageAlertLogUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UsageAlertLogUpdateManyWithWhereWithoutUserInput | UsageAlertLogUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UsageAlertLogScalarWhereInput | UsageAlertLogScalarWhereInput[]
   }
 
   export type UserCreateNestedManyWithoutPlanInput = {
@@ -21505,6 +22900,20 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAnnouncementViewsInput, UserUpdateWithoutAnnouncementViewsInput>, UserUncheckedUpdateWithoutAnnouncementViewsInput>
   }
 
+  export type UserCreateNestedOneWithoutUsageAlertLogsInput = {
+    create?: XOR<UserCreateWithoutUsageAlertLogsInput, UserUncheckedCreateWithoutUsageAlertLogsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutUsageAlertLogsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutUsageAlertLogsNestedInput = {
+    create?: XOR<UserCreateWithoutUsageAlertLogsInput, UserUncheckedCreateWithoutUsageAlertLogsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutUsageAlertLogsInput
+    upsert?: UserUpsertWithoutUsageAlertLogsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutUsageAlertLogsInput, UserUpdateWithoutUsageAlertLogsInput>, UserUncheckedUpdateWithoutUsageAlertLogsInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -21872,6 +23281,7 @@ export namespace Prisma {
     status: number
     ip?: string | null
     durationMs?: number | null
+    success?: boolean
     createdAt?: Date | string
   }
 
@@ -21882,6 +23292,7 @@ export namespace Prisma {
     status: number
     ip?: string | null
     durationMs?: number | null
+    success?: boolean
     createdAt?: Date | string
   }
 
@@ -21914,6 +23325,28 @@ export namespace Prisma {
 
   export type AnnouncementViewCreateManyUserInputEnvelope = {
     data: AnnouncementViewCreateManyUserInput | AnnouncementViewCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UsageAlertLogCreateWithoutUserInput = {
+    id?: string
+    alertType: string
+    sentAt?: Date | string
+  }
+
+  export type UsageAlertLogUncheckedCreateWithoutUserInput = {
+    id?: string
+    alertType: string
+    sentAt?: Date | string
+  }
+
+  export type UsageAlertLogCreateOrConnectWithoutUserInput = {
+    where: UsageAlertLogWhereUniqueInput
+    create: XOR<UsageAlertLogCreateWithoutUserInput, UsageAlertLogUncheckedCreateWithoutUserInput>
+  }
+
+  export type UsageAlertLogCreateManyUserInputEnvelope = {
+    data: UsageAlertLogCreateManyUserInput | UsageAlertLogCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -22054,6 +23487,7 @@ export namespace Prisma {
     status?: IntFilter<"RequestLog"> | number
     ip?: StringNullableFilter<"RequestLog"> | string | null
     durationMs?: FloatNullableFilter<"RequestLog"> | number | null
+    success?: BoolFilter<"RequestLog"> | boolean
     createdAt?: DateTimeFilter<"RequestLog"> | Date | string
   }
 
@@ -22083,6 +23517,32 @@ export namespace Prisma {
     viewedAt?: DateTimeFilter<"AnnouncementView"> | Date | string
   }
 
+  export type UsageAlertLogUpsertWithWhereUniqueWithoutUserInput = {
+    where: UsageAlertLogWhereUniqueInput
+    update: XOR<UsageAlertLogUpdateWithoutUserInput, UsageAlertLogUncheckedUpdateWithoutUserInput>
+    create: XOR<UsageAlertLogCreateWithoutUserInput, UsageAlertLogUncheckedCreateWithoutUserInput>
+  }
+
+  export type UsageAlertLogUpdateWithWhereUniqueWithoutUserInput = {
+    where: UsageAlertLogWhereUniqueInput
+    data: XOR<UsageAlertLogUpdateWithoutUserInput, UsageAlertLogUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UsageAlertLogUpdateManyWithWhereWithoutUserInput = {
+    where: UsageAlertLogScalarWhereInput
+    data: XOR<UsageAlertLogUpdateManyMutationInput, UsageAlertLogUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type UsageAlertLogScalarWhereInput = {
+    AND?: UsageAlertLogScalarWhereInput | UsageAlertLogScalarWhereInput[]
+    OR?: UsageAlertLogScalarWhereInput[]
+    NOT?: UsageAlertLogScalarWhereInput | UsageAlertLogScalarWhereInput[]
+    id?: StringFilter<"UsageAlertLog"> | string
+    userId?: StringFilter<"UsageAlertLog"> | string
+    alertType?: StringFilter<"UsageAlertLog"> | string
+    sentAt?: DateTimeFilter<"UsageAlertLog"> | Date | string
+  }
+
   export type UserCreateWithoutPlanInput = {
     id?: string
     user: string
@@ -22097,6 +23557,7 @@ export namespace Prisma {
     invitation?: UserInvitationCreateNestedOneWithoutUserInput
     requestLogs?: RequestLogCreateNestedManyWithoutUserInput
     announcementViews?: AnnouncementViewCreateNestedManyWithoutUserInput
+    usageAlertLogs?: UsageAlertLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPlanInput = {
@@ -22113,6 +23574,7 @@ export namespace Prisma {
     invitation?: UserInvitationUncheckedCreateNestedOneWithoutUserInput
     requestLogs?: RequestLogUncheckedCreateNestedManyWithoutUserInput
     announcementViews?: AnnouncementViewUncheckedCreateNestedManyWithoutUserInput
+    usageAlertLogs?: UsageAlertLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPlanInput = {
@@ -22172,6 +23634,7 @@ export namespace Prisma {
     plan?: PlanCreateNestedOneWithoutUsersInput
     invitation?: UserInvitationCreateNestedOneWithoutUserInput
     announcementViews?: AnnouncementViewCreateNestedManyWithoutUserInput
+    usageAlertLogs?: UsageAlertLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutRequestLogsInput = {
@@ -22188,6 +23651,7 @@ export namespace Prisma {
     planId?: string | null
     invitation?: UserInvitationUncheckedCreateNestedOneWithoutUserInput
     announcementViews?: AnnouncementViewUncheckedCreateNestedManyWithoutUserInput
+    usageAlertLogs?: UsageAlertLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutRequestLogsInput = {
@@ -22220,6 +23684,7 @@ export namespace Prisma {
     plan?: PlanUpdateOneWithoutUsersNestedInput
     invitation?: UserInvitationUpdateOneWithoutUserNestedInput
     announcementViews?: AnnouncementViewUpdateManyWithoutUserNestedInput
+    usageAlertLogs?: UsageAlertLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRequestLogsInput = {
@@ -22236,6 +23701,7 @@ export namespace Prisma {
     planId?: NullableStringFieldUpdateOperationsInput | string | null
     invitation?: UserInvitationUncheckedUpdateOneWithoutUserNestedInput
     announcementViews?: AnnouncementViewUncheckedUpdateManyWithoutUserNestedInput
+    usageAlertLogs?: UsageAlertLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutInvitationInput = {
@@ -22252,6 +23718,7 @@ export namespace Prisma {
     plan?: PlanCreateNestedOneWithoutUsersInput
     requestLogs?: RequestLogCreateNestedManyWithoutUserInput
     announcementViews?: AnnouncementViewCreateNestedManyWithoutUserInput
+    usageAlertLogs?: UsageAlertLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutInvitationInput = {
@@ -22268,6 +23735,7 @@ export namespace Prisma {
     planId?: string | null
     requestLogs?: RequestLogUncheckedCreateNestedManyWithoutUserInput
     announcementViews?: AnnouncementViewUncheckedCreateNestedManyWithoutUserInput
+    usageAlertLogs?: UsageAlertLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutInvitationInput = {
@@ -22300,6 +23768,7 @@ export namespace Prisma {
     plan?: PlanUpdateOneWithoutUsersNestedInput
     requestLogs?: RequestLogUpdateManyWithoutUserNestedInput
     announcementViews?: AnnouncementViewUpdateManyWithoutUserNestedInput
+    usageAlertLogs?: UsageAlertLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInvitationInput = {
@@ -22316,6 +23785,7 @@ export namespace Prisma {
     planId?: NullableStringFieldUpdateOperationsInput | string | null
     requestLogs?: RequestLogUncheckedUpdateManyWithoutUserNestedInput
     announcementViews?: AnnouncementViewUncheckedUpdateManyWithoutUserNestedInput
+    usageAlertLogs?: UsageAlertLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutDbCredentialsInput = {
@@ -22332,6 +23802,7 @@ export namespace Prisma {
     invitation?: UserInvitationCreateNestedOneWithoutUserInput
     requestLogs?: RequestLogCreateNestedManyWithoutUserInput
     announcementViews?: AnnouncementViewCreateNestedManyWithoutUserInput
+    usageAlertLogs?: UsageAlertLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutDbCredentialsInput = {
@@ -22348,6 +23819,7 @@ export namespace Prisma {
     invitation?: UserInvitationUncheckedCreateNestedOneWithoutUserInput
     requestLogs?: RequestLogUncheckedCreateNestedManyWithoutUserInput
     announcementViews?: AnnouncementViewUncheckedCreateNestedManyWithoutUserInput
+    usageAlertLogs?: UsageAlertLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutDbCredentialsInput = {
@@ -22408,6 +23880,7 @@ export namespace Prisma {
     invitation?: UserInvitationCreateNestedOneWithoutUserInput
     requestLogs?: RequestLogCreateNestedManyWithoutUserInput
     announcementViews?: AnnouncementViewCreateNestedManyWithoutUserInput
+    usageAlertLogs?: UsageAlertLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutRoleInput = {
@@ -22424,6 +23897,7 @@ export namespace Prisma {
     invitation?: UserInvitationUncheckedCreateNestedOneWithoutUserInput
     requestLogs?: RequestLogUncheckedCreateNestedManyWithoutUserInput
     announcementViews?: AnnouncementViewUncheckedCreateNestedManyWithoutUserInput
+    usageAlertLogs?: UsageAlertLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutRoleInput = {
@@ -22800,6 +24274,7 @@ export namespace Prisma {
     plan?: PlanCreateNestedOneWithoutUsersInput
     invitation?: UserInvitationCreateNestedOneWithoutUserInput
     requestLogs?: RequestLogCreateNestedManyWithoutUserInput
+    usageAlertLogs?: UsageAlertLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAnnouncementViewsInput = {
@@ -22816,6 +24291,7 @@ export namespace Prisma {
     planId?: string | null
     invitation?: UserInvitationUncheckedCreateNestedOneWithoutUserInput
     requestLogs?: RequestLogUncheckedCreateNestedManyWithoutUserInput
+    usageAlertLogs?: UsageAlertLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAnnouncementViewsInput = {
@@ -22887,6 +24363,7 @@ export namespace Prisma {
     plan?: PlanUpdateOneWithoutUsersNestedInput
     invitation?: UserInvitationUpdateOneWithoutUserNestedInput
     requestLogs?: RequestLogUpdateManyWithoutUserNestedInput
+    usageAlertLogs?: UsageAlertLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAnnouncementViewsInput = {
@@ -22903,6 +24380,91 @@ export namespace Prisma {
     planId?: NullableStringFieldUpdateOperationsInput | string | null
     invitation?: UserInvitationUncheckedUpdateOneWithoutUserNestedInput
     requestLogs?: RequestLogUncheckedUpdateManyWithoutUserNestedInput
+    usageAlertLogs?: UsageAlertLogUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserCreateWithoutUsageAlertLogsInput = {
+    id?: string
+    user: string
+    passwordHash: string
+    status?: boolean
+    email?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    storeId?: number
+    dbCredentials: DbCredentialsCreateNestedOneWithoutUsersInput
+    role?: RoleCreateNestedOneWithoutUsersInput
+    plan?: PlanCreateNestedOneWithoutUsersInput
+    invitation?: UserInvitationCreateNestedOneWithoutUserInput
+    requestLogs?: RequestLogCreateNestedManyWithoutUserInput
+    announcementViews?: AnnouncementViewCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutUsageAlertLogsInput = {
+    id?: string
+    user: string
+    passwordHash: string
+    status?: boolean
+    dbCredentialsId: string
+    email?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    storeId?: number
+    roleId?: string | null
+    planId?: string | null
+    invitation?: UserInvitationUncheckedCreateNestedOneWithoutUserInput
+    requestLogs?: RequestLogUncheckedCreateNestedManyWithoutUserInput
+    announcementViews?: AnnouncementViewUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutUsageAlertLogsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutUsageAlertLogsInput, UserUncheckedCreateWithoutUsageAlertLogsInput>
+  }
+
+  export type UserUpsertWithoutUsageAlertLogsInput = {
+    update: XOR<UserUpdateWithoutUsageAlertLogsInput, UserUncheckedUpdateWithoutUsageAlertLogsInput>
+    create: XOR<UserCreateWithoutUsageAlertLogsInput, UserUncheckedCreateWithoutUsageAlertLogsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutUsageAlertLogsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutUsageAlertLogsInput, UserUncheckedUpdateWithoutUsageAlertLogsInput>
+  }
+
+  export type UserUpdateWithoutUsageAlertLogsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    status?: BoolFieldUpdateOperationsInput | boolean
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    storeId?: IntFieldUpdateOperationsInput | number
+    dbCredentials?: DbCredentialsUpdateOneRequiredWithoutUsersNestedInput
+    role?: RoleUpdateOneWithoutUsersNestedInput
+    plan?: PlanUpdateOneWithoutUsersNestedInput
+    invitation?: UserInvitationUpdateOneWithoutUserNestedInput
+    requestLogs?: RequestLogUpdateManyWithoutUserNestedInput
+    announcementViews?: AnnouncementViewUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutUsageAlertLogsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    status?: BoolFieldUpdateOperationsInput | boolean
+    dbCredentialsId?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    storeId?: IntFieldUpdateOperationsInput | number
+    roleId?: NullableStringFieldUpdateOperationsInput | string | null
+    planId?: NullableStringFieldUpdateOperationsInput | string | null
+    invitation?: UserInvitationUncheckedUpdateOneWithoutUserNestedInput
+    requestLogs?: RequestLogUncheckedUpdateManyWithoutUserNestedInput
+    announcementViews?: AnnouncementViewUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type RequestLogCreateManyUserInput = {
@@ -22912,6 +24474,7 @@ export namespace Prisma {
     status: number
     ip?: string | null
     durationMs?: number | null
+    success?: boolean
     createdAt?: Date | string
   }
 
@@ -22921,6 +24484,12 @@ export namespace Prisma {
     viewedAt?: Date | string
   }
 
+  export type UsageAlertLogCreateManyUserInput = {
+    id?: string
+    alertType: string
+    sentAt?: Date | string
+  }
+
   export type RequestLogUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     method?: StringFieldUpdateOperationsInput | string
@@ -22928,6 +24497,7 @@ export namespace Prisma {
     status?: IntFieldUpdateOperationsInput | number
     ip?: NullableStringFieldUpdateOperationsInput | string | null
     durationMs?: NullableFloatFieldUpdateOperationsInput | number | null
+    success?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -22938,6 +24508,7 @@ export namespace Prisma {
     status?: IntFieldUpdateOperationsInput | number
     ip?: NullableStringFieldUpdateOperationsInput | string | null
     durationMs?: NullableFloatFieldUpdateOperationsInput | number | null
+    success?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -22948,6 +24519,7 @@ export namespace Prisma {
     status?: IntFieldUpdateOperationsInput | number
     ip?: NullableStringFieldUpdateOperationsInput | string | null
     durationMs?: NullableFloatFieldUpdateOperationsInput | number | null
+    success?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -22967,6 +24539,24 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     announcementId?: StringFieldUpdateOperationsInput | string
     viewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UsageAlertLogUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    alertType?: StringFieldUpdateOperationsInput | string
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UsageAlertLogUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    alertType?: StringFieldUpdateOperationsInput | string
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UsageAlertLogUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    alertType?: StringFieldUpdateOperationsInput | string
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UserCreateManyPlanInput = {
@@ -22996,6 +24586,7 @@ export namespace Prisma {
     invitation?: UserInvitationUpdateOneWithoutUserNestedInput
     requestLogs?: RequestLogUpdateManyWithoutUserNestedInput
     announcementViews?: AnnouncementViewUpdateManyWithoutUserNestedInput
+    usageAlertLogs?: UsageAlertLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPlanInput = {
@@ -23012,6 +24603,7 @@ export namespace Prisma {
     invitation?: UserInvitationUncheckedUpdateOneWithoutUserNestedInput
     requestLogs?: RequestLogUncheckedUpdateManyWithoutUserNestedInput
     announcementViews?: AnnouncementViewUncheckedUpdateManyWithoutUserNestedInput
+    usageAlertLogs?: UsageAlertLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutPlanInput = {
@@ -23054,6 +24646,7 @@ export namespace Prisma {
     invitation?: UserInvitationUpdateOneWithoutUserNestedInput
     requestLogs?: RequestLogUpdateManyWithoutUserNestedInput
     announcementViews?: AnnouncementViewUpdateManyWithoutUserNestedInput
+    usageAlertLogs?: UsageAlertLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDbCredentialsInput = {
@@ -23070,6 +24663,7 @@ export namespace Prisma {
     invitation?: UserInvitationUncheckedUpdateOneWithoutUserNestedInput
     requestLogs?: RequestLogUncheckedUpdateManyWithoutUserNestedInput
     announcementViews?: AnnouncementViewUncheckedUpdateManyWithoutUserNestedInput
+    usageAlertLogs?: UsageAlertLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutDbCredentialsInput = {
@@ -23128,6 +24722,7 @@ export namespace Prisma {
     invitation?: UserInvitationUpdateOneWithoutUserNestedInput
     requestLogs?: RequestLogUpdateManyWithoutUserNestedInput
     announcementViews?: AnnouncementViewUpdateManyWithoutUserNestedInput
+    usageAlertLogs?: UsageAlertLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRoleInput = {
@@ -23144,6 +24739,7 @@ export namespace Prisma {
     invitation?: UserInvitationUncheckedUpdateOneWithoutUserNestedInput
     requestLogs?: RequestLogUncheckedUpdateManyWithoutUserNestedInput
     announcementViews?: AnnouncementViewUncheckedUpdateManyWithoutUserNestedInput
+    usageAlertLogs?: UsageAlertLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutRoleInput = {

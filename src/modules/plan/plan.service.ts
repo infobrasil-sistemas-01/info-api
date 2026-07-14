@@ -156,50 +156,39 @@ export class PlanService {
     }
   }
 
-  private getAlertsFilePath(): string {
-    const dir = path.resolve(process.cwd(), '.tmp');
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
-    }
-    return path.resolve(dir, 'usage-alerts.json');
-  }
-
   private async hasSentUsageAlertThisMonth(userId: string): Promise<boolean> {
     try {
-      const filePath = this.getAlertsFilePath();
-      if (!fs.existsSync(filePath)) {
-        return false;
-      }
-      const fileContent = fs.readFileSync(filePath, 'utf8');
-      const data = JSON.parse(fileContent);
-      const lastSentStr = data[userId];
-      if (!lastSentStr) {
-        return false;
-      }
-      const lastSent = new Date(lastSentStr);
       const now = new Date();
-      return (
-        lastSent.getFullYear() === now.getFullYear() &&
-        lastSent.getMonth() === now.getMonth()
-      );
-    } catch {
+      const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+      const alertLog = await this.prisma.usageAlertLog.findFirst({
+        where: {
+          userId,
+          alertType: 'MONTHLY_80',
+          sentAt: {
+            gte: firstDayOfMonth,
+          },
+        },
+      });
+
+      return alertLog !== null;
+    } catch (e: any) {
+      this.logger.error(`Erro ao verificar registro de alerta de uso: ${e.message}`);
       return false;
     }
   }
 
   private async markUsageAlertSent(userId: string): Promise<void> {
     try {
-      const filePath = this.getAlertsFilePath();
-      let data: Record<string, string> = {};
-      if (fs.existsSync(filePath)) {
-        const fileContent = fs.readFileSync(filePath, 'utf8');
-        data = JSON.parse(fileContent);
-      }
-      data[userId] = new Date().toISOString();
-      fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
-      this.logger.log(`Alerta de uso de 80% mensal registrado para o usuário ${userId}`);
+      await this.prisma.usageAlertLog.create({
+        data: {
+          userId,
+          alertType: 'MONTHLY_80',
+        },
+      });
+      this.logger.log(`Alerta de uso de 80% mensal registrado no banco para o usuário ${userId}`);
     } catch (e: any) {
-      this.logger.error(`Erro ao salvar registro de alerta de uso: ${e.message}`);
+      this.logger.error(`Erro ao salvar registro de alerta de uso no banco: ${e.message}`);
     }
   }
 

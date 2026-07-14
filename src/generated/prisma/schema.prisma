@@ -25,6 +25,7 @@ model User {
   invitation        UserInvitation?
   requestLogs       RequestLog[]
   announcementViews AnnouncementView[]
+  usageAlertLogs    UsageAlertLog[]
 
   @@map("users")
 }
@@ -49,6 +50,7 @@ model RequestLog {
   status     Int
   ip         String?
   durationMs Float?   @map("duration_ms")
+  success    Boolean  @default(true)
   createdAt  DateTime @default(now()) @map("created_at")
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -202,4 +204,15 @@ model SystemHeartbeat {
   timestamp DateTime @updatedAt @map("timestamp")
 
   @@map("system_heartbeats")
+}
+
+model UsageAlertLog {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  alertType String   @map("alert_type")
+  sentAt    DateTime @default(now()) @map("sent_at")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, sentAt])
+  @@map("usage_alert_logs")
 }

@@ -151,6 +151,7 @@ exports.Prisma.RequestLogScalarFieldEnum = {
   status: 'status',
   ip: 'ip',
   durationMs: 'durationMs',
+  success: 'success',
   createdAt: 'createdAt'
 };
 
@@ -253,6 +254,13 @@ exports.Prisma.SystemHeartbeatScalarFieldEnum = {
   timestamp: 'timestamp'
 };
 
+exports.Prisma.UsageAlertLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  alertType: 'alertType',
+  sentAt: 'sentAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -303,7 +311,8 @@ exports.Prisma.ModelName = {
   Newsletter: 'Newsletter',
   AnnouncementView: 'AnnouncementView',
   StatusLog: 'StatusLog',
-  SystemHeartbeat: 'SystemHeartbeat'
+  SystemHeartbeat: 'SystemHeartbeat',
+  UsageAlertLog: 'UsageAlertLog'
 };
 
 /**
