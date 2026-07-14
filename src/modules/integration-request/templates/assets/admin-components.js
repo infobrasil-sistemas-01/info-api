@@ -586,38 +586,31 @@ const Components = {
           animation: pulse-dot-anim 2s infinite;
       }
       .summary-grid {
-          display: grid;
-          grid-template-columns: repeat(6, 1fr);
-          gap: 1rem;
+          display: flex;
+          gap: 1.5rem;
           margin-bottom: 2rem;
+          overflow-x: auto;
+          padding-bottom: 10px;
+          scroll-behavior: smooth;
+          -webkit-overflow-scrolling: touch;
+      }
+      .summary-grid::-webkit-scrollbar {
+          height: 6px;
+      }
+      .summary-grid::-webkit-scrollbar-track {
+          background: rgba(0, 0, 0, 0.2);
+          border-radius: 99px;
+      }
+      .summary-grid::-webkit-scrollbar-thumb {
+          background: rgba(16, 185, 129, 0.25);
+          border-radius: 99px;
+      }
+      .summary-grid::-webkit-scrollbar-thumb:hover {
+          background: rgba(16, 185, 129, 0.5);
       }
       .summary-grid .card {
-          padding: 1.2rem 1rem !important;
-          gap: 1rem !important;
-      }
-      .summary-grid .card > div:first-child {
-          width: 48px !important;
-          height: 48px !important;
-          font-size: 1.8rem !important;
-          border-radius: 10px !important;
-      }
-      .summary-grid .card h2 {
-          font-size: 1.4rem !important;
-      }
-      @media (max-width: 1400px) {
-          .summary-grid {
-              grid-template-columns: repeat(3, 1fr);
-          }
-      }
-      @media (max-width: 768px) {
-          .summary-grid {
-              grid-template-columns: repeat(2, 1fr);
-          }
-      }
-      @media (max-width: 480px) {
-          .summary-grid {
-              grid-template-columns: 1fr;
-          }
+          flex: 1 0 250px;
+          margin-bottom: 0 !important;
       }
       </style>
       <!-- Toolbar de Controles -->
