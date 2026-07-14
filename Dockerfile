@@ -24,6 +24,9 @@ RUN npx prisma generate
 # Build da aplicação
 RUN npm run build
 
+# Garante que todos os arquivos do client gerado (incluindo .wasm, index.js, etc.) sejam copiados para a pasta dist
+RUN cp -r /app/src/generated/prisma/. /app/dist/src/generated/prisma/
+
 
 # ---------- PRODUCTION ----------
 FROM node:22-alpine
@@ -50,8 +53,6 @@ RUN npm ci --omit=dev
 # Prisma runtime (client gerado + schema + config)
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/prisma.config.ts ./prisma.config.ts
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 
 # Build da aplicação
 COPY --from=builder /app/dist ./dist
