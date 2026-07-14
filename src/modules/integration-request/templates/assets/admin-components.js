@@ -585,6 +585,22 @@ const Components = {
           border-radius: 50%;
           animation: pulse-dot-anim 2s infinite;
       }
+      .summary-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 1.5rem;
+          margin-bottom: 2rem;
+      }
+      @media (max-width: 1024px) {
+          .summary-grid {
+              grid-template-columns: repeat(2, 1fr);
+          }
+      }
+      @media (max-width: 640px) {
+          .summary-grid {
+              grid-template-columns: 1fr;
+          }
+      }
       </style>
       <!-- Toolbar de Controles -->
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 15px;">
@@ -640,7 +656,7 @@ const Components = {
       </div>
 
       <!-- Cards de Visão Executiva -->
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+      <div class="summary-grid">
           <div class="card" style="padding: 1.5rem; display: flex; align-items: center; gap: 1.5rem;">
               <div style="font-size: 2.2rem; color: var(--primary); background: rgba(16, 185, 129, 0.1); width: 60px; height: 60px; flex-shrink: 0; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
                   <i class='bx bx-data'></i>
@@ -691,14 +707,11 @@ const Components = {
                   <i class='bx bx-pulse'></i>
                   <span class="pulse-dot" style="position: absolute; top: 12px; right: 12px;"></span>
               </div>
-              <div style="flex-grow: 1;">
+              <div>
                   <small style="color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 4px;">REQUISIÇÕES / MINUTO (RPM)</small>
-                  <h2 style="margin: 0; font-size: 1.6rem; color: white; display: flex; align-items: baseline; gap: 6px;">
-                      ${(summary.currentRpm ?? 0).toLocaleString()}
-                      <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: normal;">atual</span>
-                  </h2>
-                  <span style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-top: 2px;">
-                      Média no período: <strong style="color: var(--text-muted);">${(summary.averageRpm ?? 0).toLocaleString()}</strong>
+                  <h2 style="margin: 0; font-size: 1.6rem; color: white;">${(summary.currentRpm ?? 0).toLocaleString()} RPM</h2>
+                  <span style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-top: 4px;">
+                      Média no período: ${(summary.averageRpm ?? 0).toLocaleString()}
                   </span>
               </div>
           </div>
