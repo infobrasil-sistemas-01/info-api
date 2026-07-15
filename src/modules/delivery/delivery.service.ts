@@ -128,6 +128,42 @@ export class DeliveryService {
     }
   }
 
+  async getStatus(credentialsId: string) {
+    const connection =
+      await this.tenantConnectionService.getConnection(credentialsId);
+    try {
+      const query = `
+        SELECT
+          T.TBS_CODIGO,
+          T.TBS_DESCRICAO,
+          T.TBS_MOBILE
+        FROM tabela_status T
+        ORDER BY T.TBS_CODIGO
+      `;
+      const startTime = Date.now();
+      const result = await new Promise((resolve, reject) => {
+        connection.query(query, [], (err: any, res: any) => {
+          if (err) return reject(err);
+          resolve(res);
+        });
+      });
+      const endTime = Date.now();
+      this.logger.log(
+        `Busca de status de entregas executada. Tenant: ${credentialsId}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${endTime - startTime}ms`,
+      );
+      return result;
+    } catch (error) {
+      console.error(error);
+      this.logger.error(
+        `Erro ao buscar entregas. Tenant: ${credentialsId}`,
+        error,
+      );
+      throw error;
+    } finally {
+      this.tenantConnectionService.releaseConnection(connection);
+    }
+  }
+
   async getById(credentialsId: string, id: number, storeId?: number) {
     const connection =
       await this.tenantConnectionService.getConnection(credentialsId);

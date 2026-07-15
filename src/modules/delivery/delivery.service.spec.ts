@@ -258,4 +258,37 @@ describe('DeliveryService', () => {
       expect(mockTransaction.rollback).toHaveBeenCalled();
     });
   });
+
+  describe('getStatus', () => {
+    it('should return a list of delivery status', async () => {
+      const mockStatus = [
+        { TBS_CODIGO: 1, TBS_DESCRICAO: 'PENDENTE', TBS_MOBILE: 'S' },
+        { TBS_CODIGO: 2, TBS_DESCRICAO: 'EM ANDAMENTO', TBS_MOBILE: 'N' },
+      ];
+      mockConnection.query.mockImplementation(
+        (query: string, params: any[], callback: Function) => {
+          callback(null, mockStatus);
+        },
+      );
+
+      const result = await service.getStatus('cred-1');
+
+      expect(result).toEqual(mockStatus);
+      expect(mockConnection.query).toHaveBeenCalledWith(
+        expect.stringContaining('FROM tabela_status'),
+        [],
+        expect.any(Function),
+      );
+    });
+
+    it('should throw error if query fails', async () => {
+      mockConnection.query.mockImplementation(
+        (query: string, params: any[], callback: Function) => {
+          callback(new Error('Query error'), null);
+        },
+      );
+
+      await expect(service.getStatus('cred-1')).rejects.toThrow('Query error');
+    });
+  });
 });

@@ -29,6 +29,7 @@ import { CreateDeliveryDto } from './dto/create-delivery.dto';
 import {
   DeliveryResponseDto,
   DeliveryDetailResponseDto,
+  DeliveryStatusResponseDto,
 } from './dto/delivery-response.dto';
 
 @ApiTags('Delivery')
@@ -36,7 +37,7 @@ import {
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 @ApiBearerAuth()
 export class DeliveryController {
-  constructor(private readonly deliveryService: DeliveryService) {}
+  constructor(private readonly deliveryService: DeliveryService) { }
 
   @Get()
   @RequirePermissions({ allOf: ['tenant.deliveries.view'] })
@@ -78,6 +79,31 @@ export class DeliveryController {
         providerId: query.providerId,
       },
     );
+  }
+
+  @Get('status')
+  @RequirePermissions({ allOf: ['tenant.deliveries.view'] })
+  @ApiOperation({
+    summary: 'Obter status de entregas',
+    description: 'Retorna uma lista de status de entregas.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Lista de status de entregas retornada com sucesso.',
+    type: [DeliveryStatusResponseDto],
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Token de autenticação inválido ou ausente.',
+  })
+  async getDeliveriesStatus(@Req() req: ReqWithAuthContext) {
+    const { credentialsId } = req.authContext || {};
+
+    if (!credentialsId) {
+      throw new Error('Credentials ID not found in token');
+    }
+
+    return this.deliveryService.getStatus(credentialsId);
   }
 
   @Get(':id')

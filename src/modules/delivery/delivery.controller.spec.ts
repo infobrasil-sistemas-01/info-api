@@ -13,6 +13,7 @@ describe('DeliveryController', () => {
     get: jest.fn(),
     getById: jest.fn(),
     create: jest.fn(),
+    getStatus: jest.fn(),
   };
 
   const mockReq = {
@@ -64,6 +65,26 @@ describe('DeliveryController', () => {
         providerId: 5,
       });
       expect(result).toEqual([{ VEN_NUMERO: 12345 }]);
+    });
+  });
+
+  describe('getDeliveriesStatus', () => {
+    it('should call deliveryService.getStatus with correct parameters', async () => {
+      const mockStatus = [{ TBS_CODIGO: 1, TBS_DESCRICAO: 'PENDENTE' }];
+      mockDeliveryService.getStatus.mockResolvedValue(mockStatus);
+
+      const result = await controller.getDeliveriesStatus(mockReq);
+
+      expect(deliveryService.getStatus).toHaveBeenCalledWith('cred-1');
+      expect(result).toEqual(mockStatus);
+    });
+
+    it('should throw error if credentialsId is missing', async () => {
+      const badReq = { authContext: {} } as any;
+
+      await expect(controller.getDeliveriesStatus(badReq)).rejects.toThrow(
+        'Credentials ID not found in token',
+      );
     });
   });
 

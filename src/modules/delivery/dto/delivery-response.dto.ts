@@ -167,3 +167,21 @@ export class DeliveryDetailResponseDto extends DeliveryResponseDto {
   })
   items: DeliveryItemResponseDto[];
 }
+
+export class DeliveryStatusResponseDto {
+  @ApiProperty({ example: 1, description: 'Código do status (TBS_CODIGO)' })
+  TBS_CODIGO: number;
+
+  @ApiProperty({
+    example: 'EM ANDAMENTO',
+    description: 'Descrição do status (TBS_DESCRICAO)',
+  })
+  TBS_DESCRICAO: string;
+
+  @ApiProperty({
+    example: 'S',
+    description: 'Indicador de status mobile (TBS_MOBILE)',
+  })
+  TBS_MOBILE: string;
+}
+
