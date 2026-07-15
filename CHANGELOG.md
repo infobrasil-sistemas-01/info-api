@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.16.12](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.16.11...v1.16.12) (2026-07-15)
+
+
+### Features
+
+* endpoint GET /delivery/status ([b2f2b63](https://github.com/infobrasil-sistemas/info-vendas-api/commit/b2f2b63b4f657d76f3adc5125607c3db4f69e57b))
+* filter delivery by orderId and status(TABELA_STATUS) ([8a89b58](https://github.com/infobrasil-sistemas/info-vendas-api/commit/8a89b5845f760142e1d39bd9a5c82c6c1b3240f2))
+* minute usage by users on topusers row ([90a74d0](https://github.com/infobrasil-sistemas/info-vendas-api/commit/90a74d00948679c80d94822e5f5cf5592f3336c5))
+
+
+### Bug Fixes
+
+* endpoint cards ([ac49492](https://github.com/infobrasil-sistemas/info-vendas-api/commit/ac49492c45ae9034210922fc42ad9e45dc836671))
+
 ## [1.16.11](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.16.10...v1.16.11) (2026-07-15)
 
 
