@@ -58,4 +58,10 @@ export class GetDeliveriesQueryDto extends ZodDto(GetDeliveriesQuerySchema) {
     example: 1,
   })
   providerId?: number;
+
+  @ApiPropertyOptional({
+    description: 'ID da venda (VEN_NUMERO)',
+    example: 1,
+  })
+  orderId?: number;
 }

@@ -21,6 +21,8 @@ export class DeliveryService {
       situation?: number;
       vehiclePlate?: string;
       providerId?: number;
+      orderId?: number;
+      status?: number;
     } = {},
   ) {
     const connection =
@@ -60,6 +62,16 @@ export class DeliveryService {
         params.push(filters.providerId);
       }
 
+      if (filters.orderId) {
+        whereClause += ' AND E.VEN_NUMERO = ?';
+        params.push(filters.orderId);
+      }
+
+      if (filters.status !== undefined) {
+        whereClause += ' AND E.TBS_CODIGO = ?';
+        params.push(filters.status);
+      }
+
       const query = `
         SELECT FIRST ? SKIP ?
           E.VEN_NUMERO,
@@ -73,10 +85,13 @@ export class DeliveryService {
           E.ENT_KILOMETRAGEM,
           E.VEI_PLACA,
           E.ENT_DATABAIXA,
-          E.ENT_LOTEENTREGA
+          E.ENT_LOTEENTREGA,
+          E.TBS_CODIGO,
+          T.TBS_DESCRICAO
         FROM entregas E
         LEFT JOIN prestadores P ON P.PRE_CODIGO = E.PRE_CODIGO
         LEFT JOIN vendas V ON V.VEN_NUMERO = E.VEN_NUMERO
+        LEFT JOIN TABELA_STATUS T ON T.TBS_CODIGO = E.TBS_CODIGO
         ${whereClause}
         ORDER BY E.ENT_DATA DESC, E.ENT_NUMERO DESC
       `;
@@ -150,11 +165,14 @@ export class DeliveryService {
           E.ENT_LOTEPRODUTO,
           E.USU_CODIGOBXA,
           E.ENT_GERARROTAS,
-          E.AJ2_CODIGO
+          E.AJ2_CODIGO,
+          E.TBS_CODIGO,
+          T.TBS_DESCRICAO
         FROM entregas E
         LEFT JOIN prestadores P ON P.PRE_CODIGO = E.PRE_CODIGO
         LEFT JOIN veiculos VEI ON VEI.VEI_PLACA = E.VEI_PLACA
         LEFT JOIN vendas V ON V.VEN_NUMERO = E.VEN_NUMERO
+        LEFT JOIN TABELA_STATUS T ON T.TBS_CODIGO = E.TBS_CODIGO
         ${whereClause}
       `;
 
