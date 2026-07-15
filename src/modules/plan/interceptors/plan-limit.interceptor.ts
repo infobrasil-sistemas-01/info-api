@@ -123,27 +123,24 @@ export class PlanLimitInterceptor implements NestInterceptor {
         },
         error: (err) => {
           request.logged = true;
-          if (
-            !(
-              err instanceof HttpException &&
-              err.getStatus() === HttpStatus.TOO_MANY_REQUESTS
+          const diff = process.hrtime(startTime);
+          const durationMs = parseFloat(
+            (diff[0] * 1e3 + diff[1] / 1e6).toFixed(2),
+          );
+          const status =
+            err instanceof HttpException
+              ? err.getStatus()
+              : err.status || 500;
+          this.planService
+            .logRequest(
+              userId,
+              request.method,
+              request.url,
+              status,
+              request.ip,
+              durationMs,
             )
-          ) {
-            const diff = process.hrtime(startTime);
-            const durationMs = parseFloat(
-              (diff[0] * 1e3 + diff[1] / 1e6).toFixed(2),
-            );
-            this.planService
-              .logRequest(
-                userId,
-                request.method,
-                request.url,
-                err.status || 500,
-                request.ip,
-                durationMs,
-              )
-              .catch(() => {});
-          }
+            .catch(() => {});
         },
       }),
     );

@@ -174,4 +174,33 @@ describe('PlanService', () => {
       expect(mockPrisma.usageAlertLog.create).toHaveBeenCalled();
     });
   });
+
+  describe('getRequestCount', () => {
+    it('should query request count for minute timeframe and exclude status 429', async () => {
+      mockPrisma.requestLog.count.mockResolvedValue(5);
+      const count = await service.getRequestCount('user1', 'minute');
+      expect(count).toBe(5);
+      expect(mockPrisma.requestLog.count).toHaveBeenCalledWith({
+        where: {
+          userId: 'user1',
+          createdAt: { gte: expect.any(Date) },
+          status: { not: 429 },
+        },
+      });
+    });
+
+    it('should query request count for month timeframe and exclude status 429', async () => {
+      mockPrisma.requestLog.count.mockResolvedValue(120);
+      const count = await service.getRequestCount('user1', 'month');
+      expect(count).toBe(120);
+      expect(mockPrisma.requestLog.count).toHaveBeenCalledWith({
+        where: {
+          userId: 'user1',
+          createdAt: { gte: expect.any(Date) },
+          status: { not: 429 },
+        },
+      });
+    });
+  });
 });
+

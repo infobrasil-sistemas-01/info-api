@@ -105,6 +105,7 @@ export class DashboardService {
           FROM request_logs m
           WHERE m.user_id = rl.user_id
             AND m.created_at >= DATE_TRUNC('month', CURRENT_DATE)
+            AND m.status <> 429
             AND m.path NOT LIKE '/api/v1/dashboard%'
             AND m.path NOT LIKE '/api/v1/newsletter%'
         ) as "monthlyRequests"
@@ -246,6 +247,7 @@ export class DashboardService {
       JOIN users u ON rl.user_id = u.id
       JOIN plans p ON u.plan_id = p.id
       WHERE rl.created_at >= DATE_TRUNC('month', CURRENT_DATE)
+        AND rl.status <> 429
         AND rl.path NOT LIKE '/api/v1/dashboard%'
         AND rl.path NOT LIKE '/api/v1/newsletter%'
       GROUP BY u.id, u.user, u.email, p.name, p.req_month
@@ -379,6 +381,7 @@ export class DashboardService {
         where: {
           userId,
           createdAt: { gte: startOfMonth },
+          status: { not: 429 },
           NOT: [
             { path: { startsWith: '/api/v1/dashboard' } },
             { path: { startsWith: '/api/v1/newsletter' } },
