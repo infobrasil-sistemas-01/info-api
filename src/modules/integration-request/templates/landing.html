@@ -359,6 +359,192 @@
                 flex-direction: column;
             }
         }
+
+        /* Slider Styles */
+        .slider-container {
+            position: relative;
+            width: 100%;
+            margin: 2rem 0;
+            overflow: hidden;
+            padding: 1.5rem 0;
+        }
+
+        .slider-wrapper {
+            display: flex;
+            gap: 2rem;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none;  /* IE and Edge */
+            padding: 0.5rem 1rem;
+        }
+
+        .slider-wrapper::-webkit-scrollbar {
+            display: none; /* Chrome, Safari and Opera */
+        }
+
+        .slider-card {
+            flex: 0 0 calc(33.333% - 1.333rem); /* 3 cards on desktop */
+            min-width: 320px;
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        @media (max-width: 1024px) {
+            .slider-card {
+                flex: 0 0 calc(50% - 1rem); /* 2 cards on tablet */
+            }
+        }
+
+        @media (max-width: 680px) {
+            .slider-card {
+                flex: 0 0 100%; /* 1 card on mobile */
+                min-width: unset;
+            }
+        }
+
+        .slider-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.05);
+        }
+
+        .slider-card-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .slider-card-header i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .slider-card-header h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            color: white;
+            font-weight: 600;
+        }
+
+        .slider-card-header p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .slider-card-body {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: auto; /* Push endpoints to bottom if header height differs */
+        }
+
+        .endpoint-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
+            padding: 0.6rem 0.8rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            transition: all 0.2s;
+        }
+
+        .endpoint-item:hover {
+            background: rgba(16, 185, 129, 0.05);
+            border-color: rgba(16, 185, 129, 0.2);
+        }
+
+        .endpoint-method-path {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .method-tag {
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .method-tag.get {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--primary);
+        }
+
+        .method-tag.post {
+            background: rgba(59, 130, 246, 0.15);
+            color: #3b82f6;
+        }
+
+        .method-tag.patch {
+            background: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
+        }
+
+        .method-tag.delete {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+        }
+
+        .endpoint-path {
+            font-family: monospace;
+            font-size: 0.75rem;
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .endpoint-desc {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .slider-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .slider-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: white;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.4rem;
+        }
+
+        .slider-btn:hover:not(:disabled) {
+            background: var(--primary);
+            color: #06110d;
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .slider-btn:disabled {
+            opacity: 0.25;
+            cursor: not-allowed;
+            border-color: var(--border);
+        }
     </style>
 </head>
 
@@ -491,32 +677,350 @@
             <div class="section-header">
                 <h2>Funcionalidades da API</h2>
                 <p>Nossa arquitetura garante a estabilidade do seu banco de dados através de limites inteligentes e
-                    endpoints otimizados.</p>
+                    endpoints otimizados para todas as operações do seu ERP.</p>
             </div>
-            <div class="params-grid">
-                <div class="param-card">
-                    <i class='bx bx-shopping-bag'></i>
-                    <h3>Produtos & Estoque</h3>
-                    <p>Consulta completa de itens, saldos, preços por tabela e variações de grade em tempo real.</p>
-                    <span class="resource-tag">GET /products</span>
-                    <span class="resource-tag">GET /products/{id}</span>
-                </div>
-                <div class="param-card">
-                    <i class='bx bx-cart-alt'></i>
-                    <h3>Vendas & Pedidos</h3>
-                    <p>Integração de pedidos de venda, consulta de status de faturamento e histórico de movimentações.
-                    </p>
-                    <span class="resource-tag">POST /orders</span>
-                    <span class="resource-tag">GET /orders</span>
-                </div>
-                <div class="param-card">
-                    <i class='bx bx-credit-card-front'></i>
-                    <h3>Contas a Receber</h3>
-                    <p>Visualização de contas a receber e status com diversos filtros.</p>
-                    <span class="resource-tag">GET /account-receivable</span>
+            
+            <div class="slider-container">
+                <div class="slider-wrapper" id="features-slider">
+                    <!-- Slide 1: Produtos -->
+                    <div class="slider-card">
+                        <div class="slider-card-header">
+                            <i class='bx bx-shopping-bag'></i>
+                            <h3>Produtos & Estoque</h3>
+                            <p>Controle completo de catálogo, variações de grade, tabelas de preço e saldos de estoque.</p>
+                        </div>
+                        <div class="slider-card-body">
+                            <div class="endpoint-item">
+                                <div class="endpoint-method-path">
+                                    <span class="method-tag get">GET</span>
+                                    <span class="endpoint-path">/products</span>
+                                </div>
+                                <span class="endpoint-desc">Listar/Pesquisar produtos no catálogo</span>
+                            </div>
+                            <div class="endpoint-item">
+                                <div class="endpoint-method-path">
+                                    <span class="method-tag get">GET</span>
+                                    <span class="endpoint-path">/products/id/:id</span>
+                                </div>
+                                <span class="endpoint-desc">Obter detalhes de produto por ID</span>
+                            </div>
+                            <div class="endpoint-item">
+                                <div class="endpoint-method-path">
+                                    <span class="method-tag get">GET</span>
+                                    <span class="endpoint-path">/products/barcode/:barcode</span>
+                                </div>
+                                <span class="endpoint-desc">Buscar produto por código de barras</span>
+                            </div>
+                            <div class="endpoint-item">
+                                <div class="endpoint-method-path">
+                                    <span class="method-tag get">GET</span>
+                                    <span class="endpoint-path">/products/groups</span>
+                                </div>
+                                <span class="endpoint-desc">Listar grupos de produtos</span>
+                            </div>
+                            <div class="endpoint-item">
+                                <div class="endpoint-method-path">
+                                    <span class="method-tag post">POST</span>
+                                    <span class="endpoint-path">/products/groups</span>
+                                </div>
+                                <span class="endpoint-desc">Cadastrar novo grupo de produtos</span>
+                            </div>
+                            <div class="endpoint-item">
+                                <div class="endpoint-method-path">
+                                    <span class="method-tag patch">PATCH</span>
+                                    <span class="endpoint-path">/products/groups/:id</span>
+                                </div>
+                                <span class="endpoint-desc">Atualizar grupo de produtos existente</span>
+                            </div>
+                            <div class="endpoint-item">
+                                <div class="endpoint-method-path">
+                                    <span class="method-tag get">GET</span>
+                                    <span class="endpoint-path">/products/brands</span>
+                                </div>
+                                <span class="endpoint-desc">Listar marcas de produtos</span>
+                            </div>
+                            <div class="endpoint-item">
+                                <div class="endpoint-method-path">
+                                    <span class="method-tag post">POST</span>
+                                    <span class="endpoint-path">/products/brands</span>
+                                </div>
+                                <span class="endpoint-desc">Cadastrar nova marca de produtos</span>
+                            </div>
+                            <div class="endpoint-item">
+                                <div class="endpoint-method-path">
+                                    <span class="method-tag patch">PATCH</span>
+                                    <span class="endpoint-path">/products/brands/:id</span>
+                                </div>
+                                <span class="endpoint-desc">Atualizar marca de produtos existente</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 2: Vendas -->
+                    <div class="slider-card">
+                        <div class="slider-card-header">
+                            <i class='bx bx-cart-alt'></i>
+                            <h3>Vendas & Pedidos</h3>
+                            <p>Integração bidirecional de pedidos de venda diretamente no fluxo de faturamento do ERP.</p>
+                        </div>
+                        <div class="slider-card-body">
+                            <div class="endpoint-item">
+                                <div class="endpoint-method-path">
+                                    <span class="method-tag post">POST</span>
+                                    <span class="endpoint-path">/orders</span>
+                                </div>
+                                <span class="endpoint-desc">Registrar novo pedido de venda</span>
+                            </div>
+                            <div class="endpoint-item">
+                                <div class="endpoint-method-path">
+                                    <span class="method-tag get">GET</span>
+                                    <span class="endpoint-path">/orders</span>
+                                </div>
+                                <span class="endpoint-desc">Listar histórico de pedidos</span>
+                            </div>
+                            <div class="endpoint-item">
+                                <div class="endpoint-method-path">
+                                    <span class="method-tag get">GET</span>
+                                    <span class="endpoint-path">/orders/:id</span>
+                                </div>
+                                <span class="endpoint-desc">Obter detalhes de pedido por ID</span>
+                            </div>
+                            <div class="endpoint-item">
+                                <div class="endpoint-method-path">
+                                    <span class="method-tag get">GET</span>
+                                    <span class="endpoint-path">/order-items</span>
+                                </div>
+                                <span class="endpoint-desc">Listar itens faturados ou vendidos</span>
+                            </div>
+                            <div class="endpoint-item">
+                                <div class="endpoint-method-path">
+                                    <span class="method-tag post">POST</span>
+                                    <span class="endpoint-path">/orders/:id/receipt</span>
+                                </div>
+                                <span class="endpoint-desc">Gerar cupom fiscal (NFC-e/SAT)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 3: Clientes -->
+                    <div class="slider-card">
+                        <div class="slider-card-header">
+                            <i class='bx bx-group'></i>
+                            <h3>Clientes & Contatos</h3>
+                            <p>Sincronização de dados de clientes, endereços de entrega e históricos comerciais.</p>
+                        </div>
+                        <div class="slider-card-body">
+                            <div class="endpoint-item">
+                                <div class="endpoint-method-path">
+                                    <span class="method-tag get">GET</span>
+                                    <span class="endpoint-path">/clients</span>
+                                </div>
+                                <span class="endpoint-desc">Listar/Pesquisar clientes cadastrados</span>
+                            </div>
+                            <div class="endpoint-item">
+                                <div class="endpoint-method-path">
+                                    <span class="method-tag get">GET</span>
+                                    <span class="endpoint-path">/clients/:id</span>
+                                </div>
+                                <span class="endpoint-desc">Obter ficha detalhada do cliente por ID</span>
+                            </div>
+                            <div class="endpoint-item">
+                                <div class="endpoint-method-path">
+                                    <span class="method-tag post">POST</span>
+                                    <span class="endpoint-path">/clients</span>
+                                </div>
+                                <span class="endpoint-desc">Cadastrar novo cliente no ERP</span>
+                            </div>
+                            <div class="endpoint-item">
+                                <div class="endpoint-method-path">
+                                    <span class="method-tag patch">PATCH</span>
+                                    <span class="endpoint-path">/clients/:id</span>
+                                </div>
+                                <span class="endpoint-desc">Atualizar dados cadastrais de cliente</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 4: Financeiro -->
+                    <div class="slider-card">
+                        <div class="slider-card-header">
+                            <i class='bx bx-wallet'></i>
+                            <h3>Financeiro & Contas</h3>
+                            <p>Acompanhamento de fluxo de caixa, títulos a pagar/receber e formas de pagamento.</p>
+                        </div>
+                        <div class="slider-card-body">
+                            <div class="endpoint-item">
+                                <div class="endpoint-method-path">
+                                    <span class="method-tag get">GET</span>
+                                    <span class="endpoint-path">/account-payable</span>
+                                </div>
+                                <span class="endpoint-desc">Listar contas a pagar do período</span>
+                            </div>
+                            <div class="endpoint-item">
+                                <div class="endpoint-method-path">
+                                    <span class="method-tag get">GET</span>
+                                    <span class="endpoint-path">/account-payable/id/:id</span>
+                                </div>
+                                <span class="endpoint-desc">Obter detalhes de conta a pagar por ID</span>
+                            </div>
+                            <div class="endpoint-item">
+                                <div class="endpoint-method-path">
+                                    <span class="method-tag get">GET</span>
+                                    <span class="endpoint-path">/account-receivable</span>
+                                </div>
+                                <span class="endpoint-desc">Listar contas a receber (títulos pendentes)</span>
+                            </div>
+                            <div class="endpoint-item">
+                                <div class="endpoint-method-path">
+                                    <span class="method-tag get">GET</span>
+                                    <span class="endpoint-path">/payment-methods</span>
+                                </div>
+                                <span class="endpoint-desc">Listar métodos de pagamento aceitos (cartões)</span>
+                            </div>
+                            <div class="endpoint-item">
+                                <div class="endpoint-method-path">
+                                    <span class="method-tag get">GET</span>
+                                    <span class="endpoint-path">/payment-plans</span>
+                                </div>
+                                <span class="endpoint-desc">Listar planos e prazos de pagamento</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 5: Funcionários -->
+                    <div class="slider-card">
+                        <div class="slider-card-header">
+                            <i class='bx bx-user-pin'></i>
+                            <h3>Funcionários & Cargos</h3>
+                            <p>Gestão de vendedores, atendentes, técnicos e controle de comissões operacionais.</p>
+                        </div>
+                        <div class="slider-card-body">
+                            <div class="endpoint-item">
+                                <div class="endpoint-method-path">
+                                    <span class="method-tag get">GET</span>
+                                    <span class="endpoint-path">/employees</span>
+                                </div>
+                                <span class="endpoint-desc">Listar/Pesquisar equipe de funcionários</span>
+                            </div>
+                            <div class="endpoint-item">
+                                <div class="endpoint-method-path">
+                                    <span class="method-tag get">GET</span>
+                                    <span class="endpoint-path">/employees/:id</span>
+                                </div>
+                                <span class="endpoint-desc">Obter detalhes de funcionário por ID</span>
+                            </div>
+                            <div class="endpoint-item">
+                                <div class="endpoint-method-path">
+                                    <span class="method-tag get">GET</span>
+                                    <span class="endpoint-path">/employee-roles</span>
+                                </div>
+                                <span class="endpoint-desc">Listar cargos e funções de funcionários</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 6: Entregas -->
+                    <div class="slider-card">
+                        <div class="slider-card-header">
+                            <i class='bx bx-package'></i>
+                            <h3>Entregas & Rastreamento</h3>
+                            <p>Acompanhamento logístico, despacho de mercadorias e atualização de status de frete.</p>
+                        </div>
+                        <div class="slider-card-body">
+                            <div class="endpoint-item">
+                                <div class="endpoint-method-path">
+                                    <span class="method-tag get">GET</span>
+                                    <span class="endpoint-path">/deliveries</span>
+                                </div>
+                                <span class="endpoint-desc">Listar/Pesquisar status das entregas</span>
+                            </div>
+                            <div class="endpoint-item">
+                                <div class="endpoint-method-path">
+                                    <span class="method-tag get">GET</span>
+                                    <span class="endpoint-path">/deliveries/:id</span>
+                                </div>
+                                <span class="endpoint-desc">Obter detalhes de uma entrega específica</span>
+                            </div>
+                            <div class="endpoint-item">
+                                <div class="endpoint-method-path">
+                                    <span class="method-tag post">POST</span>
+                                    <span class="endpoint-path">/deliveries</span>
+                                </div>
+                                <span class="endpoint-desc">Registrar nova entrega ou despacho logístico</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 7: Fornecedores -->
+                    <div class="slider-card">
+                        <div class="slider-card-header">
+                            <i class='bx bx-briefcase'></i>
+                            <h3>Fornecedores & Serviços</h3>
+                            <p>Cadastro e consulta de fornecedores de mercadorias e prestadores de serviços de apoio.</p>
+                        </div>
+                        <div class="slider-card-body">
+                            <div class="endpoint-item">
+                                <div class="endpoint-method-path">
+                                    <span class="method-tag get">GET</span>
+                                    <span class="endpoint-path">/suppliers</span>
+                                </div>
+                                <span class="endpoint-desc">Listar/Pesquisar fornecedores de estoque</span>
+                            </div>
+                            <div class="endpoint-item">
+                                <div class="endpoint-method-path">
+                                    <span class="method-tag get">GET</span>
+                                    <span class="endpoint-path">/suppliers/:id</span>
+                                </div>
+                                <span class="endpoint-desc">Obter detalhes de fornecedor por ID</span>
+                            </div>
+                            <div class="endpoint-item">
+                                <div class="endpoint-method-path">
+                                    <span class="method-tag get">GET</span>
+                                    <span class="endpoint-path">/service-providers</span>
+                                </div>
+                                <span class="endpoint-desc">Listar prestadores de serviços cadastrados</span>
+                            </div>
+                            <div class="endpoint-item">
+                                <div class="endpoint-method-path">
+                                    <span class="method-tag get">GET</span>
+                                    <span class="endpoint-path">/service-providers/:id</span>
+                                </div>
+                                <span class="endpoint-desc">Obter detalhes de prestador de serviços por ID</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 8: Lojas & Filiais -->
+                    <div class="slider-card">
+                        <div class="slider-card-header">
+                            <i class='bx bx-store-alt'></i>
+                            <h3>Lojas & Filiais</h3>
+                            <p>Consulta de dados corporativos de lojas e filiais vinculadas à conta do cliente.</p>
+                        </div>
+                        <div class="slider-card-body">
+                            <div class="endpoint-item">
+                                <div class="endpoint-method-path">
+                                    <span class="method-tag get">GET</span>
+                                    <span class="endpoint-path">/stores</span>
+                                </div>
+                                <span class="endpoint-desc">Listar filiais operacionais do ERP</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div style="text-align: center;">
+
+            <!-- Controles do Slider -->
+            <div class="slider-controls">
+                <button class="slider-btn" id="slider-prev" aria-label="Slide anterior">
+                    <i class='bx bx-chevron-left'></i>
+                </button>
+                <button class="slider-btn" id="slider-next" aria-label="Próximo slide">
+                    <i class='bx bx-chevron-right'></i>
+                </button>
+            </div>
+
+            <div style="text-align: center; margin-top: 3rem;">
                 <a href="/docs" target="_blank" class="btn btn-outline">
                     <i class='bx bx-list-ul'></i> Ver Documentação Completa (Swagger)
                 </a>
@@ -616,6 +1120,40 @@
         }
 
         loadPlans();
+
+        // Lógica do Slider de Funcionalidades
+        const sliderWrapper = document.getElementById('features-slider');
+        const prevBtn = document.getElementById('slider-prev');
+        const nextBtn = document.getElementById('slider-next');
+
+        if (sliderWrapper && prevBtn && nextBtn) {
+            const getCardWidth = () => {
+                const card = sliderWrapper.querySelector('.slider-card');
+                return card ? card.offsetWidth + 32 : 350; // Largura do card + gap (2rem = 32px)
+            };
+
+            prevBtn.addEventListener('click', () => {
+                sliderWrapper.scrollBy({ left: -getCardWidth(), behavior: 'smooth' });
+            });
+
+            nextBtn.addEventListener('click', () => {
+                sliderWrapper.scrollBy({ left: getCardWidth(), behavior: 'smooth' });
+            });
+
+            const updateSliderButtons = () => {
+                const scrollLeft = sliderWrapper.scrollLeft;
+                const maxScroll = sliderWrapper.scrollWidth - sliderWrapper.clientWidth;
+                
+                prevBtn.disabled = scrollLeft <= 2;
+                nextBtn.disabled = scrollLeft >= maxScroll - 2;
+            };
+
+            sliderWrapper.addEventListener('scroll', updateSliderButtons);
+            window.addEventListener('resize', updateSliderButtons);
+            
+            // Inicializar botões de seta após render completo
+            setTimeout(updateSliderButtons, 200);
+        }
     </script>
 </body>
 
