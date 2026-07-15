@@ -385,7 +385,7 @@
 
         .slider-card {
             flex: 0 0 calc(33.333% - 1.333rem); /* 3 cards on desktop */
-            min-width: 320px;
+            min-width: 450px;
             background: var(--card-bg);
             padding: 2rem;
             border-radius: 24px;
@@ -440,10 +440,16 @@
         }
 
         .slider-card-body {
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 0.75rem;
-            margin-top: auto; /* Push endpoints to bottom if header height differs */
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 580px) {
+            .slider-card-body {
+                grid-template-columns: 1fr;
+            }
         }
 
         .endpoint-item {
