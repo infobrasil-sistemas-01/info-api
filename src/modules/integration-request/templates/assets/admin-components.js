@@ -448,6 +448,13 @@ const Components = {
 
   DashboardTopUserRow: (u) => {
     const usagePercent = Math.min(100, Math.round((u.monthlyRequests / (u.planReqMonth || 1)) * 100));
+    
+    // Consumo por minuto
+    const minRequests = u.minuteRequests || 0;
+    const minLimit = u.planReqMin || 30;
+    const minPercent = Math.min(100, Math.round((minRequests / minLimit) * 100));
+    const minColor = minPercent >= 100 ? '#ef4444' : minPercent >= 80 ? '#f59e0b' : '#10b981';
+
     const statusBadge = u.status
       ? `<span class="tag-pill" style="background: rgba(16, 185, 129, 0.1); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.2);">Ativo</span>`
       : `<span class="tag-pill" style="background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.2);">Inativo</span>`;
@@ -479,6 +486,21 @@ const Components = {
               <small style="font-size: 0.7rem; color: var(--text-muted); display: block; margin-top: 2px;">
                   ${u.monthlyRequests.toLocaleString()} / ${(u.planReqMonth || 0).toLocaleString()}
               </small>
+          </td>
+          <td style="padding: 10px; min-width: 125px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                  <svg width="22" height="22" viewBox="0 0 36 36" style="flex-shrink: 0; transform: rotate(-90deg);">
+                      <!-- Trilha de fundo -->
+                      <circle cx="18" cy="18" r="15.915" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="4.5"></circle>
+                      <!-- Preenchimento -->
+                      <circle cx="18" cy="18" r="15.915" fill="none" stroke="${minColor}" stroke-width="4.5"
+                              stroke-dasharray="${minPercent} ${100 - minPercent}"
+                              stroke-linecap="round" style="transition: stroke-dasharray 0.3s ease;"></circle>
+                  </svg>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: white; white-space: nowrap;">
+                      ${minRequests.toLocaleString()} <span style="font-size: 0.72rem; color: var(--text-muted); font-weight: 400;">/ ${minLimit.toLocaleString()}</span>
+                  </span>
+              </div>
           </td>
           <td style="color: ${u.errorRate > 10 ? 'var(--danger)' : 'var(--success)'}; font-weight: 600; text-align: center; padding: 10px;">
               ${u.errorRate}%
@@ -822,15 +844,16 @@ const Components = {
                       <tr style="border-bottom: 1px solid var(--border);">
                           <th style="text-align: left; padding: 10px; color: var(--text-muted);">Usuário / Cliente</th>
                           <th style="text-align: left; padding: 10px; color: var(--text-muted);">Plano</th>
-                          <th style="text-align: center; padding: 10px; width: 150px; color: var(--text-muted);">Total Requisições</th>
-                          <th style="text-align: left; padding: 10px; width: 220px; color: var(--text-muted);">Progresso do Limite Mensal</th>
+                          <th style="text-align: center; padding: 10px; width: 140px; color: var(--text-muted);">Total Requisições</th>
+                          <th style="text-align: left; padding: 10px; width: 200px; color: var(--text-muted);">Progresso Limite Mensal</th>
+                          <th style="text-align: left; padding: 10px; width: 130px; color: var(--text-muted);">Cota/Minuto</th>
                           <th style="text-align: center; padding: 10px; width: 100px; color: var(--text-muted);">Taxa Erro</th>
                           <th style="text-align: left; padding: 10px; width: 100px; color: var(--text-muted);">Status</th>
                           <th style="text-align: center; padding: 10px; width: 100px; color: var(--text-muted);">Dossiê</th>
                       </tr>
                   </thead>
                   <tbody>
-                      ${topUsers.map(Components.DashboardTopUserRow).join('') || '<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 20px;">Nenhum log de requisição encontrado.</td></tr>'}
+                      ${topUsers.map(Components.DashboardTopUserRow).join('') || '<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 20px;">Nenhum log de requisição encontrado.</td></tr>'}
                   </tbody>
               </table>
           </div>

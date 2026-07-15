@@ -97,7 +97,8 @@ export class DashboardService {
         u.email as "email",
         u.status as "status",
         p.name as "planName",
-        p.req_month as "planReqMonth",
+        COALESCE(p.req_min, 30)::int as "planReqMin",
+        COALESCE(p.req_month, 10000)::int as "planReqMonth",
         COUNT(rl.id)::int as "totalRequests",
         ROUND((SUM(CASE WHEN rl.status >= 400 THEN 1 ELSE 0 END)::float / COUNT(rl.id) * 100)::numeric, 2)::float as "errorRate",
         (
@@ -108,14 +109,23 @@ export class DashboardService {
             AND m.status <> 429
             AND m.path NOT LIKE '/api/v1/dashboard%'
             AND m.path NOT LIKE '/api/v1/newsletter%'
-        ) as "monthlyRequests"
+        ) as "monthlyRequests",
+        (
+          SELECT COUNT(m.id)::int
+          FROM request_logs m
+          WHERE m.user_id = rl.user_id
+            AND m.created_at >= NOW() - INTERVAL '1 minute'
+            AND m.status <> 429
+            AND m.path NOT LIKE '/api/v1/dashboard%'
+            AND m.path NOT LIKE '/api/v1/newsletter%'
+        ) as "minuteRequests"
       FROM request_logs rl
       JOIN users u ON rl.user_id = u.id
       LEFT JOIN plans p ON u.plan_id = p.id
       WHERE rl.created_at >= $1 AND rl.created_at <= $2
         AND rl.path NOT LIKE '/api/v1/dashboard%'
         AND rl.path NOT LIKE '/api/v1/newsletter%'
-      GROUP BY rl.user_id, u.user, u.email, u.status, p.name, p.req_month
+      GROUP BY rl.user_id, u.user, u.email, u.status, p.name, p.req_min, p.req_month
       ORDER BY "totalRequests" DESC
       LIMIT $3
     `;
