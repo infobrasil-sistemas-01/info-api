@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.16.11](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.16.10...v1.16.11) (2026-07-15)
+
+
+### Features
+
+* add alert emails logs on db ([764ac6a](https://github.com/infobrasil-sistemas/info-vendas-api/commit/764ac6a59e7e2d3a5ca33c6448c9f0f9f9103590))
+* add Notificado column with email status to dashboard and dossier proactive alerts ([20a07af](https://github.com/infobrasil-sistemas/info-vendas-api/commit/20a07afe1c82d6708323e0c284e55373f3d8d963))
+* add RPM metrics to client and general PDF dossiers ([bfc67fc](https://github.com/infobrasil-sistemas/info-vendas-api/commit/bfc67fc6306714da7f680cfd33ed7b4ba25f5896))
+* localize Zod validation error messages to pt-BR systematically ([cc6bb8a](https://github.com/infobrasil-sistemas/info-vendas-api/commit/cc6bb8a9a9327e0414283e480ab87f783cc41ba0))
+* remove 429 to quota count ([0a1220c](https://github.com/infobrasil-sistemas/info-vendas-api/commit/0a1220cc01883f234df8999958ad811fb1834877))
+* rpm on dashboard ([07ef8f7](https://github.com/infobrasil-sistemas/info-vendas-api/commit/07ef8f79f5dd272852cc39d634e1f64e278b396a))
+* translate zod errors ([55bed86](https://github.com/infobrasil-sistemas/info-vendas-api/commit/55bed8634554e538d4f5ed0ba26d668b1d7ea7bf))
+
+
+### Bug Fixes
+
+* adjust automatic alert conditions, add manual resend capability to frontend, and fix payment method spec ([d50a4e1](https://github.com/infobrasil-sistemas/info-vendas-api/commit/d50a4e1548c02e28c467c0a17817cbda871f5672))
+* docker build prisma client copy paths ([0159dd4](https://github.com/infobrasil-sistemas/info-vendas-api/commit/0159dd402767267c66ecb5385d25d3beca9055fd))
+* import path of PrismaClient at runtime ([9415130](https://github.com/infobrasil-sistemas/info-vendas-api/commit/9415130e6ce6a7e00a2d7c3f9ad5fa03716957f5))
+* mock data on dashboard spec ([3735efd](https://github.com/infobrasil-sistemas/info-vendas-api/commit/3735efd3b5c736aba49ee04638034264a8645618))
+* **plan:** count all requests within calendar month for usage stats and alerts ([17f4a04](https://github.com/infobrasil-sistemas/info-vendas-api/commit/17f4a0430f145f0797d72a5c1bd998a84f03acc4))
+* revert PrismaClient import and map path in tsconfig ([a37d4b8](https://github.com/infobrasil-sistemas/info-vendas-api/commit/a37d4b86865cea0b837d47d47f1b5b1fc7e80f12))
+
 ## [1.16.10](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.16.9...v1.16.10) (2026-07-13)
 
 
