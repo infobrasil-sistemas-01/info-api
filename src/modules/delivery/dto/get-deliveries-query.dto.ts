@@ -17,6 +17,8 @@ export const GetDeliveriesQuerySchema = z.object({
   situation: z.coerce.number().optional(),
   vehiclePlate: z.string().max(8).optional(),
   providerId: z.coerce.number().optional(),
+  orderId: z.coerce.number().optional(),
+  status: z.coerce.number().optional(),
 });
 
 export class GetDeliveriesQueryDto extends ZodDto(GetDeliveriesQuerySchema) {
@@ -64,4 +66,10 @@ export class GetDeliveriesQueryDto extends ZodDto(GetDeliveriesQuerySchema) {
     example: 1,
   })
   orderId?: number;
+
+  @ApiPropertyOptional({
+    description: 'Código do status (TBS_CODIGO)',
+    example: 1,
+  })
+  status?: number;
 }

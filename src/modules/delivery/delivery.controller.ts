@@ -77,6 +77,8 @@ export class DeliveryController {
         situation: query.situation,
         vehiclePlate: query.vehiclePlate,
         providerId: query.providerId,
+        orderId: query.orderId,
+        status: query.status,
       },
     );
   }

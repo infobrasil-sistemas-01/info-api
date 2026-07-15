@@ -55,6 +55,8 @@ describe('DeliveryController', () => {
         situation: 1,
         vehiclePlate: 'ABC-1234',
         providerId: 5,
+        orderId: 10,
+        status: 2,
       });
 
       expect(deliveryService.get).toHaveBeenCalledWith('cred-1', 1, 2, 20, {
@@ -63,6 +65,8 @@ describe('DeliveryController', () => {
         situation: 1,
         vehiclePlate: 'ABC-1234',
         providerId: 5,
+        orderId: 10,
+        status: 2,
       });
       expect(result).toEqual([{ VEN_NUMERO: 12345 }]);
     });

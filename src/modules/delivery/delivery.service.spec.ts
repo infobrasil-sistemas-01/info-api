@@ -59,7 +59,7 @@ describe('DeliveryService', () => {
       );
     });
 
-    it('should apply situation and vehiclePlate filters when provided', async () => {
+    it('should apply situation, vehiclePlate, orderId and status filters when provided', async () => {
       mockConnection.query.mockImplementation(
         (query: string, params: any[], callback: Function) => {
           callback(null, []);
@@ -69,6 +69,8 @@ describe('DeliveryService', () => {
       await service.get('cred-1', 1, 1, 10, {
         situation: 2,
         vehiclePlate: 'ABC-1234',
+        orderId: 12345,
+        status: 3,
       });
 
       expect(mockConnection.query).toHaveBeenCalledWith(
@@ -79,6 +81,16 @@ describe('DeliveryService', () => {
       expect(mockConnection.query).toHaveBeenCalledWith(
         expect.stringContaining('AND E.VEI_PLACA = ?'),
         expect.arrayContaining(['ABC-1234']),
+        expect.any(Function),
+      );
+      expect(mockConnection.query).toHaveBeenCalledWith(
+        expect.stringContaining('AND E.VEN_NUMERO = ?'),
+        expect.arrayContaining([12345]),
+        expect.any(Function),
+      );
+      expect(mockConnection.query).toHaveBeenCalledWith(
+        expect.stringContaining('AND E.TBS_CODIGO = ?'),
+        expect.arrayContaining([3]),
         expect.any(Function),
       );
     });
