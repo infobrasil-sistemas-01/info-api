@@ -441,7 +441,7 @@
 
         .slider-card-body {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 0.75rem;
             margin-top: 0.5rem;
         }
@@ -461,11 +461,42 @@
             flex-direction: column;
             gap: 0.25rem;
             transition: all 0.2s;
+            min-width: 0; /* Prevents overflow in CSS Grid columns */
         }
 
         .endpoint-item:hover {
             background: rgba(16, 185, 129, 0.05);
             border-color: rgba(16, 185, 129, 0.2);
+        }
+
+        /* Section Header Wrapper for Top Arrows */
+        .section-header-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 2rem;
+            gap: 1.5rem;
+            width: 100%;
+        }
+
+        #params .section-header {
+            text-align: left;
+            margin-bottom: 0;
+        }
+
+        #params .section-header p {
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .section-header-wrapper {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            #params .section-header {
+                text-align: center;
+            }
         }
 
         .endpoint-method-path {
@@ -680,10 +711,21 @@
 
     <section id="params" class="params">
         <div class="container">
-            <div class="section-header">
-                <h2>Funcionalidades da API</h2>
-                <p>Nossa arquitetura garante a estabilidade do seu banco de dados através de limites inteligentes e
-                    endpoints otimizados para todas as operações do seu ERP.</p>
+            <div class="section-header-wrapper">
+                <div class="section-header">
+                    <h2>Funcionalidades da API</h2>
+                    <p>Nossa arquitetura garante a estabilidade do seu banco de dados através de limites inteligentes e
+                        endpoints otimizados para todas as operações do seu ERP.</p>
+                </div>
+                <!-- Controles do Slider no Topo -->
+                <div class="slider-controls" style="margin-top: 0;">
+                    <button class="slider-btn" id="slider-prev" aria-label="Slide anterior">
+                        <i class='bx bx-chevron-left'></i>
+                    </button>
+                    <button class="slider-btn" id="slider-next" aria-label="Próximo slide">
+                        <i class='bx bx-chevron-right'></i>
+                    </button>
+                </div>
             </div>
             
             <div class="slider-container">
@@ -1016,15 +1058,6 @@
                 </div>
             </div>
 
-            <!-- Controles do Slider -->
-            <div class="slider-controls">
-                <button class="slider-btn" id="slider-prev" aria-label="Slide anterior">
-                    <i class='bx bx-chevron-left'></i>
-                </button>
-                <button class="slider-btn" id="slider-next" aria-label="Próximo slide">
-                    <i class='bx bx-chevron-right'></i>
-                </button>
-            </div>
 
             <div style="text-align: center; margin-top: 3rem;">
                 <a href="/docs" target="_blank" class="btn btn-outline">
