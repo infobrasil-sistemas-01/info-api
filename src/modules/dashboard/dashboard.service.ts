@@ -224,6 +224,8 @@ export class DashboardService {
         ${sqlTimestampExpr} as "timestamp",
         COUNT(id)::int as "count",
         SUM(CASE WHEN status >= 200 AND status < 300 THEN 1 ELSE 0 END)::int as "success",
+        SUM(CASE WHEN status >= 400 AND status < 500 THEN 1 ELSE 0 END)::int as "clientError",
+        SUM(CASE WHEN status >= 500 THEN 1 ELSE 0 END)::int as "serverError",
         SUM(CASE WHEN status >= 400 THEN 1 ELSE 0 END)::int as "error"
       FROM request_logs
       WHERE created_at >= $1 AND created_at <= $2

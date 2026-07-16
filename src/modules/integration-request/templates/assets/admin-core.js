@@ -532,8 +532,8 @@ const Data = {
                 if (label === '2xx') return '#10B981';
                 if (label === '3xx') return '#6B7280';
                 if (label === '429') return '#F59E0B';
-                if (label === '4xx') return '#EF4444';
-                if (label === '5xx') return '#8B5CF6';
+                if (label === '4xx') return '#F97316';
+                if (label === '5xx') return '#EF4444';
                 return '#9CA3AF';
             });
 
@@ -609,9 +609,13 @@ const Data = {
             x: new Date(t.timestamp).getTime(),
             y: t.success
         }));
-        const tsErrorSeries = timeSeries.map(t => ({
+        const tsClientErrorSeries = timeSeries.map(t => ({
             x: new Date(t.timestamp).getTime(),
-            y: t.error
+            y: t.clientError || 0
+        }));
+        const tsServerErrorSeries = timeSeries.map(t => ({
+            x: new Date(t.timestamp).getTime(),
+            y: t.serverError || 0
         }));
 
         const tsOptions = {
@@ -625,8 +629,12 @@ const Data = {
                     data: tsSuccessSeries
                 },
                 {
-                    name: 'Falhas (4xx/5xx)',
-                    data: tsErrorSeries
+                    name: 'Erros de Cliente (4xx)',
+                    data: tsClientErrorSeries
+                },
+                {
+                    name: 'Erros de Servidor (5xx)',
+                    data: tsServerErrorSeries
                 }
             ],
             chart: {
@@ -673,7 +681,7 @@ const Data = {
                     }
                 }
             },
-            colors: ['#3B82F6', '#10B981', '#EF4444'],
+            colors: ['#3B82F6', '#10B981', '#F97316', '#EF4444'],
             dataLabels: {
                 enabled: false
             },

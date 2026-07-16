@@ -155,7 +155,7 @@ describe('DashboardService', () => {
       const start = new Date('2026-07-02T12:00:00Z');
       const end = new Date('2026-07-02T13:00:00Z'); // 1 hour difference -> interval 1m
       const mockResult = [
-        { timestamp: '2026-07-02T12:00:00Z', count: 5, success: 5, error: 0 },
+        { timestamp: '2026-07-02T12:00:00Z', count: 5, success: 5, clientError: 0, serverError: 0, error: 0 },
       ];
       mockPrisma.$queryRawUnsafe.mockResolvedValue(mockResult);
 
@@ -306,7 +306,7 @@ describe('DashboardService', () => {
         mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([{ planName: 'Bronze', totalRequests: 100 }]);
 
         // mock for getTimeSeries
-        mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([{ timestamp: '2026-07-01', count: 100, success: 95, error: 5 }]);
+        mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([{ timestamp: '2026-07-01', count: 100, success: 95, clientError: 4, serverError: 1, error: 5 }]);
 
         // mock for getHeartbeatStatus
         mockPrisma.systemHeartbeat.findUnique.mockResolvedValueOnce({
@@ -372,7 +372,7 @@ describe('DashboardService', () => {
         mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([{ statusClass: '2xx', count: 190 }]);
 
         // mock for getTimeSeries(userId)
-        mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([{ timestamp: '2026-07-01', count: 200, success: 190, error: 10 }]);
+        mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([{ timestamp: '2026-07-01', count: 200, success: 190, clientError: 8, serverError: 2, error: 10 }]);
 
         const result = await service.getDossierData('client', start, end, 'user-id');
 
