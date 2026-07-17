@@ -280,7 +280,7 @@ export class OrderService {
 
       // Campos VEN_ENTREGA e VEN_MONTAGEM solicitados pelo Depósito Oliveira
       const query = `SELECT
-                  VEN_NUMERO,
+                  V.VEN_NUMERO,
                   V.SIT_CODIGO,
                   V.VEN_NUMSITE,
                   V.LOJ_CODIGO,
