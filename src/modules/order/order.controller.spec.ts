@@ -198,7 +198,9 @@ describe('OrderController', () => {
   describe('getOrderById', () => {
     it('should call orderService.getById and orderItemService.getByOrderId', async () => {
       const mockOrder = { id: 123, date: '2024-01-15' };
-      const mockItems = [{ product_id: 1, quantity: 2 }];
+      const mockItems = [
+        { product_id: 1, quantity: 2, PRO_PESO: 1.5, IVD_QTDE: 2 },
+      ];
 
       mockOrderService.getById.mockResolvedValue(mockOrder);
       mockOrderItemService.getByOrderId.mockResolvedValue(mockItems);
@@ -207,7 +209,7 @@ describe('OrderController', () => {
 
       expect(orderService.getById).toHaveBeenCalledWith('cred-1', 1, 123);
       expect(orderItemService.getByOrderId).toHaveBeenCalledWith('cred-1', 123);
-      expect(result).toEqual({ ...mockOrder, items: mockItems });
+      expect(result).toEqual({ ...mockOrder, PESO: 3, items: mockItems });
     });
   });
 });

@@ -38,7 +38,7 @@ export class OrderController {
   constructor(
     private readonly orderService: OrderService,
     private readonly orderItemService: OrderItemService,
-  ) {}
+  ) { }
 
   @Post()
   @UseGuards(JwtAuthGuard, PermissionsGuard)
@@ -194,15 +194,17 @@ export class OrderController {
 
     const finalStoreId = query.storeId ? Number(query.storeId) : storeIdToken;
 
-    const orderData = await this.orderService.getById(
+    const orderData = (await this.orderService.getById(
       credentialsId,
       finalStoreId,
       id,
-    );
-    const orderItems = await this.orderItemService.getByOrderId(
+    )) as any;
+    const orderItems = (await this.orderItemService.getByOrderId(
       credentialsId,
       id,
-    );
+    )) as any[];
+
+    orderData.PESO = orderItems.reduce((acc, item) => acc + (item.PRO_PESO * item.IVD_QTDE), 0)
 
     return { ...orderData, items: orderItems };
   }

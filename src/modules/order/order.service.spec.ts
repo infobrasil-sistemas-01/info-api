@@ -187,7 +187,16 @@ describe('OrderService', () => {
 
   describe('getById', () => {
     it('should return order by id', async () => {
-      const mockOrder = { VEN_NUMERO: 123, VEN_DATA: '2024-01-15' };
+      const mockOrder = {
+        VEN_NUMERO: 123,
+        VEN_DATA: '2024-01-15',
+        VEN_ENTREGA: 'S',
+        VEN_MONTAGEM: 'N',
+        TRA_CODIGO: 1,
+        TRA_NOME: 'Transportadora 1',
+        VALORENT: 10.0,
+        MON_DATA: '2024-01-16',
+      };
       mockConnection.query.mockImplementation((query, params, callback) => {
         callback(null, [mockOrder]);
       });

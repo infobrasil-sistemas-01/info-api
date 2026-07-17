@@ -278,6 +278,7 @@ export class OrderService {
         params.push(storeId);
       }
 
+      // Campos VEN_ENTREGA e VEN_MONTAGEM solicitados pelo Depósito Oliveira
       const query = `SELECT
                   VEN_NUMERO,
                   V.SIT_CODIGO,
@@ -288,16 +289,24 @@ export class OrderService {
                   V.VEN_DATA,
                   V.VEN_HORA,
                   V.FP1_CODIGO,
-                  FPG.fpg_descricao,
-                  V.pp1_codigo,
-                  PLP.plp_descricao,
+                  FPG.FPG_DESCRICAO,
+                  V.PP1_CODIGO,
+                  PLP.PLP_DESCRICAO,
                   V.VEN_TOTALBRUTO,
-                  V.ven_totaldesc,
-                  V.ven_totalliquido,
-                  V.ven_quant
+                  V.VEN_TOTALDESC,
+                  V.VEN_TOTALLIQUIDO,
+                  V.VEN_QUANT,
+                  V.VEN_ENTREGA,
+                  V.VEN_MONTAGEM,
+                  V.TRA_CODIGO,
+                  T.TRA_NOME,
+                  V.VALORENT,
+                  M.MON_DATA
                FROM VENDAS V
-               LEFT JOIN formaspag FPG ON FPG.fpg_codigo = V.fp1_codigo
-               LEFT JOIN planospag PLP ON PLP.plp_codigo = V.pp1_codigo
+               LEFT JOIN formaspag FPG ON FPG.FPG_CODIGO = V.FP1_CODIGO
+               LEFT JOIN planospag PLP ON PLP.PLP_CODIGO = V.PP1_CODIGO
+               LEFT JOIN TRANSPORTADORAS T ON T.TRA_CODIGO = V.TRA_CODIGO
+               LEFT JOIN MONTAGENS M ON M.VEN_NUMERO = V.VEN_NUMERO
                ${whereClause}
                ORDER BY V.VEN_NUMERO DESC`;
 

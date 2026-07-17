@@ -127,11 +127,14 @@ describe('OrderItemService', () => {
         {
           PRO_CODIGO: 1,
           PRO_DESCRICAO: 'Product 1',
+          PRO_PESO: 1.5,
           IVD_PRECO: 10.0,
           IVD_QTDE: 2,
           IVD_TOTAL: 20.0,
           IVD_DESCONTO: 0,
           IVD_LIQUIDO: 20.0,
+          TRM_CODIGO: '3',
+          TRM_DESCRICAO: 'ENTREGA',
         },
       ];
       mockConnection.query.mockImplementation(
