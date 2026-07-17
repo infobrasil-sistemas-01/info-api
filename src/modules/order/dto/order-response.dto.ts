@@ -63,17 +63,35 @@ export class OrderResponseDto {
 }
 
 export class OrderItemResponseDto {
-  @ApiProperty({ example: 1, description: 'Sequência do item' })
-  ITE_SEQUENCIA: number;
-
   @ApiProperty({ example: 101, description: 'Código do produto' })
   PRO_CODIGO: number;
 
-  @ApiProperty({ example: 2, description: 'Quantidade' })
-  ITE_QUANT: number;
+  @ApiProperty({ example: 'Produto de Teste', description: 'Descrição do produto' })
+  PRO_DESCRICAO: string;
 
-  @ApiProperty({ example: 150.0, description: 'Preço unitário' })
-  ITE_PRECO: number;
+  @ApiProperty({ example: 1.5, description: 'Peso do produto' })
+  PRO_PESO: number;
+
+  @ApiProperty({ example: 150.0, description: 'Preço unitário do item' })
+  IVD_PRECO: number;
+
+  @ApiProperty({ example: 2, description: 'Quantidade vendida' })
+  IVD_QTDE: number;
+
+  @ApiProperty({ example: 300.0, description: 'Valor total bruto do item' })
+  IVD_TOTAL: number;
+
+  @ApiProperty({ example: 0.0, description: 'Desconto aplicado no item' })
+  IVD_DESCONTO: number;
+
+  @ApiProperty({ example: 300.0, description: 'Valor líquido do item' })
+  IVD_LIQUIDO: number;
+
+  @ApiProperty({ example: '3', description: 'Código da modalidade de entrega' })
+  TRM_CODIGO: string;
+
+  @ApiProperty({ example: 'ENTREGA', description: 'Descrição da modalidade de entrega' })
+  TRM_DESCRICAO: string;
 }
 
 export class OrderDetailResponseDto extends OrderResponseDto {
@@ -84,10 +102,43 @@ export class OrderDetailResponseDto extends OrderResponseDto {
   VEN_TOTALBRUTO: number;
 
   @ApiProperty({ example: 49.5, description: 'Valor total de desconto' })
-  ven_totaldesc: number;
+  VEN_TOTALDESC: number;
+
+  @ApiProperty({ example: 250.5, description: 'Valor total líquido' })
+  VEN_TOTALLIQUIDO: number;
 
   @ApiProperty({ example: 2, description: 'Quantidade total de itens' })
-  ven_quant: number;
+  VEN_QUANT: number;
+
+  @ApiProperty({ example: '2026-07-20T00:00:00.000Z', description: 'Data de entrega' })
+  VEN_ENTREGA: string;
+
+  @ApiProperty({ example: '2026-07-22T00:00:00.000Z', description: 'Data de montagem' })
+  VEN_MONTAGEM: string;
+
+  @ApiProperty({ example: 1, description: 'Código da transportadora' })
+  TRA_CODIGO: number;
+
+  @ApiProperty({ example: 'Transportadora Exemplo', description: 'Nome da transportadora' })
+  TRA_NOME: string;
+
+  @ApiProperty({ example: 15.0, description: 'Valor do frete/entrega' })
+  VEN_VALORENT: number;
+
+  @ApiProperty({ example: '2026-07-23T00:00:00.000Z', description: 'Data da montagem agendada' })
+  MON_DATA: string;
+
+  @ApiProperty({ example: 3.0, description: 'Peso total calculado do pedido' })
+  PESO: number;
+
+  @ApiProperty({ example: 'Dinheiro', description: 'Descrição da forma de pagamento' })
+  FPG_DESCRICAO: string;
+
+  @ApiProperty({ example: 1, description: 'Código do plano de pagamento' })
+  PP1_CODIGO: number;
+
+  @ApiProperty({ example: 'A Vista', description: 'Descrição do plano de pagamento' })
+  PLP_DESCRICAO: string;
 
   @ApiProperty({ type: [OrderItemResponseDto], description: 'Itens do pedido' })
   items: OrderItemResponseDto[];
