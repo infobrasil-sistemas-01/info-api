@@ -300,7 +300,7 @@ export class OrderService {
                   V.VEN_MONTAGEM,
                   V.TRA_CODIGO,
                   T.TRA_NOME,
-                  V.VALORENT,
+                  V.VEN_VALORENT,
                   M.MON_DATA
                FROM VENDAS V
                LEFT JOIN formaspag FPG ON FPG.FPG_CODIGO = V.FP1_CODIGO
