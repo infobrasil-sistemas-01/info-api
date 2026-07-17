@@ -250,11 +250,22 @@ export class DashboardService {
         p.req_month as "planReqMonth",
         COUNT(rl.id)::int as "monthlyRequests",
         ROUND((COUNT(rl.id)::float / p.req_month * 100)::numeric, 2)::float as "usagePercentage",
-        EXISTS (
-          SELECT 1 FROM usage_alert_logs ual
-          WHERE ual.user_id = u.id
-            AND ual.sent_at >= DATE_TRUNC('month', CURRENT_DATE)
-        ) as "notified"
+        (CASE
+          WHEN COUNT(rl.id)::float / p.req_month >= 1.0 THEN
+            EXISTS (
+              SELECT 1 FROM usage_alert_logs ual
+              WHERE ual.user_id = u.id
+                AND ual.alert_type = 'MONTHLY_100'
+                AND ual.sent_at >= DATE_TRUNC('month', CURRENT_DATE)
+            )
+          ELSE
+            EXISTS (
+              SELECT 1 FROM usage_alert_logs ual
+              WHERE ual.user_id = u.id
+                AND ual.alert_type = 'MONTHLY_80'
+                AND ual.sent_at >= DATE_TRUNC('month', CURRENT_DATE)
+            )
+        END) as "notified"
       FROM request_logs rl
       JOIN users u ON rl.user_id = u.id
       JOIN plans p ON u.plan_id = p.id

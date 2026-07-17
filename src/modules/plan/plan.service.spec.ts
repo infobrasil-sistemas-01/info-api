@@ -155,23 +155,134 @@ describe('PlanService', () => {
       expect(mockEmailService.sendEmail).not.toHaveBeenCalled();
     });
 
-    it('should send email if user is at 80% and last alert was sent in a previous month (current month findFirst returns null)', async () => {
+    it('should send email if user reaches 100% and has not been alerted this month', async () => {
       mockPrisma.user.findUnique.mockResolvedValue({
         id: 'user1',
         user: 'testuser',
         email: 'test@example.com',
         plan: { reqMonth: 10000 },
       });
-      mockPrisma.requestLog.count.mockResolvedValue(8500);
-
-      // Simulate no alert sent in the current month (findFirst returns null)
+      mockPrisma.requestLog.count.mockResolvedValue(10050); // 100%+
+      
+      // Simulate no alert sent this month
       mockPrisma.usageAlertLog.findFirst.mockResolvedValue(null);
       mockPrisma.usageAlertLog.create.mockResolvedValue({});
 
       await (service as any).checkAndSendUsageAlert('user1');
 
-      expect(mockEmailService.sendEmail).toHaveBeenCalled();
-      expect(mockPrisma.usageAlertLog.create).toHaveBeenCalled();
+      expect(mockEmailService.sendEmail).toHaveBeenCalledWith(
+        'test@example.com',
+        'Alerta de Uso: Limite de Requisições Mensais Totalmente Consumido (100%)',
+        expect.stringContaining('testuser'),
+      );
+      expect(mockPrisma.usageAlertLog.create).toHaveBeenCalledWith({
+        data: {
+          userId: 'user1',
+          alertType: 'MONTHLY_100',
+        },
+      });
+    });
+
+    it('should not send email if user is at 100% but was already alerted this month', async () => {
+      mockPrisma.user.findUnique.mockResolvedValue({
+        id: 'user1',
+        user: 'testuser',
+        email: 'test@example.com',
+        plan: { reqMonth: 10000 },
+      });
+      mockPrisma.requestLog.count.mockResolvedValue(10050);
+
+      // Simulate alert already sent this month
+      mockPrisma.usageAlertLog.findFirst.mockResolvedValue({
+        id: 'log1',
+        userId: 'user1',
+        alertType: 'MONTHLY_100',
+        sentAt: new Date(),
+      });
+
+      await (service as any).checkAndSendUsageAlert('user1');
+
+      expect(mockEmailService.sendEmail).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('sendManualUsageAlert', () => {
+    it('should throw BadRequestException if user is not found', async () => {
+      mockPrisma.user.findUnique.mockResolvedValue(null);
+      await expect(service.sendManualUsageAlert('invalid-user')).rejects.toThrow('Usuário não encontrado');
+    });
+
+    it('should throw BadRequestException if user email is missing', async () => {
+      mockPrisma.user.findUnique.mockResolvedValue({
+        id: 'user1',
+        user: 'testuser',
+        email: null,
+      });
+      await expect(service.sendManualUsageAlert('user1')).rejects.toThrow('O usuário não possui e-mail cadastrado');
+    });
+
+    it('should send 100% alert manually if usage is >= 100%', async () => {
+      mockPrisma.user.findUnique.mockResolvedValue({
+        id: 'user1',
+        user: 'testuser',
+        email: 'test@example.com',
+        plan: { reqMonth: 10000 },
+      });
+      mockPrisma.requestLog.count.mockResolvedValue(10500); // 105%
+      mockPrisma.usageAlertLog.create.mockResolvedValue({});
+
+      await service.sendManualUsageAlert('user1');
+
+      expect(mockEmailService.sendEmail).toHaveBeenCalledWith(
+        'test@example.com',
+        'Alerta de Uso: Limite de Requisições Mensais Totalmente Consumido (100%)',
+        expect.any(String),
+      );
+      expect(mockPrisma.usageAlertLog.create).toHaveBeenCalledWith({
+        data: {
+          userId: 'user1',
+          alertType: 'MONTHLY_100',
+        },
+      });
+    });
+
+    it('should send 80% alert manually if usage is >= 80% and < 100%', async () => {
+      mockPrisma.user.findUnique.mockResolvedValue({
+        id: 'user1',
+        user: 'testuser',
+        email: 'test@example.com',
+        plan: { reqMonth: 10000 },
+      });
+      mockPrisma.requestLog.count.mockResolvedValue(9000); // 90%
+      mockPrisma.usageAlertLog.create.mockResolvedValue({});
+
+      await service.sendManualUsageAlert('user1');
+
+      expect(mockEmailService.sendEmail).toHaveBeenCalledWith(
+        'test@example.com',
+        'Alerta de Uso: Limite de Requisições Mensais Atingido em 80%',
+        expect.any(String),
+      );
+      expect(mockPrisma.usageAlertLog.create).toHaveBeenCalledWith({
+        data: {
+          userId: 'user1',
+          alertType: 'MONTHLY_80',
+        },
+      });
+    });
+
+    it('should throw BadRequestException if usage is under 80%', async () => {
+      mockPrisma.user.findUnique.mockResolvedValue({
+        id: 'user1',
+        user: 'testuser',
+        email: 'test@example.com',
+        plan: { reqMonth: 10000 },
+      });
+      mockPrisma.requestLog.count.mockResolvedValue(5000); // 50%
+
+      await expect(service.sendManualUsageAlert('user1')).rejects.toThrow(
+        'Usuário com consumo abaixo do limite de alerta (80%)',
+      );
     });
   });
 

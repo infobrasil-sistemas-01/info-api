@@ -136,9 +136,22 @@ export class PlanService {
       const reqsMonth = await this.getRequestCount(userId, 'month');
       const limit = limits.reqMonth;
 
-      // Se atingir pelo menos 80% do limite mensal
-      if (reqsMonth >= limit * 0.8) {
-        const alreadySent = await this.hasSentUsageAlertThisMonth(userId);
+      // 1. Se atingir 100% do limite mensal
+      if (reqsMonth >= limit) {
+        const alreadySent = await this.hasSentUsageAlertThisMonth(userId, 'MONTHLY_100');
+        if (alreadySent) {
+          return;
+        }
+
+        const html = this.generateUsageAlertHtml(user.user, reqsMonth, limit);
+        const subject = 'Alerta de Uso: Limite de Requisições Mensais Totalmente Consumido (100%)';
+        await this.emailService.sendEmail(user.email, subject, html);
+
+        await this.markUsageAlertSent(userId, 'MONTHLY_100');
+      }
+      // 2. Se atingir pelo menos 80% do limite mensal
+      else if (reqsMonth >= limit * 0.8) {
+        const alreadySent = await this.hasSentUsageAlertThisMonth(userId, 'MONTHLY_80');
         if (alreadySent) {
           return;
         }
@@ -147,7 +160,7 @@ export class PlanService {
         const subject = 'Alerta de Uso: Limite de Requisições Mensais Atingido em 80%';
         await this.emailService.sendEmail(user.email, subject, html);
 
-        await this.markUsageAlertSent(userId);
+        await this.markUsageAlertSent(userId, 'MONTHLY_80');
       }
     } catch (e: any) {
       this.logger.error(
@@ -174,14 +187,28 @@ export class PlanService {
     const reqsMonth = await this.getRequestCount(userId, 'month');
     const limit = limits.reqMonth;
 
+    let alertType: 'MONTHLY_80' | 'MONTHLY_100';
+    let subject: string;
+
+    if (reqsMonth >= limit) {
+      alertType = 'MONTHLY_100';
+      subject = 'Alerta de Uso: Limite de Requisições Mensais Totalmente Consumido (100%)';
+    } else if (reqsMonth >= limit * 0.8) {
+      alertType = 'MONTHLY_80';
+      subject = 'Alerta de Uso: Limite de Requisições Mensais Atingido em 80%';
+    } else {
+      throw new BadRequestException('Usuário com consumo abaixo do limite de alerta (80%)');
+    }
+
     const html = this.generateUsageAlertHtml(user.user, reqsMonth, limit);
-    const subject = 'Alerta de Uso: Limite de Requisições Mensais Atingido em 80%';
-    
     await this.emailService.sendEmail(user.email, subject, html);
-    await this.markUsageAlertSent(userId);
+    await this.markUsageAlertSent(userId, alertType);
   }
 
-  private async hasSentUsageAlertThisMonth(userId: string): Promise<boolean> {
+  private async hasSentUsageAlertThisMonth(
+    userId: string,
+    alertType: 'MONTHLY_80' | 'MONTHLY_100',
+  ): Promise<boolean> {
     try {
       const now = new Date();
       const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -189,7 +216,7 @@ export class PlanService {
       const alertLog = await this.prisma.usageAlertLog.findFirst({
         where: {
           userId,
-          alertType: 'MONTHLY_80',
+          alertType,
           sentAt: {
             gte: firstDayOfMonth,
           },
@@ -203,15 +230,19 @@ export class PlanService {
     }
   }
 
-  private async markUsageAlertSent(userId: string): Promise<void> {
+  private async markUsageAlertSent(
+    userId: string,
+    alertType: 'MONTHLY_80' | 'MONTHLY_100',
+  ): Promise<void> {
     try {
       await this.prisma.usageAlertLog.create({
         data: {
           userId,
-          alertType: 'MONTHLY_80',
+          alertType,
         },
       });
-      this.logger.log(`Alerta de uso de 80% mensal registrado no banco para o usuário ${userId}`);
+      const percentStr = alertType === 'MONTHLY_100' ? '100%' : '80%';
+      this.logger.log(`Alerta de uso de ${percentStr} mensal registrado no banco para o usuário ${userId}`);
     } catch (e: any) {
       this.logger.error(`Erro ao salvar registro de alerta de uso no banco: ${e.message}`);
     }
@@ -257,6 +288,25 @@ export class PlanService {
     const protocol = host === 'localhost' ? 'http' : 'https';
     const baseUrl = `${protocol}://${host}${port === '80' || port === '443' || !port ? '' : `:${port}`}`;
 
+    const isLimitReached = percentage >= 100;
+
+    const introText = isLimitReached
+      ? `Identificamos que a sua integração consumiu <strong>100%</strong> das requisições mensais permitidas pelo seu plano atual.`
+      : `Identificamos que a sua integração atingiu <strong>${percentage}%</strong> do limite mensal de requisições do seu plano atual.`;
+
+    const boxBg = isLimitReached ? '#fef2f2' : '#fffbeb';
+    const boxBorder = isLimitReached ? '#ef4444' : '#f59e0b';
+    const boxTitleColor = isLimitReached ? '#991b1b' : '#b45309';
+    const boxTitle = isLimitReached ? 'Limite Consumido' : 'Aviso de Limite';
+    const boxIcon = isLimitReached ? '🚫' : '⚠️';
+    const boxText = isLimitReached
+      ? `Você consumiu <strong>${currentUsage.toLocaleString('pt-BR')}</strong> de um total de <strong>${limit.toLocaleString('pt-BR')}</strong> requisições mensais disponíveis. Novas requisições serão rejeitadas com erro HTTP 429 até a virada da cota mensal ou realização de upgrade.`
+      : `Você utilizou <strong>${currentUsage.toLocaleString('pt-BR')}</strong> de um total de <strong>${limit.toLocaleString('pt-BR')}</strong> requisições mensais disponíveis.`;
+
+    const nextStepsIntro = isLimitReached
+      ? `Para restabelecer o funcionamento da sua integração imediatamente e evitar a rejeição de chamadas, sugerimos duas ações:`
+      : `Para garantir que seu serviço não sofra interrupções automáticas ao atingir 100% de uso, sugerimos duas ações:`;
+
     return `
     <!DOCTYPE html>
     <html lang="pt-br">
@@ -290,37 +340,56 @@ export class PlanService {
                   <h2 style="color: #0f172a; font-size: 1.4rem; margin-top: 0; margin-bottom: 16px; font-weight: 700;">Olá, ${username}!</h2>
                   
                   <p style="color: #475569; font-size: 1rem; line-height: 1.6; margin-top: 0; margin-bottom: 24px;">
-                    Identificamos que a sua integração atingiu <strong>${percentage}%</strong> do limite mensal de requisições do seu plano atual.
+                    ${introText}
                   </p>
 
                   <!-- Box Alerta de Uso -->
-                  <div style="background: #fffbeb; border-left: 4px solid #f59e0b; padding: 16px; border-radius: 0 8px 8px 0; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                  <div style="background: ${boxBg}; border-left: 4px solid ${boxBorder}; padding: 16px; border-radius: 0 8px 8px 0; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
                     <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-                      <span style="font-size: 1.1rem; line-height: 1;">⚠️</span>
-                      <span style="font-weight: bold; color: #b45309; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">Aviso de Limite</span>
+                      <span style="font-size: 1.1rem; line-height: 1;">${boxIcon}</span>
+                      <span style="font-weight: bold; color: ${boxTitleColor}; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">${boxTitle}</span>
                     </div>
                     <div style="color: #1e293b; font-size: 0.95rem; line-height: 1.5;">
-                      Você utilizou <strong>${currentUsage.toLocaleString('pt-BR')}</strong> de um total de <strong>${limit.toLocaleString('pt-BR')}</strong> requisições mensais disponíveis.
+                      ${boxText}
                     </div>
                   </div>
 
                   <p style="color: #475569; font-size: 1rem; line-height: 1.6; margin-top: 0; margin-bottom: 20px;">
-                    Para garantir que seu serviço não sofra interrupções automáticas ao atingir 100% de uso, sugerimos duas ações:
+                    ${nextStepsIntro}
                   </p>
 
                   <ul style="color: #475569; font-size: 0.95rem; line-height: 1.6; margin-top: 0; margin-bottom: 24px; padding-left: 20px;">
-                    <li style="margin-bottom: 12px;">
-                      <strong>Otimize suas Consultas:</strong> Recomendamos fortemente a leitura da nossa documentação sobre a aplicação de filtros eficientes (como limites, paginação e ranges de data apropriados). Isso reduz o volume de dados trafegados e evita chamadas redundantes.
-                      <div style="margin-top: 8px;">
-                        <a href="${baseUrl}/docs" style="background: #10b981; color: white; padding: 6px 12px; font-size: 0.8rem; font-weight: bold; text-decoration: none; border-radius: 6px; display: inline-block;">Ler Documentação de Filtros</a>
-                      </div>
-                    </li>
-                    <li>
-                      <strong>Upgrade de Plano:</strong> Se o seu volume de requisições cresceu de forma orgânica, considere migrar para um plano que atenda melhor a sua demanda atual.
-                      <div style="margin-top: 8px;">
-                        <a href="${baseUrl}/integration" style="background: #0f172a; color: white; padding: 6px 12px; font-size: 0.8rem; font-weight: bold; text-decoration: none; border-radius: 6px; display: inline-block;">Ver Planos de Integração</a>
-                      </div>
-                    </li>
+                    ${
+                      isLimitReached
+                        ? `
+                        <li style="margin-bottom: 12px;">
+                          <strong>Upgrade de Plano:</strong> Faça o upgrade de seu plano para restabelecer imediatamente a API e voltar a receber requisições de integração.
+                          <div style="margin-top: 8px;">
+                            <a href="${baseUrl}/integration" style="background: #10b981; color: white; padding: 6px 12px; font-size: 0.8rem; font-weight: bold; text-decoration: none; border-radius: 6px; display: inline-block;">Ver Planos de Integração</a>
+                          </div>
+                        </li>
+                        <li>
+                          <strong>Otimize suas Consultas:</strong> Aproveite para otimizar suas integrações seguindo nossa documentação sobre a aplicação de filtros eficientes (como limites, paginação e ranges de data apropriados).
+                          <div style="margin-top: 8px;">
+                            <a href="${baseUrl}/docs" style="background: #0f172a; color: white; padding: 6px 12px; font-size: 0.8rem; font-weight: bold; text-decoration: none; border-radius: 6px; display: inline-block;">Ler Documentação de Filtros</a>
+                          </div>
+                        </li>
+                        `
+                        : `
+                        <li style="margin-bottom: 12px;">
+                          <strong>Otimize suas Consultas:</strong> Recomendamos fortemente a leitura da nossa documentação sobre a aplicação de filtros eficientes (como limites, paginação e ranges de data apropriados). Isso reduz o volume de dados trafegados e evita chamadas redundantes.
+                          <div style="margin-top: 8px;">
+                            <a href="${baseUrl}/docs" style="background: #10b981; color: white; padding: 6px 12px; font-size: 0.8rem; font-weight: bold; text-decoration: none; border-radius: 6px; display: inline-block;">Ler Documentação de Filtros</a>
+                          </div>
+                        </li>
+                        <li>
+                          <strong>Upgrade de Plano:</strong> Se o seu volume de requisições cresceu de forma orgânica, considere migrar para um plano que atenda melhor a sua demanda atual.
+                          <div style="margin-top: 8px;">
+                            <a href="${baseUrl}/integration" style="background: #0f172a; color: white; padding: 6px 12px; font-size: 0.8rem; font-weight: bold; text-decoration: none; border-radius: 6px; display: inline-block;">Ver Planos de Integração</a>
+                          </div>
+                        </li>
+                        `
+                    }
                   </ul>
 
                   <p style="color: #475569; font-size: 1rem; line-height: 1.6; margin-top: 0; margin-bottom: 0;">
