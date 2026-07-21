@@ -7,7 +7,9 @@ export const GetProductGroupsQuerySchema = z.object({
   pageSize: z.coerce.number().int().min(1).max(100).optional(),
 });
 
-export class GetProductGroupsQueryDto extends ZodDto(GetProductGroupsQuerySchema) {
+export class GetProductGroupsQueryDto extends ZodDto(
+  GetProductGroupsQuerySchema,
+) {
   @ApiPropertyOptional({ description: 'Página atual', example: 1 })
   page?: number;
 

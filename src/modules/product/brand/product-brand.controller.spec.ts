@@ -48,7 +48,10 @@ describe('ProductBrandController', () => {
     it('should call brandService.get with pagination params', async () => {
       mockBrandService.get.mockResolvedValue([{ id: 1 }, { id: 2 }]);
 
-      const result = await controller.getBrands(mockReq, { page: 2, pageSize: 10 });
+      const result = await controller.getBrands(mockReq, {
+        page: 2,
+        pageSize: 10,
+      });
 
       expect(brandService.get).toHaveBeenCalledWith('cred-1', 2, 10);
       expect(result).toEqual([{ id: 1 }, { id: 2 }]);

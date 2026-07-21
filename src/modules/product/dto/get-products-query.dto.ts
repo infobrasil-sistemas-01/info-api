@@ -14,7 +14,10 @@ export const GetProductsQuerySchema = z.object({
 });
 
 export class GetProductsQueryDto extends ZodDto(GetProductsQuerySchema) {
-  @ApiProperty({ description: 'Código da loja para buscar os estoques dos produtos', example: 1 })
+  @ApiProperty({
+    description: 'Código da loja para buscar os estoques dos produtos',
+    example: 1,
+  })
   storeId!: number;
 
   @ApiPropertyOptional({ description: 'Página atual', example: 1 })
@@ -23,7 +26,10 @@ export class GetProductsQueryDto extends ZodDto(GetProductsQuerySchema) {
   @ApiPropertyOptional({ description: 'Itens por página', example: 10 })
   pageSize?: number;
 
-  @ApiPropertyOptional({ description: 'Código da tabela de preço para buscar os preços dos produtos', example: 1 })
+  @ApiPropertyOptional({
+    description: 'Código da tabela de preço para buscar os preços dos produtos',
+    example: 1,
+  })
   priceTable?: number;
 
   @ApiPropertyOptional({ description: 'Código do grupo para filtrar produtos' })
@@ -32,9 +38,13 @@ export class GetProductsQueryDto extends ZodDto(GetProductsQuerySchema) {
   @ApiPropertyOptional({ description: 'Código da marca para filtrar produtos' })
   brand?: number;
 
-  @ApiPropertyOptional({ description: 'Quantidade mínima em estoque para filtrar produtos' })
+  @ApiPropertyOptional({
+    description: 'Quantidade mínima em estoque para filtrar produtos',
+  })
   minStock?: number;
 
-  @ApiPropertyOptional({ description: 'Termo de busca para filtrar produtos por descrição' })
+  @ApiPropertyOptional({
+    description: 'Termo de busca para filtrar produtos por descrição',
+  })
   search?: string;
 }

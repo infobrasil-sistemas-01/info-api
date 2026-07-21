@@ -59,7 +59,8 @@ export class DashboardService {
          AND path NOT LIKE '/api/v1/newsletter%'`,
       ...[startDate, endDate, ...(userId ? [userId] : [])],
     );
-    const p95Latency = (latencyResult && latencyResult[0]) ? latencyResult[0].p95 || 0 : 0;
+    const p95Latency =
+      latencyResult && latencyResult[0] ? latencyResult[0].p95 || 0 : 0;
 
     const oneMinuteAgo = new Date(Date.now() - 60 * 1000);
     const currentRpm = await this.prisma.requestLog.count({
@@ -75,7 +76,10 @@ export class DashboardService {
       },
     });
 
-    const diffMinutes = Math.max(1, (endDate.getTime() - startDate.getTime()) / (1000 * 60));
+    const diffMinutes = Math.max(
+      1,
+      (endDate.getTime() - startDate.getTime()) / (1000 * 60),
+    );
     const averageRpm = Number((totalRequests / diffMinutes).toFixed(2));
 
     return {
@@ -133,7 +137,12 @@ export class DashboardService {
     return this.prisma.$queryRawUnsafe<any[]>(query, startDate, endDate, limit);
   }
 
-  async getTopEndpoints(startDate: Date, endDate: Date, limit = 10, userId?: string) {
+  async getTopEndpoints(
+    startDate: Date,
+    endDate: Date,
+    limit = 10,
+    userId?: string,
+  ) {
     const query = `
       SELECT
         method as "method",
@@ -155,7 +164,9 @@ export class DashboardService {
       LIMIT ${userId ? '$4' : '$3'}
     `;
 
-    const params = userId ? [startDate, endDate, userId, limit] : [startDate, endDate, limit];
+    const params = userId
+      ? [startDate, endDate, userId, limit]
+      : [startDate, endDate, limit];
     return this.prisma.$queryRawUnsafe<any[]>(query, ...params);
   }
 
@@ -184,7 +195,12 @@ export class DashboardService {
     return this.prisma.$queryRawUnsafe<any[]>(query, ...params);
   }
 
-  async getTimeSeries(startDate: Date, endDate: Date, customInterval?: string, userId?: string) {
+  async getTimeSeries(
+    startDate: Date,
+    endDate: Date,
+    customInterval?: string,
+    userId?: string,
+  ) {
     let interval = customInterval;
 
     if (!interval) {
@@ -289,7 +305,8 @@ export class DashboardService {
       if (!hb) {
         return { status: 'INACTIVE', lastSeen: null };
       }
-      const diffMin = (new Date().getTime() - hb.timestamp.getTime()) / (1000 * 60);
+      const diffMin =
+        (new Date().getTime() - hb.timestamp.getTime()) / (1000 * 60);
       return {
         status: diffMin <= 2 ? 'ACTIVE' : 'INACTIVE',
         lastSeen: hb.timestamp,
@@ -328,7 +345,13 @@ export class DashboardService {
     `;
 
     const [data, totalResult] = await Promise.all([
-      this.prisma.$queryRawUnsafe<any[]>(query, startDate, endDate, limit, offset),
+      this.prisma.$queryRawUnsafe<any[]>(
+        query,
+        startDate,
+        endDate,
+        limit,
+        offset,
+      ),
       this.prisma.$queryRawUnsafe<any[]>(countQuery, startDate, endDate),
     ]);
 
@@ -344,7 +367,6 @@ export class DashboardService {
       },
     };
   }
-
 
   async getDatabaseLoad(startDate: Date, endDate: Date, limit = 10) {
     const query = `
@@ -384,7 +406,12 @@ export class DashboardService {
     return this.prisma.$queryRawUnsafe<any[]>(query, startDate, endDate);
   }
 
-  async getDossierData(type: 'internal' | 'client', startDate: Date, endDate: Date, userId?: string) {
+  async getDossierData(
+    type: 'internal' | 'client',
+    startDate: Date,
+    endDate: Date,
+    userId?: string,
+  ) {
     if (type === 'client') {
       if (!userId) {
         throw new Error('userId é obrigatório para dossiê do cliente');
@@ -399,7 +426,11 @@ export class DashboardService {
         throw new Error('Usuário não encontrado');
       }
 
-      const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+      const startOfMonth = new Date(
+        new Date().getFullYear(),
+        new Date().getMonth(),
+        1,
+      );
       const monthlyRequests = await this.prisma.requestLog.count({
         where: {
           userId,
@@ -412,12 +443,13 @@ export class DashboardService {
         },
       });
 
-      const [summary, topEndpoints, statusDistribution, timeSeries] = await Promise.all([
-        this.getSummary(startDate, endDate, userId),
-        this.getTopEndpoints(startDate, endDate, 10, userId),
-        this.getStatusDistribution(startDate, endDate, userId),
-        this.getTimeSeries(startDate, endDate, undefined, userId),
-      ]);
+      const [summary, topEndpoints, statusDistribution, timeSeries] =
+        await Promise.all([
+          this.getSummary(startDate, endDate, userId),
+          this.getTopEndpoints(startDate, endDate, 10, userId),
+          this.getStatusDistribution(startDate, endDate, userId),
+          this.getTimeSeries(startDate, endDate, undefined, userId),
+        ]);
 
       return {
         type: 'client',

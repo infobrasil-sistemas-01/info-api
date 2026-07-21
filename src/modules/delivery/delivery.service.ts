@@ -8,7 +8,7 @@ export class DeliveryService {
 
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
-  ) { }
+  ) {}
 
   async get(
     credentialsId: string,

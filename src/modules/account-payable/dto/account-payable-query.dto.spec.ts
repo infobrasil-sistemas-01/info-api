@@ -1,4 +1,7 @@
-import { AccountPayableQuerySchema, AccountPayableSituation } from './account-payable-query.dto';
+import {
+  AccountPayableQuerySchema,
+  AccountPayableSituation,
+} from './account-payable-query.dto';
 
 describe('AccountPayableQueryDto', () => {
   const validData = {

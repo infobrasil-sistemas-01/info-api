@@ -37,7 +37,7 @@ import {
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 @ApiBearerAuth()
 export class DeliveryController {
-  constructor(private readonly deliveryService: DeliveryService) { }
+  constructor(private readonly deliveryService: DeliveryService) {}
 
   @Get()
   @RequirePermissions({ allOf: ['tenant.deliveries.view'] })

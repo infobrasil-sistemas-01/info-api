@@ -42,10 +42,7 @@ export class StoreController {
     status: 401,
     description: 'Token de autenticação inválido ou ausente.',
   })
-  get(
-    @Req() req: ReqWithAuthContext,
-    @Query() query: GetStoresQueryDto,
-  ) {
+  get(@Req() req: ReqWithAuthContext, @Query() query: GetStoresQueryDto) {
     const credentialsId = req.authContext?.credentialsId;
 
     if (!credentialsId) {

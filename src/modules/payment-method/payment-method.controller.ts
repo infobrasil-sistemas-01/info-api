@@ -58,6 +58,10 @@ export class PaymentMethodController {
       throw new Error('Credentials ID not found in token');
     }
 
-    return this.paymentMethodService.get(credentialsId, query.page, query.pageSize);
+    return this.paymentMethodService.get(
+      credentialsId,
+      query.page,
+      query.pageSize,
+    );
   }
 }

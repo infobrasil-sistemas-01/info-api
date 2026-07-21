@@ -66,7 +66,10 @@ export class OrderItemResponseDto {
   @ApiProperty({ example: 101, description: 'Código do produto' })
   PRO_CODIGO: number;
 
-  @ApiProperty({ example: 'Produto de Teste', description: 'Descrição do produto' })
+  @ApiProperty({
+    example: 'Produto de Teste',
+    description: 'Descrição do produto',
+  })
   PRO_DESCRICAO: string;
 
   @ApiProperty({ example: 1.5, description: 'Peso do produto' })
@@ -90,7 +93,10 @@ export class OrderItemResponseDto {
   @ApiProperty({ example: '3', description: 'Código da modalidade de entrega' })
   TRM_CODIGO: string;
 
-  @ApiProperty({ example: 'ENTREGA', description: 'Descrição da modalidade de entrega' })
+  @ApiProperty({
+    example: 'ENTREGA',
+    description: 'Descrição da modalidade de entrega',
+  })
   TRM_DESCRICAO: string;
 }
 
@@ -110,34 +116,52 @@ export class OrderDetailResponseDto extends OrderResponseDto {
   @ApiProperty({ example: 2, description: 'Quantidade total de itens' })
   VEN_QUANT: number;
 
-  @ApiProperty({ example: '2026-07-20T00:00:00.000Z', description: 'Data de entrega' })
+  @ApiProperty({
+    example: '2026-07-20T00:00:00.000Z',
+    description: 'Data de entrega',
+  })
   VEN_ENTREGA: string;
 
-  @ApiProperty({ example: '2026-07-22T00:00:00.000Z', description: 'Data de montagem' })
+  @ApiProperty({
+    example: '2026-07-22T00:00:00.000Z',
+    description: 'Data de montagem',
+  })
   VEN_MONTAGEM: string;
 
   @ApiProperty({ example: 1, description: 'Código da transportadora' })
   TRA_CODIGO: number;
 
-  @ApiProperty({ example: 'Transportadora Exemplo', description: 'Nome da transportadora' })
+  @ApiProperty({
+    example: 'Transportadora Exemplo',
+    description: 'Nome da transportadora',
+  })
   TRA_NOME: string;
 
   @ApiProperty({ example: 15.0, description: 'Valor do frete/entrega' })
   VEN_VALORENT: number;
 
-  @ApiProperty({ example: '2026-07-23T00:00:00.000Z', description: 'Data da montagem agendada' })
+  @ApiProperty({
+    example: '2026-07-23T00:00:00.000Z',
+    description: 'Data da montagem agendada',
+  })
   MON_DATA: string;
 
   @ApiProperty({ example: 3.0, description: 'Peso total calculado do pedido' })
   PESO: number;
 
-  @ApiProperty({ example: 'Dinheiro', description: 'Descrição da forma de pagamento' })
+  @ApiProperty({
+    example: 'Dinheiro',
+    description: 'Descrição da forma de pagamento',
+  })
   FPG_DESCRICAO: string;
 
   @ApiProperty({ example: 1, description: 'Código do plano de pagamento' })
   PP1_CODIGO: number;
 
-  @ApiProperty({ example: 'A Vista', description: 'Descrição do plano de pagamento' })
+  @ApiProperty({
+    example: 'A Vista',
+    description: 'Descrição do plano de pagamento',
+  })
   PLP_DESCRICAO: string;
 
   @ApiProperty({ type: [OrderItemResponseDto], description: 'Itens do pedido' })

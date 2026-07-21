@@ -81,12 +81,24 @@ describe('PlanService', () => {
   describe('logRequest', () => {
     it('should log request and check alert if success is true', async () => {
       mockPrisma.requestLog.create.mockResolvedValue({});
-      jest.spyOn(service as any, 'checkAndSendUsageAlert').mockResolvedValue(undefined);
+      jest
+        .spyOn(service as any, 'checkAndSendUsageAlert')
+        .mockResolvedValue(undefined);
 
-      await service.logRequest('user1', 'GET', '/api/products', 200, '127.0.0.1', 50, true);
+      await service.logRequest(
+        'user1',
+        'GET',
+        '/api/products',
+        200,
+        '127.0.0.1',
+        50,
+        true,
+      );
 
       expect(mockPrisma.requestLog.create).toHaveBeenCalled();
-      expect((service as any).checkAndSendUsageAlert).toHaveBeenCalledWith('user1');
+      expect((service as any).checkAndSendUsageAlert).toHaveBeenCalledWith(
+        'user1',
+      );
     });
   });
 
@@ -113,7 +125,7 @@ describe('PlanService', () => {
         plan: { reqMonth: 10000 },
       });
       mockPrisma.requestLog.count.mockResolvedValue(8500); // 85%
-      
+
       // Simulate no alert sent this month
       mockPrisma.usageAlertLog.findFirst.mockResolvedValue(null);
       mockPrisma.usageAlertLog.create.mockResolvedValue({});
@@ -163,7 +175,7 @@ describe('PlanService', () => {
         plan: { reqMonth: 10000 },
       });
       mockPrisma.requestLog.count.mockResolvedValue(10050); // 100%+
-      
+
       // Simulate no alert sent this month
       mockPrisma.usageAlertLog.findFirst.mockResolvedValue(null);
       mockPrisma.usageAlertLog.create.mockResolvedValue({});
@@ -209,7 +221,9 @@ describe('PlanService', () => {
   describe('sendManualUsageAlert', () => {
     it('should throw BadRequestException if user is not found', async () => {
       mockPrisma.user.findUnique.mockResolvedValue(null);
-      await expect(service.sendManualUsageAlert('invalid-user')).rejects.toThrow('Usuário não encontrado');
+      await expect(
+        service.sendManualUsageAlert('invalid-user'),
+      ).rejects.toThrow('Usuário não encontrado');
     });
 
     it('should throw BadRequestException if user email is missing', async () => {
@@ -218,7 +232,9 @@ describe('PlanService', () => {
         user: 'testuser',
         email: null,
       });
-      await expect(service.sendManualUsageAlert('user1')).rejects.toThrow('O usuário não possui e-mail cadastrado');
+      await expect(service.sendManualUsageAlert('user1')).rejects.toThrow(
+        'O usuário não possui e-mail cadastrado',
+      );
     });
 
     it('should send 100% alert manually if usage is >= 100%', async () => {
@@ -314,4 +330,3 @@ describe('PlanService', () => {
     });
   });
 });
-

@@ -7,7 +7,7 @@ export class PaymentMethodService {
 
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
-  ) { }
+  ) {}
 
   async get(credentialsId: string, page: number = 1, pageSize: number = 100) {
     if (pageSize > 25) {
@@ -38,7 +38,8 @@ export class PaymentMethodService {
       this.logger.log(
         `Busca de formas de pagamento executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
           { page, pageSize },
-        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${queryEndTime - queryStartTime
+        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${
+          queryEndTime - queryStartTime
         }ms`,
       );
 

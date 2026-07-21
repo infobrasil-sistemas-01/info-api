@@ -1,4 +1,17 @@
-import { Controller, Get, Post, Body, HttpCode, HttpStatus, Query, UseGuards, Res, BadRequestException, Logger, HttpException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  HttpCode,
+  HttpStatus,
+  Query,
+  UseGuards,
+  Res,
+  BadRequestException,
+  Logger,
+  HttpException,
+} from '@nestjs/common';
 import type { Response } from 'express';
 import { format } from 'date-fns';
 import { DossierPdfService } from './dossier-pdf.service';
@@ -112,7 +125,8 @@ export class DashboardController {
   @RequirePermissions({ allOf: ['core.dashboard.view'] })
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
-    summary: 'Dispara manualmente o e-mail de alerta de limite de uso para um cliente',
+    summary:
+      'Dispara manualmente o e-mail de alerta de limite de uso para um cliente',
   })
   async resendProactiveAlert(@Body('userId') userId: string) {
     if (!userId) {
@@ -123,14 +137,18 @@ export class DashboardController {
   }
   @Get('heartbeat')
   @RequirePermissions({ allOf: ['core.dashboard.view'] })
-  @ApiOperation({ summary: 'Obtém o status de integridade do consumer log-processor' })
+  @ApiOperation({
+    summary: 'Obtém o status de integridade do consumer log-processor',
+  })
   async getHeartbeat() {
     return this.dashboardService.getHeartbeatStatus();
   }
 
   @Get('request-logs')
   @RequirePermissions({ allOf: ['core.dashboard.view'] })
-  @ApiOperation({ summary: 'Obtém a lista de logs de requisições HTTP do período' })
+  @ApiOperation({
+    summary: 'Obtém a lista de logs de requisições HTTP do período',
+  })
   async getRequestLogs(
     @Query('startDate') startDateStr?: string,
     @Query('endDate') endDateStr?: string,
@@ -140,7 +158,12 @@ export class DashboardController {
     const { startDate, endDate } = this.parseDates(startDateStr, endDateStr);
     const page = pageStr ? parseInt(pageStr, 10) : 1;
     const limit = limitStr ? parseInt(limitStr, 10) : 50;
-    return this.dashboardService.getRequestLogs(startDate, endDate, page, limit);
+    return this.dashboardService.getRequestLogs(
+      startDate,
+      endDate,
+      page,
+      limit,
+    );
   }
   @Get('database-load')
   @RequirePermissions({ allOf: ['core.dashboard.view'] })
@@ -216,7 +239,10 @@ export class DashboardController {
       if (error instanceof HttpException) {
         throw error;
       }
-      this.logger.error(`Erro ao gerar dossiê PDF (${type}):`, error.stack || error.message || error);
+      this.logger.error(
+        `Erro ao gerar dossiê PDF (${type}):`,
+        error.stack || error.message || error,
+      );
       if (!res.headersSent) {
         res.status(500).json({
           statusCode: 500,

@@ -69,7 +69,9 @@ export class AllExceptionsFilter implements ExceptionFilter {
         try {
           const parts = token.split('.');
           if (parts.length === 3) {
-            const payloadDecoded = Buffer.from(parts[1], 'base64').toString('utf8');
+            const payloadDecoded = Buffer.from(parts[1], 'base64').toString(
+              'utf8',
+            );
             const payload = JSON.parse(payloadDecoded);
             userId = payload.sub || payload.userId;
           }
@@ -109,7 +111,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
           status,
           ip,
           undefined, // durationMs
-          false,     // success
+          false, // success
         )
         .catch(() => {});
     }

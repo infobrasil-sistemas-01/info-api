@@ -7,7 +7,7 @@ export class PaymentPlanService {
 
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
-  ) { }
+  ) {}
 
   async get(credentialsId: string, page: number = 1, pageSize: number = 100) {
     if (pageSize > 25) {
@@ -38,7 +38,8 @@ export class PaymentPlanService {
       this.logger.log(
         `Busca de planos de pagamento executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
           { page, pageSize },
-        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${queryEndTime - queryStartTime
+        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${
+          queryEndTime - queryStartTime
         }ms`,
       );
 

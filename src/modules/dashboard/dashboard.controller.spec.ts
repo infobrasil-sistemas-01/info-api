@@ -66,7 +66,13 @@ describe('DashboardController', () => {
       } as any;
 
       await expect(
-        controller.downloadDossier(mockRes, 'client', undefined, '2026-07-01', '2026-07-02'),
+        controller.downloadDossier(
+          mockRes,
+          'client',
+          undefined,
+          '2026-07-01',
+          '2026-07-02',
+        ),
       ).rejects.toThrow(BadRequestException);
     });
 
@@ -82,7 +88,13 @@ describe('DashboardController', () => {
       service.getDossierData.mockResolvedValueOnce(mockData);
       pdfService.generateDossierPdf.mockResolvedValueOnce(mockPdfBuffer);
 
-      await controller.downloadDossier(mockRes, 'internal', undefined, '2026-07-01', '2026-07-02');
+      await controller.downloadDossier(
+        mockRes,
+        'internal',
+        undefined,
+        '2026-07-01',
+        '2026-07-02',
+      );
 
       expect(service.getDossierData).toHaveBeenCalledWith(
         'internal',
@@ -96,8 +108,14 @@ describe('DashboardController', () => {
         expect.any(Date),
         expect.any(Date),
       );
-      expect(mockRes.setHeader).toHaveBeenCalledWith('Content-Type', 'application/pdf');
-      expect(mockRes.setHeader).toHaveBeenCalledWith('Content-Length', mockPdfBuffer.length);
+      expect(mockRes.setHeader).toHaveBeenCalledWith(
+        'Content-Type',
+        'application/pdf',
+      );
+      expect(mockRes.setHeader).toHaveBeenCalledWith(
+        'Content-Length',
+        mockPdfBuffer.length,
+      );
       expect(mockRes.end).toHaveBeenCalledWith(mockPdfBuffer);
     });
 
@@ -107,13 +125,22 @@ describe('DashboardController', () => {
         end: jest.fn(),
       } as any;
 
-      const mockData = { type: 'client', user: { username: 'test-user' } } as any;
+      const mockData = {
+        type: 'client',
+        user: { username: 'test-user' },
+      } as any;
       const mockPdfBuffer = Buffer.from('pdf-content');
 
       service.getDossierData.mockResolvedValueOnce(mockData);
       pdfService.generateDossierPdf.mockResolvedValueOnce(mockPdfBuffer);
 
-      await controller.downloadDossier(mockRes, 'client', 'user-id', '2026-07-01', '2026-07-02');
+      await controller.downloadDossier(
+        mockRes,
+        'client',
+        'user-id',
+        '2026-07-01',
+        '2026-07-02',
+      );
 
       expect(service.getDossierData).toHaveBeenCalledWith(
         'client',
@@ -136,13 +163,17 @@ describe('DashboardController', () => {
       planService.sendManualUsageAlert.mockResolvedValueOnce(undefined);
 
       const result = await controller.resendProactiveAlert('test-user-id');
-      
-      expect(planService.sendManualUsageAlert).toHaveBeenCalledWith('test-user-id');
+
+      expect(planService.sendManualUsageAlert).toHaveBeenCalledWith(
+        'test-user-id',
+      );
       expect(result).toEqual({ message: 'Alerta enviado com sucesso' });
     });
 
     it('should throw BadRequestException if userId is missing', async () => {
-      await expect(controller.resendProactiveAlert('')).rejects.toThrow(BadRequestException);
+      await expect(controller.resendProactiveAlert('')).rejects.toThrow(
+        BadRequestException,
+      );
     });
   });
 });

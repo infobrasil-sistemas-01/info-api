@@ -128,9 +128,7 @@ export class PlanLimitInterceptor implements NestInterceptor {
             (diff[0] * 1e3 + diff[1] / 1e6).toFixed(2),
           );
           const status =
-            err instanceof HttpException
-              ? err.getStatus()
-              : err.status || 500;
+            err instanceof HttpException ? err.getStatus() : err.status || 500;
           this.planService
             .logRequest(
               userId,

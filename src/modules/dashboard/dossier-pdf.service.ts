@@ -38,7 +38,10 @@ export class DossierPdfService {
       await page.evaluateHandle('document.fonts.ready');
 
       const dateStr = this.safeFormat(new Date(), 'dd/MM/yyyy HH:mm');
-      const title = type === 'internal' ? 'Dossiê Executivo Interno' : `Dossiê de Uso - ${data.user?.username}`;
+      const title =
+        type === 'internal'
+          ? 'Dossiê Executivo Interno'
+          : `Dossiê de Uso - ${data.user?.username}`;
 
       const pdfBuffer = Buffer.from(
         await page.pdf({
@@ -69,16 +72,32 @@ export class DossierPdfService {
       this.logger.log(`PDF gerado com sucesso (${pdfBuffer.length} bytes)`);
       return pdfBuffer;
     } catch (error) {
-      this.logger.error('Erro na compilação do PDF pelo Puppeteer', error.stack);
+      this.logger.error(
+        'Erro na compilação do PDF pelo Puppeteer',
+        error.stack,
+      );
       throw error;
     } finally {
       await browser.close();
     }
   }
 
-  private compileHtml(type: 'internal' | 'client', data: any, startDate: Date, endDate: Date): string {
-    const formattedStart = this.safeFormat(startDate, "dd 'de' MMMM 'de' yyyy 'às' HH:mm", { locale: ptBR });
-    const formattedEnd = this.safeFormat(endDate, "dd 'de' MMMM 'de' yyyy 'às' HH:mm", { locale: ptBR });
+  private compileHtml(
+    type: 'internal' | 'client',
+    data: any,
+    startDate: Date,
+    endDate: Date,
+  ): string {
+    const formattedStart = this.safeFormat(
+      startDate,
+      "dd 'de' MMMM 'de' yyyy 'às' HH:mm",
+      { locale: ptBR },
+    );
+    const formattedEnd = this.safeFormat(
+      endDate,
+      "dd 'de' MMMM 'de' yyyy 'às' HH:mm",
+      { locale: ptBR },
+    );
 
     const brandingStyles = `
       :root {
@@ -271,17 +290,33 @@ export class DossierPdfService {
     `;
 
     if (type === 'client') {
-      return this.renderClientHtml(data, formattedStart, formattedEnd, brandingStyles);
+      return this.renderClientHtml(
+        data,
+        formattedStart,
+        formattedEnd,
+        brandingStyles,
+      );
     } else {
-      return this.renderInternalHtml(data, formattedStart, formattedEnd, brandingStyles);
+      return this.renderInternalHtml(
+        data,
+        formattedStart,
+        formattedEnd,
+        brandingStyles,
+      );
     }
   }
 
-  private renderClientHtml(data: any, start: string, end: string, styles: string): string {
+  private renderClientHtml(
+    data: any,
+    start: string,
+    end: string,
+    styles: string,
+  ): string {
     const successRateStr = data.summary.successRate.toFixed(2);
-    const usagePercent = data.user.planReqMonth > 0 
-      ? ((data.user.monthlyRequests / data.user.planReqMonth) * 100)
-      : 0;
+    const usagePercent =
+      data.user.planReqMonth > 0
+        ? (data.user.monthlyRequests / data.user.planReqMonth) * 100
+        : 0;
 
     let alertBoxHtml = '';
     if (usagePercent >= 100) {
@@ -300,7 +335,9 @@ export class DossierPdfService {
 
     const timeSeriesSvg = this.generateTimeSeriesSvg(data.timeSeries);
     const statusRows = this.generateStatusRows(data.statusDistribution);
-    const endpointRows = data.topEndpoints.map((ep: any) => `
+    const endpointRows = data.topEndpoints
+      .map(
+        (ep: any) => `
       <tr>
         <td style="font-family: monospace; font-weight: 600; color: var(--slate-900);">${ep.method}</td>
         <td style="font-family: monospace;">${ep.path}</td>
@@ -309,7 +346,9 @@ export class DossierPdfService {
         <td class="text-right">${(ep.avgLatency ?? 0).toFixed(0)} ms</td>
         <td class="text-right">${(ep.p95Latency ?? 0).toFixed(0)} ms</td>
       </tr>
-    `).join('');
+    `,
+      )
+      .join('');
 
     return `
       <!DOCTYPE html>
@@ -477,17 +516,28 @@ export class DossierPdfService {
     `;
   }
 
-  private renderInternalHtml(data: any, start: string, end: string, styles: string): string {
+  private renderInternalHtml(
+    data: any,
+    start: string,
+    end: string,
+    styles: string,
+  ): string {
     const successRateStr = data.summary.successRate.toFixed(2);
 
     const hbStatus = data.heartbeat?.status === 'ACTIVE' ? 'Ativo' : 'Inativo';
-    const hbColor = data.heartbeat?.status === 'ACTIVE' ? 'var(--primary)' : 'var(--red-600)';
-    const hbBg = data.heartbeat?.status === 'ACTIVE' ? 'var(--primary-light)' : 'var(--red-100)';
+    const hbColor =
+      data.heartbeat?.status === 'ACTIVE' ? 'var(--primary)' : 'var(--red-600)';
+    const hbBg =
+      data.heartbeat?.status === 'ACTIVE'
+        ? 'var(--primary-light)'
+        : 'var(--red-100)';
     const hbLastSeen = data.heartbeat?.lastSeen
       ? this.safeFormat(data.heartbeat.lastSeen, 'dd/MM/yyyy HH:mm:ss')
       : 'Nunca visto';
 
-    const alertRows = data.proactiveAlerts.map((user: any) => `
+    const alertRows = data.proactiveAlerts
+      .map(
+        (user: any) => `
       <tr>
         <td style="font-weight: 600; color: var(--slate-900);">${user.username}</td>
         <td>${user.email || '-'}</td>
@@ -495,15 +545,20 @@ export class DossierPdfService {
         <td class="text-right">${(user.monthlyRequests ?? 0).toLocaleString('pt-BR')} / ${(user.planReqMonth ?? 0).toLocaleString('pt-BR')}</td>
         <td class="text-right" style="font-weight: 700; color: var(--red-600);">${(user.usagePercentage ?? 0).toFixed(1)}%</td>
         <td class="text-center">
-          ${user.notified ? 
-            `<span class="badge badge-success">Sim</span>` : 
-            `<span class="badge badge-muted">Não</span>`
+          ${
+            user.notified
+              ? `<span class="badge badge-success">Sim</span>`
+              : `<span class="badge badge-muted">Não</span>`
           }
         </td>
       </tr>
-    `).join('');
+    `,
+      )
+      .join('');
 
-    const topUsersRows = data.topUsers.map((user: any) => `
+    const topUsersRows = data.topUsers
+      .map(
+        (user: any) => `
       <tr>
         <td style="font-weight: 600; color: var(--slate-900);">${user.username}</td>
         <td>${user.planName || 'Sem Plano'}</td>
@@ -511,30 +566,41 @@ export class DossierPdfService {
         <td class="text-right ${(user.errorRate ?? 0) >= 5 ? 'text-error' : 'text-success'}">${(user.errorRate ?? 0).toFixed(1)}%</td>
         <td class="text-right">${(user.monthlyRequests ?? 0).toLocaleString('pt-BR')}</td>
       </tr>
-    `).join('');
+    `,
+      )
+      .join('');
 
-    const dbLoadRows = data.databaseLoad.map((db: any) => `
+    const dbLoadRows = data.databaseLoad
+      .map(
+        (db: any) => `
       <tr>
         <td style="font-family: monospace; font-weight: 600;">${db.host}</td>
         <td>${db.database}</td>
         <td class="text-right" style="font-weight: 700; color: var(--slate-900);">${db.totalRequests.toLocaleString('pt-BR')}</td>
       </tr>
-    `).join('');
+    `,
+      )
+      .join('');
 
-    const planDistributionRows = (data.planDistribution || []).map((plan: any) => {
-      const pct = data.summary.totalRequests > 0
-        ? (plan.totalRequests / data.summary.totalRequests) * 100
-        : 0;
-      return `
+    const planDistributionRows = (data.planDistribution || [])
+      .map((plan: any) => {
+        const pct =
+          data.summary.totalRequests > 0
+            ? (plan.totalRequests / data.summary.totalRequests) * 100
+            : 0;
+        return `
         <tr>
           <td style="font-weight: 600; color: var(--slate-900);">${plan.planName}</td>
           <td class="text-right">${(plan.totalRequests ?? 0).toLocaleString('pt-BR')}</td>
           <td class="text-right">${pct.toFixed(1)}%</td>
         </tr>
       `;
-    }).join('');
+      })
+      .join('');
 
-    const endpointRows = data.topEndpoints.map((ep: any) => `
+    const endpointRows = data.topEndpoints
+      .map(
+        (ep: any) => `
       <tr>
         <td style="font-family: monospace; font-weight: 600; color: var(--slate-900);">${ep.method}</td>
         <td style="font-family: monospace;">${ep.path}</td>
@@ -543,7 +609,9 @@ export class DossierPdfService {
         <td class="text-right">${(ep.avgLatency ?? 0).toFixed(0)} ms</td>
         <td class="text-right">${(ep.p95Latency ?? 0).toFixed(0)} ms</td>
       </tr>
-    `).join('');
+    `,
+      )
+      .join('');
 
     const statusRows = this.generateStatusRows(data.statusDistribution);
 
@@ -775,17 +843,23 @@ export class DossierPdfService {
 
   private generateStatusRows(statusDistribution: any[]): string {
     const total = statusDistribution.reduce((acc, curr) => acc + curr.count, 0);
-    if (total === 0) return '<div class="text-center" style="font-size: 11px; color: var(--slate-500);">Nenhum log para distribuição.</div>';
+    if (total === 0)
+      return '<div class="text-center" style="font-size: 11px; color: var(--slate-500);">Nenhum log para distribuição.</div>';
 
-    return statusDistribution.map((item) => {
-      const pct = (item.count / total) * 100;
-      let colorClass = 'var(--slate-500)';
-      
-      if (item.statusClass === '2xx') colorClass = 'var(--primary)';
-      else if (item.statusClass === '429') colorClass = 'var(--amber-600)';
-      else if (item.statusClass.startsWith('4') || item.statusClass.startsWith('5')) colorClass = 'var(--red-600)';
+    return statusDistribution
+      .map((item) => {
+        const pct = (item.count / total) * 100;
+        let colorClass = 'var(--slate-500)';
 
-      return `
+        if (item.statusClass === '2xx') colorClass = 'var(--primary)';
+        else if (item.statusClass === '429') colorClass = 'var(--amber-600)';
+        else if (
+          item.statusClass.startsWith('4') ||
+          item.statusClass.startsWith('5')
+        )
+          colorClass = 'var(--red-600)';
+
+        return `
         <div style="margin-bottom: 10px;">
           <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 2px;">
             <span style="font-weight: 700; color: ${colorClass};">${item.statusClass}</span>
@@ -796,7 +870,8 @@ export class DossierPdfService {
           </div>
         </div>
       `;
-    }).join('');
+      })
+      .join('');
   }
 
   private generateTimeSeriesSvg(timeSeries: any[]): string {
@@ -812,13 +887,15 @@ export class DossierPdfService {
     const chartHeight = height - padding.top - padding.bottom;
 
     const maxCount = Math.max(...timeSeries.map((d) => d.count), 1);
-    
+
     // Y Axis limits (round to readable values)
     const yMax = Math.ceil(maxCount / 10) * 10 || 10;
 
     // Helper mapping
-    const getX = (index: number) => padding.left + (index / (timeSeries.length - 1)) * chartWidth;
-    const getY = (val: number) => padding.top + chartHeight - (val / yMax) * chartHeight;
+    const getX = (index: number) =>
+      padding.left + (index / (timeSeries.length - 1)) * chartWidth;
+    const getY = (val: number) =>
+      padding.top + chartHeight - (val / yMax) * chartHeight;
 
     // Generate path data
     let areaSuccessPoints = '';
@@ -859,15 +936,17 @@ export class DossierPdfService {
 
     // Generate labels for X Axis
     const xLabelStep = Math.ceil(timeSeries.length / 5);
-    const xLabelsHtml = timeSeries.map((d, i) => {
-      if (i % xLabelStep !== 0 && i !== timeSeries.length - 1) return '';
-      const x = getX(i);
-      const labelDate = this.safeFormat(d.timestamp, 'dd/MM');
-      return `
+    const xLabelsHtml = timeSeries
+      .map((d, i) => {
+        if (i % xLabelStep !== 0 && i !== timeSeries.length - 1) return '';
+        const x = getX(i);
+        const labelDate = this.safeFormat(d.timestamp, 'dd/MM');
+        return `
         <text x="${x}" y="${height - 5}" fill="#94a3b8" font-size="8" text-anchor="middle" font-family="Inter">${labelDate}</text>
         <line x1="${x}" y1="${padding.top + chartHeight}" x2="${x}" y2="${padding.top + chartHeight + 4}" stroke="#cbd5e1" stroke-width="1" />
       `;
-    }).join('');
+      })
+      .join('');
 
     return `
       <svg width="100%" height="180" viewBox="0 0 ${width} ${height}" style="overflow: visible;">
@@ -885,9 +964,13 @@ export class DossierPdfService {
         <path d="${successLinePoints}" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
 
         <!-- Error Line (Only if there are errors) -->
-        ${timeSeries.some(d => d.error > 0) ? `
+        ${
+          timeSeries.some((d) => d.error > 0)
+            ? `
           <path d="${errorLinePoints}" fill="none" stroke="var(--red-600)" stroke-width="1.5" stroke-dasharray="2,2" stroke-linecap="round" stroke-linejoin="round" />
-        ` : ''}
+        `
+            : ''
+        }
 
         <!-- Definitions for Gradients -->
         <defs>
@@ -902,23 +985,33 @@ export class DossierPdfService {
           <span style="display: inline-block; width: 12px; height: 3px; background-color: var(--primary); border-radius: 1px;"></span>
           <span style="color: var(--slate-600); font-weight: 500;">Requisições com Sucesso (2xx/3xx)</span>
         </div>
-        ${timeSeries.some(d => d.error > 0) ? `
+        ${
+          timeSeries.some((d) => d.error > 0)
+            ? `
           <div style="display: flex; align-items: center; gap: 4px;">
             <span style="display: inline-block; width: 12px; height: 1px; border-top: 2px dashed var(--red-600);"></span>
             <span style="color: var(--slate-600); font-weight: 500;">Falhas / Erros (4xx/5xx)</span>
           </div>
-        ` : ''}
+        `
+            : ''
+        }
       </div>
     `;
   }
 
-  private safeFormat(date: Date | string | number, formatStr: string, options?: any): string {
+  private safeFormat(
+    date: Date | string | number,
+    formatStr: string,
+    options?: any,
+  ): string {
     try {
       let parsed = new Date(date);
       if (!date || isNaN(parsed.getTime())) {
         return '--/--/----';
       }
-      const tzString = parsed.toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' });
+      const tzString = parsed.toLocaleString('en-US', {
+        timeZone: 'America/Sao_Paulo',
+      });
       parsed = new Date(tzString);
       return format(parsed, formatStr, options);
     } catch {

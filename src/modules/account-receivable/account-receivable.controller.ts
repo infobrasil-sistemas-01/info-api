@@ -127,8 +127,7 @@ export class AccountReceivableController {
     const storeId =
       params.storeId !== undefined ? params.storeId : tokenStoreId;
     const page = params.page !== undefined ? params.page : 1;
-    const pageSize =
-      params.pageSize !== undefined ? params.pageSize : 10;
+    const pageSize = params.pageSize !== undefined ? params.pageSize : 10;
 
     return this.accountReceivableService.get(
       credentialsId,

@@ -36,9 +36,22 @@ describe('DossierPdfService', () => {
   describe('generateDossierPdf', () => {
     it('should launch puppeteer, set page content, generate PDF and close browser', async () => {
       const data = {
-        user: { username: 'test-user', monthlyRequests: 50000, planReqMonth: 100000 },
-        summary: { totalRequests: 10000, successRate: 100, p95Latency: 15, rateLimitHits: 0, currentRpm: 15, averageRpm: 5.5 },
-        timeSeries: [{ timestamp: '2026-07-01', count: 10, success: 10, error: 0 }],
+        user: {
+          username: 'test-user',
+          monthlyRequests: 50000,
+          planReqMonth: 100000,
+        },
+        summary: {
+          totalRequests: 10000,
+          successRate: 100,
+          p95Latency: 15,
+          rateLimitHits: 0,
+          currentRpm: 15,
+          averageRpm: 5.5,
+        },
+        timeSeries: [
+          { timestamp: '2026-07-01', count: 10, success: 10, error: 0 },
+        ],
         statusDistribution: [{ statusClass: '2xx', count: 10 }],
         topEndpoints: [],
       };
@@ -52,10 +65,10 @@ describe('DossierPdfService', () => {
 
       expect(result).toEqual(Buffer.from('pdf-data'));
       expect(mockPuppeteer.launch).toHaveBeenCalled();
-      
+
       const mockBrowser = await mockPuppeteer.launch.mock.results[0].value;
       expect(mockBrowser.newPage).toHaveBeenCalled();
-      
+
       const mockPage = await mockBrowser.newPage.mock.results[0].value;
       expect(mockPage.setContent).toHaveBeenCalled();
       expect(mockPage.setContent).toHaveBeenCalledWith(
@@ -82,7 +95,9 @@ describe('DossierPdfService', () => {
         expect.stringContaining('02 de julho de 2026 às 18:30'),
         expect.any(Object),
       );
-      expect(mockPage.evaluateHandle).toHaveBeenCalledWith('document.fonts.ready');
+      expect(mockPage.evaluateHandle).toHaveBeenCalledWith(
+        'document.fonts.ready',
+      );
       expect(mockPage.pdf).toHaveBeenCalledWith(
         expect.objectContaining({
           format: 'A4',
@@ -95,30 +110,69 @@ describe('DossierPdfService', () => {
 
     it('should generate internal dossier PDF with operational and commercial metrics', async () => {
       const data = {
-        summary: { totalRequests: 100000, successRate: 90, p95Latency: 15, rateLimitHits: 2000, activeUsers: 5, currentRpm: 150, averageRpm: 75.2 },
+        summary: {
+          totalRequests: 100000,
+          successRate: 90,
+          p95Latency: 15,
+          rateLimitHits: 2000,
+          activeUsers: 5,
+          currentRpm: 150,
+          averageRpm: 75.2,
+        },
         proactiveAlerts: [
-          { username: 'alert-user', email: 'alert@test.com', planName: 'Gold', monthlyRequests: 9000, planReqMonth: 10000, usagePercentage: 90, notified: true }
+          {
+            username: 'alert-user',
+            email: 'alert@test.com',
+            planName: 'Gold',
+            monthlyRequests: 9000,
+            planReqMonth: 10000,
+            usagePercentage: 90,
+            notified: true,
+          },
         ],
         topUsers: [
-          { username: 'top-user', planName: 'Bronze', totalRequests: 10000, errorRate: 2, monthlyRequests: 12000 }
+          {
+            username: 'top-user',
+            planName: 'Bronze',
+            totalRequests: 10000,
+            errorRate: 2,
+            monthlyRequests: 12000,
+          },
         ],
         databaseLoad: [
-          { host: 'localhost', database: 'test-db', totalRequests: 15000 }
+          { host: 'localhost', database: 'test-db', totalRequests: 15000 },
         ],
         topEndpoints: [
-          { method: 'GET', path: '/api/v1/test', totalRequests: 50, successRate: 98, avgLatency: 12, p95Latency: 20 }
+          {
+            method: 'GET',
+            path: '/api/v1/test',
+            totalRequests: 50,
+            successRate: 98,
+            avgLatency: 12,
+            p95Latency: 20,
+          },
         ],
         statusDistribution: [
           { statusClass: '2xx', count: 9000 },
-          { statusClass: '4xx', count: 1000 }
+          { statusClass: '4xx', count: 1000 },
         ],
         planDistribution: [
           { planName: 'Gold', totalRequests: 9000 },
-          { planName: 'Bronze', totalRequests: 1000 }
+          { planName: 'Bronze', totalRequests: 1000 },
         ],
         timeSeries: [
-          { timestamp: '2026-07-01T00:00:00.000Z', count: 100, success: 90, error: 10 },
-          { timestamp: '2026-07-02T00:00:00.000Z', count: 100, success: 90, error: 10 }
+          {
+            timestamp: '2026-07-01T00:00:00.000Z',
+            count: 100,
+            success: 90,
+            error: 10,
+          },
+          {
+            timestamp: '2026-07-02T00:00:00.000Z',
+            count: 100,
+            success: 90,
+            error: 10,
+          },
         ],
         heartbeat: {
           status: 'ACTIVE',
@@ -135,10 +189,10 @@ describe('DossierPdfService', () => {
 
       expect(result).toEqual(Buffer.from('pdf-data'));
       expect(mockPuppeteer.launch).toHaveBeenCalled();
-      
+
       const mockBrowser = await mockPuppeteer.launch.mock.results[0].value;
       expect(mockBrowser.newPage).toHaveBeenCalled();
-      
+
       const mockPage = await mockBrowser.newPage.mock.results[0].value;
       expect(mockPage.setContent).toHaveBeenCalled();
       expect(mockPage.setContent).toHaveBeenCalledWith(

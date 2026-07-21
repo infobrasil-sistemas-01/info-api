@@ -7,7 +7,9 @@ export const GetPaymentMethodsQuerySchema = z.object({
   pageSize: z.coerce.number().int().min(1).max(100).optional(),
 });
 
-export class GetPaymentMethodsQueryDto extends ZodDto(GetPaymentMethodsQuerySchema) {
+export class GetPaymentMethodsQueryDto extends ZodDto(
+  GetPaymentMethodsQuerySchema,
+) {
   @ApiPropertyOptional({ description: 'Página atual', example: 1 })
   page?: number;
 

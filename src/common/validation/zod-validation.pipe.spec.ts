@@ -28,7 +28,11 @@ describe('ZodValidationPipe', () => {
   });
 
   it('should ignore and strip extra fields when metadata.type is body', () => {
-    const value = { name: 'John Doe', age: '30', extraField: 'should be stripped' };
+    const value = {
+      name: 'John Doe',
+      age: '30',
+      extraField: 'should be stripped',
+    };
     const metadata = { type: 'body', metatype: TestDto } as any;
 
     const result = pipe.transform(value, metadata);

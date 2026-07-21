@@ -37,7 +37,9 @@ export class GetAccountReceivablesQueryDto extends ZodDto(
   })
   situation?: 'A' | 'L';
 
-  @ApiPropertyOptional({ description: 'Data de vencimento inicial (YYYY-MM-DD)' })
+  @ApiPropertyOptional({
+    description: 'Data de vencimento inicial (YYYY-MM-DD)',
+  })
   startDate?: string;
 
   @ApiPropertyOptional({ description: 'Data de vencimento final (YYYY-MM-DD)' })

@@ -155,7 +155,14 @@ describe('DashboardService', () => {
       const start = new Date('2026-07-02T12:00:00Z');
       const end = new Date('2026-07-02T13:00:00Z'); // 1 hour difference -> interval 1m
       const mockResult = [
-        { timestamp: '2026-07-02T12:00:00Z', count: 5, success: 5, clientError: 0, serverError: 0, error: 0 },
+        {
+          timestamp: '2026-07-02T12:00:00Z',
+          count: 5,
+          success: 5,
+          clientError: 0,
+          serverError: 0,
+          error: 0,
+        },
       ];
       mockPrisma.$queryRawUnsafe.mockResolvedValue(mockResult);
 
@@ -288,25 +295,44 @@ describe('DashboardService', () => {
         mockPrisma.requestLog.count.mockResolvedValueOnce(8); // Current RPM
 
         // mock for getTopUsers
-        mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([{ userId: '1', totalRequests: 50 }]); 
+        mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([
+          { userId: '1', totalRequests: 50 },
+        ]);
 
         // mock for getTopEndpoints
-        mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([{ path: '/test', totalRequests: 50 }]); 
+        mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([
+          { path: '/test', totalRequests: 50 },
+        ]);
 
         // mock for getStatusDistribution
-        mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([{ statusClass: '2xx', count: 95 }]); 
+        mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([
+          { statusClass: '2xx', count: 95 },
+        ]);
 
         // mock for getDatabaseLoad
-        mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([{ host: 'localhost', database: 'db', totalRequests: 100 }]); 
+        mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([
+          { host: 'localhost', database: 'db', totalRequests: 100 },
+        ]);
 
         // mock for getProactiveAlerts
         mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([]);
 
         // mock for getPlanDistribution
-        mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([{ planName: 'Bronze', totalRequests: 100 }]);
+        mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([
+          { planName: 'Bronze', totalRequests: 100 },
+        ]);
 
         // mock for getTimeSeries
-        mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([{ timestamp: '2026-07-01', count: 100, success: 95, clientError: 4, serverError: 1, error: 5 }]);
+        mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([
+          {
+            timestamp: '2026-07-01',
+            count: 100,
+            success: 95,
+            clientError: 4,
+            serverError: 1,
+            error: 5,
+          },
+        ]);
 
         // mock for getHeartbeatStatus
         mockPrisma.systemHeartbeat.findUnique.mockResolvedValueOnce({
@@ -331,16 +357,16 @@ describe('DashboardService', () => {
 
     describe('client dossier', () => {
       it('should throw error if userId is missing', async () => {
-        await expect(service.getDossierData('client', start, end)).rejects.toThrow(
-          'userId é obrigatório para dossiê do cliente',
-        );
+        await expect(
+          service.getDossierData('client', start, end),
+        ).rejects.toThrow('userId é obrigatório para dossiê do cliente');
       });
 
       it('should throw error if user does not exist', async () => {
         mockPrisma.user.findUnique.mockResolvedValueOnce(null);
-        await expect(service.getDossierData('client', start, end, 'user-id')).rejects.toThrow(
-          'Usuário não encontrado',
-        );
+        await expect(
+          service.getDossierData('client', start, end, 'user-id'),
+        ).rejects.toThrow('Usuário não encontrado');
       });
 
       it('should return user metrics if user exists', async () => {
@@ -366,15 +392,33 @@ describe('DashboardService', () => {
         mockPrisma.requestLog.count.mockResolvedValueOnce(15); // Current RPM
 
         // mock for getTopEndpoints(userId)
-        mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([{ path: '/test', totalRequests: 200 }]);
+        mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([
+          { path: '/test', totalRequests: 200 },
+        ]);
 
         // mock for getStatusDistribution(userId)
-        mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([{ statusClass: '2xx', count: 190 }]);
+        mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([
+          { statusClass: '2xx', count: 190 },
+        ]);
 
         // mock for getTimeSeries(userId)
-        mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([{ timestamp: '2026-07-01', count: 200, success: 190, clientError: 8, serverError: 2, error: 10 }]);
+        mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([
+          {
+            timestamp: '2026-07-01',
+            count: 200,
+            success: 190,
+            clientError: 8,
+            serverError: 2,
+            error: 10,
+          },
+        ]);
 
-        const result = await service.getDossierData('client', start, end, 'user-id');
+        const result = await service.getDossierData(
+          'client',
+          start,
+          end,
+          'user-id',
+        );
 
         expect(result.type).toBe('client');
         expect(result.user).toEqual({

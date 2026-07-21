@@ -138,26 +138,34 @@ export class PlanService {
 
       // 1. Se atingir 100% do limite mensal
       if (reqsMonth >= limit) {
-        const alreadySent = await this.hasSentUsageAlertThisMonth(userId, 'MONTHLY_100');
+        const alreadySent = await this.hasSentUsageAlertThisMonth(
+          userId,
+          'MONTHLY_100',
+        );
         if (alreadySent) {
           return;
         }
 
         const html = this.generateUsageAlertHtml(user.user, reqsMonth, limit);
-        const subject = 'Alerta de Uso: Limite de Requisições Mensais Totalmente Consumido (100%)';
+        const subject =
+          'Alerta de Uso: Limite de Requisições Mensais Totalmente Consumido (100%)';
         await this.emailService.sendEmail(user.email, subject, html);
 
         await this.markUsageAlertSent(userId, 'MONTHLY_100');
       }
       // 2. Se atingir pelo menos 80% do limite mensal
       else if (reqsMonth >= limit * 0.8) {
-        const alreadySent = await this.hasSentUsageAlertThisMonth(userId, 'MONTHLY_80');
+        const alreadySent = await this.hasSentUsageAlertThisMonth(
+          userId,
+          'MONTHLY_80',
+        );
         if (alreadySent) {
           return;
         }
 
         const html = this.generateUsageAlertHtml(user.user, reqsMonth, limit);
-        const subject = 'Alerta de Uso: Limite de Requisições Mensais Atingido em 80%';
+        const subject =
+          'Alerta de Uso: Limite de Requisições Mensais Atingido em 80%';
         await this.emailService.sendEmail(user.email, subject, html);
 
         await this.markUsageAlertSent(userId, 'MONTHLY_80');
@@ -192,12 +200,15 @@ export class PlanService {
 
     if (reqsMonth >= limit) {
       alertType = 'MONTHLY_100';
-      subject = 'Alerta de Uso: Limite de Requisições Mensais Totalmente Consumido (100%)';
+      subject =
+        'Alerta de Uso: Limite de Requisições Mensais Totalmente Consumido (100%)';
     } else if (reqsMonth >= limit * 0.8) {
       alertType = 'MONTHLY_80';
       subject = 'Alerta de Uso: Limite de Requisições Mensais Atingido em 80%';
     } else {
-      throw new BadRequestException('Usuário com consumo abaixo do limite de alerta (80%)');
+      throw new BadRequestException(
+        'Usuário com consumo abaixo do limite de alerta (80%)',
+      );
     }
 
     const html = this.generateUsageAlertHtml(user.user, reqsMonth, limit);
@@ -225,7 +236,9 @@ export class PlanService {
 
       return alertLog !== null;
     } catch (e: any) {
-      this.logger.error(`Erro ao verificar registro de alerta de uso: ${e.message}`);
+      this.logger.error(
+        `Erro ao verificar registro de alerta de uso: ${e.message}`,
+      );
       return false;
     }
   }
@@ -242,9 +255,13 @@ export class PlanService {
         },
       });
       const percentStr = alertType === 'MONTHLY_100' ? '100%' : '80%';
-      this.logger.log(`Alerta de uso de ${percentStr} mensal registrado no banco para o usuário ${userId}`);
+      this.logger.log(
+        `Alerta de uso de ${percentStr} mensal registrado no banco para o usuário ${userId}`,
+      );
     } catch (e: any) {
-      this.logger.error(`Erro ao salvar registro de alerta de uso no banco: ${e.message}`);
+      this.logger.error(
+        `Erro ao salvar registro de alerta de uso no banco: ${e.message}`,
+      );
     }
   }
 

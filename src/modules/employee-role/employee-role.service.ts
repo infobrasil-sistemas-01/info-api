@@ -7,7 +7,7 @@ export class EmployeeRoleService {
 
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
-  ) { }
+  ) {}
 
   async get(
     credentialsId: string,

@@ -184,4 +184,3 @@ export class DeliveryStatusResponseDto {
   })
   TBS_MOBILE: string;
 }
-

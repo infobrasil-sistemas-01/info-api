@@ -8,9 +8,15 @@ export const GetProductQuerySchema = z.object({
 });
 
 export class GetProductQueryDto extends ZodDto(GetProductQuerySchema) {
-  @ApiPropertyOptional({ description: 'Código da tabela de preço para buscar os preços dos produtos', example: 1 })
+  @ApiPropertyOptional({
+    description: 'Código da tabela de preço para buscar os preços dos produtos',
+    example: 1,
+  })
   priceTable?: number;
 
-  @ApiPropertyOptional({ description: 'Código da loja para buscar os estoques dos produtos', example: 1 })
+  @ApiPropertyOptional({
+    description: 'Código da loja para buscar os estoques dos produtos',
+    example: 1,
+  })
   storeId?: number;
 }
