@@ -69,7 +69,12 @@ describe('ClientService', () => {
 
   describe('getById', () => {
     it('should return client by id', async () => {
-      const mockClient = { CLI_CODIGO: 1, CLI_NOME: 'Test Client' };
+      const mockClient = {
+        CLI_CODIGO: 1,
+        CLI_NOME: 'Test Client',
+        MUN_CODIGO: 2304400,
+        MUN_NOME: 'FORTALEZA',
+      };
       mockConnection.query.mockImplementation(
         (query: string, params: any[], callback: Function) => {
           callback(null, [mockClient]);
@@ -79,6 +84,13 @@ describe('ClientService', () => {
       const result = await service.getById('cred-1', 1, 1);
 
       expect(result).toEqual(mockClient);
+      expect(mockConnection.query).toHaveBeenCalledWith(
+        expect.stringContaining(
+          'LEFT JOIN municipios M ON C.MUN_CODIGO = M.MUN_CODIGO',
+        ),
+        [1, 1],
+        expect.any(Function),
+      );
     });
   });
 

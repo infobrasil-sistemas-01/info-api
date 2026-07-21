@@ -14,7 +14,7 @@ export class ClientService {
 
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
-  ) { }
+  ) {}
 
   async get(
     credentialsId: string,
@@ -93,11 +93,12 @@ export class ClientService {
       await this.tenantConnectionService.getConnection(credentialsId);
 
     try {
-      const query = `SELECT 
-                      CLI_CODIGO, CLI_SITUACAO, CLI_NOME, CLI_FANTASIA, CLI_SEXO, CLI_ENDERECO, CLI_FONE, CLI_EMAIL, CLI_DATANASC,
-                      CLI_COMPL_ENDERECO, CLI_CEP, CLI_BAIRRO, CLI_UF, CLI_CPF_CNPJ, CLI_IDENTIDADE, CLI_MAE, CLI_PAI, CLI_ESTADOCIVIL, CLI_NATURALIDADE
-                      FROM clientes 
-                      WHERE LOJ_CODIGO = ? AND CLI_CODIGO = ?`;
+      const query = `SELECT C.CLI_CODIGO, C.CLI_SITUACAO, C.CLI_NOME, C.CLI_FANTASIA, C.CLI_SEXO, C.CLI_ENDERECO, C.CLI_FONE, C.CLI_EMAIL, C.CLI_DATANASC,
+                      C.CLI_COMPL_ENDERECO, C.CLI_CEP, C.CLI_BAIRRO, C.MUN_CODIGO, M.MUN_NOME, C.CLI_UF, C.CLI_CPF_CNPJ, C.CLI_IDENTIDADE, C.CLI_MAE, 
+                      C.CLI_PAI, C.CLI_ESTADOCIVIL, C.CLI_NATURALIDADE
+                      FROM clientes C
+                      LEFT JOIN municipios M ON C.MUN_CODIGO = M.MUN_CODIGO
+                      WHERE C.LOJ_CODIGO = ? AND C.CLI_CODIGO = ?`;
       const params = [storeId, id];
 
       const startTime = Date.now();
@@ -110,7 +111,8 @@ export class ClientService {
       const endTime = Date.now();
 
       this.logger.log(
-        `Busca de cliente por ID executada. Tenant: ${credentialsId}, ID: ${id}, Tempo SQL: ${endTime - startTime
+        `Busca de cliente por ID executada. Tenant: ${credentialsId}, ID: ${id}, Tempo SQL: ${
+          endTime - startTime
         }ms`,
       );
       return result;
@@ -227,7 +229,8 @@ export class ClientService {
       const endTime = Date.now();
 
       this.logger.log(
-        `Cliente atualizado. Tenant: ${credentialsId}, ID: ${id}, Tempo SQL: ${endTime - startTime
+        `Cliente atualizado. Tenant: ${credentialsId}, ID: ${id}, Tempo SQL: ${
+          endTime - startTime
         }ms`,
       );
 

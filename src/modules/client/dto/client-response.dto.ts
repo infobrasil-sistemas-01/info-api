@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class ClientResponseDto {
   @ApiProperty({ example: 1, description: 'Código do cliente' })
@@ -50,6 +50,18 @@ export class ClientDetailResponseDto extends ClientResponseDto {
 
   @ApiProperty({ example: 'Bela Vista', description: 'Bairro' })
   CLI_BAIRRO: string;
+
+  @ApiPropertyOptional({
+    example: 2304400,
+    description: 'Código IBGE do município',
+  })
+  MUN_CODIGO?: number;
+
+  @ApiPropertyOptional({
+    example: 'FORTALEZA',
+    description: 'Nome do município',
+  })
+  MUN_NOME?: string;
 
   @ApiProperty({ example: 'SP', description: 'UF' })
   CLI_UF: string;
