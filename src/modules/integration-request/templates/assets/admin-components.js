@@ -569,10 +569,10 @@ const Components = {
 
     const proactiveRows = proactiveAlerts.map(a => `
           <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-              <td style="padding: 10px 0;"><strong style="color: white;">${a.username}</strong><br><small style="color: var(--text-muted);">${a.email || ''}</small></td>
-              <td style="padding: 10px 0;"><span class="tag-pill">${a.planName}</span></td>
-              <td style="color: var(--danger); font-weight: 700; text-align: right; padding: 10px 0;">${a.usagePercentage}%</td>
-              <td style="text-align: center; padding: 10px 0;">
+              <td style="padding: 10px 8px 10px 0;"><strong style="color: white;">${a.username}</strong><br><small style="color: var(--text-muted);">${a.email || ''}</small></td>
+              <td style="padding: 10px 8px;"><span class="tag-pill">${a.planName}</span></td>
+              <td style="color: var(--danger); font-weight: 700; text-align: right; padding: 10px 12px;">${a.usagePercentage}%</td>
+              <td style="text-align: center; padding: 10px 8px;">
                   ${a.notified ? 
                       `<i class='bx bx-mail-send' style='color: var(--success); font-size: 1.25rem;' title='Notificação enviada'></i>` : 
                       `<i class='bx bx-envelope' style='color: var(--text-muted); opacity: 0.8; font-size: 1.25rem; cursor: pointer;' title='Clique para enviar notificação de alerta' onclick="Data.resendAlert('${a.userId}', this)"></i>`
@@ -583,9 +583,9 @@ const Components = {
 
     const dbRows = databaseLoad.map(d => `
           <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-              <td style="padding: 10px 0; font-family: monospace; color: white;">${d.host}</td>
-              <td style="color: var(--text-muted); font-size: 0.85rem; padding: 10px 0;">${d.database}</td>
-              <td style="font-weight: 600; text-align: right; color: white; padding: 10px 0;">${d.totalRequests.toLocaleString()}</td>
+              <td style="padding: 10px 8px 10px 0; font-family: monospace; color: white;">${d.host}</td>
+              <td style="color: var(--text-muted); font-size: 0.85rem; padding: 10px 8px;">${d.database}</td>
+              <td style="font-weight: 600; text-align: right; color: white; padding: 10px 12px;">${d.totalRequests.toLocaleString()}</td>
           </tr>
       `).join('') || `<tr><td colspan="3" style="text-align: center; color: var(--text-muted); padding: 20px;">Sem dados</td></tr>`;
 
@@ -936,10 +936,10 @@ const Components = {
                   <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
                       <thead>
                           <tr style="border-bottom: 1px solid var(--border); color: var(--text-muted);">
-                              <th style="text-align: left; padding: 8px 0; color: var(--text-muted);">Usuário</th>
-                              <th style="text-align: left; padding: 8px 0; color: var(--text-muted);">Plano</th>
-                              <th style="text-align: right; padding: 8px 0; color: var(--text-muted);">Uso %</th>
-                              <th style="text-align: center; padding: 8px 0; color: var(--text-muted); width: 80px;">Notificado</th>
+                              <th style="text-align: left; padding: 8px 8px 8px 0; color: var(--text-muted);">Usuário</th>
+                              <th style="text-align: left; padding: 8px 8px; color: var(--text-muted); width: 75px;">Plano</th>
+                              <th style="text-align: right; padding: 8px 12px; color: var(--text-muted); width: 90px;">Uso %</th>
+                              <th style="text-align: center; padding: 8px 8px; color: var(--text-muted); width: 95px;">Notificado</th>
                           </tr>
                       </thead>
                       <tbody>
@@ -959,9 +959,9 @@ const Components = {
                   <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
                       <thead>
                           <tr style="border-bottom: 1px solid var(--border); color: var(--text-muted);">
-                              <th style="text-align: left; padding: 8px 0; color: var(--text-muted);">Host</th>
-                              <th style="text-align: left; padding: 8px 0; color: var(--text-muted);">Database</th>
-                              <th style="text-align: right; padding: 8px 0; color: var(--text-muted);">Chamadas</th>
+                              <th style="text-align: left; padding: 8px 8px 8px 0; color: var(--text-muted);">Host</th>
+                              <th style="text-align: left; padding: 8px 8px; color: var(--text-muted);">Database</th>
+                              <th style="text-align: right; padding: 8px 12px; color: var(--text-muted); width: 100px;">Chamadas</th>
                           </tr>
                       </thead>
                       <tbody>
