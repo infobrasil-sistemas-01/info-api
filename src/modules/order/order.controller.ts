@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  NotFoundException,
   Param,
   Post,
   Query,
@@ -38,7 +39,7 @@ export class OrderController {
   constructor(
     private readonly orderService: OrderService,
     private readonly orderItemService: OrderItemService,
-  ) { }
+  ) {}
 
   @Post()
   @UseGuards(JwtAuthGuard, PermissionsGuard)
@@ -134,10 +135,7 @@ export class OrderController {
     description: 'Lista de pedidos retornada com sucesso.',
     type: [OrderResponseDto],
   })
-  getOrders(
-    @Req() req: ReqWithAuthContext,
-    @Query() query: GetOrdersQueryDto,
-  ) {
+  getOrders(@Req() req: ReqWithAuthContext, @Query() query: GetOrdersQueryDto) {
     const { credentialsId, storeId: storeIdToken } = req.authContext || {};
 
     if (!credentialsId) {
@@ -146,12 +144,18 @@ export class OrderController {
 
     const finalStoreId = query.storeId ? Number(query.storeId) : storeIdToken;
 
-    return this.orderService.get(credentialsId, finalStoreId, query.page, query.pageSize, {
-      startDate: query.startDate,
-      endDate: query.endDate,
-      clientId: query.clientId ? Number(query.clientId) : undefined,
-      employeeId: query.employeeId ? Number(query.employeeId) : undefined,
-    });
+    return this.orderService.get(
+      credentialsId,
+      finalStoreId,
+      query.page,
+      query.pageSize,
+      {
+        startDate: query.startDate,
+        endDate: query.endDate,
+        clientId: query.clientId ? Number(query.clientId) : undefined,
+        employeeId: query.employeeId ? Number(query.employeeId) : undefined,
+      },
+    );
   }
 
   @Get(':id')
@@ -199,12 +203,20 @@ export class OrderController {
       finalStoreId,
       id,
     )) as any;
+
+    if (!orderData) {
+      throw new NotFoundException(`Pedido ${id} não encontrado`);
+    }
+
     const orderItems = (await this.orderItemService.getByOrderId(
       credentialsId,
       id,
     )) as any[];
 
-    orderData.PESO = orderItems.reduce((acc, item) => acc + (item.PRO_PESO * item.IVD_QTDE), 0)
+    orderData.PESO = orderItems.reduce(
+      (acc, item) => acc + item.PRO_PESO * item.IVD_QTDE,
+      0,
+    );
 
     return { ...orderData, items: orderItems };
   }

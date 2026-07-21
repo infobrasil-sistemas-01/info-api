@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { NotFoundException } from '@nestjs/common';
 import { OrderController } from './order.controller';
 import { OrderService } from './order.service';
 import { OrderItemService } from './order-item/order-item.service';
@@ -164,7 +165,10 @@ describe('OrderController', () => {
     it('should call orderService.get with pagination params', async () => {
       mockOrderService.get.mockResolvedValue([{ id: 1 }, { id: 2 }]);
 
-      const result = await controller.getOrders(mockReq, { page: 2, pageSize: 10 });
+      const result = await controller.getOrders(mockReq, {
+        page: 2,
+        pageSize: 10,
+      });
 
       expect(orderService.get).toHaveBeenCalledWith('cred-1', 1, 2, 10, {
         clientId: undefined,
@@ -210,6 +214,14 @@ describe('OrderController', () => {
       expect(orderService.getById).toHaveBeenCalledWith('cred-1', 1, 123);
       expect(orderItemService.getByOrderId).toHaveBeenCalledWith('cred-1', 123);
       expect(result).toEqual({ ...mockOrder, PESO: 3, items: mockItems });
+    });
+
+    it('should throw NotFoundException if order is not found', async () => {
+      mockOrderService.getById.mockResolvedValue(null);
+
+      await expect(controller.getOrderById(mockReq, 999, {})).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 });
