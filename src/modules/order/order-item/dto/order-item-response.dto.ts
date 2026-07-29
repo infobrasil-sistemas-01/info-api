@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class OrderItemEnrichedResponseDto {
   @ApiProperty({ example: 12345, description: 'Número da venda' })
@@ -45,4 +45,22 @@ export class OrderItemEnrichedResponseDto {
 
   @ApiProperty({ example: 'Grupo Exemplo', description: 'Descrição do grupo' })
   GRU_DESCRICAO: string;
+
+  @ApiPropertyOptional({ example: 1, description: 'Código do ambiente' })
+  AMB_CODIGO?: number;
+
+  @ApiPropertyOptional({
+    example: 'COZINHA',
+    description: 'Descrição do ambiente',
+  })
+  AMB_DESCRICAO?: string;
+
+  @ApiPropertyOptional({
+    example: 'VENDA',
+    description: 'Operação do item',
+  })
+  IVD_OPERACAO?: string;
+
+  @ApiPropertyOptional({ example: 'N', description: 'Item entregue (S/N)' })
+  IVD_ENTREGUE?: string;
 }

@@ -8,7 +8,7 @@ export class OrderItemService {
 
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
-  ) {}
+  ) { }
 
   async insertSoldProductOnDb(
     transaction: any,
@@ -112,9 +112,10 @@ export class OrderItemService {
 
     try {
       const query = `SELECT 
-      IV.PRO_CODIGO, P.PRO_DESCRICAO, P.PRO_PESO, IV.IVD_PRECO, IV.IVD_QTDE, IV.IVD_TOTAL, IV.IVD_DESCONTO, IV.IVD_LIQUIDO, IV.TRM_CODIGO, CASE IV.TRM_CODIGO WHEN '1' THEN 'IMEDIATA' WHEN '2' THEN 'RETIRADA' WHEN '3' THEN 'ENTREGA' END AS TRM_DESCRICAO
+      IV.PRO_CODIGO, P.PRO_DESCRICAO, P.PRO_PESO, IV.IVD_PRECO, IV.IVD_QTDE, IV.IVD_TOTAL, IV.IVD_DESCONTO, IV.IVD_LIQUIDO, IV.TRM_CODIGO, CASE IV.TRM_CODIGO WHEN '1' THEN 'IMEDIATA' WHEN '2' THEN 'RETIRADA' WHEN '3' THEN 'ENTREGA' END AS TRM_DESCRICAO, A.AMB_CODIGO, A.AMB_DESCRICAO, IV.IVD_OPERACAO, IV.IVD_ENTREGUE
       FROM ITENSVEN IV
       INNER JOIN PRODUTOS P ON IV.PRO_CODIGO = P.PRO_CODIGO
+      LEFT JOIN AMBIENTES A ON IV.AMB_CODIGO = A.AMB_CODIGO
       WHERE IV.VEN_NUMERO = ?`;
 
       const params = [orderId];
@@ -131,8 +132,7 @@ export class OrderItemService {
       this.logger.log(
         `Busca de itens do pedido executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
           { orderId },
-        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${
-          queryEndTime - queryStartTime
+        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${queryEndTime - queryStartTime
         }ms`,
       );
 
@@ -219,8 +219,7 @@ export class OrderItemService {
       this.logger.log(
         `Busca transversal de itens de venda executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
           { storeId, ...filters },
-        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${
-          queryEndTime - queryStartTime
+        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${queryEndTime - queryStartTime
         }ms`,
       );
 

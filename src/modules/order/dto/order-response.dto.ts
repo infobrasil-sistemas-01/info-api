@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class OrderResponseDto {
   @ApiProperty({ example: 12345, description: 'Número da venda' })
@@ -98,6 +98,24 @@ export class OrderItemResponseDto {
     description: 'Descrição da modalidade de entrega',
   })
   TRM_DESCRICAO: string;
+
+  @ApiPropertyOptional({ example: 1, description: 'Código do ambiente' })
+  AMB_CODIGO?: number;
+
+  @ApiPropertyOptional({
+    example: 'COZINHA',
+    description: 'Descrição do ambiente',
+  })
+  AMB_DESCRICAO?: string;
+
+  @ApiPropertyOptional({
+    example: 'VENDA',
+    description: 'Operação do item',
+  })
+  IVD_OPERACAO?: string;
+
+  @ApiPropertyOptional({ example: 'N', description: 'Item entregue (S/N)' })
+  IVD_ENTREGUE?: string;
 }
 
 export class OrderDetailResponseDto extends OrderResponseDto {
@@ -112,6 +130,21 @@ export class OrderDetailResponseDto extends OrderResponseDto {
 
   @ApiProperty({ example: 250.5, description: 'Valor total líquido' })
   VEN_TOTALLIQUIDO: number;
+
+  @ApiPropertyOptional({ example: 0.0, description: 'Valor pendente da venda' })
+  VEN_VALORPENDENTE?: number;
+
+  @ApiPropertyOptional({ example: 0.0, description: 'Valor dos encargos' })
+  VEN_VALORENC?: number;
+
+  @ApiPropertyOptional({
+    example: '2026-08-01T00:00:00.000Z',
+    description: 'Data de previsão de entrega',
+  })
+  VEN_DTPREVISAOENT?: string;
+
+  @ApiPropertyOptional({ example: 'R', description: 'Origem/Canal do DAV' })
+  VEN_ORIGEMDAV?: string;
 
   @ApiProperty({ example: 2, description: 'Quantidade total de itens' })
   VEN_QUANT: number;
