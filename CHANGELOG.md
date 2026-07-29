@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.16.13](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.16.12...v1.16.13) (2026-07-29)
+
+
+### Features
+
+* 100% alert ([c1747d1](https://github.com/infobrasil-sistemas/info-vendas-api/commit/c1747d1cd40d70aee65a89b0798eeff7eb3d4ca7))
+* **client:** add MUN_CODIGO and MUN_NOME municipality fields to client detail response ([229215b](https://github.com/infobrasil-sistemas/info-vendas-api/commit/229215baef209eeb55b60840ee2e7c108aabd835))
+* new fields on GET /orders/:id for logistics integration ([eb79eae](https://github.com/infobrasil-sistemas/info-vendas-api/commit/eb79eaee049c6b2ffa96f524367a4c24cd6ee03a))
+* **order:** adiciona campos de ambiente, operacao, entrega, encargos e valor pendente nos pedidos ([6c9f9a4](https://github.com/infobrasil-sistemas/info-vendas-api/commit/6c9f9a4185a61e9696fa772fd3d680622f4ec106))
+
+
+### Bug Fixes
+
+* 80 percent alert table ([e083cd4](https://github.com/infobrasil-sistemas/info-vendas-api/commit/e083cd452e67fc9cf2861914c45ee1f86d81198d))
+* endpoint GET /deliveries ([da80d6a](https://github.com/infobrasil-sistemas/info-vendas-api/commit/da80d6aeeb13e85370d5d03dacbf61b2f85bf5ed))
+* order by id ([0744f72](https://github.com/infobrasil-sistemas/info-vendas-api/commit/0744f72f02546a6700c7efd19d67e5b14e5e53b1))
+* order by id 2 ([0d1a3f2](https://github.com/infobrasil-sistemas/info-vendas-api/commit/0d1a3f284f35896e7948723eb16587759fcaecbf))
+* **order:** throw NotFoundException when order is not found in getOrderById ([7cf7e1c](https://github.com/infobrasil-sistemas/info-vendas-api/commit/7cf7e1ce17eb819ee4bdeca45535d462bfd60da7))
+
 ## [1.16.12](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.16.11...v1.16.12) (2026-07-15)
 
 
