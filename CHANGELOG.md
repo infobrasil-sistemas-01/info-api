@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.16.15](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.16.13...v1.16.15) (2026-08-05)
+
+
+### Bug Fixes
+
+* POST /deliveries ([56bd3dc](https://github.com/infobrasil-sistemas-01/info-api/commit/56bd3dcd33b55f74ebe3b5725e45dde3730ed5be))
+
 ## [1.16.13](https://github.com/infobrasil-sistemas/info-vendas-api/compare/v1.16.12...v1.16.13) (2026-07-29)
 
 
