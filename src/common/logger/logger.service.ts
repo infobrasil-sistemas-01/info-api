@@ -30,9 +30,32 @@ const NOISY_CONTEXTS = [
 @Injectable()
 export class GlobalLoggerService extends ConsoleLogger {
   // ------------------------------------------------------------------ error
-  error(message: any, stack?: string, context?: string): void {
-    super.error(message, stack, context);
-    this.toSentryError(message, stack, context);
+  error(message: any, stack?: any, context?: string): void {
+    let resolvedStack: string | undefined = undefined;
+    const resolvedContext: string | undefined = context;
+
+    if (typeof stack === 'string') {
+      resolvedStack = stack;
+    } else if (stack instanceof Error) {
+      resolvedStack = stack.stack;
+    } else if (stack && typeof stack === 'object') {
+      if (typeof (stack as any).stack === 'string') {
+        resolvedStack = (stack as any).stack;
+      } else if (typeof (stack as any).message === 'string') {
+        resolvedStack = (stack as any).message;
+      } else {
+        try {
+          resolvedStack = JSON.stringify(stack);
+        } catch {
+          resolvedStack = String(stack);
+        }
+      }
+    } else if (message instanceof Error && !resolvedStack) {
+      resolvedStack = message.stack;
+    }
+
+    super.error(message, resolvedStack, resolvedContext);
+    this.toSentryError(message, resolvedStack, resolvedContext);
   }
 
   // ------------------------------------------------------------------ warn
@@ -70,8 +93,17 @@ export class GlobalLoggerService extends ConsoleLogger {
       if (stack) scope.setExtra('stack', stack);
 
       const err =
-        message instanceof Error ? message : new Error(String(message));
-      if (stack && !(message instanceof Error)) {
+        message instanceof Error
+          ? message
+          : new Error(
+              typeof message === 'string'
+                ? message
+                : typeof message === 'object' && message !== null
+                  ? JSON.stringify(message)
+                  : String(message),
+            );
+
+      if (stack && typeof stack === 'string' && !(message instanceof Error)) {
         err.stack = stack;
       }
       Sentry.captureException(err);

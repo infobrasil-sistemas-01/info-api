@@ -317,7 +317,9 @@ export class DeliveryService {
         );
       })) as any;
 
-      const entNumero = insertResult?.ENT_NUMERO;
+      const entNumero = Array.isArray(insertResult)
+        ? insertResult[0]?.ENT_NUMERO
+        : insertResult?.ENT_NUMERO;
       if (!entNumero) {
         throw new Error('Falha ao obter número da entrega gerado');
       }
@@ -358,7 +360,11 @@ export class DeliveryService {
       await new Promise((resolve, reject) => {
         transaction.commit((err: any) => {
           if (err) {
-            transaction.rollback();
+            if (transaction) {
+              try {
+                transaction.rollback();
+              } catch {}
+            }
             return reject(err);
           }
           resolve(true);
@@ -372,7 +378,11 @@ export class DeliveryService {
 
       return this.getById(credentialsId, entNumero);
     } catch (error) {
-      transaction.rollback();
+      if (transaction) {
+        try {
+          transaction.rollback();
+        } catch {}
+      }
       this.logger.error(
         `Erro ao inserir entrega. Tenant: ${credentialsId}`,
         error,

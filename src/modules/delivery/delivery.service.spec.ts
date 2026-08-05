@@ -242,6 +242,37 @@ describe('DeliveryService', () => {
       expect(mockTransaction.commit).toHaveBeenCalled();
     });
 
+    it('should insert a delivery successfully when returning result as array', async () => {
+      mockTransaction.query.mockImplementation((query, params, callback) => {
+        if (query.includes('INSERT INTO entregas')) {
+          callback(null, [{ ENT_NUMERO: 100 }]);
+        } else {
+          callback(null, {});
+        }
+      });
+
+      const mockDeliveryDetail = {
+        VEN_NUMERO: 12345,
+        ENT_NUMERO: 100,
+        PRE_CODIGO: 1,
+      };
+
+      mockConnection.query
+        .mockImplementationOnce((query, params, callback) => {
+          callback(null, [mockDeliveryDetail]);
+        })
+        .mockImplementationOnce((query, params, callback) => {
+          callback(null, []);
+        });
+
+      const result = await service.create('cred-1', mockDeliveryInput as any);
+
+      expect(result).toEqual({
+        ...mockDeliveryDetail,
+        items: [],
+      });
+    });
+
     it('should rollback transaction and throw error if inserting delivery fails', async () => {
       mockTransaction.query.mockImplementation((query, params, callback) => {
         if (query.includes('INSERT INTO entregas')) {
