@@ -89,6 +89,10 @@ export class ClientService {
   }
 
   async getById(credentialsId: string, storeId: number = 1, id: number) {
+    if (!id || Number.isNaN(Number(id)) || Number(id) <= 0) {
+      throw new BadRequestException('ID do cliente inválido.');
+    }
+
     const connection =
       await this.tenantConnectionService.getConnection(credentialsId);
 
@@ -178,6 +182,10 @@ export class ClientService {
     id: number,
     data: UpdateClientDto,
   ) {
+    if (!id || Number.isNaN(Number(id)) || Number(id) <= 0) {
+      throw new BadRequestException('ID do cliente inválido.');
+    }
+
     const connection =
       await this.tenantConnectionService.getConnection(credentialsId);
 

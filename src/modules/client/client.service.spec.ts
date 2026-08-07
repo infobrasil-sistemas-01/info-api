@@ -92,6 +92,20 @@ describe('ClientService', () => {
         expect.any(Function),
       );
     });
+
+    it('should throw BadRequestException for invalid id', async () => {
+      await expect(
+        service.getById('cred-1', 1, NaN as any),
+      ).rejects.toThrow(BadRequestException);
+
+      await expect(
+        service.getById('cred-1', 1, 0),
+      ).rejects.toThrow(BadRequestException);
+
+      await expect(
+        service.getById('cred-1', 1, null as any),
+      ).rejects.toThrow(BadRequestException);
+    });
   });
 
   describe('create', () => {
@@ -159,6 +173,12 @@ describe('ClientService', () => {
       await expect(
         service.update('cred-1', 1, 999, { CLI_NOME: 'test' }),
       ).rejects.toThrow(NotFoundException);
+    });
+
+    it('should throw BadRequestException if id is invalid in update', async () => {
+      await expect(
+        service.update('cred-1', 1, NaN as any, { CLI_NOME: 'test' }),
+      ).rejects.toThrow(BadRequestException);
     });
   });
 });

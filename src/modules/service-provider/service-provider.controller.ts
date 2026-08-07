@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, Query, UseGuards } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiTags,
@@ -61,7 +61,10 @@ export class ServiceProviderController {
     description: 'Detalhes do prestador de serviço',
     type: ServiceProviderDetailResponseDto,
   })
-  async getById(@CurrentUser() user: any, @Param('id') id: number) {
+  async getById(
+    @CurrentUser() user: any,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
     return this.serviceProviderService.getById(user.credentials_id, id);
   }
 }

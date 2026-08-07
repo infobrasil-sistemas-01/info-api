@@ -4,6 +4,7 @@ import {
   Controller,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -140,7 +141,7 @@ export class ProductGroupController {
   })
   async updateGroup(
     @Req() req: ReqWithAuthContext,
-    @Param('id') id: number,
+    @Param('id', ParseIntPipe) id: number,
     @Body() body: UpdateGroupDto,
   ) {
     const credentialsId = req.authContext?.credentialsId;

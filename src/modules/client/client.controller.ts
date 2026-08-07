@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -69,7 +70,10 @@ export class ClientController {
     description: 'Detalhes do cliente',
     type: ClientDetailResponseDto,
   })
-  async getById(@CurrentUser() user: any, @Param('id') id: number) {
+  async getById(
+    @CurrentUser() user: any,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
     return this.clientService.getById(user.credentials_id, user.store_id, id);
   }
 
@@ -95,7 +99,7 @@ export class ClientController {
   })
   async update(
     @CurrentUser() user: any,
-    @Param('id') id: number,
+    @Param('id', ParseIntPipe) id: number,
     @Body() body: UpdateClientDto,
   ) {
     return this.clientService.update(

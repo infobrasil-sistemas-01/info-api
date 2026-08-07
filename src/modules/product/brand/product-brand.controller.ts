@@ -9,6 +9,7 @@ import {
   UseGuards,
   Patch,
   Param,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { ProductBrandService } from './product-brand.service';
 import {
@@ -140,7 +141,7 @@ export class ProductBrandController {
   })
   async updateBrand(
     @Req() req: ReqWithAuthContext,
-    @Param('id') id: number,
+    @Param('id', ParseIntPipe) id: number,
     @Body() body: UpdateBrandDto,
   ) {
     const credentialsId = req.authContext?.credentialsId;

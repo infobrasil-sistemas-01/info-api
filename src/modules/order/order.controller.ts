@@ -4,6 +4,7 @@ import {
   Get,
   NotFoundException,
   Param,
+  ParseIntPipe,
   Post,
   Query,
   Req,
@@ -187,7 +188,7 @@ export class OrderController {
   })
   async getOrderById(
     @Req() req: ReqWithAuthContext,
-    @Param('id') id: number,
+    @Param('id', ParseIntPipe) id: number,
     @Query() query: GetOrderByIdQueryDto,
   ) {
     const { credentialsId, storeId: storeIdToken } = req.authContext || {};

@@ -1,5 +1,5 @@
 import type { ReqWithAuthContext } from './../auth/guards/jwt-auth.guard';
-import { Controller, Get, Param, Query, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, Query, Req, UseGuards } from '@nestjs/common';
 import { AccountPayableService } from './account-payable.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import {
@@ -87,7 +87,7 @@ export class AccountPayableController {
   })
   getAccountPayableById(
     @Req() req: ReqWithAuthContext,
-    @Param('id') id: number,
+    @Param('id', ParseIntPipe) id: number,
   ) {
     const credentialsId = req.authContext?.credentialsId;
 

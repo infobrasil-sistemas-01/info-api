@@ -6,6 +6,7 @@ import {
   Query,
   NotFoundException,
   Param,
+  ParseIntPipe,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -108,7 +109,7 @@ export class ProductController {
   })
   async getProductById(
     @Req() req: ReqWithAuthContext,
-    @Param('id') id: number,
+    @Param('id', ParseIntPipe) id: number,
     @Query() query: GetProductQueryDto,
   ) {
     const credentialsId = req.authContext?.credentialsId;

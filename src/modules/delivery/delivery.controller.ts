@@ -4,6 +4,7 @@ import {
   Post,
   Body,
   Param,
+  ParseIntPipe,
   Query,
   Req,
   UseGuards,
@@ -136,7 +137,7 @@ export class DeliveryController {
   })
   async getDeliveryById(
     @Req() req: ReqWithAuthContext,
-    @Param('id') id: number,
+    @Param('id', ParseIntPipe) id: number,
     @Query() query: GetDeliveryByIdQueryDto,
   ) {
     const { credentialsId, storeId: storeIdToken } = req.authContext || {};
