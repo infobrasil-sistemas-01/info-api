@@ -294,6 +294,26 @@ export const PERMISSIONS = [
     descricao: 'Deletar entregas do tenant',
     module: 'tenant',
   },
+  {
+    key: 'tenant.call-centers.view',
+    descricao: 'Visualizar atendimentos do call center do tenant',
+    module: 'tenant',
+  },
+  {
+    key: 'tenant.call-centers.create',
+    descricao: 'Criar atendimentos do call center do tenant',
+    module: 'tenant',
+  },
+  {
+    key: 'tenant.call-centers.update',
+    descricao: 'Atualizar atendimentos do call center do tenant',
+    module: 'tenant',
+  },
+  {
+    key: 'tenant.call-centers.delete',
+    descricao: 'Deletar atendimentos do call center do tenant',
+    module: 'tenant',
+  },
 
   // ========= SOLICITAÇÕES =========
   {

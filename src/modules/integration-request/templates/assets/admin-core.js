@@ -827,6 +827,7 @@ const LABEL_MAP = {
     'suppliers': 'Fornecedores',
     'service-providers': 'Prestadores de Serviço',
     'deliveries': 'Entregas',
+    'call-centers': 'Call Center',
     'announcement': 'Avisos & Notificações',
     'dbcredential': 'Credenciais DB',
     'payment-plans': 'Planos de Pagamento',

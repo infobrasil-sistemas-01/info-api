@@ -71,6 +71,7 @@ const Translations = {
         'suppliers': 'Fornecedores',
         'service-providers': 'Prestadores',
         'deliveries': 'Entregas',
+        'call-centers': 'Call Center',
         'announcement': 'Avisos do Sistema',
     },
     actions: {
