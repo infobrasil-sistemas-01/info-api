@@ -1099,13 +1099,21 @@
                 grid.innerHTML = plans.map((p, index) => {
                     let priceHtml = 'Sob Consulta';
                     if (p.price !== null && p.price !== undefined) {
-                        const numPrice = Number(p.price);
-                        if (numPrice === 0) {
-                            priceHtml = `R$ 0<span>/mês</span>`;
-                        } else {
-                            priceHtml = `R$ ${numPrice.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}<span>/mês</span>`;
+                        let rawVal = p.price;
+                        if (typeof rawVal === 'object' && rawVal !== null && 'd' in rawVal) {
+                            rawVal = rawVal.d ? rawVal.d[0] : Number(rawVal);
+                        }
+                        const numPrice = Number(rawVal);
+                        if (!isNaN(numPrice)) {
+                            if (numPrice === 0) {
+                                priceHtml = `R$ 0<span>/mês</span>`;
+                            } else {
+                                priceHtml = `R$ ${numPrice.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}<span>/mês</span>`;
+                            }
                         }
                     }
+
+                    const formattedReqMonth = (p.reqMonth || 0).toLocaleString('pt-BR');
 
                     return `
                         <div class="plan-card ${index === 1 ? 'featured' : ''}">
@@ -1116,7 +1124,7 @@
                                     <i class='bx bx-check'></i> 
                                     <div>
                                         <span class="has-tooltip">
-                                            ${p.reqMonth.toLocaleString()} req/mês
+                                            ${formattedReqMonth} req/mês
                                             <span class="tooltip">Cota total de chamadas que sua integração pode realizar mensalmente.</span>
                                         </span>
                                     </div>

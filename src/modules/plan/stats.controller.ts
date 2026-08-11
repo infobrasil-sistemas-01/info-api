@@ -45,8 +45,13 @@ export class StatsController {
     type: [PlanResponseDto],
   })
   async findAll() {
-    return this.prisma.plan.findMany({
+    const plans = await this.prisma.plan.findMany({
       orderBy: { reqMonth: 'asc' },
     });
+
+    return plans.map((p) => ({
+      ...p,
+      price: p.price !== null && p.price !== undefined ? Number(p.price) : null,
+    }));
   }
 }

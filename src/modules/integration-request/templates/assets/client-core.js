@@ -428,10 +428,17 @@ const UI = {
 
             grid.innerHTML = plans.map(p => {
                 const isCurrent = p.name === this.currentPlanName;
-                const hasPrice = p.price !== null && p.price !== undefined;
-                const formattedPrice = hasPrice
-                    ? (Number(p.price) === 0 ? '0,00' : Number(p.price).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }))
+                let rawVal = p.price;
+                if (typeof rawVal === 'object' && rawVal !== null && 'd' in rawVal) {
+                    rawVal = rawVal.d ? rawVal.d[0] : Number(rawVal);
+                }
+                const numPrice = rawVal !== null && rawVal !== undefined ? Number(rawVal) : NaN;
+                const hasValidPrice = !isNaN(numPrice);
+                const formattedPrice = hasValidPrice
+                    ? (numPrice === 0 ? '0,00' : numPrice.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }))
                     : 'Sob Consulta';
+
+                const formattedReqMonth = (p.reqMonth || 0).toLocaleString('pt-BR');
 
                 return `
                     <div class="card upgrade-card ${p.name === 'Advanced' ? 'featured' : ''} ${isCurrent ? 'current' : ''}">
@@ -439,15 +446,15 @@ const UI = {
                         <div class="plan-header">
                             <h2 class="plan-title">${p.name}</h2>
                             <div class="plan-price">
-                                ${hasPrice ? '<span class="currency">R$</span>' : ''}
+                                ${hasValidPrice ? '<span class="currency">R$</span>' : ''}
                                 <span class="amount">${formattedPrice}</span>
                             </div>
                         </div>
                         <p class="plan-description">${p.description || 'Plano ideal para suas necessidades de integração.'}</p>
                         <ul class="plan-features">
-                            <li><strong>${p.reqMonth.toLocaleString()}</strong> req/mês</li>
-                            <li>Limite de <strong>${p.maxPageSize}</strong> registros</li>
-                            <li>Range de <strong>${p.maxDateRangeDays}</strong> dias</li>
+                            <li><strong>${formattedReqMonth}</strong> req/mês</li>
+                            <li>Limite de <strong>${p.maxPageSize || 0}</strong> registros</li>
+                            <li>Range de <strong>${p.maxDateRangeDays || 0}</strong> dias</li>
                         </ul>
                     </div>
                 `;
