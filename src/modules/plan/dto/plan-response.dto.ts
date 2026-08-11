@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class PlanResponseDto {
   @ApiProperty({
@@ -30,4 +30,11 @@ export class PlanResponseDto {
     example: 30,
   })
   maxDateRangeDays!: number;
+
+  @ApiPropertyOptional({
+    description: 'Preço mensal do plano em R$ (null indica sob consulta)',
+    example: 199.9,
+    nullable: true,
+  })
+  price?: number | null;
 }

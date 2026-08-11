@@ -140,7 +140,8 @@ exports.Prisma.PlanScalarFieldEnum = {
   reqMin: 'reqMin',
   reqMonth: 'reqMonth',
   maxPageSize: 'maxPageSize',
-  maxDateRangeDays: 'maxDateRangeDays'
+  maxDateRangeDays: 'maxDateRangeDays',
+  price: 'price'
 };
 
 exports.Prisma.RequestLogScalarFieldEnum = {

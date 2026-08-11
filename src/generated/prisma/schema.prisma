@@ -31,12 +31,13 @@ model User {
 }
 
 model Plan {
-  id               String @id @default(uuid())
-  name             String @unique
-  reqMin           Int    @map("req_min")
-  reqMonth         Int    @map("req_month")
-  maxPageSize      Int    @map("max_page_size")
-  maxDateRangeDays Int    @map("max_date_range_days")
+  id               String   @id @default(uuid())
+  name             String   @unique
+  reqMin           Int      @map("req_min")
+  reqMonth         Int      @map("req_month")
+  maxPageSize      Int      @map("max_page_size")
+  maxDateRangeDays Int      @map("max_date_range_days")
+  price            Decimal? @db.Decimal(10, 2)
   users            User[]
 
   @@map("plans")

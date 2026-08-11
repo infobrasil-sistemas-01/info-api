@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '../src/generated/prisma';
 import { PrismaPg } from '@prisma/adapter-pg';
 import 'dotenv/config';
 
@@ -14,13 +14,15 @@ async function main() {
       reqMonth: 10000,
       maxPageSize: 100,
       maxDateRangeDays: 7,
+      price: 0,
     },
     {
       name: 'Profissional',
       reqMin: 120,
-      reqMonth: 300000,
+      reqMonth: 500000,
       maxPageSize: 500,
       maxDateRangeDays: 31,
+      price: 199,
     },
     {
       name: 'Enterprise',
@@ -28,6 +30,7 @@ async function main() {
       reqMonth: 1500000,
       maxPageSize: 1000,
       maxDateRangeDays: 92,
+      price: 499,
     },
   ];
 

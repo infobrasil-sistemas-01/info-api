@@ -428,14 +428,19 @@ const UI = {
 
             grid.innerHTML = plans.map(p => {
                 const isCurrent = p.name === this.currentPlanName;
+                const hasPrice = p.price !== null && p.price !== undefined;
+                const formattedPrice = hasPrice
+                    ? (Number(p.price) === 0 ? '0,00' : Number(p.price).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }))
+                    : 'Sob Consulta';
+
                 return `
                     <div class="card upgrade-card ${p.name === 'Advanced' ? 'featured' : ''} ${isCurrent ? 'current' : ''}">
                         ${isCurrent ? '<div class="current-plan-banner">SEU PLANO ATUAL</div>' : ''}
                         <div class="plan-header">
                             <h2 class="plan-title">${p.name}</h2>
                             <div class="plan-price">
-                                <span class="currency">R$</span>
-                                <span class="amount">${p.name === 'Free' ? '0,00' : 'Sob Consulta'}</span>
+                                ${hasPrice ? '<span class="currency">R$</span>' : ''}
+                                <span class="amount">${formattedPrice}</span>
                             </div>
                         </div>
                         <p class="plan-description">${p.description || 'Plano ideal para suas necessidades de integração.'}</p>
