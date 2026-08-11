@@ -1097,11 +1097,12 @@
                 }
 
                 grid.innerHTML = plans.map((p, index) => {
+                    const isConsultation = p.price === null || p.price === undefined;
                     let priceHtml = 'Sob Consulta';
-                    if (p.price !== null && p.price !== undefined) {
+                    if (!isConsultation) {
                         let rawVal = p.price;
                         if (typeof rawVal === 'object' && rawVal !== null && 'd' in rawVal) {
-                            rawVal = rawVal.d ? rawVal.d[0] : Number(rawVal);
+                            rawVal = Array.isArray(rawVal.d) ? rawVal.d[0] : Number(rawVal);
                         }
                         const numPrice = Number(rawVal);
                         if (!isNaN(numPrice)) {
@@ -1133,7 +1134,7 @@
                                     <i class='bx bx-check'></i> 
                                     <div>
                                         <span class="has-tooltip">
-                                            ${p.reqMin} req/minuto
+                                            ${p.reqMin || 0} req/minuto
                                             <span class="tooltip">Volume máximo de chamadas simultâneas para garantir a saúde do servidor.</span>
                                         </span>
                                     </div>
@@ -1142,7 +1143,7 @@
                                     <i class='bx bx-check'></i> 
                                     <div>
                                         <span class="has-tooltip">
-                                            ${p.maxDateRangeDays} dias de range
+                                            ${p.maxDateRangeDays || 0} dias de range
                                             <span class="tooltip">Período máximo de dias permitido em filtros de data (ex: buscar vendas).</span>
                                         </span>
                                     </div>
@@ -1151,7 +1152,7 @@
                                     <i class='bx bx-check'></i> 
                                     <div>
                                         <span class="has-tooltip">
-                                            Max ${p.maxPageSize} registros
+                                            Max ${p.maxPageSize || 0} registros
                                             <span class="tooltip">Limite de registros retornados em uma única chamada de listagem (paginação).</span>
                                         </span>
                                     </div>
