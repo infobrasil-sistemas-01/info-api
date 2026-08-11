@@ -67,7 +67,9 @@ export class CallCenterService {
       let query = `SELECT FIRST ? SKIP ?
         CC.CAL_NUMERO,
         CC.CLI_CODIGO,
+        C.CLI_NOME,
         CC.USU_CODIGO,
+        U.USU_NOME,
         CC.CAL_DATA,
         CC.CAL_HORA,
         CC.CAL_STATUS,
@@ -79,6 +81,7 @@ export class CallCenterService {
         CC.CAL_DATABAIXA,
         CC.CAL_HORABAIXA,
         CC.VEN_NUMERO,
+        V.VEN_NOME,
         CC.PAS_NUMERO,
         CC.FAT_CODIGO,
         CC.TOP_CODIGO,
@@ -92,6 +95,9 @@ export class CallCenterService {
         T.TOP_DESCRICAO,
         F.FAT_DESCRICAO
       FROM CALLCENTER CC
+      LEFT JOIN CLIENTES C ON CC.CLI_CODIGO = C.CLI_CODIGO
+      LEFT JOIN USUARIOS U ON CC.USU_CODIGO = U.USU_CODIGO
+      LEFT JOIN VENDEDORES V ON CC.VEN_NUMERO = V.VEN_NUMERO
       LEFT JOIN APLICACOES A ON CC.APL_CODIGO = A.APL_CODIGO
       LEFT JOIN TOPICOS T ON CC.TOP_CODIGO = T.TOP_CODIGO
       LEFT JOIN FORMASATENDIMENTOS F ON CC.FAT_CODIGO = F.FAT_CODIGO
@@ -133,6 +139,8 @@ export class CallCenterService {
         );
       }
 
+      query += ' ORDER BY CC.CAL_DATA DESC, CC.CAL_NUMERO DESC';
+
       const queryStartTime = Date.now();
       const rawResult = await new Promise<any[]>((resolve, reject) => {
         connection.query(query, params, (err: any, res: any) => {
@@ -169,7 +177,9 @@ export class CallCenterService {
       const query = `SELECT 
         CC.CAL_NUMERO,
         CC.CLI_CODIGO,
+        C.CLI_NOME,
         CC.USU_CODIGO,
+        U.USU_NOME,
         CC.CAL_DATA,
         CC.CAL_HORA,
         CC.CAL_STATUS,
@@ -181,6 +191,7 @@ export class CallCenterService {
         CC.CAL_DATABAIXA,
         CC.CAL_HORABAIXA,
         CC.VEN_NUMERO,
+        V.VEN_NOME,
         CC.PAS_NUMERO,
         CC.FAT_CODIGO,
         CC.TOP_CODIGO,
@@ -194,6 +205,9 @@ export class CallCenterService {
         T.TOP_DESCRICAO,
         F.FAT_DESCRICAO
       FROM CALLCENTER CC
+      LEFT JOIN CLIENTES C ON CC.CLI_CODIGO = C.CLI_CODIGO
+      LEFT JOIN USUARIOS U ON CC.USU_CODIGO = U.USU_CODIGO
+      LEFT JOIN VENDEDORES V ON CC.VEN_NUMERO = V.VEN_NUMERO
       LEFT JOIN APLICACOES A ON CC.APL_CODIGO = A.APL_CODIGO
       LEFT JOIN TOPICOS T ON CC.TOP_CODIGO = T.TOP_CODIGO
       LEFT JOIN FORMASATENDIMENTOS F ON CC.FAT_CODIGO = F.FAT_CODIGO

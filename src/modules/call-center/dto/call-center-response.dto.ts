@@ -7,8 +7,14 @@ export class CallCenterResponseDto {
   @ApiProperty({ description: 'Código do cliente (CLI_CODIGO)' })
   CLI_CODIGO: number;
 
+  @ApiPropertyOptional({ description: 'Nome do cliente (CLI_NOME)' })
+  CLI_NOME?: string;
+
   @ApiProperty({ description: 'Código do usuário (USU_CODIGO)' })
   USU_CODIGO: number;
+
+  @ApiPropertyOptional({ description: 'Nome do usuário (USU_NOME)' })
+  USU_NOME?: string;
 
   @ApiProperty({ description: 'Data do atendimento (CAL_DATA)' })
   CAL_DATA: string;
@@ -42,6 +48,9 @@ export class CallCenterResponseDto {
 
   @ApiPropertyOptional({ description: 'Número do vendedor (VEN_NUMERO)' })
   VEN_NUMERO?: number;
+
+  @ApiPropertyOptional({ description: 'Nome do vendedor (VEN_NOME)' })
+  VEN_NOME?: string;
 
   @ApiPropertyOptional({ description: 'Número do passaporte/pacote (PAS_NUMERO)' })
   PAS_NUMERO?: number;
