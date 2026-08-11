@@ -13,7 +13,7 @@ export class CallCenterService {
 
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
-  ) {}
+  ) { }
 
   private async parseBlob(blobField: any): Promise<string | null> {
     if (!blobField) return null;
@@ -157,8 +157,7 @@ export class CallCenterService {
       this.logger.log(
         `Busca de call center executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
           queryDto,
-        )}, Itens: ${mappedResult.length}, Tempo SQL: ${
-          queryEndTime - queryStartTime
+        )}, Itens: ${mappedResult.length}, Tempo SQL: ${queryEndTime - queryStartTime
         }ms`,
       );
 
@@ -191,7 +190,6 @@ export class CallCenterService {
         CC.CAL_DATABAIXA,
         CC.CAL_HORABAIXA,
         CC.VEN_NUMERO,
-        V.VEN_NOME,
         CC.PAS_NUMERO,
         CC.FAT_CODIGO,
         CC.TOP_CODIGO,
@@ -207,7 +205,6 @@ export class CallCenterService {
       FROM CALLCENTER CC
       LEFT JOIN CLIENTES C ON CC.CLI_CODIGO = C.CLI_CODIGO
       LEFT JOIN USUARIOS U ON CC.USU_CODIGO = U.USU_CODIGO
-      LEFT JOIN VENDEDORES V ON CC.VEN_NUMERO = V.VEN_NUMERO
       LEFT JOIN APLICACOES A ON CC.APL_CODIGO = A.APL_CODIGO
       LEFT JOIN TOPICOS T ON CC.TOP_CODIGO = T.TOP_CODIGO
       LEFT JOIN FORMASATENDIMENTOS F ON CC.FAT_CODIGO = F.FAT_CODIGO
