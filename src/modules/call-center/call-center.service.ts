@@ -13,29 +13,28 @@ export class CallCenterService {
 
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
-  ) { }
+  ) {}
 
   private async parseBlob(blobField: any): Promise<string | null> {
     if (!blobField) return null;
     if (typeof blobField === 'string') return blobField;
     if (Buffer.isBuffer(blobField)) return blobField.toString('utf-8');
     if (typeof blobField === 'function') {
-      return new Promise((resolve, reject) => {
-        blobField((err: any, _name: any, eventEmitter: any) => {
-          if (err) return reject(err);
-          if (!eventEmitter) return resolve(null);
-          let data = '';
-          eventEmitter.on('data', (chunk: any) => {
-            data += chunk.toString('utf-8');
-          });
-          eventEmitter.on('end', () => {
-            resolve(data);
-          });
-          eventEmitter.on('error', (e: any) => {
-            reject(e);
+      try {
+        return await new Promise((resolve) => {
+          blobField((err: any, _name: any, eventEmitter: any) => {
+            if (err || !eventEmitter) return resolve(null);
+            let data = '';
+            eventEmitter.on('data', (chunk: any) => {
+              data += chunk.toString('utf-8');
+            });
+            eventEmitter.on('end', () => resolve(data));
+            eventEmitter.on('error', () => resolve(null));
           });
         });
-      });
+      } catch {
+        return null;
+      }
     }
     return String(blobField);
   }
@@ -76,8 +75,8 @@ export class CallCenterService {
         CC.CAL_CONTATO,
         CC.CAL_DATAPROXLIGACAO,
         CC.CAL_HORAPROXLIGACAO,
-        CC.CAL_DEPOIMENTO,
-        CC.CAL_RELATORIO,
+        CAST(CC.CAL_DEPOIMENTO AS VARCHAR(8000)) AS CAL_DEPOIMENTO,
+        CAST(CC.CAL_RELATORIO AS VARCHAR(8000)) AS CAL_RELATORIO,
         CC.CAL_DATABAIXA,
         CC.CAL_HORABAIXA,
         CC.VEN_NUMERO,
@@ -89,7 +88,7 @@ export class CallCenterService {
         CC.CAL_BLOQUEADO,
         CC.LOJ_CODIGO,
         CC.CAL_EMAILENVIADO,
-        CC.CAL_OUTRASINFO,
+        CAST(CC.CAL_OUTRASINFO AS VARCHAR(8000)) AS CAL_OUTRASINFO,
         A.APL_DESCRICAO,
         T.TOP_DESCRICAO,
         F.FAT_DESCRICAO
@@ -150,7 +149,8 @@ export class CallCenterService {
       this.logger.log(
         `Busca de call center executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
           queryDto,
-        )}, Itens: ${mappedResult.length}, Tempo SQL: ${queryEndTime - queryStartTime
+        )}, Itens: ${mappedResult.length}, Tempo SQL: ${
+          queryEndTime - queryStartTime
         }ms`,
       );
 
@@ -178,8 +178,8 @@ export class CallCenterService {
         CC.CAL_CONTATO,
         CC.CAL_DATAPROXLIGACAO,
         CC.CAL_HORAPROXLIGACAO,
-        CC.CAL_DEPOIMENTO,
-        CC.CAL_RELATORIO,
+        CAST(CC.CAL_DEPOIMENTO AS VARCHAR(8000)) AS CAL_DEPOIMENTO,
+        CAST(CC.CAL_RELATORIO AS VARCHAR(8000)) AS CAL_RELATORIO,
         CC.CAL_DATABAIXA,
         CC.CAL_HORABAIXA,
         CC.VEN_NUMERO,
@@ -191,7 +191,7 @@ export class CallCenterService {
         CC.CAL_BLOQUEADO,
         CC.LOJ_CODIGO,
         CC.CAL_EMAILENVIADO,
-        CC.CAL_OUTRASINFO,
+        CAST(CC.CAL_OUTRASINFO AS VARCHAR(8000)) AS CAL_OUTRASINFO,
         A.APL_DESCRICAO,
         T.TOP_DESCRICAO,
         F.FAT_DESCRICAO
