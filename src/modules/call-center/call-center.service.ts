@@ -123,11 +123,6 @@ export class CallCenterService {
         params.push(queryDto.storeId);
       }
 
-      if (queryDto.sellerId) {
-        query += ' AND CC.VEN_NUMERO = ?';
-        params.push(queryDto.sellerId);
-      }
-
       if (queryDto.startDate && queryDto.endDate) {
         query += ' AND CC.CAL_DATA BETWEEN ? AND ?';
         params.push(queryDto.startDate, queryDto.endDate);

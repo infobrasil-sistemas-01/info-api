@@ -44,15 +44,14 @@ describe('CallCenterService', () => {
           CLI_CODIGO: 10,
           CLI_NOME: 'Cliente João Silva',
           USU_CODIGO: 5,
-          USU_NOME: 'Usuário Atendente',
+          USU_APELIDO: 'Atendente João',
           CAL_DATA: '2026-08-10',
           CAL_HORA: '10:00:00',
           CAL_STATUS: 'P',
           CAL_DEPOIMENTO: 'Depoimento em texto',
           CAL_RELATORIO: null,
           CAL_OUTRASINFO: null,
-          VEN_NUMERO: 2,
-          VEN_NOME: 'Vendedor Pedro',
+          VEN_NUMERO: 1002,
           APL_DESCRICAO: 'Aplicação Teste',
           TOP_DESCRICAO: 'Tópico Teste',
           FAT_DESCRICAO: 'Forma Teste',
@@ -64,7 +63,6 @@ describe('CallCenterService', () => {
           expect(query).toContain('ORDER BY CC.CAL_DATA DESC, CC.CAL_NUMERO DESC');
           expect(query).toContain('LEFT JOIN CLIENTES');
           expect(query).toContain('LEFT JOIN USUARIOS');
-          expect(query).toContain('LEFT JOIN VENDEDORES');
           callback(null, mockResult);
         },
       );
@@ -81,8 +79,8 @@ describe('CallCenterService', () => {
       expect(result).toHaveLength(1);
       expect(result[0].CAL_NUMERO).toEqual(1);
       expect(result[0].CLI_NOME).toEqual('Cliente João Silva');
-      expect(result[0].USU_NOME).toEqual('Usuário Atendente');
-      expect(result[0].VEN_NOME).toEqual('Vendedor Pedro');
+      expect(result[0].USU_APELIDO).toEqual('Atendente João');
+      expect(result[0].VEN_NUMERO).toEqual(1002);
       expect(result[0].APL_DESCRICAO).toEqual('Aplicação Teste');
       expect(tenantConnectionService.releaseConnection).toHaveBeenCalledWith(
         mockConnection,
@@ -104,7 +102,7 @@ describe('CallCenterService', () => {
           CLI_CODIGO: 10,
           CLI_NOME: 'Cliente João Silva',
           USU_CODIGO: 5,
-          USU_NOME: 'Usuário Atendente',
+          USU_APELIDO: 'Atendente João',
           CAL_DATA: '2026-08-10',
           CAL_HORA: '10:00:00',
           CAL_STATUS: 'P',
@@ -127,7 +125,7 @@ describe('CallCenterService', () => {
 
       expect(result.CAL_NUMERO).toEqual(123);
       expect(result.CLI_NOME).toEqual('Cliente João Silva');
-      expect(result.USU_NOME).toEqual('Usuário Atendente');
+      expect(result.USU_APELIDO).toEqual('Atendente João');
       expect(result.APL_DESCRICAO).toEqual('Aplicação Teste');
     });
 

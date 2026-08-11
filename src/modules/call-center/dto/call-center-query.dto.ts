@@ -9,7 +9,6 @@ export const CallCenterQuerySchema = z.object({
   userId: z.coerce.number().optional(),
   status: z.string().max(1).optional(),
   storeId: z.coerce.number().optional(),
-  sellerId: z.coerce.number().optional(),
   startDate: z.string().optional(),
   endDate: z.string().optional(),
 });
@@ -52,12 +51,6 @@ export class CallCenterQueryDto extends ZodDto(CallCenterQuerySchema) {
     type: Number,
   })
   storeId?: number;
-
-  @ApiPropertyOptional({
-    description: 'Número do vendedor/representante (VEN_NUMERO)',
-    type: Number,
-  })
-  sellerId?: number;
 
   @ApiPropertyOptional({
     description: 'Data de atendimento inicial (YYYY-MM-DD)',
