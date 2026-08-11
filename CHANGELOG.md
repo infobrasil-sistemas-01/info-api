@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.16.16](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.16.15...v1.16.16) (2026-08-11)
+
+
+### Features
+
+* GET /call-centers ([0537d8e](https://github.com/infobrasil-sistemas-01/info-api/commit/0537d8e61d256585f91b5953b977938f54721378))
+* more fields o GET /call-centers && order ([7e39889](https://github.com/infobrasil-sistemas-01/info-api/commit/7e398896676dff4df64a334d852be62cd4513d51))
+
+
+### Bug Fixes
+
+* return 400 to invalid :id ([844173e](https://github.com/infobrasil-sistemas-01/info-api/commit/844173ec113d8af9e35c170823a7a9216fe89bf4))
+
 ## [1.16.15](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.16.13...v1.16.15) (2026-08-05)
 
 
