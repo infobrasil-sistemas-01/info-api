@@ -289,6 +289,60 @@ export class UserService {
   }
 
   async update(id: string, data: UpdateUserDto) {
+    const currentUser = await this.prisma.user.findUnique({
+      where: { id },
+      include: { plan: true },
+    });
+
+    if (!currentUser) {
+      throw new NotFoundException('Usuário não encontrado');
+    }
+
+    if (data.planId !== undefined && data.planId !== currentUser.planId) {
+      const isCurrentPlanFree =
+        !currentUser.plan ||
+        currentUser.plan.price === null ||
+        Number(currentUser.plan.price) <= 0;
+
+      let isNewPlanPaid = false;
+      if (data.planId) {
+        const newPlan = await this.prisma.plan.findUnique({
+          where: { id: data.planId },
+        });
+        isNewPlanPaid =
+          !!newPlan &&
+          newPlan.price !== null &&
+          Number(newPlan.price) > 0;
+      }
+
+      if (isCurrentPlanFree && isNewPlanPaid) {
+        const now = new Date();
+        const firstDayOfMonth = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          1,
+        );
+
+        await this.prisma.requestLog.deleteMany({
+          where: {
+            userId: id,
+            createdAt: { gte: firstDayOfMonth },
+          },
+        });
+
+        await this.prisma.usageAlertLog.deleteMany({
+          where: {
+            userId: id,
+            sentAt: { gte: firstDayOfMonth },
+          },
+        });
+
+        this.logger.log(
+          `Requests do mês zeradas para o usuário ${id} na transição de plano sem custo para plano pago.`,
+        );
+      }
+    }
+
     const { password, ...userData } = data;
 
     const updateData: any = { ...userData };
