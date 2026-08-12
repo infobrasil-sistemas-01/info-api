@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.16.17](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.16.16...v1.16.17) (2026-08-12)
+
+
+### Features
+
+* price on plans ([6705bfd](https://github.com/infobrasil-sistemas-01/info-api/commit/6705bfd94186d5a9dedf7c1b7a3a692352d63062))
+* price on plans - migration ([e217abf](https://github.com/infobrasil-sistemas-01/info-api/commit/e217abfeb8a9098bc79674c67a451d86db6cf1e6))
+* reset request logs on upgrade plan ([cd99deb](https://github.com/infobrasil-sistemas-01/info-api/commit/cd99deba135f765ceb4ffe5f0f34ee4c971a8aa5))
+
+
+### Bug Fixes
+
+* call-centers BLOB ID error ([8d6ebc1](https://github.com/infobrasil-sistemas-01/info-api/commit/8d6ebc172f7588098b1264d8e2f0a15260bb4c11))
+* fixed limit on pageSize ([3d6dba4](https://github.com/infobrasil-sistemas-01/info-api/commit/3d6dba43a9262927775c90dbfc3c52cad6a86b71))
+* GET /call-centers ([e41f62a](https://github.com/infobrasil-sistemas-01/info-api/commit/e41f62a842f6bb44febd62ee02c7026e3e371218))
+* GET /call-centers - USU_APELIDO ([b1de06e](https://github.com/infobrasil-sistemas-01/info-api/commit/b1de06e761eb029547b462c08e97b47cae348050))
+* GET /call-centers 2 ([84fa2bb](https://github.com/infobrasil-sistemas-01/info-api/commit/84fa2bbcf073d8ac5f50d22de661cdb56e504439))
+* plans on lp - 2 ([ec48633](https://github.com/infobrasil-sistemas-01/info-api/commit/ec4863389e11922dce94446328c924758a4a5e2d))
+* plans price on lp ([85755a2](https://github.com/infobrasil-sistemas-01/info-api/commit/85755a271154bb00720a6b3563d75c9953f6175c))
+* remove VEN_NUMERO to GET /call-centers ([1351c12](https://github.com/infobrasil-sistemas-01/info-api/commit/1351c12e9a118a657672de8346f9e9671597aec9))
+
 ## [1.16.16](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.16.15...v1.16.16) (2026-08-11)
 
 
