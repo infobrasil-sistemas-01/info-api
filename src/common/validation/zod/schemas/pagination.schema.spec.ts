@@ -36,7 +36,7 @@ describe('paginationQuerySchema', () => {
     test.each`
       input
       ${{ pageSize: 0 }}
-      ${{ pageSize: 51 }}
+      ${{ pageSize: -1 }}
     `('should reject invalid pageSize $input', ({ input }) => {
       expect(() => paginationQuerySchema.parse(input)).toThrow();
     });

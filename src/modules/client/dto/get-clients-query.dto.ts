@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 export const GetClientsQuerySchema = z.object({
   page: z.coerce.number().min(1).optional(),
-  pageSize: z.coerce.number().min(1).max(100).optional(),
+  pageSize: z.coerce.number().min(1).optional(),
   search: z.string().optional(),
   situation: z.enum(['A', 'I']).optional(),
   birthdate: z.string().optional(),

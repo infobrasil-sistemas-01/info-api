@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 export const GetDeliveriesQuerySchema = z.object({
   page: z.coerce.number().min(1).optional(),
-  pageSize: z.coerce.number().min(1).max(100).optional(),
+  pageSize: z.coerce.number().min(1).optional(),
   storeId: z.coerce.number().min(1).optional(),
   startDate: z
     .string()

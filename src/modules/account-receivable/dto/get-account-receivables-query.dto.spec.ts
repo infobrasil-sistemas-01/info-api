@@ -22,7 +22,7 @@ describe('GetAccountReceivablesQueryDto', () => {
 
   test.each([
     ['invalid page', { page: 0 }],
-    ['invalid pageSize', { pageSize: 101 }],
+    ['invalid pageSize zero', { pageSize: 0 }],
     ['invalid situation', { situation: 'X' }],
   ])('should reject %s', (_, input) => {
     expect(() => GetAccountReceivablesQuerySchema.parse(input)).toThrow();

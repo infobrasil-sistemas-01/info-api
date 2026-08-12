@@ -9,7 +9,7 @@ export enum AccountPayableSituation {
 
 export const AccountPayableQuerySchema = z.object({
   page: z.coerce.number().min(1).optional(),
-  pageSize: z.coerce.number().min(1).max(100).optional(),
+  pageSize: z.coerce.number().min(1).optional(),
   storeId: z.coerce.number().optional(),
   supplierId: z.coerce.number().optional(),
   situation: z.nativeEnum(AccountPayableSituation).optional(),

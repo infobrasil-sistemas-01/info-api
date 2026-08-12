@@ -10,11 +10,7 @@ export class PaymentPlanService {
   ) {}
 
   async get(credentialsId: string, page: number = 1, pageSize: number = 100) {
-    if (pageSize > 25) {
-      throw new BadRequestException(
-        'Page size must be less than or equal to 25',
-      );
-    }
+
 
     let connection: any;
     connection =

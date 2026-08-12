@@ -5,7 +5,7 @@ import { z } from 'zod';
 export const GetProductsQuerySchema = z.object({
   storeId: z.coerce.number().int(),
   page: z.coerce.number().int().min(1).optional(),
-  pageSize: z.coerce.number().int().min(1).max(100).optional(),
+  pageSize: z.coerce.number().int().min(1).optional(),
   priceTable: z.coerce.number().int().min(1).max(12).optional(),
   group: z.coerce.number().int().optional(),
   brand: z.coerce.number().int().optional(),

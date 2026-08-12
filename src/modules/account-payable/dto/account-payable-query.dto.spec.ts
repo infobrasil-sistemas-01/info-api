@@ -24,7 +24,7 @@ describe('AccountPayableQueryDto', () => {
 
   test.each([
     ['invalid page', { page: 0 }],
-    ['invalid pageSize', { pageSize: 101 }],
+    ['invalid pageSize zero', { pageSize: 0 }],
     ['invalid situation', { situation: 'X' }],
   ])('should reject %s', (_, input) => {
     expect(() => AccountPayableQuerySchema.parse(input)).toThrow();

@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 export const CallCenterQuerySchema = z.object({
   page: z.coerce.number().min(1).optional(),
-  pageSize: z.coerce.number().min(1).max(100).optional(),
+  pageSize: z.coerce.number().min(1).optional(),
   clientId: z.coerce.number().optional(),
   userId: z.coerce.number().optional(),
   status: z.string().max(1).optional(),

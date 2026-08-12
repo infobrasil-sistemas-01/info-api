@@ -50,10 +50,16 @@ describe('PaymentPlanService', () => {
       );
     });
 
-    it('should throw BadRequestException when pageSize is greater than 25', async () => {
-      await expect(service.get('cred-1', 1, 50)).rejects.toThrow(
-        BadRequestException,
+    it('should accept pageSize greater than 25', async () => {
+      const mockPlans = [{ PLP_CODIGO: 1, PLP_DESCRICAO: 'A VISTA' }];
+      mockConnection.query.mockImplementation(
+        (query: string, params: any[], callback: Function) => {
+          callback(null, mockPlans);
+        },
       );
+
+      const result = await service.get('cred-1', 1, 50);
+      expect(result).toEqual(mockPlans);
     });
   });
 });

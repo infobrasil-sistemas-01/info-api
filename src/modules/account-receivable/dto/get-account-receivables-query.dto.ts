@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 export const GetAccountReceivablesQuerySchema = z.object({
   page: z.coerce.number().min(1).optional(),
-  pageSize: z.coerce.number().min(1).max(100).optional(),
+  pageSize: z.coerce.number().min(1).optional(),
   storeId: z.coerce.number().optional(),
   clientId: z.coerce.number().optional(),
   arId: z.coerce.number().optional(),
