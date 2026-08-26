@@ -87,6 +87,46 @@ describe('CallCenterService', () => {
       );
     });
 
+    it('should correctly parse BLOB callback function and buffer fields (including large payloads)', async () => {
+      const largeText = 'A'.repeat(15000);
+      const mockBlobFunction = (cb: (err: any, name: any, emitter: any) => void) => {
+        const { EventEmitter } = require('events');
+        const emitter = new EventEmitter();
+        cb(null, 'CAL_RELATORIO', emitter);
+        setTimeout(() => {
+          emitter.emit('data', Buffer.from(largeText.slice(0, 8000)));
+          emitter.emit('data', Buffer.from(largeText.slice(8000)));
+          emitter.emit('end');
+        }, 1);
+      };
+
+      const mockResult = [
+        {
+          CAL_NUMERO: 2,
+          CLI_CODIGO: 10,
+          CAL_DEPOIMENTO: Buffer.from('Depoimento Buffer'),
+          CAL_RELATORIO: mockBlobFunction,
+          CAL_OUTRASINFO: 'Outras informações string',
+        },
+      ];
+
+      mockConnection.query.mockImplementation(
+        (query: string, params: any[], callback: any) => {
+          callback(null, mockResult);
+        },
+      );
+
+      const result = await service.get('credentials-id-123', {
+        page: 1,
+        pageSize: 10,
+      });
+
+      expect(result).toHaveLength(1);
+      expect(result[0].CAL_DEPOIMENTO).toEqual('Depoimento Buffer');
+      expect(result[0].CAL_RELATORIO).toEqual(largeText);
+      expect(result[0].CAL_OUTRASINFO).toEqual('Outras informações string');
+    });
+
     it('should throw BadRequestException if only startDate is provided without endDate', async () => {
       await expect(
         service.get('credentials-id-123', { startDate: '2026-01-01' }),
