@@ -73,6 +73,8 @@ const Translations = {
         'deliveries': 'Entregas',
         'call-centers': 'Call Center',
         'purchases': 'Compras / Entradas',
+        'purchase': 'Compras / Entradas',
+        'compras': 'Compras / Entradas',
         'announcement': 'Avisos do Sistema',
     },
     actions: {

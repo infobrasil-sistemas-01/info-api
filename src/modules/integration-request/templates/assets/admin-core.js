@@ -833,6 +833,8 @@ const LABEL_MAP = {
     'payment-plans': 'Planos de Pagamento',
     'account-payable': 'Contas a Pagar',
     'purchases': 'Compras / Entradas',
+    'purchase': 'Compras / Entradas',
+    'compras': 'Compras / Entradas',
 
     // Ações do painel de solicitação
     'approve': 'Aprovar',
