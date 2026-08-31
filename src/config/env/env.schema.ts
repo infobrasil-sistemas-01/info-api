@@ -23,6 +23,7 @@ export const envSchema = z.object({
   P131: z.string(),
   P104: z.string(),
   P129: z.string(),
+  P130: z.string(),
   CRYPTO_ENC: z.string(),
   CRYPTO_IV: z.string(),
   CRYPTO_ALGO: z.string().default('aes-256-cbc'),
