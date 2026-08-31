@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.16.18](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.16.17...v1.16.18) (2026-08-31)
+
+
+### Features
+
+* **purchase:** implement purchases module and integration request/rbac support ([c891b59](https://github.com/infobrasil-sistemas-01/info-api/commit/c891b5916e150dc9e01e150230d30226f6ef1414))
+* **scripts:** add permissions sync script and update prisma client documentation ([8a5672c](https://github.com/infobrasil-sistemas-01/info-api/commit/8a5672c7fe34b3ee51329888decdf5916ec93acc))
+
+
+### Bug Fixes
+
+* **call-center:** remove VARCHAR cast on BLOB fields to avoid string truncation ([f271438](https://github.com/infobrasil-sistemas-01/info-api/commit/f27143855ab72eecc7bbc4123259390c3f173225))
+* **infra:** mitigate 504 timeouts with pool TTL, query timeout safety, and TCP keep-alive ([f3c1a86](https://github.com/infobrasil-sistemas-01/info-api/commit/f3c1a860edfa6228939c341a8b7378b8f9a307ad))
+* **integration-request:** add aliases for purchases and cache busting for admin assets ([5d97078](https://github.com/infobrasil-sistemas-01/info-api/commit/5d97078c392874345f5c7d6bd20799349bdcc99a))
+
 ## [1.16.17](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.16.16...v1.16.17) (2026-08-12)
 
 
