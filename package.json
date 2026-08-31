@@ -24,7 +24,8 @@
     "release:patch": "commit-and-tag-version --release-as patch",
     "swagger:generate": "npx ts-node --transpile-only -r tsconfig-paths/register scripts/generate-swagger.ts",
     "swagger:retroactive": "npx ts-node --transpile-only -r tsconfig-paths/register scripts/retroactive-swagger.ts",
-    "swagger:pdf": "npx ts-node --transpile-only -r tsconfig-paths/register scripts/export-swagger-pdf.ts"
+    "swagger:pdf": "npx ts-node --transpile-only -r tsconfig-paths/register scripts/export-swagger-pdf.ts",
+    "permissions:sync": "npx ts-node --transpile-only -r tsconfig-paths/register scripts/sync-permissions.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",

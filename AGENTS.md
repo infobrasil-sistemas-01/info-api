@@ -27,7 +27,7 @@ Always normalize the filename as a lower_case_snake_case slug based on the plan'
 
 ### Prisma Client Location
 
-Generated client is at `src/generated/prisma/client.ts`, NOT `node_modules/@prisma/client`. Import from `src/generated/prisma/client` or re-export from a module.
+Generated client is at `src/generated/prisma`, NOT `node_modules/@prisma/client`. Import from `src/generated/prisma` or re-export from a module.
 
 ### API Prefix
 
