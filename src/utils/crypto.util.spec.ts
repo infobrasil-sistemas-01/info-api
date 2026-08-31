@@ -1,4 +1,4 @@
-import { generateOpaqueToken, hashTokenSha256, decrypt } from './crypto.util';
+import { generateOpaqueToken, hashTokenSha256, decrypt, encrypt } from './crypto.util';
 import crypto from 'crypto';
 
 describe('CryptoUtil', () => {
@@ -56,6 +56,34 @@ describe('CryptoUtil', () => {
       const hash1 = hashTokenSha256('token1', pepper);
       const hash2 = hashTokenSha256('token2', pepper);
       expect(hash1).not.toBe(hash2);
+    });
+  });
+
+  describe('encrypt', () => {
+    const originalEnv = process.env;
+
+    beforeEach(() => {
+      process.env = { ...originalEnv };
+    });
+
+    afterEach(() => {
+      process.env = originalEnv;
+    });
+
+    it('should encrypt plaintext into base64 ciphertext and be decryptable', () => {
+      const key = '0123456789abcdef0123456789abcdef';
+      const iv = '1234567890abcdef';
+      const plaintext = 'MinhaSenhaSecreta';
+
+      process.env.CRYPTO_ENC = key;
+      process.env.CRYPTO_IV = iv;
+
+      const encrypted = encrypt(plaintext);
+      expect(typeof encrypted).toBe('string');
+      expect(encrypted).not.toBe(plaintext);
+
+      const decrypted = decrypt(encrypted);
+      expect(decrypted).toBe(plaintext);
     });
   });
 
