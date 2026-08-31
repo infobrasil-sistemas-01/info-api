@@ -20,6 +20,10 @@ services:
         condition: service_healthy
     networks:
       - infoapi-network
+    sysctls:
+      - net.ipv4.tcp_keepalive_time=60
+      - net.ipv4.tcp_keepalive_intvl=10
+      - net.ipv4.tcp_keepalive_probes=5
     restart: unless-stopped
 
   infoapi-green:
@@ -43,6 +47,10 @@ services:
         condition: service_healthy
     networks:
       - infoapi-network
+    sysctls:
+      - net.ipv4.tcp_keepalive_time=60
+      - net.ipv4.tcp_keepalive_intvl=10
+      - net.ipv4.tcp_keepalive_probes=5
     restart: unless-stopped
 
   gateway:

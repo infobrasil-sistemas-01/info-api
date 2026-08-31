@@ -1,4 +1,9 @@
-import { Injectable, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  OnModuleDestroy,
+  OnModuleInit,
+} from '@nestjs/common';
 import { RegistryPrismaService } from '../prisma/registry-prisma.service';
 import {
   FirebirdService,
@@ -7,12 +12,19 @@ import {
 import * as firebird from 'node-firebird';
 
 @Injectable()
-export class TenantConnectionService {
+export class TenantConnectionService implements OnModuleInit, OnModuleDestroy {
   /** Cache dos dados de conexão consultados do banco (Prisma). Um registro por tenant. */
   private credentialsCache = new Map<string, IConnectionOptions>();
 
   /** Cache de pools de conexão Firebird. Um pool por tenant. */
   private poolCache = new Map<string, firebird.ConnectionPool>();
+
+  /** Rastreamento do último uso de cada pool para evicção por inatividade. */
+  private lastUsedMap = new Map<string, number>();
+
+  private cleanupInterval: NodeJS.Timeout | null = null;
+  private readonly IDLE_TIMEOUT_MS = 15 * 60 * 1000; // 15 minutos de inatividade
+  private readonly CLEANUP_INTERVAL_MS = 5 * 60 * 1000; // Varredura a cada 5 minutos
 
   private readonly logger = new Logger(TenantConnectionService.name);
 
@@ -20,6 +32,52 @@ export class TenantConnectionService {
     private readonly prisma: RegistryPrismaService,
     private readonly firebirdService: FirebirdService,
   ) {}
+
+  onModuleInit() {
+    this.cleanupInterval = setInterval(() => {
+      this.evictIdlePools().catch((err) => {
+        this.logger.error(
+          `Erro ao executar evicção de pools inativos: ${err?.message}`,
+        );
+      });
+    }, this.CLEANUP_INTERVAL_MS);
+
+    if (this.cleanupInterval?.unref) {
+      this.cleanupInterval.unref();
+    }
+  }
+
+  async onModuleDestroy() {
+    if (this.cleanupInterval) {
+      clearInterval(this.cleanupInterval);
+      this.cleanupInterval = null;
+    }
+    const poolIds = Array.from(this.poolCache.keys());
+    await Promise.all(poolIds.map((id) => this.destroyPool(id)));
+  }
+
+  /**
+   * Remove pools que ficaram inativos por mais de IDLE_TIMEOUT_MS.
+   */
+  async evictIdlePools(): Promise<number> {
+    const now = Date.now();
+    let evictedCount = 0;
+
+    for (const [credentialsId, lastUsed] of this.lastUsedMap.entries()) {
+      if (now - lastUsed > this.IDLE_TIMEOUT_MS) {
+        this.logger.log(
+          `Evicting pool inativo para o tenant ${credentialsId} (inativo há ${Math.round(
+            (now - lastUsed) / 60000,
+          )} min)`,
+        );
+        await this.destroyPool(credentialsId);
+        this.lastUsedMap.delete(credentialsId);
+        evictedCount++;
+      }
+    }
+
+    return evictedCount;
+  }
 
   /**
    * Retorna uma conexão individual do pool do tenant.
@@ -29,6 +87,7 @@ export class TenantConnectionService {
     credentialsId: string,
     isRetry = false,
   ): Promise<firebird.Database> {
+    this.lastUsedMap.set(credentialsId, Date.now());
     const pool = await this.getPool(credentialsId);
 
     try {
@@ -50,6 +109,61 @@ export class TenantConnectionService {
                 `Erro na conexão Firebird para o tenant ${credentialsId}: ${dbErr?.message}`,
               );
             });
+          }
+
+          // Envolve db.query com timeout de segurança (25s) para evitar que qualquer query direta fique presa
+          if (!(db as any).__queryWrapped && typeof db.query === 'function') {
+            const originalQuery = db.query.bind(db);
+            (db as any).__queryWrapped = true;
+            (db as any).query = (
+              sql: string,
+              paramsOrCallback?: any,
+              callback?: (qErr: any, res: any) => void,
+            ) => {
+              let actualParams: any[] = [];
+              let actualCallback: ((qErr: any, res: any) => void) | undefined;
+
+              if (typeof paramsOrCallback === 'function') {
+                actualCallback = paramsOrCallback;
+              } else {
+                actualParams = paramsOrCallback || [];
+                actualCallback = callback;
+              }
+
+              if (!actualCallback) {
+                return originalQuery(sql, actualParams);
+              }
+
+              let isDone = false;
+              const timer = setTimeout(() => {
+                if (!isDone) {
+                  isDone = true;
+                  this.logger.warn(
+                    `Timeout (25s) na execução da query no tenant ${credentialsId}`,
+                  );
+                  actualCallback!(
+                    new Error(
+                      'Timeout na execução da query SQL no Firebird (25s)',
+                    ),
+                    null,
+                  );
+                }
+              }, 25000);
+
+              try {
+                originalQuery(sql, actualParams, (qErr: any, res: any) => {
+                  if (isDone) return;
+                  isDone = true;
+                  clearTimeout(timer);
+                  actualCallback!(qErr, res);
+                });
+              } catch (syncErr) {
+                if (isDone) return;
+                isDone = true;
+                clearTimeout(timer);
+                actualCallback!(syncErr, null);
+              }
+            };
           }
 
           resolve(db);
@@ -88,6 +202,81 @@ export class TenantConnectionService {
   }
 
   /**
+   * Executa uma consulta SQL em uma conexão aberta com timeout garantido.
+   * Caso a conexão trave ou demore mais que timeoutMs, a Promise rejeita.
+   */
+  queryWithTimeout<T = any>(
+    connection: firebird.Database,
+    query: string,
+    params: any[] = [],
+    timeoutMs = 25000,
+  ): Promise<T> {
+    return new Promise<T>((resolve, reject) => {
+      let isDone = false;
+      const timer = setTimeout(() => {
+        if (!isDone) {
+          isDone = true;
+          reject(
+            new Error(
+              `Timeout na execução da query SQL no Firebird (${timeoutMs}ms)`,
+            ),
+          );
+        }
+      }, timeoutMs);
+
+      try {
+        connection.query(query, params, (err: any, res: any) => {
+          if (isDone) return;
+          isDone = true;
+          clearTimeout(timer);
+          if (err) return reject(err);
+          resolve(res as T);
+        });
+      } catch (err) {
+        if (isDone) return;
+        isDone = true;
+        clearTimeout(timer);
+        reject(err);
+      }
+    });
+  }
+
+  /**
+   * Método de conveniência que obtém uma conexão do pool, executa a consulta com timeout,
+   * e garante a liberação no finally.
+   * Se houver timeout no socket, o pool é automaticamente destruído para descartar sockets zumbis.
+   */
+  async query<T = any>(
+    credentialsId: string,
+    query: string,
+    params: any[] = [],
+    timeoutMs = 25000,
+  ): Promise<T> {
+    const connection = await this.getConnection(credentialsId);
+    try {
+      return await this.queryWithTimeout<T>(
+        connection,
+        query,
+        params,
+        timeoutMs,
+      );
+    } catch (err: any) {
+      if (
+        err?.message?.includes('Timeout') ||
+        err?.message?.includes('timeout')
+      ) {
+        this.logger.warn(
+          `Query timeout no tenant ${credentialsId}. Destruindo pool para reciclagem de sockets.`,
+        );
+        await this.destroyPool(credentialsId);
+      }
+      throw err;
+    } finally {
+      this.releaseConnection(connection);
+    }
+  }
+
+  /**
    * Destrói o pool de um tenant (ex: ao remover credenciais).
    * O cache de credenciais é mantido para que o pool possa ser recriado sem ir ao banco.
    * Não use em fluxos normais de requisição.
@@ -98,6 +287,7 @@ export class TenantConnectionService {
 
     // Remove do cache IMEDIATAMENTE para evitar que outras requisições usem um pool em destruição
     this.poolCache.delete(credentialsId);
+    this.lastUsedMap.delete(credentialsId);
 
     await new Promise<void>((resolve) => {
       const timeout = setTimeout(() => {

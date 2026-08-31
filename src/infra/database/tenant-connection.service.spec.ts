@@ -184,4 +184,126 @@ describe('TenantConnectionService', () => {
       expect(mockPrisma.dbCredentials.findUnique).toHaveBeenCalledTimes(2);
     });
   });
+
+  describe('evictIdlePools', () => {
+    it('should evict pools that exceeded idle timeout', async () => {
+      await service.getConnection('cred-1');
+
+      // Simula passagem de 20 minutos
+      jest.spyOn(Date, 'now').mockReturnValue(Date.now() + 20 * 60 * 1000);
+
+      const evicted = await service.evictIdlePools();
+      expect(evicted).toBe(1);
+      expect(mockPool.destroy).toHaveBeenCalledTimes(1);
+
+      jest.restoreAllMocks();
+    });
+
+    it('should NOT evict pools that are still within idle timeout', async () => {
+      await service.getConnection('cred-1');
+
+      // Simula passagem de apenas 5 minutos
+      jest.spyOn(Date, 'now').mockReturnValue(Date.now() + 5 * 60 * 1000);
+
+      const evicted = await service.evictIdlePools();
+      expect(evicted).toBe(0);
+      expect(mockPool.destroy).not.toHaveBeenCalled();
+
+      jest.restoreAllMocks();
+    });
+  });
+
+  describe('onModuleDestroy', () => {
+    it('should destroy all active pools on module destroy', async () => {
+      await service.getConnection('cred-1');
+      await service.onModuleDestroy();
+
+      expect(mockPool.destroy).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('queryWithTimeout', () => {
+    it('should resolve query result when query succeeds', async () => {
+      mockDb.query = jest
+        .fn()
+        .mockImplementation((sql, params, callback) =>
+          callback(null, [{ id: 1, name: 'Test' }]),
+        );
+
+      const result = await service.queryWithTimeout(
+        mockDb,
+        'SELECT * FROM test',
+        [],
+        1000,
+      );
+
+      expect(result).toEqual([{ id: 1, name: 'Test' }]);
+    });
+
+    it('should reject when query callback returns error', async () => {
+      mockDb.query = jest
+        .fn()
+        .mockImplementation((sql, params, callback) =>
+          callback(new Error('SQL syntax error'), null),
+        );
+
+      await expect(
+        service.queryWithTimeout(mockDb, 'INVALID SQL', [], 1000),
+      ).rejects.toThrow('SQL syntax error');
+    });
+
+    it('should reject with timeout error when query hangs', async () => {
+      jest.useFakeTimers();
+
+      mockDb.query = jest.fn().mockImplementation(() => {
+        // Hangs indefinitely
+      });
+
+      const promise = service.queryWithTimeout(mockDb, 'SELECT 1', [], 2000);
+      const expectation = expect(promise).rejects.toThrow(
+        'Timeout na execução da query SQL no Firebird (2000ms)',
+      );
+
+      await jest.advanceTimersByTimeAsync(2001);
+      await expectation;
+
+      jest.useRealTimers();
+    });
+  });
+
+  describe('query', () => {
+    it('should acquire connection, execute query and release connection', async () => {
+      mockDb.query = jest
+        .fn()
+        .mockImplementation((sql, params, callback) =>
+          callback(null, [{ id: 1 }]),
+        );
+
+      const result = await service.query('cred-1', 'SELECT 1', []);
+
+      expect(result).toEqual([{ id: 1 }]);
+      expect(mockDb.detach).toHaveBeenCalled();
+    });
+
+    it('should destroy pool when query times out to recycle dead sockets', async () => {
+      jest.useFakeTimers();
+
+      mockDb.query = jest.fn().mockImplementation(() => {
+        // Hangs
+      });
+
+      const promise = service.query('cred-1', 'SELECT 1', [], 1000);
+      const expectation = expect(promise).rejects.toThrow(
+        'Timeout na execução da query',
+      );
+
+      await jest.advanceTimersByTimeAsync(1001);
+      await expectation;
+
+      expect(mockPool.destroy).toHaveBeenCalled();
+      expect(mockDb.detach).toHaveBeenCalled();
+
+      jest.useRealTimers();
+    });
+  });
 });

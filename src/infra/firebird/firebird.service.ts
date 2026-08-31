@@ -11,6 +11,7 @@ export interface IConnectionOptions {
   id: number;
   pageSize: number;
   wireCrypt?: number;
+  connectTimeout?: number;
 }
 
 @Injectable()
@@ -26,7 +27,8 @@ export class FirebirdService {
     options: IConnectionOptions,
     poolSize = 5,
   ): firebird.ConnectionPool {
-    const optionsFinal = {
+    const optionsFinal: any = {
+      connectTimeout: 7000,
       ...options,
       password: decrypt(ids(options.id)),
     };
