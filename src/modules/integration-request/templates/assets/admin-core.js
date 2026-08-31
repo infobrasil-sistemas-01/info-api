@@ -832,6 +832,7 @@ const LABEL_MAP = {
     'dbcredential': 'Credenciais DB',
     'payment-plans': 'Planos de Pagamento',
     'account-payable': 'Contas a Pagar',
+    'purchases': 'Compras / Entradas',
 
     // Ações do painel de solicitação
     'approve': 'Aprovar',

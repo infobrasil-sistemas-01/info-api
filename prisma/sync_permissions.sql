@@ -81,7 +81,11 @@ INSERT INTO permissions (id, key, name, description) VALUES
 (gen_random_uuid(), 'tenant.call-centers.view', 'Visualizar call center', 'Visualizar atendimentos do call center do tenant'),
 (gen_random_uuid(), 'tenant.call-centers.create', 'Criar call center', 'Criar atendimentos do call center do tenant'),
 (gen_random_uuid(), 'tenant.call-centers.update', 'Atualizar call center', 'Atualizar atendimentos do call center do tenant'),
-(gen_random_uuid(), 'tenant.call-centers.delete', 'Deletar call center', 'Deletar atendimentos do call center do tenant')
+(gen_random_uuid(), 'tenant.call-centers.delete', 'Deletar call center', 'Deletar atendimentos do call center do tenant'),
+(gen_random_uuid(), 'tenant.purchases.view', 'Visualizar compras', 'Visualizar compras/entradas do tenant'),
+(gen_random_uuid(), 'tenant.purchases.create', 'Criar compras', 'Criar compras/entradas do tenant'),
+(gen_random_uuid(), 'tenant.purchases.update', 'Atualizar compras', 'Atualizar compras/entradas do tenant'),
+(gen_random_uuid(), 'tenant.purchases.delete', 'Deletar compras', 'Deletar compras/entradas do tenant')
 ON CONFLICT (key) DO UPDATE SET 
     name = EXCLUDED.name, 
     description = EXCLUDED.description;

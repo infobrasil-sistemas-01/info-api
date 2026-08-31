@@ -314,6 +314,26 @@ export const PERMISSIONS = [
     descricao: 'Deletar atendimentos do call center do tenant',
     module: 'tenant',
   },
+  {
+    key: 'tenant.purchases.view',
+    descricao: 'Visualizar compras/entradas de mercadorias do tenant',
+    module: 'tenant',
+  },
+  {
+    key: 'tenant.purchases.create',
+    descricao: 'Criar compras/entradas de mercadorias do tenant',
+    module: 'tenant',
+  },
+  {
+    key: 'tenant.purchases.update',
+    descricao: 'Atualizar compras/entradas de mercadorias do tenant',
+    module: 'tenant',
+  },
+  {
+    key: 'tenant.purchases.delete',
+    descricao: 'Deletar compras/entradas de mercadorias do tenant',
+    module: 'tenant',
+  },
 
   // ========= SOLICITAÇÕES =========
   {

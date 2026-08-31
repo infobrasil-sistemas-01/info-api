@@ -38,6 +38,7 @@ import { DeliveryModule } from './modules/delivery/delivery.module';
 import { NewsletterModule } from './modules/newsletter/newsletter.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { CallCenterModule } from './modules/call-center/call-center.module';
+import { PurchaseModule } from './modules/purchase/purchase.module';
 
 import { AppController } from './app.controller';
 
@@ -74,6 +75,7 @@ import { AppController } from './app.controller';
     DeliveryModule,
     NewsletterModule,
     CallCenterModule,
+    PurchaseModule,
     ScheduleModule.forRoot(),
     StatusModule,
     DashboardModule,
