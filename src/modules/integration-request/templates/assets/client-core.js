@@ -75,6 +75,11 @@ const Translations = {
         'purchases': 'Compras / Entradas',
         'purchase': 'Compras / Entradas',
         'compras': 'Compras / Entradas',
+        'fiscal-entries': 'Entradas Fiscais',
+        'fiscal-entry': 'Entradas Fiscais',
+        'entradas-fiscais': 'Entradas Fiscais',
+        'entradas_apoio': 'Entradas Fiscais',
+        'entradas-apoio': 'Entradas Fiscais',
         'announcement': 'Avisos do Sistema',
     },
     actions: {

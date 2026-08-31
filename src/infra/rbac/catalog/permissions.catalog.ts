@@ -334,6 +334,26 @@ export const PERMISSIONS = [
     descricao: 'Deletar compras/entradas de mercadorias do tenant',
     module: 'tenant',
   },
+  {
+    key: 'tenant.fiscal-entries.view',
+    descricao: 'Visualizar entradas fiscais (apoio) do tenant',
+    module: 'tenant',
+  },
+  {
+    key: 'tenant.fiscal-entries.create',
+    descricao: 'Criar entradas fiscais (apoio) do tenant',
+    module: 'tenant',
+  },
+  {
+    key: 'tenant.fiscal-entries.update',
+    descricao: 'Atualizar entradas fiscais (apoio) do tenant',
+    module: 'tenant',
+  },
+  {
+    key: 'tenant.fiscal-entries.delete',
+    descricao: 'Deletar entradas fiscais (apoio) do tenant',
+    module: 'tenant',
+  },
 
   // ========= SOLICITAÇÕES =========
   {
