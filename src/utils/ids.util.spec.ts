@@ -41,6 +41,20 @@ describe('IdsUtil', () => {
       expect(ids(104)).toBe('profile-104-value');
     });
 
+    it('should return P129 env value when id is 129', () => {
+      process.env.P129 = 'profile-129-value';
+      jest.resetModules();
+      const { ids } = require('./ids.util');
+      expect(ids(129)).toBe('profile-129-value');
+    });
+
+    it('should return P130 env value when id is 130', () => {
+      process.env.P130 = 'profile-130-value';
+      jest.resetModules();
+      const { ids } = require('./ids.util');
+      expect(ids(130)).toBe('profile-130-value');
+    });
+
     it('should return undefined for unknown id', () => {
       jest.resetModules();
       const { ids } = require('./ids.util');

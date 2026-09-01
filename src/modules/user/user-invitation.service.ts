@@ -12,7 +12,7 @@ export class UserInvitationService {
   constructor(
     private readonly prisma: RegistryPrismaService,
     private readonly userService: UserService,
-  ) {}
+  ) { }
 
   async findAll() {
     return this.prisma.userInvitation.findMany({
@@ -59,7 +59,7 @@ export class UserInvitationService {
 
     const newToken = randomUUID();
     const newExpiresAt = new Date();
-    newExpiresAt.setMinutes(newExpiresAt.getMinutes() + 30);
+    newExpiresAt.setHours(newExpiresAt.getHours() + 24);
 
     const updatedInvite = await this.prisma.userInvitation.update({
       where: { id },

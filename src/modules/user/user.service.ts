@@ -20,7 +20,7 @@ export class UserService {
     private readonly prisma: RegistryPrismaService,
     private readonly emailService: EmailService,
     private readonly env: EnvService,
-  ) {}
+  ) { }
 
   async create(data: CreateUserDto) {
     const existing = await this.prisma.user.findUnique({
@@ -64,7 +64,7 @@ export class UserService {
     if (hasInvitation && data.email) {
       const token = randomUUID();
       const expiresAt = new Date();
-      expiresAt.setHours(expiresAt.getHours() + 1);
+      expiresAt.setHours(expiresAt.getHours() + 24);
 
       await this.prisma.userInvitation.create({
         data: {
