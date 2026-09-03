@@ -54,6 +54,9 @@ RUN npm ci --omit=dev
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/prisma.config.ts ./prisma.config.ts
 
+# Documentos e relatórios (incluindo relatorio_lojas.csv)
+COPY --from=builder /app/docs ./docs
+
 # Build da aplicação
 COPY --from=builder /app/dist ./dist
 
