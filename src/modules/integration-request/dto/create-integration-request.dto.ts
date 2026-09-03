@@ -8,7 +8,7 @@ export const CreateIntegrationRequestSchema = z.object({
   clientName: z.string().min(3, 'Nome do cliente muito curto'),
   legalName: z.string().min(3, 'Razão social muito curta'),
   cnpj: z.string().optional(),
-  hostingType: HostingTypeEnum.optional().default('DATACENTER'),
+  hostingType: HostingTypeEnum.optional(),
   fixedIp: z.string().optional(),
   database: z
     .object({
@@ -16,8 +16,7 @@ export const CreateIntegrationRequestSchema = z.object({
       port: z.number(),
       database: z.string(),
     })
-    .optional()
-    .default({ host: 'DATACENTER', port: 0, database: 'DATACENTER' }),
+    .optional(),
   modules: z.array(z.string()).min(1, 'Selecione ao menos um módulo'),
   scopes: z.array(
     z.object({
@@ -51,7 +50,7 @@ export class CreateIntegrationRequestDto extends ZodDto(
   cnpj?: string;
 
   @ApiProperty({ required: false, enum: ['DATACENTER', 'CLIENT_SERVER'] })
-  hostingType!: 'DATACENTER' | 'CLIENT_SERVER';
+  hostingType?: 'DATACENTER' | 'CLIENT_SERVER';
 
   @ApiProperty({ required: false, example: '187.1.2.3' })
   fixedIp?: string;
@@ -60,7 +59,7 @@ export class CreateIntegrationRequestDto extends ZodDto(
     required: false,
     example: { host: 'localhost', port: 3050, database: 'C:\\BASE.FDB' },
   })
-  database!: {
+  database?: {
     host: string;
     port: number;
     database: string;
