@@ -184,6 +184,37 @@ const Data = {
         });
         if (res.ok) this.fetchRequests();
     },
+    async syncRequestsDatabase() {
+        const btn = document.getElementById('btn-sync-requests-db');
+        try {
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = `<i class='bx bx-loader-alt bx-spin' style="font-size: 1.2rem;"></i> Sincronizando...`;
+            }
+            const res = await this.fetch('/integration/sync-databases', {
+                method: 'POST',
+            });
+            if (res.ok) {
+                const data = await res.json();
+                alert(`Sincronização concluída com sucesso!\n\n` +
+                      `- Atualizados: ${data.updatedCount}\n` +
+                      `- Não encontrados / Sem CNPJ: ${data.notFoundCount}\n` +
+                      `- Total de solicitações: ${data.total}`);
+                await this.fetchRequests();
+            } else {
+                const err = await res.json();
+                alert('Erro na sincronização: ' + (err.message || 'Erro desconhecido'));
+            }
+        } catch (e) {
+            console.error('Erro ao sincronizar:', e);
+            alert('Falha ao conectar com o servidor para sincronização.');
+        } finally {
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = `<i class='bx bx-sync' style="font-size: 1.2rem; color: var(--primary);"></i> Sincronizar URLs`;
+            }
+        }
+    },
     async deleteRequest(id) {
         if (confirm('Excluir solicitação?')) {
             await this.fetch(`/integration/${id}`, { method: 'DELETE' });

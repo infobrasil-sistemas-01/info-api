@@ -172,6 +172,19 @@ export class IntegrationRequestController {
     return this.service.updateStatus(id, status, rejectionReason);
   }
 
+  @Post('sync-databases')
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @RequirePermissions({
+    anyOf: ['integration-request.view', 'integration-request.approve'],
+  })
+  @ApiOperation({
+    summary:
+      'Sincroniza os dados de conexão das solicitações pelo CNPJ usando o CSV de lojas',
+  })
+  syncDatabases() {
+    return this.service.syncDatabasesByCnpj();
+  }
+
   @Delete(':id')
   @UseGuards(JwtAuthGuard, PermissionsGuard)
   @RequirePermissions({ anyOf: ['integration-request.delete'] })

@@ -5,14 +5,29 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
+import { existsSync, readFileSync } from 'fs';
+import { join } from 'path';
 import { RegistryPrismaService } from 'src/infra/prisma/registry-prisma.service';
 import { CreateIntegrationRequestDto } from './dto/create-integration-request.dto';
 import { EmailService } from 'src/infra/email/email.service';
 import { EnvService } from 'src/config/env/env.service';
 
+export interface IStoreCsvRecord {
+  server: string;
+  host: string;
+  port: number;
+  alias: string;
+  cname: string;
+  storeCode: number;
+  tradeName: string;
+  legalName: string;
+  cnpj: string;
+}
+
 @Injectable()
 export class IntegrationRequestService {
   private readonly logger = new Logger(IntegrationRequestService.name);
+  private storesCache: IStoreCsvRecord[] | null = null;
 
   constructor(
     private readonly prisma: RegistryPrismaService,
@@ -20,15 +35,114 @@ export class IntegrationRequestService {
     private readonly env: EnvService,
   ) {}
 
+  private getCsvPath(): string {
+    const paths = [
+      join(process.cwd(), 'docs', 'relatorio_lojas.csv'),
+      join(__dirname, '..', '..', '..', 'docs', 'relatorio_lojas.csv'),
+      join(__dirname, '..', '..', '..', '..', 'docs', 'relatorio_lojas.csv'),
+    ];
+
+    for (const p of paths) {
+      if (existsSync(p)) return p;
+    }
+
+    return join(process.cwd(), 'docs', 'relatorio_lojas.csv');
+  }
+
+  getStoresFromCsv(forceReload = false): IStoreCsvRecord[] {
+    if (this.storesCache && !forceReload) {
+      return this.storesCache;
+    }
+
+    const csvPath = this.getCsvPath();
+    if (!existsSync(csvPath)) {
+      this.logger.warn(`Arquivo CSV de lojas não encontrado em: ${csvPath}`);
+      return [];
+    }
+
+    try {
+      const fileContent = readFileSync(csvPath, 'utf8');
+      const lines = fileContent
+        .split(/\r?\n/)
+        .filter((l) => l.trim().length > 0);
+      if (lines.length <= 1) {
+        return [];
+      }
+
+      const records: IStoreCsvRecord[] = [];
+      for (let i = 1; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (!line) continue;
+        const cols = line.split(';');
+        if (cols.length < 5) continue;
+
+        const server = (cols[0] || '').trim();
+        const host = (cols[1] || '').trim();
+        const port = parseInt((cols[2] || '3050').trim(), 10) || 3050;
+        const alias = (cols[3] || '').trim();
+        const cname = (cols[4] || '').trim() || `${host}/${port}:${alias}`;
+        const storeCode = parseInt((cols[5] || '1').trim(), 10) || 1;
+        const tradeName = (cols[6] || '').trim();
+        const legalName = (cols[7] || '').trim();
+        const rawCnpj = (cols[8] || '').trim();
+        const cleanCnpj = rawCnpj.replace(/\D/g, '');
+        const cnpj = /^0+$/.test(cleanCnpj) ? '' : cleanCnpj;
+
+        records.push({
+          server,
+          host,
+          port,
+          alias,
+          cname,
+          storeCode,
+          tradeName,
+          legalName,
+          cnpj,
+        });
+      }
+
+      this.storesCache = records;
+      return records;
+    } catch (err: any) {
+      this.logger.error(`Erro ao ler ${csvPath}: ${err.message}`, err.stack);
+      return [];
+    }
+  }
+
+  getStoreByCnpj(rawCnpj?: string | null): IStoreCsvRecord | null {
+    if (!rawCnpj) return null;
+    const clean = rawCnpj.replace(/\D/g, '');
+    if (!clean || /^0+$/.test(clean)) return null;
+    const stores = this.getStoresFromCsv();
+    return stores.find((s) => s.cnpj === clean) || null;
+  }
+
   async create(dto: CreateIntegrationRequestDto) {
+    const store = dto.cnpj ? this.getStoreByCnpj(dto.cnpj) : null;
+    let databaseConfig = dto.database;
+
+    if (store) {
+      databaseConfig = {
+        host: store.host,
+        port: store.port,
+        database: store.alias,
+      };
+    } else if (!databaseConfig || !databaseConfig.host) {
+      databaseConfig = {
+        host: 'DATACENTER',
+        port: 0,
+        database: 'DATACENTER',
+      };
+    }
+
     const request = await this.prisma.integrationRequest.create({
       data: {
         clientName: dto.clientName,
         legalName: dto.legalName,
         cnpj: dto.cnpj,
-        hostingType: dto.hostingType,
+        hostingType: dto.hostingType || 'DATACENTER',
         fixedIp: dto.fixedIp,
-        database: dto.database as any,
+        database: databaseConfig as any,
         modules: dto.modules,
         scopes: dto.scopes as any,
         objective: dto.objective,
@@ -220,5 +334,78 @@ export class IntegrationRequestService {
     return this.prisma.integrationRequest.delete({
       where: { id },
     });
+  }
+
+  async syncDatabasesByCnpj() {
+    const allRequests = await this.prisma.integrationRequest.findMany();
+    let updatedCount = 0;
+    let notFoundCount = 0;
+    const results: {
+      id: string;
+      clientName: string;
+      cnpj?: string | null;
+      synced: boolean;
+      database?: any;
+    }[] = [];
+
+    // Forçar recarga do CSV para sincronizar com base atualizada
+    this.getStoresFromCsv(true);
+
+    for (const req of allRequests) {
+      if (!req.cnpj) {
+        notFoundCount++;
+        results.push({
+          id: req.id,
+          clientName: req.clientName,
+          cnpj: req.cnpj,
+          synced: false,
+        });
+        continue;
+      }
+
+      const store = this.getStoreByCnpj(req.cnpj);
+      if (store) {
+        const updatedDb = {
+          host: store.host,
+          port: store.port,
+          database: store.alias,
+        };
+
+        await this.prisma.integrationRequest.update({
+          where: { id: req.id },
+          data: {
+            database: updatedDb as any,
+          },
+        });
+
+        updatedCount++;
+        results.push({
+          id: req.id,
+          clientName: req.clientName,
+          cnpj: req.cnpj,
+          synced: true,
+          database: updatedDb,
+        });
+      } else {
+        notFoundCount++;
+        results.push({
+          id: req.id,
+          clientName: req.clientName,
+          cnpj: req.cnpj,
+          synced: false,
+        });
+      }
+    }
+
+    this.logger.log(
+      `Sincronização de bancos por CNPJ concluída: ${updatedCount} atualizados de ${allRequests.length} totais.`,
+    );
+
+    return {
+      total: allRequests.length,
+      updatedCount,
+      notFoundCount,
+      results,
+    };
   }
 }

@@ -78,8 +78,10 @@ const Components = {
                         <div class="detail-box"><label>IP Fixo</label><p>${req.fixedIp || 'N/A'}</p></div>
                     </div>
                     <div style="margin-bottom: 12px;">
-                        <small style="font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">BANCO DE DADOS</small>
-                        <p style="font-size: 0.8rem; font-family: monospace;">${db.host}:${db.port} / ${db.database}</p>
+                        <small style="font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">BANCO DE DADOS / URL</small>
+                        <p style="font-size: 0.8rem; font-family: monospace; background: rgba(0,0,0,0.25); padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border); word-break: break-all; margin: 0;">
+                            ${db.host && db.host !== 'DATACENTER' ? `${db.host}/${db.port}:${db.database}` : `${db.host || 'N/A'}:${db.port || 0} / ${db.database || 'N/A'}`}
+                        </p>
                     </div>
                     <div>
                         <div style="display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px;">
@@ -392,9 +394,15 @@ const Components = {
                       )
                       .join('')}
                 </div>
-                <button class="btn btn-outline" onclick="Data.fetchRequests()" title="Atualizar solicitações" style="padding: 10px; border-radius: 10px;">
-                    <i class='bx bx-refresh' style="font-size: 1.2rem;"></i>
-                </button>
+                <div style="display: flex; gap: 8px;">
+                    <button id="btn-sync-requests-db" class="btn btn-outline" onclick="Data.syncRequestsDatabase()" title="Sincronizar URLs/Banco por CNPJ (CSV)" style="padding: 8px 14px; border-radius: 10px; display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem;">
+                        <i class='bx bx-sync' style="font-size: 1.2rem; color: var(--primary);"></i>
+                        Sincronizar URLs
+                    </button>
+                    <button class="btn btn-outline" onclick="Data.fetchRequests()" title="Atualizar solicitações" style="padding: 10px; border-radius: 10px;">
+                        <i class='bx bx-refresh' style="font-size: 1.2rem;"></i>
+                    </button>
+                </div>
             </div>
         `;
   },

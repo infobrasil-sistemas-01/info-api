@@ -1,0 +1,895 @@
+?Servidor;Host;Porta;Alias;CNAME;LOJ_CODIGO;LOJ_FANTASIA;LOJ_NOME;LOJ_CNPJ
+DB06;db4padel.iprojectti.com.br;3056;4padel;db4padel.iprojectti.com.br/3056:4padel;1;4PADEL;4PADEL LTDA;53813096000173
+DB06;db4padel.iprojectti.com.br;3056;4padel;db4padel.iprojectti.com.br/3056:4padel;2;LOJA 02;LOJA 02;
+DB02;dba4.iprojectti.com.br;3051;a4;dba4.iprojectti.com.br/3051:a4;1;A4 SOLUCOES  A LOJA DO SEU CELULAR.;ELIS CRISTINA DA COSTA SOUSA ME;22584364000107
+DB02;dba4.iprojectti.com.br;3051;a4;dba4.iprojectti.com.br/3051:a4;2;A4 SOLUCOES;A4 SOLUCOES, COMERCIO E SERVICOS LTDA;48506100000110
+DB02;dba4.iprojectti.com.br;3051;a4;dba4.iprojectti.com.br/3051:a4;3;A4 SOLUCOES;WILSON DAVID DO NASCIMENTO MAIA ME;14039354000154
+DB02;dba4.iprojectti.com.br;3051;a4;dba4.iprojectti.com.br/3051:a4;4;A4 SOLUCOES;E&D COMERCIO EM ELETRONICOS LTDA ME;27079535000156
+DB02;dbaeroboy.iprojectti.com.br;3051;aeroboy;dbaeroboy.iprojectti.com.br/3051:aeroboy;1;AEROBOY;AEROBOY CONFECCOES LTDA;14958618000335
+DB02;dbaeroboy.iprojectti.com.br;3051;aeroboy;dbaeroboy.iprojectti.com.br/3051:aeroboy;2;AEROBOY;AEROBOY CONFECCOES LTDA ME;14958618000416
+DB02;dbaeroboy.iprojectti.com.br;3051;aeroboy;dbaeroboy.iprojectti.com.br/3051:aeroboy;3;AEROBOY;AEROBOY CONFECCOES LTDA 3;14958618000254
+DB02;dbaeroboy.iprojectti.com.br;3051;aeroboy;dbaeroboy.iprojectti.com.br/3051:aeroboy;4;AEROBOY 4;GILMAR BARBOSA CARVALHO;
+DB02;dbaeroboy.iprojectti.com.br;3051;aeroboy;dbaeroboy.iprojectti.com.br/3051:aeroboy;5;AEROGIRL CONFECCOES LTDA 5;AEROGIRL CONFECCOES LTDA 5;
+DB02;dbaeroboy.iprojectti.com.br;3051;aeroboy;dbaeroboy.iprojectti.com.br/3051:aeroboy;6;AEROBOY CONFECCOES LTDA;AEROBOY CONFECCOES LTDA;
+DB02;dbaeroboy.iprojectti.com.br;3051;aeroboy;dbaeroboy.iprojectti.com.br/3051:aeroboy;7;AEROBOY LJ 5;VIVIANE MODAS LTDA;32100759000132
+DB03;dbaliancacolchoes.iprojectti.com.br;3052;aliancacolchoes;dbaliancacolchoes.iprojectti.com.br/3052:aliancacolchoes;1;ALIANÇA COLCHOES;ALIANÇA COLCHOES EIRELI-EPP;09624393000189
+DB03;dbaliancacolchoes.iprojectti.com.br;3052;aliancacolchoes;dbaliancacolchoes.iprojectti.com.br/3052:aliancacolchoes;2;ALIANCA COLCHOES;VARLINDO E CASTRO COMERCIO DE COLCHOES LTDA EPP;15747917000121
+DB03;dbaliancacolchoes.iprojectti.com.br;3052;aliancacolchoes;dbaliancacolchoes.iprojectti.com.br/3052:aliancacolchoes;3;ALIANCA COLCHOES;AV COMERCIO DE COLCHOES EIRELI-EPP;10848478000120
+DB03;dbaliancacolchoes.iprojectti.com.br;3052;aliancacolchoes;dbaliancacolchoes.iprojectti.com.br/3052:aliancacolchoes;4;ALIANCA COLCHOES;ALIANCA COLCHOES EIRELI-EPP;09624393000260
+DB03;dbaliancacolchoes.iprojectti.com.br;3052;aliancacolchoes;dbaliancacolchoes.iprojectti.com.br/3052:aliancacolchoes;5;DEPOSITO AV;AV COMERCIO DE COLCHOES EIRELI-EPP;10848478000200
+DB03;dbaliancacolchoes.iprojectti.com.br;3052;aliancacolchoes;dbaliancacolchoes.iprojectti.com.br/3052:aliancacolchoes;6;ALIANÇA COLCHÕES;ALIANÇA COLCHÕES  EIRELI;09624393000421
+DB03;dbaliancacolchoes.iprojectti.com.br;3052;aliancacolchoes;dbaliancacolchoes.iprojectti.com.br/3052:aliancacolchoes;7;VIRTUAL ALIANCA COLCHOES LTDA;VIRTUAL ALIANCA COLCHOES LTDA;45540383000129
+DB03;dbaliancacolchoes.iprojectti.com.br;3052;aliancacolchoes;dbaliancacolchoes.iprojectti.com.br/3052:aliancacolchoes;8;DEPOSITO VARLINDO;VARLINDO COMERCIO DE COLCHOES LTDA;15747917000202
+DB03;dbaliancacolchoes.iprojectti.com.br;3052;aliancacolchoes;dbaliancacolchoes.iprojectti.com.br/3052:aliancacolchoes;9;DEPOSITO VIRTUAL ALIANCA;DEPOSITO VIRTUAL ALIANCA COLCHOES LTDA;
+DB03;dbaliancacolchoes.iprojectti.com.br;3052;aliancacolchoes;dbaliancacolchoes.iprojectti.com.br/3052:aliancacolchoes;99;ALIANÇA COLCHOES;ALIANÇA COLCHOES;
+DB06;dbapacel.iprojectti.com.br;3056;apacel;dbapacel.iprojectti.com.br/3056:apacel;1;LOJA APACEL;CASA JAGUARIBE MATERIAIS DE CONSTRUCAO LTDA;05847471000153
+DB05;dbaraujoalimentos.iprojectti.com.br;3055;araujoalimentos;dbaraujoalimentos.iprojectti.com.br/3055:araujoalimentos;1;R S ARAUJO COMERCIAL DE ALIMENTOS;RS ARAUJO COMERCIAL DE ALIMENTOS LTDA;09393535000144
+DB05;dbaraujoalimentos.iprojectti.com.br;3055;araujoalimentos;dbaraujoalimentos.iprojectti.com.br/3055:araujoalimentos;2;MIX ARAUJO;SUPERMERCADO MIX ARAUJO LTDA;64038473000160
+DB05;dbaraujoalimentos.iprojectti.com.br;3055;araujoalimentosmix;dbaraujoalimentos.iprojectti.com.br/3055:araujoalimentosmix;1;R S ARAUJO COMERCIAL DE ALIMENTOS;RS ARAUJO COMERCIAL DE ALIMENTOS LTDA;09393535000144
+DB05;dbaraujoalimentos.iprojectti.com.br;3055;araujoalimentosmix;dbaraujoalimentos.iprojectti.com.br/3055:araujoalimentosmix;2;MIX ARAUJO;SUPERMERCADO MIX ARAUJO LTDA;64038473000160
+DB05;dbarmazemprogresso.iprojectti.com.br;3055;armazemprogresso;dbarmazemprogresso.iprojectti.com.br/3055:armazemprogresso;1;ARMAZÉM PROGRESSO;JAIRO DINIZ & CIA;07892110000154
+DB05;dbarmazemprogresso.iprojectti.com.br;3055;armazemprogresso;dbarmazemprogresso.iprojectti.com.br/3055:armazemprogresso;2;ARMAZEM PROGRESSO;MVV COMERCIO DE TECIDOS LTDA;52529910000160
+DB05;dbartenossa.iprojectti.com.br;3055;artenossa;dbartenossa.iprojectti.com.br/3055:artenossa;1;ARTE NOSSA;FI MOVEIS E DECORACOES LTDA;73852147000183
+DB05;dbartenossa.iprojectti.com.br;3055;artenossa;dbartenossa.iprojectti.com.br/3055:artenossa;2;AN CASA;AN CASA LTDA;53930917000151
+DB05;dbartenossa.iprojectti.com.br;3055;artenossa;dbartenossa.iprojectti.com.br/3055:artenossa;3;GALPAO LF;GALPAO LF;
+DB05;dbartenossa.iprojectti.com.br;3055;artenossa;dbartenossa.iprojectti.com.br/3055:artenossa;4;PESSOA FISICA;PESSOA FISICA;32043244353
+DB05;dbartfinamoveis.iprojectti.com.br;3055;artfinamoveis;dbartfinamoveis.iprojectti.com.br/3055:artfinamoveis;1;ARTFINA DEP;J A COM DE MOVEIS DECORACOES LTDA;
+DB05;dbartfinamoveis.iprojectti.com.br;3055;artfinamoveis;dbartfinamoveis.iprojectti.com.br/3055:artfinamoveis;2;ARTFINA MATRIZ;J A COM  DE MOVEIS DECORACOES LTDA;03048265000158
+DB05;dbartfinamoveis.iprojectti.com.br;3055;artfinamoveis;dbartfinamoveis.iprojectti.com.br/3055:artfinamoveis;3;ARTFINA FILIAL;J A COM DE MOVEIS DECORACOES LTDA;03048265000239
+DB05;dbartfinamoveis.iprojectti.com.br;3055;artfinamoveis;dbartfinamoveis.iprojectti.com.br/3055:artfinamoveis;4;STYLO FINO;M J COMERCIO DE MÓVEIS E ELETROS LTDA;10754121/0001-82
+DB05;dbarthrofix.iprojectti.com.br;3055;arthrofix;dbarthrofix.iprojectti.com.br/3055:arthrofix;1;ARTHROFIX;ARTHROFIX COM. E REP. LTDA - ME;25078820000127
+DB03;dbartmoveis.iprojectti.com.br;3052;artmoveis;dbartmoveis.iprojectti.com.br/3052:artmoveis;1;ART MOVEIS - MATRIZ;REJANE ANDRADE MARINHO EPP;08870654000188
+DB03;dbartmoveis.iprojectti.com.br;3052;artmoveis;dbartmoveis.iprojectti.com.br/3052:artmoveis;2;ART MOVEIS - GENIBAU;ORLEANS DA SILVA FROTA ME;07464486000168
+DB03;dbartmoveis.iprojectti.com.br;3052;artmoveis;dbartmoveis.iprojectti.com.br/3052:artmoveis;3;ART MOVEIS -JOQUEI;ORLEANS DA SILVA FROTA;07464486000249
+DB03;dbartmoveis.iprojectti.com.br;3052;artmoveis;dbartmoveis.iprojectti.com.br/3052:artmoveis;4;ART MOVEIS - JUREMA;ORLEANS DA SILVA FROTA;07464486000591
+DB03;dbartmoveis.iprojectti.com.br;3052;artmoveis;dbartmoveis.iprojectti.com.br/3052:artmoveis;5;ART MOVEIS - SÃO GONÇALO;MARIA GERCILIANE ANDRADE MARINHO ME;04241191000134
+DB03;dbartmoveis.iprojectti.com.br;3052;artmoveis;dbartmoveis.iprojectti.com.br/3052:artmoveis;6;ART MOVEIS - BOM JARDIM;ORLEANS DA SILVA FROTA;07464486000672
+DB03;dbartmoveis.iprojectti.com.br;3052;artmoveis;dbartmoveis.iprojectti.com.br/3052:artmoveis;7;ART MOVEIS - DEPOSITO;ORLEANS DA SILVA FROTA;07464486000400
+DB03;dbartmoveis.iprojectti.com.br;3052;artmoveis;dbartmoveis.iprojectti.com.br/3052:artmoveis;8;ART MOVEIS - CAUCAIA;ORLEANS DA SILVA FROTA;07464486000320
+DB03;dbartmoveis.iprojectti.com.br;3052;artmoveis;dbartmoveis.iprojectti.com.br/3052:artmoveis;9;ART MOVIES - BARÃO 2;MARIA GERCILIANE ANDRADE MARINHO;04241191000215
+DB03;dbartmoveis.iprojectti.com.br;3052;artmoveis;dbartmoveis.iprojectti.com.br/3052:artmoveis;10;ART MOVEIS - BARÃO 1;ORLEANS DA SILVA FROTA;07464486000753
+DB03;dbartmoveis.iprojectti.com.br;3052;artmoveis;dbartmoveis.iprojectti.com.br/3052:artmoveis;11;ART MOVEIS - GENERAL 1;MARIA GERCILIANE ANDRADE MARINHO;04241191000304
+DB03;dbartmoveis.iprojectti.com.br;3052;artmoveis;dbartmoveis.iprojectti.com.br/3052:artmoveis;12;ART MOVEIS - BARÃO 3;MARIA GERCILIANE ANDRADE MARINHO;04241191000487
+DB03;dbartmoveis.iprojectti.com.br;3052;artmoveis;dbartmoveis.iprojectti.com.br/3052:artmoveis;13;ART MOVEIS - PARANGABA;ORLEANS DA SILVA FROTA;07464486000915
+DB03;dbartmoveis.iprojectti.com.br;3052;artmoveis;dbartmoveis.iprojectti.com.br/3052:artmoveis;14;LARBEL MOVEIS;LARBEL COMERCIO DE MOVEIS LTDA;61593601000140
+DB03;dbartmoveis.iprojectti.com.br;3052;artmoveis;dbartmoveis.iprojectti.com.br/3052:artmoveis;15;ART MOVEIS - PARAIPABA;MARIA GERCILIANE ANDRADE MARINHO;04241191000720
+DB03;dbartmoveis.iprojectti.com.br;3052;artmoveis;dbartmoveis.iprojectti.com.br/3052:artmoveis;16;FILIAL CASCAVEL;ORLEANS DA SILVA FROTA;07464486001059
+DB03;dbartmoveis.iprojectti.com.br;3052;artmoveis;dbartmoveis.iprojectti.com.br/3052:artmoveis;17;DEP SOBRAL;DEPOSITO MARIA GERCILIANE ANDRADE MARINHO;
+DB03;dbartmoveis.iprojectti.com.br;3052;artmoveis;dbartmoveis.iprojectti.com.br/3052:artmoveis;18;ART MOVEIS - GENERAL II;ORLEANS DA SILVA FROTA ME;07464486000834
+DB03;dbartmoveis.iprojectti.com.br;3052;artmoveis;dbartmoveis.iprojectti.com.br/3052:artmoveis;19;ART MOVEIS - SENADOR POMPEU;ORLEANS DA SILVA FROTA ME;07464486001130
+DB03;dbartmoveis.iprojectti.com.br;3052;artmoveis;dbartmoveis.iprojectti.com.br/3052:artmoveis;20;ART MOVEIS;ORLEANS DA SILVA FROTA LTDA;07464486001210
+DB03;dbartmoveis.iprojectti.com.br;3052;artmoveis;dbartmoveis.iprojectti.com.br/3052:artmoveis;21;ARTMOVEIS;ARTMOVEIS COMERCIO DE MOVEIS LTDA;60690608000117
+DB05;dbarvo.iprojectti.com.br;3055;arvo;dbarvo.iprojectti.com.br/3055:arvo;1;ARVO;DE CASA COMERCIO DE MOVEIS LTDA ME;10783038000131
+DB05;dbarvo.iprojectti.com.br;3055;arvo;dbarvo.iprojectti.com.br/3055:arvo;2;DE CASA COMERCIO;DE CASA COMERCIO DE MOVEIS LTDA - EPP;10783038000301
+DB03;dbatacadaomilhaense.iprojectti.com.br;3052;atacadaomilhaense;dbatacadaomilhaense.iprojectti.com.br/3052:atacadaomilhaense;1;ATACADAO MILHAENSE;JL - COMERCIAL ATACADISTA MILHAENSE LTDA;23741081000186
+DB06;dbatrativa.iprojectti.com.br;3056;atrativa;dbatrativa.iprojectti.com.br/3056:atrativa;1;ATRATIVA MODAS;ILARIO NETO CONFECCOES LTDA;09067633000191
+DB06;dbatrativa.iprojectti.com.br;3056;atrativa;dbatrativa.iprojectti.com.br/3056:atrativa;2;MEGA;SHEYLA MARIA PEREIRA DO NASCIMENTO;03477377000124
+DB03;dbbarataoconstrucaoquixeramobim.iprojectti.com.br;3052;barataoconstrucaoquixeramobim;dbbarataoconstrucaoquixeramobim.iprojectti.com.br/3052:barataoconstrucaoquixeramobim;1;BARATAO DA CONSTRUCAO;A B ALMEIDA CONSTRUCAO EIRELI;31152620000170
+DB03;dbbarataoconstrucaoquixeramobim.iprojectti.com.br;3052;barataoconstrucaoquixeramobim;dbbarataoconstrucaoquixeramobim.iprojectti.com.br/3052:barataoconstrucaoquixeramobim;2;BARATAO SENADOR;BARATAO DA CONSTRUCAO SENADOR POMPEU;10474946000143
+DB03;dbbarataoconstrucaoquixeramobim.iprojectti.com.br;3052;barataoconstrucaoquixeramobim;dbbarataoconstrucaoquixeramobim.iprojectti.com.br/3052:barataoconstrucaoquixeramobim;3;BARATAO PIQUET;A B ALMEIDA BARATAO DA CONSTRUCAO LTDA;31152620000250
+DB03;dbbarataoconstrucaopompeu.iprojectti.com.br;3052;barataoconstrucaosenadorpompeu;dbbarataoconstrucaopompeu.iprojectti.com.br/3052:barataoconstrucaosenadorpompeu;1;BARATAO DA CONSTRUCAO;A B ALMEIDA CONSTRUCAO EPP;10474946000143
+DB03;dbbarataoconstrucaopompeu.iprojectti.com.br;3052;barataoconstrucaosenadorpompeu;dbbarataoconstrucaopompeu.iprojectti.com.br/3052:barataoconstrucaosenadorpompeu;2;BARATAO DA CONSTRUCAO;A B ALMEIDA CONSTRUCAO EPP;10474946000224
+DB03;dbbarataoconstrucaopompeu.iprojectti.com.br;3052;barataoconstrucaosenadorpompeu;dbbarataoconstrucaopompeu.iprojectti.com.br/3052:barataoconstrucaosenadorpompeu;3;BARATAO DA CONSTRUCAO;F A DE ALMEIDA NETO CONSTRUÇÃO EPP;07571893000174
+DB05;dbbarataodosparafusos.iprojectti.com.br;3055;barataodosparafusos;dbbarataodosparafusos.iprojectti.com.br/3055:barataodosparafusos;1;BARATAO DOS PARAFUSOS COMERCIO E SERVICO;BARATAO DOS PARAFUSOS COMERCIO E SERVICOS LTDA;52899406000151
+DB05;dbbarataodosparafusos.iprojectti.com.br;3055;barataodosparafusos;dbbarataodosparafusos.iprojectti.com.br/3055:barataodosparafusos;2;CRISTINA;CRISTNA FINANCEIRO;
+DB05;dbbarataodosparafusos.iprojectti.com.br;3055;barataodosparafusos;dbbarataodosparafusos.iprojectti.com.br/3055:barataodosparafusos;3;BARATAO DOS PARAFUSOS;CASA DO PARAFUSO COMERCIO & SERVICOS LTDA;39614786000334
+DB03;dbbellabiju.iprojectti.com.br;3052;bellabiju;dbbellabiju.iprojectti.com.br/3052:bellabiju;1;BELLA BIJUTERIAS;COMERCIAL DE BIJUTERIAS LOBO LTDA;10157413000219
+DB03;dbbellabiju.iprojectti.com.br;3052;bellabiju;dbbellabiju.iprojectti.com.br/3052:bellabiju;2;BELLA BIJUTERIAS;LUCIANA DE SOUZA BEZERRA LOBO ME;07353306000332
+DB03;dbbellabiju.iprojectti.com.br;3052;bellabiju;dbbellabiju.iprojectti.com.br/3052:bellabiju;3;BELLA BIJUTERIAS;LUCIANA DE SOUZA BEZERRA LOBO ME;07353306000170
+DB03;dbbellabiju.iprojectti.com.br;3052;bellabiju;dbbellabiju.iprojectti.com.br/3052:bellabiju;4;BELLA BIJUTERIAS;COMERCIAL DE BIJUTERIAS LOBO LTDA;10157413000308
+DB03;dbbellabiju.iprojectti.com.br;3052;bellabiju;dbbellabiju.iprojectti.com.br/3052:bellabiju;5;BELLA BIJUTERIAS;ROBERTO WAGNER HOLANDA LOBO;08346628000155
+DB03;dbbellabiju.iprojectti.com.br;3052;bellabiju;dbbellabiju.iprojectti.com.br/3052:bellabiju;6;BELLA BIJUTERIAS;LUCIANA DE SOUZA BEZERRA LOBO ME;07353306000251
+DB03;dbbellabiju.iprojectti.com.br;3052;bellabiju;dbbellabiju.iprojectti.com.br/3052:bellabiju;7;BELLA BIJUTERIAS;COMERCIAL DE BIJUTERIAS LOBO LTDA;10157413000138
+DB03;dbbellabiju.iprojectti.com.br;3052;bellabiju;dbbellabiju.iprojectti.com.br/3052:bellabiju;8;BELLA BIJUTERIAS;LUCIANA DE SOUZA BEZERRA LOBO - ME;07353306000413
+DB03;dbbellabiju.iprojectti.com.br;3052;bellabiju;dbbellabiju.iprojectti.com.br/3052:bellabiju;9;BELLA BIJUTERIAS;ROBERTO WAGNER HOLANDA LOBO;08346628000236
+DB03;dbbellabiju.iprojectti.com.br;3052;bellabiju;dbbellabiju.iprojectti.com.br/3052:bellabiju;10;BELLA BIJUTERIAS;ROBERTO WAGNER HOLANDA LOBO;08346628000317
+DB03;dbbellabiju.iprojectti.com.br;3052;bellabiju;dbbellabiju.iprojectti.com.br/3052:bellabiju;11;BELLA BIJUTERIAS;ROBERTO WAGNER BIJUTERIAS LTDA;08346628000406
+DB03;dbbellabiju.iprojectti.com.br;3052;bellabiju;dbbellabiju.iprojectti.com.br/3052:bellabiju;12;BELLA BIJU DEPOSITO;COMERCIAL DE BIJUTERIAS LOBO LTDA - EPP;10157413000480
+DB03;dbbemgranel.iprojectti.com.br;3052;bemgranel;dbbemgranel.iprojectti.com.br/3052:bemgranel;1;BEM GRANEL;BEM GRANEL LTDA;27446495000133
+DB03;dbbemgranel.iprojectti.com.br;3052;bemgranel;dbbemgranel.iprojectti.com.br/3052:bemgranel;2;BEM GRANEL;TEREZA CUNHA XIMENES;30486376000119
+DB05;dbbemlevemakeup.iprojectti.com.br;3055;bemlevemakeup;dbbemlevemakeup.iprojectti.com.br/3055:bemlevemakeup;1;BEM LEVE MAKEUP;P&S COMERCIO DE COSMETICOS LTDA;32650064000205
+DB05;dbbemlevemakeup.iprojectti.com.br;3055;bemlevemakeup;dbbemlevemakeup.iprojectti.com.br/3055:bemlevemakeup;2;BEM LEVE MAKEUP;P&S COMERCIO DE COSMETICOS LTDA;32650064000124
+DB05;dbbemlevemakeup.iprojectti.com.br;3055;bemlevemakeup;dbbemlevemakeup.iprojectti.com.br/3055:bemlevemakeup;3;POUPE MAIS MAKEUP;POUPE MAIS MAKE E ACESSORIOS LTDA;52751696000191
+DB05;dbbemlevemakeup.iprojectti.com.br;3055;bemlevemakeup;dbbemlevemakeup.iprojectti.com.br/3055:bemlevemakeup;4;POUPE MAIS MAKEUP;MARIA DO SOCORRO SOEIRO SILVA;50330818000140
+DB05;dbbemlevemakeup.iprojectti.com.br;3055;bemlevemakeup;dbbemlevemakeup.iprojectti.com.br/3055:bemlevemakeup;5;POUPE MAIS MAKE;POUPE MAIS MAKE;
+DB05;dbbemlevemakeup.iprojectti.com.br;3055;bemlevemakeup;dbbemlevemakeup.iprojectti.com.br/3055:bemlevemakeup;6;POUPE MAIS MAKEUP;POUPE MAIS MAKEUP;
+DB05;dbbemlevemakeup.iprojectti.com.br;3055;bemlevemakeup;dbbemlevemakeup.iprojectti.com.br/3055:bemlevemakeup;7;POUPE MAIS MAKE;LUCAS DA SILVA SANTOS;51735755000175
+DB05;dbbezerrairrigacaomaquinas.iprojectti.com.br;3055;bezerrairrigacaomaquinas;dbbezerrairrigacaomaquinas.iprojectti.com.br/3055:bezerrairrigacaomaquinas;1;BEZERRA IRRIGACAO MAQUINAS E FERRAMENTAS;BEZERRA IRRIGACAO MAQUINAS E FERRAMENTAS;
+DB05;dbbezerrairrigacaomaquinas.iprojectti.com.br;3055;bezerrairrigacaomaquinas;dbbezerrairrigacaomaquinas.iprojectti.com.br/3055:bezerrairrigacaomaquinas;2;BEZERRA IRRIGAÇÃO;BEZERRA IRRIGAÇÃO;
+DB05;dbbezerrairrigacaomaquinas.iprojectti.com.br;3055;bezerrairrigacaomaquinas;dbbezerrairrigacaomaquinas.iprojectti.com.br/3055:bezerrairrigacaomaquinas;3;BEZERRA;BEZERRA COMERCIO ATACADISTA LTDA;31206985000130
+DB05;dbbezerrairrigacaomaquinas.iprojectti.com.br;3055;bezerrairrigacaomaquinas;dbbezerrairrigacaomaquinas.iprojectti.com.br/3055:bezerrairrigacaomaquinas;4;BEZERRA;BEZERRA COMERCIO ATACADISTA LTDA;31206985000210
+DB06;dbbibimoveis.iprojectti.com.br;3056;bibimoveis;dbbibimoveis.iprojectti.com.br/3056:bibimoveis;1;BIBI MOVEIS;BIBI MOVEIS LTDA;26139005000193
+DB06;dbbiliu.iprojectti.com.br;3056;biliu;dbbiliu.iprojectti.com.br/3056:biliu;1;BILIU VARIEDADES;EMILIANE NASCIMENTO DA COSTA 00181177323;26392915000183
+DB05;dbbisskids.iprojectti.com.br;3055;bisskids;dbbisskids.iprojectti.com.br/3055:bisskids;1;BISS KIDS;BISS KIDS COMERCIO DE CONFECCOES EIRELI;41543786000170
+DB05;dbbissmodas.iprojectti.com.br;3055;bissmodas;dbbissmodas.iprojectti.com.br/3055:bissmodas;1;BISS BOUTIQUE;FRANCISCO JOSE TEIXEIRA MOURA ME;00834048000103
+DB02;dbblendtopcolchoes.iprojectti.com.br;3051;blendtopcolchoes;dbblendtopcolchoes.iprojectti.com.br/3051:blendtopcolchoes;1;BLAND;INDUSTRIA BLAND COLCHOES LTDA;48020094000197
+DB01;dbbvsports.iprojectti.com.br;3050;bvsports;dbbvsports.iprojectti.com.br/3050:bvsports;1;BV SPORTS;JOSE IRLANDO LIMA GADELHA;13839338000183
+DB01;dbcacasport.iprojectti.com.br;3050;cacasport;dbcacasport.iprojectti.com.br/3050:cacasport;1;A.R. CACASPORT;C.D.L. FREIRE;15387698000117
+DB01;dbcacasport.iprojectti.com.br;3050;cacasport;dbcacasport.iprojectti.com.br/3050:cacasport;2;PLANETA ANIMAL;C.D.L. FREIRE;15387698000389
+DB01;dbcacasport.iprojectti.com.br;3050;cacasport;dbcacasport.iprojectti.com.br/3050:cacasport;3;CAÇASPORT LJ3;C.D.L. FREIRE - EPP;15387698000206
+DB05;dbcalliope.iprojectti.com.br;3055;calliope;dbcalliope.iprojectti.com.br/3055:calliope;1;CALIOOPE STORE;JESSIKA CASTRO DE SOUSA;06556826359
+DB06;dbcarlly.iprojectti.com.br;3056;carllyconstrucaobv;dbcarlly.iprojectti.com.br/3056:carllyconstrucaobv;1;CARLLY HOME CENTER;COML. CARLLY DE MAT. DE CONSTRUC LTDA;07078454000124
+DB06;dbcarlly.iprojectti.com.br;3056;carllyconstrucaobv;dbcarlly.iprojectti.com.br/3056:carllyconstrucaobv;2;HERDENY;HERDENY DI CARLLY DO ALMEIDA ROCHA EPP;08636964/0001-32
+DB06;dbcarlly.iprojectti.com.br;3056;carllyconstrucaobv;dbcarlly.iprojectti.com.br/3056:carllyconstrucaobv;3;DEPOSITO FECHADO;COMERCIAL CARLLY DE MATERIAL DE CONSTRUÇAO;07078454000205
+DB06;dbcarlly.iprojectti.com.br;3056;carllyconstrucaobv;dbcarlly.iprojectti.com.br/3056:carllyconstrucaobv;4;CARLLY STORE;ANTONIA AUSENIR DE ALMEIDA ROCHA ME;20340772/0001-80
+DB06;dbcarlly.iprojectti.com.br;3056;carllyconstrucaom;dbcarlly.iprojectti.com.br/3056:carllyconstrucaom;1;CARLLY CONSTRUCOES;CARLLY CONSTRUCOES -01;07078454/0001-24
+DB06;dbcarlly.iprojectti.com.br;3056;carllyconstrucaom;dbcarlly.iprojectti.com.br/3056:carllyconstrucaom;2;HERDENY;HERDENY DI CARLLY DE ALMEIDA ROCHA FARIAS E CIA LT;08636964000132
+DB06;dbcarlly.iprojectti.com.br;3056;carllyconstrucaom;dbcarlly.iprojectti.com.br/3056:carllyconstrucaom;3;DENY;ANTONIA AUSENIR DE ALMEIDA  ROCHA 03;
+DB06;dbcarlly.iprojectti.com.br;3056;carllyconstrucaom;dbcarlly.iprojectti.com.br/3056:carllyconstrucaom;4;CARLY CONSTRUCOES;HERDENY DI CARLLY DE ALMEIDA ROCHA ME;08636964/0002-13
+DB06;dbcarlly.iprojectti.com.br;3056;carllymegastore;dbcarlly.iprojectti.com.br/3056:carllymegastore;1;CARLLY MEGA STORE;ANTONIA AUZENIR DE ALMEIDA ROCHA;20340772000180
+DB06;dbcarlly.iprojectti.com.br;3056;carllymegastore;dbcarlly.iprojectti.com.br/3056:carllymegastore;2;HERDENY;HERDENY DI CARLLY DO ALMEIDA ROCHA EPP;08636964/0001-32
+DB06;dbcarlly.iprojectti.com.br;3056;carllymegastore;dbcarlly.iprojectti.com.br/3056:carllymegastore;3;DEPOSITO FECHADO;COMERCIAL CARLLY DE MATERIAL DE CONSTRUÇAO;07078454/0002-05
+DB06;dbcarlly.iprojectti.com.br;3056;carllymegastore;dbcarlly.iprojectti.com.br/3056:carllymegastore;4;CARLLY STORE;ANTONIA AUSENIR DE ALMEIDA ROCHA ME;20340772/0001-80
+DB03;dbcasaanastacio.iprojectti.com.br;3052;casaanastacio;dbcasaanastacio.iprojectti.com.br/3052:casaanastacio;1;CASA ANASTACIO;JOSE JUCA DE SOUSA NETO;72517915000180
+DB03;dbcasaanastacio.iprojectti.com.br;3052;casaanastacio;dbcasaanastacio.iprojectti.com.br/3052:casaanastacio;2;CASA ANASTACIO;CASA CONSTRUCOES ANASTACIO LTDA;14490351000132
+DB03;dbcasaanastacio.iprojectti.com.br;3052;casaanastacio;dbcasaanastacio.iprojectti.com.br/3052:casaanastacio;3;DEPOSITO;DEPOSITO;
+DB03;dbcasaanastacio.iprojectti.com.br;3052;casaanastacio;dbcasaanastacio.iprojectti.com.br/3052:casaanastacio;4;CASA ANASTACIO;CASA ANASTACIO CONSTRUCOES LTDA - ME;58181514000170
+DB03;dbcasaanastacio.iprojectti.com.br;3052;casaanastacio;dbcasaanastacio.iprojectti.com.br/3052:casaanastacio;5;F R MATERIAL DE COSNTRUCAO;F R CONSTRUCOES LTDA;63920697000139
+DB05;dbcasadantas.iprojectti.com.br;3055;casadantas;dbcasadantas.iprojectti.com.br/3055:casadantas;1;CASA DANTAS;MARIA DANTAS & CIA LTDA EPP;07772783000170
+DB05;dbcasadantas.iprojectti.com.br;3055;casadantas2;dbcasadantas.iprojectti.com.br/3055:casadantas2;1;CASA DANTAS;CASA DANTAS LTDA;51398917000127
+DB06;dbcasadatiarosa.iprojectti.com.br;3056;casadatiarosa;dbcasadatiarosa.iprojectti.com.br/3056:casadatiarosa;1;CASA DA TIA ROSA;CASA DA TIA ROSA COMERCIO LTDA;29921341000181
+DB03;dbcasaecia.iprojectti.com.br;3052;casaecia;dbcasaecia.iprojectti.com.br/3052:casaecia;1;CASA & CIA;AMIC MOVEIS LTDA EPP;05652590000150
+DB03;dbcasaecia.iprojectti.com.br;3052;casaecia;dbcasaecia.iprojectti.com.br/3052:casaecia;2;DEPOSITO;LUSIANA ALVES DE MORAIS ME;08912162000108
+DB03;dbcasaecia.iprojectti.com.br;3052;casaecia;dbcasaecia.iprojectti.com.br/3052:casaecia;3;CASA E CIA;AMIC MOVEIS LTDA EPP;05652590000231
+DB06;dbcasanovaconstrucoes.iprojectti.com.br;3056;casanovaconstrucoes;dbcasanovaconstrucoes.iprojectti.com.br/3056:casanovaconstrucoes;1;CASA NOVA CONSTRUCOES;CASA NOVA CONSTRUCOES LTDA;05761487000149
+DB06;dbcasanovaconstrucoes.iprojectti.com.br;3056;casanovaconstrucoes;dbcasanovaconstrucoes.iprojectti.com.br/3056:casanovaconstrucoes;2;DEPOSITO S. FRANC.;MARIA SANTA JUCA BALBINO;63468474000182
+DB06;dbcasanovaconstrucoes.iprojectti.com.br;3056;casanovaconstrucoes;dbcasanovaconstrucoes.iprojectti.com.br/3056:casanovaconstrucoes;3;DEP.;ESTOQUE;
+DB06;dbcasanovaconstrucoes.iprojectti.com.br;3056;casanovaconstrucoes;dbcasanovaconstrucoes.iprojectti.com.br/3056:casanovaconstrucoes;4;BALBINO CONSULTORIA;ALCANTARA & BALBINO SERV CONSULT EMPRESARIAL LTDA;09031294000193
+DB06;dbcasanovaconstrucoes.iprojectti.com.br;3056;casanovaconstrucoes;dbcasanovaconstrucoes.iprojectti.com.br/3056:casanovaconstrucoes;5;BALBINO CONSTRUÇOES;BALBINO CONSTRUÇOES;
+DB03;dbcasasalves.iprojectti.com.br;3052;casasalves;dbcasasalves.iprojectti.com.br/3052:casasalves;1;CASAS ALVES;FRANCISCO DAS CHAGAS ALVES DOS SANTOS - ME;00350032000117
+DB03;dbcasasalves.iprojectti.com.br;3052;casasalves;dbcasasalves.iprojectti.com.br/3052:casasalves;2;CASAS ALVES;FRANCISCO DAS CHAGAS ALVES DOS SANTOS ME;00350032000206
+DB05;dbcasasp.iprojectti.com.br;3055;casasp;dbcasasp.iprojectti.com.br/3055:casasp;1;COMERCIAL CASA SAO PAULO;COMERCIAL CASA SAO PAULO LTDA EPP;02249434000155
+DB03;dbcasateles.iprojectti.com.br;3052;casateles;dbcasateles.iprojectti.com.br/3052:casateles;1;CASA TELES HOME DECOR;CASA TELES COMERCIO DE MOVEIS LTDA;32021395000103
+DB03;dbcasateles.iprojectti.com.br;3052;casateles;dbcasateles.iprojectti.com.br/3052:casateles;2;CASA TELES OUTLET;CT HOME DECOR COMERCIO DE MOVEIS LTDA;03128867000115
+DB03;dbcasateles.iprojectti.com.br;3052;casateles;dbcasateles.iprojectti.com.br/3052:casateles;3;32021395000286;CASA TELES COMERCIO DE MOVEIS LTDA;32021395000286
+DB03;dbcasateles.iprojectti.com.br;3052;casateles;dbcasateles.iprojectti.com.br/3052:casateles;4;32021395000600;CASA TELES COMERCIO DE MOVEIS LTDA;32021395000600
+DB03;dbcasateles.iprojectti.com.br;3052;casateles;dbcasateles.iprojectti.com.br/3052:casateles;5;DEPOSITO AVARIADOS AMAPA;DEPOSITO AVARIADOS AMAPA;
+DB03;dbcasateles.iprojectti.com.br;3052;casateles;dbcasateles.iprojectti.com.br/3052:casateles;6;DESPESAS PF/ESTOQUE;DESPESAS PF/ESTOQUE;
+DB03;dbcasateles.iprojectti.com.br;3052;casateles;dbcasateles.iprojectti.com.br/3052:casateles;7;32021395000448;CASA TELES COMERCIO DE MOVEIS LTDA;32021395000448
+DB03;dbcasateles.iprojectti.com.br;3052;casateles;dbcasateles.iprojectti.com.br/3052:casateles;8;CASA TELES HOME DECOR;CASA TELES COMERCIO DE MOVEIS LTDA;32021395000367
+DB03;dbcasateles.iprojectti.com.br;3052;casateles;dbcasateles.iprojectti.com.br/3052:casateles;9;32021395000529;CASA TELES COMERCIO DE MOVEIS LTDA;32021395000529
+DB03;dbcasateles.iprojectti.com.br;3052;casateles;dbcasateles.iprojectti.com.br/3052:casateles;10;CASA TELES HOME DECOR;CASA TELES COMERCIO DE MOVEIS LTDA;32021395000790
+DB03;dbcasateles.iprojectti.com.br;3052;casateles;dbcasateles.iprojectti.com.br/3052:casateles;11;ESTOQUE OUTLET;ESTOQUE OUTLET;
+DB03;dbcasateles.iprojectti.com.br;3052;casateles;dbcasateles.iprojectti.com.br/3052:casateles;12;CASA TELES;CASA TELES DECOR COMERCIO DE MOVEIS LTDA - EPP;60006422000104
+DB05;dbcearabolha.iprojectti.com.br;3055;cearabolha;dbcearabolha.iprojectti.com.br/3055:cearabolha;1;CEARA BOLHA;CEARA BOLHA INDUSTRIA E COMERCIO DE PLASTICOS E AR;52232346000119
+DB03;dbflormel.iprojectti.com.br;3052;central;dbflormel.iprojectti.com.br/3052:central;1;FLOR MEL;FLOR DE MEL CONFECCOES DE ARTIGOS DO VESTUARIO LTD;08415125000194
+DB03;dbflormel.iprojectti.com.br;3052;central;dbflormel.iprojectti.com.br/3052:central;2;FLOR MEL;FLOR MEL CONFECCOES DE ARTIGOS DO VESTUARIO LTDA M;08415125000275
+DB03;dbflormel.iprojectti.com.br;3052;central;dbflormel.iprojectti.com.br/3052:central;3;MARIA IMACULADA ROCHA;MARIA IMACULADA ROCHA 90724348387;28128402000195
+DB03;dbflormel.iprojectti.com.br;3052;central;dbflormel.iprojectti.com.br/3052:central;4;FLOR MEL CENTRO FASHION;FLOR DE MEL CONFECCOES DE ARTIGOS DO VESTUARIO LTD;08415125000194
+DB03;dbciamoveis.iprojectti.com.br;3052;ciamoveis;dbciamoveis.iprojectti.com.br/3052:ciamoveis;1;COMPANHIA DOS MOVEIS - PARANGABA;TAU COMERCIO DE MOVEIS LTDA - 01;03221136000110
+DB03;dbciamoveis.iprojectti.com.br;3052;ciamoveis;dbciamoveis.iprojectti.com.br/3052:ciamoveis;2;COMPANHIA DOS MOVEIS - PARANGABA FUNDOS;TAU COMERCIO DE MOVEIS LTDA - 02;03221136000209
+DB03;dbciamoveis.iprojectti.com.br;3052;ciamoveis;dbciamoveis.iprojectti.com.br/3052:ciamoveis;3;FINGER-BARAO;TAU COMERCIO DE MOVEIS LTDA - 03;03221136000381
+DB06;dbcmmadeireira.iprojectti.com.br;3056;cmmadeireira;dbcmmadeireira.iprojectti.com.br/3056:cmmadeireira;1;CM MADEIREIRA;CM MADEIREIRA;52729561000120
+DB06;dbcmmadeireira.iprojectti.com.br;3056;cmmadeireira;dbcmmadeireira.iprojectti.com.br/3056:cmmadeireira;2;C M MADEIREIRA LTDA;C M MADEIREIRA LTDA;52729561000200
+DB02;dbcolosso.iprojectti.com.br;3051;colosso;dbcolosso.iprojectti.com.br/3051:colosso;1;DEPOSITO COLOSSO;COLOSSO CONTRUCOES LTDA - ME;49721572000159
+DB03;dbcomagri.iprojectti.com.br;3052;comagri;dbcomagri.iprojectti.com.br/3052:comagri;1;COMAGRI;COMERCIAL DE MADEIRA, MAT AGRIC E CONST LTDA;00866516000113
+DB03;dbcomagri.iprojectti.com.br;3052;comagri;dbcomagri.iprojectti.com.br/3052:comagri;2;COMAGRI DEPOSITO;COM DE MADEIRA MAT AGRÍCOLA E CONSTRUÇÃO LTDA ME;00866516000202
+DB03;dbcomagri.iprojectti.com.br;3052;comagri;dbcomagri.iprojectti.com.br/3052:comagri;3;COMAGRE FILIAL;JOSE LEILSON MORAIS PINHEIRO ME;23572340000192
+DB03;dbcomagri.iprojectti.com.br;3052;comagri;dbcomagri.iprojectti.com.br/3052:comagri;4;DEPOSITO FECHADO PORTA VERDE;COMA-COMAGRI COMERCIAL DE MADEIRA MATERIAL AGRICOL;00866516000385
+DB03;dbcomagri.iprojectti.com.br;3052;comagri;dbcomagri.iprojectti.com.br/3052:comagri;5;DEPOSITO FECHADO 2 EDINEU;COMAG - COMAGRI COMERCIAL DE MAD MATERIAL AGRIC;00866516000466
+DB03;dbcomagri.iprojectti.com.br;3052;comagri;dbcomagri.iprojectti.com.br/3052:comagri;6;COMAGRI (FILIAL 4);COMAGRI - COMERCIAL DE MADEIRA MATERIAL AGRI E CON;00866516000547
+DB01;dbcomercialaraujo.iprojectti.com.br;3050;comercialaraujo;dbcomercialaraujo.iprojectti.com.br/3050:comercialaraujo;1;COMERCIAL ARAUJO;COMERCIAL ARAUJO MATERIAIS DE IRRIGACAO LTDA;49381022000138
+DB01;dbcomercialaraujo.iprojectti.com.br;3050;comercialaraujo;dbcomercialaraujo.iprojectti.com.br/3050:comercialaraujo;2;COM.ARAUJO RAÇOES;COMERCIAL ARAUJO RAÇOES;
+DB01;dbcomercialaraujo.iprojectti.com.br;3050;comercialaraujo;dbcomercialaraujo.iprojectti.com.br/3050:comercialaraujo;3;DEPOSITO FECHADO;ANTONIO AGOSTINHO DE ARAUJO ME;41636986000259
+DB03;dbconstantino.iprojectti.com.br;3052;constantino;dbconstantino.iprojectti.com.br/3052:constantino;1;CONSTANTINO MOVEIS;FRANCISCO CONSTANTINO DA SILVA;86686623000185
+DB03;dbconstantino.iprojectti.com.br;3052;constantino;dbconstantino.iprojectti.com.br/3052:constantino;2;CONSTATINO MOVEIS - BEBERIBE;F. D. NASCIMENTO DA COSTA;08805771000168
+DB03;dbconstantino.iprojectti.com.br;3052;constantino;dbconstantino.iprojectti.com.br/3052:constantino;3;DEPOSITO CASCAVEL;FRANCISCO CONSTANTINO DA SILVA;86686623000266
+DB03;dbconstantino.iprojectti.com.br;3052;constantino;dbconstantino.iprojectti.com.br/3052:constantino;4;CONSTANTINO MOVEIS - FILIAL;FRANCISCO CONSTANTINO DA SILVA ME;86686623000347
+DB03;dbconstantino.iprojectti.com.br;3052;constantino;dbconstantino.iprojectti.com.br/3052:constantino;5;CONSTANTINO MOVEIS;FRANCISCO CONSTANTINO DA SILVA - EPP;86686623000428
+DB03;dbconstantino.iprojectti.com.br;3052;constantino;dbconstantino.iprojectti.com.br/3052:constantino;6;CONSTATINO MOVEIS;FRANCISCO CONSTANTINO DA SILVA;86686623000509
+DB03;dbconstruleste.iprojectti.com.br;3052;construleste;dbconstruleste.iprojectti.com.br/3052:construleste;1;NONO;FRANCISCO ERINILSON DE SOUSA SILVA;36642091000106
+DB03;dbconstruleste.iprojectti.com.br;3052;construleste;dbconstruleste.iprojectti.com.br/3052:construleste;2;CONSTRULESTE;F JOACILLIO CAVALCANTE LTDA;24057550000296
+DB03;dbconstruleste.iprojectti.com.br;3052;construleste;dbconstruleste.iprojectti.com.br/3052:construleste;3;CONSTRULESTE IPARANA;F JOACILLIO CAVALCANTE LTDA;24057550000377
+DB03;dbconstruleste.iprojectti.com.br;3052;construlesteconsulta;dbconstruleste.iprojectti.com.br/3052:construlesteconsulta;1;CONSTRULESTE;VLADISON DA SILVA LIMA;36298482000155
+DB03;dbconstruleste.iprojectti.com.br;3052;construlesteconsulta;dbconstruleste.iprojectti.com.br/3052:construlesteconsulta;2;CONSTRULESTE;VLADISON COMERCIO DE MATERIAS DE CONSTRUCAO LTDA;36298482000317
+DB03;dbconstruleste.iprojectti.com.br;3052;construlesteconsulta;dbconstruleste.iprojectti.com.br/3052:construlesteconsulta;3;CONSTRULESTE;IPARANA CONTRUCOES LTDA;11223207000141
+DB03;dbconstruleste.iprojectti.com.br;3052;construlesteconsulta;dbconstruleste.iprojectti.com.br/3052:construlesteconsulta;4;MAIS TOP;FARIAS COMERCIO DE MATERIAIS DE CONSTRUÇÃO LTDA;22754531000102
+DB03;dbconstruleste.iprojectti.com.br;3052;construlesteconsulta;dbconstruleste.iprojectti.com.br/3052:construlesteconsulta;5;CONSTRULESTE IPARANA;V M COMERCIO MATERIAIS DE CONSTRUÇÃO LTDA;54477269000192
+DB03;dbconstruleste.iprojectti.com.br;3052;construlesteconsulta;dbconstruleste.iprojectti.com.br/3052:construlesteconsulta;6;CONSTRULESTE;V M COMERCIO MATERIAIS DE CONSTRUCAO LTDA;54477269000273
+DB05;dbconsumourbano.iprojectti.com.br;3055;consumourbano;dbconsumourbano.iprojectti.com.br/3055:consumourbano;1;CONSUMO URBANO;ADIL JOSE DE OLIVEIRA - EPP;72404668000105
+DB05;dbconsumourbano.iprojectti.com.br;3055;consumourbano;dbconsumourbano.iprojectti.com.br/3055:consumourbano;2;FGH;FGH;
+DB05;dbconsumourbano.iprojectti.com.br;3055;consumourbano;dbconsumourbano.iprojectti.com.br/3055:consumourbano;3;GDI;GDI;
+DB01;dbcredmilg.iprojectti.com.br;3050;credmilg;dbcredmilg.iprojectti.com.br/3050:credmilg;1;MARIA IVANDA LIMA GADELHA EPP CREDMILG;MARIA IVANDA LIMA GADELHA EPP;35245513000147
+DB06;dbcredpontes.iprojectti.com.br;3056;credpontes;dbcredpontes.iprojectti.com.br/3056:credpontes;1;CREDPONTES;FRANCISCO EDILAILSON MARTINS PONTES;16811049000164
+DB06;dbcredpontes.iprojectti.com.br;3056;credpontes;dbcredpontes.iprojectti.com.br/3056:credpontes;2;CAMINHAO BRANCO;CAMINHAO BRANCO NOVO;
+DB06;dbcredpontes.iprojectti.com.br;3056;credpontes;dbcredpontes.iprojectti.com.br/3056:credpontes;3;CAMINHÃO VERMELHO NOVO;CAMINHÃO VERMELHO;
+DB06;dbcredpontes.iprojectti.com.br;3056;credpontes;dbcredpontes.iprojectti.com.br/3056:credpontes;4;CAMINHÃO AZUL;CAMINHÃO AZUL;
+DB06;dbcredpontes.iprojectti.com.br;3056;credpontes;dbcredpontes.iprojectti.com.br/3056:credpontes;5;CAMINHÃO VERMELHO;CAMINHÃO VERMELHO;
+DB06;dbcredpontes.iprojectti.com.br;3056;credpontes;dbcredpontes.iprojectti.com.br/3056:credpontes;6;CAMINHÃO VERMELHO BRANCO ANTIGO;CAMINHÃO VERMELHO BRANCO ANTIGO;
+DB06;dbcredpontes.iprojectti.com.br;3056;credpontes;dbcredpontes.iprojectti.com.br/3056:credpontes;7;CAMINHAO F4000;CAMINHAO F4000;
+DB06;dbcredpontes.iprojectti.com.br;3056;credpontes;dbcredpontes.iprojectti.com.br/3056:credpontes;8;LOJA 08;LOJA 08;
+DB06;dbcredpontes.iprojectti.com.br;3056;credpontes;dbcredpontes.iprojectti.com.br/3056:credpontes;9;LOJA 09;LOJA 09;
+DB06;dbcredpontes.iprojectti.com.br;3056;credpontes;dbcredpontes.iprojectti.com.br/3056:credpontes;10;AVARIAS;AVARIAS;
+DB05;dbdcf.iprojectti.com.br;3055;dcf;dbdcf.iprojectti.com.br/3055:dcf;1;DCF DISTRIBUIDOR;DAVID CARNEIRO DE FREITAS;07783433000100
+DB05;dbdcf.iprojectti.com.br;3055;dcf;dbdcf.iprojectti.com.br/3055:dcf;2;D&B DISTRIBUIDORA;ARRAIS DISTRIBUIDORA EIRELI - ME;13053505000166
+DB05;dbdcf.iprojectti.com.br;3055;dcf;dbdcf.iprojectti.com.br/3055:dcf;3;DEPOSITO;DAVID CARNEIRO DE FREITAS - ME;07783433000290
+DB03;dbdepoliveira.iprojectti.com.br;3052;depoliveira;dbdepoliveira.iprojectti.com.br/3052:depoliveira;1;DEPOSITO OLIVEIRA;A DE ALMEIDA COSTA;08333729000191
+DB03;dbdepoliveira.iprojectti.com.br;3052;depoliveira;dbdepoliveira.iprojectti.com.br/3052:depoliveira;2;DEPOSITO OLIVEIRA;A DE ALMEIDA COSTA;08333729000272
+DB03;dbdepoliveira.iprojectti.com.br;3052;depoliveira;dbdepoliveira.iprojectti.com.br/3052:depoliveira;3;OLIVEIRA HOME CENTER;OLIVEIRA HOME CENTER ATACADO LTDA;51560295000191
+DB05;dbdigigrafics.iprojectti.com.br;3055;digigrafics;dbdigigrafics.iprojectti.com.br/3055:digigrafics;1;DIGIGRAFICS;DIGIGRAFICS CONCEITO LTDA - EPP;48259045000101
+DB05;dbdigigrafics.iprojectti.com.br;3055;digigrafics;dbdigigrafics.iprojectti.com.br/3055:digigrafics;2;DEPOSITO IGUATEMI;DEPOSITO IGUATEMI;
+DB05;dbdigigrafics.iprojectti.com.br;3055;digigrafics;dbdigigrafics.iprojectti.com.br/3055:digigrafics;3;DIGIGRAFICS;DIGIGRAFICS LTDA;49819305000119
+DB05;dbdigigrafics.iprojectti.com.br;3055;digigrafics;dbdigigrafics.iprojectti.com.br/3055:digigrafics;4;DEPOSITO PARANGABA;DEPOSITO PARANGABA;
+DB05;dbdigigrafics.iprojectti.com.br;3055;digigrafics;dbdigigrafics.iprojectti.com.br/3055:digigrafics;5;DIGIGRAFICS CONCEITO;DIGIMAISS IMPRESSOES LTDA;28079554000145
+DB05;dbdigigrafics.iprojectti.com.br;3055;digigrafics;dbdigigrafics.iprojectti.com.br/3055:digigrafics;6;DEPOSITO KENNEDY;DEPOSITO KENNEDY;
+DB05;dbdigigrafics.iprojectti.com.br;3055;digigrafics;dbdigigrafics.iprojectti.com.br/3055:digigrafics;7;PERSONALICS;PERSONALICS LTDA;54360541000150
+DB05;dbdigigrafics.iprojectti.com.br;3055;digigrafics;dbdigigrafics.iprojectti.com.br/3055:digigrafics;8;DEPOSITO PERSONALICS;DEPOSITO PERSONALICS;
+DB03;dbdigitronica.iprojectti.com.br;3052;digitronica;dbdigitronica.iprojectti.com.br/3052:digitronica;1;DIGEE;DIGEE COMERCIAL E SERVICOS LTDA.;09270809000108
+DB03;dbdigitronica.iprojectti.com.br;3052;digitronica;dbdigitronica.iprojectti.com.br/3052:digitronica;2;DIGEE;DIGEE COMERCIAL E SERVICOS LTDA.;09270809000299
+DB05;dbdistrferragens.iprojectti.com.br;3055;distrferragens;dbdistrferragens.iprojectti.com.br/3055:distrferragens;1;DIST. DE FERRAGENS;F BENICIO DE HOLANDA & CIA LTDA;06599211000179
+DB05;dbdistrferragens.iprojectti.com.br;3055;distrferragens;dbdistrferragens.iprojectti.com.br/3055:distrferragens;2;DIST. DE FERRAGENS;F BENICIO DE HOLANDA & CIA LTDA;06599211000250
+DB05;dbdistrferragens.iprojectti.com.br;3055;distrferragens;dbdistrferragens.iprojectti.com.br/3055:distrferragens;3;AGUANAMBI FERRAGENS;F. BENICIO DE HOLANDA & CIA LTDA;06599211000330
+DB05;dblanehc.iprojectti.com.br;3055;distribuidoraconstruir;dblanehc.iprojectti.com.br/3055:distribuidoraconstruir;1;DISTRIBUIDORA CONSTRUIR;DISTRIBUIDORA CONSTRUIR COM DE MAT DE CONSTRUCAO;27949671000150
+DB04;dbducampo.iprojectti.com.br;3054;ducampo;dbducampo.iprojectti.com.br/3054:ducampo;1;DUCAMPO;DUCAMPO EMPREENDIMENTOS FLORESTAIS LTDA ME;14267622000195
+DB04;dbducampo.iprojectti.com.br;3054;ducampo;dbducampo.iprojectti.com.br/3054:ducampo;2;AGROENE;AGROENE PRODUCAO E COMERCIO DE BIOMASSAS LTDA ME;21758383000131
+DB04;dbducampo.iprojectti.com.br;3054;ducampo;dbducampo.iprojectti.com.br/3054:ducampo;3;FLAMMA BRIQUETS;FLAMMA INDUSTRIA DE BRIQUETS LTDA;19890673000192
+DB04;dbducampo.iprojectti.com.br;3054;ducampo;dbducampo.iprojectti.com.br/3054:ducampo;4;ENERGIA DUCAMPO;POTIGUAR BIOMASSA LTDA;24044377000100
+DB04;dbducampo.iprojectti.com.br;3054;ducampo;dbducampo.iprojectti.com.br/3054:ducampo;5;DUCAMPO ALAGOAS;DUCAMPO ALAGOAS;00000000000000
+DB04;dbducampo.iprojectti.com.br;3054;ducampo;dbducampo.iprojectti.com.br/3054:ducampo;6;DUCAMPO PIAUI;DUCAMPO PIAUI;
+DB04;dbducampo.iprojectti.com.br;3054;ducampo;dbducampo.iprojectti.com.br/3054:ducampo;7;ENERGIA DUCAMPO;AGRO BIOMASSA NORDESTE LTDA;33851279000176
+DB04;dbducampo.iprojectti.com.br;3054;ducampo;dbducampo.iprojectti.com.br/3054:ducampo;8;RENO VERDE MADEIRA;RENO VERDE MADEIRA EIRELI;37015491000154
+DB04;dbducampo.iprojectti.com.br;3054;ducampo;dbducampo.iprojectti.com.br/3054:ducampo;9;NATULENHA;NATULENHA COMERCIO DE BIOMASSA LTDA;19890673000273
+DB04;dbducampo.iprojectti.com.br;3054;ducampo;dbducampo.iprojectti.com.br/3054:ducampo;10;AGROENE - AGRO ENERGIA VERDE DO NORDESTE;AGROENE - PRODUCAO E COMERCIO DE BIOMASSAS LTDA;21758383000301
+DB04;dbducampo.iprojectti.com.br;3054;ducampo;dbducampo.iprojectti.com.br/3054:ducampo;11;AGROENE;AGROENE - PRODUCAO E COMERCIO DE BIOMASSAS LTDA;21758383000212
+DB04;dbducampo.iprojectti.com.br;3054;ducampo;dbducampo.iprojectti.com.br/3054:ducampo;12;ENVERNE;ENERGIA VERDE DO NORDESTE - ENVERNE LTDA;61297505000154
+DB03;dbdulcesilveira.iprojectti.com.br;3052;dulcesilveira;dbdulcesilveira.iprojectti.com.br/3052:dulcesilveira;1;HOLANDA POR DULCE SILVEIRA;DULCE SILVEIRA AMBIENTACOES LTDA;07297682000195
+DB03;dbdulcesilveira.iprojectti.com.br;3052;dulcesilveira;dbdulcesilveira.iprojectti.com.br/3052:dulcesilveira;2;DEPOSITO;DULCE SILVEIRA AMBIENTACOES EIRELI;07297682000608
+DB03;dbdulcesilveira.iprojectti.com.br;3052;dulcesilveira;dbdulcesilveira.iprojectti.com.br/3052:dulcesilveira;3;MD&T COMERCIO DE MOVEIS E DECORACOES;MD&T COMERCIO DE MOVEIS E DECORACOES EIRELI -ME;06635119000117
+DB06;dbeddicoesipdh.iprojectti.com.br;3056;eddicoesipdh;dbeddicoesipdh.iprojectti.com.br/3056:eddicoesipdh;1;EDICOES IPDH;EDICOES IPDH GRAFICA EDITORA E SERVICOS LTDA;09596757000164
+DB06;dbeddicoesipdh.iprojectti.com.br;3056;eddicoesipdh;dbeddicoesipdh.iprojectti.com.br/3056:eddicoesipdh;2;INSTITUTO PRISMA;INSTITUTO PRISMA DE DESENVOLVIMENTO HUMANO-IPDH;07248187000196
+DB06;dbeddicoesipdh.iprojectti.com.br;3056;eddicoesipdh;dbeddicoesipdh.iprojectti.com.br/3056:eddicoesipdh;3;SEGE;SEGE SISTEMAS DE EDUCACAO E GESTAO DE EXCELENCIA L;26699930000179
+DB06;dbeddicoesipdh.iprojectti.com.br;3056;eddicoesipdh;dbeddicoesipdh.iprojectti.com.br/3056:eddicoesipdh;4;GRAFICA;GRAFICA;
+DB06;dbeddicoesipdh.iprojectti.com.br;3056;eddicoesipdh;dbeddicoesipdh.iprojectti.com.br/3056:eddicoesipdh;5;DISTRILER DISTRIBUIDORA;DISTRILER DISTRIBUIDORA DE DIDATICOS LTDA;63555248000139
+DB03;dbedglerpescadosbarrospi.iprojectti.com.br;3052;edglerpescadosbarrospi;dbedglerpescadosbarrospi.iprojectti.com.br/3052:edglerpescadosbarrospi;1;EDGLER PESCADOS;DAVI DOS SANTOS SOUSA;32977672000148
+DB03;dbedglerpescadosbarrospi.iprojectti.com.br;3052;edglerpescadosbarrospi;dbedglerpescadosbarrospi.iprojectti.com.br/3052:edglerpescadosbarrospi;2;EDGLER PESCADOS;EDGLER PESCADOS LTDA.;32977672000229
+DB03;dbedglerpescadosbarrospi.iprojectti.com.br;3052;edglerpescadosbarrospi;dbedglerpescadosbarrospi.iprojectti.com.br/3052:edglerpescadosbarrospi;3;EDGLER PESCADOS;EDGLER PESCADOS LTDA.;32977672000300
+DB03;dbedglerpescadosbarrospi.iprojectti.com.br;3052;edglerpescadosbarrospi;dbedglerpescadosbarrospi.iprojectti.com.br/3052:edglerpescadosbarrospi;4;EDGLER PESCADOS;EDGLER PESCADOS LTDA.;32977672000148
+DB03;dbedglerpescadosfortaleza.iprojectti.com.br;3052;edglerpescadosfortaleza;dbedglerpescadosfortaleza.iprojectti.com.br/3052:edglerpescadosfortaleza;1;EDGLER PESCADOS;DAVI DOS SANTOS SOUSA;32977672000148
+DB03;dbedglerpescadosfortaleza.iprojectti.com.br;3052;edglerpescadosfortaleza;dbedglerpescadosfortaleza.iprojectti.com.br/3052:edglerpescadosfortaleza;2;EDGLER PESCADOS;EDGLER PESCADOS LTDA.;32977672000229
+DB03;dbedglerpescadosfortaleza.iprojectti.com.br;3052;edglerpescadosfortaleza;dbedglerpescadosfortaleza.iprojectti.com.br/3052:edglerpescadosfortaleza;3;EDGLER PESCADOS;EDGLER PESCADOS LTDA.;32977672000300
+DB03;dbedglerpescadosfortaleza.iprojectti.com.br;3052;edglerpescadosfortaleza;dbedglerpescadosfortaleza.iprojectti.com.br/3052:edglerpescadosfortaleza;4;EDGLER PESCADOS;EDGLER PESCADOS LTDA.;32977672000148
+DB03;dbedglerpescadospentecoste.iprojectti.com.br;3052;edglerpescadospentecoste;dbedglerpescadospentecoste.iprojectti.com.br/3052:edglerpescadospentecoste;1;EDGLER PESCADOS;DAVI DOS SANTOS SOUSA;32977672000148
+DB03;dbedglerpescadospentecoste.iprojectti.com.br;3052;edglerpescadospentecoste;dbedglerpescadospentecoste.iprojectti.com.br/3052:edglerpescadospentecoste;2;EDGLER PESCADOS;EDGLER PESCADOS LTDA.;32977672000229
+DB03;dbedglerpescadospentecoste.iprojectti.com.br;3052;edglerpescadospentecoste;dbedglerpescadospentecoste.iprojectti.com.br/3052:edglerpescadospentecoste;3;EDGLER PESCADOS;EDGLER PESCADOS LTDA.;32977672000300
+DB03;dbedglerpescadospentecoste.iprojectti.com.br;3052;edglerpescadospentecoste;dbedglerpescadospentecoste.iprojectti.com.br/3052:edglerpescadospentecoste;4;EDGLER PESCADOS;EDGLER PESCADOS LTDA.;32977672000148
+DB03;dbtgpinheiro.iprojectti.com.br;3052;egpinheiro;dbtgpinheiro.iprojectti.com.br/3052:egpinheiro;4;MAGAZINE GUERRA;T G PINHEIRO-ME;20590687000170
+DB03;dbtgpinheiro.iprojectti.com.br;3052;egpinheiro;dbtgpinheiro.iprojectti.com.br/3052:egpinheiro;5;GUERRA KIDS;E G PINHEIRO LTDA;51322267000136
+DB03;dbtgpinheiro.iprojectti.com.br;3052;egpinheiro;dbtgpinheiro.iprojectti.com.br/3052:egpinheiro;6;MAGAZINE GUERRA;E G PINHEIRO LTDA;51322267000217
+DB03;dbeletrogas.iprojectti.com.br;3052;eletrogas;dbeletrogas.iprojectti.com.br/3052:eletrogas;1;ELETROGAS;FRANCISCA FRANCO DA SILVA;01565230000160
+DB03;dbeletronicamega.iprojectti.com.br;3052;eletronicamega;dbeletronicamega.iprojectti.com.br/3052:eletronicamega;1;ELETRONICA MEGA;F. ELIVANIR XAVIER ELETRONICA - ME;10548327000156
+DB03;dbeletronicamega.iprojectti.com.br;3052;eletronicamega;dbeletronicamega.iprojectti.com.br/3052:eletronicamega;2;LIVERTEC VARIEDADES;F. ELIVANIR XAVIER ELETRONICA - ME;10548327000150
+DB03;dbeletronicamega.iprojectti.com.br;3052;eletronicamega;dbeletronicamega.iprojectti.com.br/3052:eletronicamega;3;ELETRONICA MEGA;LIMA DISTRIBUICAO E COMERCIO DE PECAS PARA ELETROD;22162830000409
+DB03;dbeletronicamega.iprojectti.com.br;3052;eletronicamega;dbeletronicamega.iprojectti.com.br/3052:eletronicamega;101;TESTE;TESTE;
+DB01;dbentrelinhas.iprojectti.com.br;3050;entrelinhas;dbentrelinhas.iprojectti.com.br/3050:entrelinhas;1;ENTRELINHAS;F F LOUREIRO COMERCIO VAREJISTA DE BIJUTERIAS LTDA;30580188000155
+DB01;dbentrelinhas.iprojectti.com.br;3050;entrelinhas;dbentrelinhas.iprojectti.com.br/3050:entrelinhas;2;ENTRELINHAS;F F LOUREIRO COMERCIO VAREJISTA DE BIJUTERIAS LTDA;30580188000236
+DB01;dbentrelinhas.iprojectti.com.br;3050;entrelinhas;dbentrelinhas.iprojectti.com.br/3050:entrelinhas;3;AVES E RACOES;C.D.L. FREIRE;
+DB02;dberandimotos.iprojectti.com.br;3051;erandimotos;dberandimotos.iprojectti.com.br/3051:erandimotos;1;ERANDI MOTOS;ERANDI FERNANDES AMARO LTDA.;29982750000198
+DB05;dberidannovidades.iprojectti.com.br;3055;eridannovidades;dberidannovidades.iprojectti.com.br/3055:eridannovidades;1;ERIDAN NOVIDADES;FRANCISCO ERIDAN FARIAS MOTA - ME;07341021000110
+DB05;dbessencialcosmetico.iprojectti.com.br;3055;essencialcosmetico;dbessencialcosmetico.iprojectti.com.br/3055:essencialcosmetico;1;ESSENCIAL COSMÉTICO;60.920.059 ARTHUR BATISTA DUTRA;60920059000120
+DB03;dbeugeniamoveis.iprojectti.com.br;3052;eugeniamoveis;dbeugeniamoveis.iprojectti.com.br/3052:eugeniamoveis;1;EUGENIA MOVEIS - MATRIZ;E M E ELETRODOMESTICOS LTDA ME;01614545000150
+DB03;dbeugeniamoveis.iprojectti.com.br;3052;eugeniamoveis;dbeugeniamoveis.iprojectti.com.br/3052:eugeniamoveis;2;EUGENIA MOVEIS - PB;MARIA EUGENIA CALIOPE DE ARIMATEIA;11827292000157
+DB03;dbeugeniamoveis.iprojectti.com.br;3052;eugeniamoveis;dbeugeniamoveis.iprojectti.com.br/3052:eugeniamoveis;3;EUGENIA MOVEIS - MN;MARIA EUGENIA CALIOPE DE ARIMATEIA;
+DB03;dbeugeniamoveis.iprojectti.com.br;3052;eugeniamoveis;dbeugeniamoveis.iprojectti.com.br/3052:eugeniamoveis;4;EUGENIA MOVEIS - SP;MARIA EUGENIA CALIOPE DE ARIMATEIA;11827292000238
+DB02;dbevelinemoveis.iprojectti.com.br;3051;evelinemoveis;dbevelinemoveis.iprojectti.com.br/3051:evelinemoveis;1;EVELINE MOVEIS;MARCOS ANTONIO ABINTES;07603102000140
+DB02;dbevelinemoveis.iprojectti.com.br;3051;evelinemoveis;dbevelinemoveis.iprojectti.com.br/3051:evelinemoveis;2;EVELINE MOVEIS;EVELINE MARIA ABINTES ME;00632675000153
+DB02;dbevelinemoveis.iprojectti.com.br;3051;evelinemoveis;dbevelinemoveis.iprojectti.com.br/3051:evelinemoveis;3;EVELINE MOVEIS;EVELINE MARIA ABINTES;00632675000234
+DB02;dbevelinemoveis.iprojectti.com.br;3051;evelinemoveis;dbevelinemoveis.iprojectti.com.br/3051:evelinemoveis;4;DEPOSITO CASCAVEL 02;MARCOS ANTONIO ABINTES ME;07603102000221
+DB02;dbevelinemoveis.iprojectti.com.br;3051;evelinemoveis;dbevelinemoveis.iprojectti.com.br/3051:evelinemoveis;5;EVELINE MOVEIS;EVELINE MARIA ABINTES;00632675000315
+DB02;dbevelinemoveis.iprojectti.com.br;3051;evelinemoveis;dbevelinemoveis.iprojectti.com.br/3051:evelinemoveis;6;CENTRO DE DISTRIBUIÇÃO;EVELINE MARIA ABINTES ME;00632675000404
+DB02;dbevelinemoveis.iprojectti.com.br;3051;evelinemoveis;dbevelinemoveis.iprojectti.com.br/3051:evelinemoveis;7;EVELINE MOVEIS;EVELINE MARIA ABINTES;00632675000587
+DB03;dbflormel.iprojectti.com.br;3052;fabrica;dbflormel.iprojectti.com.br/3052:fabrica;1;FLOR MEL;FLOR DE MEL CONFECCOES DE ARTIGOS DO VESTUARIO LTD;08415125000194
+DB03;dbflormel.iprojectti.com.br;3052;fabrica;dbflormel.iprojectti.com.br/3052:fabrica;2;LOJA PATIO CENTRAL;LOJA PATIO CENTRAL;08415125000275
+DB03;dbflormel.iprojectti.com.br;3052;fabrica;dbflormel.iprojectti.com.br/3052:fabrica;3;LOJA CENTRO FASHION;LOJA CENTRO FASHION;08415125000356
+DB03;dbflormel.iprojectti.com.br;3052;fabrica;dbflormel.iprojectti.com.br/3052:fabrica;4;FLOR MEL CENTRO FASHION;FLOR DE MEL CONFECCOES DE ARTIGOS DO VESTUARIO LTD;08415125000194
+DB03;dbflormel.iprojectti.com.br;3052;fashion;dbflormel.iprojectti.com.br/3052:fashion;1;FLOR MEL;FLOR DE MEL CONFECCOES DE ARTIGOS DO VESTUARIO LTD;08415125000194
+DB03;dbflormel.iprojectti.com.br;3052;fashion;dbflormel.iprojectti.com.br/3052:fashion;2;FLOR MEL;FLOR MEL CONFECCOES DE ARTIGOS DO VESTUARIO LTDA M;08415125000275
+DB03;dbflormel.iprojectti.com.br;3052;fashion;dbflormel.iprojectti.com.br/3052:fashion;3;MARIA IMACULADA ROCHA;MARIA IMACULADA ROCHA 90724348387;28128402000195
+DB03;dbflormel.iprojectti.com.br;3052;fashion;dbflormel.iprojectti.com.br/3052:fashion;4;FLOR MEL CENTRO FASHION;FLOR DE MEL CONFECCOES DE ARTIGOS DO VESTUARIO LTD;08415125000356
+DB01;dbfdmoveis.iprojectti.com.br;3050;fdmoveis;dbfdmoveis.iprojectti.com.br/3050:fdmoveis;1;FD MOVEIS;FD MOVEIS E ELETROS LTDA;13589944000198
+DB01;dbfdmoveis.iprojectti.com.br;3050;fdmoveis;dbfdmoveis.iprojectti.com.br/3050:fdmoveis;2;FD MOVEIS;D R DE FREITAS MOVEIS E ELETROS ME;
+DB01;dbfdmoveis.iprojectti.com.br;3050;fdmoveis;dbfdmoveis.iprojectti.com.br/3050:fdmoveis;3;FD MOVEIS;ANABIO LOJA 3;
+DB01;dbfdmoveis.iprojectti.com.br;3050;fdmoveis;dbfdmoveis.iprojectti.com.br/3050:fdmoveis;4;ANT MARCOS;JOAO LOJA 4;
+DB01;dbfdmoveis.iprojectti.com.br;3050;fdmoveis;dbfdmoveis.iprojectti.com.br/3050:fdmoveis;5;FD MOVEIS;JOCELINO LOJA 5;
+DB01;dbfdmoveis.iprojectti.com.br;3050;fdmoveis;dbfdmoveis.iprojectti.com.br/3050:fdmoveis;6;FD MOVEIS;FD LOJA GERAL;
+DB01;dbfdmoveis.iprojectti.com.br;3050;fdmoveis;dbfdmoveis.iprojectti.com.br/3050:fdmoveis;7;EDINHO;EDIVAN;
+DB01;dbfdmoveis.iprojectti.com.br;3050;fdmoveis;dbfdmoveis.iprojectti.com.br/3050:fdmoveis;8;F D MOVEIS;D R DE FREITAS MOVEIS E ELETROS - ME;13589944000279
+DB01;dbfdmoveis.iprojectti.com.br;3050;fdmoveis;dbfdmoveis.iprojectti.com.br/3050:fdmoveis;9;CLEITON;CLEITON LOJA 09;
+DB01;dbfdmoveis.iprojectti.com.br;3050;fdmoveis;dbfdmoveis.iprojectti.com.br/3050:fdmoveis;10;FD MOVEIS E ELETROS;D M  MOVEIS E ELETROS LTDA;31822253000174
+DB01;dbfdmoveis.iprojectti.com.br;3050;fdmoveis;dbfdmoveis.iprojectti.com.br/3050:fdmoveis;11;FD MOVEIS E ELETROS HORIZONTE;DR DE FREIATAS MOVEIS E ELETROS - EPP;13589944000350
+DB01;dbfjmoveis.iprojectti.com.br;3050;fj;dbfjmoveis.iprojectti.com.br/3050:fj;1;DEPOSITO 1;FRANCISCO JOSÉ XIMENES RODRIGUES;07415698000155
+DB01;dbfjmoveis.iprojectti.com.br;3050;fj;dbfjmoveis.iprojectti.com.br/3050:fj;2;FJ MÓVEIS;CITHILUS IMOBILIARIA LTDA;11045478000154
+DB01;dbfjmoveis.iprojectti.com.br;3050;fj;dbfjmoveis.iprojectti.com.br/3050:fj;3;24 DE MAIO;FRANSICO JOSÉ XIMENES RODRIGUES;
+DB01;dbfjmoveis.iprojectti.com.br;3050;fj;dbfjmoveis.iprojectti.com.br/3050:fj;4;FJ MÓVEIS;THIAGO PAIVA XIMENES RODRIGUES;04584856000293
+DB01;dbfjmoveis.iprojectti.com.br;3050;fj;dbfjmoveis.iprojectti.com.br/3050:fj;5;FJ MÓVEIS;LUCAS PAIVA XIMENES RODRIGUES;05874922000222
+DB01;dbfjmoveis.iprojectti.com.br;3050;fj;dbfjmoveis.iprojectti.com.br/3050:fj;6;FJ MÓVEIS;LUCAS PAIVA XIMENES RODRIGUES;05874922000303
+DB01;dbfjmoveis.iprojectti.com.br;3050;fj;dbfjmoveis.iprojectti.com.br/3050:fj;7;KSA MOBILI;KSA MOBILI COMERCIO VAREJISTA DE MOVEIS LTDA;04584856000102
+DB01;dbfjmoveis.iprojectti.com.br;3050;fj;dbfjmoveis.iprojectti.com.br/3050:fj;8;FJ MÓVEIS;NOSSO LAR MOVEIS LTDA;05874922000141
+DB01;dbfjmoveis.iprojectti.com.br;3050;fj;dbfjmoveis.iprojectti.com.br/3050:fj;9;FJ MÓVEIS;THIAGO PAIVA XIMENES RODRIGUES;04584856000455
+DB01;dbfjmoveis.iprojectti.com.br;3050;fj;dbfjmoveis.iprojectti.com.br/3050:fj;10;INOVART AMBIENTAÇÕES;LUCAS PAIVA XIMENES RODRIGUES;05874922000494
+DB01;dbfjmoveis.iprojectti.com.br;3050;fj;dbfjmoveis.iprojectti.com.br/3050:fj;11;FJ MÓVEIS;THIAGO PAIVA XIMENES RODRIGUES;04584856000455
+DB01;dbfjmoveis.iprojectti.com.br;3050;fj;dbfjmoveis.iprojectti.com.br/3050:fj;12;INOVART;MOVEIS DO LAR LTDA EPP;40700835000179
+DB01;dbfjmoveis.iprojectti.com.br;3050;fj;dbfjmoveis.iprojectti.com.br/3050:fj;13;DISTRIMOVEIS;DISTRIMOVEIS - COMERCIO DE MOVEIS LTDA;12537266000157
+DB01;dbfjmoveis.iprojectti.com.br;3050;fj;dbfjmoveis.iprojectti.com.br/3050:fj;14;CASA PAIVA;BOMLAR COMERCIO DE MOVEIS LTDA EPP;13452426000128
+DB01;dbfjmoveis.iprojectti.com.br;3050;fj;dbfjmoveis.iprojectti.com.br/3050:fj;15;INOVART;NEWLAR COMERCIO DE MOVEIS LTDA EPP;13499449000198
+DB01;dbfjmoveis.iprojectti.com.br;3050;fj;dbfjmoveis.iprojectti.com.br/3050:fj;16;FJ MOVEIS;CLOTILDES PAIVA XIMENES RODRIGUES ME;16834315000174
+DB03;dbfloriculturarayanne.iprojectti.com.br;3052;floriculturarayanne;dbfloriculturarayanne.iprojectti.com.br/3052:floriculturarayanne;1;FLORICULTURA RAYANNE EIRELI - RUSSAS;FLORICULTURA RAYANNE EIRELI;03134238000106
+DB03;dbfloriculturarayanne.iprojectti.com.br;3052;floriculturarayanne;dbfloriculturarayanne.iprojectti.com.br/3052:floriculturarayanne;2;DISTRIBUIDORA E FLORICULTURA RAYANNE LTD;FLORICULTURA RAYANNE LTDA;03134238000955
+DB03;dbfloriculturarayanne.iprojectti.com.br;3052;floriculturarayanne;dbfloriculturarayanne.iprojectti.com.br/3052:floriculturarayanne;3;FLORICULTURA RAYANNE EIRELI - ARACATI;FLORICULTURA RAYANNE EIRELI;03134238000360
+DB03;dbfloriculturarayanne.iprojectti.com.br;3052;floriculturarayanne;dbfloriculturarayanne.iprojectti.com.br/3052:floriculturarayanne;4;FLORICULTURA RAYANNE EIRELI - CRATEUS;FLORICULTURA RAYANNE EIRELI;03134238000521
+DB03;dbfloriculturarayanne.iprojectti.com.br;3052;floriculturarayanne;dbfloriculturarayanne.iprojectti.com.br/3052:floriculturarayanne;5;FLORICULTURA RAYANNE - IGUATU;FLORICULTURA RAYANNE LTDA - IGUATU;03134238001501
+DB03;dbfloriculturarayanne.iprojectti.com.br;3052;floriculturarayanne;dbfloriculturarayanne.iprojectti.com.br/3052:floriculturarayanne;6;FLORICULTURA RAYANNE EIRELI - JUAZEIRO;FLORICULTURA RAYANNE EIRELI;03134238000874
+DB03;dbfloriculturarayanne.iprojectti.com.br;3052;floriculturarayanne;dbfloriculturarayanne.iprojectti.com.br/3052:floriculturarayanne;7;FLORICULTURA RAYANNE EIRELI - LIMOEIRO;FLORICULTURA RAYANNE EIRELI;03134238000289
+DB03;dbfloriculturarayanne.iprojectti.com.br;3052;floriculturarayanne;dbfloriculturarayanne.iprojectti.com.br/3052:floriculturarayanne;8;FLORICULTURA RAYANNE EIRELI - QUIXADA;FLORICULTURA RAYANNE EIRELI;03134238000440
+DB03;dbfloriculturarayanne.iprojectti.com.br;3052;floriculturarayanne;dbfloriculturarayanne.iprojectti.com.br/3052:floriculturarayanne;9;FLORICULTURA RAYANNE - QUIXERAMOBIM;FLORICULTURA RAYANNE LTDA - QUIXERAMOBIM;03134238001099
+DB03;dbfloriculturarayanne.iprojectti.com.br;3052;floriculturarayanne;dbfloriculturarayanne.iprojectti.com.br/3052:floriculturarayanne;10;FLORICULTURA RAYANNE LTDA - SOCORRO;FLORICULTURA RAYANNE LTDA;03134238002060
+DB03;dbfloriculturarayanne.iprojectti.com.br;3052;floriculturarayanne;dbfloriculturarayanne.iprojectti.com.br/3052:floriculturarayanne;11;FLORICULTURA RAYANNE - CRATO;FLORICULTURA RAYANNE LTDA;03134238001250
+DB03;dbfloriculturarayanne.iprojectti.com.br;3052;floriculturarayanne;dbfloriculturarayanne.iprojectti.com.br/3052:floriculturarayanne;12;FLORICULTURA RAYANNE - SAO BENEDITO;FLORICULTURA RAYANNE LTDA;03134238000793
+DB03;dbfloriculturarayanne.iprojectti.com.br;3052;floriculturarayanne;dbfloriculturarayanne.iprojectti.com.br/3052:floriculturarayanne;13;FLORICULTURA RAYANNE-SÃO BENEDITO- BARRA;FLORICULTURA RAYANNE LTDA;03134238001170
+DB03;dbfloriculturarayanne.iprojectti.com.br;3052;floriculturarayanne;dbfloriculturarayanne.iprojectti.com.br/3052:floriculturarayanne;14;FLORICULTURA RAYANNE LTDA - ARARIPINA;FLORICULTURA RAYANNE LTDA - ARARIPINA;03134238001331
+DB03;dbfloriculturarayanne.iprojectti.com.br;3052;floriculturarayanne;dbfloriculturarayanne.iprojectti.com.br/3052:floriculturarayanne;15;FLORICULTURA RAYANNE - CAMPO MAIOR;FLORICULTURA RAYANNE LTDA - CAMPO MAIOR;03134238001765
+DB03;dbfloriculturarayanne.iprojectti.com.br;3052;floriculturarayanne;dbfloriculturarayanne.iprojectti.com.br/3052:floriculturarayanne;16;FLORICULTURA RAYANNE - SALGUEIRO;FLORICULTURA RAYANNE LTDA;03134238001927
+DB03;dbfloriculturarayanne.iprojectti.com.br;3052;floriculturarayanne;dbfloriculturarayanne.iprojectti.com.br/3052:floriculturarayanne;17;FLORICULTURA RAYANNE;FLORICULTURA RAYANNE;03134238000602
+DB03;dbfloriculturarayanne.iprojectti.com.br;3052;floriculturarayanne;dbfloriculturarayanne.iprojectti.com.br/3052:floriculturarayanne;18;FLORICULTURA RAYANNE LTDA L/V;FLORICULTURA RAYANNE LTDA;03134238001412
+DB06;dbfugiequipamentos.iprojectti.com.br;3056;fugiequipamentos;dbfugiequipamentos.iprojectti.com.br/3056:fugiequipamentos;1;FUGI EQUIPAMENTOS;FUGITA CARTAXO COMERCIO E SERVICOS LTDA;38713256000119
+DB01;dbgnconstrucoes.iprojectti.com.br;3050;gnconstrucoes;dbgnconstrucoes.iprojectti.com.br/3050:gnconstrucoes;1;GN CONSTRUCOES;GN CONSTRUCOES LTDA;29795169000167
+DB01;dbgnconstrucoes.iprojectti.com.br;3050;gnconstrucoes;dbgnconstrucoes.iprojectti.com.br/3050:gnconstrucoes;2;GN MADEIREIRA;GN CONSTRUCOES LTDA - ME;29795169000248
+DB01;dbgnconstrucoes.iprojectti.com.br;3050;gnconstrucoes;dbgnconstrucoes.iprojectti.com.br/3050:gnconstrucoes;3;GN CONSTRUCOES LTDA;GN CONSTRUCOES LTDA;29795169000329
+DB05;dblivertec.iprojectti.com.br;3055;gomeselima;dblivertec.iprojectti.com.br/3055:gomeselima;1;LIMA DISTR;LIMA DISTR E COM DE PEÇAS P ELET EIRELI;22162830000239
+DB05;dblivertec.iprojectti.com.br;3055;gomeselima;dblivertec.iprojectti.com.br/3055:gomeselima;2;ATACADO;LIMA DISTR E COM DE PEÇAS P ELET EIRELI;
+DB03;dbgripi2.iprojectti.com.br;3052;gripi2;dbgripi2.iprojectti.com.br/3052:gripi2;1;HORTIFRUT GRIPI II;HORTIFRUT GRIPI II LTDA;10201734000192
+DB03;dbgripi2.iprojectti.com.br;3052;gripi2;dbgripi2.iprojectti.com.br/3052:gripi2;2;BOX CEASA;CEASA;
+DB03;dbgripi2.iprojectti.com.br;3052;gripi2;dbgripi2.iprojectti.com.br/3052:gripi2;3;DEPOSITO BAHIA;HORTIFRUTI GRIPI II LTDA;10201734000273
+DB03;dbgripi2.iprojectti.com.br;3052;gripi2;dbgripi2.iprojectti.com.br/3052:gripi2;4;TRANSPORTADORA GRIPI II;VALDEILA FERNANDES SOUZA MAGALHAES - ME;42926015000125
+DB03;dbgripi2.iprojectti.com.br;3052;gripi2;dbgripi2.iprojectti.com.br/3052:gripi2;5;HORTFRUT GRIPI 2 - EXTERNO;HORTFRUT GRIPI 2 - EXTERNO;
+DB03;dbgripi2.iprojectti.com.br;3052;gripi2;dbgripi2.iprojectti.com.br/3052:gripi2;6;GRIPI + FRUTAS;V F S MAGALHAES & CIA LTDA;27028795000100
+DB03;dbgripi2.iprojectti.com.br;3052;gripi2;dbgripi2.iprojectti.com.br/3052:gripi2;7;MINHA RAZAO HORTIFRUTI;MINHA RAZAO HORTIFRUTI LTDA;69704625000130
+DB03;dbgripi2.iprojectti.com.br;3052;gripi2transportes;dbgripi2.iprojectti.com.br/3052:gripi2transportes;1;GRIPI II TRANSPORTES;GRIPI II TRANSPORTES LTDA;42926015000125
+DB03;dbgrupoheletro.iprojectti.com.br;3052;grupoheletro;dbgrupoheletro.iprojectti.com.br/3052:grupoheletro;1;H ELETRO MOVEIS;H ELETRO MOVEIS LTDA;02903595000110
+DB03;dbgrupoheletro.iprojectti.com.br;3052;grupoheletro;dbgrupoheletro.iprojectti.com.br/3052:grupoheletro;2;H ELETRO MOVEIS - DEPOSITO;H ELETRO MOVEIS LTDA;02903595000544
+DB03;dbgrupoheletro.iprojectti.com.br;3052;grupoheletro;dbgrupoheletro.iprojectti.com.br/3052:grupoheletro;3;H ELETRO MOVEIS;H ELETRO MOVEIS LTDA;02903595000897
+DB03;dbgrupoheletro.iprojectti.com.br;3052;grupoheletro;dbgrupoheletro.iprojectti.com.br/3052:grupoheletro;4;H ELETRO MOVEIS;H ELETRO MOVEIS LTDA;02903595000625
+DB03;dbgrupoheletro.iprojectti.com.br;3052;grupoheletro;dbgrupoheletro.iprojectti.com.br/3052:grupoheletro;5;H ELETRO MOVEIS;H ELETRO MOVEIS LTDA;02903595000200
+DB03;dbgrupoheletro.iprojectti.com.br;3052;grupoheletro;dbgrupoheletro.iprojectti.com.br/3052:grupoheletro;6;H ELETRO MOVEIS;H ELETRO MOVEIS LTDA;02903595000706
+DB03;dbgrupoheletro.iprojectti.com.br;3052;grupoheletro;dbgrupoheletro.iprojectti.com.br/3052:grupoheletro;7;H ELETRO MOVEIS;H ELETRO MOVEIS LTDA;02903595000978
+DB03;dbgrupoheletro.iprojectti.com.br;3052;grupoheletro;dbgrupoheletro.iprojectti.com.br/3052:grupoheletro;8;H ELETRO MOVEIS;H ELETRO MOVEIS LTDA;02903595000382
+DB03;dbgrupohpeletro.iprojectti.com.br;3052;grupohpeletro;dbgrupohpeletro.iprojectti.com.br/3052:grupohpeletro;1;HP ELETRO MOVEIS;H P E COMERCIO DE MOVEIS LTDA ME;05809349000192
+DB03;dbgrupohpeletro.iprojectti.com.br;3052;grupohpeletro;dbgrupohpeletro.iprojectti.com.br/3052:grupohpeletro;2;H P E COMERCIO DE MOVEIS DEPOSITO;H P E COMERCIO DE MOVEIS LTDA ME;05809349000354
+DB03;dbgrupohpeletro.iprojectti.com.br;3052;grupohpeletro;dbgrupohpeletro.iprojectti.com.br/3052:grupohpeletro;3;HP ELETRO;H P E COMERCIO DE MOVEIS LTDA;05809349000435
+DB03;dbgrupohpeletro.iprojectti.com.br;3052;grupohpeletro;dbgrupohpeletro.iprojectti.com.br/3052:grupohpeletro;4;HP ELETRO MOVEIS;H P E COMERCIO DE MOVEIS LTDA - EPP;05809349000516
+DB03;dbgrupohpeletro.iprojectti.com.br;3052;grupohpeletro;dbgrupohpeletro.iprojectti.com.br/3052:grupohpeletro;5;H P E COMERCIO DE MOVEIS LTDA;H P E COMERCIO DE MOVEIS LTDA;05809349000605
+DB03;dbgrupohpeletro.iprojectti.com.br;3052;grupohpeletro;dbgrupohpeletro.iprojectti.com.br/3052:grupohpeletro;6;HP ELETRO MOVEIS;H P E COMERCIO DE MOVEIS LTDA;05809349000788
+DB03;dbgrupohpeletro.iprojectti.com.br;3052;grupohpeletro;dbgrupohpeletro.iprojectti.com.br/3052:grupohpeletro;7;H P E COMERCIO DEPOSITO;H P E COMERCIO DE MOVEIS LTDA;
+DB03;dbgrupohpeletro.iprojectti.com.br;3052;grupohpeletro;dbgrupohpeletro.iprojectti.com.br/3052:grupohpeletro;8;DEPOSITO IPAUMIRIM - H P E COMERCIO;H P E COMERCIO DE MOVEIS LTDA;05809349000940
+DB03;dbgrupohpeletro.iprojectti.com.br;3052;grupohpeletro;dbgrupohpeletro.iprojectti.com.br/3052:grupohpeletro;9;HP ELETROMOVEIS BAIXIO;H P E COMERCIO DE MOVEIS LTDA;05809349000869
+DB03;dbgrupohpeletro.iprojectti.com.br;3052;grupohpeletro;dbgrupohpeletro.iprojectti.com.br/3052:grupohpeletro;10;HP ELETRO;H P E COMERCIO DE MOVEIS LTDA;05809349000435
+DB03;dbgrupohpeletro.iprojectti.com.br;3052;grupohpeletro;dbgrupohpeletro.iprojectti.com.br/3052:grupohpeletro;11;H P E COMERCIO DE MOVEIS LTDA;H P E COMERCIO DE MOVEIS LTDA;05809349001164
+DB03;dbgrupohpeletro.iprojectti.com.br;3052;grupohpeletro;dbgrupohpeletro.iprojectti.com.br/3052:grupohpeletro;12;HP ELETROS;H P E COMERCIO DE MOVEIS LTDA;05809349001326
+DB05;dblivertec.iprojectti.com.br;3055;grx;dblivertec.iprojectti.com.br/3055:grx;1;LIVERTEC;G R X GOMES ELETRONICA - ME - EPP;12430669000283
+DB05;dblivertec.iprojectti.com.br;3055;grx;dblivertec.iprojectti.com.br/3055:grx;6;LIVERTEC LOJA 6;G R X GOMES ELETRONICA - ME - EPP;12430669000283
+DB05;dblivertec.iprojectti.com.br;3055;grxinterno;dblivertec.iprojectti.com.br/3055:grxinterno;1;LIVERTEC SERVICOS;G.R.X.GOMES ELETRONICA - ME;12430669000100
+DB05;dblivertec.iprojectti.com.br;3055;grxmatriz;dblivertec.iprojectti.com.br/3055:grxmatriz;1;LIVER TEC SERVIÇOS;G.R.X GOMES ELETRONICA;12430669000100
+DB05;dblivertec.iprojectti.com.br;3055;grxmatriz;dblivertec.iprojectti.com.br/3055:grxmatriz;2;GRX SIMILARES;G.R.X GOMES ELETRONICA;
+DB05;dblivertec.iprojectti.com.br;3055;grxmatriz;dblivertec.iprojectti.com.br/3055:grxmatriz;3;GRX ORIGINAIS;G.R.X GOMES ELETRONICA;
+DB05;dblivertec.iprojectti.com.br;3055;grxmatriz;dblivertec.iprojectti.com.br/3055:grxmatriz;4;LOJA 3;LOJA 3;
+DB05;dblivertec.iprojectti.com.br;3055;grxmatriz;dblivertec.iprojectti.com.br/3055:grxmatriz;5;LOJA 4;LOJA 4;
+DB05;dblivertec.iprojectti.com.br;3055;grxmatriz;dblivertec.iprojectti.com.br/3055:grxmatriz;6;LOJA 5;LOJA 5;
+DB03;dbguerracalcadossocorro.iprojectti.com.br;3052;guerracalcadossocorro;dbguerracalcadossocorro.iprojectti.com.br/3052:guerracalcadossocorro;1;GUERRA CALCADOS;GUERRA CALCADOS & ACESSORIOS;12629715000197
+DB03;dbguerracalcadossocorro.iprojectti.com.br;3052;guerracalcadossocorro;dbguerracalcadossocorro.iprojectti.com.br/3052:guerracalcadossocorro;2;ELETRO GUERRA;MSG COMERCIO DE MOVEIS E ELETRO LTDA;08970235000207
+DB03;dbguerracalcadossocorro.iprojectti.com.br;3052;guerracalcadossocorro;dbguerracalcadossocorro.iprojectti.com.br/3052:guerracalcadossocorro;3;GUERRA MAGAZINE;2M COMERCIO DE MOVEIS E COLCHOES LTDA;37367210000203
+DB01;dbguerraconfeccaosocorro.iprojectti.com.br;3050;guerraconfeccaosocorro;dbguerraconfeccaosocorro.iprojectti.com.br/3050:guerraconfeccaosocorro;1;GUERRA CONFECCAO;2M COMERCIO DE MOVEIS E COLCHOES LTDA;37367210000203
+DB01;dbguerraconfeccaosocorro.iprojectti.com.br;3050;guerraconfeccaosocorro;dbguerraconfeccaosocorro.iprojectti.com.br/3050:guerraconfeccaosocorro;2;GUERRA CALCADOS;GUERRA CALCADOS E ACESSORIOS LTDA;12629715000278
+DB01;dbguerraconfeccaosocorro.iprojectti.com.br;3050;guerraconfeccaosocorro;dbguerraconfeccaosocorro.iprojectti.com.br/3050:guerraconfeccaosocorro;3;ELETRO GUERRA;MSG COMERCIO DE MOVEIS E ELETRO LTDA EPP;08970235000207
+DB01;dbguerraconfeccaosocorro.iprojectti.com.br;3050;guerraconfeccaosocorro;dbguerraconfeccaosocorro.iprojectti.com.br/3050:guerraconfeccaosocorro;5;GRUPO GUERRA NOVA;GRUPO GUERRA NOVA;
+DB01;dbguerramagazinesocorro.iprojectti.com.br;3050;guerramagazinesocorro;dbguerramagazinesocorro.iprojectti.com.br/3050:guerramagazinesocorro;1;CPD;CENTRO DE PROCESSAMENTO DE DADOS;08970235000207
+DB01;dbguerramagazinesocorro.iprojectti.com.br;3050;guerramagazinesocorro;dbguerramagazinesocorro.iprojectti.com.br/3050:guerramagazinesocorro;2;MAGAZINE GUERRA;MS GUERRA;41553090000125
+DB01;dbguerramagazinesocorro.iprojectti.com.br;3050;guerramagazinesocorro;dbguerramagazinesocorro.iprojectti.com.br/3050:guerramagazinesocorro;3;MAGAZINE GUERRA;M S GUERRA;
+DB01;dbguerramagazinesocorro.iprojectti.com.br;3050;guerramagazinesocorro;dbguerramagazinesocorro.iprojectti.com.br/3050:guerramagazinesocorro;4;MAGAZINE GUERRA;GUERRA E GUERRA ELETRO LTDA;04776529000314
+DB01;dbguerramagazinesocorro.iprojectti.com.br;3050;guerramagazinesocorro;dbguerramagazinesocorro.iprojectti.com.br/3050:guerramagazinesocorro;5;MAGAZINE GUERRA;MS GUERRA;41553090000206
+DB01;dbguerramagazinesocorro.iprojectti.com.br;3050;guerramagazinesocorro;dbguerramagazinesocorro.iprojectti.com.br/3050:guerramagazinesocorro;6;MAGAZINE GUERRA;GRA COMERCIO DE ARTIGOS DO VESTUARIO LTDA EPP;12629715000197
+DB01;dbguerramagazinesocorro.iprojectti.com.br;3050;guerramagazinesocorro;dbguerramagazinesocorro.iprojectti.com.br/3050:guerramagazinesocorro;7;GUERRA MAGAZINE;2M COMERCIO DE MOVEIS E COLCHOES LTDA - EPP;37367210000203
+DB01;dbguerramagazinesocorro.iprojectti.com.br;3050;guerramagazinesocorro;dbguerramagazinesocorro.iprojectti.com.br/3050:guerramagazinesocorro;8;MAGAZINE GUERRA;M S GUERRA;41553090000478
+DB01;dbguerramagazinesocorro.iprojectti.com.br;3050;guerramagazinesocorro;dbguerramagazinesocorro.iprojectti.com.br/3050:guerramagazinesocorro;10;MAGAZINE GUERRA;M.S GUERRA;41553090000559
+DB01;dbguerramagazinesocorro.iprojectti.com.br;3050;guerramagazinesocorro;dbguerramagazinesocorro.iprojectti.com.br/3050:guerramagazinesocorro;11;GUERRA MAGAZINE;2M COMERCIO DE MOVEIS E COLCHOES LTDA - EPP;37367210000394
+DB01;dbguerramagazinesocorro.iprojectti.com.br;3050;guerramagazinesocorro;dbguerramagazinesocorro.iprojectti.com.br/3050:guerramagazinesocorro;14;MAGAZINE GUERRA;5M MAGAZINE LTDA;56125794000174
+DB01;dbguerramagazinesocorro.iprojectti.com.br;3050;guerramagazinesocorro;dbguerramagazinesocorro.iprojectti.com.br/3050:guerramagazinesocorro;15;MAGAZINE GUERRA;5M MAGAZINE LTDA;56125794000255
+DB01;dbguerramagazinesocorro.iprojectti.com.br;3050;guerramagazinesocorro;dbguerramagazinesocorro.iprojectti.com.br/3050:guerramagazinesocorro;16;MAGAZINE GUERRA;5M MAGAZINE LTDA;56125794000336
+DB01;dbguerramoveissocorro.iprojectti.com.br;3050;guerramoveissocorro;dbguerramoveissocorro.iprojectti.com.br/3050:guerramoveissocorro;1;GUERRA CONCEITO;GUERRA E GUERRA ELETRO LTDA ME;
+DB01;dbguerramoveissocorro.iprojectti.com.br;3050;guerramoveissocorro;dbguerramoveissocorro.iprojectti.com.br/3050:guerramoveissocorro;2;DEPOSITO;GUERRA E GUERRA ELETRO LTDA;04776529000403
+DB01;dbguerramoveissocorro.iprojectti.com.br;3050;guerramoveissocorro;dbguerramoveissocorro.iprojectti.com.br/3050:guerramoveissocorro;3;ELETRO GUERRA;MSG COMERCIO DE MOVEIS E ELETRO LTDA EPP;08970235000118
+DB01;dbguerramoveissocorro.iprojectti.com.br;3050;guerramoveissocorro;dbguerramoveissocorro.iprojectti.com.br/3050:guerramoveissocorro;4;ELETRO GUERRA;GUERRA E GUERRA ELETRO LTDA;04776529000152
+DB01;dbguerramoveissocorro.iprojectti.com.br;3050;guerramoveissocorro;dbguerramoveissocorro.iprojectti.com.br/3050:guerramoveissocorro;5;ELETRO GUERRA;GUERRA  E GUERRA ELETRO LTDA;04776529000314
+DB01;dbguerramoveissocorro.iprojectti.com.br;3050;guerramoveissocorro;dbguerramoveissocorro.iprojectti.com.br/3050:guerramoveissocorro;6;ELETRO GUERRA;MSG COMERCIO DE MOVEIS E ELETRO LTDA EPP;
+DB01;dbguerramoveissocorro.iprojectti.com.br;3050;guerramoveissocorro;dbguerramoveissocorro.iprojectti.com.br/3050:guerramoveissocorro;7;ELETRO GUERRA;GUERRA E GUERRA ELETRO LTDA;04776529000586
+DB01;dbguerramoveissocorro.iprojectti.com.br;3050;guerramoveissocorro;dbguerramoveissocorro.iprojectti.com.br/3050:guerramoveissocorro;8;ELETRO GUERRA;GUERRA E GUERRA ELETRO LTDA;09555656000022
+DB01;dbguerramoveissocorro.iprojectti.com.br;3050;guerramoveissocorro;dbguerramoveissocorro.iprojectti.com.br/3050:guerramoveissocorro;9;GUERRA CONCEITO;M. MAGALHAES GUERRA LTDA;21406718000152
+DB01;dbguerramoveissocorro.iprojectti.com.br;3050;guerramoveissocorro;dbguerramoveissocorro.iprojectti.com.br/3050:guerramoveissocorro;10;GUERRA CONCEITO;GUERRA E GUERRA ELETRO LTDA ME;04776529000748
+DB01;dbguerramoveissocorro.iprojectti.com.br;3050;guerramoveissocorro;dbguerramoveissocorro.iprojectti.com.br/3050:guerramoveissocorro;11;ELETRO GUERRA;GUERRA E GUERRA ELETRO LTDA - EPP;04776529000667
+DB01;dbguerramoveissocorro.iprojectti.com.br;3050;guerramoveissocorro;dbguerramoveissocorro.iprojectti.com.br/3050:guerramoveissocorro;12;ELETRO GUERRA;MSG COMERCIO DE MOVEIS E ELETRO LTDA EPP;08970235000118
+DB01;dbguerramoveissocorro.iprojectti.com.br;3050;guerramoveissocorro;dbguerramoveissocorro.iprojectti.com.br/3050:guerramoveissocorro;13;ELETRO GUERRA;2M COMERCIO DE MOVEIS E COLCHOES LTDA;
+DB01;dbguerramoveissocorro.iprojectti.com.br;3050;guerramoveissocorro;dbguerramoveissocorro.iprojectti.com.br/3050:guerramoveissocorro;14;ELETRO GUERRA;2M COMERCIO DE MOVEIS E COLCHOES LTDA;37367210000203
+DB01;dbguerramoveissocorro.iprojectti.com.br;3050;guerramoveissocorro;dbguerramoveissocorro.iprojectti.com.br/3050:guerramoveissocorro;15;ELETRO GUERRA;MSG COMERCIO DE MOVEIS E ELETRO LTDA EPP;08970235000207
+DB01;dbguerramoveissocorro.iprojectti.com.br;3050;guerramoveissocorro;dbguerramoveissocorro.iprojectti.com.br/3050:guerramoveissocorro;16;ELETRO GUERRA;2M COMERCIO DE MOVEIS E COLCHOES LTDA;37367210000122
+DB01;dbguerramoveissocorro.iprojectti.com.br;3050;guerramoveissocorro;dbguerramoveissocorro.iprojectti.com.br/3050:guerramoveissocorro;17;ELETRO GUERRA;2M COMERCIO DE MOVEIS E COLCHOES LTDA;37367210000475
+DB01;dbguerramoveissocorro.iprojectti.com.br;3050;guerramoveissocorro;dbguerramoveissocorro.iprojectti.com.br/3050:guerramoveissocorro;19;ELETRO GUERRA TABU;8G COMERCIO DE MOVEIS LTDA;59133188000199
+DB06;dbhalya.iprojectti.com.br;3056;halya;dbhalya.iprojectti.com.br/3056:halya;1;HALYA TECNOLOGIAS EDUCACIONAIS;HALYA TECNOLOGIAS EDUCACIONAIS E SOLUCOES EMPRESAR;35351017000178
+DB06;dbhalya.iprojectti.com.br;3056;halya;dbhalya.iprojectti.com.br/3056:halya;2;CONECTAE;CONECTAE - AUTORIA E AVALIACAO EDUCACIONAL LTDA;42432175000118
+DB05;dbhiperlar.iprojectti.com.br;3055;hiperlar;dbhiperlar.iprojectti.com.br/3055:hiperlar;1;HIPERLAR;M S ROCHA MARQUES ME;20429710000149
+DB05;dbhiperlar.iprojectti.com.br;3055;hiperlar;dbhiperlar.iprojectti.com.br/3055:hiperlar;2;HIPER LAR;M S ROCHA MARQUES;20429710000220
+DB06;dbhpeletrohm.iprojectti.com.br;3056;hpeletrohm;dbhpeletrohm.iprojectti.com.br/3056:hpeletrohm;1;HP ELETRO MOVEIS;H P E COMERCIO DE MOVEIS LTDA ME;05809349000192
+DB06;dbhpeletrohm.iprojectti.com.br;3056;hpeletrohm;dbhpeletrohm.iprojectti.com.br/3056:hpeletrohm;2;H P E COMERCIO DE MOVEIS DEPOSITO;H P E COMERCIO DE MOVEIS LTDA ME;05809349000354
+DB06;dbhpeletrohm.iprojectti.com.br;3056;hpeletrohm;dbhpeletrohm.iprojectti.com.br/3056:hpeletrohm;3;HP ELETRO;H P E COMERCIO DE MOVEIS LTDA;05809349000435
+DB06;dbhpeletrohm.iprojectti.com.br;3056;hpeletrohm;dbhpeletrohm.iprojectti.com.br/3056:hpeletrohm;4;HP ELETRO MOVEIS;H P E COMERCIO DE MOVEIS LTDA - EPP;05809349000516
+DB06;dbhpeletrohm.iprojectti.com.br;3056;hpeletrohm;dbhpeletrohm.iprojectti.com.br/3056:hpeletrohm;5;H P E COMERCIO DE MOVEIS LTDA;H P E COMERCIO DE MOVEIS LTDA;05809349000605
+DB06;dbhpeletrohm.iprojectti.com.br;3056;hpeletrohm;dbhpeletrohm.iprojectti.com.br/3056:hpeletrohm;6;HP ELETRO MOVEIS;H P E COMERCIO DE MOVEIS LTDA;05809349000788
+DB06;dbhpeletrohm.iprojectti.com.br;3056;hpeletrohm;dbhpeletrohm.iprojectti.com.br/3056:hpeletrohm;7;H P E COMERCIO DEPOSITO;H P E COMERCIO DE MOVEIS LTDA;05809349000869
+DB06;dbhpeletrohm.iprojectti.com.br;3056;hpeletrohm;dbhpeletrohm.iprojectti.com.br/3056:hpeletrohm;8;DEPOSITO IPAUMIRIM - H P E COMERCIO;H P E COMERCIO DE MOVEIS LTDA;05809349000940
+DB06;dbhpeletrohm.iprojectti.com.br;3056;hpeletrohm;dbhpeletrohm.iprojectti.com.br/3056:hpeletrohm;9;H P ELETROMOVEIS;H M MOVEIS E ELETROS LTDA;56988190000151
+DB05;dbiamshoes.iprojectti.com.br;3055;iamshoes;dbiamshoes.iprojectti.com.br/3055:iamshoes;1;I. A. SHOES;I AM SHOES LTDA - ME;52270078000120
+DB05;dbicrtintas.iprojectti.com.br;3055;icrtintas;dbicrtintas.iprojectti.com.br/3055:icrtintas;1;AUTOFLEX;ICR IND CEARENSE DE RESINAS E TINTAS LTDA;06181919000105
+DB05;dbicrtintas.iprojectti.com.br;3055;icrtintas;dbicrtintas.iprojectti.com.br/3055:icrtintas;2;ICR TINTAS;ICR IND CEARENSE DE RESINAS E TINTAS LTDA;
+DB05;dbicrtintas.iprojectti.com.br;3055;icrtintas;dbicrtintas.iprojectti.com.br/3055:icrtintas;3;INVERTS;ALEXANDRE FREIRE DE OLIVEIRA - ME;47977246000181
+DB05;dbiguabela.iprojectti.com.br;3055;iguabela;dbiguabela.iprojectti.com.br/3055:iguabela;1;IGUABELA;IGUABELA COSMETICOS LTDA;02741246000140
+DB05;dbiguabela.iprojectti.com.br;3055;iguabela2;dbiguabela.iprojectti.com.br/3055:iguabela2;1;IGUABELA;IGUABELA COSMETICOS LTDA FILIAL;02741246000220
+DB04;dbinfo01.iprojectti.com.br;3054;infobrasil;dbinfo01.iprojectti.com.br/3054:infobrasil;1;INFOBRASIL SISTEMAS;F E J COM. E SERV. DE INFORMATICA LTDA-ME;05510526000135
+DB04;dbinfo01.iprojectti.com.br;3054;infobrasil;dbinfo01.iprojectti.com.br/3054:infobrasil;2;INFOBRASIL;FN E J SERVIÇOS DE INFORMATICA LTDA-ME;11398810000164
+DB03;dbinovemix.iprojectti.com.br;3052;inovemix;dbinovemix.iprojectti.com.br/3052:inovemix;1;INOVEMIX;INOVEMIX INDUSTRIA  E COMERCIO DE ARGAMASSA LTDA;25403789000152
+DB03;dbinovemix.iprojectti.com.br;3052;inovemix;dbinovemix.iprojectti.com.br/3052:inovemix;2;TRANSBALBINO;FSJ BALBINO TRANSPORTES ME;25152344000147
+DB03;dbinovemix.iprojectti.com.br;3052;inovemix;dbinovemix.iprojectti.com.br/3052:inovemix;3;INOVEMIX FILIAL;INOVEMIX INDUSTRIA E COMERCIO DE ARGAMASSAS LTDA;25403789000233
+DB03;dbisahomecenter.iprojectti.com.br;3052;isahomecenter;dbisahomecenter.iprojectti.com.br/3052:isahomecenter;1;H CONSTRUCOES;ISA HOME CENTER LTDA - EPP;46256596000196
+DB03;dbita.iprojectti.com.br;3052;ita;dbita.iprojectti.com.br/3052:ita;1;ITC;ITC INDUSTRIA E COMERCIO DE TELHAS LTDA ME;20327997000104
+DB03;dbita.iprojectti.com.br;3052;ita;dbita.iprojectti.com.br/3052:ita;2;ACERT;ACERT-IND DE ACABAMENTOS CERAMICOS E TELHAS EIRELI;07209470000109
+DB03;dbita.iprojectti.com.br;3052;ita;dbita.iprojectti.com.br/3052:ita;3;ITA;ITA - INDUSTRIA E COMERCIO DE TELHAS E ACABAMENTOS;43749397000121
+DB03;dbita.iprojectti.com.br;3052;ita;dbita.iprojectti.com.br/3052:ita;4;ITA;INDUSTRIA DE TELHAS E ACABAMENTOS LTDA.ME;09609202000100
+DB03;dbita.iprojectti.com.br;3052;ita;dbita.iprojectti.com.br/3052:ita;5;FAZENDA;FAZENDA;
+DB02;dbjfmota.iprojectti.com.br;3051;jfmota;dbjfmota.iprojectti.com.br/3051:jfmota;1;J F MOTA E CIA LTDA;J F MOTA E CIA LTDA;06918957000106
+DB02;dbjfmota.iprojectti.com.br;3051;jfmota;dbjfmota.iprojectti.com.br/3051:jfmota;2;DEPOSITO;J F MOTA E CIA LTDA;06918957000360
+DB02;dbjfmota.iprojectti.com.br;3051;jfmota;dbjfmota.iprojectti.com.br/3051:jfmota;3;TRANSPORTADORA;J F MOTA E CIA LTDA;06918957000440
+DB02;dbjfmota.iprojectti.com.br;3051;jfmota;dbjfmota.iprojectti.com.br/3051:jfmota;4;J F MOTA E CIA LTDA - FILIAL 05;J F MOTA E CIA LTDA;06918957000521
+DB05;dbjgalimentos.iprojectti.com.br;3055;jgalimentos;dbjgalimentos.iprojectti.com.br/3055:jgalimentos;1;JG ALIMENTOS E VARIEDADES LTDA;JG ALIMENTOS E VARIEDADES LTDA;24736359000190
+DB06;dbjmcmadeiras.iprojectti.com.br;3056;jmcmadeiras;dbjmcmadeiras.iprojectti.com.br/3056:jmcmadeiras;1;JMC MADEIRAS;J M C DE OLIVEIRA - MADEIRAS;03767861000198
+DB06;dbjmcmadeiras.iprojectti.com.br;3056;jmcmadeiras;dbjmcmadeiras.iprojectti.com.br/3056:jmcmadeiras;2;JMC CONSTRUCAO;JMC CONSTRUCAO LTDA;49109273000168
+DB02;dbjnlogistica.iprojectti.com.br;3051;jnlogistica;dbjnlogistica.iprojectti.com.br/3051:jnlogistica;1;MIX PAPELARIA EXPRESS;MIX PAPELARIA EXPRESS LTDA;66510018000141
+DB06;dbjrferragens.iprojectti.com.br;3056;jrferragens;dbjrferragens.iprojectti.com.br/3056:jrferragens;1;JUNIOR FERRAGENS;A B DA CUNHA JUNIOR FERRAGENS LTDA;11665714000135
+DB06;dbjrferragens.iprojectti.com.br;3056;jrferragens;dbjrferragens.iprojectti.com.br/3056:jrferragens;2;PRODUÇÃO;PRODUÇÃO;
+DB05;dblaeka.iprojectti.com.br;3055;laeka;dblaeka.iprojectti.com.br/3055:laeka;1;LA & KA;J MAIS  DISTRIBUIDORA DE ALIMENTOS LTDA;31681418000135
+DB05;dblanehc.iprojectti.com.br;3055;lanehc;dblanehc.iprojectti.com.br/3055:lanehc;1;LANE HOME CENTER;DEPOSITO DE CONSTRUÇÃO MJ LTDA-ME;04520844000114
+DB05;dblanehc.iprojectti.com.br;3055;lanehc;dblanehc.iprojectti.com.br/3055:lanehc;2;LA SERVICOS INTEGRADOS;LA SERVICOS INTEGRADOS LTDA;45698514000109
+DB05;dblanehc.iprojectti.com.br;3055;lanehc;dblanehc.iprojectti.com.br/3055:lanehc;3;DISTRIBUIDORA CONSTRUIR;DISTRIBUIDORA CONSTRUIR COM DE MAT DE CONSTRUCAO;27949671000150
+DB02;dblarbel.iprojectti.com.br;3051;larbel;dblarbel.iprojectti.com.br/3051:larbel;1;LARBEL COMERCIO DE MOVEIS LTDA;LARBEL - AUTRAN NUNES;08870654000188
+DB02;dblarbel.iprojectti.com.br;3051;larbel;dblarbel.iprojectti.com.br/3051:larbel;14;LARBEL MOVEIS;LARBEL COMERCIO DE MOVEIS LTDA;61593601000140
+DB05;dblarissamoveis.iprojectti.com.br;3055;larissamoveis;dblarissamoveis.iprojectti.com.br/3055:larissamoveis;1;LARISSA MOVEIS;MERCES & LUCIANO MOVEIS LTDA;21307612000100
+DB02;dblaservicos.iprojectti.com.br;3051;laservicos;dblaservicos.iprojectti.com.br/3051:laservicos;1;LA SERVICOS INTEGRADOS;LA SERVICOS INTEGRADOS LTDA;45698514000109
+DB05;dblaulita.iprojectti.com.br;3055;laulita;dblaulita.iprojectti.com.br/3055:laulita;1;LAULITA CALCADOS E ACESSORIOS;V N BEZERRA;47375113000135
+DB05;dblaulita.iprojectti.com.br;3055;laulita;dblaulita.iprojectti.com.br/3055:laulita;2;F DA ROCHA - FABRICA DE JEANS;ROCHA ARAUJO INDUSTRIA DE CONFECCOES;46691414000105
+DB02;dblojaocapibaribe.iprojectti.com.br;3051;lc01;dblojaocapibaribe.iprojectti.com.br/3051:lc01;1;LOJAO CAPIBARIBE;FRANCISCO MORENO DA SILVA ME;03966810000195
+DB02;dblojaocapibaribe.iprojectti.com.br;3051;lc02;dblojaocapibaribe.iprojectti.com.br/3051:lc02;1;LOJAO CAPIBARIBE;ANA PAULA DE BARROS MORENO ME;07384113000187
+DB02;dblojaocapibaribe.iprojectti.com.br;3051;lc03;dblojaocapibaribe.iprojectti.com.br/3051:lc03;1;LOJAO CAPIBARIBE;FRANCISCO MORENO DA SILVA ME;03966810000276
+DB02;dblojaocapibaribe.iprojectti.com.br;3051;lc04;dblojaocapibaribe.iprojectti.com.br/3051:lc04;1;LOJAO CAPIBARIBE;KESIA PRISCILA DE BARROS MORAIS ME;14619599000231
+DB02;dblojaocapibaribe.iprojectti.com.br;3051;lc04;dblojaocapibaribe.iprojectti.com.br/3051:lc04;2;LOJAO CAPIBARIBE;KESIA PRISCILA DE BARROS MORAIS - ME;14619599000150
+DB04;dbleleo.iprojectti.com.br;3054;leleoconstrucoes;dbleleo.iprojectti.com.br/3054:leleoconstrucoes;1;LELEO CONSTRUÇÕES - MATRIZ RUSSAS;LELEO CONSTRUCOES LTDA;07542463000124
+DB04;dbleleo.iprojectti.com.br;3054;leleoconstrucoes;dbleleo.iprojectti.com.br/3054:leleoconstrucoes;2;LELEO CONSTRUCOES DEPOSITO;LELEO CONSTRUCOES LTDA;07542463000205
+DB04;dbleleo.iprojectti.com.br;3054;leleoconstrucoes;dbleleo.iprojectti.com.br/3054:leleoconstrucoes;3;LELEO CONSTRUÇÕES - LIMOEIRO DO NORTE;LELEO CONSTRUCOES LTDA;07542463000396
+DB04;dbleleo.iprojectti.com.br;3054;leleoconstrucoes;dbleleo.iprojectti.com.br/3054:leleoconstrucoes;4;LELEO CONSTRUÇÕES - JAGUARIBE;LELEO CONSTRUÇÕES LTDA;07542463000639
+DB04;dbleleo.iprojectti.com.br;3054;leleoconstrucoes;dbleleo.iprojectti.com.br/3054:leleoconstrucoes;5;LELEO CONSTRUÇÕES - DEPOSITO JAGUARIBE;LELEO CONSTRUCOES LTDA;07542463000710
+DB04;dbleleo.iprojectti.com.br;3054;leleoconstrucoes;dbleleo.iprojectti.com.br/3054:leleoconstrucoes;6;LELEO CONSTRUÇÕES - ARACATI;LELEO CONSTRUCOES LTDA;07542463000809
+DB04;dbleleo.iprojectti.com.br;3054;leleoconstrucoes;dbleleo.iprojectti.com.br/3054:leleoconstrucoes;7;LELEO CONSTRUÇÕES - DEPOSITO ARACATI;LELEO CONSTRUÇÕES LTDA;07542463000981
+DB04;dbleleo.iprojectti.com.br;3054;leleoconstrucoes;dbleleo.iprojectti.com.br/3054:leleoconstrucoes;8;LELEO CONSTRUÇÕES - MORADA NOVA;LELEO CONSTRUÇÕES LTDA;07542463001015
+DB04;dbleleo.iprojectti.com.br;3054;leleoconstrucoes;dbleleo.iprojectti.com.br/3054:leleoconstrucoes;9;LELEO CONSTRUÇÕES - DEPOSITO MORADA NOVA;LELEO CONSTRUÇÕES LTDA;07542463001104
+DB04;dbleleo.iprojectti.com.br;3054;leleoconstrucoes;dbleleo.iprojectti.com.br/3054:leleoconstrucoes;10;LELEO CONSTRUÇÕES - DEPOSITO RUSSAS;LELEO CONSTRUCOES LTDA;07542463001287
+DB04;dbleleo.iprojectti.com.br;3054;leleoconstrucoes;dbleleo.iprojectti.com.br/3054:leleoconstrucoes;11;LELEO CONSTRUÇÕES - IRACEMA;LELEO CONSTRUCOES LTDA;07542463001368
+DB04;dbleleo.iprojectti.com.br;3054;leleoconstrucoes;dbleleo.iprojectti.com.br/3054:leleoconstrucoes;12;LELEO CONSTRUÇÕES - ALTO SANTO;LELEO CONSTRUCOES LTDA;07542463001449
+DB04;dbleleo.iprojectti.com.br;3054;leleoconstrucoes;dbleleo.iprojectti.com.br/3054:leleoconstrucoes;13;LELEO CONSTRUÇÕES - TABULEIRO;LELEO CONSTRUCOES LTDA;07542463001520
+DB04;dbleleo.iprojectti.com.br;3054;leleoconstrucoes;dbleleo.iprojectti.com.br/3054:leleoconstrucoes;14;LELEO CONSTRUÇÕES - HORIZONTE;LELEO CONSTRUCOES LTDA;07542463001600
+DB04;dbleleo.iprojectti.com.br;3054;leleoconstrucoes;dbleleo.iprojectti.com.br/3054:leleoconstrucoes;15;LELEO CONSTRUCAO E IRRIGACAO DEPOSITO;LELEO CONSTRUCOES LTDA;07542463001791
+DB04;dbleleo.iprojectti.com.br;3054;leleoconstrucoes;dbleleo.iprojectti.com.br/3054:leleoconstrucoes;16;LELEO CONSTRUÇÕES - DEPOSITO IRACEMA;LELEO CONSTRUCOES LTDA;07542463001872
+DB04;dbleleo.iprojectti.com.br;3054;leleoconstrucoes;dbleleo.iprojectti.com.br/3054:leleoconstrucoes;17;LELEO CONSTRUÇÕES - DEPOSITO LIMOEIRO;LELEO CONSTRUCOES LTDA;07542463001953
+DB04;dbleleo.iprojectti.com.br;3054;leleoconstrucoes;dbleleo.iprojectti.com.br/3054:leleoconstrucoes;18;LELEO CONSTRUÇÕES - JAGUARUANA;LELEO CONSTRUCOES LTDA;07542463002178
+DB04;dbleleo.iprojectti.com.br;3054;leleoconstrucoes;dbleleo.iprojectti.com.br/3054:leleoconstrucoes;19;LELEO CONSTRUÇÕES - JAGUARETAMA;LELEO CONSTRUCOES LTDA;07542463002097
+DB04;dbleleo.iprojectti.com.br;3054;leleoconstrucoes;dbleleo.iprojectti.com.br/3054:leleoconstrucoes;20;LELEO CONSTRUÇÕES - DEPOSITO JAGUARETAMA;LELEO CONSTRUCOES LTDA;07542463002259
+DB04;dbleleo.iprojectti.com.br;3054;leleoconstrucoes;dbleleo.iprojectti.com.br/3054:leleoconstrucoes;21;LELEO CONSTRUÇÕES - ICAPUI;LELEO CONSTRUCOES LTDA;07542463002330
+DB04;dbleleo.iprojectti.com.br;3054;leleoconstrucoes;dbleleo.iprojectti.com.br/3054:leleoconstrucoes;22;LELEO CONSTRUÇÕES - DEPOSITO JAGUARUANA;LELEO CONSTRUCOES LTDA;07542463002410
+DB04;dbleleo.iprojectti.com.br;3054;leleofazenda;dbleleo.iprojectti.com.br/3054:leleofazenda;1;LELEO FAZENDA;LAGOA DE SOUSA AGROPECUARIA LTDA;55334674000114
+DB04;dbleleo.iprojectti.com.br;3054;leleomoveis;dbleleo.iprojectti.com.br/3054:leleomoveis;1;LELEO MOVEIS - RUSSAS (MATRIZ);J. ERIVALDO E CIA LTDA;06001044000112
+DB04;dbleleo.iprojectti.com.br;3054;leleomoveis;dbleleo.iprojectti.com.br/3054:leleomoveis;2;LELEO MOVEIS - IRACEMA;J. ERIVALDO & CIA LTDA;06001044000201
+DB04;dbleleo.iprojectti.com.br;3054;leleomoveis;dbleleo.iprojectti.com.br/3054:leleomoveis;3;LELEO MOVEIS - JAGUARUANA;J ERIVALDO & CIA LTDA;06001044001607
+DB04;dbleleo.iprojectti.com.br;3054;leleomoveis;dbleleo.iprojectti.com.br/3054:leleomoveis;4;LELEO MOVEIS - ALTO SANTO;J. ERIVALDO & CIA LTDA;06001044000627
+DB04;dbleleo.iprojectti.com.br;3054;leleomoveis;dbleleo.iprojectti.com.br/3054:leleomoveis;5;LELEO MOVEIS - JAGUARETAMA;J. ERIVALDO & CIA LTDA;06001044000465
+DB04;dbleleo.iprojectti.com.br;3054;leleomoveis;dbleleo.iprojectti.com.br/3054:leleomoveis;6;LELEO MOVEIS - PACAJUS;J. ERIVALDO & CIA LTDA;06001044002247
+DB04;dbleleo.iprojectti.com.br;3054;leleomoveis;dbleleo.iprojectti.com.br/3054:leleomoveis;7;LELEO MOVEIS - ARACATI;J. ERIVALDO & CIA LTDA;06001044002590
+DB04;dbleleo.iprojectti.com.br;3054;leleomoveis;dbleleo.iprojectti.com.br/3054:leleomoveis;8;DEPOSITO - PACAJUS;J. ERIVALDO & CIA LTDA;06001044002409
+DB04;dbleleo.iprojectti.com.br;3054;leleomoveis;dbleleo.iprojectti.com.br/3054:leleomoveis;9;LELEO MOVEIS - QUIXERE;J. ERIVALDO & CIA LTDA;06001044001780
+DB04;dbleleo.iprojectti.com.br;3054;leleomoveis;dbleleo.iprojectti.com.br/3054:leleomoveis;10;DEPOSITO - QUIXERE;J. ERIVALDO & CIA LTDA;06001044002166
+DB04;dbleleo.iprojectti.com.br;3054;leleomoveis;dbleleo.iprojectti.com.br/3054:leleomoveis;11;LELEO MOVEIS  MORADA NOVA;J. ERIVALDO & CIA LTDA;06001044001356
+DB04;dbleleo.iprojectti.com.br;3054;leleomoveis;dbleleo.iprojectti.com.br/3054:leleomoveis;12;LELEO MOVEIS - LIMOEIRO;J. ERIVALDO & CIA LTDA;06001044001437
+DB04;dbleleo.iprojectti.com.br;3054;leleomoveis;dbleleo.iprojectti.com.br/3054:leleomoveis;13;LELEO MOVEIS  -TABULEIRO;J. ERIVALDO & CIA LTDA;06001044001518
+DB04;dbleleo.iprojectti.com.br;3054;leleomoveis;dbleleo.iprojectti.com.br/3054:leleomoveis;14;DEPOSITO - JAGUARETAMA;J. ERIVALDO & CIA LTDA;06001044001275
+DB04;dbleleo.iprojectti.com.br;3054;leleomoveis;dbleleo.iprojectti.com.br/3054:leleomoveis;15;DEPOSITO GERAL - RUSSAS;J. ERIVALDO & CIA LTDA;06001044000970
+DB04;dbleleo.iprojectti.com.br;3054;leleomoveis;dbleleo.iprojectti.com.br/3054:leleomoveis;16;DEPOSITO - ALTO SANTO;J. ERIVALDO & CIA LTDA;06001044001194
+DB04;dbleleo.iprojectti.com.br;3054;leleomoveis;dbleleo.iprojectti.com.br/3054:leleomoveis;17;DEPOSITO  - JAGUARUANA;J. ERIVALDO & CIA LTDA;06001044001860
+DB04;dbleleo.iprojectti.com.br;3054;leleomoveis;dbleleo.iprojectti.com.br/3054:leleomoveis;18;LELEO MOVEIS - JAGUARIBE;J. ERIVALDO & CIA LTDA;06001044002085
+DB04;dbleleo.iprojectti.com.br;3054;leleomoveis;dbleleo.iprojectti.com.br/3054:leleomoveis;19;DEPOSITO - JAGUARIBE;J. ERIVALDO & CIA LTDA;06001044001941
+DB04;dbleleo.iprojectti.com.br;3054;leleomoveis;dbleleo.iprojectti.com.br/3054:leleomoveis;20;LELEO MOVEIS - CASCAVEL;J. ERIVALDO & CIA LTDA;06001044002328
+DB04;dbleleo.iprojectti.com.br;3054;leleomoveis;dbleleo.iprojectti.com.br/3054:leleomoveis;21;LELEO MOVEIS;J. ERIVALDO & CIA LTDA;06001044002670
+DB04;dbleleo.iprojectti.com.br;3054;leleomoveis;dbleleo.iprojectti.com.br/3054:leleomoveis;22;CASA AMARELA;CASA AMARELA;
+DB04;dbleleo.iprojectti.com.br;3054;leleomoveis;dbleleo.iprojectti.com.br/3054:leleomoveis;23;LELEO MOVEIS;J. ERIVALDO & CIA LTDA;06001044002832
+DB04;dbleleo.iprojectti.com.br;3054;leleomoveis;dbleleo.iprojectti.com.br/3054:leleomoveis;24;LELEO MOVEIS;J. ERIVALDO & CIA LTDA;06001044002751
+DB04;dbleleo.iprojectti.com.br;3054;leleomoveis;dbleleo.iprojectti.com.br/3054:leleomoveis;25;LELEO CONSTRUCOES;LELEO CONSTRUCOES LTDA;07542463000558
+DB04;dbleleo.iprojectti.com.br;3054;leleomoveis;dbleleo.iprojectti.com.br/3054:leleomoveis;26;LELE MOVEIS- RUSSAS;J. ERIVALDO & CIA LTDA;06001044002913
+DB04;dbleleo.iprojectti.com.br;3054;leleomoveis;dbleleo.iprojectti.com.br/3054:leleomoveis;27;DEPOSITO FECHADO;J.ERIVALDO & CIA LTDA;06001044003057
+DB04;dbleleo.iprojectti.com.br;3054;leleomoveis;dbleleo.iprojectti.com.br/3054:leleomoveis;28;LELEO MOVEIS;J. ERIVALDO & CIA LTDA;06001044003219
+DB04;dbleleo.iprojectti.com.br;3054;leleomoveis;dbleleo.iprojectti.com.br/3054:leleomoveis;29;LELEO MOVEIS;J. ERIVALDO & CIA LTDA;06001044003138
+DB04;dbleleo.iprojectti.com.br;3054;leleomoveis;dbleleo.iprojectti.com.br/3054:leleomoveis;30;LELEO MOVEIS - HORIZONTE;J. ERIVALDO & CIA LTDA;06001044003480
+DB04;dbleleo.iprojectti.com.br;3054;leleomoveis;dbleleo.iprojectti.com.br/3054:leleomoveis;31;LELEO MOVEIS - DEP LIMOEIRO;J. ERIVALDO E CIA LTDA;06001044003308
+DB04;dbleleo.iprojectti.com.br;3054;leleomoveis;dbleleo.iprojectti.com.br/3054:leleomoveis;32;DEPOSITO -  HORIZONTE;J ERIVALDO & CIA LTDA;06001044003561
+DB04;dbleleo.iprojectti.com.br;3054;leleomoveis;dbleleo.iprojectti.com.br/3054:leleomoveis;33;DEPOSITO - PACAJUS;J ERIVALDO & CIA LTDA;06001044003642
+DB04;dbleleo.iprojectti.com.br;3054;leleomoveis;dbleleo.iprojectti.com.br/3054:leleomoveis;34;DEPOSITO - PACAJUS;J ERIVALDO & CIA LTDA;06001044003723
+DB04;dbleleo.iprojectti.com.br;3054;leleomoveis;dbleleo.iprojectti.com.br/3054:leleomoveis;98;LELEO SITE;J. ERIVALDO E CIA LTDA;06001044000112
+DB04;dbleleo.iprojectti.com.br;3054;leleomoveis;dbleleo.iprojectti.com.br/3054:leleomoveis;99;ESCRITORIO - ASTEC;ANTONIO JOSE SANTIAGO PONTES;55334674000114
+DB04;dbleleo.iprojectti.com.br;3054;leleopresentes;dbleleo.iprojectti.com.br/3054:leleopresentes;1;LELEO PRESENTES;ANTONIO JOSE SANTIAGO PONTES E CIA LTDA;04420795000148
+DB02;dbley.iprojectti.com.br;3051;leycolchoes;dbley.iprojectti.com.br/3051:leycolchoes;1;LEY MOVEIS LTDA - DIST 1;LEY MOVEIS LTDA;04064533000198
+DB02;dbley.iprojectti.com.br;3051;leycolchoes;dbley.iprojectti.com.br/3051:leycolchoes;2;LEY MOVEIS LTDA - DIST 2;LEY MOVEIS LTDA;04064533000350
+DB02;dbley.iprojectti.com.br;3051;leycolchoes;dbley.iprojectti.com.br/3051:leycolchoes;3;FILIAL LEY 05;LEY MOVEIS LTDA;04064533000511
+DB02;dbley.iprojectti.com.br;3051;leycolchoes;dbley.iprojectti.com.br/3051:leycolchoes;4;FILIAL LEY 04 - USADOS;LEY MOVEIS LTDA;04064533000430
+DB02;dbley.iprojectti.com.br;3051;leycolchoes;dbley.iprojectti.com.br/3051:leycolchoes;5;FILIAL LEY 02;LEY MOVEIS LTDA;04064533000279
+DB02;dbley.iprojectti.com.br;3051;leycolchoes;dbley.iprojectti.com.br/3051:leycolchoes;6;LEY COLCHOES - MATRIZ;LEY INDUSTRIA DE COLCHOES LTDA;18363125000141
+DB02;dbley.iprojectti.com.br;3051;leycolchoes;dbley.iprojectti.com.br/3051:leycolchoes;7;JSBGTELES;JSBGTELES;
+DB02;dbley.iprojectti.com.br;3051;leycolchoes;dbley.iprojectti.com.br/3051:leycolchoes;8;LEY COLCHOES - FILIAL;LEY INDUSTRIA DE COLCHOES LTDA;18363125000222
+DB02;dbley.iprojectti.com.br;3051;leycolchoes;dbley.iprojectti.com.br/3051:leycolchoes;9;SELET SERVICOS;SELET LOGISTICA E SERVICOS LTDA ME;40829610000117
+DB02;dbley.iprojectti.com.br;3051;leycolchoes;dbley.iprojectti.com.br/3051:leycolchoes;10;LEY EXPRESS;LEY EXPRESS LTDA;59339063000110
+DB01;dbinfo01.iprojectti.com.br;3050;lhc1;dbinfo01.iprojectti.com.br/3050:lhc1;1;DISTRIBUIDORA CAVALCANTE;LHC COMERCIO E REPRESENTAÇÃO LTDA;04993298000139
+DB01;dbinfo01.iprojectti.com.br;3050;lhc1;dbinfo01.iprojectti.com.br/3050:lhc1;2;LOJA 2;LHC COMÉRCIO E REPRESENTAÇÕES LTDA;04993298000210
+DB01;dbinfo01.iprojectti.com.br;3050;lhc2;dbinfo01.iprojectti.com.br/3050:lhc2;1;CONSTRUTORA JT;CONSTRUTORA JT LTDA;00336053000188
+DB01;dbinfo01.iprojectti.com.br;3050;lhc2;dbinfo01.iprojectti.com.br/3050:lhc2;2;ESCOLAS EM PVC MATINHA;OBRA - ESCOLAS EM PVC MATINHA;
+DB01;dbinfo01.iprojectti.com.br;3050;lhc2;dbinfo01.iprojectti.com.br/3050:lhc2;3;CONSTRUTEC;L A CAVALCANTE EIRELI;17763666000102
+DB01;dbinfo01.iprojectti.com.br;3050;lhc2;dbinfo01.iprojectti.com.br/3050:lhc2;4;CONSTRUTORA JT;CONTRUTORA JT LTDA;00336053000340
+DB01;dbinfo01.iprojectti.com.br;3050;lhc2;dbinfo01.iprojectti.com.br/3050:lhc2;5;JN LOGISTICA;JN CAVALCANTE DA NOBREGA LTDA;65895929000171
+DB01;dbinfo01.iprojectti.com.br;3050;lhc2;dbinfo01.iprojectti.com.br/3050:lhc2;9;PONTE MATINHA;PONTE MATINHA;
+DB02;dblidermaxconstrucoes.iprojectti.com.br;3051;lidermaxconstrucoes;dblidermaxconstrucoes.iprojectti.com.br/3051:lidermaxconstrucoes;1;LIDERMAC CONSTRUCOES;LIDERMAC DISTRIBUIDORA DE MATERIAL DE CONSTRUCAO L;44504277000127
+DB02;dblidermaxconstrucoes.iprojectti.com.br;3051;lidermaxconstrucoes;dblidermaxconstrucoes.iprojectti.com.br/3051:lidermaxconstrucoes;2;LIDER MAC CONSTRUÇÕES;LIDERMAC DISTRIBUIDORA DE MATERIAL DE CONSTRUCAO L;44504277000470
+DB02;dblidermaxconstrucoes.iprojectti.com.br;3051;lidermaxconstrucoes;dblidermaxconstrucoes.iprojectti.com.br/3051:lidermaxconstrucoes;3;CD03;LIDERMAC DISTRIBUIDORA DE MATERIAL DE CONSTRUCAO L;44504277000208
+DB02;dblidermaxconstrucoes.iprojectti.com.br;3051;lidermaxconstrucoes;dblidermaxconstrucoes.iprojectti.com.br/3051:lidermaxconstrucoes;4;LJ04;LJ04;
+DB05;dblivertec.iprojectti.com.br;3055;livertec;dblivertec.iprojectti.com.br/3055:livertec;1;LIVER TEC;CRISTIANO LIMA VERDE - ME;00620791000152
+DB05;dblivertec.iprojectti.com.br;3055;livertec;dblivertec.iprojectti.com.br/3055:livertec;2;LIVER TEC;CRISTIANO LIMA VERDE-ME;00620791000152
+DB05;dblivertec.iprojectti.com.br;3055;livertec;dblivertec.iprojectti.com.br/3055:livertec;3;LIVERTEC;CRISTIANO LIMA VERDE ME;
+DB05;dblivertec.iprojectti.com.br;3055;livertec;dblivertec.iprojectti.com.br/3055:livertec;4;ATACADO;CRISTIANO LIMA VERDE - ME;00620791000152
+DB05;dblivertec.iprojectti.com.br;3055;livertecfortaleza;dblivertec.iprojectti.com.br/3055:livertecfortaleza;1;MUNDO DAS PEÇAS ELETRO;LIMA DISTR. E COMERCIO DE PEÇAS PARA ELETRO LTDA;22162830000310
+DB03;dblourosofa.iprojectti.com.br;3052;lourosofa;dblourosofa.iprojectti.com.br/3052:lourosofa;1;LOURO DO SOFA;PEDRO FERREIRA LIMA EIRELI ME;24703466000111
+DB03;dblourosofa.iprojectti.com.br;3052;lourosofa;dblourosofa.iprojectti.com.br/3052:lourosofa;2;LOURO DO SOFA;RIANDRA BARBOSA DE MELO;22493655000181
+DB03;dblourosofa.iprojectti.com.br;3052;lourosofa;dblourosofa.iprojectti.com.br/3052:lourosofa;3;R SILVA DESIGN;R SILVA DESIGN COMERCIO DE MOVEIS LTDA;43146011000197
+DB03;dblourosofa.iprojectti.com.br;3052;lourosofa;dblourosofa.iprojectti.com.br/3052:lourosofa;4;MOVELIZE CONCEITO;MOVELIZE CONCEITO COMERRCIO DE MOVEIS E COCHOARIA;52363143000161
+DB03;dblourosofa.iprojectti.com.br;3052;lourosofa;dblourosofa.iprojectti.com.br/3052:lourosofa;5;INOVAR MOVEIS;R S COMERCIO DE MOVEIS LTDA;54910126000122
+DB02;dblpcdecoracoes.iprojectti.com.br;3051;lpcdecoracoes;dblpcdecoracoes.iprojectti.com.br/3051:lpcdecoracoes;1;LPC DECORACOES;LPC DECORACOES LTDA;08948160000179
+DB02;dblpcdecoracoes.iprojectti.com.br;3051;lpcdecoracoes;dblpcdecoracoes.iprojectti.com.br/3051:lpcdecoracoes;2;ONLINE;LPC DECORAÇÕES ONLINE;
+DB02;dblpcdecoracoes.iprojectti.com.br;3051;lpcdecoracoes;dblpcdecoracoes.iprojectti.com.br/3051:lpcdecoracoes;3;LPC DECORACOES;LPC DECORACOES LTDA;08948160000330
+DB02;dbluzdcasa.iprojectti.com.br;3051;luzdcasa;dbluzdcasa.iprojectti.com.br/3051:luzdcasa;1;LUZ DE CASA;LUZ D'CASA COMERCIO DE MATERIAL ELETRICO LTDA ME;03418618000164
+DB02;dbluzdcasa.iprojectti.com.br;3051;luzdcasa;dbluzdcasa.iprojectti.com.br/3051:luzdcasa;2;NEWLED;NEWLED ILUMINACAO LTDA - ME;60755107000171
+DB05;dbmadeireiradovale.iprojectti.com.br;3055;madeireiradovale;dbmadeireiradovale.iprojectti.com.br/3055:madeireiradovale;1;MADEIREIRA DO VALE;F REBOUÇAS DO AMARAL ME;00934642000168
+DB05;dbmadeireiramaciel.iprojectti.com.br;3055;madeireiramaciel;dbmadeireiramaciel.iprojectti.com.br/3055:madeireiramaciel;1;MADEIREIRA MACIEL;HAROLDO CESAR DE OLIVEIRA MACIEL;73918252/0001-78
+DB05;dbmadeireiramaciel.iprojectti.com.br;3055;madeireiramaciel;dbmadeireiramaciel.iprojectti.com.br/3055:madeireiramaciel;2;DEP - M.J. LOUREIRO MACIEL;M.J. LOUREIRO MACIEL;02471295/0001-00
+DB05;dbmadeireiramaciel.iprojectti.com.br;3055;madeireiramaciel;dbmadeireiramaciel.iprojectti.com.br/3055:madeireiramaciel;3;MADEIREIRA MACIEL;CARLOS VIDAL DE OLIVEIRA MACIEL;11045376000139
+DB03;dbmadereiramaciel.iprojectti.com.br;3052;madereiramaciel;dbmadereiramaciel.iprojectti.com.br/3052:madereiramaciel;1;MADEIREIRA MACIEL;HAROLDO CESAR DE OLIVEIRA MACIEL ME;73918252000178
+DB03;dbmadereiramaciel.iprojectti.com.br;3052;madereiramaciel;dbmadereiramaciel.iprojectti.com.br/3052:madereiramaciel;2;DEP - M.J. LOUREIRO MACIEL;M.J. LOUREIRO MACIEL;02471295000100
+DB03;dbmadereiramaciel.iprojectti.com.br;3052;madereiramaciel;dbmadereiramaciel.iprojectti.com.br/3052:madereiramaciel;3;MADEIREIRA MACIEL;CARLOS VIDAL DE OLIVEIRA MACIEL;11045376000139
+DB03;dbmadereiramaciel.iprojectti.com.br;3052;madereiramaciel;dbmadereiramaciel.iprojectti.com.br/3052:madereiramaciel;4;LAURO CONSTRUÇÕES;LAURO LUIS LOUREIRO MACIEL;26787108000160
+DB05;dbmafalda.iprojectti.com.br;3055;mafalda;dbmafalda.iprojectti.com.br/3055:mafalda;1;MAFALDA MAGAZINE;MAFALDA MAGAZINE EIRELI;07336981000191
+DB05;dbmafalda.iprojectti.com.br;3055;mafalda;dbmafalda.iprojectti.com.br/3055:mafalda;2;MAFALDA MAGAZINE - JAGUARUANA;MAFALDA MAGAZINE LTDA MICROEMPRESA;07336981/0003-53
+DB05;dbmafalda.iprojectti.com.br;3055;mafalda;dbmafalda.iprojectti.com.br/3055:mafalda;3;MAFALDA MAGAZINE - QUIXADA;MAFALDA MAGAZINE LTDA;07336981/0002-72
+DB05;dbmafalda.iprojectti.com.br;3055;mafalda;dbmafalda.iprojectti.com.br/3055:mafalda;4;MAFALDA MAGAZINE;MAFALDA MAGAZINE LTDA - ME;07336981/0005-15
+DB05;dbmafalda.iprojectti.com.br;3055;mafalda;dbmafalda.iprojectti.com.br/3055:mafalda;5;FEIRAO MODA FLORES;MAFALDA MAGAZINE LTDA ME;07336981000353
+DB05;dbmafalda.iprojectti.com.br;3055;mafalda;dbmafalda.iprojectti.com.br/3055:mafalda;7;MAFALDA MAGAZINE;MAFALDA MAGAZINE LTDA ME;07336981000353
+DB05;dbmafalda.iprojectti.com.br;3055;mafalda;dbmafalda.iprojectti.com.br/3055:mafalda;8;MAFALDA MAGAZINE;MAFALDA MAGAZINE EIRELI;07336981000272
+DB05;dbmafalda.iprojectti.com.br;3055;mafalda;dbmafalda.iprojectti.com.br/3055:mafalda;9;MY GUERRA;COMERCIO ATACADISTA E VAREJISTA DE ALIMENTOS MY GU;33585508000158
+DB05;dbmafalda.iprojectti.com.br;3055;mafalda;dbmafalda.iprojectti.com.br/3055:mafalda;12;MAFALDA CENTER;M GUERRA MAGAZINE LTDA - EPP;23542657000186
+DB05;dbmafalda.iprojectti.com.br;3055;mafalda;dbmafalda.iprojectti.com.br/3055:mafalda;13;SUPER MAFALDA;YURI GUERRA SALDANHA;28367945000165
+DB05;dbmafalda.iprojectti.com.br;3055;mafalda;dbmafalda.iprojectti.com.br/3055:mafalda;14;HOLANDA MAGAZINE;SUPER MAGAZINE COMERCIAL LTD;52270424000170
+DB05;dbmafalda.iprojectti.com.br;3055;mafalda;dbmafalda.iprojectti.com.br/3055:mafalda;15;NOSSA SAPATARIA;SUPER MAGAZINE COMERCIAL LTDA;52270424000170
+DB03;dbmakesebijus.iprojectti.com.br;3052;makesparacuru;dbmakesebijus.iprojectti.com.br/3052:makesparacuru;1;MAKES E BIJUS PARACURU;MAKES E BIJUS PARACURU LTDA - ME;48081009000109
+DB03;dbmakesebijus.iprojectti.com.br;3052;makessaogoncalo;dbmakesebijus.iprojectti.com.br/3052:makessaogoncalo;1;MAKES & BIJUS;ANA CHRISTINA ABREU DA PONTE LOBO;33692954000161
+DB06;dbmaranata.iprojectti.com.br;3056;maranata;dbmaranata.iprojectti.com.br/3056:maranata;1;MARANATA MOVEIS;ADAILTON ALVES TEIXEIRA JUNIOR ME;07374662000170
+DB06;dbmaranata.iprojectti.com.br;3056;maranata;dbmaranata.iprojectti.com.br/3056:maranata;2;MARANATA;MARANATA COM.VAREJISTA DE MOVEIS E ELETROD.LTD;10693236000104
+DB01;dbmaravilha.iprojectti.com.br;3050;maravilha;dbmaravilha.iprojectti.com.br/3050:maravilha;1;LOJAS MARAVILHA - MATRIZ;J O DE LIMA LTDA;07870381000370
+DB01;dbmaravilha.iprojectti.com.br;3050;maravilha;dbmaravilha.iprojectti.com.br/3050:maravilha;2;LOJAS MARAVILHA - PALHANO;J O DE LIMA LTDA;07870381000290
+DB01;dbmaravilha.iprojectti.com.br;3050;maravilha;dbmaravilha.iprojectti.com.br/3050:maravilha;3;LOJAS MARAVILHA - JAGUARUANA;J O DE LIMA LTDA;07870381000109
+DB01;dbmaravilha.iprojectti.com.br;3050;maravilha;dbmaravilha.iprojectti.com.br/3050:maravilha;4;LOJAS MARAVILHA - DEPOSITO;J O DE LIMA LTDA;07870381000451
+DB01;dbmaravilha.iprojectti.com.br;3050;maravilha;dbmaravilha.iprojectti.com.br/3050:maravilha;5;LOJAS MARAVILHA - LOJA 05;J O DE LIMA LTDA;07870381000532
+DB01;dbmaravilha.iprojectti.com.br;3050;maravilha;dbmaravilha.iprojectti.com.br/3050:maravilha;6;LOJAS MARAVILHA - LIMOEIRO;J O DE LIMA LTDA;07870381000613
+DB01;dbmaravilha.iprojectti.com.br;3050;maravilha;dbmaravilha.iprojectti.com.br/3050:maravilha;7;LOJAS MARAVILHA - AVARIADO;AVARIADO;
+DB01;dbmaravilha.iprojectti.com.br;3050;maravilha;dbmaravilha.iprojectti.com.br/3050:maravilha;8;LOJAS MARAVILHA - ITAICABA;J O DE LIMA LTDA;07870381000702
+DB01;dbmaravilha.iprojectti.com.br;3050;maravilha;dbmaravilha.iprojectti.com.br/3050:maravilha;9;LOJAS MARAVILHA - FLORES;J O DE LIMA LTDA;07870381000966
+DB01;dbmaravilha.iprojectti.com.br;3050;maravilha;dbmaravilha.iprojectti.com.br/3050:maravilha;10;LOJAS MARAVILHA - ARACATI;J O DE LIMA EIRELI;07870381000885
+DB01;dbmaravilha.iprojectti.com.br;3050;maravilha;dbmaravilha.iprojectti.com.br/3050:maravilha;11;LOJAS MARAVILHA - QUIXERE;J O DE LIMA EIRELI;07870381001008
+DB01;dbmaravilha.iprojectti.com.br;3050;maravilha;dbmaravilha.iprojectti.com.br/3050:maravilha;12;DEPOSITO MARAVILHAS;J O DE LIMA LTDA;07870381001180
+DB01;dbmaravilha.iprojectti.com.br;3050;maravilha;dbmaravilha.iprojectti.com.br/3050:maravilha;13;LOJAS MARAVILHA - ARACATI 2;J O DE LIMA LTDA;07870381001261
+DB01;dbmaravilha.iprojectti.com.br;3050;maravilha;dbmaravilha.iprojectti.com.br/3050:maravilha;14;LOJAS MARAVILHA - AVULSA;J O DE LIMA EIRELI;
+DB01;dbmaravilha.iprojectti.com.br;3050;maravilha;dbmaravilha.iprojectti.com.br/3050:maravilha;99;ASSISTENCIA;ASSISTENCIA;
+DB06;dbmarcicleide.iprojectti.com.br;3056;marcicleide;dbmarcicleide.iprojectti.com.br/3056:marcicleide;1;MARIA MARCICLEIDE;MARIA MARCICLEIDE MARTINS HOLANDA BARBOSA;33973933000114
+DB06;dbmarmorariafrutuozo.iprojectti.com.br;3056;marmorariafrutuozo;dbmarmorariafrutuozo.iprojectti.com.br/3056:marmorariafrutuozo;1;MARMORARIA SAO RAIMUNDO;VALDETE FERREIRA DA SILVA OLIVEIRA ME;07947511000164
+DB06;dbmarmorariafrutuozo.iprojectti.com.br;3056;marmorariafrutuozo;dbmarmorariafrutuozo.iprojectti.com.br/3056:marmorariafrutuozo;2;MARMORARIA SAO RAIMUNDO FILIAL;VALDETE FERREIRA DA SILVA OLIVEIRA ME;07947511000245
+DB06;dbmartinspolpas.iprojectti.com.br;3056;martinspolpas;dbmartinspolpas.iprojectti.com.br/3056:martinspolpas;1;MARTINS POLPAS;MARTINS POLPAS LTDA - EPP;52740041000118
+DB03;dbmconceito.iprojectti.com.br;3052;mconceito;dbmconceito.iprojectti.com.br/3052:mconceito;1;MAGAZINE CONCEITO;MAGAZINE CONCEITO LIMITADA;33277729000169
+DB02;dbmegalux.iprojectti.com.br;3051;megalux;dbmegalux.iprojectti.com.br/3051:megalux;1;MEGA LUX FORTALEZA;MEGA LUX COM. SERV.MAT. ELET. HID. LTDA;04934227000165
+DB02;dbmegalux.iprojectti.com.br;3051;megalux;dbmegalux.iprojectti.com.br/3051:megalux;2;MEGA LUX SOBRAL;MEGA LUX COMERCIO E SERVICOS DE MATERIAI;04934227000246
+DB02;dbmegalux.iprojectti.com.br;3051;megalux;dbmegalux.iprojectti.com.br/3051:megalux;3;MEGA LUX EUSEBIO;MEGA LUX COM E SERV DE MAT ELETRICOS E HIDRAULICOS;04934227000327
+DB02;dbmegalux.iprojectti.com.br;3051;megalux;dbmegalux.iprojectti.com.br/3051:megalux;4;JOTATEC;JOTATEC COM. DE MAT. ELETR. E;41448200000199
+DB05;dbmenu.iprojectti.com.br;3055;menu;dbmenu.iprojectti.com.br/3055:menu;1;MENU FOOD SERVICE;JSN INDUSTRIA E COMERCIO DE ALIMENTOS LTDA;61134460000105
+DB05;dbmercsaofco.iprojectti.com.br;3055;mercsaofco;dbmercsaofco.iprojectti.com.br/3055:mercsaofco;1;MER. SÃO FRANCISCO;ELINAIDE DIOGENES HOLANDA-ME;07637826000105
+DB05;dbmercsaofco.iprojectti.com.br;3055;mercsaofco;dbmercsaofco.iprojectti.com.br/3055:mercsaofco;2;MER. SÃO FRANCISCO;ELINAIDE DIOGENES HOLANDA-ME;07637826000296
+DB01;dbmilled.iprojectti.com.br;3050;milled;dbmilled.iprojectti.com.br/3050:milled;2;LOJA 2;FLASH NOTES ELETRONICOS E TECNOLOGIA EIRELI-EPP;23571761000107
+DB01;dbmilled.iprojectti.com.br;3050;milled;dbmilled.iprojectti.com.br/3050:milled;100;MIL LED;MIL IMPORTAÇOES COMERCIO DE LUMINARIA LTDA -ME;22952967000106
+DB01;dbmilled.iprojectti.com.br;3050;milled;dbmilled.iprojectti.com.br/3050:milled;101;;LEDS DO BRASIL DISTRIBUIDORA EIRELI ME;02670707000130
+DB01;dbmilled.iprojectti.com.br;3050;milled;dbmilled.iprojectti.com.br/3050:milled;102;ELEKTRA DISTRIBUIDORA DE MATERIAL ELETRI;ELEKTRA DISTRIBUIDORA DE MATERIAL ELETRICO EIRELI;29161633000163
+DB01;dbmilled.iprojectti.com.br;3050;milled;dbmilled.iprojectti.com.br/3050:milled;103;LEDS DO BRASIL;CNIP COMERCIO NACIONAL DE ILUMINACAO PUBLICA LTDA;14248351000120
+DB01;dbmilled.iprojectti.com.br;3050;milled;dbmilled.iprojectti.com.br/3050:milled;105;CMC;CMC - COMERCIO DE MATERIAIS DE CONSTRUCOES LTDA;05515458000105
+DB01;dbmilled.iprojectti.com.br;3050;milled;dbmilled.iprojectti.com.br/3050:milled;106;LEDS DO BRASIL;CNIP COMERCIO NACIONAL DE ILUMINAÇAO PUBLICA;14248351000120
+DB01;dbmixcomercio.iprojectti.com.br;3050;mixcomercio;dbmixcomercio.iprojectti.com.br/3050:mixcomercio;1;MIX COMERCIO;MIX COMERCIO DE ARTIGOS DE PAPELARIA LTDA EPP;02700843000126
+DB03;dbmmatos.iprojectti.com.br;3052;mmatos;dbmmatos.iprojectti.com.br/3052:mmatos;1;MARIA MATOS HOME CENTER;DEPOSITO DE MAT DE CONSTR MARIA DE MATOS LTDA ME;00236105000144
+DB03;dbmmatos.iprojectti.com.br;3052;mmatos;dbmmatos.iprojectti.com.br/3052:mmatos;2;MARIA MATOS HOME CENTER;DEP DE MAT DE CONSTRUCAO MARIA DE MATOS LTDA;00236105000225
+DB03;dbmmatos.iprojectti.com.br;3052;mmatos;dbmmatos.iprojectti.com.br/3052:mmatos;3;FEIRAO DA CONSTRUCAO;ANA PAULA MACIEL MATOS - ME;02702364000149
+DB03;dbmmatos.iprojectti.com.br;3052;mmatos;dbmmatos.iprojectti.com.br/3052:mmatos;4;HORIZONTE CERAMICAS;HORIZONTE INDUSTRIA E COMERCIO DE CERAMICA LTDA ME;07202079000182
+DB03;dbmobile.iprojectti.com.br;3052;mobile;dbmobile.iprojectti.com.br/3052:mobile;1;INFOBRASIL SISTEMAS - MOBILE;INFOBRASIL SISTEMAS - MOBILE;69825760000134
+DB03;dbmobile.iprojectti.com.br;3052;mobile;dbmobile.iprojectti.com.br/3052:mobile;2;GERTEC - HOMOLOGACAO;GERTEC BRASIL LTDA - HOMOLOGACAO;03654119000176
+DB03;dbmobile.iprojectti.com.br;3052;mobile;dbmobile.iprojectti.com.br/3052:mobile;3;INFOMOBILE L3 HOMOLOGACAO;F E J COMERCIO E SER. DE INFORMATICA HOMOLOGACAO;05510526000135
+DB03;dbmobile.iprojectti.com.br;3052;mobile;dbmobile.iprojectti.com.br/3052:mobile;4;FANTASIA LOJA TESTE;RAZAO SOCIAL TESTE;06001044002247
+DB03;dbmobile.iprojectti.com.br;3052;mobile;dbmobile.iprojectti.com.br/3052:mobile;5;GRAJEITO TREINAMENTO;GRAJEITO TREINAMENTO;
+DB03;dbmobile.iprojectti.com.br;3052;mobile;dbmobile.iprojectti.com.br/3052:mobile;6;HP ELETRO MOVEIS;IPAUMIRIM;
+DB03;dbmobile.iprojectti.com.br;3052;mobile;dbmobile.iprojectti.com.br/3052:mobile;7;KARVAS;BRUNO KARVA;
+DB03;dbmobile.iprojectti.com.br;3052;mobile;dbmobile.iprojectti.com.br/3052:mobile;8;DAVI;DAVI;
+DB03;dbmobile.iprojectti.com.br;3052;mobile;dbmobile.iprojectti.com.br/3052:mobile;9;CCLASSTRIB;CLASSIFICACAO TRIBUTARIA;
+DB03;dbmobile.iprojectti.com.br;3052;mobile;dbmobile.iprojectti.com.br/3052:mobile;14;INFOBRASIL SISTEMAS - HOMOLOGAÇÃO KDM CR;INFOBRASIL SISTEMAS - HOMOLOGAÇÃO KDM CRT3;03294777000102
+DB02;dbmodernaconstrucoes.iprojectti.com.br;3051;modernaconstrucoes;dbmodernaconstrucoes.iprojectti.com.br/3051:modernaconstrucoes;1;MODERNA HOME CENTER;MODERNA CONSTRUCAO LTDA ME;09450528000137
+DB02;dbmodernaconstrucoes.iprojectti.com.br;3051;modernaconstrucoes;dbmodernaconstrucoes.iprojectti.com.br/3051:modernaconstrucoes;2;MODERNA CONSTRUÇÃO HOEM CENTER;MODERNA CONSTRUÇÃO LTDA;09450528000218
+DB03;dbmormaco.iprojectti.com.br;3052;mormaco;dbmormaco.iprojectti.com.br/3052:mormaco;1;MORMAÇO IGUATEMI;MORMACO COM.DE ARTIGOS P/ARTESANATO LTDA;03786403000104
+DB03;dbmormaco.iprojectti.com.br;3052;mormaco;dbmormaco.iprojectti.com.br/3052:mormaco;2;MORMACO GUARARAPES;MORMACO GUARARAPES ARTIGOS PARA ARTESANATO LTDA;45061125000160
+DB03;dbmormaco.iprojectti.com.br;3052;mormaco;dbmormaco.iprojectti.com.br/3052:mormaco;3;MORMAÇO MEIRELES;MORMACO ART E DECOR MEIRELES LTDA - EPP;55892109000172
+DB03;dbmormaco.iprojectti.com.br;3052;mormaco;dbmormaco.iprojectti.com.br/3052:mormaco;4;MORMACO;DALIA ART E DECOR LTDA;59082452000102
+DB03;dbmormaco.iprojectti.com.br;3052;mormaco;dbmormaco.iprojectti.com.br/3052:mormaco;5;MORMAÇO;TICIANO TEOFILO MOREIRA - EPP;21796689000182
+DB03;dbmormaco.iprojectti.com.br;3052;mormaco;dbmormaco.iprojectti.com.br/3052:mormaco;6;MORMAÇO;MARIA DO SOCORRO COM. VAR. DE ARTIGOS P/ ARTESANAT;06055479000140
+DB03;dbmormaco.iprojectti.com.br;3052;mormaco1;dbmormaco.iprojectti.com.br/3052:mormaco1;1;MORMAÇO;MARIA DO SOCORRO COM. VAR. DE ARTIGOS P/ ARTESANAT;06055479000140
+DB03;dbmormaco.iprojectti.com.br;3052;mormaco1;dbmormaco.iprojectti.com.br/3052:mormaco1;2;LOJA 2;LOJA 2;
+DB03;dbmormaco.iprojectti.com.br;3052;mormaco1;dbmormaco.iprojectti.com.br/3052:mormaco1;3;LOJA 3;LOJA 3;
+DB03;dbmormaco.iprojectti.com.br;3052;mormaco2consulta;dbmormaco.iprojectti.com.br/3052:mormaco2consulta;1;MORMAÇO;TICIANO TEOFILO MOREIRA - EPP;21796689000182
+DB03;dbmormaco.iprojectti.com.br;3052;mormaco2consulta;dbmormaco.iprojectti.com.br/3052:mormaco2consulta;3;MORMAÇO;MORMAÇO;
+DB05;dblivertec.iprojectti.com.br;3055;mossoro;dblivertec.iprojectti.com.br/3055:mossoro;1;GOMES E LIMA;LIMA DISTRIBUICAO E COMERCIO DE PECAS PARA ELETROD;22162830000158
+DB05;dblivertec.iprojectti.com.br;3055;mossoro;dblivertec.iprojectti.com.br/3055:mossoro;2;GOMES E LIMA;GOMES E LIMA DISTRIBUICAO E COMERCIO DE PECAS;
+DB05;dblivertec.iprojectti.com.br;3055;mossoro;dblivertec.iprojectti.com.br/3055:mossoro;3;ESTOQUE 2;GOMES E LIMA DISTRIBUICAO E COMERCIO DE PECAS;22162830000158
+DB03;dbmovelar.iprojectti.com.br;3052;movelar;dbmovelar.iprojectti.com.br/3052:movelar;1;LOJAS MOVELAR;J HENRIQUE SILVA JUNIOR;09064327000100
+DB03;dbmovelar.iprojectti.com.br;3052;movelar;dbmovelar.iprojectti.com.br/3052:movelar;2;LOJAS MOVELAR;MOVELAR MOVEIS E ELETROS CEDRO LTDA;00112978000145
+DB01;dbgrupomundau.iprojectti.com.br;3050;mundaumoveis;dbgrupomundau.iprojectti.com.br/3050:mundaumoveis;1;MUNDAU MOVEIS LOJA 01;MUNDAU MOVEIS LTDA;41328832000119
+DB01;dbgrupomundau.iprojectti.com.br;3050;mundaumoveis;dbgrupomundau.iprojectti.com.br/3050:mundaumoveis;2;MUNDAU MOVEIS LOJA 02;MUNDAU MOVEIS LTDA;41328832000208
+DB01;dbgrupomundau.iprojectti.com.br;3050;mundaumoveis;dbgrupomundau.iprojectti.com.br/3050:mundaumoveis;3;MUNDAU MOVEIS LOJA 03;MUNDAU MOVEIS LTDA;41328832000380
+DB01;dbgrupomundau.iprojectti.com.br;3050;mundaumoveis;dbgrupomundau.iprojectti.com.br/3050:mundaumoveis;4;MUNDAU MOVEIS LOJA 04;MUNDAU MOVEIS LTDA;41328832000461
+DB01;dbgrupomundau.iprojectti.com.br;3050;mundaumoveis;dbgrupomundau.iprojectti.com.br/3050:mundaumoveis;5;MUNDAU MOVEIS LOJA 05;MUNDAU MOVEIS LTDA;41328832000542
+DB01;dbgrupomundau.iprojectti.com.br;3050;mundaumoveis;dbgrupomundau.iprojectti.com.br/3050:mundaumoveis;6;MUNDAU MOVEIS LOJA 06;MUNDAU MOVEIS LTDA;41328832000623
+DB01;dbgrupomundau.iprojectti.com.br;3050;mundaumoveis;dbgrupomundau.iprojectti.com.br/3050:mundaumoveis;7;MUNDAU MOVEIS LOJA 07;MUNDAU MOVEIS LTDA;41328832000704
+DB01;dbgrupomundau.iprojectti.com.br;3050;mundaumoveis;dbgrupomundau.iprojectti.com.br/3050:mundaumoveis;8;MUNDAU MOVEIS LOJA 08;MUNDAU MOVEIS LTDA;41328832000895
+DB01;dbgrupomundau.iprojectti.com.br;3050;mundaumoveis;dbgrupomundau.iprojectti.com.br/3050:mundaumoveis;9;MUNDAU MOVEIS LOJA 09;MUNDAU MOVEIS LTDA;41328832000976
+DB01;dbgrupomundau.iprojectti.com.br;3050;mundaumoveis;dbgrupomundau.iprojectti.com.br/3050:mundaumoveis;10;MUNDAU MOVEIS LOJA 10;MUNDAU MOVEIS LTDA;41328832001000
+DB01;dbgrupomundau.iprojectti.com.br;3050;mundaumoveis;dbgrupomundau.iprojectti.com.br/3050:mundaumoveis;11;MUNDAU MOVEIS LTDA - EPP;MUNDAU MOVEIS LTDA - EPP;41328832001190
+DB01;dbgrupomundau.iprojectti.com.br;3050;mundaumoveis;dbgrupomundau.iprojectti.com.br/3050:mundaumoveis;12;MUNDAU MOVEIS LOJA 12;MUNDAU MOVEIS LTDA;41328832001271
+DB06;dbnacionalgas.iprojectti.com.br;3056;nacionalgas;dbnacionalgas.iprojectti.com.br/3056:nacionalgas;1;GAS DA ORPAM;GAS DA ORPAM LTDA;10587391000146
+DB03;dbnandababy.iprojectti.com.br;3052;nandababy;dbnandababy.iprojectti.com.br/3052:nandababy;1;NANDA BABY;ALINE FRAGOSO CAVALCANTE;12094446000101
+DB05;dbnewcar.iprojectti.com.br;3055;newcar;dbnewcar.iprojectti.com.br/3055:newcar;1;NEW CAR;L M L ALMEIDA AUTO PEÇAS EPP;11164628000149
+DB05;dbnewcar.iprojectti.com.br;3055;newcar;dbnewcar.iprojectti.com.br/3055:newcar;2;NEW CAR;JOSE RICARDO ELOE ALMEIDA EPP;07257547000116
+DB05;dbnobreconstrucoes.iprojectti.com.br;3055;nobreconstrucoes;dbnobreconstrucoes.iprojectti.com.br/3055:nobreconstrucoes;1;NOBRE CONSTRUCOES -COQUEIRO;MENDONÇA E MESQUITA CONSTRUCOES LTDA;05058867000111
+DB05;dbnobreconstrucoes.iprojectti.com.br;3055;nobreconstrucoes;dbnobreconstrucoes.iprojectti.com.br/3055:nobreconstrucoes;2;NOBRE CONSTRUCOES;NOBRE CONSTRUCOES LTDA;05202808000175
+DB05;dbnobreconstrucoes.iprojectti.com.br;3055;nobreconstrucoes;dbnobreconstrucoes.iprojectti.com.br/3055:nobreconstrucoes;3;DEPOSITO LJ 01;DEPOSITO LJ01;
+DB05;dbnobreconstrucoes.iprojectti.com.br;3055;nobreconstrucoes;dbnobreconstrucoes.iprojectti.com.br/3055:nobreconstrucoes;4;DEPOSITO LJ 02;DEPOSITO LJ 02;
+DB05;dbnobreconstrucoes.iprojectti.com.br;3055;nobreconstrucoes;dbnobreconstrucoes.iprojectti.com.br/3055:nobreconstrucoes;5;NOBRE CONSTRUCOES;NOBRE CONSTRUCOES LTDA ME;05202808000256
+DB01;dbnobrelar.iprojectti.com.br;3050;nobrelar;dbnobrelar.iprojectti.com.br/3050:nobrelar;1;NOBRE LAR I;COML ELETRODOM RIBEIRO LTDA;41415381000157
+DB01;dbnobrelar.iprojectti.com.br;3050;nobrelar;dbnobrelar.iprojectti.com.br/3050:nobrelar;2;NOBRELAR;COML DE ELETROMOVEIS T RIBEIRO;04100177000110
+DB01;dbnobrelar.iprojectti.com.br;3050;nobrelar;dbnobrelar.iprojectti.com.br/3050:nobrelar;3;NOBRELAR - MATRIZ;COML ELETRO CAV BENEV LTDA;04401293000170
+DB01;dbnobrelar.iprojectti.com.br;3050;nobrelar;dbnobrelar.iprojectti.com.br/3050:nobrelar;4;EXTERNA - NOBRELAR;COML ELETRO CAV BENEV LTDA;04401293000170
+DB01;dbnobrelar.iprojectti.com.br;3050;nobrelar;dbnobrelar.iprojectti.com.br/3050:nobrelar;5;NOBRELAR - CD;COML ELETROMOVEIS CAVALCANTE BENEVIDES LTDA;04401293000250
+DB01;dbnobrelar.iprojectti.com.br;3050;nobrelar;dbnobrelar.iprojectti.com.br/3050:nobrelar;6;FL AMONTADA;COML ELETROMOVEIS CAVALCANTE BENEVIDES LTDA;04401293000331
+DB01;dbnobrelar.iprojectti.com.br;3050;nobrelar;dbnobrelar.iprojectti.com.br/3050:nobrelar;7;NOBRELAR -  ITAREMA;COML ELETROMOVEIS CAVALCANTE BENEVIDES LTDA;04401293000412
+DB01;dbnobrelar.iprojectti.com.br;3050;nobrelar;dbnobrelar.iprojectti.com.br/3050:nobrelar;8;DP FL ITAREMA;COM. DE ELETROMOVEIS CALVANTE BENEVIDES LTDA;04401293000501
+DB01;dbnobrelar.iprojectti.com.br;3050;nobrelar;dbnobrelar.iprojectti.com.br/3050:nobrelar;9;FL MARCO;COML DE ELETROMOVEIS CAVALCANTE BENEVIDES LTDA;04401293000765
+DB01;dbnobrelar.iprojectti.com.br;3050;nobrelar;dbnobrelar.iprojectti.com.br/3050:nobrelar;10;NOBRELAR - BELA CRUZ;COML ELETROMOVEIS CAVALCANTE BENEVIDES LTDA;04401293000684
+DB01;dbnobrelar.iprojectti.com.br;3050;nobrelar;dbnobrelar.iprojectti.com.br/3050:nobrelar;11;FL ITAPIPOCA;COML ELETROMOVEIS CAVALCANTE BENEVIDES LTDA;04401293000846
+DB01;dbnobrelar.iprojectti.com.br;3050;nobrelar;dbnobrelar.iprojectti.com.br/3050:nobrelar;12;DEP FL ITAPIPOCA;COML DE ELETROMOVEIS CAVALCANTE BENEVIDES LTDA;
+DB01;dbnobrelar.iprojectti.com.br;3050;nobrelar;dbnobrelar.iprojectti.com.br/3050:nobrelar;13;DEP AMONTADA;COML DE ELETROMOVEIS CAVALCANTE BENEVIDES LTDA;
+DB01;dbnobrelar.iprojectti.com.br;3050;nobrelar;dbnobrelar.iprojectti.com.br/3050:nobrelar;14;DEP MATRIZ;DEPOSITO;
+DB01;dbnobrelar.iprojectti.com.br;3050;nobrelar;dbnobrelar.iprojectti.com.br/3050:nobrelar;15;FL PENTECOSTE;COML ELETROM  CAVALCANTE BENEVIDES LTDA;04401293000927
+DB01;dbnobrelar.iprojectti.com.br;3050;nobrelar;dbnobrelar.iprojectti.com.br/3050:nobrelar;16;NOBRELAR;COML ELETRO CAV BENEV LTDA;04401293000170
+DB01;dbnobrelar.iprojectti.com.br;3050;nobrelar;dbnobrelar.iprojectti.com.br/3050:nobrelar;17;FL ACARAU;COML ELETROMOVEIS CAVALCANTE BENEVIDES LTDA;04401293001060
+DB01;dbnobrelar.iprojectti.com.br;3050;nobrelar;dbnobrelar.iprojectti.com.br/3050:nobrelar;18;FL IRAUCUBA;COML ELETROMOVEIS CAVALCANTE BENEVIDES LTDA;04401293001222
+DB01;dbnobrelar.iprojectti.com.br;3050;nobrelar;dbnobrelar.iprojectti.com.br/3050:nobrelar;19;FL ITAPAJE;COML ELETROMOVEIS CAVALCANTE BENEVIDES LTDA;04401293001303
+DB01;dbnobrelar.iprojectti.com.br;3050;nobrelar;dbnobrelar.iprojectti.com.br/3050:nobrelar;20;NOBRELAR - ITAPAJÉ;RAMOS RIBEIRO COM DE MOVEIS LTDA ME;29820414000149
+DB01;dbnobrelar.iprojectti.com.br;3050;nobrelar;dbnobrelar.iprojectti.com.br/3050:nobrelar;21;NOBRELAR - IRAUÇUBA;RAMOS RIBEIRO COM DE MOVEIS LTDA;29820414000220
+DB01;dbnobrelar.iprojectti.com.br;3050;nobrelar;dbnobrelar.iprojectti.com.br/3050:nobrelar;22;NOBRELAR - AMONTADA;MF COMERC DE MOV EIRELI;31454316000187
+DB01;dbnobrelar.iprojectti.com.br;3050;nobrelar;dbnobrelar.iprojectti.com.br/3050:nobrelar;23;NOBRELAR - VD EXTERNA;MF COMERC DE MOV EIRELI;31454316000187
+DB03;dbnutrialracoes.iprojectti.com.br;3052;nutrialracoes;dbnutrialracoes.iprojectti.com.br/3052:nutrialracoes;1;NUTRIAL;S M DA COSTA AMARAL EPP;05026268000116
+DB03;dbnutrialracoes.iprojectti.com.br;3052;nutrialracoes;dbnutrialracoes.iprojectti.com.br/3052:nutrialracoes;2;DEPOSITO;DEPOSITO;
+DB03;dbnutrialracoes.iprojectti.com.br;3052;nutrialracoes;dbnutrialracoes.iprojectti.com.br/3052:nutrialracoes;3;NUTRIAL RAÇÕES LIMOEIRO;NUTRIAL COMERCIO VAREJISTA DE RACOES LTDA;31332119000195
+DB03;dbnutrialracoes.iprojectti.com.br;3052;nutrialracoes;dbnutrialracoes.iprojectti.com.br/3052:nutrialracoes;4;ARACATI;ARACATI;
+DB03;dbnutrialracoes.iprojectti.com.br;3052;nutrialracoes;dbnutrialracoes.iprojectti.com.br/3052:nutrialracoes;5;LIMOEIRO;LIMOEIRO DO NORTE;
+DB03;dbnutrialracoes.iprojectti.com.br;3052;nutrialracoes;dbnutrialracoes.iprojectti.com.br/3052:nutrialracoes;6;NUTRIAL;S. M. DA COSTA AMARAL;05026268000205
+DB06;dborpam.iprojectti.com.br;3056;orpam;dborpam.iprojectti.com.br/3056:orpam;1;LOJAS ORPAM 1;VICENTE DE PAULO MAGALHÃES ME;07111743000188
+DB06;dborpam.iprojectti.com.br;3056;orpam;dborpam.iprojectti.com.br/3056:orpam;2;DEPOSITO LOJ. ORPAM;VICENTE DE PAULO MAGALHÃES ME;07111743000188
+DB06;dborpam.iprojectti.com.br;3056;orpam;dborpam.iprojectti.com.br/3056:orpam;3;INATIVO;VICENTE DE PALO MAGALHAES - EPP;07111743000269
+DB01;dbpontodolar.iprojectti.com.br;3050;osvaldo;dbpontodolar.iprojectti.com.br/3050:osvaldo;1;KANTO DA MODA;OSVALDO BARBOSA ALENCAR JUNIOR - ME;15679363000172
+DB01;dbpontodolar.iprojectti.com.br;3050;osvaldo;dbpontodolar.iprojectti.com.br/3050:osvaldo;2;DEPOSITO;DEPOSITO;
+DB01;dbpontodolar.iprojectti.com.br;3050;osvaldo;dbpontodolar.iprojectti.com.br/3050:osvaldo;3;MARALE;OSVALDO BARBOSA ALENCAR JUNIOR - ME;15679363000253
+DB01;dbpontodolar.iprojectti.com.br;3050;osvaldo;dbpontodolar.iprojectti.com.br/3050:osvaldo;4;NOVA MODA;LOJA 4;
+DB01;dbpontodolar.iprojectti.com.br;3050;osvaldo;dbpontodolar.iprojectti.com.br/3050:osvaldo;5;KANTO DA MODA;OSVALDO BARBOSA ALENCAR JUNIOR - ME;15679363000334
+DB03;dbpereiramoveis.iprojectti.com.br;3052;pereiramoveis;dbpereiramoveis.iprojectti.com.br/3052:pereiramoveis;1;PEREIRA MOVEIS;ALEXANDRE PEREIRA COMERCIO DE MOVEIS U. LTDA;37023123000158
+DB03;dbpereiramoveis.iprojectti.com.br;3052;pereiramoveis;dbpereiramoveis.iprojectti.com.br/3052:pereiramoveis;2;PEREIRA MOVEIS LJ 02;ALEXANDRE PEREIRA COMERCIO DE MOVEIS UNIPESSOAL LT;37023123000239
+DB03;dbpereiramoveis.iprojectti.com.br;3052;pereiramoveis;dbpereiramoveis.iprojectti.com.br/3052:pereiramoveis;3;PEREIRA MOVEIS;ALEXANDRE PEREIRA COMERCIO DE MOVEIS UNIP LTDA;37023123000310
+DB03;dbpereiramoveis.iprojectti.com.br;3052;pereiramoveis;dbpereiramoveis.iprojectti.com.br/3052:pereiramoveis;4;PEREIRA MOVEIS;ALEXANDRE PEREIRA COMERCIO DE MOVEIS UNIPESSO LTDA;37023123000409
+DB03;dbpereiramoveis.iprojectti.com.br;3052;pereiramoveis;dbpereiramoveis.iprojectti.com.br/3052:pereiramoveis;5;PEREIRA MOVEIS;ALEXANDRE PEREIRA COMERCIO DE MOVEIS UNIPESSOAL LT;37023123000581
+DB03;dbpereiramoveis.iprojectti.com.br;3052;pereiramoveis;dbpereiramoveis.iprojectti.com.br/3052:pereiramoveis;6;FRANCISCO SÁ;ALEXANDRE PEREIRA COMERCIO DE MOVEIS UNIPESSOAL LT;37023123001200
+DB03;dbpereiramoveis.iprojectti.com.br;3052;pereiramoveis;dbpereiramoveis.iprojectti.com.br/3052:pereiramoveis;7;PEREIRA MOVEIS - CENTRO 2;ALEXANDRE PEREIRA COMERCIO DE MOVEIS UNIPESSOAL LT;37023123000662
+DB03;dbpereiramoveis.iprojectti.com.br;3052;pereiramoveis;dbpereiramoveis.iprojectti.com.br/3052:pereiramoveis;8;PEREIRA MOVEIS;ALEXANDRE PEREIRA COMERCIO DE MOVEIS U. LTDA;37023123000743
+DB03;dbpereiramoveis.iprojectti.com.br;3052;pereiramoveis;dbpereiramoveis.iprojectti.com.br/3052:pereiramoveis;9;PEREIRA MOVEIS CENTRO3;PEREIRA MOVEIS CENTRO3;37023123001120
+DB03;dbpereiramoveis.iprojectti.com.br;3052;pereiramoveis;dbpereiramoveis.iprojectti.com.br/3052:pereiramoveis;10;PEREIRA MOVEIS;ALEXANDRE PEREIRA COMERCIO DE MOVEIS UNIPESSOAL LT;37023123000905
+DB03;dbpereiramoveis.iprojectti.com.br;3052;pereiramoveis;dbpereiramoveis.iprojectti.com.br/3052:pereiramoveis;11;PEREIRA MOVEIS;ALEXANDRE PEREIRA COMERCIO DE MOVEIS U. LTDA;37023123000824
+DB03;dbpereiramoveis.iprojectti.com.br;3052;pereiramoveis;dbpereiramoveis.iprojectti.com.br/3052:pereiramoveis;12;PEREIRA MOVEIS - CENTRO 1;ALEXANDRE PEREIRA COM. DE MOVEIS UNIPESSOAL LTDA;37023123001049
+DB03;dbpereiramoveis.iprojectti.com.br;3052;pereiramoveis;dbpereiramoveis.iprojectti.com.br/3052:pereiramoveis;13;FABRICA DE SÓFA;CAUCAIA COMERCIO DE MOVEIS LTDA;47629972000103
+DB03;dbpereiramoveis.iprojectti.com.br;3052;pereiramoveis;dbpereiramoveis.iprojectti.com.br/3052:pereiramoveis;14;PEREIRA MOVEIS;CAUCAIA COMERCIO DE MOVEIS LTDA;47629972000294
+DB03;dbpereiramoveis.iprojectti.com.br;3052;pereiramoveis;dbpereiramoveis.iprojectti.com.br/3052:pereiramoveis;15;PEREIRA COLCHOES;PEREIRA COLCHOES;51753400000109
+DB03;dbpereiramoveis.iprojectti.com.br;3052;pereiramoveis;dbpereiramoveis.iprojectti.com.br/3052:pereiramoveis;16;PEREIRA COLCHOES;PEREIRA COLCHOES CAUCAIA LTDA - EPP;51753400000290
+DB03;dbpereiramoveis.iprojectti.com.br;3052;pereiramoveis;dbpereiramoveis.iprojectti.com.br/3052:pereiramoveis;17;PEREIRA COLCHOES;CAUCAIA COMERCIO LTDA;47629972000375
+DB03;dbpereiramoveis.iprojectti.com.br;3052;pereiramoveis;dbpereiramoveis.iprojectti.com.br/3052:pereiramoveis;18;PEREIRA MOVEIS;ALEXANDRE PEREIRA COMERCIO DE MOVEIS UNIPESSOAL LT;37023123001391
+DB03;dbpereiramoveis.iprojectti.com.br;3052;pereiramoveis;dbpereiramoveis.iprojectti.com.br/3052:pereiramoveis;19;PEREIRA MOVEIS;PEREIRA COLCHOES CAUCAIA LTDA;51753400000532
+DB03;dbpereiramoveis.iprojectti.com.br;3052;pereiramoveis;dbpereiramoveis.iprojectti.com.br/3052:pereiramoveis;20;PEREIRA MOVEIS SHPPARANGABA;PEREIRA COLCHOES CAUCAIA LTDA;51753400000702
+DB03;dbpereiramoveis.iprojectti.com.br;3052;pereiramoveis;dbpereiramoveis.iprojectti.com.br/3052:pereiramoveis;21;PEREIRA MOVEIS;PEREIRA COLCHOES CAUCAIA LTDA - EPP;51753400000451
+DB03;dbpereiramoveis.iprojectti.com.br;3052;pereiramoveis;dbpereiramoveis.iprojectti.com.br/3052:pereiramoveis;22;PEREIRA COLCHOES BARAO;PEREIRA COLCHÕES CAUCAIA LTDA EPP;51753400000370
+DB03;dbpereiramoveis.iprojectti.com.br;3052;pereiramoveis;dbpereiramoveis.iprojectti.com.br/3052:pereiramoveis;23;PEREIRA MOVEIS;CAUCAIA COLCHOES LTDA;61969363000124
+DB03;dbpereiramoveis.iprojectti.com.br;3052;pereiramoveis;dbpereiramoveis.iprojectti.com.br/3052:pereiramoveis;24;PEREIRA COLCHOES;PEREIRA COLCHOES CAUCAIA LTDA;51753400000613
+DB03;dbpereiramoveis.iprojectti.com.br;3052;pereiramoveis;dbpereiramoveis.iprojectti.com.br/3052:pereiramoveis;25;PEREIRA MOVEIS;PEREIRA COLCHOES CAUCAIA LTDA;51753400000885
+DB01;dbpontodolar.iprojectti.com.br;3050;pontodolar;dbpontodolar.iprojectti.com.br/3050:pontodolar;1;PONTO DO LAR;CLISIA MARIA TARGINO FELIX LTDA;07907441000110
+DB01;dbpontodolar.iprojectti.com.br;3050;pontodolar;dbpontodolar.iprojectti.com.br/3050:pontodolar;2;PONTO DO LAR;CLISIA MARIA TARGINO FELIX EPP;07907441000200
+DB01;dbpontodolar.iprojectti.com.br;3050;pontodolar;dbpontodolar.iprojectti.com.br/3050:pontodolar;3;PONTO DO LAR;GABRIEL TARGINO FELIX LTDA;13293879000159
+DB01;dbpontodolar.iprojectti.com.br;3050;pontodolar;dbpontodolar.iprojectti.com.br/3050:pontodolar;4;PONTO DO LAR;GABRIEL TARGINO FELIX LTDA;13293879000230
+DB01;dbpontodolar.iprojectti.com.br;3050;pontodolar;dbpontodolar.iprojectti.com.br/3050:pontodolar;5;MARIA POP;ALINE CABRAL CRISTINO FELIX ME;31599296000132
+DB01;dbpontodolar.iprojectti.com.br;3050;pontodolar;dbpontodolar.iprojectti.com.br/3050:pontodolar;6;PONTO DO LAR;LEONARDO TARGINO FELIX LTDA;43307777000106
+DB05;dbpoptintas.iprojectti.com.br;3055;poptintas;dbpoptintas.iprojectti.com.br/3055:poptintas;1;POP TINTAS;POP TINTAS LTDA;33869032000187
+DB05;dbpoptintas.iprojectti.com.br;3055;poptintas;dbpoptintas.iprojectti.com.br/3055:poptintas;2;POP LIGHT;POP LIGHT LTDA;
+DB05;dbbemlevemakeup.iprojectti.com.br;3055;poupemais;dbbemlevemakeup.iprojectti.com.br/3055:poupemais;1;POUPE MAIS MAKE;LUCAS DA SILVA SANTOS;51735755000175
+DB05;dbbemlevemakeup.iprojectti.com.br;3055;poupemaisacarau;dbbemlevemakeup.iprojectti.com.br/3055:poupemaisacarau;1;POUPE MAIS MAKE;MARIA DO SOCORRO SOEIRO SILVA;50330818000140
+DB05;dbbemlevemakeup.iprojectti.com.br;3055;poupemaisassuncao;dbbemlevemakeup.iprojectti.com.br/3055:poupemaisassuncao;1;POUPE MAIS ASSUNCAO;TAILANDIA VIANA GALDINO;55255379000172
+DB05;dbbemlevemakeup.iprojectti.com.br;3055;poupemaiscamocim;dbbemlevemakeup.iprojectti.com.br/3055:poupemaiscamocim;1;POUPE MAIS MAKE CAMOCIM;POUPE MAIS MAKE CAMOCIM LTDA;64379731000172
+DB05;dbbemlevemakeup.iprojectti.com.br;3055;poupemaiscruz;dbbemlevemakeup.iprojectti.com.br/3055:poupemaiscruz;1;POUPE MAIS MAKE CRUZ;POUPE MAIS MAKE CRUZ;
+DB05;dbbemlevemakeup.iprojectti.com.br;3055;poupemaisgranja;dbbemlevemakeup.iprojectti.com.br/3055:poupemaisgranja;1;POUPE MAIS GRANJA;POUPE MAIS MAKE GRANJA;65152982000182
+DB05;dbbemlevemakeup.iprojectti.com.br;3055;poupemaisicarai;dbbemlevemakeup.iprojectti.com.br/3055:poupemaisicarai;1;POUPE MAIS ICARAI;POUPE MAIS ICARAI;63286161000103
+DB05;dbbemlevemakeup.iprojectti.com.br;3055;poupemaisitarema;dbbemlevemakeup.iprojectti.com.br/3055:poupemaisitarema;1;POUPE MAIS MAKE;POUPE MAIS MAKE;
+DB05;dbbemlevemakeup.iprojectti.com.br;3055;poupemaisjijoca;dbbemlevemakeup.iprojectti.com.br/3055:poupemaisjijoca;1;POUPE MAIS JIJOCA;POUPE MAIS MAKEUP JIJOCA;
+DB05;dbbemlevemakeup.iprojectti.com.br;3055;poupemaismarco;dbbemlevemakeup.iprojectti.com.br/3055:poupemaismarco;1;POUPE MAIS MAKE;LIVIA JANINE GONCALVES DE ARAUJO;49464812000187
+DB05;dbbemlevemakeup.iprojectti.com.br;3055;poupemaisparacuru;dbbemlevemakeup.iprojectti.com.br/3055:poupemaisparacuru;1;POUPE MAIS MAKE PARACURU;ENAICONJONH TEIXEIRA MARQUES;64529457000170
+DB05;dbbemlevemakeup.iprojectti.com.br;3055;poupemaisparaipaba;dbbemlevemakeup.iprojectti.com.br/3055:poupemaisparaipaba;1;POUPE MAIS MAKE;JHONATTAN SOUSA SILVA;58714474000185
+DB05;dbbemlevemakeup.iprojectti.com.br;3055;poupemaispecem;dbbemlevemakeup.iprojectti.com.br/3055:poupemaispecem;1;POUPE MAIS PECEM;M. JOSE MAGALHAES MONTEIRO LTDA;62562093000103
+DB05;dbbemlevemakeup.iprojectti.com.br;3055;poupemaistrairi;dbbemlevemakeup.iprojectti.com.br/3055:poupemaistrairi;1;POUPE MAIS MAKE;LAISSA TATIANA LIMA ALVES;62899503000106
+DB05;dbpoupemaisumirim.iprojectti.com.br;3055;poupemaisumirim;dbpoupemaisumirim.iprojectti.com.br/3055:poupemaisumirim;1;POUPE MAIS UMIRIM;POUPE MAIS UMIRIM;
+DB05;dbbemlevemakeup.iprojectti.com.br;3055;poupemix;dbbemlevemakeup.iprojectti.com.br/3055:poupemix;1;POUPE MIX AMONTADA;POUPE MIX AMONTADA;
+DB05;dbbemlevemakeup.iprojectti.com.br;3055;poupemixamontada;dbbemlevemakeup.iprojectti.com.br/3055:poupemixamontada;1;POUPE MAIS MIX DEPOSITO;POUPE MAIS MAKE E ACESSORIOS LTDA;52751696000191
+DB05;dbbemlevemakeup.iprojectti.com.br;3055;poupemixamontada;dbbemlevemakeup.iprojectti.com.br/3055:poupemixamontada;2;POUPE MAIS MIX;POUPE MAIS MIX AMONTADA;
+DB05;dbbemlevemakeup.iprojectti.com.br;3055;poupemixamontada;dbbemlevemakeup.iprojectti.com.br/3055:poupemixamontada;3;POUPE MAIS MIX;POUPE MAIS MIX ITAPIPOCA;
+DB05;dbbemlevemakeup.iprojectti.com.br;3055;poupemixitapipoca;dbbemlevemakeup.iprojectti.com.br/3055:poupemixitapipoca;1;POUPE MIX ITAPIPOCA;POUPE MIX ITAPIPOCA;
+DB06;dbppconstrucao.iprojectti.com.br;3056;ppconstrucao;dbppconstrucao.iprojectti.com.br/3056:ppconstrucao;1;P P CONSTRUCAO;PATRICIA ARAUJO GOMES DA SILVA;34504531000133
+DB06;dbpremax.iprojectti.com.br;3056;premax;dbpremax.iprojectti.com.br/3056:premax;1;PREMAX ENERGIA;BANDEIRA & NOGUEIRA PRE MOLDADOS LTDA;50973871000160
+DB01;dbprogresso.iprojectti.com.br;3050;progresso;dbprogresso.iprojectti.com.br/3050:progresso;1;LOJA REDENCAO;FRANCISCO WELYTON BENEDITO MUNIZ FILHO - ME;06273812000197
+DB01;dbprogresso.iprojectti.com.br;3050;progresso;dbprogresso.iprojectti.com.br/3050:progresso;2;DEPOSITO REDENÇÃO;PROGRESSO COMERCIAL DE CONSTRUCOES LTDA;11032368000158
+DB01;dbprogresso.iprojectti.com.br;3050;progresso;dbprogresso.iprojectti.com.br/3050:progresso;3;LOJA BARREIRA;MUSTAFA E LIMA COMERCIAL DE MOVEIS E ELETRO LTDA;08658453000111
+DB01;dbprogresso.iprojectti.com.br;3050;progresso;dbprogresso.iprojectti.com.br/3050:progresso;4;LOJA ACARAPE;MUNIZ E SILVA COMERCIAL DE MOVEIS E ELETRO LTDA;03553453000133
+DB01;dbprogresso.iprojectti.com.br;3050;progresso;dbprogresso.iprojectti.com.br/3050:progresso;5;LOJA ANTONIO DIOGO;FW COMERCIAL DE MOVEIS LTDA ME;14624264000120
+DB01;dbprogresso.iprojectti.com.br;3050;progresso;dbprogresso.iprojectti.com.br/3050:progresso;6;MATRIZ UTILIDADES DO LAR;NAYANNE KELLY LIMA DA SILVA;09178214000208
+DB01;dbprogresso.iprojectti.com.br;3050;progresso;dbprogresso.iprojectti.com.br/3050:progresso;7;LOJA GUAIUBA;COMERCIAL MUNIZ DE MOVEIS LTDA ME;14622391000190
+DB01;dbprogresso.iprojectti.com.br;3050;progresso;dbprogresso.iprojectti.com.br/3050:progresso;8;GALPAO BOA FE;NAYANNE KELLY LIMA DA SILVA;09178214000127
+DB01;dbprogresso.iprojectti.com.br;3050;progresso;dbprogresso.iprojectti.com.br/3050:progresso;9;LJ ARACOIABA;MUNIZ E SILVA COMERCIAL DE MOVEIS E ELETRO LTDA;03553453000214
+DB01;dbprogresso.iprojectti.com.br;3050;progresso;dbprogresso.iprojectti.com.br/3050:progresso;10;LOJA ITAPIUNA;MUSTAFA E LIMA COMERCIAL DE MOVEIS E ELETRO LTDA;08658453000200
+DB01;dbprogresso.iprojectti.com.br;3050;progresso;dbprogresso.iprojectti.com.br/3050:progresso;11;LOJA BATURITE;NAYANNE KELLY LIMA DA SILVA ME;09178214000399
+DB01;dbprogresso.iprojectti.com.br;3050;progresso;dbprogresso.iprojectti.com.br/3050:progresso;12;LOJA CAPISTRANO;PROGRESSO COMERCIAL DE MOVEIS E ELETRO LTDA;28665901000111
+DB01;dbprogresso.iprojectti.com.br;3050;progresso;dbprogresso.iprojectti.com.br/3050:progresso;13;FEIRAO CASAS PROGRESSO;FEIRAO CASAS PROGRESSO;
+DB05;dbraulverdfrut.iprojectti.com.br;3055;raulverdfrut;dbraulverdfrut.iprojectti.com.br/3055:raulverdfrut;1;RAUL VERDFRUT;R A FONTENELE HORTIFRUTI LTDA;56302216000166
+DB05;dbraulverdfrut.iprojectti.com.br;3055;raulverdfrut;dbraulverdfrut.iprojectti.com.br/3055:raulverdfrut;2;FRANCISCO RAUL;FRANCISCO RAUL LOURENCO DE SOUSA;03974680322
+DB05;dbraulverdfrut.iprojectti.com.br;3055;raulverdfrut;dbraulverdfrut.iprojectti.com.br/3055:raulverdfrut;3;ESTUFA;ESTUFA;
+DB05;dbraulverdfrut.iprojectti.com.br;3055;raulverdfrut;dbraulverdfrut.iprojectti.com.br/3055:raulverdfrut;4;QUASE PRONTO;QUASE PRONTO COMERCIO E BENEFICIAMENTO DE ALIMENTO;61839896000191
+DB02;dbrayannemodas.iprojectti.com.br;3051;rayannemodas;dbrayannemodas.iprojectti.com.br/3051:rayannemodas;1;RAYANNE MODAS;ELIZANE ROCHA RODRIGUES ME;02467101000100
+DB02;dbrayannemodas.iprojectti.com.br;3051;rayannemodas;dbrayannemodas.iprojectti.com.br/3051:rayannemodas;2;FILIAL CASCAVEL;RAYANNE CALÇADOS & ACESSORIOS;
+DB02;dbrayannemodas.iprojectti.com.br;3051;rayannemodas;dbrayannemodas.iprojectti.com.br/3051:rayannemodas;3;RAYANNE MODAS;FILIAL- PACAJUS;
+DB02;dbrayannemodas.iprojectti.com.br;3051;rayannemodas;dbrayannemodas.iprojectti.com.br/3051:rayannemodas;4;RAYANNE MODAS;RAYANNE MODAS COMERCIAL DE VESTUARIO LTDA -ME;09152642000180
+DB03;dbrdtintas.iprojectti.com.br;3052;rdtintas;dbrdtintas.iprojectti.com.br/3052:rdtintas;1;RD TINTAS - CONSTRUINDO COM VOCÊ;ROBERVANIO QUEIROZ DO NASCIMENTO;08362369000156
+DB01;dbrevestir.iprojectti.com.br;3050;revestir;dbrevestir.iprojectti.com.br/3050:revestir;1;REVESTIR HOME CENTER;BVS COMERCIO DE MATERIAIS DE CONSTRUCAO LTDA;10667891000198
+DB01;dbrevestir.iprojectti.com.br;3050;revestir;dbrevestir.iprojectti.com.br/3050:revestir;2;REVESTIR HOME CENTER;BVS COMERCIO DE MATERIAIS DE CONSTRUCAO LTDA;10667891000511
+DB01;dbrevestir.iprojectti.com.br;3050;revestir;dbrevestir.iprojectti.com.br/3050:revestir;3;BRASIL PISOS;BVS COMERCIO DE MATERIAIS DE CONSTRUCAO LTDA;10667891000279
+DB01;dbrevestir.iprojectti.com.br;3050;revestir;dbrevestir.iprojectti.com.br/3050:revestir;4;RM VASCONCELOS;RM VASCONCELOS SILVA - ME;22295056000153
+DB01;dbrevestir.iprojectti.com.br;3050;revestir;dbrevestir.iprojectti.com.br/3050:revestir;5;BRASIL PISOS E CIA;BVS COMERCIO DE MATERIAIS DE CONSTRUCAO LTDA;10667891000864
+DB01;dbrevestir.iprojectti.com.br;3050;revestir;dbrevestir.iprojectti.com.br/3050:revestir;6;REVESTIR HOME CENTER;BVS COMERCIO DE MATERIAIS DE CONSTRUCAO LTDA;10667891000945
+DB01;dbrevestir.iprojectti.com.br;3050;revestir;dbrevestir.iprojectti.com.br/3050:revestir;7;REVESTIR HOME CENTER;BVS COMERCIO DE MATERIAIS DE CONSTRUCAO LTDA;10667891001089
+DB01;dbrevestir.iprojectti.com.br;3050;revestir;dbrevestir.iprojectti.com.br/3050:revestir;99;REVESTIR HOME CENTER;BVS COMERCIO DE MATERIAIS DE CONSTRUCAO LTDA;10667891000600
+DB02;dbricardomoveis.iprojectti.com.br;3051;ricardomoveis;dbricardomoveis.iprojectti.com.br/3051:ricardomoveis;1;RICARDO MOVEIS E ELETROS;RICARDO MENEZES BARROS LTDA;28879566000154
+DB02;dbricardomoveis.iprojectti.com.br;3051;ricardomoveis;dbricardomoveis.iprojectti.com.br/3051:ricardomoveis;2;RICARDO MOVEIS E ELETRO;RICARDO MENEZES BARROS LTDA;28879566000235
+DB02;dbrihomo.iprojectti.com.br;3051;rihomo;dbrihomo.iprojectti.com.br/3051:rihomo;1;01 LCS JOCKEY;LCS COMERCIO DE CONFECCOES LTDA;34923811000186
+DB02;dbrihomo.iprojectti.com.br;3051;rihomo;dbrihomo.iprojectti.com.br/3051:rihomo;3;03 B & E ITAPIPOCA;B & E CONFECCOES LTDA;12020183000358
+DB02;dbrihomo.iprojectti.com.br;3051;rihomo;dbrihomo.iprojectti.com.br/3051:rihomo;4;04 B & E SOBRAL 02;B & E CONFECCOES LTDA EPP;12020183000439
+DB02;dbrihomo.iprojectti.com.br;3051;rihomo;dbrihomo.iprojectti.com.br/3051:rihomo;8;08 DINA LIBERATO;DINA CONFECCOES LTDA - ME;49295281000146
+DB02;dbrihomo.iprojectti.com.br;3051;rihomo;dbrihomo.iprojectti.com.br/3051:rihomo;10;10 LCS MARACANAU;LCS COMERCIO DE CONFECCOES LTDA;34923811000429
+DB02;dbrihomo.iprojectti.com.br;3051;rihomo;dbrihomo.iprojectti.com.br/3051:rihomo;12;12 M C P MOSSORO;M C P COMERCIO DE CONFECCOES LTDA;36560748000439
+DB02;dbrihomo.iprojectti.com.br;3051;rihomo;dbrihomo.iprojectti.com.br/3051:rihomo;16;16 RIHOMO MESSEJANA 2;MESSEJANA  CONSULTA;
+DB02;dbrihomo.iprojectti.com.br;3051;rihomo;dbrihomo.iprojectti.com.br/3051:rihomo;17;17 RIHOMO CENTRO DE DISTRIBUIÇÃO;RIHOMO COMERCIO DE CONFECCOES LTDA - EPP;07004576000680
+DB02;dbrihomo.iprojectti.com.br;3051;rihomo;dbrihomo.iprojectti.com.br/3051:rihomo;18;18 M C P GUILHERME ROCHA;M C P COMERCIO DE CONFECCOES LTDA;36560748000196
+DB02;dbrihomo.iprojectti.com.br;3051;rihomo;dbrihomo.iprojectti.com.br/3051:rihomo;19;19 LCS CAUCAIA;LCS COMERCIO DE CONFECCOES LTDA;34923811000348
+DB02;dbrihomo.iprojectti.com.br;3051;rihomo;dbrihomo.iprojectti.com.br/3051:rihomo;22;22 LCS VILA UNIAO;LCS COMERCIO DE CONFECCOES LTDA;34923811000690
+DB02;dbrihomo.iprojectti.com.br;3051;rihomo;dbrihomo.iprojectti.com.br/3051:rihomo;24;RIHOMO LIMOEIRO;SILVEIRA INDUSTRIA E COMERCIO DE CONFECCOES LTDA;61281251000348
+DB02;dbrihomo.iprojectti.com.br;3051;rihomo;dbrihomo.iprojectti.com.br/3051:rihomo;25;-IND B & E CONFECCOES FILIAL;B & E CONFECCOES LTDA EPP;12020183000277
+DB02;dbrihomo.iprojectti.com.br;3051;rihomo;dbrihomo.iprojectti.com.br/3051:rihomo;26;26 RIHOMO BATURITÉ;RIHOMO COMERCIO E INDUSTRIA DE CONFECÇOE;07004576002110
+DB02;dbrihomo.iprojectti.com.br;3051;rihomo;dbrihomo.iprojectti.com.br/3051:rihomo;27;27 RIHOMO QUIXADÁ;RIHOMO COMERCIO E INDUSTRIA DE CONFECCOE;07004576002209
+DB02;dbrihomo.iprojectti.com.br;3051;rihomo;dbrihomo.iprojectti.com.br/3051:rihomo;28;28 - RIHOMO RUSSAS;RUSSAS CONSULTA;
+DB02;dbrihomo.iprojectti.com.br;3051;rihomo;dbrihomo.iprojectti.com.br/3051:rihomo;29;29 M C P JUAZEIRO 02;M C P COMERCIO DE CONFECCOES LTDA;36560748000510
+DB02;dbrihomo.iprojectti.com.br;3051;rihomo;dbrihomo.iprojectti.com.br/3051:rihomo;30;30  RIHOMO PIAUI;RIHOMO COMERCIO DE CONFECCOES LTDA;07004576002462
+DB02;dbrihomo.iprojectti.com.br;3051;rihomo;dbrihomo.iprojectti.com.br/3051:rihomo;55;-IND B & E CONFECCOES MATRIZ;B & E CONFECCOES LTDA EPP;12020183000196
+DB02;dbrihomo.iprojectti.com.br;3051;rihomo;dbrihomo.iprojectti.com.br/3051:rihomo;99;-IND LC;LC INDUSTRIA E COMERCIO D CONFECCOES LTD;03956569000113
+DB02;dbrihomo.iprojectti.com.br;3051;rihomo;dbrihomo.iprojectti.com.br/3051:rihomo;100;S- EMPREENDIMENTO LC IND - MARACANAU;RIHOMO INDUSTRIA E COM DE CONFECCOES LTD;03956569000113
+DB02;dbrihomo.iprojectti.com.br;3051;rihomo;dbrihomo.iprojectti.com.br/3051:rihomo;101;INATIVO-LOJAS;INATIVO-LOJAS;
+DB02;dbrihomo.iprojectti.com.br;3051;rihomo;dbrihomo.iprojectti.com.br/3051:rihomo;102;102-INATIVOINDUSTRIA;102-INATIVOINDUSTRIA;
+DB02;dbrihomo.iprojectti.com.br;3051;rihomo;dbrihomo.iprojectti.com.br/3051:rihomo;116;116 RIHOMO MESSEJANA 2;RIHOMO COMERCIO DE CONFECCOES LTDA;07004576000176
+DB02;dbrihomo.iprojectti.com.br;3051;rihomo;dbrihomo.iprojectti.com.br/3051:rihomo;128;128 - RIHOMO RUSSAS;RIHOMO COMERCIO DE CONFECCES LTDA;07004576002039
+DB05;dbrmdecor.iprojectti.com.br;3055;rmdecor;dbrmdecor.iprojectti.com.br/3055:rmdecor;1;RM DECOR E COLCHÕES;M A P ABREU RODRIGUES - ME;20089320000177
+DB05;dbrmdecor.iprojectti.com.br;3055;rmdecoritaitinga;dbrmdecor.iprojectti.com.br/3055:rmdecoritaitinga;1;RM DECOR E COLCHOES;RM DECOR E COLCHOES LTDA;66856166000112
+DB06;dbroquehc.iprojectti.com.br;3056;roquehomecenter;dbroquehc.iprojectti.com.br/3056:roquehomecenter;1;ROQUE HOME CENTER;ROQUE MATERIAL E CONSTRUCAO LTDA;24767107000128
+DB06;dbmaranata.iprojectti.com.br;3056;roseilson;dbmaranata.iprojectti.com.br/3056:roseilson;1;MARANATA MOVEIS;ROSEILSON FRAGOSO VIEIRA;30689305000113
+DB02;dbrrfit.iprojectti.com.br;3051;rrfit;dbrrfit.iprojectti.com.br/3051:rrfit;1;RFIT;RAYANNE ROCHA RODRIGUES - EPP;44657290000116
+DB05;dbsabalimentos.iprojectti.com.br;3055;sabalimentos;dbsabalimentos.iprojectti.com.br/3055:sabalimentos;1;SAB ALIMENTOS;SAB DISTRIBUIDORA SOLUCAO ALIMENTOS BEBIDAS LTDA;42389956000177
+DB05;dbsabalimentos.iprojectti.com.br;3055;sabalimentos;dbsabalimentos.iprojectti.com.br/3055:sabalimentos;2;SAB ALIMENTOS DEPOSITO;SAB ALIMENTOS DEPOSITO;
+DB05;dbsabalimentos.iprojectti.com.br;3055;sabalimentos;dbsabalimentos.iprojectti.com.br/3055:sabalimentos;3;SAB BONIFICAÇÃO;SAB BONIFICAÇÃO;
+DB01;dbsabornobre.iprojectti.com.br;3050;sabornobre;dbsabornobre.iprojectti.com.br/3050:sabornobre;1;SABOR NOBRE;ALBERTO JOSE CAVALCANTE JUNIOR COM DE PESCADOS;35044866000189
+DB01;dbsabornobre.iprojectti.com.br;3050;sabornobre;dbsabornobre.iprojectti.com.br/3050:sabornobre;2;SABOR NOBRE;AGAMENON DE SOUZA REBOUÇAS;14697099000137
+DB01;dbsabornobre.iprojectti.com.br;3050;sabornobre;dbsabornobre.iprojectti.com.br/3050:sabornobre;3;SABOR NOBRE;SABOR NOBRE COMERCIODE PESCADOS LTDA;33603266000188
+DB01;dbsabornobre.iprojectti.com.br;3050;sabornobre;dbsabornobre.iprojectti.com.br/3050:sabornobre;4;SABOR NOBRE;SABOR NOBRE COMERCIO DE PESCADOS LTDA;33603266000269
+DB03;dbscengenharia.iprojectti.com.br;3052;scengenharia;dbscengenharia.iprojectti.com.br/3052:scengenharia;1;SC ENGENHARIA;SC COMERCIO VAREJISTA DE MATERIAL DE CONSTRUCAO EI;40938049000104
+DB02;dbsoleseda.iprojectti.com.br;3051;soleseda;dbsoleseda.iprojectti.com.br/3051:soleseda;1;SOL & SEDA;SOL E SEDA IND. E COMERCIO DE CONFECCOES LTDA;63950848000100
+DB06;dbsolotica.iprojectti.com.br;3056;solotica;dbsolotica.iprojectti.com.br/3056:solotica;1;L & M LENS;L & M LENS PRODUTOS OPTICOS LTDA;11126538000163
+DB06;dbsolotica.iprojectti.com.br;3056;solotica;dbsolotica.iprojectti.com.br/3056:solotica;2;LIORA LENS COMERCIO LTDA;LIORA LENS COMERCIO LTDA;68387073000111
+DB05;dbsosconstrucoes.iprojectti.com.br;3055;sosconstrucoes;dbsosconstrucoes.iprojectti.com.br/3055:sosconstrucoes;1;S.O.S CONSTRUÇÃO;S.O.S CONSTRUCOES LTDA;54224293000110
+DB03;dbsousareis.iprojectti.com.br;3052;sousareis;dbsousareis.iprojectti.com.br/3052:sousareis;1;PARAISO DA CONSTRUCAO;ANA LUCIA BENICIO DA SILVA;23713126000109
+DB03;dbsousareis.iprojectti.com.br;3052;sousareis;dbsousareis.iprojectti.com.br/3052:sousareis;2;SOUSA REIS CONSTRUCOES;SOUSA COM DE MAT P CONS LTDA;05360828000174
+DB03;dbsousareis.iprojectti.com.br;3052;sousareis;dbsousareis.iprojectti.com.br/3052:sousareis;3;SOUSA REIS CONSTRUCOES;SOUSA COMERCIO DE MATERIAL P/CONSTRUCAO LTDA - EPP;05360828000255
+DB03;dbstopvariedades.iprojectti.com.br;3052;stopvariedades;dbstopvariedades.iprojectti.com.br/3052:stopvariedades;1;STOP VARIEDADSES;ANTONIO FRANCISCO PINHEIRO BATISTA;13688745000137
+DB03;dbstopvariedades.iprojectti.com.br;3052;stopvariedades;dbstopvariedades.iprojectti.com.br/3052:stopvariedades;2;STOP MADALENA;PAULA DONATO RIBEIRO BATISTA;27714643000153
+DB03;dbstopvariedades.iprojectti.com.br;3052;stopvariedades;dbstopvariedades.iprojectti.com.br/3052:stopvariedades;3;STOP MAGAZINE;STOP MAGAZINE COMERCIO CANINDE LTDA;54873568000146
+DB03;dbstopvariedades.iprojectti.com.br;3052;stopvariedades;dbstopvariedades.iprojectti.com.br/3052:stopvariedades;4;STOP MAGAZINE;P. B. DE SOUZA LTDA;59698749000105
+DB03;dbstopvariedades.iprojectti.com.br;3052;stopvariedades;dbstopvariedades.iprojectti.com.br/3052:stopvariedades;5;STOP CLIMATIZACAO;STOP CLIMATIZACAO COMERCIO E SERVICOS LTDA;64687456000154
+DB03;dbstopvariedades.iprojectti.com.br;3052;stopvariedades;dbstopvariedades.iprojectti.com.br/3052:stopvariedades;6;STOP CLIMATIZACAO SOBRAL;STOP CLIMATIZACAO SOBRAL COMERCIO E SERVICOS LTDA;65192873000199
+DB03;dbstopvariedades.iprojectti.com.br;3052;stopvariedades;dbstopvariedades.iprojectti.com.br/3052:stopvariedades;7;STOP MAGAZINE;P. BATISTA DE SOUZA LTDA;59687898000160
+DB05;dbsucataaeroporto.iprojectti.com.br;3055;sucataaeroportoind;dbsucataaeroporto.iprojectti.com.br/3055:sucataaeroportoind;1;SUCATA AEROPORTO;SUCATA AEROPORTO INDUSTRIA E COMÉRCIO LTDA;29781809000180
+DB05;dbsucataaeroporto.iprojectti.com.br;3055;sucataaeroportoind;dbsucataaeroporto.iprojectti.com.br/3055:sucataaeroportoind;2;MOSSORÓ;SUCATA MOSSORÓ;
+DB05;dbsucataaeroporto.iprojectti.com.br;3055;sucataaeroportoind;dbsucataaeroporto.iprojectti.com.br/3055:sucataaeroportoind;3;SUCATA AEROPORTO;SUCATA AEROPORTO INDUSTRIA E COMERCIO LTDA;29781809000260
+DB05;dbsucataaeroporto.iprojectti.com.br;3055;sucataaeroportoind;dbsucataaeroporto.iprojectti.com.br/3055:sucataaeroportoind;4;TREVO;TREVO DO SUCATEIRO COMERCIO DE MATERIAIS RECICLAVE;55980121000139
+DB05;dbsucataaeroporto.iprojectti.com.br;3055;sucataaeroportoind;dbsucataaeroporto.iprojectti.com.br/3055:sucataaeroportoind;5;SUCATAO BRASIL;JOTASOL COMERCIO E SERVICOS LTDA;54324211000109
+DB05;dblivertec.iprojectti.com.br;3055;sucataotemdetudo;dblivertec.iprojectti.com.br/3055:sucataotemdetudo;1;SUCATAO TEM DE TUDO;FEXL COMERCIO ATACADISTA DE RESIDUOS E SUCATAS LTD;65685390000126
+DB03;dbtgpinheiro.iprojectti.com.br;3052;tgpinheiro;dbtgpinheiro.iprojectti.com.br/3052:tgpinheiro;4;MAGAZINE GUERRA;T G PINHEIRO-ME;20590687000170
+DB03;dbtgpinheiro.iprojectti.com.br;3052;tgpinheiro;dbtgpinheiro.iprojectti.com.br/3052:tgpinheiro;5;GUERRA KIDS;E G PINHEIRO LTDA;51322267000136
+DB03;dbtgpinheiro.iprojectti.com.br;3052;tgpinheiro;dbtgpinheiro.iprojectti.com.br/3052:tgpinheiro;6;MAGAZINE GUERRA;E G PINHEIRO LTDA;51322267000217
+DB05;dbcasasp.iprojectti.com.br;3055;tintashc;dbcasasp.iprojectti.com.br/3055:tintashc;1;SAO PAULO TINTAS HOME CENTER LTDA;SAO PAULO TINTAS HOME CENTER LTDA;34998779000106
+DB05;dbtockchickblz.iprojectti.com.br;3055;tockchickblz;dbtockchickblz.iprojectti.com.br/3055:tockchickblz;1;TOCK CHICK DA BELEZA;COMERCIO VAREJISTA DE COSMETICOS TOCK CHICK DA BEL;40851161000103
+DB03;dbtopazio.iprojectti.com.br;3052;topazio;dbtopazio.iprojectti.com.br/3052:topazio;1;TOPAZIO;LEONARDO CARMONA PINHEIRO MACHADO DE SOUZA ME;19052371000145
+DB03;dbtopazio.iprojectti.com.br;3052;topazio;dbtopazio.iprojectti.com.br/3052:topazio;2;TOP.SUL;LEONARDO CARMONA PINHEIRO MACHADO DE SOUZA LTDA;19052371000226
+DB03;dbtopazio.iprojectti.com.br;3052;topazio;dbtopazio.iprojectti.com.br/3052:topazio;3;TOPAZIO;RITA DE CASSIA PASSOS CARMONA ME;35068139000151
+DB03;dbunnishopmoveis.iprojectti.com.br;3052;unnishopmoveis;dbunnishopmoveis.iprojectti.com.br/3052:unnishopmoveis;1;UNNI SHOP MOVEIS - CAMOCIM;GRUPO UNNI SHOP COMERCIO LTDA;02938499000299
+DB03;dbunnishopmoveis.iprojectti.com.br;3052;unnishopmoveis;dbunnishopmoveis.iprojectti.com.br/3052:unnishopmoveis;2;UNNI SHOP MOVEIS - CAMOCIM;GRUPO UNNI SHOP COMERCIO LTDA;02938499000370
+DB03;dbunnishopmoveis.iprojectti.com.br;3052;unnishopmoveis;dbunnishopmoveis.iprojectti.com.br/3052:unnishopmoveis;3;UNNI SHOP MOVEIS - GRANJA 50;GRUPO UNNI SHOP COMERCIO LTDA;02938499000450
+DB03;dbunnishopmoveis.iprojectti.com.br;3052;unnishopmoveis;dbunnishopmoveis.iprojectti.com.br/3052:unnishopmoveis;4;UNNI SHOP MOVEIS - DEP VIÇOSA;GRUPO UNNI SHOP COMERCIO LTDA;02938499000612
+DB03;dbunnishopmoveis.iprojectti.com.br;3052;unnishopmoveis;dbunnishopmoveis.iprojectti.com.br/3052:unnishopmoveis;5;UNNI SHOP MOVEIS - DEPOSITO;GRUPO UNNI SHOP COMERCIO LTDA;02938499000531
+DB03;dbunnishopmoveis.iprojectti.com.br;3052;unnishopmoveis;dbunnishopmoveis.iprojectti.com.br/3052:unnishopmoveis;6;UNNI SHOP MOVEIS - JIJOCA;GRUPO UNNI SHOP COMERCIO LTDA;02938499000701
+DB03;dbunnishopmoveis.iprojectti.com.br;3052;unnishopmoveis;dbunnishopmoveis.iprojectti.com.br/3052:unnishopmoveis;7;UNNI SHOP MOVEIS - VIÇOSA 84;GRUPO UNNI SHOP COMERCIO LTDA;02938499000884
+DB03;dbunnishopmoveis.iprojectti.com.br;3052;unnishopmoveis;dbunnishopmoveis.iprojectti.com.br/3052:unnishopmoveis;8;UNNI SHOP MOVEIS - VIÇOSA 65;GRUPO UNNI SHOP COMERCIO LTDA;02938499000965
+DB03;dbunnishopmoveis.iprojectti.com.br;3052;unnishopmoveis;dbunnishopmoveis.iprojectti.com.br/3052:unnishopmoveis;9;UNNI SHOP MOVEIS - ACARAU;GRUPO UNNI SHOP COMERCIO LTDA;02938499001007
+DB03;dbunnishopmoveis.iprojectti.com.br;3052;unnishopmoveis;dbunnishopmoveis.iprojectti.com.br/3052:unnishopmoveis;10;UNNI SHOP MOVEIS - FREICHEIRINHAS;GRUPO UNNI SHOP COMERCIO LTDA;02938499001180
+DB03;dbunnishopmoveis.iprojectti.com.br;3052;unnishopmoveis;dbunnishopmoveis.iprojectti.com.br/3052:unnishopmoveis;11;UNNI SHOP MOVEIS - TIANGUA 60;GRUPO UNNI SHOP COMERCIO LTDA;02938499001260
+DB03;dbunnishopmoveis.iprojectti.com.br;3052;unnishopmoveis;dbunnishopmoveis.iprojectti.com.br/3052:unnishopmoveis;12;UNNI SHOP MOVEIS - GRANJA 41;UNNISHOP MOVEIS E ELETROS LTDA;02938499001341
+DB03;dbunnishopmoveis.iprojectti.com.br;3052;unnishopmoveis;dbunnishopmoveis.iprojectti.com.br/3052:unnishopmoveis;13;UNNISHOP MOVEIS;UNNISHOP MOVEIS E ELETROS LTDA;02938499000108
+DB03;dbunnishopmoveis.iprojectti.com.br;3052;unnishopmoveis;dbunnishopmoveis.iprojectti.com.br/3052:unnishopmoveis;14;UNNISHOP  FEIRÃO;UNNISHOP MOVEIS FEIRÃO;
+DB03;dbversatil.iprojectti.com.br;3052;versatil;dbversatil.iprojectti.com.br/3052:versatil;1;VERSATIL;VERSATIL TELECOM LTDA;05415053000197
+DB03;dbversatil.iprojectti.com.br;3052;versatil;dbversatil.iprojectti.com.br/3052:versatil;2;DINAMICA MANUTENÇÃO;DINAMICA  MANUTENÇAO E SERVIÇOS EIRELI;04446265000179
+DB03;dbversatil.iprojectti.com.br;3052;versatil;dbversatil.iprojectti.com.br/3052:versatil;3;GILMAR RODRIGUES;GILMAR RODRIGUES;
+DB02;dbversatile.iprojectti.com.br;3051;versatile;dbversatile.iprojectti.com.br/3051:versatile;1;VERSATILE CONFORTO E VIDA;VERSATILE COLCHOES;27830028000102
+DB02;dbversatile.iprojectti.com.br;3051;versatile;dbversatile.iprojectti.com.br/3051:versatile;2;VERSATILE FILIAL;VERSATILE COLCHOES FILIAL;
+DB02;dbversatile.iprojectti.com.br;3051;versatile;dbversatile.iprojectti.com.br/3051:versatile;3;VERSATILE COLCHOES DEPOSITO;VERSATILE COLCHOES DEPOSITO;
+DB06;dbviasense.iprojectti.com.br;3056;viasense;dbviasense.iprojectti.com.br/3056:viasense;1;VIA SENSE;FONTENELE & LIMA LTDA;24606181000162
+DB06;dbvidracariafrutuozo.iprojectti.com.br;3056;vidracariafrutuozo;dbvidracariafrutuozo.iprojectti.com.br/3056:vidracariafrutuozo;1;VIDRACARIA FRUTUOZO;I FRUTUOZO DE OLIVEIRA ME;02316531000113
+DB06;dbvisconobre.iprojectti.com.br;3056;visconobre;dbvisconobre.iprojectti.com.br/3056:visconobre;1;VISCONOBRE;VISCONOBRE INDUSTRIA E COMERCIO DE COLCHOES LTDA;23255155000174
+DB02;dbwellmoveis.iprojectti.com.br;3051;wellmoveis;dbwellmoveis.iprojectti.com.br/3051:wellmoveis;1;WELL MOVEIS;MARIA JOSE PEREIRA DA ROCHA;41291659000121
+DB02;dbwellmoveis.iprojectti.com.br;3051;wellmoveis;dbwellmoveis.iprojectti.com.br/3051:wellmoveis;2;WELL MOVEIS;REGINA CLAUDIA FREITAS FERREIRA;05257858000150
+DB02;dbwellmoveis.iprojectti.com.br;3051;wellmoveis;dbwellmoveis.iprojectti.com.br/3051:wellmoveis;3;WELL MOVEIS - DEPOSITO;MARIA JOSE PEREIRA DA ROCHA - ME;41291659000202
+DB02;dbwellmoveis.iprojectti.com.br;3051;wellmoveis;dbwellmoveis.iprojectti.com.br/3051:wellmoveis;4;DEPOSITO L2;DEPOSITO L2;05257858000230
+DB05;dbzilook.iprojectti.com.br;3055;zilook;dbzilook.iprojectti.com.br/3055:zilook;1;ZILOOK LINGERIE;ANTONIO RUI SOUSA DA SILVA;35810920000150
