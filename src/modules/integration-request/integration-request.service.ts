@@ -38,8 +38,11 @@ export class IntegrationRequestService {
   private getCsvPath(): string {
     const paths = [
       join(process.cwd(), 'docs', 'relatorio_lojas.csv'),
-      join(__dirname, '..', '..', '..', 'docs', 'relatorio_lojas.csv'),
       join(__dirname, '..', '..', '..', '..', 'docs', 'relatorio_lojas.csv'),
+      join(__dirname, '..', '..', '..', 'docs', 'relatorio_lojas.csv'),
+      join(__dirname, '..', '..', 'docs', 'relatorio_lojas.csv'),
+      join(__dirname, '..', 'docs', 'relatorio_lojas.csv'),
+      join(__dirname, 'docs', 'relatorio_lojas.csv'),
     ];
 
     for (const p of paths) {
@@ -85,7 +88,7 @@ export class IntegrationRequestService {
         const tradeName = (cols[6] || '').trim();
         const legalName = (cols[7] || '').trim();
         const rawCnpj = (cols[8] || '').trim();
-        const cleanCnpj = rawCnpj.replace(/\D/g, '');
+        const cleanCnpj = rawCnpj.replace(/\D/g, '').trim();
         const cnpj = /^0+$/.test(cleanCnpj) ? '' : cleanCnpj;
 
         records.push({
@@ -111,10 +114,36 @@ export class IntegrationRequestService {
 
   getStoreByCnpj(rawCnpj?: string | null): IStoreCsvRecord | null {
     if (!rawCnpj) return null;
-    const clean = rawCnpj.replace(/\D/g, '');
+    const clean = String(rawCnpj).replace(/\D/g, '').trim();
     if (!clean || /^0+$/.test(clean)) return null;
+
+    const paddedClean = clean.padStart(14, '0');
     const stores = this.getStoresFromCsv();
-    return stores.find((s) => s.cnpj === clean) || null;
+
+    const found =
+      stores.find((s) => {
+        if (!s.cnpj) return false;
+        const sClean = s.cnpj.replace(/\D/g, '').trim();
+        const sPadded = sClean.padStart(14, '0');
+        return (
+          sClean === clean ||
+          sPadded === paddedClean ||
+          sClean === paddedClean ||
+          sPadded === clean
+        );
+      }) || null;
+
+    if (found) {
+      this.logger.log(
+        `Loja encontrada no CSV para o CNPJ ${rawCnpj} (limpo: ${clean}): ${found.cname} (${found.tradeName})`,
+      );
+    } else {
+      this.logger.warn(
+        `Nenhuma loja encontrada no CSV para o CNPJ ${rawCnpj} (limpo: ${clean}). Total de lojas carregadas: ${stores.length}`,
+      );
+    }
+
+    return found;
   }
 
   async create(dto: CreateIntegrationRequestDto) {
@@ -405,7 +434,53 @@ export class IntegrationRequestService {
       total: allRequests.length,
       updatedCount,
       notFoundCount,
+      updatedList: results.filter((r) => r.synced),
+      notFoundList: results.filter((r) => !r.synced),
       results,
+    };
+  }
+
+  async syncSingleDatabaseById(id: string) {
+    const request = await this.prisma.integrationRequest.findUnique({
+      where: { id },
+    });
+    if (!request) throw new NotFoundException('Solicitação não encontrada');
+
+    if (!request.cnpj) {
+      throw new BadRequestException(
+        'Esta solicitação não possui CNPJ cadastrado',
+      );
+    }
+
+    const store = this.getStoreByCnpj(request.cnpj);
+    if (!store) {
+      throw new NotFoundException(
+        `Nenhuma loja encontrada no CSV para o CNPJ ${request.cnpj}`,
+      );
+    }
+
+    const updatedDb = {
+      host: store.host,
+      port: store.port,
+      database: store.alias,
+    };
+
+    const updated = await this.prisma.integrationRequest.update({
+      where: { id },
+      data: {
+        database: updatedDb as any,
+      },
+    });
+
+    this.logger.log(
+      `Banco sincronizado com sucesso para solicitação ${id} (CNPJ: ${request.cnpj}) -> ${store.cname}`,
+    );
+
+    return {
+      message: 'Banco de dados sincronizado com sucesso!',
+      store,
+      database: updatedDb,
+      request: updated,
     };
   }
 }

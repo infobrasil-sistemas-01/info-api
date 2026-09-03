@@ -196,10 +196,18 @@ const Data = {
             });
             if (res.ok) {
                 const data = await res.json();
-                alert(`Sincronização concluída com sucesso!\n\n` +
-                      `- Atualizados: ${data.updatedCount}\n` +
-                      `- Não encontrados / Sem CNPJ: ${data.notFoundCount}\n` +
-                      `- Total de solicitações: ${data.total}`);
+                let msg = `Sincronização concluída com sucesso!\n\n` +
+                          `• Atualizados: ${data.updatedCount}\n` +
+                          `• Não encontrados / Sem CNPJ: ${data.notFoundCount}\n` +
+                          `• Total de solicitações: ${data.total}`;
+
+                if (data.updatedList && data.updatedList.length > 0) {
+                    msg += `\n\nAtualizados:\n` + data.updatedList.map(u => `✓ ${u.clientName} (${u.cnpj || 'Sem CNPJ'}): ${u.database?.host}/${u.database?.port}:${u.database?.database}`).join('\n');
+                }
+                if (data.notFoundList && data.notFoundList.length > 0) {
+                    msg += `\n\nNão encontrados no CSV:\n` + data.notFoundList.map(n => `✗ ${n.clientName} (CNPJ: ${n.cnpj || 'vazio'})`).join('\n');
+                }
+                alert(msg);
                 await this.fetchRequests();
             } else {
                 const err = await res.json();
@@ -213,6 +221,24 @@ const Data = {
                 btn.disabled = false;
                 btn.innerHTML = `<i class='bx bx-sync' style="font-size: 1.2rem; color: var(--primary);"></i> Sincronizar URLs`;
             }
+        }
+    },
+    async syncSingleRequest(id) {
+        try {
+            const res = await this.fetch(`/integration/${id}/sync-database`, {
+                method: 'PATCH',
+            });
+            if (res.ok) {
+                const data = await res.json();
+                alert(`Sucesso: ${data.message}\n\nLoja: ${data.store?.tradeName || data.store?.legalName}\nURL: ${data.store?.cname}`);
+                await this.fetchRequests();
+            } else {
+                const err = await res.json();
+                alert('Não foi possível sincronizar: ' + (err.message || 'CNPJ não localizado'));
+            }
+        } catch (e) {
+            console.error('Erro ao sincronizar solicitação:', e);
+            alert('Falha ao conectar com o servidor para sincronização.');
         }
     },
     async deleteRequest(id) {

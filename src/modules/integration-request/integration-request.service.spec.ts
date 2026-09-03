@@ -82,6 +82,13 @@ describe('IntegrationRequestService', () => {
       const storeFormatted = service.getStoreByCnpj('53.813.096/0001-73');
       expect(storeFormatted).not.toBeNull();
       expect(storeFormatted?.alias).toBe('4padel');
+
+      // Test specifically with 52.751.696/0001-91 (POUPE MAIS MAKEUP / BEM LEVE)
+      const storePoupeMais = service.getStoreByCnpj('52.751.696/0001-91');
+      expect(storePoupeMais).not.toBeNull();
+      expect(storePoupeMais?.host).toBe('dbbemlevemakeup.iprojectti.com.br');
+      expect(storePoupeMais?.port).toBe(3055);
+      expect(storePoupeMais?.alias).toBe('bemlevemakeup');
     });
 
     it('should return null for non-existent or empty CNPJ', () => {
@@ -174,8 +181,8 @@ describe('IntegrationRequestService', () => {
       mockPrisma.integrationRequest.findMany.mockResolvedValue([
         {
           id: 'req-1',
-          clientName: '4Padel Client',
-          cnpj: '53813096000173',
+          clientName: 'Poupe Mais Makeup',
+          cnpj: '52.751.696/0001-91',
           database: { host: 'DATACENTER', port: 0, database: 'DATACENTER' },
         },
         {
@@ -203,9 +210,37 @@ describe('IntegrationRequestService', () => {
         where: { id: 'req-1' },
         data: {
           database: {
-            host: 'db4padel.iprojectti.com.br',
-            port: 3056,
-            database: '4padel',
+            host: 'dbbemlevemakeup.iprojectti.com.br',
+            port: 3055,
+            database: 'bemlevemakeup',
+          },
+        },
+      });
+    });
+  });
+
+  describe('syncSingleDatabaseById', () => {
+    it('should sync database for a single request with CNPJ', async () => {
+      mockPrisma.integrationRequest.findUnique.mockResolvedValue({
+        id: 'req-single',
+        clientName: 'Poupe Mais',
+        cnpj: '52.751.696/0001-91',
+      });
+
+      const result = await service.syncSingleDatabaseById('req-single');
+
+      expect(result.database).toEqual({
+        host: 'dbbemlevemakeup.iprojectti.com.br',
+        port: 3055,
+        database: 'bemlevemakeup',
+      });
+      expect(mockPrisma.integrationRequest.update).toHaveBeenCalledWith({
+        where: { id: 'req-single' },
+        data: {
+          database: {
+            host: 'dbbemlevemakeup.iprojectti.com.br',
+            port: 3055,
+            database: 'bemlevemakeup',
           },
         },
       });

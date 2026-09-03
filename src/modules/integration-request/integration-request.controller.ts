@@ -185,6 +185,18 @@ export class IntegrationRequestController {
     return this.service.syncDatabasesByCnpj();
   }
 
+  @Patch(':id/sync-database')
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @RequirePermissions({
+    anyOf: ['integration-request.view', 'integration-request.approve'],
+  })
+  @ApiOperation({
+    summary: 'Sincroniza o banco de uma solicitação específica pelo CNPJ',
+  })
+  syncSingleDatabase(@Param('id') id: string) {
+    return this.service.syncSingleDatabaseById(id);
+  }
+
   @Delete(':id')
   @UseGuards(JwtAuthGuard, PermissionsGuard)
   @RequirePermissions({ anyOf: ['integration-request.delete'] })

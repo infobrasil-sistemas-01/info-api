@@ -78,7 +78,14 @@ const Components = {
                         <div class="detail-box"><label>IP Fixo</label><p>${req.fixedIp || 'N/A'}</p></div>
                     </div>
                     <div style="margin-bottom: 12px;">
-                        <small style="font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">BANCO DE DADOS / URL</small>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                            <small style="font-weight: 700; color: var(--text-muted);">BANCO DE DADOS / URL</small>
+                            ${req.cnpj ? `
+                                <button type="button" class="btn-icon" onclick="Data.syncSingleRequest('${req.id}')" title="Sincronizar dados deste banco pelo CNPJ" style="background: none; border: none; cursor: pointer; color: var(--primary); display: flex; align-items: center; gap: 4px; font-size: 0.75rem; padding: 2px 4px;">
+                                    <i class='bx bx-sync' style="font-size: 1rem;"></i> Sync
+                                </button>
+                            ` : ''}
+                        </div>
                         <p style="font-size: 0.8rem; font-family: monospace; background: rgba(0,0,0,0.25); padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border); word-break: break-all; margin: 0;">
                             ${db.host && db.host !== 'DATACENTER' ? `${db.host}/${db.port}:${db.database}` : `${db.host || 'N/A'}:${db.port || 0} / ${db.database || 'N/A'}`}
                         </p>
