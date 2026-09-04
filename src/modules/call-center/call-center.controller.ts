@@ -17,7 +17,10 @@ import {
 } from '@nestjs/swagger';
 import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
-import { JwtAuthGuard, type ReqWithAuthContext } from '../auth/guards/jwt-auth.guard';
+import {
+  JwtAuthGuard,
+  type ReqWithAuthContext,
+} from '../auth/guards/jwt-auth.guard';
 import { CallCenterService } from './call-center.service';
 import { CallCenterQueryDto } from './dto/call-center-query.dto';
 import { CallCenterResponseDto } from './dto/call-center-response.dto';
@@ -25,7 +28,7 @@ import { CallCenterResponseDto } from './dto/call-center-response.dto';
 @ApiTags('Call Center')
 @Controller('call-centers')
 export class CallCenterController {
-  constructor(private readonly callCenterService: CallCenterService) { }
+  constructor(private readonly callCenterService: CallCenterService) {}
 
   @Get()
   @UseGuards(JwtAuthGuard, PermissionsGuard)

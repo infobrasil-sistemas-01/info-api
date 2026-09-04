@@ -213,7 +213,9 @@ export class CallCenterService {
       });
 
       if (!rawResult || rawResult.length === 0) {
-        throw new NotFoundException('Atendimento de Call Center não encontrado');
+        throw new NotFoundException(
+          'Atendimento de Call Center não encontrado',
+        );
       }
 
       return await this.mapRecord(rawResult[0]);

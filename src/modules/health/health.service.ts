@@ -32,6 +32,14 @@ export interface FirebirdStatus {
   tenants: FirebirdTenantStatus[];
 }
 
+export interface LivenessStatus {
+  status: 'ok' | 'degraded';
+  version: string;
+  uptime: number;
+  timestamp: string;
+  database: DatabaseStatus;
+}
+
 export interface HealthStatus {
   status: 'ok' | 'degraded' | 'error';
   version: string;
@@ -52,6 +60,22 @@ export class HealthService {
     private readonly prisma: RegistryPrismaService,
     private readonly tenantConnections: TenantConnectionService,
   ) {}
+
+  /**
+   * Health check leve para Liveness Probes (Docker, Kubernetes, Gateway).
+   * Avalia apenas o processo local e conexão PostgreSQL interna (< 5ms).
+   * NUNCA faz chamadas aos bancos Firebird externos de clientes.
+   */
+  async checkLiveness(): Promise<LivenessStatus> {
+    const postgres = await this.checkPostgres();
+    return {
+      status: postgres.status === 'up' ? 'ok' : 'degraded',
+      version: packageVersion,
+      uptime: Math.floor(process.uptime()),
+      timestamp: new Date().toISOString(),
+      database: postgres,
+    };
+  }
 
   async check(bypassCache = false): Promise<HealthStatus> {
     const now = Date.now();

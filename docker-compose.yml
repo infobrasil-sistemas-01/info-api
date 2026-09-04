@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
     container_name: infoapi-blue
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://127.0.0.1:${PORT}/api/v1/health || exit 1"]
+      test: ["CMD-SHELL", "curl -f http://127.0.0.1:${PORT}/api/v1/health/live || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 3
@@ -32,7 +32,7 @@ services:
       dockerfile: Dockerfile
     container_name: infoapi-green
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://127.0.0.1:${PORT}/api/v1/health || exit 1"]
+      test: ["CMD-SHELL", "curl -f http://127.0.0.1:${PORT}/api/v1/health/live || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 3

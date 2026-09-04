@@ -2,7 +2,9 @@ import { GlobalLoggerService } from './logger.service';
 import * as Sentry from '@sentry/node';
 
 jest.mock('@sentry/node', () => ({
-  withScope: jest.fn((callback) => callback({ setTag: jest.fn(), setExtra: jest.fn(), setUser: jest.fn() })),
+  withScope: jest.fn((callback) =>
+    callback({ setTag: jest.fn(), setExtra: jest.fn(), setUser: jest.fn() }),
+  ),
   captureException: jest.fn(),
   captureMessage: jest.fn(),
   logger: {
@@ -47,7 +49,11 @@ describe('GlobalLoggerService', () => {
 
     it('should handle error when stack is passed as a string', () => {
       expect(() => {
-        loggerService.error('Log message', 'Error: trace at line 1', 'TestContext');
+        loggerService.error(
+          'Log message',
+          'Error: trace at line 1',
+          'TestContext',
+        );
       }).not.toThrow();
 
       expect(Sentry.captureException).toHaveBeenCalled();

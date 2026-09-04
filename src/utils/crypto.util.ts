@@ -14,7 +14,11 @@ export function hashTokenSha256(token: string, pepper: string): string {
   return createHmac('sha256', pepper).update(token).digest('hex');
 }
 
-export const encrypt = (text: string, encKey?: string, ivKey?: string): string => {
+export const encrypt = (
+  text: string,
+  encKey?: string,
+  ivKey?: string,
+): string => {
   const cipher = crypto.createCipheriv(
     'aes-256-cbc',
     encKey || (process.env.CRYPTO_ENC as string),

@@ -12,7 +12,7 @@ export class UserInvitationService {
   constructor(
     private readonly prisma: RegistryPrismaService,
     private readonly userService: UserService,
-  ) { }
+  ) {}
 
   async findAll() {
     return this.prisma.userInvitation.findMany({

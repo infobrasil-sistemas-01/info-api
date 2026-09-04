@@ -16,7 +16,10 @@ describe('FiscalEntryQueryDto Schema Validation', () => {
     ['dados válidos completos', validData],
     ['apenas paginação', { page: 2, pageSize: 20 }],
     ['campos vazios/opcionais', {}],
-    ['strings numéricas coercíveis', { page: '3', pageSize: '15', storeId: '2', supplierId: '50' }],
+    [
+      'strings numéricas coercíveis',
+      { page: '3', pageSize: '15', storeId: '2', supplierId: '50' },
+    ],
     ['filtro por chave NF-e', { nfeKey: '12345' }],
   ])('deve aceitar %s', (_, input) => {
     expect(() => FiscalEntryQuerySchema.parse(input)).not.toThrow();

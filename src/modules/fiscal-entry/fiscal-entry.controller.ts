@@ -36,10 +36,7 @@ export class FiscalEntryController {
     status: 400,
     description: 'Parâmetros de busca inválidos.',
   })
-  get(
-    @Req() req: ReqWithAuthContext,
-    @Query() query: FiscalEntryQueryDto,
-  ) {
+  get(@Req() req: ReqWithAuthContext, @Query() query: FiscalEntryQueryDto) {
     const credentialsId = req.authContext?.credentialsId;
 
     if (!credentialsId) {

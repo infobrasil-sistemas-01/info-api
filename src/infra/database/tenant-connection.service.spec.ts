@@ -306,4 +306,88 @@ describe('TenantConnectionService', () => {
       jest.useRealTimers();
     });
   });
+
+  describe('pingActivePools', () => {
+    it('should ping all active pools and return status up', async () => {
+      mockDb.query = jest
+        .fn()
+        .mockImplementation((sql, params, callback) => callback(null, []));
+
+      await service.getConnection('cred-1');
+      const results = await service.pingActivePools();
+
+      expect(results).toHaveLength(1);
+      expect(results[0].credentialsId).toBe('cred-1');
+      expect(results[0].status).toBe('up');
+      expect(mockDb.detach).toHaveBeenCalled();
+    });
+
+    it('should recycle pool and return status down when ping times out or fails', async () => {
+      jest.useFakeTimers();
+
+      mockDb.query = jest.fn().mockImplementation(() => {
+        // Hangs ping query
+      });
+
+      await service.getConnection('cred-1');
+      const promise = service.pingActivePools();
+
+      await jest.advanceTimersByTimeAsync(3500);
+      const results = await promise;
+
+      expect(results).toHaveLength(1);
+      expect(results[0].status).toBe('down');
+      expect(mockPool.destroy).toHaveBeenCalled();
+
+      jest.useRealTimers();
+    });
+
+    it('should safely detach late-resolved connection after ping timeout', async () => {
+      jest.useFakeTimers();
+
+      let savedCallback: any;
+      // Primeiro getConnection tem sucesso
+      mockPool.get = jest.fn().mockImplementation((cb) => cb(null, mockDb));
+      await service.getConnection('cred-1');
+
+      // Agora mocka o pool.get do ping para salvar o callback sem responder imediatamente
+      mockPool.get = jest.fn().mockImplementation((cb) => {
+        savedCallback = cb;
+      });
+
+      const promise = service.pingActivePools();
+
+      // Dispara o timeout do ping (3000ms)
+      await jest.advanceTimersByTimeAsync(3100);
+      const results = await promise;
+
+      expect(results[0].status).toBe('down');
+
+      // Agora simula a entrega tardia da conexão pelo driver
+      savedCallback(null, mockDb);
+      expect(mockDb.detach).toHaveBeenCalled();
+
+      jest.useRealTimers();
+    });
+  });
+
+  describe('ping', () => {
+    it('should ping tenant pool successfully', async () => {
+      mockDb.query = jest
+        .fn()
+        .mockImplementation((sql, params, callback) => callback(null, []));
+
+      await expect(service.ping('cred-1')).resolves.not.toThrow();
+      expect(mockDb.detach).toHaveBeenCalled();
+    });
+
+    it('should recycle pool and throw error on ping failure', async () => {
+      mockPool.get = jest
+        .fn()
+        .mockImplementation((cb) => cb(new Error('Connection error')));
+
+      await expect(service.ping('cred-1')).rejects.toThrow('Connection error');
+      expect(mockPool.destroy).toHaveBeenCalled();
+    });
+  });
 });

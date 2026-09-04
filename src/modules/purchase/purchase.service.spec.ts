@@ -56,8 +56,12 @@ describe('PurchaseService', () => {
       const result = await service.get('cred-1', { page: 1, pageSize: 10 });
 
       expect(result).toEqual(mockResult);
-      expect(mockTenantConnectionService.getConnection).toHaveBeenCalledWith('cred-1');
-      expect(mockTenantConnectionService.releaseConnection).toHaveBeenCalledWith(mockConnection);
+      expect(mockTenantConnectionService.getConnection).toHaveBeenCalledWith(
+        'cred-1',
+      );
+      expect(
+        mockTenantConnectionService.releaseConnection,
+      ).toHaveBeenCalledWith(mockConnection);
     });
 
     it('deve aplicar filtros opcionais corretamente na query', async () => {
@@ -78,7 +82,16 @@ describe('PurchaseService', () => {
 
       expect(mockConnection.query).toHaveBeenCalledWith(
         expect.stringContaining('COM.LOJ_CODIGO = ?'),
-        expect.arrayContaining([20, 20, 2, 45, '%999%', '23260812345678000195550010001234561001234567', '2026-01-01', '2026-01-31']),
+        expect.arrayContaining([
+          20,
+          20,
+          2,
+          45,
+          '%999%',
+          '23260812345678000195550010001234561001234567',
+          '2026-01-01',
+          '2026-01-31',
+        ]),
         expect.any(Function),
       );
     });
@@ -99,7 +112,9 @@ describe('PurchaseService', () => {
       });
 
       await expect(service.get('cred-1', {})).rejects.toThrow('Database error');
-      expect(mockTenantConnectionService.releaseConnection).toHaveBeenCalledWith(mockConnection);
+      expect(
+        mockTenantConnectionService.releaseConnection,
+      ).toHaveBeenCalledWith(mockConnection);
     });
   });
 });

@@ -23,14 +23,14 @@ export class StatusService {
     let dbTime = 0;
 
     try {
-      // Consome o Health Check oficial da API (Bypassing cache para medição real)
-      const health = await this.healthService.check(true);
+      // Consome o Liveness Check da API (Postgres + API uptime, sem travar em pools Firebird)
+      const health = await this.healthService.checkLiveness();
 
-      // DB Status: Especificamente o status do Postgres retornado pelo health check
-      dbStatus = health.databases.postgres.status === 'up' ? 'UP' : 'DOWN';
-      dbTime = health.databases.postgres.responseTimeMs || 0;
+      // DB Status: Especificamente o status do Postgres retornado pelo liveness check
+      dbStatus = health.database.status === 'up' ? 'UP' : 'DOWN';
+      dbTime = health.database.responseTimeMs || 0;
 
-      // API Status: Se o processo está rodando e o health check respondeu
+      // API Status: Se o processo está rodando e o liveness check respondeu
       apiStatus = 'UP';
 
       // Calcula a latência da API como o "overhead" de processamento (Total - DB)

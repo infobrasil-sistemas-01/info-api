@@ -7,21 +7,62 @@ import { GlobalLoggerService } from './common/logger/logger.service';
 
 import { ZodValidationPipe } from './common/validation/zod-validation.pipe';
 
-// Previne que bugs internos do node-firebird (como o erro de leitura de buffer na autenticação) derrubem o servidor
-process.on('uncaughtException', (err: any, origin: string) => {
-  if (
-    err?.message?.includes('readUInt16LE') &&
-    err?.stack?.includes('node-firebird')
-  ) {
-    console.error(
-      `[Node-Firebird Bug Safecatch] Ignorando crash interno do driver: ${err.message}`,
-    );
-    return; // Não derruba o servidor
+import * as Sentry from '@sentry/node';
+
+// Previne que bugs internos do driver ou quedas de conexões de clientes derrubem o servidor
+const isIgnorableDriverError = (err: any): boolean => {
+  const msg = err?.message || '';
+  const stack = err?.stack || '';
+  const code = err?.code || '';
+
+  // Bug conhecido de buffer no node-firebird
+  if (msg.includes('readUInt16LE') && stack.includes('node-firebird')) {
+    return true;
   }
 
-  // Para qualquer outro erro não tratado, logamos e encerramos o processo
+  // Erros de rede de sockets remotos de clientes (VPN oscilando, NAT timeout)
+  if (['ECONNRESET', 'EPIPE', 'ETIMEDOUT', 'ECONNREFUSED'].includes(code)) {
+    return true;
+  }
+
+  // Sockets fechados abruptamente durante queries no node-firebird
+  if (msg.includes('Connection is closed') || msg.includes('Socket closed')) {
+    return true;
+  }
+
+  return false;
+};
+
+process.on('uncaughtException', async (err: any, origin: string) => {
+  if (isIgnorableDriverError(err)) {
+    console.warn(
+      `[Driver/Network SafeCatch] Ignorando erro de socket/driver (${origin}): ${err.message}`,
+    );
+    return;
+  }
+
   console.error(`Uncaught Exception (${origin}):`, err);
-  process.exit(1);
+  Sentry.captureException(err);
+
+  try {
+    await Sentry.flush(2000);
+  } finally {
+    process.exit(1);
+  }
+});
+
+process.on('unhandledRejection', (reason: any, promise: Promise<any>) => {
+  if (isIgnorableDriverError(reason)) {
+    console.warn(
+      `[UnhandledRejection SafeCatch] Ignorando rejeição não tratada de socket/driver: ${reason?.message || reason}`,
+    );
+    return;
+  }
+
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  Sentry.captureException(
+    reason instanceof Error ? reason : new Error(String(reason)),
+  );
 });
 
 async function bootstrap() {

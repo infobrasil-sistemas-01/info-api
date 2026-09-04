@@ -56,9 +56,9 @@ describe('UserService', () => {
     it('should throw NotFoundException if user does not exist', async () => {
       mockPrisma.user.findUnique.mockResolvedValue(null);
 
-      await expect(
-        service.update('user-1', { status: false }),
-      ).rejects.toThrow(NotFoundException);
+      await expect(service.update('user-1', { status: false })).rejects.toThrow(
+        NotFoundException,
+      );
     });
 
     it('should reset monthly requests when transitioning from free plan (null) to paid plan', async () => {
@@ -179,7 +179,10 @@ describe('UserService', () => {
       };
 
       mockPrisma.user.findUnique.mockResolvedValue(currentUser);
-      mockPrisma.user.update.mockResolvedValue({ id: 'user-1', user: 'updated' });
+      mockPrisma.user.update.mockResolvedValue({
+        id: 'user-1',
+        user: 'updated',
+      });
 
       await service.update('user-1', { email: 'newemail@test.com' });
 

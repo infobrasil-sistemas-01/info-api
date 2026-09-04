@@ -60,7 +60,9 @@ describe('CallCenterService', () => {
 
       mockConnection.query.mockImplementation(
         (query: string, params: any[], callback: any) => {
-          expect(query).toContain('ORDER BY CC.CAL_DATA DESC, CC.CAL_NUMERO DESC');
+          expect(query).toContain(
+            'ORDER BY CC.CAL_DATA DESC, CC.CAL_NUMERO DESC',
+          );
           expect(query).toContain('LEFT JOIN CLIENTES');
           expect(query).toContain('LEFT JOIN USUARIOS');
           callback(null, mockResult);
@@ -89,7 +91,9 @@ describe('CallCenterService', () => {
 
     it('should correctly parse BLOB callback function and buffer fields (including large payloads)', async () => {
       const largeText = 'A'.repeat(15000);
-      const mockBlobFunction = (cb: (err: any, name: any, emitter: any) => void) => {
+      const mockBlobFunction = (
+        cb: (err: any, name: any, emitter: any) => void,
+      ) => {
         const { EventEmitter } = require('events');
         const emitter = new EventEmitter();
         cb(null, 'CAL_RELATORIO', emitter);

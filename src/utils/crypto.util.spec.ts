@@ -1,4 +1,9 @@
-import { generateOpaqueToken, hashTokenSha256, decrypt, encrypt } from './crypto.util';
+import {
+  generateOpaqueToken,
+  hashTokenSha256,
+  decrypt,
+  encrypt,
+} from './crypto.util';
 import crypto from 'crypto';
 
 describe('CryptoUtil', () => {

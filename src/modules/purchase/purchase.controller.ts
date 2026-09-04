@@ -1,5 +1,10 @@
 import { Controller, Get, Query, Req, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import type { ReqWithAuthContext } from '../auth/guards/jwt-auth.guard';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
@@ -31,10 +36,7 @@ export class PurchaseController {
     status: 400,
     description: 'Parâmetros de busca inválidos.',
   })
-  get(
-    @Req() req: ReqWithAuthContext,
-    @Query() query: PurchaseQueryDto,
-  ) {
+  get(@Req() req: ReqWithAuthContext, @Query() query: PurchaseQueryDto) {
     const credentialsId = req.authContext?.credentialsId;
 
     if (!credentialsId) {

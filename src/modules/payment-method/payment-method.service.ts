@@ -10,8 +10,6 @@ export class PaymentMethodService {
   ) {}
 
   async get(credentialsId: string, page: number = 1, pageSize: number = 100) {
-
-
     let connection: any;
     connection =
       await this.tenantConnectionService.getConnection(credentialsId);

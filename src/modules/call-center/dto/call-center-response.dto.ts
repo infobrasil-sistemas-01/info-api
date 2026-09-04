@@ -28,16 +28,22 @@ export class CallCenterResponseDto {
   @ApiPropertyOptional({ description: 'Contato (CAL_CONTATO)' })
   CAL_CONTATO?: string;
 
-  @ApiPropertyOptional({ description: 'Data da próxima ligação (CAL_DATAPROXLIGACAO)' })
+  @ApiPropertyOptional({
+    description: 'Data da próxima ligação (CAL_DATAPROXLIGACAO)',
+  })
   CAL_DATAPROXLIGACAO?: string;
 
-  @ApiPropertyOptional({ description: 'Hora da próxima ligação (CAL_HORAPROXLIGACAO)' })
+  @ApiPropertyOptional({
+    description: 'Hora da próxima ligação (CAL_HORAPROXLIGACAO)',
+  })
   CAL_HORAPROXLIGACAO?: string;
 
   @ApiPropertyOptional({ description: 'Depoimento (CAL_DEPOIMENTO)' })
   CAL_DEPOIMENTO?: string;
 
-  @ApiPropertyOptional({ description: 'Relatório do atendimento (CAL_RELATORIO)' })
+  @ApiPropertyOptional({
+    description: 'Relatório do atendimento (CAL_RELATORIO)',
+  })
   CAL_RELATORIO?: string;
 
   @ApiPropertyOptional({ description: 'Data de baixa (CAL_DATABAIXA)' })
@@ -52,13 +58,17 @@ export class CallCenterResponseDto {
   @ApiPropertyOptional({ description: 'Nome do vendedor (VEN_NOME)' })
   VEN_NOME?: string;
 
-  @ApiPropertyOptional({ description: 'Número do passaporte/pacote (PAS_NUMERO)' })
+  @ApiPropertyOptional({
+    description: 'Número do passaporte/pacote (PAS_NUMERO)',
+  })
   PAS_NUMERO?: number;
 
   @ApiProperty({ description: 'Código da forma de atendimento (FAT_CODIGO)' })
   FAT_CODIGO: number;
 
-  @ApiPropertyOptional({ description: 'Descrição da forma de atendimento (FAT_DESCRICAO)' })
+  @ApiPropertyOptional({
+    description: 'Descrição da forma de atendimento (FAT_DESCRICAO)',
+  })
   FAT_DESCRICAO?: string;
 
   @ApiPropertyOptional({ description: 'Código do tópico (TOP_CODIGO)' })
@@ -70,13 +80,17 @@ export class CallCenterResponseDto {
   @ApiPropertyOptional({ description: 'Código da aplicação (APL_CODIGO)' })
   APL_CODIGO?: number;
 
-  @ApiPropertyOptional({ description: 'Descrição da aplicação (APL_DESCRICAO)' })
+  @ApiPropertyOptional({
+    description: 'Descrição da aplicação (APL_DESCRICAO)',
+  })
   APL_DESCRICAO?: string;
 
   @ApiPropertyOptional({ description: 'Identificação da loja (CAL_LOJA)' })
   CAL_LOJA?: string;
 
-  @ApiPropertyOptional({ description: 'Indicador de bloqueado (CAL_BLOQUEADO)' })
+  @ApiPropertyOptional({
+    description: 'Indicador de bloqueado (CAL_BLOQUEADO)',
+  })
   CAL_BLOQUEADO?: string;
 
   @ApiPropertyOptional({ description: 'Código da loja (LOJ_CODIGO)' })

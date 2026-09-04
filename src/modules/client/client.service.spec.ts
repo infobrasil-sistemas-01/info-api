@@ -94,17 +94,17 @@ describe('ClientService', () => {
     });
 
     it('should throw BadRequestException for invalid id', async () => {
-      await expect(
-        service.getById('cred-1', 1, NaN as any),
-      ).rejects.toThrow(BadRequestException);
+      await expect(service.getById('cred-1', 1, NaN as any)).rejects.toThrow(
+        BadRequestException,
+      );
 
-      await expect(
-        service.getById('cred-1', 1, 0),
-      ).rejects.toThrow(BadRequestException);
+      await expect(service.getById('cred-1', 1, 0)).rejects.toThrow(
+        BadRequestException,
+      );
 
-      await expect(
-        service.getById('cred-1', 1, null as any),
-      ).rejects.toThrow(BadRequestException);
+      await expect(service.getById('cred-1', 1, null as any)).rejects.toThrow(
+        BadRequestException,
+      );
     });
   });
 

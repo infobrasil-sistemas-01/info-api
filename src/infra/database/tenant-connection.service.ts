@@ -92,13 +92,30 @@ export class TenantConnectionService implements OnModuleInit, OnModuleDestroy {
 
     try {
       return await new Promise<firebird.Database>((resolve, reject) => {
+        let isSettled = false;
         // Timeout de 10 segundos para obter uma conexão do pool
         const timeout = setTimeout(() => {
-          reject(new Error('Timeout (10s) ao obter conexão do pool Firebird'));
+          if (!isSettled) {
+            isSettled = true;
+            reject(
+              new Error('Timeout (10s) ao obter conexão do pool Firebird'),
+            );
+          }
         }, 10000);
 
         pool.get((err, db) => {
           clearTimeout(timeout);
+          if (isSettled) {
+            // Se a Promise já deu timeout, descarta imediatamente a conexão atrasada
+            if (db) {
+              try {
+                db.detach();
+              } catch (_) {}
+            }
+            return;
+          }
+          isSettled = true;
+
           if (err) return reject(err);
 
           // Previne crash por Unhandled 'error' event caso a conexão caia depois
@@ -340,6 +357,8 @@ export class TenantConnectionService implements OnModuleInit, OnModuleDestroy {
     };
   }
 
+  private isPingingActivePools = false;
+
   /**
    * Tenta executar `SELECT 1 FROM RDB$DATABASE` em cada pool aquecido.
    * Retorna o resultado por tenant (sem lançar exceção).
@@ -353,45 +372,87 @@ export class TenantConnectionService implements OnModuleInit, OnModuleDestroy {
       error?: string;
     }>
   > {
+    if (this.isPingingActivePools) {
+      // Se já houver um ping em andamento, retorna status rápido sem disparar pings duplicados
+      return Array.from(this.poolCache.keys()).map((credentialsId) => ({
+        credentialsId,
+        status: 'up' as const,
+        responseTimeMs: 0,
+      }));
+    }
+
+    this.isPingingActivePools = true;
     const poolEntries = Array.from(this.poolCache.entries());
 
-    return await Promise.all(
-      poolEntries.map(async ([credentialsId, pool]) => {
-        const start = Date.now();
-        try {
-          await this.pingPool(pool);
-          return {
-            credentialsId,
-            status: 'up' as const,
-            responseTimeMs: Date.now() - start,
-          };
-        } catch (err: any) {
-          return {
-            credentialsId,
-            status: 'down' as const,
-            responseTimeMs: Date.now() - start,
-            error: err?.message ?? 'Unknown error',
-          };
-        }
-      }),
-    );
+    try {
+      return await Promise.all(
+        poolEntries.map(async ([credentialsId, pool]) => {
+          const start = Date.now();
+          try {
+            await this.pingPool(pool);
+            return {
+              credentialsId,
+              status: 'up' as const,
+              responseTimeMs: Date.now() - start,
+            };
+          } catch (err: any) {
+            this.logger.warn(
+              `Ping falhou no tenant ${credentialsId} (${err?.message}). Reciclando pool para purgar conexões zumbis...`,
+            );
+            // Destrói o pool problemático para não acumular sockets zumbis
+            await this.destroyPool(credentialsId);
+
+            return {
+              credentialsId,
+              status: 'down' as const,
+              responseTimeMs: Date.now() - start,
+              error: err?.message ?? 'Unknown error',
+            };
+          }
+        }),
+      );
+    } finally {
+      this.isPingingActivePools = false;
+    }
   }
 
   async ping(credentialsId: string): Promise<void> {
     const pool = await this.getPool(credentialsId);
-    await this.pingPool(pool);
+    try {
+      await this.pingPool(pool);
+    } catch (err: any) {
+      this.logger.warn(
+        `Ping individual falhou no tenant ${credentialsId}: ${err?.message}. Reciclando pool...`,
+      );
+      await this.destroyPool(credentialsId);
+      throw err;
+    }
   }
 
   private pingPool(pool: firebird.ConnectionPool): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-      const timeout = setTimeout(
-        () => reject(new Error('Ping timeout (3s)')),
-        3000,
-      );
+      let isSettled = false;
+      const timeout = setTimeout(() => {
+        if (!isSettled) {
+          isSettled = true;
+          reject(new Error('Ping timeout (3s)'));
+        }
+      }, 3000);
 
       pool.get((err, db) => {
+        clearTimeout(timeout);
+        if (isSettled) {
+          // Timeout já ocorreu: descarta imediatamente a conexão para não vazar no pool
+          if (db) {
+            try {
+              db.detach();
+            } catch (_) {}
+          }
+          return;
+        }
+
         if (err) {
-          clearTimeout(timeout);
+          isSettled = true;
           return reject(err);
         }
 
@@ -404,22 +465,37 @@ export class TenantConnectionService implements OnModuleInit, OnModuleDestroy {
         }
 
         try {
+          let queryDone = false;
+          const queryTimeout = setTimeout(() => {
+            if (!queryDone && !isSettled) {
+              queryDone = true;
+              isSettled = true;
+              try {
+                db.detach();
+              } catch (_) {}
+              reject(new Error('Ping query timeout (2.5s)'));
+            }
+          }, 2500);
+
           db.query('SELECT 1 FROM RDB$DATABASE', [], (qErr) => {
-            clearTimeout(timeout);
+            clearTimeout(queryTimeout);
+            if (queryDone || isSettled) return;
+            queryDone = true;
+            isSettled = true;
             try {
               db.detach();
-            } catch (e) {
-              // ignore detach errors if connection is broken
-            }
+            } catch (_) {}
             if (qErr) return reject(qErr);
             resolve();
           });
         } catch (e) {
-          clearTimeout(timeout);
-          try {
-            db.detach();
-          } catch (err) {}
-          reject(e);
+          if (!isSettled) {
+            isSettled = true;
+            try {
+              db.detach();
+            } catch (_) {}
+            reject(e);
+          }
         }
       });
     });

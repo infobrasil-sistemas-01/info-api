@@ -1,11 +1,45 @@
 import { Controller, Get, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { HealthService, HealthStatus } from './health.service';
+import { HealthService, HealthStatus, LivenessStatus } from './health.service';
 
 @ApiTags('Health')
 @Controller('health')
 export class HealthController {
   constructor(private readonly healthService: HealthService) {}
+
+  /**
+   * GET /api/v1/health/live
+   *
+   * Endpoint leve de liveness para Docker healthcheck e orquestradores.
+   * Checa apenas processo e PostgreSQL local (< 5ms), sem consultar Firebird remoto.
+   */
+  @Get('live')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Liveness check da API (Docker / Orquestradores)',
+    description:
+      'Verifica rapidamente o processo e a conexão local com PostgreSQL. ' +
+      'Ideal para probes frequentes que não devem acoplar a bancos remotos de clientes.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Status de liveness da API',
+    schema: {
+      example: {
+        status: 'ok',
+        version: '1.1.2',
+        uptime: 3600,
+        timestamp: '2026-04-23T13:00:00.000Z',
+        database: {
+          status: 'up',
+          responseTimeMs: 2,
+        },
+      },
+    },
+  })
+  async checkLive(): Promise<LivenessStatus> {
+    return this.healthService.checkLiveness();
+  }
 
   /**
    * GET /api/v1/health

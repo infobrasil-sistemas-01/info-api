@@ -20,7 +20,7 @@ export class UserService {
     private readonly prisma: RegistryPrismaService,
     private readonly emailService: EmailService,
     private readonly env: EnvService,
-  ) { }
+  ) {}
 
   async create(data: CreateUserDto) {
     const existing = await this.prisma.user.findUnique({
@@ -310,18 +310,12 @@ export class UserService {
           where: { id: data.planId },
         });
         isNewPlanPaid =
-          !!newPlan &&
-          newPlan.price !== null &&
-          Number(newPlan.price) > 0;
+          !!newPlan && newPlan.price !== null && Number(newPlan.price) > 0;
       }
 
       if (isCurrentPlanFree && isNewPlanPaid) {
         const now = new Date();
-        const firstDayOfMonth = new Date(
-          now.getFullYear(),
-          now.getMonth(),
-          1,
-        );
+        const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
         await this.prisma.requestLog.deleteMany({
           where: {

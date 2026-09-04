@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.16.20](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.16.18...v1.16.20) (2026-09-04)
+
+
+### Features
+
+* **crypto:** add encrypt helper and cli script to encrypt database passwords ([c28e771](https://github.com/infobrasil-sistemas-01/info-api/commit/c28e77198493d5e53b3d6eea4fde1eabd8a39797))
+* database url by cnpj' ([e417fb8](https://github.com/infobrasil-sistemas-01/info-api/commit/e417fb884a55ed8f552932e7614b8ea7ad3f3a38))
+* **fiscal-entry:** implement fiscal entries module (ENTRADAS_APOIO) and RBAC support ([cb789fa](https://github.com/infobrasil-sistemas-01/info-api/commit/cb789fac838f60075641d60a0d9cc45c05999f2a))
+* increase user invitation expiration to 24h and configure P130 ([f6c6a8f](https://github.com/infobrasil-sistemas-01/info-api/commit/f6c6a8ffb6e613cb86a53db00a15350084863d1f))
+
+
+### Bug Fixes
+
+* add docs to docker build' ([b1ddc57](https://github.com/infobrasil-sistemas-01/info-api/commit/b1ddc57513706af72b24d4b53b265e504b5180ac))
+* create-integration-request dto' ([ffc9d7a](https://github.com/infobrasil-sistemas-01/info-api/commit/ffc9d7ad753f73a25363b94fa7e4c1cc281029d7))
+* database url by cnpj' ([2dfcc6e](https://github.com/infobrasil-sistemas-01/info-api/commit/2dfcc6e9e99d43d27ef13b1e67af8784f090534f))
+* **fiscal-entry:** import TenantConnectionModule and update swagger spec ([ba159cc](https://github.com/infobrasil-sistemas-01/info-api/commit/ba159ccbee2dac13fb5cf9cb3b9a6f78c2996365))
+
 ## [1.16.18](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.16.17...v1.16.18) (2026-08-31)
 
 
