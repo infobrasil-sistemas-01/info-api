@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.16.21](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.16.20...v1.16.21) (2026-09-04)
+
 ## [1.16.20](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.16.18...v1.16.20) (2026-09-04)
 
 

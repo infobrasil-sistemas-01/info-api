@@ -8,7 +8,7 @@ GREEN_SERVICE="infoapi-green"
 
 APP_PORT=3336
 
-HEALTH_PATH="/api/v1/health"
+HEALTH_PATH="/api/v1/health/live"
 
 echo "Detectando ambiente ativo..."
 

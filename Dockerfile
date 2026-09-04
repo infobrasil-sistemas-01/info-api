@@ -3,6 +3,9 @@ FROM node:22-alpine AS builder
 
 WORKDIR /app
 
+# Impede o download do Chromium no estágio de build
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+
 # Dependências
 COPY package*.json ./
 
@@ -13,7 +16,9 @@ COPY prisma.config.ts ./
 # TS configs
 COPY tsconfig*.json ./
 
-RUN npm ci
+# Cache do npm e flags de performance
+RUN --mount=type=cache,target=/root/.npm \
+    npm ci --prefer-offline --no-audit --no-fund
 
 # Código-fonte
 COPY . .
@@ -46,9 +51,10 @@ RUN apk add --no-cache \
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
     PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 
-# Dependências de produção
+# Dependências de produção com cache
 COPY package*.json ./
-RUN npm ci --omit=dev
+RUN --mount=type=cache,target=/root/.npm \
+    npm ci --omit=dev --prefer-offline --no-audit --no-fund
 
 # Prisma runtime (client gerado + schema + config)
 COPY --from=builder /app/prisma ./prisma
