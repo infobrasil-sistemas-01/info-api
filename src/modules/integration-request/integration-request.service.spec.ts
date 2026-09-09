@@ -174,34 +174,97 @@ describe('IntegrationRequestService', () => {
         }),
       );
     });
+
+    it('should preserve manual database credentials when hostingType is CLIENT_SERVER even if CNPJ exists in CSV', async () => {
+      const dto = {
+        clientName: '4PADEL TEST LOCAL',
+        legalName: '4PADEL LTDA',
+        cnpj: '53.813.096/0001-73',
+        hostingType: 'CLIENT_SERVER' as const,
+        fixedIp: '187.50.10.2',
+        database: {
+          host: '187.50.10.2',
+          port: 3050,
+          database: 'C:\\MEUBANCO\\DADOS.FDB',
+        },
+        modules: ['Produtos'],
+        scopes: [{ resource: 'products', actions: ['read' as const] }],
+        objective: 'Integração em servidor próprio do cliente',
+        technicalContact: {
+          name: 'Tech Test',
+          email: 'tech@test.com',
+          phone: '11999999999',
+        },
+        responsiblePerson: {
+          name: 'Resp Test',
+          email: 'resp@test.com',
+          phone: '11999999999',
+        },
+      };
+
+      const result = await service.create(dto);
+
+      expect(mockPrisma.integrationRequest.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({
+            hostingType: 'CLIENT_SERVER',
+            fixedIp: '187.50.10.2',
+            database: {
+              host: '187.50.10.2',
+              port: 3050,
+              database: 'C:\\MEUBANCO\\DADOS.FDB',
+            },
+          }),
+        }),
+      );
+      expect(result.database).toEqual({
+        host: '187.50.10.2',
+        port: 3050,
+        database: 'C:\\MEUBANCO\\DADOS.FDB',
+      });
+    });
   });
 
   describe('syncDatabasesByCnpj', () => {
-    it('should iterate over requests and update database connection for matching CNPJs', async () => {
+    it('should iterate over requests and update database connection for matching CNPJs while skipping CLIENT_SERVER', async () => {
       mockPrisma.integrationRequest.findMany.mockResolvedValue([
         {
           id: 'req-1',
           clientName: 'Poupe Mais Makeup',
           cnpj: '52.751.696/0001-91',
+          hostingType: 'DATACENTER',
           database: { host: 'DATACENTER', port: 0, database: 'DATACENTER' },
         },
         {
           id: 'req-2',
           clientName: 'Sem CNPJ',
           cnpj: null,
+          hostingType: 'DATACENTER',
           database: null,
         },
         {
           id: 'req-3',
           clientName: 'CNPJ Inexistente',
           cnpj: '99999999999999',
+          hostingType: 'DATACENTER',
           database: { host: 'OLD', port: 3050, database: 'OLD' },
+        },
+        {
+          id: 'req-4',
+          clientName: 'Cliente com IP Fixo',
+          cnpj: '52.751.696/0001-91',
+          hostingType: 'CLIENT_SERVER',
+          database: {
+            host: '187.1.2.3',
+            port: 3050,
+            database: 'C:\\DADOS.FDB',
+          },
         },
       ]);
 
       const result = await service.syncDatabasesByCnpj();
 
-      expect(result.total).toBe(3);
+      expect(result.total).toBe(4);
       expect(result.updatedCount).toBe(1);
       expect(result.notFoundCount).toBe(2);
 

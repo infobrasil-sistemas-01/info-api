@@ -147,21 +147,32 @@ export class IntegrationRequestService {
   }
 
   async create(dto: CreateIntegrationRequestDto) {
-    const store = dto.cnpj ? this.getStoreByCnpj(dto.cnpj) : null;
+    const isDatacenter = !dto.hostingType || dto.hostingType === 'DATACENTER';
     let databaseConfig = dto.database;
 
-    if (store) {
-      databaseConfig = {
-        host: store.host,
-        port: store.port,
-        database: store.alias,
-      };
-    } else if (!databaseConfig || !databaseConfig.host) {
-      databaseConfig = {
-        host: 'DATACENTER',
-        port: 0,
-        database: 'DATACENTER',
-      };
+    if (isDatacenter) {
+      const store = dto.cnpj ? this.getStoreByCnpj(dto.cnpj) : null;
+      if (store) {
+        databaseConfig = {
+          host: store.host,
+          port: store.port,
+          database: store.alias,
+        };
+      } else if (!databaseConfig || !databaseConfig.host) {
+        databaseConfig = {
+          host: 'DATACENTER',
+          port: 0,
+          database: 'DATACENTER',
+        };
+      }
+    } else {
+      if (!databaseConfig || !databaseConfig.host) {
+        databaseConfig = {
+          host: dto.fixedIp || 'N/A',
+          port: 3050,
+          database: 'DADOS.FDB',
+        };
+      }
     }
 
     const request = await this.prisma.integrationRequest.create({
@@ -381,6 +392,10 @@ export class IntegrationRequestService {
     this.getStoresFromCsv(true);
 
     for (const req of allRequests) {
+      if (req.hostingType === 'CLIENT_SERVER') {
+        continue;
+      }
+
       if (!req.cnpj) {
         notFoundCount++;
         results.push({
