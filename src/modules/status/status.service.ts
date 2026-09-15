@@ -10,7 +10,7 @@ export class StatusService {
   constructor(
     private readonly prisma: RegistryPrismaService,
     private readonly healthService: HealthService,
-  ) {}
+  ) { }
 
   @Cron(CronExpression.EVERY_MINUTE)
   async monitor() {
@@ -75,27 +75,30 @@ export class StatusService {
   }
 
   /**
-   * Limpa logs mais antigos que 7 dias para evitar inchaço do banco de dados.
-   * [MITIGAÇÃO EMERGENCIAL] Cron desativado temporariamente pois estava
-   * causando travamento silencioso da API às 00h (03:00 UTC).
-   * @Cron(CronExpression.EVERY_DAY_AT_3AM)
-   */
+ * Limpa logs mais antigos que 24h a cada hora.
+ * Como roda de hora em hora, remove apenas ~60 registros por execução,
+ * sem causar picos de I/O ou lock no banco.
+ */
+  @Cron(CronExpression.EVERY_HOUR)
   async cleanup() {
     this.logger.log('Starting status logs cleanup...');
-    const sevenDaysAgo = new Date();
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    const oneDayAgo = new Date();
+    oneDayAgo.setDate(oneDayAgo.getDate() - 1);
 
     try {
       const { count } = await this.prisma.statusLog.deleteMany({
         where: {
-          timestamp: { lt: sevenDaysAgo },
+          timestamp: { lt: oneDayAgo },
         },
       });
-      this.logger.log(`Cleanup finished. Removed ${count} old status logs.`);
+      if (count > 0) {
+        this.logger.log(`Cleanup finished. Removed ${count} old status logs.`);
+      }
     } catch (e) {
       this.logger.error(`Failed to cleanup status logs: ${e.message}`);
     }
   }
+
 
   async getLatestStatus() {
     try {
