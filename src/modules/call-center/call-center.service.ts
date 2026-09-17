@@ -170,6 +170,7 @@ export class CallCenterService {
         CC.CAL_NUMERO,
         CC.CLI_CODIGO,
         C.CLI_NOME,
+        C.CLI_OBS,
         CC.USU_CODIGO,
         U.USU_APELIDO,
         CC.CAL_DATA,
