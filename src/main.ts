@@ -99,6 +99,8 @@ async function bootstrap() {
       'favicon.ico',
       'status',
       'status/*path',
+      'changelog',
+      'changelog/*path',
     ],
   });
 

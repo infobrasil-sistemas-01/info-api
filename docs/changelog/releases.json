@@ -1,0 +1,3054 @@
+[
+  {
+    "version": "1.16.22",
+    "date": "2026-09-07",
+    "title": "Resiliência e Auto-recuperação de Serviços",
+    "summary": "Introdução de mecanismo automático de auto-cura (autoheal) para assegurar alta disponibilidade dos serviços da API.",
+    "highlights": [
+      "Auto-recuperação automática em falhas transitórias de containers"
+    ],
+    "items": [
+      {
+        "module": "Infraestrutura & Resiliência",
+        "type": "fix",
+        "title": "Recuperação automática de serviços (Autoheal)",
+        "description": "Adicionado mecanismo de autocura para monitorar a saúde dos containers e restabelecer conexões automaticamente em caso de instabilidade.",
+        "impact": "Maior tempo de atividade (uptime) e prevenção de quedas da API.",
+        "originalCommit": "add willfarrell/autoheal to resilience",
+        "commitHash": "cc8e283"
+      }
+    ],
+    "totalChanges": 1
+  },
+  {
+    "version": "1.16.21",
+    "date": "2026-09-04",
+    "title": "Atualizações da Versão 1.16.21",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de .",
+    "highlights": [],
+    "items": [],
+    "totalChanges": 0
+  },
+  {
+    "version": "1.16.20",
+    "date": "2026-09-04",
+    "title": "Entradas Fiscais e Proteção Criptográfica",
+    "summary": "Lançamento do módulo de Entradas Fiscais (ENTRADAS_APOIO), cifragem de credenciais de banco e extensão de prazo de convites.",
+    "highlights": [
+      "Novo módulo de Entradas Fiscais com controle RBAC",
+      "Criptografia robusta de credenciais de banco"
+    ],
+    "items": [
+      {
+        "module": "Criptografia & Segurança",
+        "type": "security",
+        "title": "Proteção criptográfica de credenciais de banco",
+        "description": "Implementado utilitário para cifrar senhas e credenciais dos bancos de dados dos clientes na camada de persistência.",
+        "impact": "Máxima segurança e conformidade com boas práticas de proteção de dados sensíveis.",
+        "originalCommit": "add encrypt helper and cli script to encrypt database passwords",
+        "commitHash": "c28e771"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "database url by cnpj",
+        "description": "Atualização no módulo de Geral & Usabilidade: database url by cnpj.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "database url by cnpj",
+        "commitHash": "e417fb8"
+      },
+      {
+        "module": "Entradas Fiscais",
+        "type": "feature",
+        "title": "Módulo de Entradas Fiscais (ENTRADAS_APOIO)",
+        "description": "Disponibilizada integração completa para consulta e gestão de notas de entrada fiscal com controle de acesso granular baseado em perfis (RBAC).",
+        "impact": "Facilidade na integração contábil e fiscal de notas fiscais recebidas.",
+        "originalCommit": "implement fiscal entries module (ENTRADAS_APOIO) and RBAC support",
+        "commitHash": "cb789fa"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "increase user invitation expiration to 24h and configure P130",
+        "description": "Atualização no módulo de Geral & Usabilidade: increase user invitation expiration to 24h and configure P130.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "increase user invitation expiration to 24h and configure P130",
+        "commitHash": "f6c6a8f"
+      },
+      {
+        "module": "Infraestrutura & Resiliência",
+        "type": "fix",
+        "title": "Inclusão de docs to docker build",
+        "description": "Atualização no módulo de Infraestrutura & Resiliência: add docs to docker build.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add docs to docker build",
+        "commitHash": "b1ddc57"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "create-integration-request dto",
+        "description": "Atualização no módulo de Geral & Usabilidade: create-integration-request dto.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "create-integration-request dto",
+        "commitHash": "ffc9d7a"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "database url by cnpj",
+        "description": "Atualização no módulo de Geral & Usabilidade: database url by cnpj.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "database url by cnpj",
+        "commitHash": "2dfcc6e"
+      },
+      {
+        "module": "Entradas Fiscais",
+        "type": "fix",
+        "title": "import TenantConnectionModule and update swagger spec",
+        "description": "Atualização no módulo de Entradas Fiscais: import TenantConnectionModule and update swagger spec.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "import TenantConnectionModule and update swagger spec",
+        "commitHash": "ba159cc"
+      }
+    ],
+    "totalChanges": 8
+  },
+  {
+    "version": "1.16.18",
+    "date": "2026-08-31",
+    "title": "Módulo de Compras e Prevenção de Timeouts",
+    "summary": "Implementação do módulo de Compras e melhorias críticas de resiliência no pool de conexões (prevenção de 504 Gateway Timeout).",
+    "highlights": [
+      "Novo módulo de Compras integrado ao ERP",
+      "Conexões mais estáveis com pool TTL e TCP keep-alive"
+    ],
+    "items": [
+      {
+        "module": "Compras",
+        "type": "feature",
+        "title": "Módulo de Compras & Suporte a RBAC",
+        "description": "Nova integração para sincronização e acompanhamento de pedidos de compra e cotações com fornecedores.",
+        "impact": "Visibilidade em tempo real das movimentações de compras realizadas no ERP.",
+        "originalCommit": "implement purchases module and integration request/rbac support",
+        "commitHash": "c891b59"
+      },
+      {
+        "module": "Ferramentas de Manutenção",
+        "type": "feature",
+        "title": "Inclusão de permissions sync script and update prisma client documentation",
+        "description": "Atualização no módulo de Ferramentas de Manutenção: add permissions sync script and update prisma client documentation.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add permissions sync script and update prisma client documentation",
+        "commitHash": "8a5672c"
+      },
+      {
+        "module": "Call Center",
+        "type": "fix",
+        "title": "Correção na leitura de campos longos no Call Center",
+        "description": "Ajustada a conversão de campos de texto longo (BLOB) para prevenir truncamento de informações e falhas de consulta.",
+        "impact": "Atendimentos de clientes agora exibem histórico detalhado sem corte de dados.",
+        "originalCommit": "remove VARCHAR cast on BLOB fields to avoid string truncation",
+        "commitHash": "f271438"
+      },
+      {
+        "module": "Infraestrutura & Resiliência",
+        "type": "fix",
+        "title": "Estabilização de conexões e prevenção de timeout 504",
+        "description": "Implementado controle inteligente de ciclo de vida de conexões (TTL), timeouts de segurança e TCP keep-alive no pool do banco de dados.",
+        "impact": "Eliminação de travamentos e respostas de erro 504 em momentos de oscilação de rede.",
+        "originalCommit": "mitigate 504 timeouts with pool TTL, query timeout safety, and TCP keep-alive",
+        "commitHash": "f3c1a86"
+      },
+      {
+        "module": "Solicitações de Integração",
+        "type": "fix",
+        "title": "Módulo de Compras & Suporte a RBAC",
+        "description": "Nova integração para sincronização e acompanhamento de pedidos de compra e cotações com fornecedores.",
+        "impact": "Visibilidade em tempo real das movimentações de compras realizadas no ERP.",
+        "originalCommit": "add aliases for purchases and cache busting for admin assets",
+        "commitHash": "5d97078"
+      }
+    ],
+    "totalChanges": 5
+  },
+  {
+    "version": "1.16.17",
+    "date": "2026-08-12",
+    "title": "Gestão Comercial de Planos e Estabilidade no Call Center",
+    "summary": "Estruturação de valores e cotas de planos comerciais, além de correções no processamento de atendimentos de Call Center.",
+    "highlights": [
+      "Visibilidade de valores e cotas por plano",
+      "Correção no tratamento de campos de texto no Call Center"
+    ],
+    "items": [
+      {
+        "module": "Planos & Quotas",
+        "type": "feature",
+        "title": "Exibição de valores e planos comerciais",
+        "description": "Ajustada a estrutura de planos comerciais para detalhamento transparente de preços, quotas de requisição e upgrades.",
+        "impact": "Clareza na visualização das características e limites do plano contratado.",
+        "originalCommit": "price on plans",
+        "commitHash": "6705bfd"
+      },
+      {
+        "module": "Planos & Quotas",
+        "type": "feature",
+        "title": "Exibição de valores e planos comerciais",
+        "description": "Ajustada a estrutura de planos comerciais para detalhamento transparente de preços, quotas de requisição e upgrades.",
+        "impact": "Clareza na visualização das características e limites do plano contratado.",
+        "originalCommit": "price on plans - migration",
+        "commitHash": "e217abf"
+      },
+      {
+        "module": "Planos & Quotas",
+        "type": "feature",
+        "title": "reset request logs on upgrade plan",
+        "description": "Atualização no módulo de Planos & Quotas: reset request logs on upgrade plan.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "reset request logs on upgrade plan",
+        "commitHash": "cd99deb"
+      },
+      {
+        "module": "Call Center",
+        "type": "fix",
+        "title": "Correção na leitura de campos longos no Call Center",
+        "description": "Ajustada a conversão de campos de texto longo (BLOB) para prevenir truncamento de informações e falhas de consulta.",
+        "impact": "Atendimentos de clientes agora exibem histórico detalhado sem corte de dados.",
+        "originalCommit": "call-centers BLOB ID error",
+        "commitHash": "8d6ebc1"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "fixed limit on pageSize",
+        "description": "Atualização no módulo de Geral & Usabilidade: fixed limit on pageSize.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "fixed limit on pageSize",
+        "commitHash": "3d6dba4"
+      },
+      {
+        "module": "Call Center",
+        "type": "fix",
+        "title": "Consulta a atendimentos de Call Center",
+        "description": "Disponibilizados filtros avançados e novos campos na busca de atendimentos do suporte e call center.",
+        "impact": "Acesso simplificado ao histórico de suporte ao cliente.",
+        "originalCommit": "GET /call-centers",
+        "commitHash": "e41f62a"
+      },
+      {
+        "module": "Call Center",
+        "type": "fix",
+        "title": "Consulta a atendimentos de Call Center",
+        "description": "Disponibilizados filtros avançados e novos campos na busca de atendimentos do suporte e call center.",
+        "impact": "Acesso simplificado ao histórico de suporte ao cliente.",
+        "originalCommit": "GET /call-centers - USU_APELIDO",
+        "commitHash": "b1de06e"
+      },
+      {
+        "module": "Call Center",
+        "type": "fix",
+        "title": "Consulta a atendimentos de Call Center",
+        "description": "Disponibilizados filtros avançados e novos campos na busca de atendimentos do suporte e call center.",
+        "impact": "Acesso simplificado ao histórico de suporte ao cliente.",
+        "originalCommit": "GET /call-centers 2",
+        "commitHash": "84fa2bb"
+      },
+      {
+        "module": "Planos & Quotas",
+        "type": "fix",
+        "title": "Exibição de valores e planos comerciais",
+        "description": "Ajustada a estrutura de planos comerciais para detalhamento transparente de preços, quotas de requisição e upgrades.",
+        "impact": "Clareza na visualização das características e limites do plano contratado.",
+        "originalCommit": "plans on lp - 2",
+        "commitHash": "ec48633"
+      },
+      {
+        "module": "Planos & Quotas",
+        "type": "fix",
+        "title": "plans price on lp",
+        "description": "Atualização no módulo de Planos & Quotas: plans price on lp.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "plans price on lp",
+        "commitHash": "85755a2"
+      },
+      {
+        "module": "Call Center",
+        "type": "fix",
+        "title": "Consulta a atendimentos de Call Center",
+        "description": "Disponibilizados filtros avançados e novos campos na busca de atendimentos do suporte e call center.",
+        "impact": "Acesso simplificado ao histórico de suporte ao cliente.",
+        "originalCommit": "remove VEN_NUMERO to GET /call-centers",
+        "commitHash": "1351c12"
+      }
+    ],
+    "totalChanges": 11
+  },
+  {
+    "version": "1.16.16",
+    "date": "2026-08-11",
+    "title": "Expansão da API de Call Center",
+    "summary": "Disponibilização de novos endpoints e campos detalhados para integração de chamados do Call Center.",
+    "highlights": [
+      "Novos campos de auditoria e dados de usuários nos atendimentos"
+    ],
+    "items": [
+      {
+        "module": "Call Center",
+        "type": "feature",
+        "title": "Consulta a atendimentos de Call Center",
+        "description": "Disponibilizados filtros avançados e novos campos na busca de atendimentos do suporte e call center.",
+        "impact": "Acesso simplificado ao histórico de suporte ao cliente.",
+        "originalCommit": "GET /call-centers",
+        "commitHash": "0537d8e"
+      },
+      {
+        "module": "Call Center",
+        "type": "feature",
+        "title": "Consulta a atendimentos de Call Center",
+        "description": "Disponibilizados filtros avançados e novos campos na busca de atendimentos do suporte e call center.",
+        "impact": "Acesso simplificado ao histórico de suporte ao cliente.",
+        "originalCommit": "more fields o GET /call-centers && order",
+        "commitHash": "7e39889"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "return 400 to invalid :id",
+        "description": "Atualização no módulo de Geral & Usabilidade: return 400 to invalid :id.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "return 400 to invalid :id",
+        "commitHash": "844173e"
+      }
+    ],
+    "totalChanges": 3
+  },
+  {
+    "version": "1.16.15",
+    "date": "2026-08-05",
+    "title": "Correções de estabilidade e aprimoramentos",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Entregas & Logística.",
+    "highlights": [
+      "Gestão de Entregas e Logística"
+    ],
+    "items": [
+      {
+        "module": "Entregas & Logística",
+        "type": "fix",
+        "title": "Gestão de Entregas e Logística",
+        "description": "Implementado o módulo de controle e rastreamento de entregas vinculadas a pedidos de venda.",
+        "impact": "Acompanhamento do status de despacho e rota de entregas aos clientes.",
+        "originalCommit": "POST /deliveries",
+        "commitHash": "56bd3dc"
+      }
+    ],
+    "totalChanges": 1
+  },
+  {
+    "version": "1.16.13",
+    "date": "2026-07-29",
+    "title": "Alertas Proativos de Quota e Campos Logísticos",
+    "summary": "Alertas automáticos de consumo de 100% da franquia e inclusão de dados fiscais e de logística nos pedidos.",
+    "highlights": [
+      "Notificação automática de 100% da cota consumida",
+      "Detalhamento de operação fiscal e frete nos pedidos"
+    ],
+    "items": [
+      {
+        "module": "Planos & Quotas",
+        "type": "feature",
+        "title": "Alertas preventivos de consumo de cota",
+        "description": "Notificações automatizadas quando a franquia de requisições atinge 80% e 100% do limite mensal.",
+        "impact": "Prevenção contra bloqueios inesperados de integração por estouro de cota.",
+        "originalCommit": "100% alert",
+        "commitHash": "c1747d1"
+      },
+      {
+        "module": "Clientes",
+        "type": "feature",
+        "title": "Inclusão de MUN_CODIGO and MUN_NOME municipality fields to client detail response",
+        "description": "Atualização no módulo de Clientes: add MUN_CODIGO and MUN_NOME municipality fields to client detail response.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add MUN_CODIGO and MUN_NOME municipality fields to client detail response",
+        "commitHash": "229215b"
+      },
+      {
+        "module": "Pedidos & Vendas",
+        "type": "feature",
+        "title": "Operações de Vendas & Pedidos",
+        "description": "Aprimoramento nos fluxos de consulta e criação de pedidos de venda com suporte a novos campos e formas de pagamento.",
+        "impact": "Integração de vendas rápida, robusta e com validações completas.",
+        "originalCommit": "new fields on GET /orders/:id for logistics integration",
+        "commitHash": "eb79eae"
+      },
+      {
+        "module": "Pedidos & Vendas",
+        "type": "feature",
+        "title": "Operações de Vendas & Pedidos",
+        "description": "Aprimoramento nos fluxos de consulta e criação de pedidos de venda com suporte a novos campos e formas de pagamento.",
+        "impact": "Integração de vendas rápida, robusta e com validações completas.",
+        "originalCommit": "adiciona campos de ambiente, operacao, entrega, encargos e valor pendente nos pedidos",
+        "commitHash": "6c9f9a4"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "80 percent alert table",
+        "description": "Atualização no módulo de Geral & Usabilidade: 80 percent alert table.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "80 percent alert table",
+        "commitHash": "e083cd4"
+      },
+      {
+        "module": "Entregas & Logística",
+        "type": "fix",
+        "title": "Gestão de Entregas e Logística",
+        "description": "Implementado o módulo de controle e rastreamento de entregas vinculadas a pedidos de venda.",
+        "impact": "Acompanhamento do status de despacho e rota de entregas aos clientes.",
+        "originalCommit": "endpoint GET /deliveries",
+        "commitHash": "da80d6a"
+      },
+      {
+        "module": "Pedidos & Vendas",
+        "type": "fix",
+        "title": "order by id",
+        "description": "Atualização no módulo de Pedidos & Vendas: order by id.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "order by id",
+        "commitHash": "0744f72"
+      },
+      {
+        "module": "Pedidos & Vendas",
+        "type": "fix",
+        "title": "order by id 2",
+        "description": "Atualização no módulo de Pedidos & Vendas: order by id 2.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "order by id 2",
+        "commitHash": "0d1a3f2"
+      },
+      {
+        "module": "Pedidos & Vendas",
+        "type": "fix",
+        "title": "throw NotFoundException when order is not found in getOrderById",
+        "description": "Atualização no módulo de Pedidos & Vendas: throw NotFoundException when order is not found in getOrderById.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "throw NotFoundException when order is not found in getOrderById",
+        "commitHash": "7cf7e1c"
+      }
+    ],
+    "totalChanges": 9
+  },
+  {
+    "version": "1.16.12",
+    "date": "2026-07-15",
+    "title": "Gestão de Entregas e Logística e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Entregas & Logística, Pedidos & Vendas, Geral & Usabilidade.",
+    "highlights": [
+      "Gestão de Entregas e Logística",
+      "Gestão de Entregas e Logística"
+    ],
+    "items": [
+      {
+        "module": "Entregas & Logística",
+        "type": "feature",
+        "title": "Gestão de Entregas e Logística",
+        "description": "Implementado o módulo de controle e rastreamento de entregas vinculadas a pedidos de venda.",
+        "impact": "Acompanhamento do status de despacho e rota de entregas aos clientes.",
+        "originalCommit": "endpoint GET /delivery/status",
+        "commitHash": "b2f2b63"
+      },
+      {
+        "module": "Pedidos & Vendas",
+        "type": "feature",
+        "title": "Gestão de Entregas e Logística",
+        "description": "Implementado o módulo de controle e rastreamento de entregas vinculadas a pedidos de venda.",
+        "impact": "Acompanhamento do status de despacho e rota de entregas aos clientes.",
+        "originalCommit": "filter delivery by orderId and status(TABELA_STATUS)",
+        "commitHash": "8a89b58"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "minute usage by users on topusers row",
+        "description": "Atualização no módulo de Geral & Usabilidade: minute usage by users on topusers row.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "minute usage by users on topusers row",
+        "commitHash": "90a74d0"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "endpoint cards",
+        "description": "Atualização no módulo de Geral & Usabilidade: endpoint cards.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "endpoint cards",
+        "commitHash": "ac49492"
+      }
+    ],
+    "totalChanges": 4
+  },
+  {
+    "version": "1.16.11",
+    "date": "2026-07-15",
+    "title": "Localização de Erros em Português e Métricas de Consumo",
+    "summary": "Mensagens de validação da API traduzidas para português do Brasil, registro de logs de alerta e auditoria de RPM.",
+    "highlights": [
+      "Erros da API apresentados em português claro",
+      "Métricas de requisições por minuto (RPM) em dossiês"
+    ],
+    "items": [
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "Inclusão de alert emails logs on db",
+        "description": "Atualização no módulo de Geral & Usabilidade: add alert emails logs on db.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add alert emails logs on db",
+        "commitHash": "764ac6a"
+      },
+      {
+        "module": "Dossiês & Relatórios",
+        "type": "feature",
+        "title": "Geração de Dossiês e Relatórios em PDF",
+        "description": "Exportação de relatórios gerenciais consolidados em PDF com métricas de consumo de requisições, latência e chamadas por minuto (RPM).",
+        "impact": "Facilidade de auditoria e prestação de contas com gráficos executivos.",
+        "originalCommit": "add Notificado column with email status to dashboard and dossier proactive alerts",
+        "commitHash": "20a07af"
+      },
+      {
+        "module": "Dossiês & Relatórios",
+        "type": "feature",
+        "title": "Geração de Dossiês e Relatórios em PDF",
+        "description": "Exportação de relatórios gerenciais consolidados em PDF com métricas de consumo de requisições, latência e chamadas por minuto (RPM).",
+        "impact": "Facilidade de auditoria e prestação de contas com gráficos executivos.",
+        "originalCommit": "add RPM metrics to client and general PDF dossiers",
+        "commitHash": "bfc67fc"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "localize Zod validation error messages to pt-BR systematically",
+        "description": "Atualização no módulo de Geral & Usabilidade: localize Zod validation error messages to pt-BR systematically.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "localize Zod validation error messages to pt-BR systematically",
+        "commitHash": "cc6bb8a"
+      },
+      {
+        "module": "Planos & Quotas",
+        "type": "feature",
+        "title": "Alertas preventivos de consumo de cota",
+        "description": "Notificações automatizadas quando a franquia de requisições atinge 80% e 100% do limite mensal.",
+        "impact": "Prevenção contra bloqueios inesperados de integração por estouro de cota.",
+        "originalCommit": "remove 429 to quota count",
+        "commitHash": "0a1220c"
+      },
+      {
+        "module": "Painel & Métricas",
+        "type": "feature",
+        "title": "rpm on dashboard",
+        "description": "Atualização no módulo de Painel & Métricas: rpm on dashboard.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "rpm on dashboard",
+        "commitHash": "07ef8f7"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "translate zod errors",
+        "description": "Atualização no módulo de Geral & Usabilidade: translate zod errors.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "translate zod errors",
+        "commitHash": "55bed86"
+      },
+      {
+        "module": "Contas a Receber",
+        "type": "fix",
+        "title": "Ajuste em automatic alert conditions, add manual resend capability to frontend, and fix payment method spec",
+        "description": "Atualização no módulo de Contas a Receber: adjust automatic alert conditions, add manual resend capability to frontend, and fix payment method spec.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "adjust automatic alert conditions, add manual resend capability to frontend, and fix payment method spec",
+        "commitHash": "d50a4e1"
+      },
+      {
+        "module": "Infraestrutura & Resiliência",
+        "type": "fix",
+        "title": "docker build prisma client copy paths",
+        "description": "Atualização no módulo de Infraestrutura & Resiliência: docker build prisma client copy paths.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "docker build prisma client copy paths",
+        "commitHash": "0159dd4"
+      },
+      {
+        "module": "Infraestrutura & Resiliência",
+        "type": "fix",
+        "title": "import path of PrismaClient at runtime",
+        "description": "Atualização no módulo de Infraestrutura & Resiliência: import path of PrismaClient at runtime.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "import path of PrismaClient at runtime",
+        "commitHash": "9415130"
+      },
+      {
+        "module": "Painel & Métricas",
+        "type": "fix",
+        "title": "mock data on dashboard spec",
+        "description": "Atualização no módulo de Painel & Métricas: mock data on dashboard spec.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "mock data on dashboard spec",
+        "commitHash": "3735efd"
+      },
+      {
+        "module": "Planos & Quotas",
+        "type": "fix",
+        "title": "count all requests within calendar month for usage stats and alerts",
+        "description": "Atualização no módulo de Planos & Quotas: count all requests within calendar month for usage stats and alerts.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "count all requests within calendar month for usage stats and alerts",
+        "commitHash": "17f4a04"
+      },
+      {
+        "module": "Infraestrutura & Resiliência",
+        "type": "fix",
+        "title": "revert PrismaClient import and map path in tsconfig",
+        "description": "Atualização no módulo de Infraestrutura & Resiliência: revert PrismaClient import and map path in tsconfig.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "revert PrismaClient import and map path in tsconfig",
+        "commitHash": "a37d4b8"
+      }
+    ],
+    "totalChanges": 13
+  },
+  {
+    "version": "1.16.10",
+    "date": "2026-07-13",
+    "title": "Inclusão de date range to filename1 e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Dossiês & Relatórios, Planos & Quotas, Filtros de Período.",
+    "highlights": [
+      "Inclusão de date range to filename1",
+      "Alertas preventivos de consumo de cota"
+    ],
+    "items": [
+      {
+        "module": "Dossiês & Relatórios",
+        "type": "feature",
+        "title": "Inclusão de date range to filename1",
+        "description": "Atualização no módulo de Dossiês & Relatórios: add date range to filename1.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add date range to filename1",
+        "commitHash": "f2d8962"
+      },
+      {
+        "module": "Planos & Quotas",
+        "type": "feature",
+        "title": "Alertas preventivos de consumo de cota",
+        "description": "Notificações automatizadas quando a franquia de requisições atinge 80% e 100% do limite mensal.",
+        "impact": "Prevenção contra bloqueios inesperados de integração por estouro de cota.",
+        "originalCommit": "mail send of 80% usage",
+        "commitHash": "3f0166b"
+      },
+      {
+        "module": "Filtros de Período",
+        "type": "feature",
+        "title": "Inclusão de hour on data range",
+        "description": "Atualização no módulo de Filtros de Período: add hour on data range.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add hour on data range",
+        "commitHash": "02b5307"
+      },
+      {
+        "module": "Painel & Métricas",
+        "type": "fix",
+        "title": "icons",
+        "description": "Atualização no módulo de Painel & Métricas: icons.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "icons",
+        "commitHash": "7aaa3f4"
+      },
+      {
+        "module": "Dossiês & Relatórios",
+        "type": "fix",
+        "title": "Inclusão de date range to filename 2",
+        "description": "Atualização no módulo de Dossiês & Relatórios: add date range to filename 2.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add date range to filename 2",
+        "commitHash": "298dfb4"
+      },
+      {
+        "module": "Dossiês & Relatórios",
+        "type": "fix",
+        "title": "Inclusão de date range to filename1",
+        "description": "Atualização no módulo de Dossiês & Relatórios: add date range to filename1.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add date range to filename1",
+        "commitHash": "1264d74"
+      },
+      {
+        "module": "Dossiês & Relatórios",
+        "type": "fix",
+        "title": "timezone",
+        "description": "Atualização no módulo de Dossiês & Relatórios: timezone.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "timezone",
+        "commitHash": "514303a"
+      },
+      {
+        "module": "Painel & Métricas",
+        "type": "fix",
+        "title": "header on scroll (admin && client dash)",
+        "description": "Atualização no módulo de Painel & Métricas: header on scroll (admin && client dash).",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "header on scroll (admin && client dash)",
+        "commitHash": "82b6e36"
+      }
+    ],
+    "totalChanges": 8
+  },
+  {
+    "version": "1.16.9",
+    "date": "2026-07-10",
+    "title": "Sessão Estendida no Painel e Dossiês Gerenciais",
+    "summary": "Opção de manter sessão conectada, renovação silenciosa de tokens e geração robusta de dossiês em PDF.",
+    "highlights": [
+      "Conveniência de sessão estendida no painel de administração",
+      "Relatórios executivos e auditoria em PDF"
+    ],
+    "items": [
+      {
+        "module": "Clientes",
+        "type": "feature",
+        "title": "Sessão prolongada e renovação automática de acesso",
+        "description": "Opção de \"lembrar sessão\" e renovação transparente do token de acesso sem interromper a navegação no painel.",
+        "impact": "Maior comodidade e produtividade para operadores do sistema.",
+        "originalCommit": "add extended session checkbox and silent token refresh for admin and client logins",
+        "commitHash": "8de012e"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "Inclusão de pagination to HTTP logs and move section to third row",
+        "description": "Atualização no módulo de Geral & Usabilidade: add pagination to HTTP logs and move section to third row.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add pagination to HTTP logs and move section to third row",
+        "commitHash": "3602fd8"
+      },
+      {
+        "module": "Dossiês & Relatórios",
+        "type": "feature",
+        "title": "Geração de Dossiês e Relatórios em PDF",
+        "description": "Exportação de relatórios gerenciais consolidados em PDF com métricas de consumo de requisições, latência e chamadas por minuto (RPM).",
+        "impact": "Facilidade de auditoria e prestação de contas com gráficos executivos.",
+        "originalCommit": "dossie buttons style",
+        "commitHash": "3b7b658"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "Proteção contra sobrecarga de requisições (Rate Limiting)",
+        "description": "Controle de taxa de requisições por usuário para evitar lentidão e garantir justiça na distribuição de recursos.",
+        "impact": "Estabilidade constante e alta disponibilidade da API para todos os clientes.",
+        "originalCommit": "log 404/routing errors and ignore them in rate limiting via success flag",
+        "commitHash": "41e1041"
+      },
+      {
+        "module": "Dossiês & Relatórios",
+        "type": "feature",
+        "title": "Geração de Dossiês e Relatórios em PDF",
+        "description": "Exportação de relatórios gerenciais consolidados em PDF com métricas de consumo de requisições, latência e chamadas por minuto (RPM).",
+        "impact": "Facilidade de auditoria e prestação de contas com gráficos executivos.",
+        "originalCommit": "metrics dossie on admin dash",
+        "commitHash": "5ad7d5e"
+      },
+      {
+        "module": "Dossiês & Relatórios",
+        "type": "feature",
+        "title": "Geração de Dossiês e Relatórios em PDF",
+        "description": "Exportação de relatórios gerenciais consolidados em PDF com métricas de consumo de requisições, latência e chamadas por minuto (RPM).",
+        "impact": "Facilidade de auditoria e prestação de contas com gráficos executivos.",
+        "originalCommit": "metrics dossie on admin dash in front",
+        "commitHash": "a546175"
+      },
+      {
+        "module": "Dossiês & Relatórios",
+        "type": "feature",
+        "title": "Geração de Dossiês e Relatórios em PDF",
+        "description": "Exportação de relatórios gerenciais consolidados em PDF com métricas de consumo de requisições, latência e chamadas por minuto (RPM).",
+        "impact": "Facilidade de auditoria e prestação de contas com gráficos executivos.",
+        "originalCommit": "more data on dossies",
+        "commitHash": "b0e5f63"
+      },
+      {
+        "module": "Dossiês & Relatórios",
+        "type": "feature",
+        "title": "Geração de Dossiês e Relatórios em PDF",
+        "description": "Exportação de relatórios gerenciais consolidados em PDF com métricas de consumo de requisições, latência e chamadas por minuto (RPM).",
+        "impact": "Facilidade de auditoria e prestação de contas com gráficos executivos.",
+        "originalCommit": "more info o general dossie",
+        "commitHash": "0540850"
+      },
+      {
+        "module": "Dossiês & Relatórios",
+        "type": "feature",
+        "title": "Geração de Dossiês e Relatórios em PDF",
+        "description": "Exportação de relatórios gerenciais consolidados em PDF com métricas de consumo de requisições, latência e chamadas por minuto (RPM).",
+        "impact": "Facilidade de auditoria e prestação de contas com gráficos executivos.",
+        "originalCommit": "range on dossie by user",
+        "commitHash": "08f288c"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "sanitize all DTOs",
+        "description": "Atualização no módulo de Geral & Usabilidade: sanitize all DTOs.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "sanitize all DTOs",
+        "commitHash": "1ee1088"
+      },
+      {
+        "module": "Dossiês & Relatórios",
+        "type": "fix",
+        "title": "Geração de Dossiês e Relatórios em PDF",
+        "description": "Exportação de relatórios gerenciais consolidados em PDF com métricas de consumo de requisições, latência e chamadas por minuto (RPM).",
+        "impact": "Facilidade de auditoria e prestação de contas com gráficos executivos.",
+        "originalCommit": "add try-catch with NestJS logger to downloadDossier controller endpoint",
+        "commitHash": "986c78d"
+      },
+      {
+        "module": "Dossiês & Relatórios",
+        "type": "fix",
+        "title": "Geração de Dossiês e Relatórios em PDF",
+        "description": "Exportação de relatórios gerenciais consolidados em PDF com métricas de consumo de requisições, latência e chamadas por minuto (RPM).",
+        "impact": "Facilidade de auditoria e prestação de contas com gráficos executivos.",
+        "originalCommit": "intermitent dossie generation 500 error",
+        "commitHash": "2a23c56"
+      },
+      {
+        "module": "Infraestrutura & Resiliência",
+        "type": "fix",
+        "title": "prisma",
+        "description": "Atualização no módulo de Infraestrutura & Resiliência: prisma.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "prisma",
+        "commitHash": "210beea"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "Remoção de --single-process and --no-zygote flags to prevent Puppeteer TargetCloseError",
+        "description": "Atualização no módulo de Geral & Usabilidade: remove --single-process and --no-zygote flags to prevent Puppeteer TargetCloseError.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "remove --single-process and --no-zygote flags to prevent Puppeteer TargetCloseError",
+        "commitHash": "d05f295"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "safeguard against null avgLatency and p95Latency in topEndpoints table templates",
+        "description": "Atualização no módulo de Geral & Usabilidade: safeguard against null avgLatency and p95Latency in topEndpoints table templates.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "safeguard against null avgLatency and p95Latency in topEndpoints table templates",
+        "commitHash": "7390945"
+      }
+    ],
+    "totalChanges": 15
+  },
+  {
+    "version": "1.16.8",
+    "date": "2026-07-06",
+    "title": "new cards on dashboard e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Painel & Métricas, Validação & Segurança de Dados.",
+    "highlights": [
+      "new cards on dashboard",
+      "enforce strict validation for query parameters"
+    ],
+    "items": [
+      {
+        "module": "Painel & Métricas",
+        "type": "feature",
+        "title": "new cards on dashboard",
+        "description": "Atualização no módulo de Painel & Métricas: new cards on dashboard.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "new cards on dashboard",
+        "commitHash": "3b0fbe1"
+      },
+      {
+        "module": "Validação & Segurança de Dados",
+        "type": "feature",
+        "title": "enforce strict validation for query parameters",
+        "description": "Atualização no módulo de Validação & Segurança de Dados: enforce strict validation for query parameters.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "enforce strict validation for query parameters",
+        "commitHash": "59060cf"
+      }
+    ],
+    "totalChanges": 2
+  },
+  {
+    "version": "1.16.7",
+    "date": "2026-07-06",
+    "title": "admin dash granular graph e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Painel & Métricas, Entregas & Logística.",
+    "highlights": [
+      "admin dash granular graph",
+      "admin usage dashboard"
+    ],
+    "items": [
+      {
+        "module": "Painel & Métricas",
+        "type": "feature",
+        "title": "admin dash granular graph",
+        "description": "Atualização no módulo de Painel & Métricas: admin dash granular graph.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "admin dash granular graph",
+        "commitHash": "af465ab"
+      },
+      {
+        "module": "Painel & Métricas",
+        "type": "feature",
+        "title": "admin usage dashboard",
+        "description": "Atualização no módulo de Painel & Métricas: admin usage dashboard.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "admin usage dashboard",
+        "commitHash": "3a730f1"
+      },
+      {
+        "module": "Entregas & Logística",
+        "type": "feature",
+        "title": "Gestão de Entregas e Logística",
+        "description": "Implementado o módulo de controle e rastreamento de entregas vinculadas a pedidos de venda.",
+        "impact": "Acompanhamento do status de despacho e rota de entregas aos clientes.",
+        "originalCommit": "POST /deliveries",
+        "commitHash": "9fdc492"
+      },
+      {
+        "module": "Painel & Métricas",
+        "type": "fix",
+        "title": "admin dash",
+        "description": "Atualização no módulo de Painel & Métricas: admin dash.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "admin dash",
+        "commitHash": "7665592"
+      },
+      {
+        "module": "Painel & Métricas",
+        "type": "fix",
+        "title": "no count dashboard requests on dashboard panel",
+        "description": "Atualização no módulo de Painel & Métricas: no count dashboard requests on dashboard panel.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "no count dashboard requests on dashboard panel",
+        "commitHash": "0b5ebdd"
+      }
+    ],
+    "totalChanges": 5
+  },
+  {
+    "version": "1.16.6",
+    "date": "2026-07-02",
+    "title": "GET /stores e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral & Usabilidade.",
+    "highlights": [
+      "GET /stores"
+    ],
+    "items": [
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "GET /stores",
+        "description": "Atualização no módulo de Geral & Usabilidade: GET /stores.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "GET /stores",
+        "commitHash": "b5ef903"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "checkboxes",
+        "description": "Atualização no módulo de Geral & Usabilidade: checkboxes.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "checkboxes",
+        "commitHash": "d80dd95"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "Atualização de node-firebird",
+        "description": "Atualização no módulo de Geral & Usabilidade: update node-firebird.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "update node-firebird",
+        "commitHash": "a3e90e0"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "Criptografia na comunicação com Firebird",
+        "description": "Habilitação de criptografia de canal (WireCrypt) na comunicação remota com os bancos de dados dos clientes.",
+        "impact": "Segurança reforçada no tráfego de dados confidenciais via VPN ou rede externa.",
+        "originalCommit": "wirecrypt on firebird",
+        "commitHash": "ebf67ee"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "Criptografia na comunicação com Firebird",
+        "description": "Habilitação de criptografia de canal (WireCrypt) na comunicação remota com os bancos de dados dos clientes.",
+        "impact": "Segurança reforçada no tráfego de dados confidenciais via VPN ou rede externa.",
+        "originalCommit": "wirecrypt on firebird - ENABLE",
+        "commitHash": "1db11f4"
+      }
+    ],
+    "totalChanges": 5
+  },
+  {
+    "version": "1.16.5",
+    "date": "2026-06-09",
+    "title": "Operações de Vendas & Pedidos e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Pedidos & Vendas.",
+    "highlights": [
+      "Operações de Vendas & Pedidos",
+      "payment_plan_code on CreateOrderDTO"
+    ],
+    "items": [
+      {
+        "module": "Pedidos & Vendas",
+        "type": "feature",
+        "title": "Operações de Vendas & Pedidos",
+        "description": "Aprimoramento nos fluxos de consulta e criação de pedidos de venda com suporte a novos campos e formas de pagamento.",
+        "impact": "Integração de vendas rápida, robusta e com validações completas.",
+        "originalCommit": "add user_id to POST /orders",
+        "commitHash": "26d3704"
+      },
+      {
+        "module": "Pedidos & Vendas",
+        "type": "feature",
+        "title": "payment_plan_code on CreateOrderDTO",
+        "description": "Atualização no módulo de Pedidos & Vendas: payment_plan_code on CreateOrderDTO.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "payment_plan_code on CreateOrderDTO",
+        "commitHash": "ef6fd32"
+      },
+      {
+        "module": "Pedidos & Vendas",
+        "type": "fix",
+        "title": "order_id on CreateOrderDTO",
+        "description": "Atualização no módulo de Pedidos & Vendas: order_id on CreateOrderDTO.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "order_id on CreateOrderDTO",
+        "commitHash": "c9e0456"
+      }
+    ],
+    "totalChanges": 3
+  },
+  {
+    "version": "1.16.4",
+    "date": "2026-06-09",
+    "title": "Operações de Vendas & Pedidos e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Pedidos & Vendas, Geral & Usabilidade.",
+    "highlights": [
+      "Operações de Vendas & Pedidos"
+    ],
+    "items": [
+      {
+        "module": "Pedidos & Vendas",
+        "type": "feature",
+        "title": "Operações de Vendas & Pedidos",
+        "description": "Aprimoramento nos fluxos de consulta e criação de pedidos de venda com suporte a novos campos e formas de pagamento.",
+        "impact": "Integração de vendas rápida, robusta e com validações completas.",
+        "originalCommit": "add provider_id to POST /orders",
+        "commitHash": "822edcb"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "loj_codigo && usu_codigo && fun_codigo by field on endpoint",
+        "description": "Atualização no módulo de Geral & Usabilidade: loj_codigo && usu_codigo && fun_codigo by field on endpoint.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "loj_codigo && usu_codigo && fun_codigo by field on endpoint",
+        "commitHash": "368aaea"
+      }
+    ],
+    "totalChanges": 2
+  },
+  {
+    "version": "1.16.3",
+    "date": "2026-06-03",
+    "title": "return sit_codigo on order e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Pedidos & Vendas.",
+    "highlights": [
+      "return sit_codigo on order"
+    ],
+    "items": [
+      {
+        "module": "Pedidos & Vendas",
+        "type": "feature",
+        "title": "return sit_codigo on order",
+        "description": "Atualização no módulo de Pedidos & Vendas: return sit_codigo on order.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "return sit_codigo on order",
+        "commitHash": "844b1e8"
+      }
+    ],
+    "totalChanges": 1
+  },
+  {
+    "version": "1.16.2",
+    "date": "2026-05-25",
+    "title": "more options on POST order and disable POST receipt e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Pedidos & Vendas.",
+    "highlights": [
+      "more options on POST order and disable POST receipt"
+    ],
+    "items": [
+      {
+        "module": "Pedidos & Vendas",
+        "type": "feature",
+        "title": "more options on POST order and disable POST receipt",
+        "description": "Atualização no módulo de Pedidos & Vendas: more options on POST order and disable POST receipt.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "more options on POST order and disable POST receipt",
+        "commitHash": "3f7d172"
+      }
+    ],
+    "totalChanges": 1
+  },
+  {
+    "version": "1.16.1",
+    "date": "2026-05-20",
+    "title": "Central de Avisos e Notificações",
+    "summary": "Implementação da gaveta de avisos com separação por lidos e não lidos para os usuários da API.",
+    "highlights": [
+      "Central de comunicados e notificações interativa"
+    ],
+    "items": [
+      {
+        "module": "Avisos & Notificações",
+        "type": "feature",
+        "title": "Implementação de notifications drawer system with read/unread tabs",
+        "description": "Atualização no módulo de Avisos & Notificações: implement notifications drawer system with read/unread tabs.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "implement notifications drawer system with read/unread tabs",
+        "commitHash": "8d8fa73"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "Remoção de stores to form",
+        "description": "Atualização no módulo de Geral & Usabilidade: remove stores to form.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "remove stores to form",
+        "commitHash": "47195cf"
+      }
+    ],
+    "totalChanges": 2
+  },
+  {
+    "version": "1.16.0",
+    "date": "2026-05-20",
+    "title": "Implementação de POST and PATCH /products/groups e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Grupos de Produtos, Catálogo de Produtos.",
+    "highlights": [
+      "Implementação de POST and PATCH /products/groups",
+      "patch /products/brands && lint"
+    ],
+    "items": [
+      {
+        "module": "Grupos de Produtos",
+        "type": "feature",
+        "title": "Implementação de POST and PATCH /products/groups",
+        "description": "Atualização no módulo de Grupos de Produtos: implement POST and PATCH /products/groups.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "implement POST and PATCH /products/groups",
+        "commitHash": "92a8104"
+      },
+      {
+        "module": "Catálogo de Produtos",
+        "type": "feature",
+        "title": "patch /products/brands && lint",
+        "description": "Atualização no módulo de Catálogo de Produtos: patch /products/brands && lint.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "patch /products/brands && lint",
+        "commitHash": "dfe9786"
+      },
+      {
+        "module": "Catálogo de Produtos",
+        "type": "feature",
+        "title": "post /products/brands",
+        "description": "Atualização no módulo de Catálogo de Produtos: post /products/brands.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "post /products/brands",
+        "commitHash": "975058a"
+      }
+    ],
+    "totalChanges": 3
+  },
+  {
+    "version": "1.15.1",
+    "date": "2026-05-19",
+    "title": "Geração de Dossiês e Relatórios em PDF e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral & Usabilidade, Funcionários & Cargos, Autenticação & Acesso.",
+    "highlights": [
+      "Geração de Dossiês e Relatórios em PDF",
+      "new query params on account receivable and employee modules"
+    ],
+    "items": [
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "Geração de Dossiês e Relatórios em PDF",
+        "description": "Exportação de relatórios gerenciais consolidados em PDF com métricas de consumo de requisições, latência e chamadas por minuto (RPM).",
+        "impact": "Facilidade de auditoria e prestação de contas com gráficos executivos.",
+        "originalCommit": "generate pdf docs script",
+        "commitHash": "352a935"
+      },
+      {
+        "module": "Funcionários & Cargos",
+        "type": "feature",
+        "title": "new query params on account receivable and employee modules",
+        "description": "Atualização no módulo de Funcionários & Cargos: new query params on account receivable and employee modules.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "new query params on account receivable and employee modules",
+        "commitHash": "d97998f"
+      },
+      {
+        "module": "Autenticação & Acesso",
+        "type": "fix",
+        "title": "user login example",
+        "description": "Atualização no módulo de Autenticação & Acesso: user login example.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "user login example",
+        "commitHash": "b58c26d"
+      }
+    ],
+    "totalChanges": 3
+  },
+  {
+    "version": "1.15.0",
+    "date": "2026-05-18",
+    "title": "Módulo Oficial de Newsletter",
+    "summary": "Criação do módulo para envio de comunicados por e-mail sobre lançamentos e novidades da plataforma.",
+    "highlights": [
+      "Disparo de e-mails informativos com formatação corporativa"
+    ],
+    "items": [
+      {
+        "module": "Informativos",
+        "type": "feature",
+        "title": "Módulo de Informativos & Novidades",
+        "description": "Canal oficial para disparo de comunicados técnicos e comunicados de novidades aos usuários integradores.",
+        "impact": "Comunicação direta de atualizações importantes e avisos operacionais.",
+        "originalCommit": "newsletter module",
+        "commitHash": "c322040"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "findOne user GET",
+        "description": "Atualização no módulo de Geral & Usabilidade: findOne user GET.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "findOne user GET",
+        "commitHash": "4e64c91"
+      }
+    ],
+    "totalChanges": 2
+  },
+  {
+    "version": "1.14.0",
+    "date": "2026-05-18",
+    "title": "Módulo de Entregas & Rastreamento",
+    "summary": "Novo módulo para acompanhamento e controle de despachos e status de entrega.",
+    "highlights": [
+      "Gestão de entregas diretamente pela API"
+    ],
+    "items": [
+      {
+        "module": "Entregas & Logística",
+        "type": "feature",
+        "title": "Gestão de Entregas e Logística",
+        "description": "Implementado o módulo de controle e rastreamento de entregas vinculadas a pedidos de venda.",
+        "impact": "Acompanhamento do status de despacho e rota de entregas aos clientes.",
+        "originalCommit": "implements GET /delivery",
+        "commitHash": "7e4c590"
+      },
+      {
+        "module": "Entregas & Logística",
+        "type": "feature",
+        "title": "Gestão de Entregas e Logística",
+        "description": "Implementado o módulo de controle e rastreamento de entregas vinculadas a pedidos de venda.",
+        "impact": "Acompanhamento do status de despacho e rota de entregas aos clientes.",
+        "originalCommit": "update frontend to supports delivery",
+        "commitHash": "ecbab4c"
+      }
+    ],
+    "totalChanges": 2
+  },
+  {
+    "version": "1.13.0",
+    "date": "2026-05-18",
+    "title": "GET /employee-roles e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Funcionários & Cargos.",
+    "highlights": [
+      "GET /employee-roles"
+    ],
+    "items": [
+      {
+        "module": "Funcionários & Cargos",
+        "type": "feature",
+        "title": "GET /employee-roles",
+        "description": "Atualização no módulo de Funcionários & Cargos: GET /employee-roles.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "GET /employee-roles",
+        "commitHash": "11d8b31"
+      }
+    ],
+    "totalChanges": 1
+  },
+  {
+    "version": "1.12.1",
+    "date": "2026-05-18",
+    "title": "return function of employees e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Funcionários & Cargos.",
+    "highlights": [
+      "return function of employees"
+    ],
+    "items": [
+      {
+        "module": "Funcionários & Cargos",
+        "type": "feature",
+        "title": "return function of employees",
+        "description": "Atualização no módulo de Funcionários & Cargos: return function of employees.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "return function of employees",
+        "commitHash": "65fafa4"
+      }
+    ],
+    "totalChanges": 1
+  },
+  {
+    "version": "1.12.0",
+    "date": "2026-05-15",
+    "title": "GET /account-payable e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Contas a Receber.",
+    "highlights": [
+      "GET /account-payable"
+    ],
+    "items": [
+      {
+        "module": "Contas a Receber",
+        "type": "feature",
+        "title": "GET /account-payable",
+        "description": "Atualização no módulo de Contas a Receber: GET /account-payable.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "GET /account-payable",
+        "commitHash": "6ff48b4"
+      }
+    ],
+    "totalChanges": 1
+  },
+  {
+    "version": "1.11.0",
+    "date": "2026-05-15",
+    "title": "GET /payment-plans e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Planos & Quotas.",
+    "highlights": [
+      "GET /payment-plans"
+    ],
+    "items": [
+      {
+        "module": "Planos & Quotas",
+        "type": "feature",
+        "title": "GET /payment-plans",
+        "description": "Atualização no módulo de Planos & Quotas: GET /payment-plans.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "GET /payment-plans",
+        "commitHash": "d10c8bb"
+      }
+    ],
+    "totalChanges": 1
+  },
+  {
+    "version": "1.10.1",
+    "date": "2026-05-15",
+    "title": "Correções de estabilidade e aprimoramentos",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Clientes, Geral & Usabilidade.",
+    "highlights": [
+      "`clients`, `employees` and `suppliers` response dto",
+      "file `.versionrc`"
+    ],
+    "items": [
+      {
+        "module": "Clientes",
+        "type": "fix",
+        "title": "`clients`, `employees` and `suppliers` response dto",
+        "description": "Atualização no módulo de Clientes: `clients`, `employees` and `suppliers` response dto.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "`clients`, `employees` and `suppliers` response dto",
+        "commitHash": "ad5ba58"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "file `.versionrc`",
+        "description": "Atualização no módulo de Geral & Usabilidade: file `.versionrc`.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "file `.versionrc`",
+        "commitHash": "d04c408"
+      }
+    ],
+    "totalChanges": 2
+  },
+  {
+    "version": "1.10.0",
+    "date": "2026-05-15",
+    "title": "filter orders by employee e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Pedidos & Vendas, Geral & Usabilidade.",
+    "highlights": [
+      "filter orders by employee",
+      "GET /service-providers"
+    ],
+    "items": [
+      {
+        "module": "Pedidos & Vendas",
+        "type": "feature",
+        "title": "filter orders by employee",
+        "description": "Atualização no módulo de Pedidos & Vendas: filter orders by employee.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "filter orders by employee",
+        "commitHash": "a3f0d97"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "GET /service-providers",
+        "description": "Atualização no módulo de Geral & Usabilidade: GET /service-providers.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "GET /service-providers",
+        "commitHash": "2bfd37c"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "versioning scripts",
+        "description": "Atualização no módulo de Geral & Usabilidade: versioning scripts.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "versioning scripts",
+        "commitHash": "c5ef112"
+      }
+    ],
+    "totalChanges": 3
+  },
+  {
+    "version": "1.9.0",
+    "date": "2026-05-15",
+    "title": "GET /suppliers e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Fornecedores, Funcionários & Cargos, Criptografia & Segurança.",
+    "highlights": [
+      "GET /suppliers",
+      "GET /employees"
+    ],
+    "items": [
+      {
+        "module": "Fornecedores",
+        "type": "feature",
+        "title": "GET /suppliers",
+        "description": "Atualização no módulo de Fornecedores: GET /suppliers.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "GET /suppliers",
+        "commitHash": "00b166c"
+      },
+      {
+        "module": "Funcionários & Cargos",
+        "type": "feature",
+        "title": "GET /employees",
+        "description": "Atualização no módulo de Funcionários & Cargos: GET /employees.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "GET /employees",
+        "commitHash": "04e74cb"
+      },
+      {
+        "module": "Criptografia & Segurança",
+        "type": "security",
+        "title": "supports 129 password",
+        "description": "Atualização no módulo de Criptografia & Segurança: supports 129 password.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "supports 129 password",
+        "commitHash": "26e1c1c"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "test connection",
+        "description": "Atualização no módulo de Geral & Usabilidade: test connection.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "test connection",
+        "commitHash": "6f4a71b"
+      },
+      {
+        "module": "Pedidos & Vendas",
+        "type": "fix",
+        "title": "Remoção de type `E` to /orders",
+        "description": "Atualização no módulo de Pedidos & Vendas: remove type `E` to /orders.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "remove type `E` to /orders",
+        "commitHash": "8b87c5a"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "test connection treatment",
+        "description": "Atualização no módulo de Geral & Usabilidade: test connection treatment.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "test connection treatment",
+        "commitHash": "3fec66b"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "test connection treatment 2",
+        "description": "Atualização no módulo de Geral & Usabilidade: test connection treatment 2.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "test connection treatment 2",
+        "commitHash": "a50b9d6"
+      }
+    ],
+    "totalChanges": 7
+  },
+  {
+    "version": "1.7.0",
+    "date": "2026-05-14",
+    "title": "GET /order-items e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Pedidos & Vendas, Geral & Usabilidade.",
+    "highlights": [
+      "GET /order-items"
+    ],
+    "items": [
+      {
+        "module": "Pedidos & Vendas",
+        "type": "feature",
+        "title": "GET /order-items",
+        "description": "Atualização no módulo de Pedidos & Vendas: GET /order-items.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "GET /order-items",
+        "commitHash": "dc12498"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "POST /user return JSON",
+        "description": "Atualização no módulo de Geral & Usabilidade: POST /user return JSON.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "POST /user return JSON",
+        "commitHash": "05be059"
+      }
+    ],
+    "totalChanges": 2
+  },
+  {
+    "version": "1.6.0",
+    "date": "2026-05-14",
+    "title": "Correções de estabilidade e aprimoramentos",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Monitoramento & Saúde, Catálogo de Produtos, Geral & Usabilidade.",
+    "highlights": [
+      "status controller",
+      "status page template path for production"
+    ],
+    "items": [
+      {
+        "module": "Monitoramento & Saúde",
+        "type": "fix",
+        "title": "status controller",
+        "description": "Atualização no módulo de Monitoramento & Saúde: status controller.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "status controller",
+        "commitHash": "f28f354"
+      },
+      {
+        "module": "Catálogo de Produtos",
+        "type": "fix",
+        "title": "status page template path for production",
+        "description": "Atualização no módulo de Catálogo de Produtos: status page template path for production.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "status page template path for production",
+        "commitHash": "a9ef81d"
+      },
+      {
+        "module": "Catálogo de Produtos",
+        "type": "fix",
+        "title": "storeId on products",
+        "description": "Atualização no módulo de Catálogo de Produtos: storeId on products.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "storeId on products",
+        "commitHash": "18b7b1b"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "zod validation",
+        "description": "Atualização no módulo de Geral & Usabilidade: zod validation.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "zod validation",
+        "commitHash": "ff09578"
+      }
+    ],
+    "totalChanges": 4
+  },
+  {
+    "version": "1.5.3",
+    "date": "2026-05-14",
+    "title": "clients options on request form e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Clientes, Catálogo de Produtos, Pedidos & Vendas.",
+    "highlights": [
+      "clients options on request form",
+      "filter tablePrice on GET products"
+    ],
+    "items": [
+      {
+        "module": "Clientes",
+        "type": "feature",
+        "title": "clients options on request form",
+        "description": "Atualização no módulo de Clientes: clients options on request form.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "clients options on request form",
+        "commitHash": "623da51"
+      },
+      {
+        "module": "Catálogo de Produtos",
+        "type": "feature",
+        "title": "filter tablePrice on GET products",
+        "description": "Atualização no módulo de Catálogo de Produtos: filter tablePrice on GET products.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "filter tablePrice on GET products",
+        "commitHash": "5fac242"
+      },
+      {
+        "module": "Pedidos & Vendas",
+        "type": "feature",
+        "title": "filters on GET orders",
+        "description": "Atualização no módulo de Pedidos & Vendas: filters on GET orders.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "filters on GET orders",
+        "commitHash": "781edbd"
+      },
+      {
+        "module": "Pedidos & Vendas",
+        "type": "feature",
+        "title": "filters on GET orders",
+        "description": "Atualização no módulo de Pedidos & Vendas: filters on GET orders.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "filters on GET orders",
+        "commitHash": "0ab3628"
+      },
+      {
+        "module": "Painel & Métricas",
+        "type": "feature",
+        "title": "Implementação de background monitoring service and status dashboard template",
+        "description": "Atualização no módulo de Painel & Métricas: implement background monitoring service and status dashboard template.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "implement background monitoring service and status dashboard template",
+        "commitHash": "2da7b1e"
+      },
+      {
+        "module": "Monitoramento & Saúde",
+        "type": "feature",
+        "title": "status page",
+        "description": "Atualização no módulo de Monitoramento & Saúde: status page.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "status page",
+        "commitHash": "5d9f94d"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "tabs management and refresh data in admin panel",
+        "description": "Atualização no módulo de Geral & Usabilidade: tabs management and refresh data in admin panel.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "tabs management and refresh data in admin panel",
+        "commitHash": "d010c5f"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "api latency 0ms bug",
+        "description": "Atualização no módulo de Geral & Usabilidade: api latency 0ms bug.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "api latency 0ms bug",
+        "commitHash": "ab29a24"
+      },
+      {
+        "module": "Infraestrutura & Resiliência",
+        "type": "fix",
+        "title": "prisma migrations",
+        "description": "Atualização no módulo de Infraestrutura & Resiliência: prisma migrations.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "prisma migrations",
+        "commitHash": "b893091"
+      },
+      {
+        "module": "Pedidos & Vendas",
+        "type": "fix",
+        "title": "resolve merge conflicts in order controller and swagger spec",
+        "description": "Atualização no módulo de Pedidos & Vendas: resolve merge conflicts in order controller and swagger spec.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "resolve merge conflicts in order controller and swagger spec",
+        "commitHash": "ec930ce"
+      },
+      {
+        "module": "Monitoramento & Saúde",
+        "type": "fix",
+        "title": "status controller",
+        "description": "Atualização no módulo de Monitoramento & Saúde: status controller.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "status controller",
+        "commitHash": "f28f354"
+      },
+      {
+        "module": "Catálogo de Produtos",
+        "type": "fix",
+        "title": "status page template path for production",
+        "description": "Atualização no módulo de Catálogo de Produtos: status page template path for production.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "status page template path for production",
+        "commitHash": "a9ef81d"
+      },
+      {
+        "module": "Catálogo de Produtos",
+        "type": "fix",
+        "title": "storeId on products",
+        "description": "Atualização no módulo de Catálogo de Produtos: storeId on products.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "storeId on products",
+        "commitHash": "18b7b1b"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "zod validation",
+        "description": "Atualização no módulo de Geral & Usabilidade: zod validation.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "zod validation",
+        "commitHash": "ff09578"
+      }
+    ],
+    "totalChanges": 14
+  },
+  {
+    "version": "1.5.2",
+    "date": "2026-05-13",
+    "title": "clients options on request form e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Clientes, Pedidos & Vendas, Painel & Métricas.",
+    "highlights": [
+      "clients options on request form",
+      "filters on GET orders"
+    ],
+    "items": [
+      {
+        "module": "Clientes",
+        "type": "feature",
+        "title": "clients options on request form",
+        "description": "Atualização no módulo de Clientes: clients options on request form.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "clients options on request form",
+        "commitHash": "623da51"
+      },
+      {
+        "module": "Pedidos & Vendas",
+        "type": "feature",
+        "title": "filters on GET orders",
+        "description": "Atualização no módulo de Pedidos & Vendas: filters on GET orders.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "filters on GET orders",
+        "commitHash": "781edbd"
+      },
+      {
+        "module": "Pedidos & Vendas",
+        "type": "feature",
+        "title": "filters on GET orders",
+        "description": "Atualização no módulo de Pedidos & Vendas: filters on GET orders.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "filters on GET orders",
+        "commitHash": "0ab3628"
+      },
+      {
+        "module": "Painel & Métricas",
+        "type": "feature",
+        "title": "Implementação de background monitoring service and status dashboard template",
+        "description": "Atualização no módulo de Painel & Métricas: implement background monitoring service and status dashboard template.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "implement background monitoring service and status dashboard template",
+        "commitHash": "2da7b1e"
+      },
+      {
+        "module": "Monitoramento & Saúde",
+        "type": "feature",
+        "title": "status page",
+        "description": "Atualização no módulo de Monitoramento & Saúde: status page.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "status page",
+        "commitHash": "5d9f94d"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "api latency 0ms bug",
+        "description": "Atualização no módulo de Geral & Usabilidade: api latency 0ms bug.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "api latency 0ms bug",
+        "commitHash": "ab29a24"
+      },
+      {
+        "module": "Infraestrutura & Resiliência",
+        "type": "fix",
+        "title": "prisma migrations",
+        "description": "Atualização no módulo de Infraestrutura & Resiliência: prisma migrations.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "prisma migrations",
+        "commitHash": "b893091"
+      },
+      {
+        "module": "Pedidos & Vendas",
+        "type": "fix",
+        "title": "resolve merge conflicts in order controller and swagger spec",
+        "description": "Atualização no módulo de Pedidos & Vendas: resolve merge conflicts in order controller and swagger spec.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "resolve merge conflicts in order controller and swagger spec",
+        "commitHash": "ec930ce"
+      },
+      {
+        "module": "Monitoramento & Saúde",
+        "type": "fix",
+        "title": "status controller",
+        "description": "Atualização no módulo de Monitoramento & Saúde: status controller.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "status controller",
+        "commitHash": "f28f354"
+      },
+      {
+        "module": "Catálogo de Produtos",
+        "type": "fix",
+        "title": "status page template path for production",
+        "description": "Atualização no módulo de Catálogo de Produtos: status page template path for production.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "status page template path for production",
+        "commitHash": "a9ef81d"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "zod validation",
+        "description": "Atualização no módulo de Geral & Usabilidade: zod validation.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "zod validation",
+        "commitHash": "ff09578"
+      }
+    ],
+    "totalChanges": 11
+  },
+  {
+    "version": "1.5.1",
+    "date": "2026-05-13",
+    "title": "clients options on request form e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Clientes, Monitoramento & Saúde, Infraestrutura & Resiliência.",
+    "highlights": [
+      "clients options on request form",
+      "status page"
+    ],
+    "items": [
+      {
+        "module": "Clientes",
+        "type": "feature",
+        "title": "clients options on request form",
+        "description": "Atualização no módulo de Clientes: clients options on request form.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "clients options on request form",
+        "commitHash": "623da51"
+      },
+      {
+        "module": "Monitoramento & Saúde",
+        "type": "feature",
+        "title": "status page",
+        "description": "Atualização no módulo de Monitoramento & Saúde: status page.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "status page",
+        "commitHash": "5d9f94d"
+      },
+      {
+        "module": "Infraestrutura & Resiliência",
+        "type": "fix",
+        "title": "prisma migrations",
+        "description": "Atualização no módulo de Infraestrutura & Resiliência: prisma migrations.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "prisma migrations",
+        "commitHash": "b893091"
+      },
+      {
+        "module": "Catálogo de Produtos",
+        "type": "fix",
+        "title": "status page template path for production",
+        "description": "Atualização no módulo de Catálogo de Produtos: status page template path for production.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "status page template path for production",
+        "commitHash": "a9ef81d"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "zod validation",
+        "description": "Atualização no módulo de Geral & Usabilidade: zod validation.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "zod validation",
+        "commitHash": "ff09578"
+      }
+    ],
+    "totalChanges": 5
+  },
+  {
+    "version": "1.5.0",
+    "date": "2026-05-12",
+    "title": "clients options on request form e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Clientes, Monitoramento & Saúde.",
+    "highlights": [
+      "clients options on request form",
+      "status page"
+    ],
+    "items": [
+      {
+        "module": "Clientes",
+        "type": "feature",
+        "title": "clients options on request form",
+        "description": "Atualização no módulo de Clientes: clients options on request form.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "clients options on request form",
+        "commitHash": "623da51"
+      },
+      {
+        "module": "Monitoramento & Saúde",
+        "type": "feature",
+        "title": "status page",
+        "description": "Atualização no módulo de Monitoramento & Saúde: status page.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "status page",
+        "commitHash": "5d9f94d"
+      }
+    ],
+    "totalChanges": 2
+  },
+  {
+    "version": "1.4.0",
+    "date": "2026-05-12",
+    "title": "Painel do Cliente e Monitoramento de Uptime",
+    "summary": "Disponibilização do portal do cliente, rotação de senhas, monitoramento de disponibilidade e página pública de status.",
+    "highlights": [
+      "Portal de autoatendimento para clientes integradores",
+      "Monitoramento ativo de saúde e página de status"
+    ],
+    "items": [
+      {
+        "module": "Clientes",
+        "type": "feature",
+        "title": "`Links Uteis` on client panel",
+        "description": "Atualização no módulo de Clientes: `Links Uteis` on client panel.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "`Links Uteis` on client panel",
+        "commitHash": "acf4332"
+      },
+      {
+        "module": "Criptografia & Segurança",
+        "type": "security",
+        "title": "Inclusão de rotate password to client",
+        "description": "Atualização no módulo de Criptografia & Segurança: add rotate password to client.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add rotate password to client",
+        "commitHash": "17b09be"
+      },
+      {
+        "module": "Avisos & Notificações",
+        "type": "feature",
+        "title": "Inclusão de seed script for announcement permissions and assign to admin role",
+        "description": "Atualização no módulo de Avisos & Notificações: add seed script for announcement permissions and assign to admin role.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add seed script for announcement permissions and assign to admin role",
+        "commitHash": "5dfb265"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "docs versioning",
+        "description": "Atualização no módulo de Geral & Usabilidade: docs versioning.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "docs versioning",
+        "commitHash": "59e4700"
+      },
+      {
+        "module": "Avisos & Notificações",
+        "type": "feature",
+        "title": "Implementação de announcement system with persistence, tracking, and UI integration",
+        "description": "Atualização no módulo de Avisos & Notificações: implement announcement system with persistence, tracking, and UI integration.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "implement announcement system with persistence, tracking, and UI integration",
+        "commitHash": "758f7cd"
+      },
+      {
+        "module": "Clientes",
+        "type": "feature",
+        "title": "Implementação de clients module",
+        "description": "Atualização no módulo de Clientes: implement clients module.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "implement clients module",
+        "commitHash": "ec85e36"
+      },
+      {
+        "module": "Avisos & Notificações",
+        "type": "feature",
+        "title": "Implementação de RBAC-protected announcement module and define system-wide permissions catalog",
+        "description": "Atualização no módulo de Avisos & Notificações: implement RBAC-protected announcement module and define system-wide permissions catalog.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "implement RBAC-protected announcement module and define system-wide permissions catalog",
+        "commitHash": "09ab59e"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "integration guide tab",
+        "description": "Atualização no módulo de Geral & Usabilidade: integration guide tab.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "integration guide tab",
+        "commitHash": "11fdcc6"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "lp of integrations",
+        "description": "Atualização no módulo de Geral & Usabilidade: lp of integrations.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "lp of integrations",
+        "commitHash": "6e6f699"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "tab `Links Uteis` && filter for `Solicitações`",
+        "description": "Atualização no módulo de Geral & Usabilidade: tab `Links Uteis` && filter for `Solicitações`.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "tab `Links Uteis` && filter for `Solicitações`",
+        "commitHash": "31a7cfb"
+      },
+      {
+        "module": "Monitoramento & Saúde",
+        "type": "feature",
+        "title": "uptime monitor",
+        "description": "Atualização no módulo de Monitoramento & Saúde: uptime monitor.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "uptime monitor",
+        "commitHash": "be93a00"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "vpn guard on admin endpoints",
+        "description": "Atualização no módulo de Geral & Usabilidade: vpn guard on admin endpoints.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "vpn guard on admin endpoints",
+        "commitHash": "3d71064"
+      },
+      {
+        "module": "Criptografia & Segurança",
+        "type": "security",
+        "title": "welcome email after password generation",
+        "description": "Atualização no módulo de Criptografia & Segurança: welcome email after password generation.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "welcome email after password generation",
+        "commitHash": "c6b8bfc"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "action btns on admin panel",
+        "description": "Atualização no módulo de Geral & Usabilidade: action btns on admin panel.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "action btns on admin panel",
+        "commitHash": "f9c4d0d"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "alter invite duration",
+        "description": "Atualização no módulo de Geral & Usabilidade: alter invite duration.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "alter invite duration",
+        "commitHash": "0ded33e"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "apply green-blue strategy to deploy",
+        "description": "Atualização no módulo de Geral & Usabilidade: apply green-blue strategy to deploy.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "apply green-blue strategy to deploy",
+        "commitHash": "82c8a65"
+      },
+      {
+        "module": "Clientes",
+        "type": "fix",
+        "title": "auto logout to clients in admin",
+        "description": "Atualização no módulo de Clientes: auto logout to clients in admin.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "auto logout to clients in admin",
+        "commitHash": "d05ed8b"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "close buttons on modals",
+        "description": "Atualização no módulo de Geral & Usabilidade: close buttons on modals.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "close buttons on modals",
+        "commitHash": "77a97bf"
+      },
+      {
+        "module": "Monitoramento & Saúde",
+        "type": "fix",
+        "title": "deploy.sh healthcheck",
+        "description": "Atualização no módulo de Monitoramento & Saúde: deploy.sh healthcheck.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "deploy.sh healthcheck",
+        "commitHash": "77d5a5d"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "favicon",
+        "description": "Atualização no módulo de Geral & Usabilidade: favicon.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "favicon",
+        "commitHash": "9a2071b"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "favicon2",
+        "description": "Atualização no módulo de Geral & Usabilidade: favicon2.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "favicon2",
+        "commitHash": "8e9ff32"
+      },
+      {
+        "module": "Clientes",
+        "type": "fix",
+        "title": "icon on client panel",
+        "description": "Atualização no módulo de Clientes: icon on client panel.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "icon on client panel",
+        "commitHash": "797c134"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "images",
+        "description": "Atualização no módulo de Geral & Usabilidade: images.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "images",
+        "commitHash": "4d6aef7"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "permissions block on creation role",
+        "description": "Atualização no módulo de Geral & Usabilidade: permissions block on creation role.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "permissions block on creation role",
+        "commitHash": "528c2bd"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "security",
+        "title": "Remoção de 404s blocklist",
+        "description": "Atualização no módulo de Geral & Usabilidade: remove 404s blocklist.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "remove 404s blocklist",
+        "commitHash": "6a93b49"
+      },
+      {
+        "module": "Avisos & Notificações",
+        "type": "fix",
+        "title": "Remoção de announcement endpoints of Swagger",
+        "description": "Atualização no módulo de Avisos & Notificações: remove announcement endpoints of Swagger.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "remove announcement endpoints of Swagger",
+        "commitHash": "4150f0e"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "Remoção de vpn guard && add docs",
+        "description": "Atualização no módulo de Geral & Usabilidade: remove vpn guard && add docs.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "remove vpn guard && add docs",
+        "commitHash": "9ec30c1"
+      },
+      {
+        "module": "Criptografia & Segurança",
+        "type": "security",
+        "title": "setup password",
+        "description": "Atualização no módulo de Criptografia & Segurança: setup password.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "setup password",
+        "commitHash": "4e85a08"
+      },
+      {
+        "module": "Monitoramento & Saúde",
+        "type": "fix",
+        "title": "status page url",
+        "description": "Atualização no módulo de Monitoramento & Saúde: status page url.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "status page url",
+        "commitHash": "95e341a"
+      },
+      {
+        "module": "Monitoramento & Saúde",
+        "type": "fix",
+        "title": "statuspage url",
+        "description": "Atualização no módulo de Monitoramento & Saúde: statuspage url.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "statuspage url",
+        "commitHash": "223420a"
+      },
+      {
+        "module": "Avisos & Notificações",
+        "type": "fix",
+        "title": "turn database seed script for announcement permissions and assign them to the Admin role to JS file",
+        "description": "Atualização no módulo de Avisos & Notificações: turn database seed script for announcement permissions and assign them to the Admin role to JS file.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "turn database seed script for announcement permissions and assign them to the Admin role to JS file",
+        "commitHash": "e4c579d"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "unit tests",
+        "description": "Atualização no módulo de Geral & Usabilidade: unit tests.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "unit tests",
+        "commitHash": "b1a7220"
+      }
+    ],
+    "totalChanges": 32
+  },
+  {
+    "version": "1.3.0",
+    "date": "2026-05-07",
+    "title": "vpn guard on admin endpoints e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Criptografia & Segurança, Geral & Usabilidade, Clientes.",
+    "highlights": [
+      "vpn guard on admin endpoints"
+    ],
+    "items": [
+      {
+        "module": "Criptografia & Segurança",
+        "type": "security",
+        "title": "Inclusão de rotate password to client",
+        "description": "Atualização no módulo de Criptografia & Segurança: add rotate password to client.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add rotate password to client",
+        "commitHash": "17b09be"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "vpn guard on admin endpoints",
+        "description": "Atualização no módulo de Geral & Usabilidade: vpn guard on admin endpoints.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "vpn guard on admin endpoints",
+        "commitHash": "3d71064"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "action btns on admin panel",
+        "description": "Atualização no módulo de Geral & Usabilidade: action btns on admin panel.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "action btns on admin panel",
+        "commitHash": "f9c4d0d"
+      },
+      {
+        "module": "Clientes",
+        "type": "fix",
+        "title": "auto logout to clients in admin",
+        "description": "Atualização no módulo de Clientes: auto logout to clients in admin.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "auto logout to clients in admin",
+        "commitHash": "d05ed8b"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "close buttons on modals",
+        "description": "Atualização no módulo de Geral & Usabilidade: close buttons on modals.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "close buttons on modals",
+        "commitHash": "77a97bf"
+      },
+      {
+        "module": "Clientes",
+        "type": "fix",
+        "title": "icon on client panel",
+        "description": "Atualização no módulo de Clientes: icon on client panel.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "icon on client panel",
+        "commitHash": "797c134"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "permissions block on creation role",
+        "description": "Atualização no módulo de Geral & Usabilidade: permissions block on creation role.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "permissions block on creation role",
+        "commitHash": "528c2bd"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "Remoção de vpn guard && add docs",
+        "description": "Atualização no módulo de Geral & Usabilidade: remove vpn guard && add docs.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "remove vpn guard && add docs",
+        "commitHash": "9ec30c1"
+      },
+      {
+        "module": "Criptografia & Segurança",
+        "type": "security",
+        "title": "setup password",
+        "description": "Atualização no módulo de Criptografia & Segurança: setup password.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "setup password",
+        "commitHash": "4e85a08"
+      }
+    ],
+    "totalChanges": 9
+  },
+  {
+    "version": "1.2.6",
+    "date": "2026-05-06",
+    "title": "invite management e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral & Usabilidade, Infraestrutura & Resiliência, Catálogo de Produtos.",
+    "highlights": [
+      "invite management",
+      "Proteção contra sobrecarga de requisições (Rate Limiting)"
+    ],
+    "items": [
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "invite management",
+        "description": "Atualização no módulo de Geral & Usabilidade: invite management.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "invite management",
+        "commitHash": "0bbcf01"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "Proteção contra sobrecarga de requisições (Rate Limiting)",
+        "description": "Controle de taxa de requisições por usuário para evitar lentidão e garantir justiça na distribuição de recursos.",
+        "impact": "Estabilidade constante e alta disponibilidade da API para todos os clientes.",
+        "originalCommit": "rate limiting by user",
+        "commitHash": "d87477d"
+      },
+      {
+        "module": "Infraestrutura & Resiliência",
+        "type": "fix",
+        "title": "prisma seeding",
+        "description": "Atualização no módulo de Infraestrutura & Resiliência: prisma seeding.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "prisma seeding",
+        "commitHash": "0ffc6f6"
+      },
+      {
+        "module": "Catálogo de Produtos",
+        "type": "fix",
+        "title": "product GET fields",
+        "description": "Atualização no módulo de Catálogo de Produtos: product GET fields.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "product GET fields",
+        "commitHash": "bbf7c9a"
+      }
+    ],
+    "totalChanges": 4
+  },
+  {
+    "version": "1.2.5",
+    "date": "2026-05-06",
+    "title": "invite management e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral & Usabilidade.",
+    "highlights": [
+      "invite management"
+    ],
+    "items": [
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "invite management",
+        "description": "Atualização no módulo de Geral & Usabilidade: invite management.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "invite management",
+        "commitHash": "0bbcf01"
+      }
+    ],
+    "totalChanges": 1
+  },
+  {
+    "version": "1.2.4",
+    "date": "2026-05-06",
+    "title": "Inclusão de responsible contact to request form e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral & Usabilidade.",
+    "highlights": [
+      "Inclusão de responsible contact to request form"
+    ],
+    "items": [
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "Inclusão de responsible contact to request form",
+        "description": "Atualização no módulo de Geral & Usabilidade: add responsible contact to request form.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add responsible contact to request form",
+        "commitHash": "ac7e741"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "nest warnings",
+        "description": "Atualização no módulo de Geral & Usabilidade: nest warnings.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "nest warnings",
+        "commitHash": "333b805"
+      }
+    ],
+    "totalChanges": 2
+  },
+  {
+    "version": "1.2.3",
+    "date": "2026-05-05",
+    "title": "client confirmation email by request e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Clientes, Geral & Usabilidade.",
+    "highlights": [
+      "client confirmation email by request",
+      "rejection reason"
+    ],
+    "items": [
+      {
+        "module": "Clientes",
+        "type": "feature",
+        "title": "client confirmation email by request",
+        "description": "Atualização no módulo de Clientes: client confirmation email by request.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "client confirmation email by request",
+        "commitHash": "e82e9a5"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "rejection reason",
+        "description": "Atualização no módulo de Geral & Usabilidade: rejection reason.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "rejection reason",
+        "commitHash": "210830f"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "`Solicitações` information on card",
+        "description": "Atualização no módulo de Geral & Usabilidade: `Solicitações` information on card.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "`Solicitações` information on card",
+        "commitHash": "befca0d"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "admin panel",
+        "description": "Atualização no módulo de Geral & Usabilidade: admin panel.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "admin panel",
+        "commitHash": "00098a1"
+      }
+    ],
+    "totalChanges": 4
+  },
+  {
+    "version": "1.2.2",
+    "date": "2026-05-05",
+    "title": "users && roles && permission && dbCredentials monitoring e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral & Usabilidade.",
+    "highlights": [
+      "users && roles && permission && dbCredentials monitoring"
+    ],
+    "items": [
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "users && roles && permission && dbCredentials monitoring",
+        "description": "Atualização no módulo de Geral & Usabilidade: users && roles && permission && dbCredentials monitoring.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "users && roles && permission && dbCredentials monitoring",
+        "commitHash": "070926c"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "no show `Solicitações` tab without permission",
+        "description": "Atualização no módulo de Geral & Usabilidade: no show `Solicitações` tab without permission.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "no show `Solicitações` tab without permission",
+        "commitHash": "4cf7d82"
+      }
+    ],
+    "totalChanges": 2
+  },
+  {
+    "version": "1.2.1",
+    "date": "2026-05-04",
+    "title": "Inclusão de support icon on Swagger e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral & Usabilidade, Clientes.",
+    "highlights": [
+      "Inclusão de support icon on Swagger",
+      "mail send for client and support"
+    ],
+    "items": [
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "Inclusão de support icon on Swagger",
+        "description": "Atualização no módulo de Geral & Usabilidade: add support icon on Swagger.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add support icon on Swagger",
+        "commitHash": "7270c5f"
+      },
+      {
+        "module": "Clientes",
+        "type": "feature",
+        "title": "mail send for client and support",
+        "description": "Atualização no módulo de Clientes: mail send for client and support.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "mail send for client and support",
+        "commitHash": "a67efaf"
+      },
+      {
+        "module": "Clientes",
+        "type": "feature",
+        "title": "mail send for client and support",
+        "description": "Atualização no módulo de Clientes: mail send for client and support.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "mail send for client and support",
+        "commitHash": "a12ca5c"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "malformed sql queries",
+        "description": "Atualização no módulo de Geral & Usabilidade: malformed sql queries.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "malformed sql queries",
+        "commitHash": "9f2036b"
+      }
+    ],
+    "totalChanges": 4
+  },
+  {
+    "version": "1.2.0",
+    "date": "2026-05-04",
+    "title": "client request form e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Clientes.",
+    "highlights": [
+      "client request form"
+    ],
+    "items": [
+      {
+        "module": "Clientes",
+        "type": "feature",
+        "title": "client request form",
+        "description": "Atualização no módulo de Clientes: client request form.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "client request form",
+        "commitHash": "fd94c05"
+      },
+      {
+        "module": "Clientes",
+        "type": "fix",
+        "title": "client request form",
+        "description": "Atualização no módulo de Clientes: client request form.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "client request form",
+        "commitHash": "0d47a3e"
+      }
+    ],
+    "totalChanges": 2
+  },
+  {
+    "version": "1.1.4",
+    "date": "2026-05-04",
+    "title": "Correções de estabilidade e aprimoramentos",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Infraestrutura & Resiliência.",
+    "highlights": [
+      "firebird connection pool"
+    ],
+    "items": [
+      {
+        "module": "Infraestrutura & Resiliência",
+        "type": "fix",
+        "title": "firebird connection pool",
+        "description": "Atualização no módulo de Infraestrutura & Resiliência: firebird connection pool.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "firebird connection pool",
+        "commitHash": "0edb57e"
+      }
+    ],
+    "totalChanges": 1
+  },
+  {
+    "version": "1.1.3",
+    "date": "2026-04-27",
+    "title": "block many 404 unauthenticated requests e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Autenticação & Acesso, Monitoramento & Saúde, Geral & Usabilidade.",
+    "highlights": [
+      "block many 404 unauthenticated requests",
+      "implements `/health` endpoint"
+    ],
+    "items": [
+      {
+        "module": "Autenticação & Acesso",
+        "type": "feature",
+        "title": "block many 404 unauthenticated requests",
+        "description": "Atualização no módulo de Autenticação & Acesso: block many 404 unauthenticated requests.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "block many 404 unauthenticated requests",
+        "commitHash": "1382744"
+      },
+      {
+        "module": "Monitoramento & Saúde",
+        "type": "feature",
+        "title": "implements `/health` endpoint",
+        "description": "Atualização no módulo de Monitoramento & Saúde: implements `/health` endpoint.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "implements `/health` endpoint",
+        "commitHash": "fd3a7b0"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "no send `4xx` errors for issues on sentry",
+        "description": "Atualização no módulo de Geral & Usabilidade: no send `4xx` errors for issues on sentry.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "no send `4xx` errors for issues on sentry",
+        "commitHash": "254272d"
+      },
+      {
+        "module": "Monitoramento & Saúde",
+        "type": "fix",
+        "title": "Remoção de health endpoint to logs",
+        "description": "Atualização no módulo de Monitoramento & Saúde: remove health endpoint to logs.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "remove health endpoint to logs",
+        "commitHash": "4bd8faa"
+      }
+    ],
+    "totalChanges": 4
+  },
+  {
+    "version": "1.1.2",
+    "date": "2026-04-23",
+    "title": "Inclusão de two decimal places on `REC_NUMERO` field e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Contas a Receber, Autenticação & Acesso.",
+    "highlights": [
+      "Inclusão de two decimal places on `REC_NUMERO` field"
+    ],
+    "items": [
+      {
+        "module": "Contas a Receber",
+        "type": "feature",
+        "title": "Inclusão de two decimal places on `REC_NUMERO` field",
+        "description": "Atualização no módulo de Contas a Receber: add two decimal places on `REC_NUMERO` field.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add two decimal places on `REC_NUMERO` field",
+        "commitHash": "666dfd4"
+      },
+      {
+        "module": "Contas a Receber",
+        "type": "fix",
+        "title": "`account-receivable.service.ts`",
+        "description": "Atualização no módulo de Contas a Receber: `account-receivable.service.ts`.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "`account-receivable.service.ts`",
+        "commitHash": "e3c1a23"
+      },
+      {
+        "module": "Autenticação & Acesso",
+        "type": "fix",
+        "title": "role returning on login endpoint",
+        "description": "Atualização no módulo de Autenticação & Acesso: role returning on login endpoint.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "role returning on login endpoint",
+        "commitHash": "f657d45"
+      }
+    ],
+    "totalChanges": 3
+  },
+  {
+    "version": "1.1.1",
+    "date": "2026-04-17",
+    "title": "implements `GET /account-receivable` e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Contas a Receber, Geral & Usabilidade.",
+    "highlights": [
+      "implements `GET /account-receivable`"
+    ],
+    "items": [
+      {
+        "module": "Contas a Receber",
+        "type": "feature",
+        "title": "implements `GET /account-receivable`",
+        "description": "Atualização no módulo de Contas a Receber: implements `GET /account-receivable`.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "implements `GET /account-receivable`",
+        "commitHash": "22f440c"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "`node-firebird` crash bug",
+        "description": "Atualização no módulo de Geral & Usabilidade: `node-firebird` crash bug.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "`node-firebird` crash bug",
+        "commitHash": "99b0692"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "test suites to use new `tenant-connection`",
+        "description": "Atualização no módulo de Geral & Usabilidade: test suites to use new `tenant-connection`.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "test suites to use new `tenant-connection`",
+        "commitHash": "31abc5d"
+      }
+    ],
+    "totalChanges": 3
+  },
+  {
+    "version": "1.1.0",
+    "date": "2026-04-16",
+    "title": "implements `GET /account-receivable` e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Contas a Receber.",
+    "highlights": [
+      "implements `GET /account-receivable`"
+    ],
+    "items": [
+      {
+        "module": "Contas a Receber",
+        "type": "feature",
+        "title": "implements `GET /account-receivable`",
+        "description": "Atualização no módulo de Contas a Receber: implements `GET /account-receivable`.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "implements `GET /account-receivable`",
+        "commitHash": "22f440c"
+      }
+    ],
+    "totalChanges": 1
+  },
+  {
+    "version": "1.0.0",
+    "date": "2026-04-10",
+    "title": "Lançamento Inicial da InfoBrasil API",
+    "summary": "Disponibilização da primeira versão da API com integração para produtos, pedidos, clientes e autenticação segura.",
+    "highlights": [
+      "Primeira versão estável da plataforma de integração"
+    ],
+    "items": [],
+    "totalChanges": 0
+  },
+  {
+    "version": "0.0.2",
+    "date": "2026-04-10",
+    "title": "Lançamento Inicial da InfoBrasil API",
+    "summary": "Disponibilização da primeira versão da API com integração para produtos, pedidos, clientes e autenticação segura.",
+    "highlights": [
+      "Primeira versão estável da plataforma de integração"
+    ],
+    "items": [
+      {
+        "module": "Catálogo de Produtos",
+        "type": "feature",
+        "title": "`GET /products/:id` && `GET /products/ean/:ean`",
+        "description": "Atualização no módulo de Catálogo de Produtos: `GET /products/:id` && `GET /products/ean/:ean`.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "`GET /products/:id` && `GET /products/ean/:ean`",
+        "commitHash": "79795da"
+      },
+      {
+        "module": "Catálogo de Produtos",
+        "type": "feature",
+        "title": "Inclusão de `minStock` query param on `GET /products`",
+        "description": "Atualização no módulo de Catálogo de Produtos: add `minStock` query param on `GET /products`.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add `minStock` query param on `GET /products`",
+        "commitHash": "4fb33fa"
+      },
+      {
+        "module": "Catálogo de Produtos",
+        "type": "feature",
+        "title": "Inclusão de `search` to `GET /products`",
+        "description": "Atualização no módulo de Catálogo de Produtos: add `search` to `GET /products`.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add `search` to `GET /products`",
+        "commitHash": "a70d797"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "Inclusão de `store_id` on user",
+        "description": "Atualização no módulo de Geral & Usabilidade: add `store_id` on user.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add `store_id` on user",
+        "commitHash": "9dda722"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "Inclusão de permission guard",
+        "description": "Atualização no módulo de Geral & Usabilidade: add permission guard.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add permission guard",
+        "commitHash": "b75f164"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "Inclusão de permission guard on existing controllers",
+        "description": "Atualização no módulo de Geral & Usabilidade: add permission guard on existing controllers.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add permission guard on existing controllers",
+        "commitHash": "7c8b504"
+      },
+      {
+        "module": "Catálogo de Produtos",
+        "type": "feature",
+        "title": "Inclusão de stock from products",
+        "description": "Atualização no módulo de Catálogo de Produtos: add stock from products.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add stock from products",
+        "commitHash": "36e47cb"
+      },
+      {
+        "module": "Criptografia & Segurança",
+        "type": "security",
+        "title": "Proteção criptográfica de credenciais de banco",
+        "description": "Implementado utilitário para cifrar senhas e credenciais dos bancos de dados dos clientes na camada de persistência.",
+        "impact": "Máxima segurança e conformidade com boas práticas de proteção de dados sensíveis.",
+        "originalCommit": "crypto bd passwords",
+        "commitHash": "474c404"
+      },
+      {
+        "module": "Autenticação & Acesso",
+        "type": "feature",
+        "title": "dynamic store_id by JWT",
+        "description": "Atualização no módulo de Autenticação & Acesso: dynamic store_id by JWT.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "dynamic store_id by JWT",
+        "commitHash": "b8ca9a7"
+      },
+      {
+        "module": "Autenticação & Acesso",
+        "type": "feature",
+        "title": "endpoint `post /auth/login`",
+        "description": "Atualização no módulo de Autenticação & Acesso: endpoint `post /auth/login`.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "endpoint `post /auth/login`",
+        "commitHash": "f63961b"
+      },
+      {
+        "module": "Pedidos & Vendas",
+        "type": "feature",
+        "title": "Operações de Vendas & Pedidos",
+        "description": "Aprimoramento nos fluxos de consulta e criação de pedidos de venda com suporte a novos campos e formas de pagamento.",
+        "impact": "Integração de vendas rápida, robusta e com validações completas.",
+        "originalCommit": "endpoint `POST /orders` - without financial",
+        "commitHash": "0a65444"
+      },
+      {
+        "module": "Catálogo de Produtos",
+        "type": "feature",
+        "title": "filter products by brand && group",
+        "description": "Atualização no módulo de Catálogo de Produtos: filter products by brand && group.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "filter products by brand && group",
+        "commitHash": "7986fac"
+      },
+      {
+        "module": "Pedidos & Vendas",
+        "type": "feature",
+        "title": "Operações de Vendas & Pedidos",
+        "description": "Aprimoramento nos fluxos de consulta e criação de pedidos de venda com suporte a novos campos e formas de pagamento.",
+        "impact": "Integração de vendas rápida, robusta e com validações completas.",
+        "originalCommit": "generate receipt on `POST /orders`",
+        "commitHash": "262ccbe"
+      },
+      {
+        "module": "Catálogo de Produtos",
+        "type": "feature",
+        "title": "implements `api/v1/products`",
+        "description": "Atualização no módulo de Catálogo de Produtos: implements `api/v1/products`.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "implements `api/v1/products`",
+        "commitHash": "0687a9a"
+      },
+      {
+        "module": "Pedidos & Vendas",
+        "type": "feature",
+        "title": "Operações de Vendas & Pedidos",
+        "description": "Aprimoramento nos fluxos de consulta e criação de pedidos de venda com suporte a novos campos e formas de pagamento.",
+        "impact": "Integração de vendas rápida, robusta e com validações completas.",
+        "originalCommit": "implements `GET /orders/:id`",
+        "commitHash": "d74228c"
+      },
+      {
+        "module": "Pedidos & Vendas",
+        "type": "feature",
+        "title": "Operações de Vendas & Pedidos",
+        "description": "Aprimoramento nos fluxos de consulta e criação de pedidos de venda com suporte a novos campos e formas de pagamento.",
+        "impact": "Integração de vendas rápida, robusta e com validações completas.",
+        "originalCommit": "implements `GET /orders`",
+        "commitHash": "48735df"
+      },
+      {
+        "module": "Contas a Receber",
+        "type": "feature",
+        "title": "implements `GET /payment-methods`",
+        "description": "Atualização no módulo de Contas a Receber: implements `GET /payment-methods`.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "implements `GET /payment-methods`",
+        "commitHash": "6be540d"
+      },
+      {
+        "module": "Catálogo de Produtos",
+        "type": "feature",
+        "title": "implements `GET /products/brands`",
+        "description": "Atualização no módulo de Catálogo de Produtos: implements `GET /products/brands`.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "implements `GET /products/brands`",
+        "commitHash": "1b7da72"
+      },
+      {
+        "module": "Catálogo de Produtos",
+        "type": "feature",
+        "title": "implements `GET /products/groups`",
+        "description": "Atualização no módulo de Catálogo de Produtos: implements `GET /products/groups`.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "implements `GET /products/groups`",
+        "commitHash": "59719cc"
+      },
+      {
+        "module": "Pedidos & Vendas",
+        "type": "feature",
+        "title": "Operações de Vendas & Pedidos",
+        "description": "Aprimoramento nos fluxos de consulta e criação de pedidos de venda com suporte a novos campos e formas de pagamento.",
+        "impact": "Integração de vendas rápida, robusta e com validações completas.",
+        "originalCommit": "implements `POST /orders/:id/receipt`",
+        "commitHash": "ae3d921"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "implements `tenant connection module`",
+        "description": "Atualização no módulo de Geral & Usabilidade: implements `tenant connection module`.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "implements `tenant connection module`",
+        "commitHash": "29f7241"
+      },
+      {
+        "module": "Autenticação & Acesso",
+        "type": "feature",
+        "title": "implements endpoint `auth/refresh`",
+        "description": "Atualização no módulo de Autenticação & Acesso: implements endpoint `auth/refresh`.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "implements endpoint `auth/refresh`",
+        "commitHash": "3263be7"
+      },
+      {
+        "module": "Catálogo de Produtos",
+        "type": "feature",
+        "title": "improve `GET /products` by query params and specify columns",
+        "description": "Atualização no módulo de Catálogo de Produtos: improve `GET /products` by query params and specify columns.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "improve `GET /products` by query params and specify columns",
+        "commitHash": "9cd22fa"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "Inclusão de `storeId` on all functions",
+        "description": "Atualização no módulo de Geral & Usabilidade: add `storeId` on all functions.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add `storeId` on all functions",
+        "commitHash": "e5c3147"
+      },
+      {
+        "module": "Pedidos & Vendas",
+        "type": "fix",
+        "title": "Operações de Vendas & Pedidos",
+        "description": "Aprimoramento nos fluxos de consulta e criação de pedidos de venda com suporte a novos campos e formas de pagamento.",
+        "impact": "Integração de vendas rápida, robusta e com validações completas.",
+        "originalCommit": "adjust `POST /orders` body dto",
+        "commitHash": "763834d"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "Ajuste em total value",
+        "description": "Atualização no módulo de Geral & Usabilidade: adjust total value.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "adjust total value",
+        "commitHash": "bee65dd"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "code to assert all unit tests",
+        "description": "Atualização no módulo de Geral & Usabilidade: code to assert all unit tests.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "code to assert all unit tests",
+        "commitHash": "4b8ab89"
+      },
+      {
+        "module": "Catálogo de Produtos",
+        "type": "fix",
+        "title": "product group adjusts to assert tests",
+        "description": "Atualização no módulo de Catálogo de Produtos: product group adjusts to assert tests.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "product group adjusts to assert tests",
+        "commitHash": "481ce51"
+      },
+      {
+        "module": "Catálogo de Produtos",
+        "type": "fix",
+        "title": "product params",
+        "description": "Atualização no módulo de Catálogo de Produtos: product params.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "product params",
+        "commitHash": "955a2c9"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "swagger server definition",
+        "description": "Atualização no módulo de Geral & Usabilidade: swagger server definition.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "swagger server definition",
+        "commitHash": "1c62988"
+      },
+      {
+        "module": "Monitoramento & Saúde",
+        "type": "fix",
+        "title": "verify user status on login",
+        "description": "Atualização no módulo de Monitoramento & Saúde: verify user status on login.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "verify user status on login",
+        "commitHash": "87dd22d"
+      }
+    ],
+    "totalChanges": 31
+  }
+]

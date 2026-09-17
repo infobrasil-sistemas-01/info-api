@@ -40,6 +40,7 @@ import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { CallCenterModule } from './modules/call-center/call-center.module';
 import { PurchaseModule } from './modules/purchase/purchase.module';
 import { FiscalEntryModule } from './modules/fiscal-entry/fiscal-entry.module';
+import { ChangelogModule } from './modules/changelog/changelog.module';
 
 import { AppController } from './app.controller';
 
@@ -81,6 +82,7 @@ import { AppController } from './app.controller';
     ScheduleModule.forRoot(),
     StatusModule,
     DashboardModule,
+    ChangelogModule,
   ],
   controllers: [AppController],
   providers: [

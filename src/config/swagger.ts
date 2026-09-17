@@ -17,7 +17,7 @@ export function getSwaggerConfigBuilder(
       - Basic Auth para login e obtenção de token JWT<br>
       - JWT para acesso aos endpoints protegidos.
       <br><br>
-      Para verificar a disponibilidade da API acesse nossa <a href='/status'>Página de Status</a>
+      Para verificar a disponibilidade da API acesse nossa <a href='/status'>Página de Status</a> | Para novidades e histórico de versões acesse o <a href='/changelog'>Changelog Oficial</a>
       <br><br>
       A API é organizada em módulos, cada um responsável por uma área específica do sistema, como produtos, clientes, vendas, etc.`,
     )
@@ -84,6 +84,7 @@ export function getSwaggerConfigBuilder(
     // --- Monitoramento & Saúde ---
     .addTag('Status', 'Endpoints de monitoramento de instâncias e telemetria')
     .addTag('Health', 'Endpoints de verificação de integridade dos serviços')
+    .addTag('Changelog', 'Endpoints e histórico de versões da API')
 
     // --- Gestão do Plano ---
     .addTag(
@@ -155,11 +156,34 @@ export function setupSwagger(app: INestApplication) {
         if (topbar && !document.getElementById('custom-admin-link')) {
           clearInterval(check);
           
-          // 1. Botão Admin (Existente)
+          // 1. Botão Changelog (Novo)
+          var cl = document.createElement('a');
+          cl.id = 'custom-changelog-link';
+          cl.href = '/changelog';
+          cl.title = 'Notas de Atualização (Changelog)';
+          cl.style.marginLeft = 'auto';
+          cl.style.marginRight = '8px';
+          cl.style.display = 'flex';
+          cl.style.alignItems = 'center';
+          cl.style.justifyContent = 'center';
+          cl.style.alignSelf = 'center';
+          cl.style.textDecoration = 'none';
+          cl.style.flex = '0 0 40px';
+          cl.style.width = '40px';
+          cl.style.height = '40px';
+          cl.style.borderRadius = '50%';
+          cl.style.background = 'rgba(255,255,255,0.1)';
+          cl.style.transition = 'background 0.3s';
+          cl.onmouseover = function() { this.style.background = 'rgba(99,102,241,0.3)'; };
+          cl.onmouseout = function() { this.style.background = 'rgba(255,255,255,0.1)'; };
+          cl.innerHTML = '<i class="material-icons" style="color: white; font-size: 22px;">history</i>';
+          topbar.appendChild(cl);
+
+          // 2. Botão Admin (Existente)
           var a = document.createElement('a');
           a.id = 'custom-admin-link';
           a.href = '/integration/admin';
-          a.style.marginLeft = 'auto';
+          a.title = 'Painel Administrativo';
           a.style.display = 'flex';
           a.style.alignItems = 'center';
           a.style.justifyContent = 'center';
