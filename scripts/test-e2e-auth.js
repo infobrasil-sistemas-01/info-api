@@ -103,14 +103,65 @@ async function main() {
       : JSON.stringify(productsRes.body, null, 2),
   );
 
-  console.log('\n3. Testando verificação de status do operador no INFO-API (/auth/operator-status/1)...');
+  console.log('\n3. Testando GET /api/v1/clients no INFO-API...');
+  const clientsRes = await get('http://localhost:3339/api/v1/clients?pageSize=2', {
+    Authorization: `Bearer ${accessToken}`,
+  });
+  console.log('Clients Status:', clientsRes.statusCode);
+  console.log(
+    'Clients Response:',
+    Array.isArray(clientsRes.body)
+      ? `Retornou ${clientsRes.body.length} clientes.`
+      : JSON.stringify(clientsRes.body, null, 2),
+  );
+
+  console.log('\n4. Testando POST /api/v1/orders no INFO-API...');
+  const testOrderId = Math.floor(Date.now() % 10000000);
+  const orderPayload = {
+    id: testOrderId,
+    client_id: 1,
+    date: '2026-09-18',
+    hour: '16:00',
+    payment_method: 'DINHEIRO',
+    payment_date: '2026-09-18',
+    has_payment: true,
+    has_invoice: false,
+    products_sold: [
+      {
+        id: Array.isArray(productsRes.body) && productsRes.body[0]?.id ? productsRes.body[0].id : 1,
+        quantity: 1,
+        unitary_value: 10,
+        total_value: 10,
+      },
+    ],
+  };
+
+  const createOrderRes = await post('http://localhost:3339/api/v1/orders', orderPayload, {
+    Authorization: `Bearer ${accessToken}`,
+  });
+  console.log('Create Order Status:', createOrderRes.statusCode);
+  console.log('Create Order Response:', JSON.stringify(createOrderRes.body, null, 2));
+
+  console.log('\n5. Testando GET /api/v1/orders no INFO-API...');
+  const ordersRes = await get('http://localhost:3339/api/v1/orders?pageSize=2', {
+    Authorization: `Bearer ${accessToken}`,
+  });
+  console.log('Get Orders Status:', ordersRes.statusCode);
+  console.log(
+    'Get Orders Response:',
+    Array.isArray(ordersRes.body)
+      ? `Retornou ${ordersRes.body.length} pedidos.`
+      : JSON.stringify(ordersRes.body, null, 2),
+  );
+
+  console.log('\n6. Testando verificação de status do operador no INFO-API (/auth/operator-status/1)...');
   const statusRes = await get('http://localhost:3339/api/v1/auth/operator-status/1', {
     Authorization: `Bearer ${accessToken}`,
   });
   console.log('Operator Status Response Status:', statusRes.statusCode);
   console.log('Operator Status Body:', JSON.stringify(statusRes.body, null, 2));
 
-  console.log('\n4. Testando renovação de Token no STS com Refresh Token...');
+  console.log('\n7. Testando renovação de Token no STS com Refresh Token...');
   const refreshRes = await post('http://localhost:3001/auth/refresh', {
     refreshToken,
   });
