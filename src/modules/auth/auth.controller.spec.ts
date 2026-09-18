@@ -4,7 +4,10 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { AUTH_CONFIG } from 'src/config/auth.config';
 import { RefreshDto } from './dto/refresh.dto';
+import { OperatorVerifyDto } from './dto/operator-verify.dto';
 import { PermissionResolver } from 'src/infra/rbac/permission-resolver.service';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { TenantAuthGuard } from './guards/tenant-auth.guard';
 
 describe('AuthController', () => {
   let controller: AuthController;
@@ -13,6 +16,8 @@ describe('AuthController', () => {
   const mockAuthService = {
     login: jest.fn(),
     refresh: jest.fn(),
+    verifyOperator: jest.fn(),
+    checkOperatorStatus: jest.fn(),
   };
 
   const mockPermissionResolver = {
@@ -32,7 +37,12 @@ describe('AuthController', () => {
         { provide: AUTH_CONFIG, useValue: mockAuthConfig },
         { provide: PermissionResolver, useValue: mockPermissionResolver },
       ],
-    }).compile();
+    })
+      .overrideGuard(JwtAuthGuard)
+      .useValue({ canActivate: () => true })
+      .overrideGuard(TenantAuthGuard)
+      .useValue({ canActivate: () => true })
+      .compile();
 
     controller = module.get<AuthController>(AuthController);
     authService = module.get(AuthService);
@@ -114,6 +124,84 @@ describe('AuthController', () => {
 
       expect(authService.refresh).toHaveBeenCalledWith('refresh-token-value');
       expect(result).toEqual({ access_token: 'new-access-token' });
+    });
+  });
+
+  describe('operatorVerify', () => {
+    it('should call authService.verifyOperator with credentialsId and body from req', async () => {
+      const dto = new OperatorVerifyDto();
+      dto.username = 'OPERADOR1';
+      dto.password = 'pass123';
+
+      const req = {
+        authContext: {
+          credentialsId: 'cred-123',
+        },
+      } as any;
+
+      mockAuthService.verifyOperator.mockResolvedValue({
+        valid: true,
+        usuCodigo: 10,
+        funCodigo: 25,
+        storeId: 1,
+      });
+
+      const result = await controller.operatorVerify(req, dto);
+
+      expect(authService.verifyOperator).toHaveBeenCalledWith('cred-123', dto);
+      expect(result).toEqual({
+        valid: true,
+        usuCodigo: 10,
+        funCodigo: 25,
+        storeId: 1,
+      });
+    });
+
+    it('should throw UnauthorizedException if credentialsId is missing in authContext', async () => {
+      const dto = new OperatorVerifyDto();
+      dto.username = 'OPERADOR1';
+      dto.password = 'pass123';
+
+      const req = {
+        authContext: {},
+      } as any;
+
+      await expect(controller.operatorVerify(req, dto)).rejects.toThrow(
+        UnauthorizedException,
+      );
+    });
+  });
+
+  describe('operatorStatus', () => {
+    it('should call authService.checkOperatorStatus with credentialsId and usuCodigo', async () => {
+      const req = {
+        authContext: {
+          credentialsId: 'cred-123',
+        },
+      } as any;
+
+      mockAuthService.checkOperatorStatus.mockResolvedValue({
+        active: true,
+        storeId: 2,
+      });
+
+      const result = await controller.operatorStatus(req, 10);
+
+      expect(authService.checkOperatorStatus).toHaveBeenCalledWith(
+        'cred-123',
+        10,
+      );
+      expect(result).toEqual({ active: true, storeId: 2 });
+    });
+
+    it('should throw UnauthorizedException if credentialsId is missing in authContext', async () => {
+      const req = {
+        authContext: {},
+      } as any;
+
+      await expect(controller.operatorStatus(req, 10)).rejects.toThrow(
+        UnauthorizedException,
+      );
     });
   });
 });

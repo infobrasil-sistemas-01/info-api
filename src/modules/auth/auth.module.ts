@@ -5,13 +5,17 @@ import { EnvService } from 'src/config/env/env.service';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { JwtH2mStrategy } from './strategies/jwt-h2m.strategy';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { TenantAuthGuard } from './guards/tenant-auth.guard';
 import { AUTH_CONFIG, buildAuthConfig } from 'src/config/auth.config';
 import { InfraRegistryModule } from 'src/infra/prisma/infra-registry.module';
+import { TenantConnectionModule } from 'src/infra/database/tenant-connection.module';
 
 @Module({
   imports: [
     InfraRegistryModule,
+    TenantConnectionModule,
     JwtModule.registerAsync({
       inject: [EnvService],
       useFactory: (env: EnvService) => ({
@@ -25,13 +29,15 @@ import { InfraRegistryModule } from 'src/infra/prisma/infra-registry.module';
   providers: [
     AuthService,
     JwtStrategy,
+    JwtH2mStrategy,
     JwtAuthGuard,
+    TenantAuthGuard,
     {
       provide: AUTH_CONFIG,
       inject: [EnvService],
       useFactory: buildAuthConfig,
     },
   ],
-  exports: [JwtModule, JwtAuthGuard, AUTH_CONFIG],
+  exports: [JwtModule, JwtAuthGuard, TenantAuthGuard, AUTH_CONFIG],
 })
 export class AuthModule {}

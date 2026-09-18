@@ -60,15 +60,20 @@ export class ProductController {
     @Req() req: ReqWithAuthContext,
     @Query() query: GetProductsQueryDto,
   ) {
-    const credentialsId = req.authContext?.credentialsId;
+    const { credentialsId, storeId: tokenStoreId, type } = req.authContext || {};
 
     if (!credentialsId) {
       throw new Error('Credentials ID not found in token');
     }
 
+    const storeId =
+      type === 'H2M'
+        ? (tokenStoreId || 1)
+        : (query.storeId || tokenStoreId || 1);
+
     return this.productService.get(
       credentialsId,
-      query.storeId,
+      storeId,
       query.page,
       query.pageSize,
       query.priceTable,
@@ -112,16 +117,16 @@ export class ProductController {
     @Param('id', ParseIntPipe) id: number,
     @Query() query: GetProductQueryDto,
   ) {
-    const credentialsId = req.authContext?.credentialsId;
-    let storeId = query.storeId;
+    const { credentialsId, storeId: tokenStoreId, type } = req.authContext || {};
 
     if (!credentialsId) {
       throw new Error('Credentials ID not found in token');
     }
 
-    if (!storeId) {
-      storeId = req.authContext?.storeId;
-    }
+    const storeId =
+      type === 'H2M'
+        ? (tokenStoreId || 1)
+        : (query.storeId || tokenStoreId || 1);
 
     const product = await this.productService.getUnique(
       credentialsId,
@@ -170,16 +175,16 @@ export class ProductController {
     @Param('barcode') barcode: number,
     @Query() query: GetProductQueryDto,
   ) {
-    const credentialsId = req.authContext?.credentialsId;
-    let storeId = query.storeId;
+    const { credentialsId, storeId: tokenStoreId, type } = req.authContext || {};
 
     if (!credentialsId) {
       throw new Error('Credentials ID not found in token');
     }
 
-    if (!storeId) {
-      storeId = req.authContext?.storeId;
-    }
+    const storeId =
+      type === 'H2M'
+        ? (tokenStoreId || 1)
+        : (query.storeId || tokenStoreId || 1);
 
     const product = await this.productService.getUnique(
       credentialsId,

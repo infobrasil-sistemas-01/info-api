@@ -6,9 +6,12 @@ import { JwtService } from '@nestjs/jwt';
 import { EnvService } from 'src/config/env/env.service';
 import { AUTH_CONFIG } from 'src/config/auth.config';
 import * as argon2 from 'argon2';
+import * as bcrypt from 'bcrypt';
 import { PermissionResolver } from 'src/infra/rbac/permission-resolver.service';
+import { TenantConnectionService } from 'src/infra/database/tenant-connection.service';
 
 jest.mock('argon2');
+jest.mock('bcrypt');
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -17,6 +20,8 @@ describe('AuthService', () => {
   let mockEnv: any;
   let mockAuthConfig: any;
   let mockPermissionResolver: any;
+  let mockTenantConnectionService: any;
+  let mockConnection: any;
 
   const mockUser = {
     id: '1',
@@ -53,6 +58,15 @@ describe('AuthService', () => {
       resolve: jest.fn(),
     };
 
+    mockConnection = {
+      query: jest.fn(),
+    };
+
+    mockTenantConnectionService = {
+      getConnection: jest.fn().mockResolvedValue(mockConnection),
+      releaseConnection: jest.fn(),
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AuthService,
@@ -61,6 +75,7 @@ describe('AuthService', () => {
         { provide: EnvService, useValue: mockEnv },
         { provide: AUTH_CONFIG, useValue: mockAuthConfig },
         { provide: PermissionResolver, useValue: mockPermissionResolver },
+        { provide: TenantConnectionService, useValue: mockTenantConnectionService },
       ],
     }).compile();
 
@@ -212,6 +227,143 @@ describe('AuthService', () => {
 
       await expect(service.login(credentials, {})).rejects.toThrow(
         UnauthorizedException,
+      );
+    });
+  });
+
+  describe('verifyOperator', () => {
+    const validRow = {
+      USU_CODIGO: 10,
+      USU_APELIDO: 'OPERADOR1',
+      USU_SENHA_API: '$2a$10$hashedapipassword',
+      USU_SITUACAO: 'A',
+      LOJ_CODIGO: 2,
+      FUN_CODIGO: 25,
+      FUN_DATADEMISSAO: null,
+    };
+
+    it('should successfully verify valid operator and return info', async () => {
+      mockConnection.query.mockImplementation((_q: any, _p: any, callback: any) => {
+        callback(null, [validRow]);
+      });
+      (bcrypt.compare as jest.Mock).mockResolvedValue(true);
+
+      const result = await service.verifyOperator('cred-1', {
+        username: 'OPERADOR1',
+        password: 'password123',
+      });
+
+      expect(result).toEqual({
+        valid: true,
+        usuCodigo: 10,
+        funCodigo: 25,
+        storeId: 2,
+      });
+      expect(mockTenantConnectionService.releaseConnection).toHaveBeenCalledWith(
+        mockConnection,
+      );
+    });
+
+    it('should throw UnauthorizedException when credentialsId is empty', async () => {
+      await expect(
+        service.verifyOperator('', { username: 'OPERADOR1', password: '123' }),
+      ).rejects.toThrow(UnauthorizedException);
+    });
+
+    it('should throw UnauthorizedException when operator is not found', async () => {
+      mockConnection.query.mockImplementation((_q: any, _p: any, callback: any) => {
+        callback(null, []);
+      });
+
+      await expect(
+        service.verifyOperator('cred-1', {
+          username: 'UNKNOWN',
+          password: '123',
+        }),
+      ).rejects.toThrow(UnauthorizedException);
+      expect(mockTenantConnectionService.releaseConnection).toHaveBeenCalledWith(
+        mockConnection,
+      );
+    });
+
+    it('should throw UnauthorizedException when operator situation is not active', async () => {
+      mockConnection.query.mockImplementation((_q: any, _p: any, callback: any) => {
+        callback(null, [{ ...validRow, USU_SITUACAO: 'I' }]);
+      });
+
+      await expect(
+        service.verifyOperator('cred-1', {
+          username: 'OPERADOR1',
+          password: '123',
+        }),
+      ).rejects.toThrow(UnauthorizedException);
+      expect(mockTenantConnectionService.releaseConnection).toHaveBeenCalledWith(
+        mockConnection,
+      );
+    });
+
+    it('should throw UnauthorizedException when employee has FUN_DATADEMISSAO', async () => {
+      mockConnection.query.mockImplementation((_q: any, _p: any, callback: any) => {
+        callback(null, [{ ...validRow, FUN_DATADEMISSAO: '2026-01-01' }]);
+      });
+
+      await expect(
+        service.verifyOperator('cred-1', {
+          username: 'OPERADOR1',
+          password: '123',
+        }),
+      ).rejects.toThrow(UnauthorizedException);
+      expect(mockTenantConnectionService.releaseConnection).toHaveBeenCalledWith(
+        mockConnection,
+      );
+    });
+
+    it('should throw UnauthorizedException when USU_SENHA_API is missing', async () => {
+      mockConnection.query.mockImplementation((_q: any, _p: any, callback: any) => {
+        callback(null, [{ ...validRow, USU_SENHA_API: null }]);
+      });
+
+      await expect(
+        service.verifyOperator('cred-1', {
+          username: 'OPERADOR1',
+          password: '123',
+        }),
+      ).rejects.toThrow(UnauthorizedException);
+      expect(mockTenantConnectionService.releaseConnection).toHaveBeenCalledWith(
+        mockConnection,
+      );
+    });
+
+    it('should throw UnauthorizedException when password does not match', async () => {
+      mockConnection.query.mockImplementation((_q: any, _p: any, callback: any) => {
+        callback(null, [validRow]);
+      });
+      (bcrypt.compare as jest.Mock).mockResolvedValue(false);
+
+      await expect(
+        service.verifyOperator('cred-1', {
+          username: 'OPERADOR1',
+          password: 'wrongpassword',
+        }),
+      ).rejects.toThrow(UnauthorizedException);
+      expect(mockTenantConnectionService.releaseConnection).toHaveBeenCalledWith(
+        mockConnection,
+      );
+    });
+
+    it('should throw UnauthorizedException and release connection when query fails', async () => {
+      mockConnection.query.mockImplementation((_q: any, _p: any, callback: any) => {
+        callback(new Error('DB Connection Timeout'), null);
+      });
+
+      await expect(
+        service.verifyOperator('cred-1', {
+          username: 'OPERADOR1',
+          password: 'password123',
+        }),
+      ).rejects.toThrow(UnauthorizedException);
+      expect(mockTenantConnectionService.releaseConnection).toHaveBeenCalledWith(
+        mockConnection,
       );
     });
   });

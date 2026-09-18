@@ -37,6 +37,10 @@ export const envSchema = z.object({
   UPTIMEROBOT_APIKEY: z.string(),
   UPTIMEROBOT_MONITOR_ID: z.string(),
   UPTIMEROBOT_APIURL: z.string(),
+  // STS / H2M Authentication
+  STS_PUBLIC_KEY: z.string().optional(),
+  STS_ISSUER: z.string().default('infovendas-sts'),
+  STS_JWKS_URL: z.string().default('http://localhost:3001/.well-known/jwks.json'),
 });
 
 export type Env = z.infer<typeof envSchema>;

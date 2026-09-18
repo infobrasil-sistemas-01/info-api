@@ -14,6 +14,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
+      algorithms: ['HS256'],
       secretOrKey: env.get('JWT_SECRET'),
     });
   }
@@ -31,6 +32,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     if (!user) throw new UnauthorizedException('Usuário inválido');
     if (!user.status) throw new UnauthorizedException('Usuário bloqueado.');
 
-    return payload;
+    return { ...payload, type: 'M2M' };
   }
 }

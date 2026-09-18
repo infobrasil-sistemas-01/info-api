@@ -87,6 +87,33 @@ describe('ProductController', () => {
         undefined,
       );
     });
+
+    it('should enforce H2M token storeId, ignoring query.storeId', async () => {
+      const h2mReq = {
+        authContext: {
+          userId: 'h2m-user',
+          credentialsId: 'cred-1',
+          storeId: 5,
+          type: 'H2M',
+        },
+      } as any;
+
+      mockProductService.get.mockResolvedValue([]);
+
+      await controller.getProducts(h2mReq, { storeId: 99 });
+
+      expect(productService.get).toHaveBeenCalledWith(
+        'cred-1',
+        5,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+      );
+    });
   });
 
   describe('getProductById', () => {
@@ -113,6 +140,30 @@ describe('ProductController', () => {
 
       await expect(controller.getProductById(mockReq, 999, {})).rejects.toThrow(
         NotFoundException,
+      );
+    });
+
+    it('should enforce H2M token storeId for product by id, ignoring query.storeId', async () => {
+      const h2mReq = {
+        authContext: {
+          userId: 'h2m-user',
+          credentialsId: 'cred-1',
+          storeId: 7,
+          type: 'H2M',
+        },
+      } as any;
+
+      const mockProduct = { id: 123, name: 'Product 1' };
+      mockProductService.getUnique.mockResolvedValue(mockProduct);
+
+      await controller.getProductById(h2mReq, 123, { storeId: 99 });
+
+      expect(productService.getUnique).toHaveBeenCalledWith(
+        'cred-1',
+        7,
+        123,
+        undefined,
+        undefined,
       );
     });
   });

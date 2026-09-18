@@ -9,6 +9,8 @@ import {
   UnauthorizedException,
   Body,
   Get,
+  Param,
+  ParseIntPipe,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -26,7 +28,11 @@ import { RefreshDto } from './dto/refresh.dto';
 import { LoginResponseDto } from './dto/login-response.dto';
 import { UserProfileResponseDto } from './dto/user-profile-response.dto';
 import { RefreshResponseDto } from './dto/refresh-response.dto';
+import { OperatorVerifyDto } from './dto/operator-verify.dto';
+import { OperatorVerifyResponseDto } from './dto/operator-verify-response.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { TenantAuthGuard } from './guards/tenant-auth.guard';
+import type { ReqWithAuthContext } from './guards/jwt-auth.guard';
 import { CurrentUser } from './decorators/current-user.decorator';
 import type { JwtPayload } from './types/jwt-payload';
 import { PermissionResolver } from 'src/infra/rbac/permission-resolver.service';
@@ -111,6 +117,50 @@ export class AuthController {
     return {
       access_token: result.accessToken,
     };
+  }
+
+  @Post('operator-verify')
+  @HttpCode(200)
+  @UseGuards(TenantAuthGuard)
+  @ApiOperation({
+    summary: 'Verifica credenciais de operador do tenant (H2M Bridge)',
+    description:
+      'Endpoint chamado pelo STS via Basic Auth ou Bearer Token para validar operador no banco Firebird do tenant.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Operador validado com sucesso.',
+    type: OperatorVerifyResponseDto,
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Credenciais inválidas ou operador inativo.',
+  })
+  async operatorVerify(
+    @Req() req: ReqWithAuthContext,
+    @Body() body: OperatorVerifyDto,
+  ) {
+    const credentialsId = req.authContext?.credentialsId;
+    if (!credentialsId) {
+      throw new UnauthorizedException('Tenant credentialsId ausente na autenticação.');
+    }
+    return this.auth.verifyOperator(credentialsId, body);
+  }
+
+  @Get('operator-status/:usuCodigo')
+  @UseGuards(TenantAuthGuard)
+  @ApiOperation({
+    summary: 'Consulta status ativo de operador para rotação de token (H2M Refresh)',
+  })
+  async operatorStatus(
+    @Req() req: ReqWithAuthContext,
+    @Param('usuCodigo', ParseIntPipe) usuCodigo: number,
+  ) {
+    const credentialsId = req.authContext?.credentialsId;
+    if (!credentialsId) {
+      throw new UnauthorizedException('Tenant credentialsId ausente na autenticação.');
+    }
+    return this.auth.checkOperatorStatus(credentialsId, usuCodigo);
   }
 
   private metaFromReq(req: Request) {

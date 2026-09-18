@@ -6,14 +6,24 @@ export class PermissionResolver {
   constructor(private readonly prisma: RegistryPrismaService) {}
 
   async resolve(userId: string) {
-    // 1. Roles do usuário
-    const userRoles = await this.prisma.user.findMany({
-      where: { id: userId },
+    // 1. Roles do usuário (por id de usuário ou por dbCredentialsId para H2M)
+    let userRoles = await this.prisma.user.findMany({
+      where: { id: userId, status: true },
       select: {
         roleId: true,
         role: { select: { name: true } },
       },
     });
+
+    if (userRoles.length === 0) {
+      userRoles = await this.prisma.user.findMany({
+        where: { dbCredentialsId: userId, status: true },
+        select: {
+          roleId: true,
+          role: { select: { name: true } },
+        },
+      });
+    }
 
     const roleIds = userRoles.map((r) => r.roleId).filter(Boolean) as string[];
     const roleNames = userRoles

@@ -104,6 +104,68 @@ describe('OrderController', () => {
       expect(result).toEqual({ orderId: 123 });
     });
 
+    it('should enforce H2M authenticated operator and storeId, ignoring body values', async () => {
+      const h2mReq = {
+        authContext: {
+          userId: 'h2m-operator',
+          credentialsId: 'cred-1',
+          storeId: 3,
+          type: 'H2M',
+          usuCodigo: 42,
+          funCodigo: 88,
+        },
+      } as any;
+
+      const dto = new PostOrderDto();
+      dto.id = 123;
+      dto.store_id = 99; // Attacker tries to use another store
+      dto.user_id = 1; // Attacker tries to claim another user's commission
+      dto.employee_id = 2;
+
+      mockOrderService.post.mockResolvedValue({ orderId: 123 });
+
+      await controller.postOrder(h2mReq, dto);
+
+      expect(orderService.post).toHaveBeenCalledWith(
+        'cred-1',
+        expect.objectContaining({
+          store_id: 3,
+          user_id: 42,
+          employee_id: 88,
+        }),
+        3,
+      );
+    });
+
+    it('should allow M2M partner to provide custom user_id or default to 9999', async () => {
+      const m2mReq = {
+        authContext: {
+          userId: 'm2m-partner',
+          credentialsId: 'cred-1',
+          storeId: 1,
+          type: 'M2M',
+        },
+      } as any;
+
+      const dto = new PostOrderDto();
+      dto.id = 456;
+      dto.store_id = 2;
+
+      mockOrderService.post.mockResolvedValue({ orderId: 456 });
+
+      await controller.postOrder(m2mReq, dto);
+
+      expect(orderService.post).toHaveBeenCalledWith(
+        'cred-1',
+        expect.objectContaining({
+          store_id: 2,
+          user_id: 9999,
+          employee_id: 9999,
+        }),
+        2,
+      );
+    });
+
     it('should reject invalid price_table_id and return structured validation error', async () => {
       const dto = new PostOrderDto();
       dto.id = 123;

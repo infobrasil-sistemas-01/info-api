@@ -70,7 +70,8 @@ export class OrderController {
     description: 'Token de autenticação inválido ou ausente.',
   })
   postOrder(@Req() req: ReqWithAuthContext, @Body() dto: PostOrderDto) {
-    const { credentialsId, storeId } = req.authContext || {};
+    const { credentialsId, storeId, type, usuCodigo, funCodigo } =
+      req.authContext || {};
 
     if (!credentialsId) {
       throw new Error('Credentials ID not found in token');
@@ -80,7 +81,19 @@ export class OrderController {
       throw new Error('Store ID not found in token');
     }
 
-    return this.orderService.post(credentialsId, dto, storeId);
+    const isH2M = type === 'H2M';
+    const effectiveStoreId = isH2M ? storeId : (dto.store_id || storeId);
+    const effectiveUserId = isH2M ? (usuCodigo ?? 9999) : (dto.user_id || dto.employee_id || 9999);
+    const effectiveEmployeeId = isH2M ? (funCodigo ?? usuCodigo ?? 9999) : (dto.employee_id || 9999);
+
+    const sanitizedDto: PostOrderDto = {
+      ...dto,
+      store_id: effectiveStoreId,
+      user_id: effectiveUserId,
+      employee_id: effectiveEmployeeId,
+    };
+
+    return this.orderService.post(credentialsId, sanitizedDto, effectiveStoreId);
   }
 
   /* @Post(':id/receipt')
@@ -137,13 +150,16 @@ export class OrderController {
     type: [OrderResponseDto],
   })
   getOrders(@Req() req: ReqWithAuthContext, @Query() query: GetOrdersQueryDto) {
-    const { credentialsId, storeId: storeIdToken } = req.authContext || {};
+    const { credentialsId, storeId: storeIdToken, type } = req.authContext || {};
 
     if (!credentialsId) {
       throw new Error('Credentials ID not found in token');
     }
 
-    const finalStoreId = query.storeId ? Number(query.storeId) : storeIdToken;
+    const finalStoreId =
+      type === 'H2M'
+        ? storeIdToken
+        : (query.storeId ? Number(query.storeId) : storeIdToken);
 
     return this.orderService.get(
       credentialsId,
@@ -191,13 +207,16 @@ export class OrderController {
     @Param('id', ParseIntPipe) id: number,
     @Query() query: GetOrderByIdQueryDto,
   ) {
-    const { credentialsId, storeId: storeIdToken } = req.authContext || {};
+    const { credentialsId, storeId: storeIdToken, type } = req.authContext || {};
 
     if (!credentialsId) {
       throw new Error('Credentials ID not found in token');
     }
 
-    const finalStoreId = query.storeId ? Number(query.storeId) : storeIdToken;
+    const finalStoreId =
+      type === 'H2M'
+        ? storeIdToken
+        : (query.storeId ? Number(query.storeId) : storeIdToken);
 
     const orderData = (await this.orderService.getById(
       credentialsId,

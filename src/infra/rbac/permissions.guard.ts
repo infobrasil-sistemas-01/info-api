@@ -48,14 +48,17 @@ export class PermissionsGuard implements CanActivate {
       throw new UnauthorizedException('Unauthorized');
     }
 
-    const userId = payload.sub;
+    const isH2M = payload.type === 'H2M' || !!payload.usu_codigo;
+    const credentialsId = payload.credentials_id || payload.credentialsId;
+    const lookupKey = isH2M && credentialsId ? credentialsId : payload.sub;
 
-    const snap = await this.ctx.getOrResolve(userId);
+    const snap = await this.ctx.getOrResolve(lookupKey);
 
     // opcional: enriquecer log
     if (req.log) {
       req.log = req.log.child({
-        userId,
+        userId: payload.sub,
+        credentialsId,
         roles: snap.roles,
       });
     }
