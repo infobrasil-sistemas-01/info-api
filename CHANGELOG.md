@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.16.23](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.16.22...v1.16.23) (2026-09-18)
+
+
+### Features
+
+* **auth:** implement dual-auth H2M strategy and store isolation ([29eaffb](https://github.com/infobrasil-sistemas-01/info-api/commit/29eaffb1393253b5ab36e3dcbba10e96596cb4a1))
+* fixed ip option on form ([921c2d4](https://github.com/infobrasil-sistemas-01/info-api/commit/921c2d4d9fc7b69eccbdeefbf5ada9bb12a15e68))
+* human changelogs ([673885f](https://github.com/infobrasil-sistemas-01/info-api/commit/673885f8fbe14134bdc90789055b74994c3205b5))
+* return CLI_OBS on GET /call-centers ([8738715](https://github.com/infobrasil-sistemas-01/info-api/commit/87387155d49cf2f7b9b6b0f0920ab9d761a19c66))
+* return CLI_OBS on GET /call-centers/:id ([02358b0](https://github.com/infobrasil-sistemas-01/info-api/commit/02358b0a4932b90e9c439c1a4ec363e2ccddfdf5))
+
+
+### Bug Fixes
+
+* add willfarrell/autoheal to resilience add to deploy.sh ([8cc8b50](https://github.com/infobrasil-sistemas-01/info-api/commit/8cc8b50debe7183510dce7cded1debe3fab7aada))
+* cronjob fail to downtime api desabilitation' ([c46f2db](https://github.com/infobrasil-sistemas-01/info-api/commit/c46f2db79777101460707c25e542665f9b9f6d9c))
+* delete logs periodic ([2d3b56c](https://github.com/infobrasil-sistemas-01/info-api/commit/2d3b56cc811a315469c2c7af7145ce86058a0521))
+* **docker:** add public dns fallback (8.8.8.8 and 1.1.1.1) to api services ([741c3c3](https://github.com/infobrasil-sistemas-01/info-api/commit/741c3c3aa13d54693b8822a24d993066022054e6))
+
 ## [1.16.22](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.16.21...v1.16.22) (2026-09-07)
 
 
