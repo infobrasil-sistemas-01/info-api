@@ -1,4 +1,10 @@
-import { BadRequestException, Injectable, Logger, Post } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+  Post,
+} from '@nestjs/common';
 import { TenantConnectionService } from 'src/infra/database/tenant-connection.service';
 import { PostOrderDto } from './dto/create-order.dto';
 import dayjs from 'dayjs';
@@ -41,6 +47,19 @@ export class OrderService {
         );
       }
 
+      if (!products_sold || products_sold.length === 0) {
+        throw new BadRequestException('Order must have at least one product');
+      }
+
+      // Ponto 1: Resolução segura do código de pagamento (FP1_CODIGO) e plano (PP1_CODIGO)
+      const fp1Codigo = await this.resolvePaymentMethodCode(
+        connection,
+        orderData.payment_method,
+      );
+      const pp1Codigo = orderData.payment_plan_code
+        ? Number(orderData.payment_plan_code)
+        : 1;
+
       const transaction: any = await new Promise((resolve, reject) => {
         connection.startTransaction((err: any, transaction: any) => {
           if (err) {
@@ -50,58 +69,94 @@ export class OrderService {
         });
       });
 
-      const order = (await this.insertOrderOnDb(
-        transaction,
-        {
-          ...orderData,
-          date,
-        },
-        storeId,
-      )) as { VEN_NUMERO: number };
+      try {
+        // Ponto 2: Pré-validação e resolução dos produtos com fail-fast e cálculo do total
+        const resolvedProducts: Array<{
+          product: SoldProductDto;
+          ourProduct: any;
+        }> = [];
 
-      if (!products_sold || products_sold.length === 0) {
-        throw new BadRequestException('Order must have at least one product');
-      }
+        let totalCalculated = 0;
+        for (const product of products_sold) {
+          const ourProduct = (await this.productService.getById(
+            credentialsId,
+            storeId,
+            product.product_id,
+          )) as any;
 
-      let totalCalculated = 0;
-      for (const product of products_sold) {
-        const ourProduct = (await this.productService.getById(
-          credentialsId,
-          storeId,
-          product.product_id,
-        )) as any;
-
-        totalCalculated += ourProduct.PRO_PRECO1 * product.quantity;
-
-        await this.orderItemService.insertSoldProductOnDb(
-          transaction,
-          product,
-          ourProduct,
-          order.VEN_NUMERO,
-          storeId,
-        );
-      }
-
-      await this.updateFinancial(
-        transaction,
-        order.VEN_NUMERO,
-        orderData,
-        totalCalculated,
-      );
-
-      await new Promise((resolve, reject) => {
-        transaction.commit((err: any) => {
-          if (err) {
-            transaction.rollback();
-            reject(
-              `Erro ao fazer commit do pedido ${orderData.id} da loja. Erro: ${err}`,
+          if (!ourProduct) {
+            throw new NotFoundException(
+              `Produto ID ${product.product_id} não encontrado na loja ${storeId}`,
             );
           }
-          resolve(true);
-        });
-      });
 
-      return { orderId: order.VEN_NUMERO };
+          const price = Number(ourProduct.PRO_PRECO1) || 0;
+          totalCalculated += price * product.quantity;
+
+          resolvedProducts.push({
+            product,
+            ourProduct,
+          });
+        }
+
+        // Ponto 3: Inserção do cabeçalho da venda e itens dentro da transação protegida
+        const order = (await this.insertOrderOnDb(
+          transaction,
+          {
+            ...orderData,
+            date,
+          },
+          storeId,
+        )) as { VEN_NUMERO: number };
+
+        for (const item of resolvedProducts) {
+          await this.orderItemService.insertSoldProductOnDb(
+            transaction,
+            item.product,
+            item.ourProduct,
+            order.VEN_NUMERO,
+            storeId,
+          );
+        }
+
+        await this.updateFinancial(
+          transaction,
+          order.VEN_NUMERO,
+          {
+            ...orderData,
+            payment_method: String(fp1Codigo),
+            payment_plan_code: pp1Codigo,
+          },
+          totalCalculated,
+          fp1Codigo,
+          pp1Codigo,
+        );
+
+        await new Promise((resolve, reject) => {
+          transaction.commit((err: any) => {
+            if (err) {
+              return reject(
+                new Error(
+                  `Erro ao fazer commit do pedido ${orderData.id} da loja. Erro: ${err}`,
+                ),
+              );
+            }
+            resolve(true);
+          });
+        });
+
+        return { orderId: order.VEN_NUMERO };
+      } catch (txError) {
+        // Ponto 3: Rollback garantido em caso de qualquer falha na transação
+        try {
+          if (typeof transaction?.rollback === 'function') {
+            transaction.rollback();
+          }
+        } catch (rollbackErr) {
+          this.logger.error('Falha ao executar rollback da transação', rollbackErr);
+        }
+        throw txError;
+      }
     } finally {
       this.tenantConnectionService.releaseConnection(connection);
     }
@@ -408,81 +463,113 @@ export class OrderService {
     });
   }
 
+  private async resolvePaymentMethodCode(
+    connection: any,
+    paymentMethod: string | number,
+  ): Promise<number> {
+    if (typeof paymentMethod === 'number') {
+      return paymentMethod;
+    }
+
+    if (typeof paymentMethod === 'string') {
+      const trimmed = paymentMethod.trim();
+      const parsed = parseInt(trimmed, 10);
+      if (!isNaN(parsed) && /^\d+$/.test(trimmed)) {
+        return parsed;
+      }
+
+      // Se for string nominal (ex: 'DINHEIRO', 'PIX', 'CREDIT'), busca em FORMASPAG
+      const upper = trimmed.toUpperCase();
+      const searchPattern =
+        upper === 'CREDIT' || upper === 'DEBIT'
+          ? '%CART%'
+          : `%${upper}%`;
+
+      const query = `SELECT FIRST 1 FPG_CODIGO FROM formaspag WHERE UPPER(FPG_DESCRICAO) LIKE ? ORDER BY FPG_CODIGO ASC`;
+      return new Promise((resolve) => {
+        connection.query(query, [searchPattern], (err: any, results: any[]) => {
+          if (!err && results && results.length > 0 && results[0]?.FPG_CODIGO) {
+            resolve(Number(results[0].FPG_CODIGO));
+          } else {
+            resolve(1); // Default seguro para 1 (Dinheiro / À Vista)
+          }
+        });
+      });
+    }
+
+    return 1;
+  }
+
   private async updateFinancial(
     transaction: any,
     ven_numero: number,
     orderData: PostOrderDto,
     totalCalculated: number,
+    fp1Codigo?: number,
+    pp1Codigo?: number,
   ) {
-    try {
-      const FP1_CODIGO = orderData.payment_method;
-      const PP1_CODIGO = orderData.payment_plan_code || 1;
-      const data = dayjs(orderData.date).format('YYYY-MM-DD');
+    const FP1_CODIGO =
+      fp1Codigo ??
+      (typeof orderData.payment_method === 'number'
+        ? orderData.payment_method
+        : parseInt(orderData.payment_method, 10) || 1);
+    const PP1_CODIGO = pp1Codigo ?? (orderData.payment_plan_code || 1);
+    const data = dayjs(orderData.date).format('YYYY-MM-DD');
 
-      // else {
-      //     throw new Error('A forma de pagamento do pedido é inexistente ou inválida')
-      // }
+    const totalBruto = totalCalculated;
+    const financeiroAtualizar = {
+      PP1_CODIGO: PP1_CODIGO,
+      FP1_CODIGO: FP1_CODIGO,
+      VEN_TOTALPP1: totalCalculated || 0.0,
+      VEN_TOTALPPA1: totalCalculated || 0.0,
+      VEN_TOTALBRUTO: totalBruto,
+      VEN_TOTALDESC: orderData.discount || 0.0,
+      VEN_TOTALACRESC: orderData.taxes || 0.0,
+      VEN_VALORENT: 0.0,
+      VEN_TOTALLIQUIDO:
+        totalBruto + (orderData.taxes || 0) - (orderData.discount || 0),
+      VEN_DATABASE1: data,
+    };
 
-      // const descontoTotalVenda = descontoTotalItens + (orderData.discount || 0)
-      const totalBruto = totalCalculated;
-      const financeiroAtualizar = {
-        PP1_CODIGO: PP1_CODIGO,
-        FP1_CODIGO: FP1_CODIGO,
-        VEN_TOTALPP1: totalCalculated || 0.0,
-        VEN_TOTALPPA1: totalCalculated || 0.0,
-        VEN_TOTALBRUTO: totalBruto,
-        VEN_TOTALDESC: orderData.discount || 0.0,
-        VEN_TOTALACRESC: orderData.taxes || 0.0,
-        VEN_VALORENT: 0.0,
-        // VEN_TAXAPAG: orderData.payment_method_rate || 0.00,
-        VEN_TOTALLIQUIDO:
-          totalBruto + (orderData.taxes || 0) - (orderData.discount || 0),
-        VEN_DATABASE1: data,
-      };
+    const query = `
+          UPDATE VENDAS
+          SET
+              PP1_CODIGO = ?,
+              FP1_CODIGO = ?,
+              VEN_TOTALPP1 = ?,
+              VEN_TOTALPPA1 = ?,
+              VEN_TOTALBRUTO = ?,
+              VEN_TOTALDESC = ?,
+              VEN_TOTALACRESC = ?, 
+              VEN_VALORENT = ?,
+              --VEN_TAXAPAG = ?,
+              VEN_TOTALLIQUIDO = ?,
+              VEN_DATABASE1 = ?
+          
+          WHERE VENDAS.VEN_NUMERO = ?
+      `;
 
-      const query = `
-            UPDATE VENDAS
-            SET
-                PP1_CODIGO = ?,
-                FP1_CODIGO = ?,
-                VEN_TOTALPP1 = ?,
-                VEN_TOTALPPA1 = ?,
-                VEN_TOTALBRUTO = ?,
-                VEN_TOTALDESC = ?,
-                VEN_TOTALACRESC = ?, 
-                VEN_VALORENT = ?,
-                --VEN_TAXAPAG = ?,
-                VEN_TOTALLIQUIDO = ?,
-                VEN_DATABASE1 = ?
-            
-            WHERE VENDAS.VEN_NUMERO = ?
-        `;
+    const values = [
+      financeiroAtualizar.PP1_CODIGO,
+      financeiroAtualizar.FP1_CODIGO,
+      financeiroAtualizar.VEN_TOTALPP1,
+      financeiroAtualizar.VEN_TOTALPPA1,
+      financeiroAtualizar.VEN_TOTALBRUTO,
+      financeiroAtualizar.VEN_TOTALDESC,
+      financeiroAtualizar.VEN_TOTALACRESC,
+      financeiroAtualizar.VEN_VALORENT,
+      financeiroAtualizar.VEN_TOTALLIQUIDO,
+      financeiroAtualizar.VEN_DATABASE1,
+      ven_numero,
+    ];
 
-      const values = [
-        financeiroAtualizar.PP1_CODIGO,
-        financeiroAtualizar.FP1_CODIGO,
-        financeiroAtualizar.VEN_TOTALPP1,
-        financeiroAtualizar.VEN_TOTALPPA1,
-        financeiroAtualizar.VEN_TOTALBRUTO,
-        financeiroAtualizar.VEN_TOTALDESC,
-        financeiroAtualizar.VEN_TOTALACRESC,
-        financeiroAtualizar.VEN_VALORENT,
-        // financeiroAtualizar.VEN_TAXAPAG,
-        financeiroAtualizar.VEN_TOTALLIQUIDO,
-        financeiroAtualizar.VEN_DATABASE1,
-        ven_numero,
-      ];
-
-      return new Promise((resolve, reject) => {
-        transaction.query(query, values, (err: any, result: any) => {
-          if (err) {
-            return reject(err);
-          }
-          resolve(result);
-        });
+    return new Promise((resolve, reject) => {
+      transaction.query(query, values, (err: any, result: any) => {
+        if (err) {
+          return reject(err);
+        }
+        resolve(result);
       });
-    } catch (error) {
-      console.error('Error updating financial data:', error);
-    }
+    });
   }
 }

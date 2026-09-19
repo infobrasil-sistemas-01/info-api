@@ -118,7 +118,11 @@ export class ProductService {
     }
   }
 
-  async getById(credentialsId: string, storeId: number = 1, id: number) {
+  async getById(
+    credentialsId: string,
+    storeId: number = 1,
+    id: number | string,
+  ) {
     let connection: any;
     connection =
       await this.tenantConnectionService.getConnection(credentialsId);
@@ -130,7 +134,7 @@ export class ProductService {
                       FROM produtos P
                       LEFT JOIN estoque E ON P.PRO_CODIGO = E.PRO_CODIGO AND E.LOJ_CODIGO = ?
                       WHERE P.PRO_CODIGO = ?`;
-      const params = [storeId, id];
+      const params = [storeId, String(id).trim()];
 
       const queryStartTime = Date.now();
       const result = (await new Promise((resolve, reject) => {
