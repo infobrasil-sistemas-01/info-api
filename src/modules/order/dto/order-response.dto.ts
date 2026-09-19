@@ -16,32 +16,17 @@ export class OrderResponseDto {
   @ApiPropertyOptional({ example: 1, description: 'Código do funcionário' })
   FUN_CODIGO?: number;
 
-  @ApiPropertyOptional({ example: 1, description: 'Código do funcionário (minúsculo)' })
-  fun_codigo?: number;
-
   @ApiPropertyOptional({
     example: 'Funcionário Exemplo',
     description: 'Nome do funcionário',
   })
   FUN_NOME?: string;
 
-  @ApiPropertyOptional({
-    example: 'Funcionário Exemplo',
-    description: 'Nome do funcionário (minúsculo)',
-  })
-  fun_nome?: string;
-
   @ApiPropertyOptional({ example: 1, description: 'Código do usuário/operador' })
   USU_CODIGO?: number;
 
-  @ApiPropertyOptional({ example: 1, description: 'Código do usuário/operador (minúsculo)' })
-  usu_codigo?: number;
-
   @ApiPropertyOptional({ example: 'INFO-MOBILE', description: 'Apelido do usuário/operador' })
   USU_APELIDO?: string;
-
-  @ApiPropertyOptional({ example: 'INFO-MOBILE', description: 'Apelido do usuário/operador (minúsculo)' })
-  usu_apelido?: string;
 
   @ApiProperty({ example: 'E', description: 'Tipo da venda' })
   VEN_TIPO: string;
@@ -62,49 +47,25 @@ export class OrderResponseDto {
     example: 'Dinheiro',
     description: 'Descrição da forma de pagamento',
   })
-  fpg_descricao?: string;
-
-  @ApiPropertyOptional({
-    example: 'Dinheiro',
-    description: 'Descrição da forma de pagamento (maiúsculo)',
-  })
   FPG_DESCRICAO?: string;
 
   @ApiPropertyOptional({ example: 1, description: 'Código do plano de pagamento' })
-  pp1_codigo?: number;
-
-  @ApiPropertyOptional({ example: 1, description: 'Código do plano de pagamento (maiúsculo)' })
   PP1_CODIGO?: number;
 
   @ApiPropertyOptional({
     example: 'A Vista',
     description: 'Descrição do plano de pagamento',
   })
-  plp_descricao?: string;
-
-  @ApiPropertyOptional({
-    example: 'A Vista',
-    description: 'Descrição do plano de pagamento (maiúsculo)',
-  })
   PLP_DESCRICAO?: string;
 
   @ApiPropertyOptional({ example: 250.5, description: 'Valor total líquido' })
-  ven_totalliquido?: number;
-
-  @ApiPropertyOptional({ example: 250.5, description: 'Valor total líquido (maiúsculo)' })
   VEN_TOTALLIQUIDO?: number;
 
   @ApiPropertyOptional({ example: 123, description: 'Código do cliente' })
   CLI_CODIGO?: number;
 
-  @ApiPropertyOptional({ example: 123, description: 'Código do cliente (minúsculo)' })
-  cli_codigo?: number;
-
   @ApiPropertyOptional({ example: 'Cliente Exemplo', description: 'Nome do cliente' })
   CLI_NOME?: string;
-
-  @ApiPropertyOptional({ example: 'Cliente Exemplo', description: 'Nome do cliente (minúsculo)' })
-  cli_nome?: string;
 }
 
 export class OrderItemResponseDto {
