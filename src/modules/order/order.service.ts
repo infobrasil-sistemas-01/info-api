@@ -269,38 +269,51 @@ export class OrderService {
       }
 
       const query = `SELECT FIRST ? SKIP ?
-                  VEN_NUMERO,
+                  V.VEN_NUMERO,
                   V.SIT_CODIGO,
                   V.CLI_CODIGO,
                   C.CLI_NOME,
                   V.FUN_CODIGO,
                   F.FUN_NOME,
+                  V.USU_CODIGO,
+                  U.USU_APELIDO,
                   V.VEN_NUMSITE,
                   V.LOJ_CODIGO,
                   V.VEN_TIPO,
                   V.VEN_DATA,
                   V.VEN_HORA,
                   V.FP1_CODIGO,
-                  FPG.fpg_descricao,
-                  V.pp1_codigo,
-                  PLP.plp_descricao,
-                  V.ven_totalliquido
+                  FPG.FPG_DESCRICAO,
+                  FPG.FPG_DESCRICAO AS fpg_descricao,
+                  V.PP1_CODIGO,
+                  V.PP1_CODIGO AS pp1_codigo,
+                  PLP.PLP_DESCRICAO,
+                  PLP.PLP_DESCRICAO AS plp_descricao,
+                  V.VEN_TOTALLIQUIDO,
+                  V.VEN_TOTALLIQUIDO AS ven_totalliquido
                FROM VENDAS V
                LEFT JOIN formaspag FPG ON FPG.fpg_codigo = V.fp1_codigo
                LEFT JOIN planospag PLP ON PLP.plp_codigo = V.pp1_codigo
                LEFT JOIN clientes C ON C.cli_codigo = V.cli_codigo
                LEFT JOIN funcionarios F ON F.fun_codigo = V.fun_codigo
+               LEFT JOIN usuarios U ON U.usu_codigo = V.usu_codigo
                ${whereClause}
                ORDER BY V.VEN_NUMERO DESC`;
 
       const queryStartTime = Date.now();
-      const result = await new Promise((resolve, reject) => {
+      const result = (await new Promise((resolve, reject) => {
         connection.query(query, params, (err: any, res: any) => {
           if (err) return reject(err);
           resolve(res);
         });
-      });
+      })) as any;
       const queryEndTime = Date.now();
+
+      if (Array.isArray(result)) {
+        for (const r of result) {
+          this.normalizeOrderRecord(r);
+        }
+      }
 
       this.logger.log(
         `Busca de pedidos executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
@@ -338,6 +351,12 @@ export class OrderService {
       const query = `SELECT
                   V.VEN_NUMERO,
                   V.SIT_CODIGO,
+                  V.CLI_CODIGO,
+                  C.CLI_NOME,
+                  V.FUN_CODIGO,
+                  F.FUN_NOME,
+                  V.USU_CODIGO,
+                  U.USU_APELIDO,
                   V.VEN_NUMSITE,
                   V.LOJ_CODIGO,
                   V.VEN_TIPO,
@@ -346,11 +365,15 @@ export class OrderService {
                   V.VEN_HORA,
                   V.FP1_CODIGO,
                   FPG.FPG_DESCRICAO,
+                  FPG.FPG_DESCRICAO AS fpg_descricao,
                   V.PP1_CODIGO,
+                  V.PP1_CODIGO AS pp1_codigo,
                   PLP.PLP_DESCRICAO,
+                  PLP.PLP_DESCRICAO AS plp_descricao,
                   V.VEN_TOTALBRUTO,
                   V.VEN_TOTALDESC,
                   V.VEN_TOTALLIQUIDO,
+                  V.VEN_TOTALLIQUIDO AS ven_totalliquido,
                   V.VEN_VALORPENDENTE,
                   V.VEN_VALORENC,
                   V.VEN_DTPREVISAOENT,
@@ -365,6 +388,9 @@ export class OrderService {
                FROM VENDAS V
                LEFT JOIN formaspag FPG ON FPG.FPG_CODIGO = V.FP1_CODIGO
                LEFT JOIN planospag PLP ON PLP.PLP_CODIGO = V.PP1_CODIGO
+               LEFT JOIN clientes C ON C.cli_codigo = V.cli_codigo
+               LEFT JOIN funcionarios F ON F.fun_codigo = V.fun_codigo
+               LEFT JOIN usuarios U ON U.usu_codigo = V.usu_codigo
                LEFT JOIN TRANSPORTADORAS T ON T.TRA_CODIGO = V.TRA_CODIGO
                LEFT JOIN MONTAGENS M ON M.VEN_NUMERO = V.VEN_NUMERO
                ${whereClause}
@@ -376,8 +402,12 @@ export class OrderService {
           if (err) return reject(err);
           resolve(res[0]);
         });
-      })) as object;
+      })) as any;
       const queryEndTime = Date.now();
+
+      if (result) {
+        this.normalizeOrderRecord(result);
+      }
 
       this.logger.log(
         `Busca de pedido por ID executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
@@ -389,6 +419,41 @@ export class OrderService {
     } finally {
       this.tenantConnectionService.releaseConnection(connection);
     }
+  }
+
+  private normalizeOrderRecord(r: any): any {
+    if (!r) return r;
+    if (r.FPG_DESCRICAO && !r.fpg_descricao) r.fpg_descricao = r.FPG_DESCRICAO;
+    if (r.fpg_descricao && !r.FPG_DESCRICAO) r.FPG_DESCRICAO = r.fpg_descricao;
+    if (r.PLP_DESCRICAO && !r.plp_descricao) r.plp_descricao = r.PLP_DESCRICAO;
+    if (r.plp_descricao && !r.PLP_DESCRICAO) r.PLP_DESCRICAO = r.plp_descricao;
+    if (r.PP1_CODIGO && !r.pp1_codigo) r.pp1_codigo = r.PP1_CODIGO;
+    if (r.pp1_codigo && !r.PP1_CODIGO) r.PP1_CODIGO = r.pp1_codigo;
+    if (r.VEN_TOTALLIQUIDO !== undefined && r.ven_totalliquido === undefined) r.ven_totalliquido = r.VEN_TOTALLIQUIDO;
+    if (r.ven_totalliquido !== undefined && r.VEN_TOTALLIQUIDO === undefined) r.VEN_TOTALLIQUIDO = r.ven_totalliquido;
+    if (r.FUN_NOME && !r.fun_nome) r.fun_nome = r.FUN_NOME;
+    if (r.fun_nome && !r.FUN_NOME) r.FUN_NOME = r.fun_nome;
+    if (r.FUN_CODIGO !== undefined && r.fun_codigo === undefined) r.fun_codigo = r.FUN_CODIGO;
+    if (r.fun_codigo !== undefined && r.FUN_CODIGO === undefined) r.FUN_CODIGO = r.fun_codigo;
+    if (r.CLI_NOME && !r.cli_nome) r.cli_nome = r.CLI_NOME;
+    if (r.cli_nome && !r.CLI_NOME) r.CLI_NOME = r.cli_nome;
+    if (r.CLI_CODIGO !== undefined && r.cli_codigo === undefined) r.cli_codigo = r.CLI_CODIGO;
+    if (r.cli_codigo !== undefined && r.CLI_CODIGO === undefined) r.CLI_CODIGO = r.cli_codigo;
+    if (r.USU_CODIGO !== undefined && r.usu_codigo === undefined) r.usu_codigo = r.USU_CODIGO;
+    if (r.usu_codigo !== undefined && r.USU_CODIGO === undefined) r.USU_CODIGO = r.usu_codigo;
+    if (r.USU_APELIDO && !r.usu_apelido) r.usu_apelido = r.USU_APELIDO;
+    if (r.usu_apelido && !r.USU_APELIDO) r.USU_APELIDO = r.usu_apelido;
+
+    const resolvedSeller =
+      r.FUN_NOME ||
+      r.USU_APELIDO ||
+      (r.FUN_CODIGO ? `Vendedor #${r.FUN_CODIGO}` : (r.USU_CODIGO ? `Operador #${r.USU_CODIGO}` : undefined));
+    if (resolvedSeller) {
+      if (!r.FUN_NOME) r.FUN_NOME = resolvedSeller;
+      if (!r.fun_nome) r.fun_nome = resolvedSeller;
+    }
+
+    return r;
   }
 
   private async insertOrderOnDb(
