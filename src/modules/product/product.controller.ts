@@ -31,7 +31,7 @@ import { GetProductQueryDto } from './dto/get-product-query.dto';
 
 @Controller('products')
 export class ProductController {
-  constructor(private readonly productService: ProductService) {}
+  constructor(private readonly productService: ProductService) { }
 
   @Get()
   @UseGuards(JwtAuthGuard, PermissionsGuard)
@@ -81,6 +81,8 @@ export class ProductController {
       query.brand,
       query.minStock,
       query.search,
+      query.startDateAlteracao,
+      query.endDateAlteracao
     );
   }
 

@@ -106,6 +106,98 @@ describe('ProductService', () => {
       );
     });
 
+    it('should throw BadRequestException when startDateAlteracao is greater than endDateAlteracao', async () => {
+      await expect(
+        service.get(
+          'cred-1',
+          1,
+          1,
+          10,
+          1,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          '2026-02-01',
+          '2026-01-01',
+        ),
+      ).rejects.toThrow(
+        new BadRequestException('Data inicial deve ser menor que a data final.'),
+      );
+    });
+
+    it('should apply date filter with WHERE when no other filters are provided', async () => {
+      mockConnection.query.mockImplementation(
+        (query: string, params: any[], callback: Function) => {
+          callback(null, []);
+        },
+      );
+
+      await service.get(
+        'cred-1',
+        1,
+        1,
+        10,
+        1,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        '2026-01-01',
+        '2026-01-31',
+      );
+
+      expect(mockConnection.query).toHaveBeenCalledWith(
+        expect.stringContaining('WHERE E.EST_DTALTERACAO BETWEEN ? AND ?'),
+        expect.arrayContaining(['2026-01-01', '2026-01-31']),
+        expect.any(Function),
+      );
+    });
+
+    it('should apply date filter with AND when other filters are provided', async () => {
+      mockConnection.query.mockImplementation(
+        (query: string, params: any[], callback: Function) => {
+          callback(null, []);
+        },
+      );
+
+      await service.get(
+        'cred-1',
+        1,
+        1,
+        10,
+        1,
+        2,
+        undefined,
+        undefined,
+        undefined,
+        '2026-01-01',
+        '2026-01-31',
+      );
+
+      expect(mockConnection.query).toHaveBeenCalledWith(
+        expect.stringContaining('AND E.EST_DTALTERACAO BETWEEN ? AND ?'),
+        expect.arrayContaining(['2026-01-01', '2026-01-31']),
+        expect.any(Function),
+      );
+    });
+
+    it('should include EST_DTALTERACAO in SELECT query', async () => {
+      mockConnection.query.mockImplementation(
+        (query: string, params: any[], callback: Function) => {
+          callback(null, []);
+        },
+      );
+
+      await service.get('cred-1', 1, 1, 10);
+
+      expect(mockConnection.query).toHaveBeenCalledWith(
+        expect.stringContaining('E.EST_DTALTERACAO'),
+        expect.anything(),
+        expect.any(Function),
+      );
+    });
+
     it('should throw error when connection query fails', async () => {
       mockConnection.query.mockImplementation(
         (query: string, params: any[], callback: Function) => {

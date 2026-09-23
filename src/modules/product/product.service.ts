@@ -7,7 +7,7 @@ export class ProductService {
 
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
-  ) {}
+  ) { }
 
   async get(
     credentialsId: string,
@@ -19,6 +19,8 @@ export class ProductService {
     brand?: number,
     minStock?: number,
     search?: string,
+    startDateAlteracao?: string,
+    endDateAlteracao?: string,
   ) {
     let connection: any;
     connection =
@@ -43,13 +45,21 @@ export class ProductService {
         );
       }
 
+      if (startDateAlteracao && endDateAlteracao) {
+        if (new Date(startDateAlteracao) > new Date(endDateAlteracao)) {
+          throw new BadRequestException(
+            'Data inicial deve ser menor que a data final.',
+          );
+        }
+      }
+
       let params: (number | string)[] = [
         pageSize,
         (page - 1) * pageSize,
         storeId,
       ];
       let query = `SELECT FIRST ? SKIP ? 
-                      P.PRO_CODIGO, P.PRO_CODIGOBAR, P.PRO_DESCRICAO, M.MAR_CODIGO, M.MAR_DESCRICAO, G.GRU_CODIGO, G.GRU_DESCRICAO, E.EST_ATUAL, E.EST_APOIO, PRO_PRECO${priceTable} PRECO
+                      P.PRO_CODIGO, P.PRO_CODIGOBAR, P.PRO_DESCRICAO, M.MAR_CODIGO, M.MAR_DESCRICAO, G.GRU_CODIGO, G.GRU_DESCRICAO, E.EST_ATUAL, E.EST_APOIO, PRO_PRECO${priceTable} PRECO, E.EST_DTALTERACAO
                       FROM produtos P 
                       INNER JOIN estoque E ON P.PRO_CODIGO = E.PRO_CODIGO AND E.LOJ_CODIGO = ?
                       LEFT JOIN marcas M ON P.MAR_CODIGO = M.MAR_CODIGO 
@@ -84,6 +94,12 @@ export class ProductService {
         params.push(`%${search}%`);
       }
 
+      if (startDateAlteracao && endDateAlteracao) {
+        query += group || brand || minStock || search ? ` AND` : ` WHERE`;
+        query += ` E.EST_DTALTERACAO BETWEEN ? AND ?`;
+        params.push(startDateAlteracao, endDateAlteracao);
+      }
+
       query += ` ORDER BY P.PRO_DESCRICAO`;
 
       const queryStartTime = Date.now();
@@ -107,8 +123,7 @@ export class ProductService {
             minStock,
             search,
           },
-        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${
-          queryEndTime - queryStartTime
+        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${queryEndTime - queryStartTime
         }ms`,
       );
 

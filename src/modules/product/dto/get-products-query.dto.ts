@@ -11,6 +11,8 @@ export const GetProductsQuerySchema = z.object({
   brand: z.coerce.number().int().optional(),
   minStock: z.coerce.number().optional(),
   search: z.string().optional(),
+  startDateAlteracao: z.string().optional(),
+  endDateAlteracao: z.string().optional(),
 });
 
 export class GetProductsQueryDto extends ZodDto(GetProductsQuerySchema) {
@@ -47,4 +49,14 @@ export class GetProductsQueryDto extends ZodDto(GetProductsQuerySchema) {
     description: 'Termo de busca para filtrar produtos por descrição',
   })
   search?: string;
+
+  @ApiPropertyOptional({
+    description: 'Data inicial para filtrar produtos por data de alteração',
+  })
+  startDateAlteracao?: string;
+
+  @ApiPropertyOptional({
+    description: 'Data final para filtrar produtos por data de alteração',
+  })
+  endDateAlteracao?: string;
 }

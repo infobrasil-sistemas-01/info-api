@@ -54,6 +54,8 @@ describe('ProductController', () => {
         brand: 5,
         minStock: undefined,
         search: 'search term',
+        startDateAlteracao: '2026-01-01',
+        endDateAlteracao: '2026-01-31',
       });
 
       expect(productService.get).toHaveBeenCalledWith(
@@ -66,6 +68,8 @@ describe('ProductController', () => {
         5,
         undefined,
         'search term',
+        '2026-01-01',
+        '2026-01-31',
       );
       expect(result).toEqual([{ id: 1 }, { id: 2 }]);
     });
@@ -78,6 +82,8 @@ describe('ProductController', () => {
       expect(productService.get).toHaveBeenCalledWith(
         'cred-1',
         1,
+        undefined,
+        undefined,
         undefined,
         undefined,
         undefined,
@@ -105,6 +111,8 @@ describe('ProductController', () => {
       expect(productService.get).toHaveBeenCalledWith(
         'cred-1',
         5,
+        undefined,
+        undefined,
         undefined,
         undefined,
         undefined,
