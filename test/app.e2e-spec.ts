@@ -15,7 +15,7 @@ describe('API E2E Tests', () => {
   let refreshToken: string;
 
   const TEST_CREDENTIALS = Buffer.from(
-    'infomobile:xOQw^RBE^Ir^KJjNk^QWtdi0ALST6Wpt',
+    'admin:admin',
   ).toString('base64');
 
   let moduleFixture: TestingModule;
@@ -115,10 +115,28 @@ describe('API E2E Tests', () => {
       it('should return 200 with all query params', async () => {
         await request(app.getHttpServer())
           .get(
-            '/api/v1/products?page=1&pageSize=10&group=1&brand=2&minStock=5&search=test',
+            '/api/v1/products?page=1&pageSize=10&group=1&brand=2&minStock=5&search=test&startDateAlteracao=2026-01-01&endDateAlteracao=2026-01-31',
           )
           .set(authHeader())
           .expect(200);
+      });
+
+      it('should return 200 with date range query params', async () => {
+        await request(app.getHttpServer())
+          .get(
+            '/api/v1/products?startDateAlteracao=2026-01-01&endDateAlteracao=2026-01-31',
+          )
+          .set(authHeader())
+          .expect(200);
+      });
+
+      it('should return 400 when startDateAlteracao is greater than endDateAlteracao', async () => {
+        await request(app.getHttpServer())
+          .get(
+            '/api/v1/products?startDateAlteracao=2026-02-01&endDateAlteracao=2026-01-01',
+          )
+          .set(authHeader())
+          .expect(400);
       });
 
       it('should return 200 with partial query params', async () => {
