@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.16.24](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.16.23...v1.16.24) (2026-09-23)
+
+
+### Features
+
+* **order:** return seller and operator name consistently in order list and details ([10ef511](https://github.com/infobrasil-sistemas-01/info-api/commit/10ef5117cd4b54395970a8ade3a93c479b3c3c85))
+* **product:** return `EST_DTALTERACAO` && add filter by `EST_DTALTERACAO` on GET /api/v1/products ([59f3a37](https://github.com/infobrasil-sistemas-01/info-api/commit/59f3a37d8204879267e5c3e590741b6e6eb469e4))
+
+
+### Bug Fixes
+
+* e2e test ([f80ebee](https://github.com/infobrasil-sistemas-01/info-api/commit/f80ebeeba7aff0eeee48610dd32cd11e809dcf8e))
+* post order guardrails ([67a1f64](https://github.com/infobrasil-sistemas-01/info-api/commit/67a1f64e168b50ab71e79c5fc00d7c43aabbe2b0))
+
 ## [1.16.23](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.16.22...v1.16.23) (2026-09-18)
 
 
