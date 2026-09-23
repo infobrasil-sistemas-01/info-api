@@ -9,5 +9,8 @@
   "moduleNameMapper": {
     "^src/(.*)$": "<rootDir>/src/$1"
   },
-  "roots": ["<rootDir>/test/"]
+  "roots": ["<rootDir>/test/"],
+  "transformIgnorePatterns": [
+    "node_modules/(?!(jose|jwks-rsa)/)"
+  ]
 }
