@@ -18,6 +18,7 @@ export const envSchema = z.object({
   JWT_SECRET: z.string().default('your_jwt_secret'),
   JWT_EXPIRES_IN: stringValue.default('15m' as StringValue),
   REFRESH_TOKEN_DAYS: z.coerce.number().int().positive().default(30),
+  P88: z.string(),
   P98: z.string(),
   P99: z.string(),
   P131: z.string(),
