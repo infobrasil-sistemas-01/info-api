@@ -3,7 +3,7 @@ import { ZodDto } from 'src/common/validation/zod-dto';
 import { z } from 'zod';
 
 export const GetProductsQuerySchema = z.object({
-  storeId: z.coerce.number().int(),
+  storeId: z.coerce.number().int().optional(),
   page: z.coerce.number().int().min(1).optional(),
   pageSize: z.coerce.number().int().min(1).optional(),
   priceTable: z.coerce.number().int().min(1).max(12).optional(),
@@ -16,11 +16,11 @@ export const GetProductsQuerySchema = z.object({
 });
 
 export class GetProductsQueryDto extends ZodDto(GetProductsQuerySchema) {
-  @ApiProperty({
-    description: 'Código da loja para buscar os estoques dos produtos',
+  @ApiPropertyOptional({
+    description: 'Código da loja para buscar os estoques dos produtos (Caso não informado, será utilizado o estoque/preço da loja 1 ou do operador logado)',
     example: 1,
   })
-  storeId!: number;
+  storeId?: number;
 
   @ApiPropertyOptional({ description: 'Página atual', example: 1 })
   page?: number;

@@ -24,7 +24,6 @@ describe('GetProductsQueryDto', () => {
   });
 
   test.each([
-    ['missing required storeId', {}],
     ['invalid page less than 1', { storeId: 1, page: 0 }],
     ['invalid pageSize less than 1', { storeId: 1, pageSize: 0 }],
     ['invalid priceTable greater than 12', { storeId: 1, priceTable: 13 }],
