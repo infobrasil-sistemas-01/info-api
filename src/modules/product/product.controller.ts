@@ -7,6 +7,8 @@ import {
   NotFoundException,
   Param,
   ParseIntPipe,
+  BadRequestException,
+  ForbiddenException,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -31,7 +33,7 @@ import { GetProductQueryDto } from './dto/get-product-query.dto';
 
 @Controller('products')
 export class ProductController {
-  constructor(private readonly productService: ProductService) { }
+  constructor(private readonly productService: ProductService) {}
 
   @Get()
   @UseGuards(JwtAuthGuard, PermissionsGuard)
@@ -50,26 +52,48 @@ export class ProductController {
   })
   @ApiResponse({
     status: 400,
-    description: 'Erro de requisição, como pageSize excedendo o limite.',
+    description:
+      'Erro de requisição, como pageSize excedendo o limite ou storeId ausente para M2M.',
   })
   @ApiResponse({
     status: 401,
     description: 'Token de autenticação inválido ou ausente.',
   })
+  @ApiResponse({
+    status: 403,
+    description: 'Operador não autorizado a consultar dados de outra filial.',
+  })
   getProducts(
     @Req() req: ReqWithAuthContext,
     @Query() query: GetProductsQueryDto,
   ) {
-    const { credentialsId, storeId: tokenStoreId, type } = req.authContext || {};
+    const {
+      credentialsId,
+      storeId: tokenStoreId,
+      type,
+    } = req.authContext || {};
 
     if (!credentialsId) {
       throw new Error('Credentials ID not found in token');
     }
 
-    const storeId =
-      type === 'H2M'
-        ? (tokenStoreId || 1)
-        : (query.storeId || tokenStoreId || 1);
+    let storeId: number;
+
+    if (type === 'H2M') {
+      if (query.storeId && query.storeId !== tokenStoreId) {
+        throw new ForbiddenException(
+          'Operador não autorizado a consultar dados de outra filial',
+        );
+      }
+      storeId = tokenStoreId!;
+    } else {
+      if (!query.storeId) {
+        throw new BadRequestException(
+          'O parâmetro storeId é obrigatório para integrações diretas (M2M)',
+        );
+      }
+      storeId = query.storeId;
+    }
 
     return this.productService.get(
       credentialsId,
@@ -82,7 +106,7 @@ export class ProductController {
       query.minStock,
       query.search,
       query.startDateAlteracao,
-      query.endDateAlteracao
+      query.endDateAlteracao,
     );
   }
 
@@ -119,16 +143,18 @@ export class ProductController {
     @Param('id', ParseIntPipe) id: number,
     @Query() query: GetProductQueryDto,
   ) {
-    const { credentialsId, storeId: tokenStoreId, type } = req.authContext || {};
+    const {
+      credentialsId,
+      storeId: tokenStoreId,
+      type,
+    } = req.authContext || {};
 
     if (!credentialsId) {
       throw new Error('Credentials ID not found in token');
     }
 
     const storeId =
-      type === 'H2M'
-        ? (tokenStoreId || 1)
-        : (query.storeId || tokenStoreId || 1);
+      type === 'H2M' ? tokenStoreId || 1 : query.storeId || tokenStoreId || 1;
 
     const product = await this.productService.getUnique(
       credentialsId,
@@ -177,16 +203,18 @@ export class ProductController {
     @Param('barcode') barcode: number,
     @Query() query: GetProductQueryDto,
   ) {
-    const { credentialsId, storeId: tokenStoreId, type } = req.authContext || {};
+    const {
+      credentialsId,
+      storeId: tokenStoreId,
+      type,
+    } = req.authContext || {};
 
     if (!credentialsId) {
       throw new Error('Credentials ID not found in token');
     }
 
     const storeId =
-      type === 'H2M'
-        ? (tokenStoreId || 1)
-        : (query.storeId || tokenStoreId || 1);
+      type === 'H2M' ? tokenStoreId || 1 : query.storeId || tokenStoreId || 1;
 
     const product = await this.productService.getUnique(
       credentialsId,

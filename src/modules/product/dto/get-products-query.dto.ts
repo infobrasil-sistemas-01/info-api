@@ -17,7 +17,8 @@ export const GetProductsQuerySchema = z.object({
 
 export class GetProductsQueryDto extends ZodDto(GetProductsQuerySchema) {
   @ApiPropertyOptional({
-    description: 'Código da loja para buscar os estoques dos produtos (Caso não informado, será utilizado o estoque/preço da loja 1 ou do operador logado)',
+    description:
+      'Código da loja para buscar os estoques dos produtos. Obrigatório para integrações M2M. Para operadores (H2M), é opcional e assume a loja vinculada ao usuário (se informado, deve ser idêntico à loja do operador).',
     example: 1,
   })
   storeId?: number;

@@ -1,5 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
 import { ProductController } from './product.controller';
 import { ProductService } from './product.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -94,7 +98,7 @@ describe('ProductController', () => {
       );
     });
 
-    it('should enforce H2M token storeId, ignoring query.storeId', async () => {
+    it('should use H2M token storeId when query.storeId is omitted', async () => {
       const h2mReq = {
         authContext: {
           userId: 'h2m-user',
@@ -106,7 +110,7 @@ describe('ProductController', () => {
 
       mockProductService.get.mockResolvedValue([]);
 
-      await controller.getProducts(h2mReq, { storeId: 99 });
+      await controller.getProducts(h2mReq, {});
 
       expect(productService.get).toHaveBeenCalledWith(
         'cred-1',
@@ -120,6 +124,64 @@ describe('ProductController', () => {
         undefined,
         undefined,
         undefined,
+      );
+    });
+
+    it('should allow H2M operator when query.storeId matches tokenStoreId', async () => {
+      const h2mReq = {
+        authContext: {
+          userId: 'h2m-user',
+          credentialsId: 'cred-1',
+          storeId: 5,
+          type: 'H2M',
+        },
+      } as any;
+
+      mockProductService.get.mockResolvedValue([]);
+
+      await controller.getProducts(h2mReq, { storeId: 5 });
+
+      expect(productService.get).toHaveBeenCalledWith(
+        'cred-1',
+        5,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+      );
+    });
+
+    it('should throw ForbiddenException if H2M operator queries a different storeId', () => {
+      const h2mReq = {
+        authContext: {
+          userId: 'h2m-user',
+          credentialsId: 'cred-1',
+          storeId: 5,
+          type: 'H2M',
+        },
+      } as any;
+
+      expect(() => controller.getProducts(h2mReq, { storeId: 99 })).toThrow(
+        ForbiddenException,
+      );
+    });
+
+    it('should throw BadRequestException if M2M caller does not provide storeId', () => {
+      const m2mReq = {
+        authContext: {
+          userId: 'm2m-client',
+          credentialsId: 'cred-1',
+          type: 'M2M',
+        },
+      } as any;
+
+      expect(() => controller.getProducts(m2mReq, {})).toThrow(
+        BadRequestException,
       );
     });
   });
