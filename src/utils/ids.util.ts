@@ -19,5 +19,7 @@ export function ids(id: number) {
   }
   if (id === 130) {
     return process.env.P130!;
+  } else {
+    return process.env[`P${id}`]!;
   }
 }
