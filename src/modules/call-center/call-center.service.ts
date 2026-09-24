@@ -13,7 +13,7 @@ export class CallCenterService {
 
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
-  ) { }
+  ) {}
 
   private async parseBlob(blobField: any): Promise<string | null> {
     if (!blobField) return null;
@@ -150,7 +150,8 @@ export class CallCenterService {
       this.logger.log(
         `Busca de call center executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
           queryDto,
-        )}, Itens: ${mappedResult.length}, Tempo SQL: ${queryEndTime - queryStartTime
+        )}, Itens: ${mappedResult.length}, Tempo SQL: ${
+          queryEndTime - queryStartTime
         }ms`,
       );
 

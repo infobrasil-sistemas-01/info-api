@@ -75,7 +75,10 @@ describe('AuthService', () => {
         { provide: EnvService, useValue: mockEnv },
         { provide: AUTH_CONFIG, useValue: mockAuthConfig },
         { provide: PermissionResolver, useValue: mockPermissionResolver },
-        { provide: TenantConnectionService, useValue: mockTenantConnectionService },
+        {
+          provide: TenantConnectionService,
+          useValue: mockTenantConnectionService,
+        },
       ],
     }).compile();
 
@@ -243,9 +246,11 @@ describe('AuthService', () => {
     };
 
     it('should successfully verify valid operator and return info', async () => {
-      mockConnection.query.mockImplementation((_q: any, _p: any, callback: any) => {
-        callback(null, [validRow]);
-      });
+      mockConnection.query.mockImplementation(
+        (_q: any, _p: any, callback: any) => {
+          callback(null, [validRow]);
+        },
+      );
       (bcrypt.compare as jest.Mock).mockResolvedValue(true);
 
       const result = await service.verifyOperator('cred-1', {
@@ -259,9 +264,9 @@ describe('AuthService', () => {
         funCodigo: 25,
         storeId: 2,
       });
-      expect(mockTenantConnectionService.releaseConnection).toHaveBeenCalledWith(
-        mockConnection,
-      );
+      expect(
+        mockTenantConnectionService.releaseConnection,
+      ).toHaveBeenCalledWith(mockConnection);
     });
 
     it('should throw UnauthorizedException when credentialsId is empty', async () => {
@@ -271,9 +276,11 @@ describe('AuthService', () => {
     });
 
     it('should throw UnauthorizedException when operator is not found', async () => {
-      mockConnection.query.mockImplementation((_q: any, _p: any, callback: any) => {
-        callback(null, []);
-      });
+      mockConnection.query.mockImplementation(
+        (_q: any, _p: any, callback: any) => {
+          callback(null, []);
+        },
+      );
 
       await expect(
         service.verifyOperator('cred-1', {
@@ -281,15 +288,17 @@ describe('AuthService', () => {
           password: '123',
         }),
       ).rejects.toThrow(UnauthorizedException);
-      expect(mockTenantConnectionService.releaseConnection).toHaveBeenCalledWith(
-        mockConnection,
-      );
+      expect(
+        mockTenantConnectionService.releaseConnection,
+      ).toHaveBeenCalledWith(mockConnection);
     });
 
     it('should throw UnauthorizedException when operator situation is not active', async () => {
-      mockConnection.query.mockImplementation((_q: any, _p: any, callback: any) => {
-        callback(null, [{ ...validRow, USU_SITUACAO: 'I' }]);
-      });
+      mockConnection.query.mockImplementation(
+        (_q: any, _p: any, callback: any) => {
+          callback(null, [{ ...validRow, USU_SITUACAO: 'I' }]);
+        },
+      );
 
       await expect(
         service.verifyOperator('cred-1', {
@@ -297,15 +306,17 @@ describe('AuthService', () => {
           password: '123',
         }),
       ).rejects.toThrow(UnauthorizedException);
-      expect(mockTenantConnectionService.releaseConnection).toHaveBeenCalledWith(
-        mockConnection,
-      );
+      expect(
+        mockTenantConnectionService.releaseConnection,
+      ).toHaveBeenCalledWith(mockConnection);
     });
 
     it('should throw UnauthorizedException when employee has FUN_DATADEMISSAO', async () => {
-      mockConnection.query.mockImplementation((_q: any, _p: any, callback: any) => {
-        callback(null, [{ ...validRow, FUN_DATADEMISSAO: '2026-01-01' }]);
-      });
+      mockConnection.query.mockImplementation(
+        (_q: any, _p: any, callback: any) => {
+          callback(null, [{ ...validRow, FUN_DATADEMISSAO: '2026-01-01' }]);
+        },
+      );
 
       await expect(
         service.verifyOperator('cred-1', {
@@ -313,15 +324,17 @@ describe('AuthService', () => {
           password: '123',
         }),
       ).rejects.toThrow(UnauthorizedException);
-      expect(mockTenantConnectionService.releaseConnection).toHaveBeenCalledWith(
-        mockConnection,
-      );
+      expect(
+        mockTenantConnectionService.releaseConnection,
+      ).toHaveBeenCalledWith(mockConnection);
     });
 
     it('should throw UnauthorizedException when USU_SENHA_API is missing', async () => {
-      mockConnection.query.mockImplementation((_q: any, _p: any, callback: any) => {
-        callback(null, [{ ...validRow, USU_SENHA_API: null }]);
-      });
+      mockConnection.query.mockImplementation(
+        (_q: any, _p: any, callback: any) => {
+          callback(null, [{ ...validRow, USU_SENHA_API: null }]);
+        },
+      );
 
       await expect(
         service.verifyOperator('cred-1', {
@@ -329,15 +342,17 @@ describe('AuthService', () => {
           password: '123',
         }),
       ).rejects.toThrow(UnauthorizedException);
-      expect(mockTenantConnectionService.releaseConnection).toHaveBeenCalledWith(
-        mockConnection,
-      );
+      expect(
+        mockTenantConnectionService.releaseConnection,
+      ).toHaveBeenCalledWith(mockConnection);
     });
 
     it('should throw UnauthorizedException when password does not match', async () => {
-      mockConnection.query.mockImplementation((_q: any, _p: any, callback: any) => {
-        callback(null, [validRow]);
-      });
+      mockConnection.query.mockImplementation(
+        (_q: any, _p: any, callback: any) => {
+          callback(null, [validRow]);
+        },
+      );
       (bcrypt.compare as jest.Mock).mockResolvedValue(false);
 
       await expect(
@@ -346,15 +361,17 @@ describe('AuthService', () => {
           password: 'wrongpassword',
         }),
       ).rejects.toThrow(UnauthorizedException);
-      expect(mockTenantConnectionService.releaseConnection).toHaveBeenCalledWith(
-        mockConnection,
-      );
+      expect(
+        mockTenantConnectionService.releaseConnection,
+      ).toHaveBeenCalledWith(mockConnection);
     });
 
     it('should throw UnauthorizedException and release connection when query fails', async () => {
-      mockConnection.query.mockImplementation((_q: any, _p: any, callback: any) => {
-        callback(new Error('DB Connection Timeout'), null);
-      });
+      mockConnection.query.mockImplementation(
+        (_q: any, _p: any, callback: any) => {
+          callback(new Error('DB Connection Timeout'), null);
+        },
+      );
 
       await expect(
         service.verifyOperator('cred-1', {
@@ -362,9 +379,9 @@ describe('AuthService', () => {
           password: 'password123',
         }),
       ).rejects.toThrow(UnauthorizedException);
-      expect(mockTenantConnectionService.releaseConnection).toHaveBeenCalledWith(
-        mockConnection,
-      );
+      expect(
+        mockTenantConnectionService.releaseConnection,
+      ).toHaveBeenCalledWith(mockConnection);
     });
   });
 });

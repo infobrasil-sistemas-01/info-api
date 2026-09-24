@@ -18,7 +18,14 @@ describe('GetProductsQueryDto', () => {
     ['valid full data', validData],
     ['only required storeId', { storeId: 1 }],
     ['with string storeId coerced to int', { storeId: '2' }],
-    ['with only startDateAlteracao and endDateAlteracao', { storeId: 1, startDateAlteracao: '2026-01-01', endDateAlteracao: '2026-01-31' }],
+    [
+      'with only startDateAlteracao and endDateAlteracao',
+      {
+        storeId: 1,
+        startDateAlteracao: '2026-01-01',
+        endDateAlteracao: '2026-01-31',
+      },
+    ],
   ])('should accept %s', (_, input) => {
     expect(() => GetProductsQuerySchema.parse(input)).not.toThrow();
   });

@@ -122,7 +122,9 @@ describe('ProductService', () => {
           '2026-01-01',
         ),
       ).rejects.toThrow(
-        new BadRequestException('Data inicial deve ser menor que a data final.'),
+        new BadRequestException(
+          'Data inicial deve ser menor que a data final.',
+        ),
       );
     });
 

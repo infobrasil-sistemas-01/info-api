@@ -13,7 +13,11 @@ export class JwtH2mStrategy extends PassportStrategy(Strategy, 'jwt-h2m') {
     const issuer = env.get('STS_ISSUER');
 
     const secretOrKeyProvider = staticPublicKey
-      ? (_req: any, _rawJwtToken: any, done: (err: any, secret?: string) => void) => {
+      ? (
+          _req: any,
+          _rawJwtToken: any,
+          done: (err: any, secret?: string) => void,
+        ) => {
           done(null, staticPublicKey);
         }
       : passportJwtSecret({
@@ -36,7 +40,9 @@ export class JwtH2mStrategy extends PassportStrategy(Strategy, 'jwt-h2m') {
     const credentialsId = payload.credentials_id || payload.credentialsId;
 
     if (!payload.sub || !credentialsId || !payload.usu_codigo) {
-      throw new UnauthorizedException('Token H2M inválido: claims obrigatórias ausentes');
+      throw new UnauthorizedException(
+        'Token H2M inválido: claims obrigatórias ausentes',
+      );
     }
 
     const resolvedStoreId = payload.storeId ?? payload.store_id ?? 1;

@@ -49,7 +49,8 @@ export class JwtAuthGuard extends AuthGuard(['jwt', 'jwt-h2m']) {
     }
 
     const storeId = payload.store_id ?? payload.storeId ?? 1;
-    const type: 'M2M' | 'H2M' = payload.type || (payload.usu_codigo ? 'H2M' : 'M2M');
+    const type: 'M2M' | 'H2M' =
+      payload.type || (payload.usu_codigo ? 'H2M' : 'M2M');
 
     req.authContext = {
       userId,

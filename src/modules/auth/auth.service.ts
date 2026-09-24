@@ -262,7 +262,10 @@ export class AuthService {
         throw new UnauthorizedException('Credenciais inválidas.');
       }
 
-      const situacao = (user.USU_SITUACAO || 'A').toString().trim().toUpperCase();
+      const situacao = (user.USU_SITUACAO || 'A')
+        .toString()
+        .trim()
+        .toUpperCase();
       if (situacao !== 'A') {
         this.logger.warn(
           `Tentativa de login de operador falhou: usuário "${dto.username}" com situação "${situacao}". Tenant: ${credentialsId}`,
@@ -353,7 +356,10 @@ export class AuthService {
         return { active: false };
       }
 
-      const situacao = (user.USU_SITUACAO || 'A').toString().trim().toUpperCase();
+      const situacao = (user.USU_SITUACAO || 'A')
+        .toString()
+        .trim()
+        .toUpperCase();
       if (situacao !== 'A' || user.FUN_DATADEMISSAO) {
         return { active: false };
       }

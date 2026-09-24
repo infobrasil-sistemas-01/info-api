@@ -142,7 +142,9 @@ export class AuthController {
   ) {
     const credentialsId = req.authContext?.credentialsId;
     if (!credentialsId) {
-      throw new UnauthorizedException('Tenant credentialsId ausente na autenticação.');
+      throw new UnauthorizedException(
+        'Tenant credentialsId ausente na autenticação.',
+      );
     }
     return this.auth.verifyOperator(credentialsId, body);
   }
@@ -150,7 +152,8 @@ export class AuthController {
   @Get('operator-status/:usuCodigo')
   @UseGuards(TenantAuthGuard)
   @ApiOperation({
-    summary: 'Consulta status ativo de operador para rotação de token (H2M Refresh)',
+    summary:
+      'Consulta status ativo de operador para rotação de token (H2M Refresh)',
   })
   async operatorStatus(
     @Req() req: ReqWithAuthContext,
@@ -158,7 +161,9 @@ export class AuthController {
   ) {
     const credentialsId = req.authContext?.credentialsId;
     if (!credentialsId) {
-      throw new UnauthorizedException('Tenant credentialsId ausente na autenticação.');
+      throw new UnauthorizedException(
+        'Tenant credentialsId ausente na autenticação.',
+      );
     }
     return this.auth.checkOperatorStatus(credentialsId, usuCodigo);
   }

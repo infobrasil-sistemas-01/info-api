@@ -10,7 +10,9 @@ export class CallCenterResponseDto {
   @ApiPropertyOptional({ description: 'Nome do cliente (CLI_NOME)' })
   CLI_NOME?: string;
 
-  @ApiPropertyOptional({ description: 'Observações gerais do cliente (CLI_OBS)' })
+  @ApiPropertyOptional({
+    description: 'Observações gerais do cliente (CLI_OBS)',
+  })
   CLI_OBS?: string;
 
   @ApiProperty({ description: 'Código do usuário (USU_CODIGO)' })
@@ -102,6 +104,8 @@ export class CallCenterResponseDto {
   @ApiPropertyOptional({ description: 'E-mail enviado (CAL_EMAILENVIADO)' })
   CAL_EMAILENVIADO?: string;
 
-  @ApiPropertyOptional({ description: 'Tag de Outras informações (CAL_OUTRASINFO)' })
+  @ApiPropertyOptional({
+    description: 'Tag de Outras informações (CAL_OUTRASINFO)',
+  })
   CAL_OUTRASINFO?: string;
 }

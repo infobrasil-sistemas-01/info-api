@@ -10,7 +10,7 @@ export class StatusService {
   constructor(
     private readonly prisma: RegistryPrismaService,
     private readonly healthService: HealthService,
-  ) { }
+  ) {}
 
   @Cron(CronExpression.EVERY_MINUTE)
   async monitor() {
@@ -75,10 +75,10 @@ export class StatusService {
   }
 
   /**
- * Limpa logs mais antigos que 24h a cada hora.
- * Como roda de hora em hora, remove apenas ~60 registros por execução,
- * sem causar picos de I/O ou lock no banco.
- */
+   * Limpa logs mais antigos que 24h a cada hora.
+   * Como roda de hora em hora, remove apenas ~60 registros por execução,
+   * sem causar picos de I/O ou lock no banco.
+   */
   @Cron(CronExpression.EVERY_HOUR)
   async cleanup() {
     this.logger.log('Starting status logs cleanup...');
@@ -98,7 +98,6 @@ export class StatusService {
       this.logger.error(`Failed to cleanup status logs: ${e.message}`);
     }
   }
-
 
   async getLatestStatus() {
     try {

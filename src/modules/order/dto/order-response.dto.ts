@@ -22,10 +22,16 @@ export class OrderResponseDto {
   })
   FUN_NOME?: string;
 
-  @ApiPropertyOptional({ example: 1, description: 'Código do usuário/operador' })
+  @ApiPropertyOptional({
+    example: 1,
+    description: 'Código do usuário/operador',
+  })
   USU_CODIGO?: number;
 
-  @ApiPropertyOptional({ example: 'INFO-MOBILE', description: 'Apelido do usuário/operador' })
+  @ApiPropertyOptional({
+    example: 'INFO-MOBILE',
+    description: 'Apelido do usuário/operador',
+  })
   USU_APELIDO?: string;
 
   @ApiProperty({ example: 'E', description: 'Tipo da venda' })
@@ -49,7 +55,10 @@ export class OrderResponseDto {
   })
   FPG_DESCRICAO?: string;
 
-  @ApiPropertyOptional({ example: 1, description: 'Código do plano de pagamento' })
+  @ApiPropertyOptional({
+    example: 1,
+    description: 'Código do plano de pagamento',
+  })
   PP1_CODIGO?: number;
 
   @ApiPropertyOptional({
@@ -64,7 +73,10 @@ export class OrderResponseDto {
   @ApiPropertyOptional({ example: 123, description: 'Código do cliente' })
   CLI_CODIGO?: number;
 
-  @ApiPropertyOptional({ example: 'Cliente Exemplo', description: 'Nome do cliente' })
+  @ApiPropertyOptional({
+    example: 'Cliente Exemplo',
+    description: 'Nome do cliente',
+  })
   CLI_NOME?: string;
 }
 
@@ -131,7 +143,10 @@ export class OrderDetailResponseDto extends OrderResponseDto {
   @ApiPropertyOptional({ example: 300.0, description: 'Valor total bruto' })
   VEN_TOTALBRUTO?: number;
 
-  @ApiPropertyOptional({ example: 49.5, description: 'Valor total de desconto' })
+  @ApiPropertyOptional({
+    example: 49.5,
+    description: 'Valor total de desconto',
+  })
   VEN_TOTALDESC?: number;
 
   @ApiPropertyOptional({ example: 0.0, description: 'Valor pendente da venda' })
@@ -182,7 +197,10 @@ export class OrderDetailResponseDto extends OrderResponseDto {
   })
   MON_DATA?: string;
 
-  @ApiPropertyOptional({ example: 3.0, description: 'Peso total calculado do pedido' })
+  @ApiPropertyOptional({
+    example: 3.0,
+    description: 'Peso total calculado do pedido',
+  })
   PESO?: number;
 
   @ApiProperty({ type: [OrderItemResponseDto], description: 'Itens do pedido' })

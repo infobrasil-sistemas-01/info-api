@@ -14,9 +14,7 @@ describe('API E2E Tests', () => {
   let accessToken: string;
   let refreshToken: string;
 
-  const TEST_CREDENTIALS = Buffer.from(
-    'admin:admin',
-  ).toString('base64');
+  const TEST_CREDENTIALS = Buffer.from('admin:admin').toString('base64');
 
   let moduleFixture: TestingModule;
 

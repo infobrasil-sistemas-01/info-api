@@ -61,16 +61,12 @@ describe('TenantAuthGuard', () => {
   it('should throw UnauthorizedException when authorization header is missing', async () => {
     const ctx = createMockContext();
 
-    await expect(guard.canActivate(ctx)).rejects.toThrow(
-      UnauthorizedException,
-    );
+    await expect(guard.canActivate(ctx)).rejects.toThrow(UnauthorizedException);
   });
 
   it('should throw UnauthorizedException when scheme is unknown', async () => {
     const ctx = createMockContext('Digest something');
 
-    await expect(guard.canActivate(ctx)).rejects.toThrow(
-      UnauthorizedException,
-    );
+    await expect(guard.canActivate(ctx)).rejects.toThrow(UnauthorizedException);
   });
 });

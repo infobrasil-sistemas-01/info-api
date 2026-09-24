@@ -34,7 +34,10 @@ export class ProductResponseDto {
   @ApiProperty({ example: 19.99, description: 'Preço 1' })
   PRECO: number;
 
-  @ApiProperty({ example: "2026-01-01", description: 'Data de Alteração do estoque' })
+  @ApiProperty({
+    example: '2026-01-01',
+    description: 'Data de Alteração do estoque',
+  })
   EST_DTALTERACAO: string;
 }
 

@@ -153,7 +153,10 @@ export class OrderService {
             transaction.rollback();
           }
         } catch (rollbackErr) {
-          this.logger.error('Falha ao executar rollback da transação', rollbackErr);
+          this.logger.error(
+            'Falha ao executar rollback da transação',
+            rollbackErr,
+          );
         }
         throw txError;
       }
@@ -493,9 +496,7 @@ export class OrderService {
       // Se for string nominal (ex: 'DINHEIRO', 'PIX', 'CREDIT'), busca em FORMASPAG
       const upper = trimmed.toUpperCase();
       const searchPattern =
-        upper === 'CREDIT' || upper === 'DEBIT'
-          ? '%CART%'
-          : `%${upper}%`;
+        upper === 'CREDIT' || upper === 'DEBIT' ? '%CART%' : `%${upper}%`;
 
       const query = `SELECT FIRST 1 FPG_CODIGO FROM formaspag WHERE UPPER(FPG_DESCRICAO) LIKE ? ORDER BY FPG_CODIGO ASC`;
       return new Promise((resolve) => {
