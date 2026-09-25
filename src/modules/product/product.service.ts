@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { TenantConnectionService } from 'src/infra/database/tenant-connection.service';
+import { PaginatedResponse } from 'src/common/pagination/paginated-response';
 
 @Injectable()
 export class ProductService {
@@ -21,6 +22,7 @@ export class ProductService {
     search?: string,
     startDateAlteracao?: string,
     endDateAlteracao?: string,
+    includeCount: boolean = false,
   ) {
     let connection: any;
     connection =
@@ -53,34 +55,22 @@ export class ProductService {
         }
       }
 
-      let params: (number | string)[] = [
-        pageSize,
-        (page - 1) * pageSize,
-        storeId,
-      ];
-      let query = `SELECT FIRST ? SKIP ? 
-                      P.PRO_CODIGO, P.PRO_CODIGOBAR, P.PRO_DESCRICAO, M.MAR_CODIGO, M.MAR_DESCRICAO, G.GRU_CODIGO, G.GRU_DESCRICAO, E.EST_ATUAL, E.EST_APOIO, PRO_PRECO${priceTable} PRECO, E.EST_DTALTERACAO
-                      FROM produtos P 
-                      INNER JOIN estoque E ON P.PRO_CODIGO = E.PRO_CODIGO AND E.LOJ_CODIGO = ?
-                      LEFT JOIN marcas M ON P.MAR_CODIGO = M.MAR_CODIGO 
-                      LEFT JOIN grupospro G ON P.GRU_CODIGO = G.GRU_CODIGO
-                      `;
+      const whereClauses: string[] = [];
+      const filterParams: (number | string)[] = [storeId];
 
       if (group) {
-        query += ` WHERE P.GRU_CODIGO = ?`;
-        params.push(group);
+        whereClauses.push('P.GRU_CODIGO = ?');
+        filterParams.push(group);
       }
 
       if (brand) {
-        query += group ? ` AND` : ` WHERE`;
-        query += ` P.MAR_CODIGO = ?`;
-        params.push(brand);
+        whereClauses.push('P.MAR_CODIGO = ?');
+        filterParams.push(brand);
       }
 
       if (minStock) {
-        query += group || brand ? ` AND` : ` WHERE`;
-        query += ` E.EST_ATUAL >= ?`;
-        params.push(minStock);
+        whereClauses.push('E.EST_ATUAL >= ?');
+        filterParams.push(minStock);
       }
 
       if (search) {
@@ -89,27 +79,60 @@ export class ProductService {
             'Pesquisa precisa ter pelo menos 3 caracteres.',
           );
         }
-        query += group || brand || minStock ? ` AND` : ` WHERE`;
-        query += ` P.PRO_DESCRICAO LIKE ?`;
-        params.push(`%${search}%`);
+        whereClauses.push('P.PRO_DESCRICAO LIKE ?');
+        filterParams.push(`%${search}%`);
       }
 
       if (startDateAlteracao && endDateAlteracao) {
-        query += group || brand || minStock || search ? ` AND` : ` WHERE`;
-        query += ` E.EST_DTALTERACAO BETWEEN ? AND ?`;
-        params.push(startDateAlteracao, endDateAlteracao);
+        whereClauses.push('E.EST_DTALTERACAO BETWEEN ? AND ?');
+        filterParams.push(startDateAlteracao, endDateAlteracao);
       }
 
-      query += ` ORDER BY P.PRO_DESCRICAO`;
+      const whereSql =
+        whereClauses.length > 0 ? ` WHERE ${whereClauses.join(' AND ')}` : '';
+
+      const query = `SELECT FIRST ? SKIP ? 
+                      P.PRO_CODIGO, P.PRO_CODIGOBAR, P.PRO_DESCRICAO, M.MAR_CODIGO, M.MAR_DESCRICAO, G.GRU_CODIGO, G.GRU_DESCRICAO, E.EST_ATUAL, E.EST_APOIO, PRO_PRECO${priceTable} PRECO, E.EST_DTALTERACAO
+                      FROM produtos P 
+                      INNER JOIN estoque E ON P.PRO_CODIGO = E.PRO_CODIGO AND E.LOJ_CODIGO = ?
+                      LEFT JOIN marcas M ON P.MAR_CODIGO = M.MAR_CODIGO 
+                      LEFT JOIN grupospro G ON P.GRU_CODIGO = G.GRU_CODIGO${whereSql}
+                      ORDER BY P.PRO_DESCRICAO`;
+
+      const params = [pageSize, (page - 1) * pageSize, ...filterParams];
 
       const queryStartTime = Date.now();
-      const result = await new Promise((resolve, reject) => {
+      const result: any = await new Promise((resolve, reject) => {
         connection.query(query, params, (err: any, res: any) => {
           if (err) return reject(err);
           resolve(res);
         });
       });
       const queryEndTime = Date.now();
+
+      let total: number | undefined = undefined;
+
+      if (includeCount) {
+        const countQuery = `SELECT COUNT(*) AS TOTAL
+                      FROM produtos P 
+                      INNER JOIN estoque E ON P.PRO_CODIGO = E.PRO_CODIGO AND E.LOJ_CODIGO = ?
+                      LEFT JOIN marcas M ON P.MAR_CODIGO = M.MAR_CODIGO 
+                      LEFT JOIN grupospro G ON P.GRU_CODIGO = G.GRU_CODIGO${whereSql}`;
+
+        const countRes: any = await new Promise((resolve, reject) => {
+          connection.query(countQuery, filterParams, (err: any, res: any) => {
+            if (err) return reject(err);
+            resolve(res);
+          });
+        });
+
+        const rawTotal =
+          countRes?.[0]?.TOTAL ??
+          countRes?.[0]?.total ??
+          countRes?.[0]?.COUNT ??
+          0;
+        total = Number(rawTotal);
+      }
 
       this.logger.log(
         `Busca de produtos executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
@@ -122,13 +145,20 @@ export class ProductService {
             brand,
             minStock,
             search,
+            includeCount,
+            total,
           },
         )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${
           queryEndTime - queryStartTime
         }ms`,
       );
 
-      return result;
+      return new PaginatedResponse(
+        Array.isArray(result) ? result : [],
+        total,
+        page,
+        pageSize,
+      );
     } finally {
       this.tenantConnectionService.releaseConnection(connection);
     }

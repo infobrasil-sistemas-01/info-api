@@ -45,7 +45,39 @@ describe('ProductService', () => {
 
       const result = await service.get('cred-1', 1, 1, 10);
 
-      expect(result).toEqual(mockProducts);
+      expect(result.data).toEqual(mockProducts);
+      expect(result.total).toBeUndefined();
+    });
+
+    it('should query and return total count when includeCount is true', async () => {
+      const mockProducts = [{ PRO_CODIGO: 1, PRO_DESCRICAO: 'Product 1' }];
+      mockConnection.query.mockImplementation(
+        (query: string, params: any[], callback: Function) => {
+          if (query.includes('COUNT(*)')) {
+            callback(null, [{ TOTAL: 42 }]);
+          } else {
+            callback(null, mockProducts);
+          }
+        },
+      );
+
+      const result = await service.get(
+        'cred-1',
+        1,
+        1,
+        10,
+        1,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        true,
+      );
+
+      expect(result.data).toEqual(mockProducts);
+      expect(result.total).toBe(42);
     });
 
     it('should apply group filter when provided', async () => {

@@ -74,6 +74,7 @@ describe('ProductController', () => {
         'search term',
         '2026-01-01',
         '2026-01-31',
+        false,
       );
       expect(result).toEqual([{ id: 1 }, { id: 2 }]);
     });
@@ -95,6 +96,7 @@ describe('ProductController', () => {
         undefined,
         undefined,
         undefined,
+        false,
       );
     });
 
@@ -124,6 +126,7 @@ describe('ProductController', () => {
         undefined,
         undefined,
         undefined,
+        false,
       );
     });
 
@@ -153,6 +156,28 @@ describe('ProductController', () => {
         undefined,
         undefined,
         undefined,
+        false,
+      );
+    });
+
+    it('should pass includeCount true to productService.get when includeCount parameter is true', async () => {
+      mockProductService.get.mockResolvedValue([]);
+
+      await controller.getProducts(mockReq, { storeId: 1 }, true);
+
+      expect(productService.get).toHaveBeenCalledWith(
+        'cred-1',
+        1,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        true,
       );
     });
 
