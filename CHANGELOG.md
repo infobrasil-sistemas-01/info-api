@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.16.26](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.16.25...v1.16.26) (2026-09-25)
+
+
+### Features
+
+* **product:** adicionar suporte a headers de paginacao e contagem opt-in ([4a02e2b](https://github.com/infobrasil-sistemas-01/info-api/commit/4a02e2be77bde62d09cc50187235424f089201c0))
+
 ## [1.16.25](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.16.24...v1.16.25) (2026-09-25)
 
 
