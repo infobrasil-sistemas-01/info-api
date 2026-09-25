@@ -22,6 +22,7 @@ import {
 } from '../auth/guards/jwt-auth.guard';
 import {
   ApiBearerAuth,
+  ApiHeader,
   ApiOperation,
   ApiParam,
   ApiQuery,
@@ -34,13 +35,14 @@ import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
 
 import { GetOrdersQueryDto } from './dto/get-orders-query.dto';
 import { GetOrderByIdQueryDto } from './dto/get-order-by-id-query.dto';
+import { IncludeCount } from 'src/common/decorators/include-count.decorator';
 
 @Controller('orders')
 export class OrderController {
   constructor(
     private readonly orderService: OrderService,
     private readonly orderItemService: OrderItemService,
-  ) {}
+  ) { }
 
   @Post()
   @UseGuards(JwtAuthGuard, PermissionsGuard)
@@ -152,12 +154,41 @@ export class OrderController {
     summary: 'Obter pedidos',
     description: 'Retorna uma lista de pedidos da loja.',
   })
+  @ApiHeader({
+    name: 'X-Request-Count',
+    required: false,
+    description:
+      'Se definido como "true", calcula e retorna cabeçalhos de paginação (X-Total-Count, X-Total-Pages, X-Current-Page, X-Per-Page) na resposta.',
+    schema: { type: 'string', example: 'true' },
+  })
   @ApiResponse({
     status: 200,
     description: 'Lista de pedidos retornada com sucesso.',
     type: [OrderResponseDto],
+    headers: {
+      'X-Total-Count': {
+        description:
+          'Total de registros encontrados considerando os filtros (presente quando X-Request-Count: true)',
+        schema: { type: 'integer', example: 145 },
+      },
+      'X-Total-Pages': {
+        description:
+          'Total de páginas calculadas (presente quando X-Request-Count: true)',
+        schema: { type: 'integer', example: 3 },
+      },
+      'X-Current-Page': {
+        description:
+          'Página atual solicitada (presente quando X-Request-Count: true)',
+        schema: { type: 'integer', example: 1 },
+      },
+      'X-Per-Page': {
+        description:
+          'Quantidade de registros por página (presente quando X-Request-Count: true)',
+        schema: { type: 'integer', example: 50 },
+      },
+    },
   })
-  getOrders(@Req() req: ReqWithAuthContext, @Query() query: GetOrdersQueryDto) {
+  getOrders(@Req() req: ReqWithAuthContext, @Query() query: GetOrdersQueryDto, @IncludeCount() includeCount: boolean = false) {
     const {
       credentialsId,
       storeId: storeIdToken,
@@ -180,6 +211,7 @@ export class OrderController {
       finalStoreId,
       query.page,
       query.pageSize,
+      includeCount,
       {
         startDate: query.startDate,
         endDate: query.endDate,

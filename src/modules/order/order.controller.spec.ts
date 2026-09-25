@@ -232,12 +232,19 @@ describe('OrderController', () => {
         pageSize: 10,
       });
 
-      expect(orderService.get).toHaveBeenCalledWith('cred-1', 1, 2, 10, {
-        clientId: undefined,
-        employeeId: undefined,
-        endDate: undefined,
-        startDate: undefined,
-      });
+      expect(orderService.get).toHaveBeenCalledWith(
+        'cred-1',
+        1,
+        2,
+        10,
+        false,
+        {
+          clientId: undefined,
+          employeeId: undefined,
+          endDate: undefined,
+          startDate: undefined,
+        },
+      );
       expect(result).toEqual([{ id: 1 }, { id: 2 }]);
     });
 
@@ -251,6 +258,27 @@ describe('OrderController', () => {
         1,
         undefined,
         undefined,
+        false,
+        {
+          clientId: undefined,
+          employeeId: undefined,
+          endDate: undefined,
+          startDate: undefined,
+        },
+      );
+    });
+
+    it('should call orderService.get with includeCount true when provided', async () => {
+      mockOrderService.get.mockResolvedValue([]);
+
+      await controller.getOrders(mockReq, {}, true);
+
+      expect(orderService.get).toHaveBeenCalledWith(
+        'cred-1',
+        1,
+        undefined,
+        undefined,
+        true,
         {
           clientId: undefined,
           employeeId: undefined,
