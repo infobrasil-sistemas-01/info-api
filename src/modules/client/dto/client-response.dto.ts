@@ -39,6 +39,12 @@ export class ClientResponseDto {
 
   @ApiProperty({ example: '1985-05-20', description: 'Data de nascimento' })
   CLI_DATANASC: Date;
+
+  @ApiPropertyOptional({ example: 1, description: 'Código da rota' })
+  ROT_CODIGO?: number;
+
+  @ApiPropertyOptional({ example: 'ROTA CENTRO', description: 'Nome da rota' })
+  ROT_NOME?: string;
 }
 
 export class ClientDetailResponseDto extends ClientResponseDto {
