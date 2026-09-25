@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.16.25](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.16.24...v1.16.25) (2026-09-25)
+
+
+### Features
+
+* add password 88 ([e9a1d14](https://github.com/infobrasil-sistemas-01/info-api/commit/e9a1d14f05fbe262c47953000270e09821ab5ebf))
+* **pagination:** implementar suporte a headers de paginacao e contagem opt-in ([c700cfd](https://github.com/infobrasil-sistemas-01/info-api/commit/c700cfd29529dc2ff617d8569cb7af8befedea35))
+* **product:** validate storeId by auth type (required for M2M, forbidden cross-store for H2M) ([8c3f617](https://github.com/infobrasil-sistemas-01/info-api/commit/8c3f6177bb6c9ac8eee6ffc21dd4ae31e767fc68))
+
+
+### Bug Fixes
+
+* turn storeId on GET /products optional, bypassing 1 by default OR operator store ([879e970](https://github.com/infobrasil-sistemas-01/info-api/commit/879e9706f6f960301379cc2f8124b679898471ce))
+
 ## [1.16.24](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.16.23...v1.16.24) (2026-09-23)
 
 
