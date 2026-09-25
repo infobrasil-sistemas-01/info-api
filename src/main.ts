@@ -91,7 +91,15 @@ async function bootstrap() {
   // via X-Forwarded-For. Necessário para o IpBlocklistService funcionar corretamente.
   app.getHttpAdapter().getInstance().set('trust proxy', 1);
 
-  app.enableCors();
+  app.enableCors({
+    exposedHeaders: [
+      'X-Total-Count',
+      'X-Total-Pages',
+      'X-Current-Page',
+      'X-Per-Page',
+      'X-Api-Version',
+    ],
+  });
   app.setGlobalPrefix('api/v1', {
     exclude: [
       'integration',

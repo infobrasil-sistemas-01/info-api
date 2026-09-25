@@ -12,6 +12,7 @@ import { HealthModule } from './modules/health/health.module';
 import { IntegrationRequestModule } from './modules/integration-request/integration-request.module';
 import { GlobalLoggerService } from './common/logger/logger.service';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+import { PaginationHeadersInterceptor } from './common/interceptors/pagination-headers.interceptor';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { IpBlocklistService } from './common/throttle/ip-blocklist.service';
 import { IpBlocklistMiddleware } from './common/middleware/ip-blocklist.middleware';
@@ -95,6 +96,10 @@ import { AppController } from './app.controller';
     {
       provide: APP_INTERCEPTOR,
       useClass: PlanLimitInterceptor,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: PaginationHeadersInterceptor,
     },
     {
       provide: APP_FILTER,

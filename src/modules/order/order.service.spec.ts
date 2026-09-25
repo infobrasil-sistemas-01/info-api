@@ -167,7 +167,23 @@ describe('OrderService', () => {
 
       const result = await service.get('cred-1', 1, 1, 10);
 
-      expect(result).toHaveLength(2);
+      expect(result.data).toHaveLength(2);
+      expect(result.total).toBeUndefined();
+    });
+
+    it('should query count and return total when includeCount is true', async () => {
+      mockConnection.query.mockImplementation((query, params, callback) => {
+        if (query.includes('COUNT(*)')) {
+          callback(null, [{ TOTAL: 55 }]);
+        } else {
+          callback(null, [{ VEN_NUMERO: 1, VEN_DATA: '2024-01-15' }]);
+        }
+      });
+
+      const result = await service.get('cred-1', 1, 1, 10, true);
+
+      expect(result.data).toHaveLength(1);
+      expect(result.total).toBe(55);
     });
 
     it('should calculate correct pagination offset', async () => {

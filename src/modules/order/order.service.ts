@@ -12,6 +12,7 @@ import { SoldProductDto } from './dto/sold-product.dto';
 import { ProductService } from '../product/product.service';
 import { ReceiptService } from '../receipt/receipt.service';
 import { OrderItemService } from './order-item/order-item.service';
+import { PaginatedResponse } from 'src/common/pagination/paginated-response';
 
 @Injectable()
 export class OrderService {
@@ -22,7 +23,7 @@ export class OrderService {
     private readonly orderItemService: OrderItemService,
     private readonly productService: ProductService,
     private readonly receiptService: ReceiptService,
-  ) {}
+  ) { }
 
   async post(credentialsId: string, data: PostOrderDto, storeId: number) {
     let connection: any;
@@ -231,6 +232,7 @@ export class OrderService {
     storeId?: number,
     page: number = 1,
     pageSize: number = 100,
+    includeCount: boolean = false,
     filters: {
       startDate?: string;
       endDate?: string;
@@ -244,32 +246,38 @@ export class OrderService {
 
     try {
       let whereClause = `WHERE 1=1`;
-      const params: any[] = [pageSize, (page - 1) * pageSize];
+      const filterParams: any[] = [];
 
       if (storeId) {
         whereClause += ` AND V.LOJ_CODIGO = ?`;
-        params.push(storeId);
+        filterParams.push(storeId);
       }
 
       if (filters.startDate) {
         whereClause += ` AND V.VEN_DATA >= ?`;
-        params.push(filters.startDate);
+        filterParams.push(filters.startDate);
       }
 
       if (filters.endDate) {
         whereClause += ` AND V.VEN_DATA <= ?`;
-        params.push(filters.endDate);
+        filterParams.push(filters.endDate);
       }
 
       if (filters.clientId) {
         whereClause += ` AND V.CLI_CODIGO = ?`;
-        params.push(filters.clientId);
+        filterParams.push(filters.clientId);
       }
 
       if (filters.employeeId) {
         whereClause += ` AND V.FUN_CODIGO = ?`;
-        params.push(filters.employeeId);
+        filterParams.push(filters.employeeId);
       }
+
+      const queryParams: any[] = [
+        pageSize,
+        (page - 1) * pageSize,
+        ...filterParams,
+      ];
 
       const query = `SELECT FIRST ? SKIP ?
                   V.VEN_NUMERO,
@@ -301,22 +309,53 @@ export class OrderService {
 
       const queryStartTime = Date.now();
       const result = await new Promise((resolve, reject) => {
-        connection.query(query, params, (err: any, res: any) => {
+        connection.query(query, queryParams, (err: any, res: any) => {
           if (err) return reject(err);
           resolve(res);
         });
       });
       const queryEndTime = Date.now();
 
+      let total: number | undefined;
+
+      if (includeCount) {
+        const countQuery = `SELECT COUNT(*) as total
+                             FROM VENDAS V
+                             LEFT JOIN formaspag FPG ON FPG.fpg_codigo = V.fp1_codigo
+                             LEFT JOIN planospag PLP ON PLP.plp_codigo = V.pp1_codigo
+                             LEFT JOIN clientes C ON C.cli_codigo = V.cli_codigo
+                             LEFT JOIN funcionarios F ON F.fun_codigo = V.fun_codigo
+                             LEFT JOIN usuarios U ON U.usu_codigo = V.usu_codigo
+                             ${whereClause}`;
+        const countRes = (await new Promise((resolve, reject) => {
+          connection.query(countQuery, filterParams, (err: any, res: any) => {
+            if (err) return reject(err);
+            resolve(res);
+          });
+        }));
+
+        const rawTotal =
+          countRes?.[0]?.TOTAL ??
+          countRes?.[0]?.total ??
+          countRes?.[0]?.COUNT ??
+          0;
+
+        total = Number(rawTotal);
+      }
+
       this.logger.log(
         `Busca de pedidos executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
           { storeId, page, pageSize, ...filters },
-        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${
-          queryEndTime - queryStartTime
+        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${queryEndTime - queryStartTime
         }ms`,
       );
 
-      return result;
+      return new PaginatedResponse(
+        Array.isArray(result) ? result : [],
+        total,
+        page,
+        pageSize
+      );
     } finally {
       this.tenantConnectionService.releaseConnection(connection);
     }

@@ -16,12 +16,14 @@ import {
   ApiOperation,
   ApiResponse,
   ApiParam,
+  ApiHeader,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import type { ReqWithAuthContext } from '../auth/guards/jwt-auth.guard';
 import { ProductService } from './product.service';
 import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
+import { IncludeCount } from 'src/common/decorators/include-count.decorator';
 import {
   ProductResponseDto,
   ProductDetailResponseDto,
@@ -45,10 +47,39 @@ export class ProductController {
       'Retorna uma lista paginada de produtos associados às credenciais do usuário autenticado.',
     tags: ['Product'],
   })
+  @ApiHeader({
+    name: 'X-Request-Count',
+    required: false,
+    description:
+      'Se definido como "true", calcula e retorna cabeçalhos de paginação (X-Total-Count, X-Total-Pages, X-Current-Page, X-Per-Page) na resposta.',
+    schema: { type: 'string', example: 'true' },
+  })
   @ApiResponse({
     status: 200,
     description: 'Lista de produtos retornada com sucesso.',
     type: [ProductResponseDto],
+    headers: {
+      'X-Total-Count': {
+        description:
+          'Total de registros encontrados considerando os filtros (presente quando X-Request-Count: true)',
+        schema: { type: 'integer', example: 145 },
+      },
+      'X-Total-Pages': {
+        description:
+          'Total de páginas calculadas (presente quando X-Request-Count: true)',
+        schema: { type: 'integer', example: 3 },
+      },
+      'X-Current-Page': {
+        description:
+          'Página atual solicitada (presente quando X-Request-Count: true)',
+        schema: { type: 'integer', example: 1 },
+      },
+      'X-Per-Page': {
+        description:
+          'Quantidade de registros por página (presente quando X-Request-Count: true)',
+        schema: { type: 'integer', example: 50 },
+      },
+    },
   })
   @ApiResponse({
     status: 400,
@@ -66,6 +97,7 @@ export class ProductController {
   getProducts(
     @Req() req: ReqWithAuthContext,
     @Query() query: GetProductsQueryDto,
+    @IncludeCount() includeCount: boolean = false,
   ) {
     const {
       credentialsId,
@@ -107,6 +139,7 @@ export class ProductController {
       query.search,
       query.startDateAlteracao,
       query.endDateAlteracao,
+      includeCount,
     );
   }
 

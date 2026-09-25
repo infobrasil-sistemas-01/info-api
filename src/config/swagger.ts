@@ -94,7 +94,7 @@ export function getSwaggerConfigBuilder(
 
   if (process.env.NODE_ENV === 'development') {
     builder.addServer(
-      'http://localhost:3336',
+      'http://localhost:3339',
       'Servidor local para desenvolvimento',
     );
   }
@@ -118,8 +118,8 @@ export function setupSwagger(app: INestApplication) {
   // Lista todos os arquivos swagger-*.json para registrar as versões
   const files = fs.existsSync(docsDir)
     ? fs
-        .readdirSync(docsDir)
-        .filter((f) => f.startsWith('swagger-') && f.endsWith('.json'))
+      .readdirSync(docsDir)
+      .filter((f) => f.startsWith('swagger-') && f.endsWith('.json'))
     : [];
 
   // Mapear versões encontradas
