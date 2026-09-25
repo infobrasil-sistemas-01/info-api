@@ -34,6 +34,59 @@ describe('ClientController', () => {
     jest.clearAllMocks();
   });
 
+  describe('get', () => {
+    it('should return clients using user.store_id when query.storeId is not provided', async () => {
+      const mockResult = [{ CLI_CODIGO: 1, CLI_NOME: 'Test Client' }];
+      mockService.get.mockResolvedValue(mockResult);
+
+      const user = { credentials_id: 'cred-1', store_id: 1 };
+      const query = { page: 1, pageSize: 10 };
+      const result = await controller.get(user, query as any);
+
+      expect(result).toEqual(mockResult);
+      expect(mockService.get).toHaveBeenCalledWith(
+        'cred-1',
+        1,
+        1,
+        10,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+      );
+    });
+
+    it('should return clients using query.storeId when provided for M2M', async () => {
+      const mockResult = [{ CLI_CODIGO: 1, CLI_NOME: 'Test Client' }];
+      mockService.get.mockResolvedValue(mockResult);
+
+      const user = { credentials_id: 'cred-1', store_id: 1, type: 'M2M' };
+      const query = { storeId: 2, page: 1, pageSize: 10 };
+      const result = await controller.get(user, query as any);
+
+      expect(result).toEqual(mockResult);
+      expect(mockService.get).toHaveBeenCalledWith(
+        'cred-1',
+        2,
+        1,
+        10,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+      );
+    });
+
+    it('should throw ForbiddenException when H2M operator requests different storeId', async () => {
+      const user = { credentials_id: 'cred-1', store_id: 1, type: 'H2M' };
+      const query = { storeId: 2 };
+
+      await expect(controller.get(user, query as any)).rejects.toThrow(
+        'Operador não autorizado a consultar dados de outra filial',
+      );
+    });
+  });
+
   describe('getById', () => {
     it('should return client details for valid numeric ID', async () => {
       const mockResult = { CLI_CODIGO: 1, CLI_NOME: 'Test Client' };

@@ -3,14 +3,23 @@ import { ZodDto } from 'src/common/validation/zod-dto';
 import { z } from 'zod';
 
 export const GetClientsQuerySchema = z.object({
+  storeId: z.coerce.number().int().optional(),
   page: z.coerce.number().min(1).optional(),
   pageSize: z.coerce.number().min(1).optional(),
   search: z.string().optional(),
   situation: z.enum(['A', 'I']).optional(),
   birthdate: z.string().optional(),
+  routeId: z.coerce.number().int().optional(),
 });
 
 export class GetClientsQueryDto extends ZodDto(GetClientsQuerySchema) {
+  @ApiPropertyOptional({
+    description:
+      'Código da loja para filtrar clientes. Opcional para operadores H2M (assume a loja vinculada ao operador).',
+    example: 1,
+  })
+  storeId?: number;
+
   @ApiPropertyOptional({ description: 'Página atual', example: 1 })
   page?: number;
 
@@ -25,4 +34,7 @@ export class GetClientsQueryDto extends ZodDto(GetClientsQuerySchema) {
 
   @ApiPropertyOptional({ description: 'Data de nascimento (AAAA-MM-DD)' })
   birthdate?: string;
+
+  @ApiPropertyOptional({ description: 'ID da rota' })
+  routeId?: number;
 }

@@ -14,7 +14,7 @@ export class ClientService {
 
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
-  ) {}
+  ) { }
 
   async get(
     credentialsId: string,
@@ -24,6 +24,7 @@ export class ClientService {
     search?: string,
     situation?: string,
     birthdate?: string,
+    routeId?: number,
   ) {
     const connection =
       await this.tenantConnectionService.getConnection(credentialsId);
@@ -35,17 +36,18 @@ export class ClientService {
         storeId,
       ];
       let query = `SELECT FIRST ? SKIP ? 
-                      CLI_CODIGO, CLI_SITUACAO, CLI_NOME, CLI_FANTASIA, CLI_SEXO, CLI_ENDERECO, CLI_FONE, CLI_EMAIL, CLI_DATANASC
-                      FROM clientes 
-                      WHERE LOJ_CODIGO = ?`;
+                      C.CLI_CODIGO, C.CLI_SITUACAO, C.CLI_NOME, C.CLI_FANTASIA, C.CLI_SEXO, C.CLI_ENDERECO, C.CLI_FONE, C.CLI_EMAIL, C.CLI_DATANASC, R.ROT_CODIGO, R.ROT_NOME
+                      FROM clientes C
+                      LEFT JOIN rotas R ON R.rot_codigo = C.rot_codigo
+                      WHERE C.LOJ_CODIGO = ?`;
 
       if (situation) {
-        query += ` AND CLI_SITUACAO = ?`;
+        query += ` AND C.CLI_SITUACAO = ?`;
         params.push(situation);
       }
 
       if (birthdate) {
-        query += ` AND CLI_DATANASC = ?`;
+        query += ` AND C.CLI_DATANASC = ?`;
         params.push(birthdate);
       }
 
@@ -55,11 +57,16 @@ export class ClientService {
             'Pesquisa precisa ter pelo menos 3 caracteres.',
           );
         }
-        query += ` AND (CLI_NOME LIKE ? OR CLI_FANTASIA LIKE ?)`;
+        query += ` AND (C.CLI_NOME LIKE ? OR C.CLI_FANTASIA LIKE ?)`;
         params.push(`%${search}%`, `%${search}%`);
       }
 
-      query += ` ORDER BY CLI_NOME`;
+      if (routeId) {
+        query += ` AND C.ROT_CODIGO = ?`;
+        params.push(routeId);
+      }
+
+      query += ` ORDER BY C.CLI_NOME`;
 
       const startTime = Date.now();
       const result = await new Promise((resolve, reject) => {
@@ -115,8 +122,7 @@ export class ClientService {
       const endTime = Date.now();
 
       this.logger.log(
-        `Busca de cliente por ID executada. Tenant: ${credentialsId}, ID: ${id}, Tempo SQL: ${
-          endTime - startTime
+        `Busca de cliente por ID executada. Tenant: ${credentialsId}, ID: ${id}, Tempo SQL: ${endTime - startTime
         }ms`,
       );
       return result;
@@ -237,8 +243,7 @@ export class ClientService {
       const endTime = Date.now();
 
       this.logger.log(
-        `Cliente atualizado. Tenant: ${credentialsId}, ID: ${id}, Tempo SQL: ${
-          endTime - startTime
+        `Cliente atualizado. Tenant: ${credentialsId}, ID: ${id}, Tempo SQL: ${endTime - startTime
         }ms`,
       );
 
