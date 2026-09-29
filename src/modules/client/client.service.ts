@@ -106,9 +106,10 @@ export class ClientService {
     try {
       const query = `SELECT C.CLI_CODIGO, C.CLI_SITUACAO, C.CLI_NOME, C.CLI_FANTASIA, C.CLI_SEXO, C.CLI_ENDERECO, C.CLI_FONE, C.CLI_EMAIL, C.CLI_DATANASC,
                       C.CLI_COMPL_ENDERECO, C.CLI_CEP, C.CLI_BAIRRO, C.MUN_CODIGO, M.MUN_NOME, C.CLI_UF, C.CLI_CPF_CNPJ, C.CLI_IDENTIDADE, C.CLI_MAE, 
-                      C.CLI_PAI, C.CLI_ESTADOCIVIL, C.CLI_NATURALIDADE
+                      C.CLI_PAI, C.CLI_ESTADOCIVIL, C.CLI_NATURALIDADE, R.ROT_CODIGO, R.ROT_NOME
                       FROM clientes C
                       LEFT JOIN municipios M ON C.MUN_CODIGO = M.MUN_CODIGO
+                      LEFT JOIN rotas R ON R.rot_codigo = C.rot_codigo
                       WHERE C.LOJ_CODIGO = ? AND C.CLI_CODIGO = ?`;
       const params = [storeId, id];
 
