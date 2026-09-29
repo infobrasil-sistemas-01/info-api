@@ -122,6 +122,33 @@ describe('OrderService', () => {
         service.post('cred-1', mockOrderData as any, 1),
       ).rejects.toThrow('Transaction error');
     });
+
+    it('should calculate totalpp1 with net liquid amount and omit ven_valorent in financial update', async () => {
+      const orderWithDiscount = {
+        ...mockOrderData,
+        discount: 5,
+        taxes: 2,
+      };
+
+      await service.post('cred-1', orderWithDiscount as any, 1);
+
+      // Total calculated: 10.5 * 2 = 21
+      // Net liquid: 21 + 2 (taxes) - 5 (discount) = 18
+      const updateVendasCall = mockTransaction.query.mock.calls.find(
+        (call: any[]) => typeof call[0] === 'string' && call[0].includes('UPDATE VENDAS'),
+      );
+
+      expect(updateVendasCall).toBeDefined();
+      const [sql, params] = updateVendasCall;
+      expect(sql).not.toContain('VEN_VALORENT');
+      // [PP1_CODIGO, FP1_CODIGO, VEN_TOTALPP1, VEN_TOTALPPA1, VEN_TOTALBRUTO, VEN_TOTALDESC, VEN_TOTALACRESC, VEN_TOTALLIQUIDO, VEN_DATABASE1, VEN_NUMERO]
+      expect(params[2]).toBe(18); // VEN_TOTALPP1
+      expect(params[3]).toBe(18); // VEN_TOTALPPA1
+      expect(params[4]).toBe(21); // VEN_TOTALBRUTO
+      expect(params[5]).toBe(5);  // VEN_TOTALDESC
+      expect(params[6]).toBe(2);  // VEN_TOTALACRESC
+      expect(params[7]).toBe(18); // VEN_TOTALLIQUIDO
+    });
   });
 
   describe('generateReceipt', () => {

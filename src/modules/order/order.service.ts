@@ -569,17 +569,18 @@ export class OrderService {
     const data = dayjs(orderData.date).format('YYYY-MM-DD');
 
     const totalBruto = totalCalculated;
+    const totalLiquido =
+      totalBruto + (orderData.taxes || 0) - (orderData.discount || 0);
+
     const financeiroAtualizar = {
       PP1_CODIGO: PP1_CODIGO,
       FP1_CODIGO: FP1_CODIGO,
-      VEN_TOTALPP1: totalCalculated || 0.0,
-      VEN_TOTALPPA1: totalCalculated || 0.0,
+      VEN_TOTALPP1: totalLiquido || 0.0,
+      VEN_TOTALPPA1: totalLiquido || 0.0,
       VEN_TOTALBRUTO: totalBruto,
       VEN_TOTALDESC: orderData.discount || 0.0,
       VEN_TOTALACRESC: orderData.taxes || 0.0,
-      VEN_VALORENT: 0.0,
-      VEN_TOTALLIQUIDO:
-        totalBruto + (orderData.taxes || 0) - (orderData.discount || 0),
+      VEN_TOTALLIQUIDO: totalLiquido,
       VEN_DATABASE1: data,
     };
 
@@ -593,7 +594,6 @@ export class OrderService {
               VEN_TOTALBRUTO = ?,
               VEN_TOTALDESC = ?,
               VEN_TOTALACRESC = ?, 
-              VEN_VALORENT = ?,
               --VEN_TAXAPAG = ?,
               VEN_TOTALLIQUIDO = ?,
               VEN_DATABASE1 = ?
@@ -609,7 +609,6 @@ export class OrderService {
       financeiroAtualizar.VEN_TOTALBRUTO,
       financeiroAtualizar.VEN_TOTALDESC,
       financeiroAtualizar.VEN_TOTALACRESC,
-      financeiroAtualizar.VEN_VALORENT,
       financeiroAtualizar.VEN_TOTALLIQUIDO,
       financeiroAtualizar.VEN_DATABASE1,
       ven_numero,
