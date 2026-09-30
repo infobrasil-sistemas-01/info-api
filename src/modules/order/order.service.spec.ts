@@ -297,4 +297,106 @@ describe('OrderService', () => {
       ).rejects.toThrow();
     });
   });
+
+  describe('getOrderMetrics', () => {
+    const filters = {
+      startDate: '2026-09-01',
+      endDate: '2026-09-30',
+    };
+
+    it('should return aggregated metrics with correctly calculated averageTicket', async () => {
+      mockConnection.query.mockImplementation((query, params, callback) => {
+        expect(query).toContain('SIT_CODIGO = 2');
+        expect(query).toContain('SIT_CODIGO IN (1, 4)');
+        expect(query).toContain('AND V.LOJ_CODIGO = ?');
+        expect(params).toEqual([1, '2026-09-01', '2026-09-30']);
+
+        callback(null, [
+          {
+            TOTAL_ORDERS: 100,
+            BILLING: 224597.99,
+            OPEN_ORDERS: 22,
+          },
+        ]);
+      });
+
+      const result = await service.getOrderMetrics('cred-1', 1, filters);
+
+      expect(result).toEqual({
+        totalOrders: 100,
+        billing: 224597.99,
+        averageTicket: 2245.98,
+        openOrders: 22,
+      });
+      expect(mockTenantConnection.releaseConnection).toHaveBeenCalledWith(
+        mockConnection,
+      );
+    });
+
+    it('should return zero for averageTicket when totalOrders is 0', async () => {
+      mockConnection.query.mockImplementation((query, params, callback) => {
+        callback(null, [
+          {
+            TOTAL_ORDERS: 0,
+            BILLING: 0,
+            OPEN_ORDERS: 5,
+          },
+        ]);
+      });
+
+      const result = await service.getOrderMetrics('cred-1', 1, filters);
+
+      expect(result).toEqual({
+        totalOrders: 0,
+        billing: 0,
+        averageTicket: 0,
+        openOrders: 5,
+      });
+      expect(mockTenantConnection.releaseConnection).toHaveBeenCalledWith(
+        mockConnection,
+      );
+    });
+
+    it('should query without storeId filter when storeId is undefined', async () => {
+      mockConnection.query.mockImplementation((query, params, callback) => {
+        expect(query).not.toContain('AND V.LOJ_CODIGO = ?');
+        expect(params).toEqual(['2026-09-01', '2026-09-30']);
+
+        callback(null, [
+          {
+            TOTAL_ORDERS: 50,
+            BILLING: 10000,
+            OPEN_ORDERS: 10,
+          },
+        ]);
+      });
+
+      const result = await service.getOrderMetrics('cred-1', undefined, filters);
+
+      expect(result).toEqual({
+        totalOrders: 50,
+        billing: 10000,
+        averageTicket: 200,
+        openOrders: 10,
+      });
+      expect(mockTenantConnection.releaseConnection).toHaveBeenCalledWith(
+        mockConnection,
+      );
+    });
+
+    it('should release connection even if query fails', async () => {
+      mockConnection.query.mockImplementation((query, params, callback) => {
+        callback(new Error('Firebird connection lost'), null);
+      });
+
+      await expect(
+        service.getOrderMetrics('cred-1', 1, filters),
+      ).rejects.toThrow('Firebird connection lost');
+
+      expect(mockTenantConnection.releaseConnection).toHaveBeenCalledWith(
+        mockConnection,
+      );
+    });
+  });
 });
+

@@ -13,6 +13,7 @@ import { ProductService } from '../product/product.service';
 import { ReceiptService } from '../receipt/receipt.service';
 import { OrderItemService } from './order-item/order-item.service';
 import { PaginatedResponse } from 'src/common/pagination/paginated-response';
+import { OrderMetricsResponseDto } from './dto/order-metrics-response.dto';
 
 @Injectable()
 export class OrderService {
@@ -623,4 +624,75 @@ export class OrderService {
       });
     });
   }
+
+  async getOrderMetrics(
+    credentialsId: string,
+    storeId: number | undefined,
+    filters: {
+      startDate: string;
+      endDate: string;
+    },
+  ): Promise<OrderMetricsResponseDto> {
+    let connection: any;
+    connection =
+      await this.tenantConnectionService.getConnection(credentialsId);
+
+    try {
+      let whereClause = `WHERE 1=1`;
+      const filterParams: any[] = [];
+
+      if (storeId) {
+        whereClause += ` AND V.LOJ_CODIGO = ?`;
+        filterParams.push(storeId);
+      }
+
+      whereClause += ` AND V.VEN_DATA BETWEEN ? AND ?`;
+      filterParams.push(filters.startDate, filters.endDate);
+
+      const query = `
+        SELECT
+          COUNT(CASE WHEN V.SIT_CODIGO = 2 THEN 1 END) AS TOTAL_ORDERS,
+          COALESCE(SUM(CASE WHEN V.SIT_CODIGO = 2 THEN V.VEN_TOTALLIQUIDO ELSE 0 END), 0) AS BILLING,
+          COUNT(CASE WHEN V.SIT_CODIGO IN (1, 4) THEN 1 END) AS OPEN_ORDERS
+        FROM VENDAS V
+        ${whereClause}
+      `;
+
+      const queryStartTime = Date.now();
+      const result: any = await new Promise((resolve, reject) => {
+        connection.query(query, filterParams, (err: any, res: any) => {
+          if (err) return reject(err);
+          resolve(res);
+        });
+      });
+      const queryEndTime = Date.now();
+
+      const row = Array.isArray(result) ? result[0] : result;
+      const totalOrders = Number(row?.TOTAL_ORDERS ?? row?.total_orders ?? 0);
+      const billing = Number(
+        Number(row?.BILLING ?? row?.billing ?? 0).toFixed(2),
+      );
+      const openOrders = Number(row?.OPEN_ORDERS ?? row?.open_orders ?? 0);
+      const averageTicket =
+        totalOrders > 0 ? Number((billing / totalOrders).toFixed(2)) : 0;
+
+      this.logger.log(
+        `Métricas de pedidos executadas. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
+          { storeId, ...filters },
+        )}, TotalOrders: ${totalOrders}, Billing: ${billing}, OpenOrders: ${openOrders}, Tempo SQL: ${
+          queryEndTime - queryStartTime
+        }ms`,
+      );
+
+      return {
+        totalOrders,
+        billing,
+        averageTicket,
+        openOrders,
+      };
+    } finally {
+      this.tenantConnectionService.releaseConnection(connection);
+    }
+  }
 }
+

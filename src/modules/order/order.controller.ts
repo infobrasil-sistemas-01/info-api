@@ -35,7 +35,10 @@ import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
 
 import { GetOrdersQueryDto } from './dto/get-orders-query.dto';
 import { GetOrderByIdQueryDto } from './dto/get-order-by-id-query.dto';
+import { GetOrderMetricsQueryDto } from './dto/get-order-metrics-query.dto';
+import { OrderMetricsResponseDto } from './dto/order-metrics-response.dto';
 import { IncludeCount } from 'src/common/decorators/include-count.decorator';
+import { SkipDateRangeLimit } from '../plan/decorators/skip-date-range-limit.decorator';
 
 @Controller('orders')
 export class OrderController {
@@ -219,6 +222,56 @@ export class OrderController {
         employeeId: query.employeeId ? Number(query.employeeId) : undefined,
       },
     );
+  }
+
+  @Get('order-metrics')
+  @SkipDateRangeLimit()
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @RequirePermissions({ allOf: ['tenant.orders.view'] })
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Obter métricas consolidadas de pedidos',
+    description:
+      'Retorna indicadores agregados (pedidos no mês, faturamento, ticket médio e pedidos em aberto) para o período informado.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Métricas de pedidos retornadas com sucesso.',
+    type: OrderMetricsResponseDto,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Parâmetros de data inválidos.',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Token de autenticação inválido ou ausente.',
+  })
+  getOrderMetrics(
+    @Req() req: ReqWithAuthContext,
+    @Query() query: GetOrderMetricsQueryDto,
+  ) {
+    const {
+      credentialsId,
+      storeId: storeIdToken,
+      type,
+    } = req.authContext || {};
+
+    if (!credentialsId) {
+      throw new Error('Credentials ID not found in token');
+    }
+
+    const finalStoreId =
+      type === 'H2M'
+        ? storeIdToken
+        : query.storeId
+          ? Number(query.storeId)
+          : storeIdToken;
+
+    return this.orderService.getOrderMetrics(credentialsId, finalStoreId, {
+      startDate: query.startDate,
+      endDate: query.endDate,
+    });
   }
 
   @Get(':id')

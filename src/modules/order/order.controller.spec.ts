@@ -18,6 +18,7 @@ describe('OrderController', () => {
     get: jest.fn(),
     getById: jest.fn(),
     generateReceipt: jest.fn(),
+    getOrderMetrics: jest.fn(),
   };
 
   const mockOrderItemService = {
@@ -314,4 +315,76 @@ describe('OrderController', () => {
       );
     });
   });
+
+  describe('getOrderMetrics', () => {
+    it('should call orderService.getOrderMetrics with resolved storeId and query dates', async () => {
+      const mockResult = {
+        totalOrders: 100,
+        billing: 224597.99,
+        averageTicket: 2245.98,
+        openOrders: 22,
+      };
+
+      mockOrderService.getOrderMetrics.mockResolvedValue(mockResult);
+
+      const query = {
+        startDate: '2026-09-01',
+        endDate: '2026-09-30',
+        storeId: 2,
+      };
+
+      const result = await controller.getOrderMetrics(mockReq, query);
+
+      expect(orderService.getOrderMetrics).toHaveBeenCalledWith(
+        'cred-1',
+        2,
+        {
+          startDate: '2026-09-01',
+          endDate: '2026-09-30',
+        },
+      );
+      expect(result).toEqual(mockResult);
+    });
+
+    it('should use token storeId if type is H2M even if query.storeId is provided', async () => {
+      const h2mReq = {
+        authContext: {
+          credentialsId: 'cred-1',
+          storeId: 10,
+          type: 'H2M',
+        },
+      } as any;
+
+      mockOrderService.getOrderMetrics.mockResolvedValue({} as any);
+
+      await controller.getOrderMetrics(h2mReq, {
+        startDate: '2026-09-01',
+        endDate: '2026-09-30',
+        storeId: 99,
+      });
+
+      expect(orderService.getOrderMetrics).toHaveBeenCalledWith(
+        'cred-1',
+        10,
+        {
+          startDate: '2026-09-01',
+          endDate: '2026-09-30',
+        },
+      );
+    });
+
+    it('should throw error if credentialsId is not in token', async () => {
+      const reqWithoutCreds = {
+        authContext: {},
+      } as any;
+
+      expect(() =>
+        controller.getOrderMetrics(reqWithoutCreds, {
+          startDate: '2026-09-01',
+          endDate: '2026-09-30',
+        }),
+      ).toThrow('Credentials ID not found in token');
+    });
+  });
 });
+

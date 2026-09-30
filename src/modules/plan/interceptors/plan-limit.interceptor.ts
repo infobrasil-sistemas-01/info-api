@@ -10,10 +10,15 @@ import { Observable, tap } from 'rxjs';
 import { PlanService } from '../plan.service';
 import { differenceInDays, parseISO } from 'date-fns';
 import type { JwtPayload } from '../../auth/types/jwt-payload';
+import { Reflector } from '@nestjs/core';
+import { SKIP_DATE_RANGE_LIMIT_KEY } from '../decorators/skip-date-range-limit.decorator';
 
 @Injectable()
 export class PlanLimitInterceptor implements NestInterceptor {
-  constructor(private readonly planService: PlanService) {}
+  constructor(
+    private readonly planService: PlanService,
+    private readonly reflector: Reflector,
+  ) {}
 
   async intercept(
     context: ExecutionContext,
@@ -84,7 +89,12 @@ export class PlanLimitInterceptor implements NestInterceptor {
     }
 
     // 3. Limitar Date Range (startDate e endDate)
-    if (query.startDate && query.endDate) {
+    const skipDateRangeLimit = this.reflector.getAllAndOverride<boolean>(
+      SKIP_DATE_RANGE_LIMIT_KEY,
+      [context.getHandler(), context.getClass()],
+    );
+
+    if (!skipDateRangeLimit && query.startDate && query.endDate) {
       try {
         const start = parseISO(query.startDate);
         const end = parseISO(query.endDate);
