@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.16.28](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.16.27...v1.16.28) (2026-09-30)
+
+
+### Features
+
+* **client:** retornar rota e adicionar filtros por routeId e storeId no GET /clients ([5f33296](https://github.com/infobrasil-sistemas-01/info-api/commit/5f332964528fed04cdceda122af45918178f1e7f))
+* GET /order/order-metrics ([ba93dec](https://github.com/infobrasil-sistemas-01/info-api/commit/ba93dec686788c4097e811ea75bfbc0a812cb32f))
+
+
+### Bug Fixes
+
+* add rot_codigo && rot_nome to GET /clients/:id ([73da637](https://github.com/infobrasil-sistemas-01/info-api/commit/73da637eb6f9daadbea01e09501a34965b33f002))
+* remove valorent to order! ([ba4c979](https://github.com/infobrasil-sistemas-01/info-api/commit/ba4c979ffd07516c71a9683dea7be2b1cca3a81b))
+
 ## [1.16.27](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.16.26...v1.16.27) (2026-09-25)
 
 
