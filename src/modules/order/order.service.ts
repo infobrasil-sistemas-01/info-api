@@ -386,7 +386,7 @@ export class OrderService {
       const query = `SELECT
                   V.VEN_NUMERO,
                   V.SIT_CODIGO,
-                  V.SIT_DESCRICAO,
+                  S.SIT_DESCRICAO,
                   V.CLI_CODIGO,
                   C.CLI_NOME,
                   V.FUN_CODIGO,
