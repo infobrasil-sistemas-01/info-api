@@ -283,6 +283,7 @@ export class OrderService {
       const query = `SELECT FIRST ? SKIP ?
                   V.VEN_NUMERO,
                   V.SIT_CODIGO,
+                  S.SIT_DESCRICAO,
                   V.CLI_CODIGO,
                   C.CLI_NOME,
                   V.FUN_CODIGO,
@@ -305,6 +306,7 @@ export class OrderService {
                LEFT JOIN clientes C ON C.cli_codigo = V.cli_codigo
                LEFT JOIN funcionarios F ON F.fun_codigo = V.fun_codigo
                LEFT JOIN usuarios U ON U.usu_codigo = V.usu_codigo
+               LEFT JOIN SITUACAO S ON S.sit_codigo = V.sit_codigo
                ${whereClause}
                ORDER BY V.VEN_NUMERO DESC`;
 
@@ -384,6 +386,7 @@ export class OrderService {
       const query = `SELECT
                   V.VEN_NUMERO,
                   V.SIT_CODIGO,
+                  V.SIT_DESCRICAO,
                   V.CLI_CODIGO,
                   C.CLI_NOME,
                   V.FUN_CODIGO,
@@ -422,6 +425,7 @@ export class OrderService {
                LEFT JOIN usuarios U ON U.usu_codigo = V.usu_codigo
                LEFT JOIN TRANSPORTADORAS T ON T.TRA_CODIGO = V.TRA_CODIGO
                LEFT JOIN MONTAGENS M ON M.VEN_NUMERO = V.VEN_NUMERO
+               LEFT JOIN SITUACAO S ON S.SIT_CODIGO = V.SIT_CODIGO
                ${whereClause}
                ORDER BY V.VEN_NUMERO DESC`;
 
@@ -679,8 +683,7 @@ export class OrderService {
       this.logger.log(
         `Métricas de pedidos executadas. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
           { storeId, ...filters },
-        )}, TotalOrders: ${totalOrders}, Billing: ${billing}, OpenOrders: ${openOrders}, Tempo SQL: ${
-          queryEndTime - queryStartTime
+        )}, TotalOrders: ${totalOrders}, Billing: ${billing}, OpenOrders: ${openOrders}, Tempo SQL: ${queryEndTime - queryStartTime
         }ms`,
       );
 
