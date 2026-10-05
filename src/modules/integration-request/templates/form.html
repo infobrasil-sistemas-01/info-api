@@ -447,6 +447,7 @@
                 Prestadores de Serviço
               </option>
               <option value="Entregas">Entregas</option>
+              <option value="Acertos">Acertos</option>
             </select>
           </div>
           <div class="form-group" style="margin-bottom: 0">
@@ -703,6 +704,7 @@
         delete: false,
       },
       Entregas: { read: true, create: true, update: true, delete: true },
+      Acertos: { read: true, create: false, update: false, delete: false },
     };
 
     function updateAvailableActions() {

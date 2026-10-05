@@ -42,6 +42,7 @@ import { CallCenterModule } from './modules/call-center/call-center.module';
 import { PurchaseModule } from './modules/purchase/purchase.module';
 import { FiscalEntryModule } from './modules/fiscal-entry/fiscal-entry.module';
 import { ChangelogModule } from './modules/changelog/changelog.module';
+import { AdjustmentModule } from './modules/adjustment/adjustment.module';
 
 import { AppController } from './app.controller';
 
@@ -80,6 +81,7 @@ import { AppController } from './app.controller';
     CallCenterModule,
     PurchaseModule,
     FiscalEntryModule,
+    AdjustmentModule,
     ScheduleModule.forRoot(),
     StatusModule,
     DashboardModule,

@@ -89,7 +89,11 @@ INSERT INTO permissions (id, key, name, description) VALUES
 (gen_random_uuid(), 'tenant.fiscal-entries.view', 'Visualizar entradas fiscais', 'Visualizar entradas fiscais (apoio) do tenant'),
 (gen_random_uuid(), 'tenant.fiscal-entries.create', 'Criar entradas fiscais', 'Criar entradas fiscais (apoio) do tenant'),
 (gen_random_uuid(), 'tenant.fiscal-entries.update', 'Atualizar entradas fiscais', 'Atualizar entradas fiscais (apoio) do tenant'),
-(gen_random_uuid(), 'tenant.fiscal-entries.delete', 'Deletar entradas fiscais', 'Deletar entradas fiscais (apoio) do tenant')
+(gen_random_uuid(), 'tenant.fiscal-entries.delete', 'Deletar entradas fiscais', 'Deletar entradas fiscais (apoio) do tenant'),
+(gen_random_uuid(), 'tenant.adjustments.view', 'Visualizar acertos de estoque', 'Visualizar acertos de estoque do tenant'),
+(gen_random_uuid(), 'tenant.adjustments.create', 'Criar acertos de estoque', 'Criar acertos de estoque do tenant'),
+(gen_random_uuid(), 'tenant.adjustments.update', 'Atualizar acertos de estoque', 'Atualizar acertos de estoque do tenant'),
+(gen_random_uuid(), 'tenant.adjustments.delete', 'Deletar acertos de estoque', 'Deletar acertos de estoque do tenant')
 ON CONFLICT (key) DO UPDATE SET 
     name = EXCLUDED.name, 
     description = EXCLUDED.description;

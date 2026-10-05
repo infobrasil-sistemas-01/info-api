@@ -354,6 +354,26 @@ export const PERMISSIONS = [
     descricao: 'Deletar entradas fiscais (apoio) do tenant',
     module: 'tenant',
   },
+  {
+    key: 'tenant.adjustments.view',
+    descricao: 'Visualizar acertos de estoque do tenant',
+    module: 'tenant',
+  },
+  {
+    key: 'tenant.adjustments.create',
+    descricao: 'Criar acertos de estoque do tenant',
+    module: 'tenant',
+  },
+  {
+    key: 'tenant.adjustments.update',
+    descricao: 'Atualizar acertos de estoque do tenant',
+    module: 'tenant',
+  },
+  {
+    key: 'tenant.adjustments.delete',
+    descricao: 'Deletar acertos de estoque do tenant',
+    module: 'tenant',
+  },
 
   // ========= SOLICITAÇÕES =========
   {

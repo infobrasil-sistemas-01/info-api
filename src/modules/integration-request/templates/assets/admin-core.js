@@ -897,6 +897,9 @@ const LABEL_MAP = {
     'entradas-fiscais': 'Entradas Fiscais',
     'entradas_apoio': 'Entradas Fiscais',
     'entradas-apoio': 'Entradas Fiscais',
+    'adjustments': 'Acertos de Estoque',
+    'adjustment': 'Acertos de Estoque',
+    'acertos': 'Acertos de Estoque',
 
     // Ações do painel de solicitação
     'approve': 'Aprovar',

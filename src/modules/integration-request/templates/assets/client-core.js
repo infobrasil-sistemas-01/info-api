@@ -80,6 +80,9 @@ const Translations = {
         'entradas-fiscais': 'Entradas Fiscais',
         'entradas_apoio': 'Entradas Fiscais',
         'entradas-apoio': 'Entradas Fiscais',
+        'adjustments': 'Acertos de Estoque',
+        'adjustment': 'Acertos de Estoque',
+        'acertos': 'Acertos de Estoque',
         'announcement': 'Avisos do Sistema',
     },
     actions: {
