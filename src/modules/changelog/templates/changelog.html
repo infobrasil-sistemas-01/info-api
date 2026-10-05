@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Notas de Atualização • InfoAPI</title>
+  <title>Changelog | Info Vendas</title>
   <link rel="icon" type="image/x-icon" href="/integration/assets/favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -91,11 +91,11 @@
       filter: blur(80px);
     }
 
-    /* STICKY HEADER MATCHING ADMIN */
+    /* APP LAYOUT - HEADER (EXACT SAME SIZES & BEHAVIOR AS ADMIN.CSS) */
     header {
       width: 100%;
       flex-shrink: 0;
-      background: rgba(12, 31, 24, 0.85);
+      background: rgba(12, 31, 24, 0.8);
       backdrop-filter: blur(12px);
       border: 1px solid var(--border);
       padding: 0.75rem 0;
@@ -114,7 +114,7 @@
       border-radius: 0;
       margin-top: 0;
       border-color: transparent transparent var(--border) transparent;
-      background: rgba(12, 31, 24, 0.96);
+      background: rgba(12, 31, 24, 0.95);
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
     }
 
@@ -126,6 +126,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      min-height: 38px;
     }
 
     .brand {
@@ -133,11 +134,10 @@
       align-items: center;
       gap: 1rem;
       text-decoration: none;
-      color: inherit;
     }
 
     .brand-logo {
-      height: 32px;
+      height: 24px;
       width: auto;
       object-fit: contain;
       display: block;
@@ -148,6 +148,7 @@
       font-weight: 700;
       color: var(--text);
       letter-spacing: -0.02em;
+      line-height: 1;
     }
 
     .brand-name span {
@@ -160,37 +161,35 @@
       background: rgba(255, 255, 255, 0.1);
     }
 
+    /* EXACT PANEL-NAME FROM ADMIN.CSS */
     .panel-name {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--primary);
-      letter-spacing: 0.06em;
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
       text-transform: uppercase;
-      background: var(--glass);
-      padding: 4px 10px;
-      border-radius: 6px;
-      border: 1px solid rgba(16, 185, 129, 0.2);
     }
 
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 8px 16px;
+      padding: 6px 14px;
+      height: 36px;
       border-radius: 10px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s;
       border: none;
       outline: none;
-      gap: 8px;
-      font-size: 0.85rem;
+      gap: 6px;
+      font-size: 0.82rem;
       text-decoration: none;
       white-space: nowrap;
     }
@@ -786,13 +785,14 @@
 <body>
   <div class="ambient-glow"></div>
 
-  <!-- Sticky Curved Header (Admin Pattern) -->
+  <!-- Header identical to Admin Center -->
   <header>
     <div class="header-content">
       <a href="/changelog" class="brand">
-        <img src="/integration/assets/logo-infoapi-white.png" alt="InfoAPI" class="brand-logo">
+        <img src="/integration/assets/logo-infoapi-white.png" alt="InfoAPI" class="brand-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
+        <span class="brand-name" style="display: none;">Info<span>API</span></span>
         <span class="brand-divider"></span>
-        <span class="panel-name">Changelog Oficial</span>
+        <span class="panel-name">Changelog</span>
       </a>
 
       <div class="header-actions">
@@ -842,7 +842,7 @@
 
       <div class="stat-card">
         <div class="stat-icon" style="background: rgba(16, 185, 129, 0.15); color: #34d399;">
-          <i class='bx bx-sparkles'></i>
+          <i class='bx bx-star'></i>
         </div>
         <div class="stat-info">
           <span class="stat-value" id="stat-features">--</span>
@@ -883,7 +883,7 @@
           <i class='bx bx-list-ul'></i> Todas as Versões
         </button>
         <button class="tab-btn" data-filter="feature">
-          <i class='bx bx-sparkles'></i> Novidades
+          <i class='bx bx-star'></i> Novidades
         </button>
         <button class="tab-btn" data-filter="fix">
           <i class='bx bx-wrench'></i> Correções
@@ -1066,7 +1066,7 @@
             // Features
             if (features.length > 0 && (activeFilter === 'all' || activeFilter === 'feature')) {
               html += '    <div class="category-section">';
-              html += '      <div class="category-header feat"><i class="bx bx-sparkles"></i> Novidades & Melhorias (' + features.length + ')</div>';
+              html += '      <div class="category-header feat"><i class="bx bx-star"></i> Novidades & Melhorias (' + features.length + ')</div>';
               html += '      <div class="items-grid">';
               features.forEach(function(item) {
                 html += renderItemCard(item);
