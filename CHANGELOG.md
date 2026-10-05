@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.16.29](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.16.28...v1.16.29) (2026-10-05)
+
+
+### Features
+
+* GET /adjustment && get /adjustment/:id ([44311bf](https://github.com/infobrasil-sistemas-01/info-api/commit/44311bf93b9ba67003904a77cdd77f57d2f27865))
+* return SIT_DESCRICAO on orders ([d8ab58e](https://github.com/infobrasil-sistemas-01/info-api/commit/d8ab58e8831ea2c7b5fbeeb760ba173676c638cb))
+
+
+### Bug Fixes
+
+* return SIT_DESCRICAO on orders by id ([6c7719b](https://github.com/infobrasil-sistemas-01/info-api/commit/6c7719b161bf63dc1c5706ecc5e73c0baa1073cb))
+
 ## [1.16.28](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.16.27...v1.16.28) (2026-09-30)
 
 
