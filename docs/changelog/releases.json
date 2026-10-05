@@ -1,5 +1,328 @@
 [
   {
+    "version": "1.16.29",
+    "date": "2026-10-05",
+    "title": "GET /adjustment && get /adjustment/:id e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral & Usabilidade, Pedidos & Vendas.",
+    "highlights": [
+      "GET /adjustment && get /adjustment/:id",
+      "return SIT_DESCRICAO on orders"
+    ],
+    "items": [
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "GET /adjustment && get /adjustment/:id",
+        "description": "Atualização no módulo de Geral & Usabilidade: GET /adjustment && get /adjustment/:id.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "GET /adjustment && get /adjustment/:id",
+        "commitHash": "44311bf"
+      },
+      {
+        "module": "Pedidos & Vendas",
+        "type": "feature",
+        "title": "return SIT_DESCRICAO on orders",
+        "description": "Atualização no módulo de Pedidos & Vendas: return SIT_DESCRICAO on orders.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "return SIT_DESCRICAO on orders",
+        "commitHash": "d8ab58e"
+      },
+      {
+        "module": "Pedidos & Vendas",
+        "type": "fix",
+        "title": "return SIT_DESCRICAO on orders by id",
+        "description": "Atualização no módulo de Pedidos & Vendas: return SIT_DESCRICAO on orders by id.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "return SIT_DESCRICAO on orders by id",
+        "commitHash": "6c7719b"
+      }
+    ],
+    "totalChanges": 3
+  },
+  {
+    "version": "1.16.28",
+    "date": "2026-09-30",
+    "title": "retornar rota e adicionar filtros por routeId e storeId no GET /clients e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Clientes, Pedidos & Vendas.",
+    "highlights": [
+      "retornar rota e adicionar filtros por routeId e storeId no GET /clients",
+      "GET /order/order-metrics"
+    ],
+    "items": [
+      {
+        "module": "Clientes",
+        "type": "feature",
+        "title": "retornar rota e adicionar filtros por routeId e storeId no GET /clients",
+        "description": "Atualização no módulo de Clientes: retornar rota e adicionar filtros por routeId e storeId no GET /clients.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "retornar rota e adicionar filtros por routeId e storeId no GET /clients",
+        "commitHash": "5f33296"
+      },
+      {
+        "module": "Pedidos & Vendas",
+        "type": "feature",
+        "title": "GET /order/order-metrics",
+        "description": "Atualização no módulo de Pedidos & Vendas: GET /order/order-metrics.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "GET /order/order-metrics",
+        "commitHash": "ba93dec"
+      },
+      {
+        "module": "Clientes",
+        "type": "fix",
+        "title": "Inclusão de rot_codigo && rot_nome to GET /clients/:id",
+        "description": "Atualização no módulo de Clientes: add rot_codigo && rot_nome to GET /clients/:id.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add rot_codigo && rot_nome to GET /clients/:id",
+        "commitHash": "73da637"
+      },
+      {
+        "module": "Pedidos & Vendas",
+        "type": "fix",
+        "title": "Remoção de valorent to order!",
+        "description": "Atualização no módulo de Pedidos & Vendas: remove valorent to order!.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "remove valorent to order!",
+        "commitHash": "ba4c979"
+      }
+    ],
+    "totalChanges": 4
+  },
+  {
+    "version": "1.16.27",
+    "date": "2026-09-25",
+    "title": "adicionar suporte a headers de paginacao e contagem opt-in e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Pedidos & Vendas.",
+    "highlights": [
+      "adicionar suporte a headers de paginacao e contagem opt-in"
+    ],
+    "items": [
+      {
+        "module": "Pedidos & Vendas",
+        "type": "feature",
+        "title": "adicionar suporte a headers de paginacao e contagem opt-in",
+        "description": "Atualização no módulo de Pedidos & Vendas: adicionar suporte a headers de paginacao e contagem opt-in.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "adicionar suporte a headers de paginacao e contagem opt-in",
+        "commitHash": "d959ce3"
+      }
+    ],
+    "totalChanges": 1
+  },
+  {
+    "version": "1.16.26",
+    "date": "2026-09-25",
+    "title": "adicionar suporte a headers de paginacao e contagem opt-in e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Catálogo de Produtos.",
+    "highlights": [
+      "adicionar suporte a headers de paginacao e contagem opt-in"
+    ],
+    "items": [
+      {
+        "module": "Catálogo de Produtos",
+        "type": "feature",
+        "title": "adicionar suporte a headers de paginacao e contagem opt-in",
+        "description": "Atualização no módulo de Catálogo de Produtos: adicionar suporte a headers de paginacao e contagem opt-in.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "adicionar suporte a headers de paginacao e contagem opt-in",
+        "commitHash": "4a02e2b"
+      }
+    ],
+    "totalChanges": 1
+  },
+  {
+    "version": "1.16.25",
+    "date": "2026-09-25",
+    "title": "implementar suporte a headers de paginacao e contagem opt-in e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Criptografia & Segurança, Geral, Catálogo de Produtos.",
+    "highlights": [
+      "implementar suporte a headers de paginacao e contagem opt-in",
+      "validate storeId by auth type (required for M2M, forbidden cross-store for H2M)"
+    ],
+    "items": [
+      {
+        "module": "Criptografia & Segurança",
+        "type": "security",
+        "title": "Inclusão de password 88",
+        "description": "Atualização no módulo de Criptografia & Segurança: add password 88.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add password 88",
+        "commitHash": "e9a1d14"
+      },
+      {
+        "module": "Geral",
+        "type": "feature",
+        "title": "implementar suporte a headers de paginacao e contagem opt-in",
+        "description": "Atualização no módulo de Geral: implementar suporte a headers de paginacao e contagem opt-in.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "implementar suporte a headers de paginacao e contagem opt-in",
+        "commitHash": "c700cfd"
+      },
+      {
+        "module": "Catálogo de Produtos",
+        "type": "feature",
+        "title": "validate storeId by auth type (required for M2M, forbidden cross-store for H2M)",
+        "description": "Atualização no módulo de Catálogo de Produtos: validate storeId by auth type (required for M2M, forbidden cross-store for H2M).",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "validate storeId by auth type (required for M2M, forbidden cross-store for H2M)",
+        "commitHash": "8c3f617"
+      },
+      {
+        "module": "Catálogo de Produtos",
+        "type": "fix",
+        "title": "turn storeId on GET /products optional, bypassing 1 by default OR operator store",
+        "description": "Atualização no módulo de Catálogo de Produtos: turn storeId on GET /products optional, bypassing 1 by default OR operator store.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "turn storeId on GET /products optional, bypassing 1 by default OR operator store",
+        "commitHash": "879e970"
+      }
+    ],
+    "totalChanges": 4
+  },
+  {
+    "version": "1.16.24",
+    "date": "2026-09-23",
+    "title": "return seller and operator name consistently in order list and details e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Pedidos & Vendas, Catálogo de Produtos, Geral & Usabilidade.",
+    "highlights": [
+      "return seller and operator name consistently in order list and details",
+      "return `EST_DTALTERACAO` && add filter by `EST_DTALTERACAO` on GET /api/v1/products"
+    ],
+    "items": [
+      {
+        "module": "Pedidos & Vendas",
+        "type": "feature",
+        "title": "return seller and operator name consistently in order list and details",
+        "description": "Atualização no módulo de Pedidos & Vendas: return seller and operator name consistently in order list and details.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "return seller and operator name consistently in order list and details",
+        "commitHash": "10ef511"
+      },
+      {
+        "module": "Catálogo de Produtos",
+        "type": "feature",
+        "title": "return `EST_DTALTERACAO` && add filter by `EST_DTALTERACAO` on GET /api/v1/products",
+        "description": "Atualização no módulo de Catálogo de Produtos: return `EST_DTALTERACAO` && add filter by `EST_DTALTERACAO` on GET /api/v1/products.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "return `EST_DTALTERACAO` && add filter by `EST_DTALTERACAO` on GET /api/v1/products",
+        "commitHash": "59f3a37"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "e2e test",
+        "description": "Atualização no módulo de Geral & Usabilidade: e2e test.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "e2e test",
+        "commitHash": "f80ebee"
+      },
+      {
+        "module": "Pedidos & Vendas",
+        "type": "fix",
+        "title": "post order guardrails",
+        "description": "Atualização no módulo de Pedidos & Vendas: post order guardrails.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "post order guardrails",
+        "commitHash": "67a1f64"
+      }
+    ],
+    "totalChanges": 4
+  },
+  {
+    "version": "1.16.23",
+    "date": "2026-09-18",
+    "title": "Implementação de dual-auth H2M strategy and store isolation e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Autenticação & Acesso, Geral & Usabilidade, Call Center.",
+    "highlights": [
+      "Implementação de dual-auth H2M strategy and store isolation",
+      "fixed ip option on form"
+    ],
+    "items": [
+      {
+        "module": "Autenticação & Acesso",
+        "type": "feature",
+        "title": "Implementação de dual-auth H2M strategy and store isolation",
+        "description": "Atualização no módulo de Autenticação & Acesso: implement dual-auth H2M strategy and store isolation.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "implement dual-auth H2M strategy and store isolation",
+        "commitHash": "29eaffb"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "fixed ip option on form",
+        "description": "Atualização no módulo de Geral & Usabilidade: fixed ip option on form.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "fixed ip option on form",
+        "commitHash": "921c2d4"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "human changelogs",
+        "description": "Atualização no módulo de Geral & Usabilidade: human changelogs.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "human changelogs",
+        "commitHash": "673885f"
+      },
+      {
+        "module": "Call Center",
+        "type": "feature",
+        "title": "Consulta a atendimentos de Call Center",
+        "description": "Disponibilizados filtros avançados e novos campos na busca de atendimentos do suporte e call center.",
+        "impact": "Acesso simplificado ao histórico de suporte ao cliente.",
+        "originalCommit": "return CLI_OBS on GET /call-centers",
+        "commitHash": "8738715"
+      },
+      {
+        "module": "Call Center",
+        "type": "feature",
+        "title": "Consulta a atendimentos de Call Center",
+        "description": "Disponibilizados filtros avançados e novos campos na busca de atendimentos do suporte e call center.",
+        "impact": "Acesso simplificado ao histórico de suporte ao cliente.",
+        "originalCommit": "return CLI_OBS on GET /call-centers/:id",
+        "commitHash": "02358b0"
+      },
+      {
+        "module": "Infraestrutura & Resiliência",
+        "type": "fix",
+        "title": "Recuperação automática de serviços (Autoheal)",
+        "description": "Adicionado mecanismo de autocura para monitorar a saúde dos containers e restabelecer conexões automaticamente em caso de instabilidade.",
+        "impact": "Maior tempo de atividade (uptime) e prevenção de quedas da API.",
+        "originalCommit": "add willfarrell/autoheal to resilience add to deploy.sh",
+        "commitHash": "8cc8b50"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "cronjob fail to downtime api desabilitation",
+        "description": "Atualização no módulo de Geral & Usabilidade: cronjob fail to downtime api desabilitation.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "cronjob fail to downtime api desabilitation",
+        "commitHash": "c46f2db"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "delete logs periodic",
+        "description": "Atualização no módulo de Geral & Usabilidade: delete logs periodic.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "delete logs periodic",
+        "commitHash": "2d3b56c"
+      },
+      {
+        "module": "Geral",
+        "type": "fix",
+        "title": "Inclusão de public dns fallback (8.8.8.8 and 1.1.1.1) to api services",
+        "description": "Atualização no módulo de Geral: add public dns fallback (8.8.8.8 and 1.1.1.1) to api services.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add public dns fallback (8.8.8.8 and 1.1.1.1) to api services",
+        "commitHash": "741c3c3"
+      }
+    ],
+    "totalChanges": 9
+  },
+  {
     "version": "1.16.22",
     "date": "2026-09-07",
     "title": "Resiliência e Auto-recuperação de Serviços",

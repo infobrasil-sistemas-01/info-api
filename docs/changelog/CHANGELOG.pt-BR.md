@@ -6,6 +6,133 @@ Para visualizar a versão interativa com busca em tempo real, acesse o portal we
 
 ---
 
+## [v1.16.29] - 2026-10-05
+
+### 📌 GET /adjustment && get /adjustment/:id e melhorias
+> Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral & Usabilidade, Pedidos & Vendas.
+
+**Destaques:**
+- ⭐ GET /adjustment && get /adjustment/:id
+- ⭐ return SIT_DESCRICAO on orders
+
+#### 🚀 Novidades & Melhorias
+- **[Geral & Usabilidade]** GET /adjustment && get /adjustment/:id: Atualização no módulo de Geral & Usabilidade: GET /adjustment && get /adjustment/:id.
+- **[Pedidos & Vendas]** return SIT_DESCRICAO on orders: Atualização no módulo de Pedidos & Vendas: return SIT_DESCRICAO on orders.
+
+#### 🛠️ Correções & Estabilidade
+- **[Pedidos & Vendas]** return SIT_DESCRICAO on orders by id: Atualização no módulo de Pedidos & Vendas: return SIT_DESCRICAO on orders by id.
+
+---
+
+## [v1.16.28] - 2026-09-30
+
+### 📌 retornar rota e adicionar filtros por routeId e storeId no GET /clients e melhorias
+> Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Clientes, Pedidos & Vendas.
+
+**Destaques:**
+- ⭐ retornar rota e adicionar filtros por routeId e storeId no GET /clients
+- ⭐ GET /order/order-metrics
+
+#### 🚀 Novidades & Melhorias
+- **[Clientes]** retornar rota e adicionar filtros por routeId e storeId no GET /clients: Atualização no módulo de Clientes: retornar rota e adicionar filtros por routeId e storeId no GET /clients.
+- **[Pedidos & Vendas]** GET /order/order-metrics: Atualização no módulo de Pedidos & Vendas: GET /order/order-metrics.
+
+#### 🛠️ Correções & Estabilidade
+- **[Clientes]** Inclusão de rot_codigo && rot_nome to GET /clients/:id: Atualização no módulo de Clientes: add rot_codigo && rot_nome to GET /clients/:id.
+- **[Pedidos & Vendas]** Remoção de valorent to order!: Atualização no módulo de Pedidos & Vendas: remove valorent to order!.
+
+---
+
+## [v1.16.27] - 2026-09-25
+
+### 📌 adicionar suporte a headers de paginacao e contagem opt-in e melhorias
+> Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Pedidos & Vendas.
+
+**Destaques:**
+- ⭐ adicionar suporte a headers de paginacao e contagem opt-in
+
+#### 🚀 Novidades & Melhorias
+- **[Pedidos & Vendas]** adicionar suporte a headers de paginacao e contagem opt-in: Atualização no módulo de Pedidos & Vendas: adicionar suporte a headers de paginacao e contagem opt-in.
+
+---
+
+## [v1.16.26] - 2026-09-25
+
+### 📌 adicionar suporte a headers de paginacao e contagem opt-in e melhorias
+> Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Catálogo de Produtos.
+
+**Destaques:**
+- ⭐ adicionar suporte a headers de paginacao e contagem opt-in
+
+#### 🚀 Novidades & Melhorias
+- **[Catálogo de Produtos]** adicionar suporte a headers de paginacao e contagem opt-in: Atualização no módulo de Catálogo de Produtos: adicionar suporte a headers de paginacao e contagem opt-in.
+
+---
+
+## [v1.16.25] - 2026-09-25
+
+### 📌 implementar suporte a headers de paginacao e contagem opt-in e melhorias
+> Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Criptografia & Segurança, Geral, Catálogo de Produtos.
+
+**Destaques:**
+- ⭐ implementar suporte a headers de paginacao e contagem opt-in
+- ⭐ validate storeId by auth type (required for M2M, forbidden cross-store for H2M)
+
+#### 🚀 Novidades & Melhorias
+- **[Geral]** implementar suporte a headers de paginacao e contagem opt-in: Atualização no módulo de Geral: implementar suporte a headers de paginacao e contagem opt-in.
+- **[Catálogo de Produtos]** validate storeId by auth type (required for M2M, forbidden cross-store for H2M): Atualização no módulo de Catálogo de Produtos: validate storeId by auth type (required for M2M, forbidden cross-store for H2M).
+
+#### 🛠️ Correções & Estabilidade
+- **[Catálogo de Produtos]** turn storeId on GET /products optional, bypassing 1 by default OR operator store: Atualização no módulo de Catálogo de Produtos: turn storeId on GET /products optional, bypassing 1 by default OR operator store.
+
+#### 🔒 Segurança & Infraestrutura
+- **[Criptografia & Segurança]** Inclusão de password 88: Atualização no módulo de Criptografia & Segurança: add password 88.
+
+---
+
+## [v1.16.24] - 2026-09-23
+
+### 📌 return seller and operator name consistently in order list and details e melhorias
+> Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Pedidos & Vendas, Catálogo de Produtos, Geral & Usabilidade.
+
+**Destaques:**
+- ⭐ return seller and operator name consistently in order list and details
+- ⭐ return `EST_DTALTERACAO` && add filter by `EST_DTALTERACAO` on GET /api/v1/products
+
+#### 🚀 Novidades & Melhorias
+- **[Pedidos & Vendas]** return seller and operator name consistently in order list and details: Atualização no módulo de Pedidos & Vendas: return seller and operator name consistently in order list and details.
+- **[Catálogo de Produtos]** return `EST_DTALTERACAO` && add filter by `EST_DTALTERACAO` on GET /api/v1/products: Atualização no módulo de Catálogo de Produtos: return `EST_DTALTERACAO` && add filter by `EST_DTALTERACAO` on GET /api/v1/products.
+
+#### 🛠️ Correções & Estabilidade
+- **[Geral & Usabilidade]** e2e test: Atualização no módulo de Geral & Usabilidade: e2e test.
+- **[Pedidos & Vendas]** post order guardrails: Atualização no módulo de Pedidos & Vendas: post order guardrails.
+
+---
+
+## [v1.16.23] - 2026-09-18
+
+### 📌 Implementação de dual-auth H2M strategy and store isolation e melhorias
+> Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Autenticação & Acesso, Geral & Usabilidade, Call Center.
+
+**Destaques:**
+- ⭐ Implementação de dual-auth H2M strategy and store isolation
+- ⭐ fixed ip option on form
+
+#### 🚀 Novidades & Melhorias
+- **[Autenticação & Acesso]** Implementação de dual-auth H2M strategy and store isolation: Atualização no módulo de Autenticação & Acesso: implement dual-auth H2M strategy and store isolation.
+- **[Geral & Usabilidade]** fixed ip option on form: Atualização no módulo de Geral & Usabilidade: fixed ip option on form.
+- **[Geral & Usabilidade]** human changelogs: Atualização no módulo de Geral & Usabilidade: human changelogs.
+- **[Call Center]** Consulta a atendimentos de Call Center: Disponibilizados filtros avançados e novos campos na busca de atendimentos do suporte e call center.
+- **[Call Center]** Consulta a atendimentos de Call Center: Disponibilizados filtros avançados e novos campos na busca de atendimentos do suporte e call center.
+
+#### 🛠️ Correções & Estabilidade
+- **[Infraestrutura & Resiliência]** Recuperação automática de serviços (Autoheal): Adicionado mecanismo de autocura para monitorar a saúde dos containers e restabelecer conexões automaticamente em caso de instabilidade.
+- **[Geral & Usabilidade]** cronjob fail to downtime api desabilitation: Atualização no módulo de Geral & Usabilidade: cronjob fail to downtime api desabilitation.
+- **[Geral & Usabilidade]** delete logs periodic: Atualização no módulo de Geral & Usabilidade: delete logs periodic.
+- **[Geral]** Inclusão de public dns fallback (8.8.8.8 and 1.1.1.1) to api services: Atualização no módulo de Geral: add public dns fallback (8.8.8.8 and 1.1.1.1) to api services.
+
+---
+
 ## [v1.16.22] - 2026-09-07
 
 ### 📌 Resiliência e Auto-recuperação de Serviços
