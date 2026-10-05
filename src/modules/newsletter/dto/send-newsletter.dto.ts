@@ -2,6 +2,14 @@ import { ApiProperty } from '@nestjs/swagger';
 import { ZodDto } from 'src/common/validation/zod-dto';
 import { z } from 'zod';
 
+export const NewsletterTypeEnum = z.enum([
+  'STANDARD',
+  'URGENT',
+  'URGENTE',
+  'PADRAO',
+]);
+export type NewsletterType = z.infer<typeof NewsletterTypeEnum>;
+
 export const SendNewsletterSchema = z.object({
   announcementIds: z
     .array(z.string().uuid())
@@ -9,6 +17,7 @@ export const SendNewsletterSchema = z.object({
   subject: z.string().min(3, 'Assunto muito curto'),
   initialMessage: z.string().optional().nullable(),
   finalMessage: z.string().optional().nullable(),
+  type: NewsletterTypeEnum.optional(),
 });
 
 export class SendNewsletterDto extends ZodDto(SendNewsletterSchema) {
@@ -26,4 +35,14 @@ export class SendNewsletterDto extends ZodDto(SendNewsletterSchema) {
     example: 'Ficou com alguma dúvida? Fale conosco.',
   })
   finalMessage?: string | null;
+
+  @ApiProperty({
+    required: false,
+    enum: ['STANDARD', 'URGENT'],
+    default: 'STANDARD',
+    example: 'URGENT',
+    description:
+      'Tipo de newsletter: STANDARD para novidades ou URGENT para indisponibilidade/manutenção',
+  })
+  type?: 'STANDARD' | 'URGENT' | 'URGENTE' | 'PADRAO';
 }

@@ -1403,40 +1403,63 @@ const UI = {
         // Fetch Next ID
         const resId = await Data.fetch(`${API_URL}/newsletter/next-id`);
         const { nextId } = await resId.json();
+        State.newsletterNextId = nextId;
 
         const modal = document.getElementById('newsletter-modal');
         modal.innerHTML = `
             <div class="modal-header">
-                <h3>Preparar InfoAPI News #${nextId}</h3>
+                <h3 id="n-modal-title">Preparar InfoAPI News #${nextId}</h3>
                 <button onclick="UI.closeModal()" style="background: none; border: none; cursor: pointer; font-size: 1.5rem; color: white;">&times;</button>
             </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 20px; height: 500px; overflow: hidden; background: var(--bg-card); color: var(--text-main);">
+            <div style="display: grid; grid-template-columns: 1.05fr 1fr; gap: 20px; padding: 20px; height: 560px; overflow: hidden; background: var(--bg-card); color: var(--text-main);">
                 <!-- Config Formulário -->
                 <form onsubmit="UI.sendNewsletter(event)" style="display: flex; flex-direction: column; gap: 12px; overflow-y: auto; padding-right: 10px;">
                     <input type="hidden" id="n-annIds" value='${JSON.stringify(announcementIds)}'>
+
+                    <!-- Tipo de Envio -->
+                    <div class="form-group" style="margin-bottom: 2px;">
+                        <label style="font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); display: block; margin-bottom: 6px;">Tipo de Notificação</label>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <label id="n-type-card-standard" style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 2px solid #10b981; background: rgba(16, 185, 129, 0.08); border-radius: 8px; cursor: pointer; transition: all 0.2s;">
+                                <input type="radio" name="n-type" value="STANDARD" checked onchange="UI.onNewsletterTypeChange('STANDARD')" style="accent-color: #10b981; width: 16px; height: 16px; cursor: pointer;">
+                                <div>
+                                    <div style="font-weight: 700; font-size: 0.85rem; color: var(--text-main);">📢 Informativo</div>
+                                    <div style="font-size: 0.72rem; color: var(--text-muted);">Features &amp; Atualizações</div>
+                                </div>
+                            </label>
+                            <label id="n-type-card-urgent" style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--border); background: var(--bg-hover); border-radius: 8px; cursor: pointer; transition: all 0.2s;">
+                                <input type="radio" name="n-type" value="URGENT" onchange="UI.onNewsletterTypeChange('URGENT')" style="accent-color: #ef4444; width: 16px; height: 16px; cursor: pointer;">
+                                <div>
+                                    <div style="font-weight: 700; font-size: 0.85rem; color: #ef4444;">🚨 URGENTE</div>
+                                    <div style="font-size: 0.72rem; color: #f87171;">Manutenção / Quedas</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <label>Assunto do E-mail</label>
                         <input type="text" id="n-subject" required value="InfoAPI News #${nextId} - Novidades e Atualizações" oninput="UI.updateNewsletterPreview()" style="width: 100%;">
                     </div>
                     <div class="form-group">
-                        <label>Mensagem Inicial (Padrão)</label>
+                        <label>Mensagem Inicial</label>
                         <textarea id="n-initial" rows="3" oninput="UI.updateNewsletterPreview()" style="width: 100%; resize: vertical;">Olá! Temos o prazer de compartilhar com você as últimas atualizações de recursos, novidades e alertas importantes do ecossistema InfoAPI.</textarea>
                     </div>
                     <div class="form-group">
-                        <label>Mensagem Final (Padrão)</label>
+                        <label>Mensagem Final</label>
                         <textarea id="n-final" rows="3" oninput="UI.updateNewsletterPreview()" style="width: 100%; resize: vertical;">Para dúvidas ou suporte com essas novidades, nossa equipe técnica está sempre disponível através do e-mail suporte@infobrasilsistemas.com.br ou pelo nosso suporte oficial.</textarea>
                     </div>
                     <div style="margin-top: auto; display: flex; gap: 10px;">
                         <button type="button" class="btn btn-outline" onclick="UI.closeModal()" style="flex: 1;">Cancelar</button>
-                        <button type="submit" class="btn btn-primary" style="flex: 1; background: #10b981; border-color: #10b981;">Disparar News</button>
+                        <button type="submit" id="n-submit-btn" class="btn btn-primary" style="flex: 1; background: #10b981; border-color: #10b981;">Disparar News</button>
                     </div>
                 </form>
 
                 <!-- Live Preview (Iframe) -->
                 <div style="display: flex; flex-direction: column; border-left: 1px solid var(--border); padding-left: 20px; height: 100%;">
                     <div style="font-weight: bold; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
-                        <span>Pré-visualização do E-mail</span>
-                        <span style="font-size: 0.75rem; color: var(--text-muted);">Auto-atualizável</span>
+                        <span id="n-preview-label">Pré-visualização do E-mail</span>
+                        <span id="n-preview-badge" style="font-size: 0.75rem; color: var(--text-muted);">Auto-atualizável</span>
                     </div>
                     <iframe id="newsletter-preview-frame" style="flex: 1; width: 100%; border: 1px solid var(--border); border-radius: 8px; background: white;"></iframe>
                 </div>
@@ -1449,6 +1472,71 @@ const UI = {
         // Initial preview generation
         this.updateNewsletterPreview();
     },
+    onNewsletterTypeChange(type) {
+        const isUrgent = type === 'URGENT';
+        const nextId = State.newsletterNextId || '';
+        const modalTitle = document.getElementById('n-modal-title');
+        const subjectInput = document.getElementById('n-subject');
+        const initialInput = document.getElementById('n-initial');
+        const finalInput = document.getElementById('n-final');
+        const submitBtn = document.getElementById('n-submit-btn');
+        const cardStandard = document.getElementById('n-type-card-standard');
+        const cardUrgent = document.getElementById('n-type-card-urgent');
+
+        if (cardStandard && cardUrgent) {
+            if (isUrgent) {
+                cardStandard.style.border = '1px solid var(--border)';
+                cardStandard.style.background = 'var(--bg-hover)';
+                cardUrgent.style.border = '2px solid #ef4444';
+                cardUrgent.style.background = 'rgba(239, 68, 68, 0.12)';
+            } else {
+                cardStandard.style.border = '2px solid #10b981';
+                cardStandard.style.background = 'rgba(16, 185, 129, 0.08)';
+                cardUrgent.style.border = '1px solid var(--border)';
+                cardUrgent.style.background = 'var(--bg-hover)';
+            }
+        }
+
+        if (isUrgent) {
+            if (modalTitle) {
+                modalTitle.innerHTML = `<span style="color: #ef4444;">🚨 Comunicado de Urgência</span> (News #${nextId})`;
+            }
+            if (subjectInput && (subjectInput.value.includes('InfoAPI News') || !subjectInput.value.trim())) {
+                subjectInput.value = `[URGENTE] InfoAPI - Manutenção Programada / Comunicado Operacional`;
+            }
+            if (initialInput) {
+                initialInput.value = `⚠️ COMUNICADO DE URGÊNCIA: Informamos sobre uma manutenção programada ou instabilidade temporária no ecossistema InfoAPI. Por favor, atente-se às informações descritas abaixo.`;
+            }
+            if (finalInput) {
+                finalInput.value = `Nossa equipe de engenharia e infraestrutura está atuando ativamente para mitigar qualquer impacto. Em caso de dúvidas urgentes ou anomalias, contate imediatamente nosso canal de suporte operacional.`;
+            }
+            if (submitBtn) {
+                submitBtn.style.background = '#dc2626';
+                submitBtn.style.borderColor = '#dc2626';
+                submitBtn.innerHTML = `🚨 Disparar Urgente`;
+            }
+        } else {
+            if (modalTitle) {
+                modalTitle.textContent = `Preparar InfoAPI News #${nextId}`;
+            }
+            if (subjectInput && (subjectInput.value.includes('[URGENTE]') || !subjectInput.value.trim())) {
+                subjectInput.value = `InfoAPI News #${nextId} - Novidades e Atualizações`;
+            }
+            if (initialInput) {
+                initialInput.value = `Olá! Temos o prazer de compartilhar com você as últimas atualizações de recursos, novidades e alertas importantes do ecossistema InfoAPI.`;
+            }
+            if (finalInput) {
+                finalInput.value = `Para dúvidas ou suporte com essas novidades, nossa equipe técnica está sempre disponível através do e-mail suporte@infobrasilsistemas.com.br ou pelo nosso suporte oficial.`;
+            }
+            if (submitBtn) {
+                submitBtn.style.background = '#10b981';
+                submitBtn.style.borderColor = '#10b981';
+                submitBtn.innerHTML = `Disparar News`;
+            }
+        }
+
+        this.updateNewsletterPreview();
+    },
     async updateNewsletterPreview() {
         if (State.previewTimeoutId) {
             clearTimeout(State.previewTimeoutId);
@@ -1458,6 +1546,7 @@ const UI = {
             const subject = document.getElementById('n-subject').value;
             const initialMessage = document.getElementById('n-initial').value;
             const finalMessage = document.getElementById('n-final').value;
+            const type = document.querySelector('input[name="n-type"]:checked')?.value || 'STANDARD';
 
             const frame = document.getElementById('newsletter-preview-frame');
             if (!frame) return;
@@ -1465,7 +1554,7 @@ const UI = {
             try {
                 const res = await Data.fetch(`${API_URL}/newsletter/preview`, {
                     method: 'POST',
-                    body: JSON.stringify({ announcementIds, subject, initialMessage, finalMessage })
+                    body: JSON.stringify({ announcementIds, subject, initialMessage, finalMessage, type })
                 });
 
                 if (res.ok) {
@@ -1481,12 +1570,19 @@ const UI = {
             } catch (e) {
                 console.error('Erro ao gerar preview da newsletter:', e);
             }
-        }, 500);
+        }, 300);
     },
     async sendNewsletter(e) {
         e.preventDefault();
 
-        if (!confirm('Deseja disparar esta newsletter agora para TODOS os usuários ativos cadastrados? Essa ação não pode ser desfeita.')) {
+        const type = document.querySelector('input[name="n-type"]:checked')?.value || 'STANDARD';
+        const isUrgent = type === 'URGENT';
+
+        const confirmMsg = isUrgent
+            ? '🚨 ATENÇÃO: Deseja disparar este COMUNICADO DE URGÊNCIA para TODOS os usuários ativos cadastrados? Essa notificação tem caráter prioritário e de emergência técnica.'
+            : 'Deseja disparar esta newsletter agora para TODOS os usuários ativos cadastrados? Essa ação não pode ser desfeita.';
+
+        if (!confirm(confirmMsg)) {
             return;
         }
 
@@ -1498,11 +1594,11 @@ const UI = {
         try {
             const res = await Data.fetch(`${API_URL}/newsletter/send`, {
                 method: 'POST',
-                body: JSON.stringify({ announcementIds, subject, initialMessage, finalMessage })
+                body: JSON.stringify({ announcementIds, subject, initialMessage, finalMessage, type })
             });
 
             if (res.ok) {
-                alert('Newsletter enviada e disparada com sucesso para todos os usuários ativos!');
+                alert(isUrgent ? '🚨 Comunicado de urgência enviado e disparado com sucesso para todos os usuários ativos!' : 'Newsletter enviada e disparada com sucesso para todos os usuários ativos!');
                 this.closeModal();
                 Data.fetchAnnouncements();
             } else {

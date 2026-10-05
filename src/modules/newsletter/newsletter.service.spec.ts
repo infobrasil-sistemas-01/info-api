@@ -95,6 +95,33 @@ describe('NewsletterService', () => {
       expect(result.html).toContain('New update text');
       expect(result.html).toContain('Check details');
     });
+
+    it('should generate an urgent template when type is URGENT or URGENTE', async () => {
+      mockPrisma.newsletter.findMany.mockResolvedValue([{ id: 4 }]);
+      mockPrisma.announcement.findMany.mockResolvedValue([
+        {
+          id: '47ef5c20-7f2a-4db3-9824-2c6c39bb7f1a',
+          type: 'ALERT',
+          text: 'Instabilidade detectada no módulo de pagamentos.',
+          ctaText: 'Verificar Status',
+          ctaLink: 'https://status.infobrasil.com.br',
+          createdAt: new Date(),
+        },
+      ]);
+
+      const result = await service.getPreview({
+        announcementIds: ['47ef5c20-7f2a-4db3-9824-2c6c39bb7f1a'],
+        subject: '[URGENTE] InfoAPI - Instabilidade Temporária',
+        type: 'URGENT',
+      });
+
+      expect(result.subject).toEqual('[URGENTE] InfoAPI - Instabilidade Temporária');
+      expect(result.type).toEqual('URGENT');
+      expect(result.html).toContain('COMUNICADO DE URGÊNCIA');
+      expect(result.html).toContain('ALERTA CRÍTICO');
+      expect(result.html).toContain('Instabilidade detectada no módulo de pagamentos.');
+      expect(result.html).toContain('Procedimentos &amp; Recomendações');
+    });
   });
 
   describe('send', () => {
@@ -146,5 +173,55 @@ describe('NewsletterService', () => {
       expect(result).toEqual(mockNewsletter);
       expect(mockPrisma.$transaction).toHaveBeenCalled();
     });
+
+    it('should send urgent newsletter with urgent email body and subject', async () => {
+      const mockAnnouncements = [
+        {
+          id: '47ef5c20-7f2a-4db3-9824-2c6c39bb7f1a',
+          type: 'ALERT',
+          text: 'Manutenção emergencial nos servidores.',
+          newsletterId: null,
+        },
+      ];
+      mockPrisma.announcement.findMany.mockResolvedValue(mockAnnouncements);
+
+      const mockNewsletter = {
+        id: 2,
+        subject: '[URGENTE] Manutenção Programada',
+      };
+
+      mockPrisma.$transaction.mockImplementation(async (callback) => {
+        const txMock = {
+          newsletter: {
+            create: jest.fn().mockResolvedValue(mockNewsletter),
+          },
+          announcement: {
+            updateMany: jest.fn().mockResolvedValue({ count: 1 }),
+          },
+          user: {
+            findMany: jest
+              .fn()
+              .mockResolvedValue([
+                { user: 'Admin', email: 'admin@empresa.com' },
+              ]),
+          },
+        };
+        return callback(txMock);
+      });
+
+      const result = await service.send({
+        announcementIds: ['47ef5c20-7f2a-4db3-9824-2c6c39bb7f1a'],
+        subject: '[URGENTE] Manutenção Programada',
+        type: 'URGENT',
+      });
+
+      expect(result).toEqual(mockNewsletter);
+      expect(mockEmailService.sendEmail).toHaveBeenCalledWith(
+        'admin@empresa.com',
+        '[URGENTE] Manutenção Programada',
+        expect.stringContaining('COMUNICADO DE URGÊNCIA'),
+      );
+    });
   });
 });
+
