@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,9 @@
   <link rel="icon" type="image/x-icon" href="/integration/assets/favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
   <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 
   <style>
@@ -750,6 +753,7 @@
       .stats-bar {
         grid-template-columns: repeat(2, 1fr);
       }
+
       .header-actions {
         display: none;
       }
@@ -759,29 +763,36 @@
       .stats-bar {
         grid-template-columns: 1fr;
       }
+
       .hero h1 {
         font-size: 2rem;
       }
+
       .footer-content {
         flex-direction: column;
         text-align: center;
       }
+
       .footer-links {
         justify-content: center;
         flex-wrap: wrap;
       }
+
       .release-header {
         padding: 16px;
       }
+
       .release-overview {
         padding: 16px;
       }
+
       .release-content {
         padding: 0 16px 16px;
       }
     }
   </style>
 </head>
+
 <body>
   <div class="ambient-glow"></div>
 
@@ -789,7 +800,8 @@
   <header>
     <div class="header-content">
       <a href="/changelog" class="brand">
-        <img src="/integration/assets/logo-infoapi-white.png" alt="InfoAPI" class="brand-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
+        <img src="/integration/assets/logo-infoapi-white.png" alt="InfoAPI" class="brand-logo"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
         <span class="brand-name" style="display: none;">Info<span>API</span></span>
         <span class="brand-divider"></span>
         <span class="panel-name">Changelog</span>
@@ -825,7 +837,8 @@
         Histórico Oficial de Lançamentos
       </div>
       <h1>Notas de <span>Atualização</span></h1>
-      <p>Acompanhe todas as novidades, melhorias de performance, proteções de segurança e novas funcionalidades implementadas na plataforma InfoAPI.</p>
+      <p>Acompanhe todas as novidades, melhorias de performance, proteções de segurança e novas funcionalidades
+        implementadas na plataforma InfoAPI.</p>
     </section>
 
     <!-- Stats Bar -->
@@ -846,7 +859,7 @@
         </div>
         <div class="stat-info">
           <span class="stat-value" id="stat-features">--</span>
-          <span class="stat-label">Novas Funcionalidades</span>
+          <span class="stat-label">Funcionalidades</span>
         </div>
       </div>
 
@@ -875,7 +888,9 @@
     <section class="controls-wrapper">
       <div class="search-box">
         <i class='bx bx-search'></i>
-        <input type="text" id="search-input" class="search-input" placeholder="Buscar por módulo, funcionalidade ou correção... (ex: pedidos, acertos, call center, timeout)" autocomplete="off">
+        <input type="text" id="search-input" class="search-input"
+          placeholder="Buscar por módulo, funcionalidade ou correção... (ex: pedidos, acertos, call center, timeout)"
+          autocomplete="off">
       </div>
 
       <nav class="tabs">
@@ -927,7 +942,7 @@
   </footer>
 
   <script>
-    (function() {
+    (function () {
       var allReleases = [];
       var activeFilter = 'all';
       var searchQuery = '';
@@ -937,7 +952,7 @@
       var filterButtons = document.querySelectorAll('.tab-btn');
 
       // Sticky header scroll listener matching Admin
-      window.addEventListener('scroll', function() {
+      window.addEventListener('scroll', function () {
         var header = document.querySelector('header');
         if (header) {
           if (window.scrollY > 0) {
@@ -967,20 +982,20 @@
       function copyVersionLink(version, event) {
         event.stopPropagation();
         var url = window.location.origin + window.location.pathname + '#v' + version;
-        navigator.clipboard.writeText(url).then(function() {
+        navigator.clipboard.writeText(url).then(function () {
           var btn = event.currentTarget;
           var original = btn.innerHTML;
           btn.innerHTML = "<i class='bx bx-check' style='color:#10b981; font-size:1.1rem;'></i>";
-          setTimeout(function() { btn.innerHTML = original; }, 2000);
+          setTimeout(function () { btn.innerHTML = original; }, 2000);
         });
       }
 
       function renderReleases() {
         var query = searchQuery.trim().toLowerCase();
 
-        var filtered = allReleases.filter(function(rel) {
+        var filtered = allReleases.filter(function (rel) {
           if (activeFilter !== 'all') {
-            var hasType = rel.items.some(function(i) { return i.type === activeFilter; });
+            var hasType = rel.items.some(function (i) { return i.type === activeFilter; });
             if (!hasType) return false;
           }
 
@@ -988,11 +1003,11 @@
             var matchVersion = rel.version.toLowerCase().indexOf(query) !== -1;
             var matchTitle = rel.title.toLowerCase().indexOf(query) !== -1;
             var matchSummary = rel.summary.toLowerCase().indexOf(query) !== -1;
-            var matchItems = rel.items.some(function(i) {
+            var matchItems = rel.items.some(function (i) {
               return i.module.toLowerCase().indexOf(query) !== -1 ||
-                     i.title.toLowerCase().indexOf(query) !== -1 ||
-                     i.description.toLowerCase().indexOf(query) !== -1 ||
-                     i.impact.toLowerCase().indexOf(query) !== -1;
+                i.title.toLowerCase().indexOf(query) !== -1 ||
+                i.description.toLowerCase().indexOf(query) !== -1 ||
+                i.impact.toLowerCase().indexOf(query) !== -1;
             });
 
             return matchVersion || matchTitle || matchSummary || matchItems;
@@ -1002,11 +1017,11 @@
         });
 
         if (filtered.length === 0) {
-          timeline.innerHTML = 
+          timeline.innerHTML =
             '<div class="empty-state">' +
-              '<i class="bx bx-search-alt empty-icon"></i>' +
-              '<h3>Nenhuma nota encontrada</h3>' +
-              '<p style="color:var(--text-muted); margin-top:6px;">Tente pesquisar com outros termos ou limpar os filtros aplicados.</p>' +
+            '<i class="bx bx-search-alt empty-icon"></i>' +
+            '<h3>Nenhuma nota encontrada</h3>' +
+            '<p style="color:var(--text-muted); margin-top:6px;">Tente pesquisar com outros termos ou limpar os filtros aplicados.</p>' +
             '</div>';
           return;
         }
@@ -1014,14 +1029,14 @@
         var html = '';
         var targetHash = window.location.hash.replace('#v', '').replace('#', '');
 
-        filtered.forEach(function(rel, index) {
+        filtered.forEach(function (rel, index) {
           var isLatest = (index === 0 && !query && activeFilter === 'all');
           var isTarget = (targetHash && (targetHash === rel.version || targetHash === 'v' + rel.version));
           var shouldExpand = isLatest || isTarget || query.length > 0;
 
-          var features = rel.items.filter(function(i) { return i.type === 'feature'; });
-          var fixes = rel.items.filter(function(i) { return i.type === 'fix'; });
-          var securities = rel.items.filter(function(i) { return i.type === 'security'; });
+          var features = rel.items.filter(function (i) { return i.type === 'feature'; });
+          var fixes = rel.items.filter(function (i) { return i.type === 'fix'; });
+          var securities = rel.items.filter(function (i) { return i.type === 'security'; });
 
           html += '<article class="release-card ' + (isLatest ? 'highlight-latest ' : '') + (!shouldExpand ? 'collapsed' : '') + '" id="v' + rel.version + '">';
 
@@ -1052,7 +1067,7 @@
 
           if (rel.highlights && rel.highlights.length > 0) {
             html += '    <div class="highlights-list">';
-            rel.highlights.forEach(function(h) {
+            rel.highlights.forEach(function (h) {
               html += '      <div class="highlight-item"><i class="bx bxs-star"></i> ' + h + '</div>';
             });
             html += '    </div>';
@@ -1068,7 +1083,7 @@
               html += '    <div class="category-section">';
               html += '      <div class="category-header feat"><i class="bx bx-star"></i> Novidades & Melhorias (' + features.length + ')</div>';
               html += '      <div class="items-grid">';
-              features.forEach(function(item) {
+              features.forEach(function (item) {
                 html += renderItemCard(item);
               });
               html += '      </div>';
@@ -1080,7 +1095,7 @@
               html += '    <div class="category-section">';
               html += '      <div class="category-header fix"><i class="bx bx-wrench"></i> Correções & Estabilidade (' + fixes.length + ')</div>';
               html += '      <div class="items-grid">';
-              fixes.forEach(function(item) {
+              fixes.forEach(function (item) {
                 html += renderItemCard(item);
               });
               html += '      </div>';
@@ -1092,7 +1107,7 @@
               html += '    <div class="category-section">';
               html += '      <div class="category-header sec"><i class="bx bx-shield-quarter"></i> Segurança & Infraestrutura (' + securities.length + ')</div>';
               html += '      <div class="items-grid">';
-              securities.forEach(function(item) {
+              securities.forEach(function (item) {
                 html += renderItemCard(item);
               });
               html += '      </div>';
@@ -1138,14 +1153,14 @@
       window.copyVersionLink = copyVersionLink;
 
       // Event Listeners
-      searchInput.addEventListener('input', function(e) {
+      searchInput.addEventListener('input', function (e) {
         searchQuery = e.target.value;
         renderReleases();
       });
 
-      filterButtons.forEach(function(btn) {
-        btn.addEventListener('click', function() {
-          filterButtons.forEach(function(b) { b.classList.remove('active'); });
+      filterButtons.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          filterButtons.forEach(function (b) { b.classList.remove('active'); });
           btn.classList.add('active');
           activeFilter = btn.getAttribute('data-filter');
           renderReleases();
@@ -1154,24 +1169,25 @@
 
       // Carregar Dados da API
       fetch('/changelog/data')
-        .then(function(res) { return res.json(); })
-        .then(function(data) {
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
           allReleases = data.releases || [];
           if (data.stats) {
             updateStats(data.stats);
           }
           renderReleases();
         })
-        .catch(function(err) {
+        .catch(function (err) {
           console.error('Erro ao buscar dados do changelog:', err);
-          timeline.innerHTML = 
+          timeline.innerHTML =
             '<div class="empty-state">' +
-              '<i class="bx bx-error-circle empty-icon" style="color:#ef4444;"></i>' +
-              '<h3>Não foi possível carregar as notas</h3>' +
-              '<p style="color:var(--text-muted); margin-top:6px;">Por favor tente recarregar a página em alguns instantes.</p>' +
+            '<i class="bx bx-error-circle empty-icon" style="color:#ef4444;"></i>' +
+            '<h3>Não foi possível carregar as notas</h3>' +
+            '<p style="color:var(--text-muted); margin-top:6px;">Por favor tente recarregar a página em alguns instantes.</p>' +
             '</div>';
         });
     })();
   </script>
 </body>
+
 </html>

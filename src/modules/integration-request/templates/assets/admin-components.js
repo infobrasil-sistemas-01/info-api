@@ -453,6 +453,13 @@ const Components = {
 
 
             <div class="card link-card" style="display: flex; flex-direction: column; gap: 1rem; padding: 2rem; border: 1px dashed var(--primary); background: rgba(16, 185, 129, 0.05);">
+                <div style="font-size: 2.5rem; color: var(--primary);"><i class='bx bx-list-check'></i></div>
+                <h3 style="margin: 0;">Changelog</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem; flex-grow: 1;">Confira as últimas atualizações e melhorias em nossa API.</p>
+                <a href="/changelog" target="_blank" class="btn btn-primary" style="text-align: center; text-decoration: none;">Ver Changelog</a>
+            </div>
+
+            <div class="card link-card" style="display: flex; flex-direction: column; gap: 1rem; padding: 2rem; border: 1px dashed var(--primary); background: rgba(16, 185, 129, 0.05);">
                 <div style="font-size: 2.5rem; color: var(--primary);"><i class='bx bx-support'></i></div>
                 <h3 style="margin: 0;">Suporte Interno</h3>
                 <p style="color: var(--text-muted); font-size: 0.9rem; flex-grow: 1;">Dúvidas técnicas ou problemas com o painel administrativo? Acione o time de desenvolvimento.</p>
