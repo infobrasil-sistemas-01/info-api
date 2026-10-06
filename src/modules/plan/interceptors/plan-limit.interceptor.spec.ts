@@ -110,4 +110,25 @@ describe('PlanLimitInterceptor', () => {
       expect(mockNext.handle).toHaveBeenCalled();
     });
   });
+
+  describe('Excluded Routes', () => {
+    it.each([
+      ['/api/v1/feature-requests'],
+      ['/api/v1/feature-requests/my'],
+      ['/api/v1/feature-requests/123/messages'],
+      ['/api/v1/announcements'],
+      ['/api/v1/dashboard'],
+      ['/integration'],
+    ])('should bypass limit checks and logging for %s', async (path) => {
+      const context = createMockContext(path);
+
+      const result$ = await interceptor.intercept(context, mockNext);
+      await new Promise((resolve) => result$.subscribe(resolve));
+
+      expect(mockNext.handle).toHaveBeenCalled();
+      expect(mockPlanService.getUserLimits).not.toHaveBeenCalled();
+      expect(mockPlanService.getRequestCount).not.toHaveBeenCalled();
+      expect(mockPlanService.logRequest).not.toHaveBeenCalled();
+    });
+  });
 });

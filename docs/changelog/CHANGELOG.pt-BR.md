@@ -6,6 +6,22 @@ Para visualizar a versão interativa com busca em tempo real, acesse o portal we
 
 ---
 
+## [v1.16.31] - 2026-10-06
+
+### 📌 chat on feature requests e melhorias
+> Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral & Usabilidade.
+
+**Destaques:**
+- ⭐ chat on feature requests
+
+#### 🚀 Novidades & Melhorias
+- **[Geral & Usabilidade]** chat on feature requests: Atualização no módulo de Geral & Usabilidade: chat on feature requests.
+
+#### 🛠️ Correções & Estabilidade
+- **[Geral & Usabilidade]** Remoção de /feature-requests endpoinds by all-exception filter: Atualização no módulo de Geral & Usabilidade: remove /feature-requests endpoinds by all-exception filter.
+
+---
+
 ## [v1.16.30] - 2026-10-06
 
 ### 📌 changelog links e melhorias

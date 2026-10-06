@@ -1,5 +1,35 @@
 [
   {
+    "version": "1.16.31",
+    "date": "2026-10-06",
+    "title": "chat on feature requests e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral & Usabilidade.",
+    "highlights": [
+      "chat on feature requests"
+    ],
+    "items": [
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "chat on feature requests",
+        "description": "Atualização no módulo de Geral & Usabilidade: chat on feature requests.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "chat on feature requests",
+        "commitHash": "397fc8a"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "Remoção de /feature-requests endpoinds by all-exception filter",
+        "description": "Atualização no módulo de Geral & Usabilidade: remove /feature-requests endpoinds by all-exception filter.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "remove /feature-requests endpoinds by all-exception filter",
+        "commitHash": "5f307e5"
+      }
+    ],
+    "totalChanges": 2
+  },
+  {
     "version": "1.16.30",
     "date": "2026-10-06",
     "title": "changelog links e melhorias",
