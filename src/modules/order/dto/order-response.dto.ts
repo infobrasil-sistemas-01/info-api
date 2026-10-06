@@ -1,11 +1,35 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
+export class OrderPaymentDto {
+  @ApiProperty({ example: 1, description: 'Código da forma de pagamento' })
+  codigo: number;
+
+  @ApiProperty({
+    example: 'Dinheiro',
+    description: 'Descrição da forma de pagamento',
+  })
+  descricao: string;
+
+  @ApiProperty({ example: 150.0, description: 'Valor pago nesta forma' })
+  valor: number;
+}
+
 export class OrderResponseDto {
   @ApiProperty({ example: 12345, description: 'Número da venda' })
   VEN_NUMERO: number;
 
-  @ApiProperty({ example: 1, description: 'Código da situação da venda' })
+  @ApiProperty({
+    example: 1,
+    description:
+      'Código da situação da venda (1: Aberto/Orçamento, 2: Fechado/Faturado, 3: Cancelado)',
+  })
   SIT_CODIGO: number;
+
+  @ApiPropertyOptional({
+    example: 'FECHADO',
+    description: 'Descrição da situação da venda',
+  })
+  SIT_DESCRICAO?: string;
 
   @ApiProperty({ example: 'WEB-12345', description: 'Número da venda no site' })
   VEN_NUMSITE: string;
@@ -13,12 +37,27 @@ export class OrderResponseDto {
   @ApiProperty({ example: 1, description: 'Código da loja' })
   LOJ_CODIGO: number;
 
-  @ApiPropertyOptional({ example: 1, description: 'Código do funcionário' })
+  @ApiPropertyOptional({
+    example: 'Loja Matriz',
+    description: 'Razão social / Nome da loja',
+  })
+  LOJ_NOME?: string;
+
+  @ApiPropertyOptional({
+    example: 'Filial Centro',
+    description: 'Nome fantasia da loja',
+  })
+  LOJ_FANTASIA?: string;
+
+  @ApiPropertyOptional({
+    example: 1,
+    description: 'Código do vendedor / funcionário responsável',
+  })
   FUN_CODIGO?: number;
 
   @ApiPropertyOptional({
-    example: 'Funcionário Exemplo',
-    description: 'Nome do funcionário',
+    example: 'Vendedor Exemplo',
+    description: 'Nome do vendedor / funcionário responsável',
   })
   FUN_NOME?: string;
 
@@ -46,29 +85,105 @@ export class OrderResponseDto {
   @ApiProperty({ example: '14:30:00', description: 'Hora da venda' })
   VEN_HORA: string;
 
-  @ApiProperty({ example: 1, description: 'Código da forma de pagamento' })
+  @ApiPropertyOptional({
+    example: 300.0,
+    description: 'Valor total bruto da venda',
+  })
+  VEN_TOTALBRUTO?: number;
+
+  @ApiPropertyOptional({
+    example: 49.5,
+    description: 'Valor total dos descontos aplicados na venda',
+  })
+  VEN_TOTALDESC?: number;
+
+  @ApiPropertyOptional({
+    example: 250.5,
+    description: 'Valor total líquido da venda',
+  })
+  VEN_TOTALLIQUIDO?: number;
+
+  // Forma 1
+  @ApiProperty({ example: 1, description: 'Código da forma de pagamento 1' })
   FP1_CODIGO: number;
 
   @ApiPropertyOptional({
     example: 'Dinheiro',
-    description: 'Descrição da forma de pagamento',
+    description: 'Descrição da forma de pagamento 1',
   })
   FPG_DESCRICAO?: string;
 
   @ApiPropertyOptional({
+    example: 150.0,
+    description: 'Valor pago na forma de pagamento 1',
+  })
+  VEN_TOTALPP1?: number;
+
+  @ApiPropertyOptional({
     example: 1,
-    description: 'Código do plano de pagamento',
+    description: 'Código do plano de pagamento 1',
   })
   PP1_CODIGO?: number;
 
   @ApiPropertyOptional({
     example: 'A Vista',
-    description: 'Descrição do plano de pagamento',
+    description: 'Descrição do plano de pagamento 1',
   })
   PLP_DESCRICAO?: string;
 
-  @ApiPropertyOptional({ example: 250.5, description: 'Valor total líquido' })
-  VEN_TOTALLIQUIDO?: number;
+  // Forma 2
+  @ApiPropertyOptional({ example: 2, description: 'Código da forma de pagamento 2' })
+  FP2_CODIGO?: number;
+
+  @ApiPropertyOptional({
+    example: 'Cartão de Crédito',
+    description: 'Descrição da forma de pagamento 2',
+  })
+  FPG2_DESCRICAO?: string;
+
+  @ApiPropertyOptional({
+    example: 100.5,
+    description: 'Valor pago na forma de pagamento 2',
+  })
+  VEN_TOTALPP2?: number;
+
+  // Forma 3
+  @ApiPropertyOptional({ example: 3, description: 'Código da forma de pagamento 3' })
+  FP3_CODIGO?: number;
+
+  @ApiPropertyOptional({
+    example: 'PIX',
+    description: 'Descrição da forma de pagamento 3',
+  })
+  FPG3_DESCRICAO?: string;
+
+  @ApiPropertyOptional({
+    example: 0.0,
+    description: 'Valor pago na forma de pagamento 3',
+  })
+  VEN_TOTALPP3?: number;
+
+  // Forma 4
+  @ApiPropertyOptional({ example: 4, description: 'Código da forma de pagamento 4' })
+  FP4_CODIGO?: number;
+
+  @ApiPropertyOptional({
+    example: 'Boleto',
+    description: 'Descrição da forma de pagamento 4',
+  })
+  FPG4_DESCRICAO?: string;
+
+  @ApiPropertyOptional({
+    example: 0.0,
+    description: 'Valor pago na forma de pagamento 4',
+  })
+  VEN_TOTALPP4?: number;
+
+  @ApiPropertyOptional({
+    type: [OrderPaymentDto],
+    description: 'Lista consolidada das formas de pagamento com seus respectivos valores',
+  })
+  PAYMENTS?: OrderPaymentDto[];
 
   @ApiPropertyOptional({ example: 123, description: 'Código do cliente' })
   CLI_CODIGO?: number;
@@ -139,15 +254,6 @@ export class OrderItemResponseDto {
 export class OrderDetailResponseDto extends OrderResponseDto {
   @ApiPropertyOptional({ example: '1', description: 'Preço da venda' })
   VEN_PRECO?: string;
-
-  @ApiPropertyOptional({ example: 300.0, description: 'Valor total bruto' })
-  VEN_TOTALBRUTO?: number;
-
-  @ApiPropertyOptional({
-    example: 49.5,
-    description: 'Valor total de desconto',
-  })
-  VEN_TOTALDESC?: number;
 
   @ApiPropertyOptional({ example: 0.0, description: 'Valor pendente da venda' })
   VEN_VALORPENDENTE?: number;

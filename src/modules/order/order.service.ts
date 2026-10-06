@@ -282,6 +282,11 @@ export class OrderService {
 
       const query = `SELECT FIRST ? SKIP ?
                   V.VEN_NUMERO,
+                  V.LOJ_CODIGO,
+                  LOJ.LOJ_NOME,
+                  LOJ.LOJ_FANTASIA,
+                  V.VEN_DATA,
+                  V.VEN_HORA,
                   V.SIT_CODIGO,
                   S.SIT_DESCRICAO,
                   V.CLI_CODIGO,
@@ -291,22 +296,35 @@ export class OrderService {
                   V.USU_CODIGO,
                   U.USU_APELIDO,
                   V.VEN_NUMSITE,
-                  V.LOJ_CODIGO,
                   V.VEN_TIPO,
-                  V.VEN_DATA,
-                  V.VEN_HORA,
+                  V.VEN_TOTALBRUTO,
+                  V.VEN_TOTALDESC,
+                  V.VEN_TOTALLIQUIDO,
                   V.FP1_CODIGO,
-                  FPG.FPG_DESCRICAO,
+                  FPG1.FPG_DESCRICAO,
+                  V.VEN_TOTALPP1,
                   V.PP1_CODIGO,
                   PLP.PLP_DESCRICAO,
-                  V.VEN_TOTALLIQUIDO
+                  V.FP2_CODIGO,
+                  FPG2.FPG_DESCRICAO AS FPG2_DESCRICAO,
+                  V.VEN_TOTALPP2,
+                  V.FP3_CODIGO,
+                  FPG3.FPG_DESCRICAO AS FPG3_DESCRICAO,
+                  V.VEN_TOTALPP3,
+                  V.FP4_CODIGO,
+                  FPG4.FPG_DESCRICAO AS FPG4_DESCRICAO,
+                  V.VEN_TOTALPP4
                FROM VENDAS V
-               LEFT JOIN formaspag FPG ON FPG.fpg_codigo = V.fp1_codigo
-               LEFT JOIN planospag PLP ON PLP.plp_codigo = V.pp1_codigo
-               LEFT JOIN clientes C ON C.cli_codigo = V.cli_codigo
-               LEFT JOIN funcionarios F ON F.fun_codigo = V.fun_codigo
-               LEFT JOIN usuarios U ON U.usu_codigo = V.usu_codigo
-               LEFT JOIN SITUACAO S ON S.sit_codigo = V.sit_codigo
+               LEFT JOIN LOJAS LOJ ON LOJ.LOJ_CODIGO = V.LOJ_CODIGO
+               LEFT JOIN FORMASPAG FPG1 ON FPG1.FPG_CODIGO = V.FP1_CODIGO
+               LEFT JOIN FORMASPAG FPG2 ON FPG2.FPG_CODIGO = V.FP2_CODIGO
+               LEFT JOIN FORMASPAG FPG3 ON FPG3.FPG_CODIGO = V.FP3_CODIGO
+               LEFT JOIN FORMASPAG FPG4 ON FPG4.FPG_CODIGO = V.FP4_CODIGO
+               LEFT JOIN PLANOSPAG PLP ON PLP.PLP_CODIGO = V.PP1_CODIGO
+               LEFT JOIN CLIENTES C ON C.CLI_CODIGO = V.CLI_CODIGO
+               LEFT JOIN FUNCIONARIOS F ON F.FUN_CODIGO = V.FUN_CODIGO
+               LEFT JOIN USUARIOS U ON U.USU_CODIGO = V.USU_CODIGO
+               LEFT JOIN SITUACAO S ON S.SIT_CODIGO = V.SIT_CODIGO
                ${whereClause}
                ORDER BY V.VEN_NUMERO DESC`;
 
@@ -324,11 +342,10 @@ export class OrderService {
       if (includeCount) {
         const countQuery = `SELECT COUNT(*) as total
                              FROM VENDAS V
-                             LEFT JOIN formaspag FPG ON FPG.fpg_codigo = V.fp1_codigo
-                             LEFT JOIN planospag PLP ON PLP.plp_codigo = V.pp1_codigo
-                             LEFT JOIN clientes C ON C.cli_codigo = V.cli_codigo
-                             LEFT JOIN funcionarios F ON F.fun_codigo = V.fun_codigo
-                             LEFT JOIN usuarios U ON U.usu_codigo = V.usu_codigo
+                             LEFT JOIN LOJAS LOJ ON LOJ.LOJ_CODIGO = V.LOJ_CODIGO
+                             LEFT JOIN CLIENTES C ON C.CLI_CODIGO = V.CLI_CODIGO
+                             LEFT JOIN FUNCIONARIOS F ON F.FUN_CODIGO = V.FUN_CODIGO
+                             LEFT JOIN USUARIOS U ON U.USU_CODIGO = V.USU_CODIGO
                              ${whereClause}`;
         const countRes = (await new Promise((resolve, reject) => {
           connection.query(countQuery, filterParams, (err: any, res: any) => {
@@ -353,8 +370,12 @@ export class OrderService {
         }ms`,
       );
 
+      const enrichedResult = (Array.isArray(result) ? result : []).map((row) =>
+        this.enrichOrderRow(row),
+      );
+
       return new PaginatedResponse(
-        Array.isArray(result) ? result : [],
+        enrichedResult,
         total,
         page,
         pageSize
@@ -385,6 +406,11 @@ export class OrderService {
       // Campos VEN_ENTREGA e VEN_MONTAGEM solicitados pelo Depósito Oliveira
       const query = `SELECT
                   V.VEN_NUMERO,
+                  V.LOJ_CODIGO,
+                  LOJ.LOJ_NOME,
+                  LOJ.LOJ_FANTASIA,
+                  V.VEN_DATA,
+                  V.VEN_HORA,
                   V.SIT_CODIGO,
                   S.SIT_DESCRICAO,
                   V.CLI_CODIGO,
@@ -397,17 +423,25 @@ export class OrderService {
                   V.LOJ_CODIGO,
                   V.VEN_TIPO,
                   V.VEN_PRECO,
-                  V.VEN_DATA,
-                  V.VEN_HORA,
-                  V.FP1_CODIGO,
-                  FPG.FPG_DESCRICAO,
-                  V.PP1_CODIGO,
-                  PLP.PLP_DESCRICAO,
                   V.VEN_TOTALBRUTO,
                   V.VEN_TOTALDESC,
                   V.VEN_TOTALLIQUIDO,
                   V.VEN_VALORPENDENTE,
                   V.VEN_VALORENC,
+                  V.FP1_CODIGO,
+                  FPG1.FPG_DESCRICAO,
+                  V.VEN_TOTALPP1,
+                  V.PP1_CODIGO,
+                  PLP.PLP_DESCRICAO,
+                  V.FP2_CODIGO,
+                  FPG2.FPG_DESCRICAO AS FPG2_DESCRICAO,
+                  V.VEN_TOTALPP2,
+                  V.FP3_CODIGO,
+                  FPG3.FPG_DESCRICAO AS FPG3_DESCRICAO,
+                  V.VEN_TOTALPP3,
+                  V.FP4_CODIGO,
+                  FPG4.FPG_DESCRICAO AS FPG4_DESCRICAO,
+                  V.VEN_TOTALPP4,
                   V.VEN_DTPREVISAOENT,
                   V.VEN_ORIGEMDAV,
                   V.VEN_QUANT,
@@ -418,11 +452,15 @@ export class OrderService {
                   V.VEN_VALORENT,
                   M.MON_DATA
                FROM VENDAS V
-               LEFT JOIN formaspag FPG ON FPG.FPG_CODIGO = V.FP1_CODIGO
-               LEFT JOIN planospag PLP ON PLP.PLP_CODIGO = V.PP1_CODIGO
-               LEFT JOIN clientes C ON C.cli_codigo = V.cli_codigo
-               LEFT JOIN funcionarios F ON F.fun_codigo = V.fun_codigo
-               LEFT JOIN usuarios U ON U.usu_codigo = V.usu_codigo
+               LEFT JOIN LOJAS LOJ ON LOJ.LOJ_CODIGO = V.LOJ_CODIGO
+               LEFT JOIN FORMASPAG FPG1 ON FPG1.FPG_CODIGO = V.FP1_CODIGO
+               LEFT JOIN FORMASPAG FPG2 ON FPG2.FPG_CODIGO = V.FP2_CODIGO
+               LEFT JOIN FORMASPAG FPG3 ON FPG3.FPG_CODIGO = V.FP3_CODIGO
+               LEFT JOIN FORMASPAG FPG4 ON FPG4.FPG_CODIGO = V.FP4_CODIGO
+               LEFT JOIN PLANOSPAG PLP ON PLP.PLP_CODIGO = V.PP1_CODIGO
+               LEFT JOIN CLIENTES C ON C.CLI_CODIGO = V.CLI_CODIGO
+               LEFT JOIN FUNCIONARIOS F ON F.FUN_CODIGO = V.FUN_CODIGO
+               LEFT JOIN USUARIOS U ON U.USU_CODIGO = V.USU_CODIGO
                LEFT JOIN TRANSPORTADORAS T ON T.TRA_CODIGO = V.TRA_CODIGO
                LEFT JOIN MONTAGENS M ON M.VEN_NUMERO = V.VEN_NUMERO
                LEFT JOIN SITUACAO S ON S.SIT_CODIGO = V.SIT_CODIGO
@@ -444,10 +482,61 @@ export class OrderService {
         )}, Itens: ${result ? 1 : 0}, Tempo SQL: ${queryEndTime - queryStartTime}ms`,
       );
 
-      return result;
+      return result ? this.enrichOrderRow(result) : result;
     } finally {
       this.tenantConnectionService.releaseConnection(connection);
     }
+  }
+
+  private enrichOrderRow(row: any): any {
+    if (!row) return row;
+
+    const payments: Array<{ codigo: number; descricao: string; valor: number }> = [];
+
+    // Forma 1
+    if (row.FP1_CODIGO && Number(row.FP1_CODIGO) > 0) {
+      const val1 =
+        row.VEN_TOTALPP1 !== null && row.VEN_TOTALPP1 !== undefined
+          ? Number(row.VEN_TOTALPP1)
+          : Number(row.VEN_TOTALLIQUIDO || 0);
+      payments.push({
+        codigo: Number(row.FP1_CODIGO),
+        descricao: row.FPG_DESCRICAO || 'Forma de Pagamento 1',
+        valor: Number(val1.toFixed(2)),
+      });
+    }
+
+    // Forma 2
+    if (row.FP2_CODIGO && Number(row.FP2_CODIGO) > 0) {
+      payments.push({
+        codigo: Number(row.FP2_CODIGO),
+        descricao: row.FPG2_DESCRICAO || 'Forma de Pagamento 2',
+        valor: Number((Number(row.VEN_TOTALPP2) || 0).toFixed(2)),
+      });
+    }
+
+    // Forma 3
+    if (row.FP3_CODIGO && Number(row.FP3_CODIGO) > 0) {
+      payments.push({
+        codigo: Number(row.FP3_CODIGO),
+        descricao: row.FPG3_DESCRICAO || 'Forma de Pagamento 3',
+        valor: Number((Number(row.VEN_TOTALPP3) || 0).toFixed(2)),
+      });
+    }
+
+    // Forma 4
+    if (row.FP4_CODIGO && Number(row.FP4_CODIGO) > 0) {
+      payments.push({
+        codigo: Number(row.FP4_CODIGO),
+        descricao: row.FPG4_DESCRICAO || 'Forma de Pagamento 4',
+        valor: Number((Number(row.VEN_TOTALPP4) || 0).toFixed(2)),
+      });
+    }
+
+    return {
+      ...row,
+      PAYMENTS: payments,
+    };
   }
 
   private async insertOrderOnDb(

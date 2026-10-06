@@ -203,7 +203,23 @@ describe('OrderService', () => {
         if (query.includes('COUNT(*)')) {
           callback(null, [{ TOTAL: 55 }]);
         } else {
-          callback(null, [{ VEN_NUMERO: 1, VEN_DATA: '2024-01-15' }]);
+          callback(null, [
+            {
+              VEN_NUMERO: 1,
+              VEN_DATA: '2024-01-15',
+              LOJ_CODIGO: 1,
+              LOJ_NOME: 'Loja Matriz',
+              LOJ_FANTASIA: 'Matriz',
+              SIT_CODIGO: 2,
+              SIT_DESCRICAO: 'FECHADO',
+              VEN_TOTALBRUTO: 100,
+              VEN_TOTALDESC: 10,
+              VEN_TOTALLIQUIDO: 90,
+              FP1_CODIGO: 1,
+              FPG_DESCRICAO: 'Dinheiro',
+              VEN_TOTALPP1: 90,
+            },
+          ]);
         }
       });
 
@@ -211,6 +227,11 @@ describe('OrderService', () => {
 
       expect(result.data).toHaveLength(1);
       expect(result.total).toBe(55);
+      expect(result.data[0].LOJ_NOME).toBe('Loja Matriz');
+      expect(result.data[0].SIT_DESCRICAO).toBe('FECHADO');
+      expect(result.data[0].PAYMENTS).toEqual([
+        { codigo: 1, descricao: 'Dinheiro', valor: 90 },
+      ]);
     });
 
     it('should calculate correct pagination offset', async () => {
@@ -229,10 +250,24 @@ describe('OrderService', () => {
   });
 
   describe('getById', () => {
-    it('should return order by id', async () => {
+    it('should return order by id with enriched payments and store', async () => {
       const mockOrder = {
         VEN_NUMERO: 123,
+        LOJ_CODIGO: 1,
+        LOJ_NOME: 'Loja Matriz',
+        LOJ_FANTASIA: 'Matriz',
         VEN_DATA: '2024-01-15',
+        SIT_CODIGO: 2,
+        SIT_DESCRICAO: 'FECHADO',
+        VEN_TOTALBRUTO: 150.0,
+        VEN_TOTALDESC: 10.0,
+        VEN_TOTALLIQUIDO: 140.0,
+        FP1_CODIGO: 1,
+        FPG_DESCRICAO: 'Dinheiro',
+        VEN_TOTALPP1: 40.0,
+        FP2_CODIGO: 2,
+        FPG2_DESCRICAO: 'Cartão de Crédito',
+        VEN_TOTALPP2: 100.0,
         VEN_ENTREGA: 'S',
         VEN_MONTAGEM: 'N',
         TRA_CODIGO: 1,
@@ -244,9 +279,15 @@ describe('OrderService', () => {
         callback(null, [mockOrder]);
       });
 
-      const result = await service.getById('cred-1', 1, 123);
+      const result = (await service.getById('cred-1', 1, 123)) as any;
 
-      expect(result).toEqual(mockOrder);
+      expect(result.VEN_NUMERO).toBe(123);
+      expect(result.LOJ_NOME).toBe('Loja Matriz');
+      expect(result.SIT_DESCRICAO).toBe('FECHADO');
+      expect(result.PAYMENTS).toEqual([
+        { codigo: 1, descricao: 'Dinheiro', valor: 40.0 },
+        { codigo: 2, descricao: 'Cartão de Crédito', valor: 100.0 },
+      ]);
     });
   });
 
