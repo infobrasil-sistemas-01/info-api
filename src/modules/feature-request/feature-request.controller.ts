@@ -17,6 +17,8 @@ import type { JwtPayload } from 'src/modules/auth/types/jwt-payload';
 import { FeatureRequestService } from './feature-request.service';
 import { CreateFeatureRequestDto } from './dto/create-feature-request.dto';
 import { RespondFeatureRequestDto } from './dto/respond-feature-request.dto';
+import { CreateFeatureRequestMessageDto } from './dto/create-feature-request-message.dto';
+import { ResolveFeatureRequestDto } from './dto/resolve-feature-request.dto';
 
 @ApiTags('Feature Requests')
 @ApiBearerAuth()
@@ -40,6 +42,37 @@ export class FeatureRequestController {
     return this.service.findByUser(user.sub);
   }
 
+  @Get(':id')
+  @ApiOperation({ summary: 'Obtém detalhes e histórico de mensagens de uma solicitação' })
+  findOne(
+    @Param('id') id: string,
+    @CurrentUser() user: JwtPayload,
+  ) {
+    return this.service.findOne(id, user);
+  }
+
+  @Post(':id/messages')
+  @ApiOperation({ summary: 'Envia uma mensagem na conversa da solicitação (Cliente ou Admin)' })
+  addMessage(
+    @Param('id') id: string,
+    @CurrentUser() user: JwtPayload,
+    @Body() dto: CreateFeatureRequestMessageDto,
+  ) {
+    return this.service.addMessage(id, user.sub, dto);
+  }
+
+  @Patch(':id/resolve')
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @RequirePermissions({ anyOf: ['integration-request.approve'] })
+  @ApiOperation({ summary: 'Marca a solicitação como RESOLVIDA e fecha o ticket (Admin)' })
+  resolve(
+    @Param('id') id: string,
+    @CurrentUser() user: JwtPayload,
+    @Body() dto: ResolveFeatureRequestDto,
+  ) {
+    return this.service.resolve(id, user.sub, dto);
+  }
+
   @Get()
   @UseGuards(JwtAuthGuard, PermissionsGuard)
   @RequirePermissions({ anyOf: ['integration-request.view'] })
@@ -51,11 +84,12 @@ export class FeatureRequestController {
   @Patch(':id/respond')
   @UseGuards(JwtAuthGuard, PermissionsGuard)
   @RequirePermissions({ anyOf: ['integration-request.approve'] })
-  @ApiOperation({ summary: 'Responde a uma solicitação e notifica o cliente por e-mail (Admin)' })
+  @ApiOperation({ summary: 'Responde a uma solicitação e notifica o cliente por e-mail (Admin - Legado)' })
   respond(
     @Param('id') id: string,
+    @CurrentUser() user: JwtPayload,
     @Body() dto: RespondFeatureRequestDto,
   ) {
-    return this.service.respond(id, dto);
+    return this.service.respond(id, dto, user.sub);
   }
 }

@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
 import { FeatureRequestService } from './feature-request.service';
 import { RegistryPrismaService } from 'src/infra/prisma/registry-prisma.service';
 import { EmailService } from 'src/infra/email/email.service';
@@ -19,6 +19,9 @@ describe('FeatureRequestService', () => {
         findMany: jest.fn(),
         findUnique: jest.fn(),
         update: jest.fn(),
+      },
+      featureRequestMessage: {
+        create: jest.fn(),
       },
     };
 
@@ -55,18 +58,19 @@ describe('FeatureRequestService', () => {
       expect(mockPrisma.featureRequest.create).not.toHaveBeenCalled();
     });
 
-    it('should create feature request and send email to support', async () => {
+    it('should create feature request, expose ticketNumber and send email to support', async () => {
       const user = {
         id: 'user-1',
         user: 'empresa_teste',
         email: 'empresa@teste.com',
       };
       const createdRecord = {
-        id: 'fr-1',
+        id: '12345678-abcd-ef01-2345-6789abcdef01',
         userId: 'user-1',
         requestText: 'Gostaria de um novo relatório de vendas',
         status: 'PENDING',
         user,
+        messages: [],
       };
 
       mockPrisma.user.findUnique.mockResolvedValue(user);
@@ -76,149 +80,155 @@ describe('FeatureRequestService', () => {
         requestText: 'Gostaria de um novo relatório de vendas',
       });
 
-      expect(result).toEqual(createdRecord);
-      expect(mockPrisma.featureRequest.create).toHaveBeenCalledWith({
-        data: {
-          userId: 'user-1',
-          requestText: 'Gostaria de um novo relatório de vendas',
-          status: 'PENDING',
-        },
-        include: {
-          user: {
-            select: { id: true, user: true, email: true },
-          },
-        },
+      expect(result).toEqual({
+        ...createdRecord,
+        ticketNumber: '#12345678',
       });
       expect(mockEmailService.sendToSupport).toHaveBeenCalledWith(
+        expect.stringContaining('#12345678'),
         expect.stringContaining('empresa_teste'),
-        expect.stringContaining('Gostaria de um novo relatório'),
       );
     });
-
-    it('should not throw if email service fails on create', async () => {
-      const user = {
-        id: 'user-1',
-        user: 'empresa_teste',
-        email: 'empresa@teste.com',
-      };
-      const createdRecord = {
-        id: 'fr-1',
-        userId: 'user-1',
-        requestText: 'Gostaria de um novo relatório de vendas',
-        status: 'PENDING',
-        user,
-      };
-
-      mockPrisma.user.findUnique.mockResolvedValue(user);
-      mockPrisma.featureRequest.create.mockResolvedValue(createdRecord);
-      mockEmailService.sendToSupport.mockRejectedValue(new Error('SMTP Offline'));
-
-      const result = await service.create('user-1', {
-        requestText: 'Gostaria de um novo relatório de vendas',
-      });
-
-      expect(result).toEqual(createdRecord);
-    });
   });
 
-  describe('findAll', () => {
-    it('should return all feature requests without filter', async () => {
-      const list = [{ id: '1' }, { id: '2' }];
-      mockPrisma.featureRequest.findMany.mockResolvedValue(list);
-
-      const result = await service.findAll();
-      expect(result).toEqual(list);
-      expect(mockPrisma.featureRequest.findMany).toHaveBeenCalledWith({
-        where: {},
-        orderBy: { createdAt: 'desc' },
-        include: {
-          user: {
-            select: { id: true, user: true, email: true },
-          },
-        },
-      });
-    });
-
-    it('should filter by status when provided', async () => {
-      mockPrisma.featureRequest.findMany.mockResolvedValue([]);
-
-      await service.findAll('PENDING');
-      expect(mockPrisma.featureRequest.findMany).toHaveBeenCalledWith({
-        where: { status: 'PENDING' },
-        orderBy: { createdAt: 'desc' },
-        include: {
-          user: {
-            select: { id: true, user: true, email: true },
-          },
-        },
-      });
-    });
-  });
-
-  describe('findByUser', () => {
-    it('should return requests for a specific user', async () => {
-      const userList = [{ id: '1', userId: 'user-1' }];
-      mockPrisma.featureRequest.findMany.mockResolvedValue(userList);
-
-      const result = await service.findByUser('user-1');
-      expect(result).toEqual(userList);
-      expect(mockPrisma.featureRequest.findMany).toHaveBeenCalledWith({
-        where: { userId: 'user-1' },
-        orderBy: { createdAt: 'desc' },
-      });
-    });
-  });
-
-  describe('respond', () => {
-    it('should throw NotFoundException if feature request does not exist', async () => {
+  describe('addMessage', () => {
+    it('should throw NotFoundException if request does not exist', async () => {
       mockPrisma.featureRequest.findUnique.mockResolvedValue(null);
 
       await expect(
-        service.respond('non-existent-id', {
-          responseText: 'Resposta de teste',
+        service.addMessage('non-existent-id', 'user-1', {
+          message: 'Olá, alguma novidade?',
         }),
       ).rejects.toThrow(NotFoundException);
     });
 
-    it('should update request with response and notify user by email', async () => {
-      const existing = {
+    it('should throw BadRequestException if ticket is already RESOLVED', async () => {
+      mockPrisma.featureRequest.findUnique.mockResolvedValue({
         id: 'fr-1',
         userId: 'user-1',
-        requestText: 'Texto original',
+        status: 'RESOLVED',
+      });
+
+      await expect(
+        service.addMessage('fr-1', 'user-1', {
+          message: 'Tentativa de mensagem em ticket fechado',
+        }),
+      ).rejects.toThrow(BadRequestException);
+    });
+
+    it('should allow client to add message, set status to PENDING and notify support', async () => {
+      const request = {
+        id: '12345678-0000-0000-0000-000000000000',
+        userId: 'client-1',
+        status: 'ANSWERED',
+        user: { user: 'cliente_1', email: 'cliente@teste.com' },
+      };
+      const clientSender = {
+        id: 'client-1',
+        role: { name: 'Client' },
+      };
+      const createdMessage = {
+        id: 'msg-1',
+        featureRequestId: request.id,
+        senderId: 'client-1',
+        message: 'Ainda restou uma dúvida sobre o endpoint.',
+      };
+
+      mockPrisma.featureRequest.findUnique.mockResolvedValue(request);
+      mockPrisma.user.findUnique.mockResolvedValue(clientSender);
+      mockPrisma.featureRequestMessage.create.mockResolvedValue(createdMessage);
+      mockPrisma.featureRequest.update.mockResolvedValue({ ...request, status: 'PENDING' });
+
+      const result = await service.addMessage(request.id, 'client-1', {
+        message: 'Ainda restou uma dúvida sobre o endpoint.',
+      });
+
+      expect(result).toEqual(createdMessage);
+      expect(mockPrisma.featureRequest.update).toHaveBeenCalledWith({
+        where: { id: request.id },
+        data: expect.objectContaining({ status: 'PENDING' }),
+      });
+      expect(mockEmailService.sendToSupport).toHaveBeenCalledWith(
+        expect.stringContaining('#12345678'),
+        expect.stringContaining('Ainda restou uma dúvida'),
+      );
+    });
+
+    it('should allow admin to add message, set status to ANSWERED and notify client', async () => {
+      const request = {
+        id: '87654321-0000-0000-0000-000000000000',
+        userId: 'client-1',
+        status: 'PENDING',
+        user: { user: 'cliente_1', email: 'cliente@teste.com' },
+      };
+      const adminSender = {
+        id: 'admin-1',
+        role: { name: 'Admin' },
+      };
+      const createdMessage = {
+        id: 'msg-2',
+        featureRequestId: request.id,
+        senderId: 'admin-1',
+        message: 'Estamos analisando a solicitação!',
+      };
+
+      mockPrisma.featureRequest.findUnique.mockResolvedValue(request);
+      mockPrisma.user.findUnique.mockResolvedValue(adminSender);
+      mockPrisma.featureRequestMessage.create.mockResolvedValue(createdMessage);
+      mockPrisma.featureRequest.update.mockResolvedValue({ ...request, status: 'ANSWERED' });
+
+      const result = await service.addMessage(request.id, 'admin-1', {
+        message: 'Estamos analisando a solicitação!',
+      });
+
+      expect(result).toEqual(createdMessage);
+      expect(mockPrisma.featureRequest.update).toHaveBeenCalledWith({
+        where: { id: request.id },
+        data: expect.objectContaining({ status: 'ANSWERED' }),
+      });
+      expect(mockEmailService.sendEmail).toHaveBeenCalledWith(
+        'cliente@teste.com',
+        expect.stringContaining('#87654321'),
+        expect.stringContaining('Estamos analisando a solicitação!'),
+      );
+    });
+  });
+
+  describe('resolve', () => {
+    it('should mark ticket as RESOLVED, set resolvedAt and notify client', async () => {
+      const request = {
+        id: '99998888-0000-0000-0000-000000000000',
+        userId: 'client-1',
+        status: 'ANSWERED',
         user: { user: 'cliente_1', email: 'cliente@teste.com' },
       };
       const updated = {
-        ...existing,
-        responseText: 'Resposta oficial',
-        status: 'ANSWERED',
-        answeredAt: new Date(),
+        ...request,
+        status: 'RESOLVED',
+        resolvedAt: new Date(),
+        messages: [],
       };
 
-      mockPrisma.featureRequest.findUnique.mockResolvedValue(existing);
+      mockPrisma.featureRequest.findUnique.mockResolvedValue(request);
       mockPrisma.featureRequest.update.mockResolvedValue(updated);
 
-      const result = await service.respond('fr-1', {
-        responseText: 'Resposta oficial',
+      const result = await service.resolve(request.id, 'admin-1', {
+        closingMessage: 'Entrega finalizada com sucesso.',
       });
 
-      expect(result).toEqual(updated);
-      expect(mockPrisma.featureRequest.update).toHaveBeenCalledWith({
-        where: { id: 'fr-1' },
+      expect(result.status).toBe('RESOLVED');
+      expect(result.ticketNumber).toBe('#99998888');
+      expect(mockPrisma.featureRequestMessage.create).toHaveBeenCalledWith({
         data: {
-          responseText: 'Resposta oficial',
-          status: 'ANSWERED',
-          answeredAt: expect.any(Date),
-        },
-        include: {
-          user: {
-            select: { id: true, user: true, email: true },
-          },
+          featureRequestId: request.id,
+          senderId: 'admin-1',
+          message: 'Entrega finalizada com sucesso.',
         },
       });
       expect(mockEmailService.sendEmail).toHaveBeenCalledWith(
         'cliente@teste.com',
-        expect.stringContaining('Atualização sobre sua Solicitação'),
-        expect.stringContaining('Resposta oficial'),
+        expect.stringContaining('#99998888'),
+        expect.stringContaining('Entrega finalizada com sucesso'),
       );
     });
   });

@@ -8,25 +8,26 @@ datasource db {
 }
 
 model User {
-  id                String             @id @default(uuid())
-  user              String             @unique @db.VarChar(78)
-  passwordHash      String             @map("password_hash") @db.VarChar(255)
-  status            Boolean            @default(true)
-  dbCredentialsId   String             @map("db_credentials_id")
-  email             String?
-  createdAt         DateTime           @default(now()) @map("created_at")
-  updatedAt         DateTime           @updatedAt @map("updated_at")
-  storeId           Int                @default(1) @map("store_id")
-  roleId            String?            @map("role_id")
-  planId            String?            @map("plan_id")
-  dbCredentials     DbCredentials      @relation(fields: [dbCredentialsId], references: [id])
-  role              Role?              @relation(fields: [roleId], references: [id])
-  plan              Plan?              @relation(fields: [planId], references: [id])
-  invitation        UserInvitation?
-  requestLogs       RequestLog[]
-  announcementViews AnnouncementView[]
-  usageAlertLogs    UsageAlertLog[]
-  featureRequests   FeatureRequest[]
+  id                     String                  @id @default(uuid())
+  user                   String                  @unique @db.VarChar(78)
+  passwordHash           String                  @map("password_hash") @db.VarChar(255)
+  status                 Boolean                 @default(true)
+  dbCredentialsId        String                  @map("db_credentials_id")
+  email                  String?
+  createdAt              DateTime                @default(now()) @map("created_at")
+  updatedAt              DateTime                @updatedAt @map("updated_at")
+  storeId                Int                     @default(1) @map("store_id")
+  roleId                 String?                 @map("role_id")
+  planId                 String?                 @map("plan_id")
+  dbCredentials          DbCredentials           @relation(fields: [dbCredentialsId], references: [id])
+  role                   Role?                   @relation(fields: [roleId], references: [id])
+  plan                   Plan?                   @relation(fields: [planId], references: [id])
+  invitation             UserInvitation?
+  requestLogs            RequestLog[]
+  announcementViews      AnnouncementView[]
+  usageAlertLogs         UsageAlertLog[]
+  featureRequests        FeatureRequest[]
+  featureRequestMessages FeatureRequestMessage[]
 
   @@map("users")
 }
@@ -219,19 +220,41 @@ model UsageAlertLog {
   @@map("usage_alert_logs")
 }
 
+enum FeatureRequestStatus {
+  PENDING
+  ANSWERED
+  RESOLVED
+}
+
 model FeatureRequest {
-  id           String    @id @default(uuid())
-  userId       String    @map("user_id")
-  requestText  String    @map("request_text") @db.Text
-  responseText String?   @map("response_text") @db.Text
-  status       String    @default("PENDING") @db.VarChar(20)
-  createdAt    DateTime  @default(now()) @map("created_at")
-  updatedAt    DateTime  @updatedAt @map("updated_at")
-  answeredAt   DateTime? @map("answered_at")
-  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id           String                  @id @default(uuid())
+  userId       String                  @map("user_id")
+  requestText  String                  @map("request_text") @db.Text
+  responseText String?                 @map("response_text") @db.Text
+  status       FeatureRequestStatus    @default(PENDING)
+  createdAt    DateTime                @default(now()) @map("created_at")
+  updatedAt    DateTime                @updatedAt @map("updated_at")
+  answeredAt   DateTime?               @map("answered_at")
+  resolvedAt   DateTime?               @map("resolved_at")
+  user         User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages     FeatureRequestMessage[]
 
   @@index([userId])
   @@index([status])
   @@index([createdAt])
   @@map("feature_requests")
+}
+
+model FeatureRequestMessage {
+  id               String         @id @default(uuid())
+  featureRequestId String         @map("feature_request_id")
+  senderId         String         @map("sender_id")
+  message          String         @db.Text
+  createdAt        DateTime       @default(now()) @map("created_at")
+  featureRequest   FeatureRequest @relation(fields: [featureRequestId], references: [id], onDelete: Cascade)
+  sender           User           @relation(fields: [senderId], references: [id], onDelete: Cascade)
+
+  @@index([featureRequestId, createdAt])
+  @@index([senderId])
+  @@map("feature_request_messages")
 }

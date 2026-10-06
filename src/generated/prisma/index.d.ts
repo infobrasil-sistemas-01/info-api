@@ -93,6 +93,11 @@ export type UsageAlertLog = $Result.DefaultSelection<Prisma.$UsageAlertLogPayloa
  * 
  */
 export type FeatureRequest = $Result.DefaultSelection<Prisma.$FeatureRequestPayload>
+/**
+ * Model FeatureRequestMessage
+ * 
+ */
+export type FeatureRequestMessage = $Result.DefaultSelection<Prisma.$FeatureRequestMessagePayload>
 
 /**
  * Enums
@@ -115,6 +120,15 @@ export const AnnouncementType: {
 
 export type AnnouncementType = (typeof AnnouncementType)[keyof typeof AnnouncementType]
 
+
+export const FeatureRequestStatus: {
+  PENDING: 'PENDING',
+  ANSWERED: 'ANSWERED',
+  RESOLVED: 'RESOLVED'
+};
+
+export type FeatureRequestStatus = (typeof FeatureRequestStatus)[keyof typeof FeatureRequestStatus]
+
 }
 
 export type HostingType = $Enums.HostingType
@@ -124,6 +138,10 @@ export const HostingType: typeof $Enums.HostingType
 export type AnnouncementType = $Enums.AnnouncementType
 
 export const AnnouncementType: typeof $Enums.AnnouncementType
+
+export type FeatureRequestStatus = $Enums.FeatureRequestStatus
+
+export const FeatureRequestStatus: typeof $Enums.FeatureRequestStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -405,6 +423,16 @@ export class PrismaClient<
     * ```
     */
   get featureRequest(): Prisma.FeatureRequestDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.featureRequestMessage`: Exposes CRUD operations for the **FeatureRequestMessage** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FeatureRequestMessages
+    * const featureRequestMessages = await prisma.featureRequestMessage.findMany()
+    * ```
+    */
+  get featureRequestMessage(): Prisma.FeatureRequestMessageDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -854,7 +882,8 @@ export namespace Prisma {
     StatusLog: 'StatusLog',
     SystemHeartbeat: 'SystemHeartbeat',
     UsageAlertLog: 'UsageAlertLog',
-    FeatureRequest: 'FeatureRequest'
+    FeatureRequest: 'FeatureRequest',
+    FeatureRequestMessage: 'FeatureRequestMessage'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -870,7 +899,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "plan" | "requestLog" | "userInvitation" | "dbCredentials" | "role" | "permission" | "rolePermission" | "integrationRequest" | "announcement" | "newsletter" | "announcementView" | "statusLog" | "systemHeartbeat" | "usageAlertLog" | "featureRequest"
+      modelProps: "user" | "plan" | "requestLog" | "userInvitation" | "dbCredentials" | "role" | "permission" | "rolePermission" | "integrationRequest" | "announcement" | "newsletter" | "announcementView" | "statusLog" | "systemHeartbeat" | "usageAlertLog" | "featureRequest" | "featureRequestMessage"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2058,6 +2087,80 @@ export namespace Prisma {
           }
         }
       }
+      FeatureRequestMessage: {
+        payload: Prisma.$FeatureRequestMessagePayload<ExtArgs>
+        fields: Prisma.FeatureRequestMessageFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FeatureRequestMessageFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FeatureRequestMessagePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FeatureRequestMessageFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FeatureRequestMessagePayload>
+          }
+          findFirst: {
+            args: Prisma.FeatureRequestMessageFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FeatureRequestMessagePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FeatureRequestMessageFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FeatureRequestMessagePayload>
+          }
+          findMany: {
+            args: Prisma.FeatureRequestMessageFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FeatureRequestMessagePayload>[]
+          }
+          create: {
+            args: Prisma.FeatureRequestMessageCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FeatureRequestMessagePayload>
+          }
+          createMany: {
+            args: Prisma.FeatureRequestMessageCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FeatureRequestMessageCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FeatureRequestMessagePayload>[]
+          }
+          delete: {
+            args: Prisma.FeatureRequestMessageDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FeatureRequestMessagePayload>
+          }
+          update: {
+            args: Prisma.FeatureRequestMessageUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FeatureRequestMessagePayload>
+          }
+          deleteMany: {
+            args: Prisma.FeatureRequestMessageDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FeatureRequestMessageUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FeatureRequestMessageUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FeatureRequestMessagePayload>[]
+          }
+          upsert: {
+            args: Prisma.FeatureRequestMessageUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FeatureRequestMessagePayload>
+          }
+          aggregate: {
+            args: Prisma.FeatureRequestMessageAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFeatureRequestMessage>
+          }
+          groupBy: {
+            args: Prisma.FeatureRequestMessageGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FeatureRequestMessageGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FeatureRequestMessageCountArgs<ExtArgs>
+            result: $Utils.Optional<FeatureRequestMessageCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2182,6 +2285,7 @@ export namespace Prisma {
     systemHeartbeat?: SystemHeartbeatOmit
     usageAlertLog?: UsageAlertLogOmit
     featureRequest?: FeatureRequestOmit
+    featureRequestMessage?: FeatureRequestMessageOmit
   }
 
   /* Types for Logging */
@@ -2266,6 +2370,7 @@ export namespace Prisma {
     announcementViews: number
     usageAlertLogs: number
     featureRequests: number
+    featureRequestMessages: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2273,6 +2378,7 @@ export namespace Prisma {
     announcementViews?: boolean | UserCountOutputTypeCountAnnouncementViewsArgs
     usageAlertLogs?: boolean | UserCountOutputTypeCountUsageAlertLogsArgs
     featureRequests?: boolean | UserCountOutputTypeCountFeatureRequestsArgs
+    featureRequestMessages?: boolean | UserCountOutputTypeCountFeatureRequestMessagesArgs
   }
 
   // Custom InputTypes
@@ -2312,6 +2418,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountFeatureRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: FeatureRequestWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountFeatureRequestMessagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FeatureRequestMessageWhereInput
   }
 
 
@@ -2507,6 +2620,37 @@ export namespace Prisma {
    */
   export type NewsletterCountOutputTypeCountAnnouncementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AnnouncementWhereInput
+  }
+
+
+  /**
+   * Count Type FeatureRequestCountOutputType
+   */
+
+  export type FeatureRequestCountOutputType = {
+    messages: number
+  }
+
+  export type FeatureRequestCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    messages?: boolean | FeatureRequestCountOutputTypeCountMessagesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * FeatureRequestCountOutputType without action
+   */
+  export type FeatureRequestCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FeatureRequestCountOutputType
+     */
+    select?: FeatureRequestCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * FeatureRequestCountOutputType without action
+   */
+  export type FeatureRequestCountOutputTypeCountMessagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FeatureRequestMessageWhereInput
   }
 
 
@@ -2768,6 +2912,7 @@ export namespace Prisma {
     announcementViews?: boolean | User$announcementViewsArgs<ExtArgs>
     usageAlertLogs?: boolean | User$usageAlertLogsArgs<ExtArgs>
     featureRequests?: boolean | User$featureRequestsArgs<ExtArgs>
+    featureRequestMessages?: boolean | User$featureRequestMessagesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2829,6 +2974,7 @@ export namespace Prisma {
     announcementViews?: boolean | User$announcementViewsArgs<ExtArgs>
     usageAlertLogs?: boolean | User$usageAlertLogsArgs<ExtArgs>
     featureRequests?: boolean | User$featureRequestsArgs<ExtArgs>
+    featureRequestMessages?: boolean | User$featureRequestMessagesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2853,6 +2999,7 @@ export namespace Prisma {
       announcementViews: Prisma.$AnnouncementViewPayload<ExtArgs>[]
       usageAlertLogs: Prisma.$UsageAlertLogPayload<ExtArgs>[]
       featureRequests: Prisma.$FeatureRequestPayload<ExtArgs>[]
+      featureRequestMessages: Prisma.$FeatureRequestMessagePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3268,6 +3415,7 @@ export namespace Prisma {
     announcementViews<T extends User$announcementViewsArgs<ExtArgs> = {}>(args?: Subset<T, User$announcementViewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnnouncementViewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     usageAlertLogs<T extends User$usageAlertLogsArgs<ExtArgs> = {}>(args?: Subset<T, User$usageAlertLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UsageAlertLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     featureRequests<T extends User$featureRequestsArgs<ExtArgs> = {}>(args?: Subset<T, User$featureRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FeatureRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    featureRequestMessages<T extends User$featureRequestMessagesArgs<ExtArgs> = {}>(args?: Subset<T, User$featureRequestMessagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FeatureRequestMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3859,6 +4007,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: FeatureRequestScalarFieldEnum | FeatureRequestScalarFieldEnum[]
+  }
+
+  /**
+   * User.featureRequestMessages
+   */
+  export type User$featureRequestMessagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FeatureRequestMessage
+     */
+    select?: FeatureRequestMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FeatureRequestMessage
+     */
+    omit?: FeatureRequestMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FeatureRequestMessageInclude<ExtArgs> | null
+    where?: FeatureRequestMessageWhereInput
+    orderBy?: FeatureRequestMessageOrderByWithRelationInput | FeatureRequestMessageOrderByWithRelationInput[]
+    cursor?: FeatureRequestMessageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FeatureRequestMessageScalarFieldEnum | FeatureRequestMessageScalarFieldEnum[]
   }
 
   /**
@@ -19161,10 +19333,11 @@ export namespace Prisma {
     userId: string | null
     requestText: string | null
     responseText: string | null
-    status: string | null
+    status: $Enums.FeatureRequestStatus | null
     createdAt: Date | null
     updatedAt: Date | null
     answeredAt: Date | null
+    resolvedAt: Date | null
   }
 
   export type FeatureRequestMaxAggregateOutputType = {
@@ -19172,10 +19345,11 @@ export namespace Prisma {
     userId: string | null
     requestText: string | null
     responseText: string | null
-    status: string | null
+    status: $Enums.FeatureRequestStatus | null
     createdAt: Date | null
     updatedAt: Date | null
     answeredAt: Date | null
+    resolvedAt: Date | null
   }
 
   export type FeatureRequestCountAggregateOutputType = {
@@ -19187,6 +19361,7 @@ export namespace Prisma {
     createdAt: number
     updatedAt: number
     answeredAt: number
+    resolvedAt: number
     _all: number
   }
 
@@ -19200,6 +19375,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     answeredAt?: true
+    resolvedAt?: true
   }
 
   export type FeatureRequestMaxAggregateInputType = {
@@ -19211,6 +19387,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     answeredAt?: true
+    resolvedAt?: true
   }
 
   export type FeatureRequestCountAggregateInputType = {
@@ -19222,6 +19399,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     answeredAt?: true
+    resolvedAt?: true
     _all?: true
   }
 
@@ -19302,10 +19480,11 @@ export namespace Prisma {
     userId: string
     requestText: string
     responseText: string | null
-    status: string
+    status: $Enums.FeatureRequestStatus
     createdAt: Date
     updatedAt: Date
     answeredAt: Date | null
+    resolvedAt: Date | null
     _count: FeatureRequestCountAggregateOutputType | null
     _min: FeatureRequestMinAggregateOutputType | null
     _max: FeatureRequestMaxAggregateOutputType | null
@@ -19334,7 +19513,10 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     answeredAt?: boolean
+    resolvedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
+    messages?: boolean | FeatureRequest$messagesArgs<ExtArgs>
+    _count?: boolean | FeatureRequestCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["featureRequest"]>
 
   export type FeatureRequestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -19346,6 +19528,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     answeredAt?: boolean
+    resolvedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["featureRequest"]>
 
@@ -19358,6 +19541,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     answeredAt?: boolean
+    resolvedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["featureRequest"]>
 
@@ -19370,11 +19554,14 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     answeredAt?: boolean
+    resolvedAt?: boolean
   }
 
-  export type FeatureRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "requestText" | "responseText" | "status" | "createdAt" | "updatedAt" | "answeredAt", ExtArgs["result"]["featureRequest"]>
+  export type FeatureRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "requestText" | "responseText" | "status" | "createdAt" | "updatedAt" | "answeredAt" | "resolvedAt", ExtArgs["result"]["featureRequest"]>
   export type FeatureRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
+    messages?: boolean | FeatureRequest$messagesArgs<ExtArgs>
+    _count?: boolean | FeatureRequestCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type FeatureRequestIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -19387,16 +19574,18 @@ export namespace Prisma {
     name: "FeatureRequest"
     objects: {
       user: Prisma.$UserPayload<ExtArgs>
+      messages: Prisma.$FeatureRequestMessagePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       userId: string
       requestText: string
       responseText: string | null
-      status: string
+      status: $Enums.FeatureRequestStatus
       createdAt: Date
       updatedAt: Date
       answeredAt: Date | null
+      resolvedAt: Date | null
     }, ExtArgs["result"]["featureRequest"]>
     composites: {}
   }
@@ -19792,6 +19981,7 @@ export namespace Prisma {
   export interface Prisma__FeatureRequestClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    messages<T extends FeatureRequest$messagesArgs<ExtArgs> = {}>(args?: Subset<T, FeatureRequest$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FeatureRequestMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -19825,10 +20015,11 @@ export namespace Prisma {
     readonly userId: FieldRef<"FeatureRequest", 'String'>
     readonly requestText: FieldRef<"FeatureRequest", 'String'>
     readonly responseText: FieldRef<"FeatureRequest", 'String'>
-    readonly status: FieldRef<"FeatureRequest", 'String'>
+    readonly status: FieldRef<"FeatureRequest", 'FeatureRequestStatus'>
     readonly createdAt: FieldRef<"FeatureRequest", 'DateTime'>
     readonly updatedAt: FieldRef<"FeatureRequest", 'DateTime'>
     readonly answeredAt: FieldRef<"FeatureRequest", 'DateTime'>
+    readonly resolvedAt: FieldRef<"FeatureRequest", 'DateTime'>
   }
     
 
@@ -20230,6 +20421,30 @@ export namespace Prisma {
   }
 
   /**
+   * FeatureRequest.messages
+   */
+  export type FeatureRequest$messagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FeatureRequestMessage
+     */
+    select?: FeatureRequestMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FeatureRequestMessage
+     */
+    omit?: FeatureRequestMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FeatureRequestMessageInclude<ExtArgs> | null
+    where?: FeatureRequestMessageWhereInput
+    orderBy?: FeatureRequestMessageOrderByWithRelationInput | FeatureRequestMessageOrderByWithRelationInput[]
+    cursor?: FeatureRequestMessageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FeatureRequestMessageScalarFieldEnum | FeatureRequestMessageScalarFieldEnum[]
+  }
+
+  /**
    * FeatureRequest without action
    */
   export type FeatureRequestDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -20245,6 +20460,1077 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: FeatureRequestInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model FeatureRequestMessage
+   */
+
+  export type AggregateFeatureRequestMessage = {
+    _count: FeatureRequestMessageCountAggregateOutputType | null
+    _min: FeatureRequestMessageMinAggregateOutputType | null
+    _max: FeatureRequestMessageMaxAggregateOutputType | null
+  }
+
+  export type FeatureRequestMessageMinAggregateOutputType = {
+    id: string | null
+    featureRequestId: string | null
+    senderId: string | null
+    message: string | null
+    createdAt: Date | null
+  }
+
+  export type FeatureRequestMessageMaxAggregateOutputType = {
+    id: string | null
+    featureRequestId: string | null
+    senderId: string | null
+    message: string | null
+    createdAt: Date | null
+  }
+
+  export type FeatureRequestMessageCountAggregateOutputType = {
+    id: number
+    featureRequestId: number
+    senderId: number
+    message: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type FeatureRequestMessageMinAggregateInputType = {
+    id?: true
+    featureRequestId?: true
+    senderId?: true
+    message?: true
+    createdAt?: true
+  }
+
+  export type FeatureRequestMessageMaxAggregateInputType = {
+    id?: true
+    featureRequestId?: true
+    senderId?: true
+    message?: true
+    createdAt?: true
+  }
+
+  export type FeatureRequestMessageCountAggregateInputType = {
+    id?: true
+    featureRequestId?: true
+    senderId?: true
+    message?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type FeatureRequestMessageAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FeatureRequestMessage to aggregate.
+     */
+    where?: FeatureRequestMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FeatureRequestMessages to fetch.
+     */
+    orderBy?: FeatureRequestMessageOrderByWithRelationInput | FeatureRequestMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FeatureRequestMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FeatureRequestMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FeatureRequestMessages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FeatureRequestMessages
+    **/
+    _count?: true | FeatureRequestMessageCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FeatureRequestMessageMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FeatureRequestMessageMaxAggregateInputType
+  }
+
+  export type GetFeatureRequestMessageAggregateType<T extends FeatureRequestMessageAggregateArgs> = {
+        [P in keyof T & keyof AggregateFeatureRequestMessage]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFeatureRequestMessage[P]>
+      : GetScalarType<T[P], AggregateFeatureRequestMessage[P]>
+  }
+
+
+
+
+  export type FeatureRequestMessageGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FeatureRequestMessageWhereInput
+    orderBy?: FeatureRequestMessageOrderByWithAggregationInput | FeatureRequestMessageOrderByWithAggregationInput[]
+    by: FeatureRequestMessageScalarFieldEnum[] | FeatureRequestMessageScalarFieldEnum
+    having?: FeatureRequestMessageScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FeatureRequestMessageCountAggregateInputType | true
+    _min?: FeatureRequestMessageMinAggregateInputType
+    _max?: FeatureRequestMessageMaxAggregateInputType
+  }
+
+  export type FeatureRequestMessageGroupByOutputType = {
+    id: string
+    featureRequestId: string
+    senderId: string
+    message: string
+    createdAt: Date
+    _count: FeatureRequestMessageCountAggregateOutputType | null
+    _min: FeatureRequestMessageMinAggregateOutputType | null
+    _max: FeatureRequestMessageMaxAggregateOutputType | null
+  }
+
+  type GetFeatureRequestMessageGroupByPayload<T extends FeatureRequestMessageGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FeatureRequestMessageGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FeatureRequestMessageGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FeatureRequestMessageGroupByOutputType[P]>
+            : GetScalarType<T[P], FeatureRequestMessageGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FeatureRequestMessageSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    featureRequestId?: boolean
+    senderId?: boolean
+    message?: boolean
+    createdAt?: boolean
+    featureRequest?: boolean | FeatureRequestDefaultArgs<ExtArgs>
+    sender?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["featureRequestMessage"]>
+
+  export type FeatureRequestMessageSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    featureRequestId?: boolean
+    senderId?: boolean
+    message?: boolean
+    createdAt?: boolean
+    featureRequest?: boolean | FeatureRequestDefaultArgs<ExtArgs>
+    sender?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["featureRequestMessage"]>
+
+  export type FeatureRequestMessageSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    featureRequestId?: boolean
+    senderId?: boolean
+    message?: boolean
+    createdAt?: boolean
+    featureRequest?: boolean | FeatureRequestDefaultArgs<ExtArgs>
+    sender?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["featureRequestMessage"]>
+
+  export type FeatureRequestMessageSelectScalar = {
+    id?: boolean
+    featureRequestId?: boolean
+    senderId?: boolean
+    message?: boolean
+    createdAt?: boolean
+  }
+
+  export type FeatureRequestMessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "featureRequestId" | "senderId" | "message" | "createdAt", ExtArgs["result"]["featureRequestMessage"]>
+  export type FeatureRequestMessageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    featureRequest?: boolean | FeatureRequestDefaultArgs<ExtArgs>
+    sender?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type FeatureRequestMessageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    featureRequest?: boolean | FeatureRequestDefaultArgs<ExtArgs>
+    sender?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type FeatureRequestMessageIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    featureRequest?: boolean | FeatureRequestDefaultArgs<ExtArgs>
+    sender?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $FeatureRequestMessagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FeatureRequestMessage"
+    objects: {
+      featureRequest: Prisma.$FeatureRequestPayload<ExtArgs>
+      sender: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      featureRequestId: string
+      senderId: string
+      message: string
+      createdAt: Date
+    }, ExtArgs["result"]["featureRequestMessage"]>
+    composites: {}
+  }
+
+  type FeatureRequestMessageGetPayload<S extends boolean | null | undefined | FeatureRequestMessageDefaultArgs> = $Result.GetResult<Prisma.$FeatureRequestMessagePayload, S>
+
+  type FeatureRequestMessageCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FeatureRequestMessageFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FeatureRequestMessageCountAggregateInputType | true
+    }
+
+  export interface FeatureRequestMessageDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FeatureRequestMessage'], meta: { name: 'FeatureRequestMessage' } }
+    /**
+     * Find zero or one FeatureRequestMessage that matches the filter.
+     * @param {FeatureRequestMessageFindUniqueArgs} args - Arguments to find a FeatureRequestMessage
+     * @example
+     * // Get one FeatureRequestMessage
+     * const featureRequestMessage = await prisma.featureRequestMessage.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FeatureRequestMessageFindUniqueArgs>(args: SelectSubset<T, FeatureRequestMessageFindUniqueArgs<ExtArgs>>): Prisma__FeatureRequestMessageClient<$Result.GetResult<Prisma.$FeatureRequestMessagePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one FeatureRequestMessage that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FeatureRequestMessageFindUniqueOrThrowArgs} args - Arguments to find a FeatureRequestMessage
+     * @example
+     * // Get one FeatureRequestMessage
+     * const featureRequestMessage = await prisma.featureRequestMessage.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FeatureRequestMessageFindUniqueOrThrowArgs>(args: SelectSubset<T, FeatureRequestMessageFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FeatureRequestMessageClient<$Result.GetResult<Prisma.$FeatureRequestMessagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FeatureRequestMessage that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FeatureRequestMessageFindFirstArgs} args - Arguments to find a FeatureRequestMessage
+     * @example
+     * // Get one FeatureRequestMessage
+     * const featureRequestMessage = await prisma.featureRequestMessage.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FeatureRequestMessageFindFirstArgs>(args?: SelectSubset<T, FeatureRequestMessageFindFirstArgs<ExtArgs>>): Prisma__FeatureRequestMessageClient<$Result.GetResult<Prisma.$FeatureRequestMessagePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FeatureRequestMessage that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FeatureRequestMessageFindFirstOrThrowArgs} args - Arguments to find a FeatureRequestMessage
+     * @example
+     * // Get one FeatureRequestMessage
+     * const featureRequestMessage = await prisma.featureRequestMessage.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FeatureRequestMessageFindFirstOrThrowArgs>(args?: SelectSubset<T, FeatureRequestMessageFindFirstOrThrowArgs<ExtArgs>>): Prisma__FeatureRequestMessageClient<$Result.GetResult<Prisma.$FeatureRequestMessagePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more FeatureRequestMessages that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FeatureRequestMessageFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FeatureRequestMessages
+     * const featureRequestMessages = await prisma.featureRequestMessage.findMany()
+     * 
+     * // Get first 10 FeatureRequestMessages
+     * const featureRequestMessages = await prisma.featureRequestMessage.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const featureRequestMessageWithIdOnly = await prisma.featureRequestMessage.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FeatureRequestMessageFindManyArgs>(args?: SelectSubset<T, FeatureRequestMessageFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FeatureRequestMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a FeatureRequestMessage.
+     * @param {FeatureRequestMessageCreateArgs} args - Arguments to create a FeatureRequestMessage.
+     * @example
+     * // Create one FeatureRequestMessage
+     * const FeatureRequestMessage = await prisma.featureRequestMessage.create({
+     *   data: {
+     *     // ... data to create a FeatureRequestMessage
+     *   }
+     * })
+     * 
+     */
+    create<T extends FeatureRequestMessageCreateArgs>(args: SelectSubset<T, FeatureRequestMessageCreateArgs<ExtArgs>>): Prisma__FeatureRequestMessageClient<$Result.GetResult<Prisma.$FeatureRequestMessagePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many FeatureRequestMessages.
+     * @param {FeatureRequestMessageCreateManyArgs} args - Arguments to create many FeatureRequestMessages.
+     * @example
+     * // Create many FeatureRequestMessages
+     * const featureRequestMessage = await prisma.featureRequestMessage.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FeatureRequestMessageCreateManyArgs>(args?: SelectSubset<T, FeatureRequestMessageCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FeatureRequestMessages and returns the data saved in the database.
+     * @param {FeatureRequestMessageCreateManyAndReturnArgs} args - Arguments to create many FeatureRequestMessages.
+     * @example
+     * // Create many FeatureRequestMessages
+     * const featureRequestMessage = await prisma.featureRequestMessage.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FeatureRequestMessages and only return the `id`
+     * const featureRequestMessageWithIdOnly = await prisma.featureRequestMessage.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FeatureRequestMessageCreateManyAndReturnArgs>(args?: SelectSubset<T, FeatureRequestMessageCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FeatureRequestMessagePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a FeatureRequestMessage.
+     * @param {FeatureRequestMessageDeleteArgs} args - Arguments to delete one FeatureRequestMessage.
+     * @example
+     * // Delete one FeatureRequestMessage
+     * const FeatureRequestMessage = await prisma.featureRequestMessage.delete({
+     *   where: {
+     *     // ... filter to delete one FeatureRequestMessage
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FeatureRequestMessageDeleteArgs>(args: SelectSubset<T, FeatureRequestMessageDeleteArgs<ExtArgs>>): Prisma__FeatureRequestMessageClient<$Result.GetResult<Prisma.$FeatureRequestMessagePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one FeatureRequestMessage.
+     * @param {FeatureRequestMessageUpdateArgs} args - Arguments to update one FeatureRequestMessage.
+     * @example
+     * // Update one FeatureRequestMessage
+     * const featureRequestMessage = await prisma.featureRequestMessage.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FeatureRequestMessageUpdateArgs>(args: SelectSubset<T, FeatureRequestMessageUpdateArgs<ExtArgs>>): Prisma__FeatureRequestMessageClient<$Result.GetResult<Prisma.$FeatureRequestMessagePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more FeatureRequestMessages.
+     * @param {FeatureRequestMessageDeleteManyArgs} args - Arguments to filter FeatureRequestMessages to delete.
+     * @example
+     * // Delete a few FeatureRequestMessages
+     * const { count } = await prisma.featureRequestMessage.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FeatureRequestMessageDeleteManyArgs>(args?: SelectSubset<T, FeatureRequestMessageDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FeatureRequestMessages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FeatureRequestMessageUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FeatureRequestMessages
+     * const featureRequestMessage = await prisma.featureRequestMessage.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FeatureRequestMessageUpdateManyArgs>(args: SelectSubset<T, FeatureRequestMessageUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FeatureRequestMessages and returns the data updated in the database.
+     * @param {FeatureRequestMessageUpdateManyAndReturnArgs} args - Arguments to update many FeatureRequestMessages.
+     * @example
+     * // Update many FeatureRequestMessages
+     * const featureRequestMessage = await prisma.featureRequestMessage.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more FeatureRequestMessages and only return the `id`
+     * const featureRequestMessageWithIdOnly = await prisma.featureRequestMessage.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FeatureRequestMessageUpdateManyAndReturnArgs>(args: SelectSubset<T, FeatureRequestMessageUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FeatureRequestMessagePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one FeatureRequestMessage.
+     * @param {FeatureRequestMessageUpsertArgs} args - Arguments to update or create a FeatureRequestMessage.
+     * @example
+     * // Update or create a FeatureRequestMessage
+     * const featureRequestMessage = await prisma.featureRequestMessage.upsert({
+     *   create: {
+     *     // ... data to create a FeatureRequestMessage
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FeatureRequestMessage we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FeatureRequestMessageUpsertArgs>(args: SelectSubset<T, FeatureRequestMessageUpsertArgs<ExtArgs>>): Prisma__FeatureRequestMessageClient<$Result.GetResult<Prisma.$FeatureRequestMessagePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of FeatureRequestMessages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FeatureRequestMessageCountArgs} args - Arguments to filter FeatureRequestMessages to count.
+     * @example
+     * // Count the number of FeatureRequestMessages
+     * const count = await prisma.featureRequestMessage.count({
+     *   where: {
+     *     // ... the filter for the FeatureRequestMessages we want to count
+     *   }
+     * })
+    **/
+    count<T extends FeatureRequestMessageCountArgs>(
+      args?: Subset<T, FeatureRequestMessageCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FeatureRequestMessageCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FeatureRequestMessage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FeatureRequestMessageAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FeatureRequestMessageAggregateArgs>(args: Subset<T, FeatureRequestMessageAggregateArgs>): Prisma.PrismaPromise<GetFeatureRequestMessageAggregateType<T>>
+
+    /**
+     * Group by FeatureRequestMessage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FeatureRequestMessageGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FeatureRequestMessageGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FeatureRequestMessageGroupByArgs['orderBy'] }
+        : { orderBy?: FeatureRequestMessageGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FeatureRequestMessageGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFeatureRequestMessageGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FeatureRequestMessage model
+   */
+  readonly fields: FeatureRequestMessageFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FeatureRequestMessage.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FeatureRequestMessageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    featureRequest<T extends FeatureRequestDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FeatureRequestDefaultArgs<ExtArgs>>): Prisma__FeatureRequestClient<$Result.GetResult<Prisma.$FeatureRequestPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    sender<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FeatureRequestMessage model
+   */
+  interface FeatureRequestMessageFieldRefs {
+    readonly id: FieldRef<"FeatureRequestMessage", 'String'>
+    readonly featureRequestId: FieldRef<"FeatureRequestMessage", 'String'>
+    readonly senderId: FieldRef<"FeatureRequestMessage", 'String'>
+    readonly message: FieldRef<"FeatureRequestMessage", 'String'>
+    readonly createdAt: FieldRef<"FeatureRequestMessage", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FeatureRequestMessage findUnique
+   */
+  export type FeatureRequestMessageFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FeatureRequestMessage
+     */
+    select?: FeatureRequestMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FeatureRequestMessage
+     */
+    omit?: FeatureRequestMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FeatureRequestMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which FeatureRequestMessage to fetch.
+     */
+    where: FeatureRequestMessageWhereUniqueInput
+  }
+
+  /**
+   * FeatureRequestMessage findUniqueOrThrow
+   */
+  export type FeatureRequestMessageFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FeatureRequestMessage
+     */
+    select?: FeatureRequestMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FeatureRequestMessage
+     */
+    omit?: FeatureRequestMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FeatureRequestMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which FeatureRequestMessage to fetch.
+     */
+    where: FeatureRequestMessageWhereUniqueInput
+  }
+
+  /**
+   * FeatureRequestMessage findFirst
+   */
+  export type FeatureRequestMessageFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FeatureRequestMessage
+     */
+    select?: FeatureRequestMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FeatureRequestMessage
+     */
+    omit?: FeatureRequestMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FeatureRequestMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which FeatureRequestMessage to fetch.
+     */
+    where?: FeatureRequestMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FeatureRequestMessages to fetch.
+     */
+    orderBy?: FeatureRequestMessageOrderByWithRelationInput | FeatureRequestMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FeatureRequestMessages.
+     */
+    cursor?: FeatureRequestMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FeatureRequestMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FeatureRequestMessages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FeatureRequestMessages.
+     */
+    distinct?: FeatureRequestMessageScalarFieldEnum | FeatureRequestMessageScalarFieldEnum[]
+  }
+
+  /**
+   * FeatureRequestMessage findFirstOrThrow
+   */
+  export type FeatureRequestMessageFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FeatureRequestMessage
+     */
+    select?: FeatureRequestMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FeatureRequestMessage
+     */
+    omit?: FeatureRequestMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FeatureRequestMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which FeatureRequestMessage to fetch.
+     */
+    where?: FeatureRequestMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FeatureRequestMessages to fetch.
+     */
+    orderBy?: FeatureRequestMessageOrderByWithRelationInput | FeatureRequestMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FeatureRequestMessages.
+     */
+    cursor?: FeatureRequestMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FeatureRequestMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FeatureRequestMessages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FeatureRequestMessages.
+     */
+    distinct?: FeatureRequestMessageScalarFieldEnum | FeatureRequestMessageScalarFieldEnum[]
+  }
+
+  /**
+   * FeatureRequestMessage findMany
+   */
+  export type FeatureRequestMessageFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FeatureRequestMessage
+     */
+    select?: FeatureRequestMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FeatureRequestMessage
+     */
+    omit?: FeatureRequestMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FeatureRequestMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which FeatureRequestMessages to fetch.
+     */
+    where?: FeatureRequestMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FeatureRequestMessages to fetch.
+     */
+    orderBy?: FeatureRequestMessageOrderByWithRelationInput | FeatureRequestMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FeatureRequestMessages.
+     */
+    cursor?: FeatureRequestMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FeatureRequestMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FeatureRequestMessages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FeatureRequestMessages.
+     */
+    distinct?: FeatureRequestMessageScalarFieldEnum | FeatureRequestMessageScalarFieldEnum[]
+  }
+
+  /**
+   * FeatureRequestMessage create
+   */
+  export type FeatureRequestMessageCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FeatureRequestMessage
+     */
+    select?: FeatureRequestMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FeatureRequestMessage
+     */
+    omit?: FeatureRequestMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FeatureRequestMessageInclude<ExtArgs> | null
+    /**
+     * The data needed to create a FeatureRequestMessage.
+     */
+    data: XOR<FeatureRequestMessageCreateInput, FeatureRequestMessageUncheckedCreateInput>
+  }
+
+  /**
+   * FeatureRequestMessage createMany
+   */
+  export type FeatureRequestMessageCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FeatureRequestMessages.
+     */
+    data: FeatureRequestMessageCreateManyInput | FeatureRequestMessageCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FeatureRequestMessage createManyAndReturn
+   */
+  export type FeatureRequestMessageCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FeatureRequestMessage
+     */
+    select?: FeatureRequestMessageSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FeatureRequestMessage
+     */
+    omit?: FeatureRequestMessageOmit<ExtArgs> | null
+    /**
+     * The data used to create many FeatureRequestMessages.
+     */
+    data: FeatureRequestMessageCreateManyInput | FeatureRequestMessageCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FeatureRequestMessageIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FeatureRequestMessage update
+   */
+  export type FeatureRequestMessageUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FeatureRequestMessage
+     */
+    select?: FeatureRequestMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FeatureRequestMessage
+     */
+    omit?: FeatureRequestMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FeatureRequestMessageInclude<ExtArgs> | null
+    /**
+     * The data needed to update a FeatureRequestMessage.
+     */
+    data: XOR<FeatureRequestMessageUpdateInput, FeatureRequestMessageUncheckedUpdateInput>
+    /**
+     * Choose, which FeatureRequestMessage to update.
+     */
+    where: FeatureRequestMessageWhereUniqueInput
+  }
+
+  /**
+   * FeatureRequestMessage updateMany
+   */
+  export type FeatureRequestMessageUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FeatureRequestMessages.
+     */
+    data: XOR<FeatureRequestMessageUpdateManyMutationInput, FeatureRequestMessageUncheckedUpdateManyInput>
+    /**
+     * Filter which FeatureRequestMessages to update
+     */
+    where?: FeatureRequestMessageWhereInput
+    /**
+     * Limit how many FeatureRequestMessages to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * FeatureRequestMessage updateManyAndReturn
+   */
+  export type FeatureRequestMessageUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FeatureRequestMessage
+     */
+    select?: FeatureRequestMessageSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FeatureRequestMessage
+     */
+    omit?: FeatureRequestMessageOmit<ExtArgs> | null
+    /**
+     * The data used to update FeatureRequestMessages.
+     */
+    data: XOR<FeatureRequestMessageUpdateManyMutationInput, FeatureRequestMessageUncheckedUpdateManyInput>
+    /**
+     * Filter which FeatureRequestMessages to update
+     */
+    where?: FeatureRequestMessageWhereInput
+    /**
+     * Limit how many FeatureRequestMessages to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FeatureRequestMessageIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FeatureRequestMessage upsert
+   */
+  export type FeatureRequestMessageUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FeatureRequestMessage
+     */
+    select?: FeatureRequestMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FeatureRequestMessage
+     */
+    omit?: FeatureRequestMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FeatureRequestMessageInclude<ExtArgs> | null
+    /**
+     * The filter to search for the FeatureRequestMessage to update in case it exists.
+     */
+    where: FeatureRequestMessageWhereUniqueInput
+    /**
+     * In case the FeatureRequestMessage found by the `where` argument doesn't exist, create a new FeatureRequestMessage with this data.
+     */
+    create: XOR<FeatureRequestMessageCreateInput, FeatureRequestMessageUncheckedCreateInput>
+    /**
+     * In case the FeatureRequestMessage was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FeatureRequestMessageUpdateInput, FeatureRequestMessageUncheckedUpdateInput>
+  }
+
+  /**
+   * FeatureRequestMessage delete
+   */
+  export type FeatureRequestMessageDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FeatureRequestMessage
+     */
+    select?: FeatureRequestMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FeatureRequestMessage
+     */
+    omit?: FeatureRequestMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FeatureRequestMessageInclude<ExtArgs> | null
+    /**
+     * Filter which FeatureRequestMessage to delete.
+     */
+    where: FeatureRequestMessageWhereUniqueInput
+  }
+
+  /**
+   * FeatureRequestMessage deleteMany
+   */
+  export type FeatureRequestMessageDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FeatureRequestMessages to delete
+     */
+    where?: FeatureRequestMessageWhereInput
+    /**
+     * Limit how many FeatureRequestMessages to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * FeatureRequestMessage without action
+   */
+  export type FeatureRequestMessageDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FeatureRequestMessage
+     */
+    select?: FeatureRequestMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FeatureRequestMessage
+     */
+    omit?: FeatureRequestMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FeatureRequestMessageInclude<ExtArgs> | null
   }
 
 
@@ -20457,10 +21743,22 @@ export namespace Prisma {
     status: 'status',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
-    answeredAt: 'answeredAt'
+    answeredAt: 'answeredAt',
+    resolvedAt: 'resolvedAt'
   };
 
   export type FeatureRequestScalarFieldEnum = (typeof FeatureRequestScalarFieldEnum)[keyof typeof FeatureRequestScalarFieldEnum]
+
+
+  export const FeatureRequestMessageScalarFieldEnum: {
+    id: 'id',
+    featureRequestId: 'featureRequestId',
+    senderId: 'senderId',
+    message: 'message',
+    createdAt: 'createdAt'
+  };
+
+  export type FeatureRequestMessageScalarFieldEnum = (typeof FeatureRequestMessageScalarFieldEnum)[keyof typeof FeatureRequestMessageScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -20625,6 +21923,20 @@ export namespace Prisma {
    */
   export type ListEnumAnnouncementTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AnnouncementType[]'>
     
+
+
+  /**
+   * Reference to a field of type 'FeatureRequestStatus'
+   */
+  export type EnumFeatureRequestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FeatureRequestStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'FeatureRequestStatus[]'
+   */
+  export type ListEnumFeatureRequestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FeatureRequestStatus[]'>
+    
   /**
    * Deep Input Types
    */
@@ -20653,6 +21965,7 @@ export namespace Prisma {
     announcementViews?: AnnouncementViewListRelationFilter
     usageAlertLogs?: UsageAlertLogListRelationFilter
     featureRequests?: FeatureRequestListRelationFilter
+    featureRequestMessages?: FeatureRequestMessageListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -20675,6 +21988,7 @@ export namespace Prisma {
     announcementViews?: AnnouncementViewOrderByRelationAggregateInput
     usageAlertLogs?: UsageAlertLogOrderByRelationAggregateInput
     featureRequests?: FeatureRequestOrderByRelationAggregateInput
+    featureRequestMessages?: FeatureRequestMessageOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -20700,6 +22014,7 @@ export namespace Prisma {
     announcementViews?: AnnouncementViewListRelationFilter
     usageAlertLogs?: UsageAlertLogListRelationFilter
     featureRequests?: FeatureRequestListRelationFilter
+    featureRequestMessages?: FeatureRequestMessageListRelationFilter
   }, "id" | "user">
 
   export type UserOrderByWithAggregationInput = {
@@ -21613,11 +22928,13 @@ export namespace Prisma {
     userId?: StringFilter<"FeatureRequest"> | string
     requestText?: StringFilter<"FeatureRequest"> | string
     responseText?: StringNullableFilter<"FeatureRequest"> | string | null
-    status?: StringFilter<"FeatureRequest"> | string
+    status?: EnumFeatureRequestStatusFilter<"FeatureRequest"> | $Enums.FeatureRequestStatus
     createdAt?: DateTimeFilter<"FeatureRequest"> | Date | string
     updatedAt?: DateTimeFilter<"FeatureRequest"> | Date | string
     answeredAt?: DateTimeNullableFilter<"FeatureRequest"> | Date | string | null
+    resolvedAt?: DateTimeNullableFilter<"FeatureRequest"> | Date | string | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    messages?: FeatureRequestMessageListRelationFilter
   }
 
   export type FeatureRequestOrderByWithRelationInput = {
@@ -21629,7 +22946,9 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     answeredAt?: SortOrderInput | SortOrder
+    resolvedAt?: SortOrderInput | SortOrder
     user?: UserOrderByWithRelationInput
+    messages?: FeatureRequestMessageOrderByRelationAggregateInput
   }
 
   export type FeatureRequestWhereUniqueInput = Prisma.AtLeast<{
@@ -21640,11 +22959,13 @@ export namespace Prisma {
     userId?: StringFilter<"FeatureRequest"> | string
     requestText?: StringFilter<"FeatureRequest"> | string
     responseText?: StringNullableFilter<"FeatureRequest"> | string | null
-    status?: StringFilter<"FeatureRequest"> | string
+    status?: EnumFeatureRequestStatusFilter<"FeatureRequest"> | $Enums.FeatureRequestStatus
     createdAt?: DateTimeFilter<"FeatureRequest"> | Date | string
     updatedAt?: DateTimeFilter<"FeatureRequest"> | Date | string
     answeredAt?: DateTimeNullableFilter<"FeatureRequest"> | Date | string | null
+    resolvedAt?: DateTimeNullableFilter<"FeatureRequest"> | Date | string | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    messages?: FeatureRequestMessageListRelationFilter
   }, "id">
 
   export type FeatureRequestOrderByWithAggregationInput = {
@@ -21656,6 +22977,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     answeredAt?: SortOrderInput | SortOrder
+    resolvedAt?: SortOrderInput | SortOrder
     _count?: FeatureRequestCountOrderByAggregateInput
     _max?: FeatureRequestMaxOrderByAggregateInput
     _min?: FeatureRequestMinOrderByAggregateInput
@@ -21669,10 +22991,69 @@ export namespace Prisma {
     userId?: StringWithAggregatesFilter<"FeatureRequest"> | string
     requestText?: StringWithAggregatesFilter<"FeatureRequest"> | string
     responseText?: StringNullableWithAggregatesFilter<"FeatureRequest"> | string | null
-    status?: StringWithAggregatesFilter<"FeatureRequest"> | string
+    status?: EnumFeatureRequestStatusWithAggregatesFilter<"FeatureRequest"> | $Enums.FeatureRequestStatus
     createdAt?: DateTimeWithAggregatesFilter<"FeatureRequest"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"FeatureRequest"> | Date | string
     answeredAt?: DateTimeNullableWithAggregatesFilter<"FeatureRequest"> | Date | string | null
+    resolvedAt?: DateTimeNullableWithAggregatesFilter<"FeatureRequest"> | Date | string | null
+  }
+
+  export type FeatureRequestMessageWhereInput = {
+    AND?: FeatureRequestMessageWhereInput | FeatureRequestMessageWhereInput[]
+    OR?: FeatureRequestMessageWhereInput[]
+    NOT?: FeatureRequestMessageWhereInput | FeatureRequestMessageWhereInput[]
+    id?: StringFilter<"FeatureRequestMessage"> | string
+    featureRequestId?: StringFilter<"FeatureRequestMessage"> | string
+    senderId?: StringFilter<"FeatureRequestMessage"> | string
+    message?: StringFilter<"FeatureRequestMessage"> | string
+    createdAt?: DateTimeFilter<"FeatureRequestMessage"> | Date | string
+    featureRequest?: XOR<FeatureRequestScalarRelationFilter, FeatureRequestWhereInput>
+    sender?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type FeatureRequestMessageOrderByWithRelationInput = {
+    id?: SortOrder
+    featureRequestId?: SortOrder
+    senderId?: SortOrder
+    message?: SortOrder
+    createdAt?: SortOrder
+    featureRequest?: FeatureRequestOrderByWithRelationInput
+    sender?: UserOrderByWithRelationInput
+  }
+
+  export type FeatureRequestMessageWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: FeatureRequestMessageWhereInput | FeatureRequestMessageWhereInput[]
+    OR?: FeatureRequestMessageWhereInput[]
+    NOT?: FeatureRequestMessageWhereInput | FeatureRequestMessageWhereInput[]
+    featureRequestId?: StringFilter<"FeatureRequestMessage"> | string
+    senderId?: StringFilter<"FeatureRequestMessage"> | string
+    message?: StringFilter<"FeatureRequestMessage"> | string
+    createdAt?: DateTimeFilter<"FeatureRequestMessage"> | Date | string
+    featureRequest?: XOR<FeatureRequestScalarRelationFilter, FeatureRequestWhereInput>
+    sender?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type FeatureRequestMessageOrderByWithAggregationInput = {
+    id?: SortOrder
+    featureRequestId?: SortOrder
+    senderId?: SortOrder
+    message?: SortOrder
+    createdAt?: SortOrder
+    _count?: FeatureRequestMessageCountOrderByAggregateInput
+    _max?: FeatureRequestMessageMaxOrderByAggregateInput
+    _min?: FeatureRequestMessageMinOrderByAggregateInput
+  }
+
+  export type FeatureRequestMessageScalarWhereWithAggregatesInput = {
+    AND?: FeatureRequestMessageScalarWhereWithAggregatesInput | FeatureRequestMessageScalarWhereWithAggregatesInput[]
+    OR?: FeatureRequestMessageScalarWhereWithAggregatesInput[]
+    NOT?: FeatureRequestMessageScalarWhereWithAggregatesInput | FeatureRequestMessageScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"FeatureRequestMessage"> | string
+    featureRequestId?: StringWithAggregatesFilter<"FeatureRequestMessage"> | string
+    senderId?: StringWithAggregatesFilter<"FeatureRequestMessage"> | string
+    message?: StringWithAggregatesFilter<"FeatureRequestMessage"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"FeatureRequestMessage"> | Date | string
   }
 
   export type UserCreateInput = {
@@ -21692,6 +23073,7 @@ export namespace Prisma {
     announcementViews?: AnnouncementViewCreateNestedManyWithoutUserInput
     usageAlertLogs?: UsageAlertLogCreateNestedManyWithoutUserInput
     featureRequests?: FeatureRequestCreateNestedManyWithoutUserInput
+    featureRequestMessages?: FeatureRequestMessageCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -21711,6 +23093,7 @@ export namespace Prisma {
     announcementViews?: AnnouncementViewUncheckedCreateNestedManyWithoutUserInput
     usageAlertLogs?: UsageAlertLogUncheckedCreateNestedManyWithoutUserInput
     featureRequests?: FeatureRequestUncheckedCreateNestedManyWithoutUserInput
+    featureRequestMessages?: FeatureRequestMessageUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserUpdateInput = {
@@ -21730,6 +23113,7 @@ export namespace Prisma {
     announcementViews?: AnnouncementViewUpdateManyWithoutUserNestedInput
     usageAlertLogs?: UsageAlertLogUpdateManyWithoutUserNestedInput
     featureRequests?: FeatureRequestUpdateManyWithoutUserNestedInput
+    featureRequestMessages?: FeatureRequestMessageUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -21749,6 +23133,7 @@ export namespace Prisma {
     announcementViews?: AnnouncementViewUncheckedUpdateManyWithoutUserNestedInput
     usageAlertLogs?: UsageAlertLogUncheckedUpdateManyWithoutUserNestedInput
     featureRequests?: FeatureRequestUncheckedUpdateManyWithoutUserNestedInput
+    featureRequestMessages?: FeatureRequestMessageUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -22708,11 +24093,13 @@ export namespace Prisma {
     id?: string
     requestText: string
     responseText?: string | null
-    status?: string
+    status?: $Enums.FeatureRequestStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     answeredAt?: Date | string | null
+    resolvedAt?: Date | string | null
     user: UserCreateNestedOneWithoutFeatureRequestsInput
+    messages?: FeatureRequestMessageCreateNestedManyWithoutFeatureRequestInput
   }
 
   export type FeatureRequestUncheckedCreateInput = {
@@ -22720,21 +24107,25 @@ export namespace Prisma {
     userId: string
     requestText: string
     responseText?: string | null
-    status?: string
+    status?: $Enums.FeatureRequestStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     answeredAt?: Date | string | null
+    resolvedAt?: Date | string | null
+    messages?: FeatureRequestMessageUncheckedCreateNestedManyWithoutFeatureRequestInput
   }
 
   export type FeatureRequestUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     requestText?: StringFieldUpdateOperationsInput | string
     responseText?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumFeatureRequestStatusFieldUpdateOperationsInput | $Enums.FeatureRequestStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     answeredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     user?: UserUpdateOneRequiredWithoutFeatureRequestsNestedInput
+    messages?: FeatureRequestMessageUpdateManyWithoutFeatureRequestNestedInput
   }
 
   export type FeatureRequestUncheckedUpdateInput = {
@@ -22742,10 +24133,12 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     requestText?: StringFieldUpdateOperationsInput | string
     responseText?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumFeatureRequestStatusFieldUpdateOperationsInput | $Enums.FeatureRequestStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     answeredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    messages?: FeatureRequestMessageUncheckedUpdateManyWithoutFeatureRequestNestedInput
   }
 
   export type FeatureRequestCreateManyInput = {
@@ -22753,20 +24146,22 @@ export namespace Prisma {
     userId: string
     requestText: string
     responseText?: string | null
-    status?: string
+    status?: $Enums.FeatureRequestStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     answeredAt?: Date | string | null
+    resolvedAt?: Date | string | null
   }
 
   export type FeatureRequestUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     requestText?: StringFieldUpdateOperationsInput | string
     responseText?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumFeatureRequestStatusFieldUpdateOperationsInput | $Enums.FeatureRequestStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     answeredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type FeatureRequestUncheckedUpdateManyInput = {
@@ -22774,10 +24169,65 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     requestText?: StringFieldUpdateOperationsInput | string
     responseText?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumFeatureRequestStatusFieldUpdateOperationsInput | $Enums.FeatureRequestStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     answeredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type FeatureRequestMessageCreateInput = {
+    id?: string
+    message: string
+    createdAt?: Date | string
+    featureRequest: FeatureRequestCreateNestedOneWithoutMessagesInput
+    sender: UserCreateNestedOneWithoutFeatureRequestMessagesInput
+  }
+
+  export type FeatureRequestMessageUncheckedCreateInput = {
+    id?: string
+    featureRequestId: string
+    senderId: string
+    message: string
+    createdAt?: Date | string
+  }
+
+  export type FeatureRequestMessageUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    featureRequest?: FeatureRequestUpdateOneRequiredWithoutMessagesNestedInput
+    sender?: UserUpdateOneRequiredWithoutFeatureRequestMessagesNestedInput
+  }
+
+  export type FeatureRequestMessageUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    featureRequestId?: StringFieldUpdateOperationsInput | string
+    senderId?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FeatureRequestMessageCreateManyInput = {
+    id?: string
+    featureRequestId: string
+    senderId: string
+    message: string
+    createdAt?: Date | string
+  }
+
+  export type FeatureRequestMessageUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FeatureRequestMessageUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    featureRequestId?: StringFieldUpdateOperationsInput | string
+    senderId?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -22881,6 +24331,12 @@ export namespace Prisma {
     none?: FeatureRequestWhereInput
   }
 
+  export type FeatureRequestMessageListRelationFilter = {
+    every?: FeatureRequestMessageWhereInput
+    some?: FeatureRequestMessageWhereInput
+    none?: FeatureRequestMessageWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -22899,6 +24355,10 @@ export namespace Prisma {
   }
 
   export type FeatureRequestOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FeatureRequestMessageOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -23724,6 +25184,13 @@ export namespace Prisma {
     sentAt?: SortOrder
   }
 
+  export type EnumFeatureRequestStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.FeatureRequestStatus | EnumFeatureRequestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.FeatureRequestStatus[] | ListEnumFeatureRequestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FeatureRequestStatus[] | ListEnumFeatureRequestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumFeatureRequestStatusFilter<$PrismaModel> | $Enums.FeatureRequestStatus
+  }
+
   export type FeatureRequestCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
@@ -23733,6 +25200,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     answeredAt?: SortOrder
+    resolvedAt?: SortOrder
   }
 
   export type FeatureRequestMaxOrderByAggregateInput = {
@@ -23744,6 +25212,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     answeredAt?: SortOrder
+    resolvedAt?: SortOrder
   }
 
   export type FeatureRequestMinOrderByAggregateInput = {
@@ -23755,6 +25224,46 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     answeredAt?: SortOrder
+    resolvedAt?: SortOrder
+  }
+
+  export type EnumFeatureRequestStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.FeatureRequestStatus | EnumFeatureRequestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.FeatureRequestStatus[] | ListEnumFeatureRequestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FeatureRequestStatus[] | ListEnumFeatureRequestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumFeatureRequestStatusWithAggregatesFilter<$PrismaModel> | $Enums.FeatureRequestStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumFeatureRequestStatusFilter<$PrismaModel>
+    _max?: NestedEnumFeatureRequestStatusFilter<$PrismaModel>
+  }
+
+  export type FeatureRequestScalarRelationFilter = {
+    is?: FeatureRequestWhereInput
+    isNot?: FeatureRequestWhereInput
+  }
+
+  export type FeatureRequestMessageCountOrderByAggregateInput = {
+    id?: SortOrder
+    featureRequestId?: SortOrder
+    senderId?: SortOrder
+    message?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type FeatureRequestMessageMaxOrderByAggregateInput = {
+    id?: SortOrder
+    featureRequestId?: SortOrder
+    senderId?: SortOrder
+    message?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type FeatureRequestMessageMinOrderByAggregateInput = {
+    id?: SortOrder
+    featureRequestId?: SortOrder
+    senderId?: SortOrder
+    message?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type DbCredentialsCreateNestedOneWithoutUsersInput = {
@@ -23809,6 +25318,13 @@ export namespace Prisma {
     connect?: FeatureRequestWhereUniqueInput | FeatureRequestWhereUniqueInput[]
   }
 
+  export type FeatureRequestMessageCreateNestedManyWithoutSenderInput = {
+    create?: XOR<FeatureRequestMessageCreateWithoutSenderInput, FeatureRequestMessageUncheckedCreateWithoutSenderInput> | FeatureRequestMessageCreateWithoutSenderInput[] | FeatureRequestMessageUncheckedCreateWithoutSenderInput[]
+    connectOrCreate?: FeatureRequestMessageCreateOrConnectWithoutSenderInput | FeatureRequestMessageCreateOrConnectWithoutSenderInput[]
+    createMany?: FeatureRequestMessageCreateManySenderInputEnvelope
+    connect?: FeatureRequestMessageWhereUniqueInput | FeatureRequestMessageWhereUniqueInput[]
+  }
+
   export type UserInvitationUncheckedCreateNestedOneWithoutUserInput = {
     create?: XOR<UserInvitationCreateWithoutUserInput, UserInvitationUncheckedCreateWithoutUserInput>
     connectOrCreate?: UserInvitationCreateOrConnectWithoutUserInput
@@ -23841,6 +25357,13 @@ export namespace Prisma {
     connectOrCreate?: FeatureRequestCreateOrConnectWithoutUserInput | FeatureRequestCreateOrConnectWithoutUserInput[]
     createMany?: FeatureRequestCreateManyUserInputEnvelope
     connect?: FeatureRequestWhereUniqueInput | FeatureRequestWhereUniqueInput[]
+  }
+
+  export type FeatureRequestMessageUncheckedCreateNestedManyWithoutSenderInput = {
+    create?: XOR<FeatureRequestMessageCreateWithoutSenderInput, FeatureRequestMessageUncheckedCreateWithoutSenderInput> | FeatureRequestMessageCreateWithoutSenderInput[] | FeatureRequestMessageUncheckedCreateWithoutSenderInput[]
+    connectOrCreate?: FeatureRequestMessageCreateOrConnectWithoutSenderInput | FeatureRequestMessageCreateOrConnectWithoutSenderInput[]
+    createMany?: FeatureRequestMessageCreateManySenderInputEnvelope
+    connect?: FeatureRequestMessageWhereUniqueInput | FeatureRequestMessageWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -23961,6 +25484,20 @@ export namespace Prisma {
     deleteMany?: FeatureRequestScalarWhereInput | FeatureRequestScalarWhereInput[]
   }
 
+  export type FeatureRequestMessageUpdateManyWithoutSenderNestedInput = {
+    create?: XOR<FeatureRequestMessageCreateWithoutSenderInput, FeatureRequestMessageUncheckedCreateWithoutSenderInput> | FeatureRequestMessageCreateWithoutSenderInput[] | FeatureRequestMessageUncheckedCreateWithoutSenderInput[]
+    connectOrCreate?: FeatureRequestMessageCreateOrConnectWithoutSenderInput | FeatureRequestMessageCreateOrConnectWithoutSenderInput[]
+    upsert?: FeatureRequestMessageUpsertWithWhereUniqueWithoutSenderInput | FeatureRequestMessageUpsertWithWhereUniqueWithoutSenderInput[]
+    createMany?: FeatureRequestMessageCreateManySenderInputEnvelope
+    set?: FeatureRequestMessageWhereUniqueInput | FeatureRequestMessageWhereUniqueInput[]
+    disconnect?: FeatureRequestMessageWhereUniqueInput | FeatureRequestMessageWhereUniqueInput[]
+    delete?: FeatureRequestMessageWhereUniqueInput | FeatureRequestMessageWhereUniqueInput[]
+    connect?: FeatureRequestMessageWhereUniqueInput | FeatureRequestMessageWhereUniqueInput[]
+    update?: FeatureRequestMessageUpdateWithWhereUniqueWithoutSenderInput | FeatureRequestMessageUpdateWithWhereUniqueWithoutSenderInput[]
+    updateMany?: FeatureRequestMessageUpdateManyWithWhereWithoutSenderInput | FeatureRequestMessageUpdateManyWithWhereWithoutSenderInput[]
+    deleteMany?: FeatureRequestMessageScalarWhereInput | FeatureRequestMessageScalarWhereInput[]
+  }
+
   export type UserInvitationUncheckedUpdateOneWithoutUserNestedInput = {
     create?: XOR<UserInvitationCreateWithoutUserInput, UserInvitationUncheckedCreateWithoutUserInput>
     connectOrCreate?: UserInvitationCreateOrConnectWithoutUserInput
@@ -24025,6 +25562,20 @@ export namespace Prisma {
     update?: FeatureRequestUpdateWithWhereUniqueWithoutUserInput | FeatureRequestUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: FeatureRequestUpdateManyWithWhereWithoutUserInput | FeatureRequestUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: FeatureRequestScalarWhereInput | FeatureRequestScalarWhereInput[]
+  }
+
+  export type FeatureRequestMessageUncheckedUpdateManyWithoutSenderNestedInput = {
+    create?: XOR<FeatureRequestMessageCreateWithoutSenderInput, FeatureRequestMessageUncheckedCreateWithoutSenderInput> | FeatureRequestMessageCreateWithoutSenderInput[] | FeatureRequestMessageUncheckedCreateWithoutSenderInput[]
+    connectOrCreate?: FeatureRequestMessageCreateOrConnectWithoutSenderInput | FeatureRequestMessageCreateOrConnectWithoutSenderInput[]
+    upsert?: FeatureRequestMessageUpsertWithWhereUniqueWithoutSenderInput | FeatureRequestMessageUpsertWithWhereUniqueWithoutSenderInput[]
+    createMany?: FeatureRequestMessageCreateManySenderInputEnvelope
+    set?: FeatureRequestMessageWhereUniqueInput | FeatureRequestMessageWhereUniqueInput[]
+    disconnect?: FeatureRequestMessageWhereUniqueInput | FeatureRequestMessageWhereUniqueInput[]
+    delete?: FeatureRequestMessageWhereUniqueInput | FeatureRequestMessageWhereUniqueInput[]
+    connect?: FeatureRequestMessageWhereUniqueInput | FeatureRequestMessageWhereUniqueInput[]
+    update?: FeatureRequestMessageUpdateWithWhereUniqueWithoutSenderInput | FeatureRequestMessageUpdateWithWhereUniqueWithoutSenderInput[]
+    updateMany?: FeatureRequestMessageUpdateManyWithWhereWithoutSenderInput | FeatureRequestMessageUpdateManyWithWhereWithoutSenderInput[]
+    deleteMany?: FeatureRequestMessageScalarWhereInput | FeatureRequestMessageScalarWhereInput[]
   }
 
   export type UserCreateNestedManyWithoutPlanInput = {
@@ -24486,12 +26037,86 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type FeatureRequestMessageCreateNestedManyWithoutFeatureRequestInput = {
+    create?: XOR<FeatureRequestMessageCreateWithoutFeatureRequestInput, FeatureRequestMessageUncheckedCreateWithoutFeatureRequestInput> | FeatureRequestMessageCreateWithoutFeatureRequestInput[] | FeatureRequestMessageUncheckedCreateWithoutFeatureRequestInput[]
+    connectOrCreate?: FeatureRequestMessageCreateOrConnectWithoutFeatureRequestInput | FeatureRequestMessageCreateOrConnectWithoutFeatureRequestInput[]
+    createMany?: FeatureRequestMessageCreateManyFeatureRequestInputEnvelope
+    connect?: FeatureRequestMessageWhereUniqueInput | FeatureRequestMessageWhereUniqueInput[]
+  }
+
+  export type FeatureRequestMessageUncheckedCreateNestedManyWithoutFeatureRequestInput = {
+    create?: XOR<FeatureRequestMessageCreateWithoutFeatureRequestInput, FeatureRequestMessageUncheckedCreateWithoutFeatureRequestInput> | FeatureRequestMessageCreateWithoutFeatureRequestInput[] | FeatureRequestMessageUncheckedCreateWithoutFeatureRequestInput[]
+    connectOrCreate?: FeatureRequestMessageCreateOrConnectWithoutFeatureRequestInput | FeatureRequestMessageCreateOrConnectWithoutFeatureRequestInput[]
+    createMany?: FeatureRequestMessageCreateManyFeatureRequestInputEnvelope
+    connect?: FeatureRequestMessageWhereUniqueInput | FeatureRequestMessageWhereUniqueInput[]
+  }
+
+  export type EnumFeatureRequestStatusFieldUpdateOperationsInput = {
+    set?: $Enums.FeatureRequestStatus
+  }
+
   export type UserUpdateOneRequiredWithoutFeatureRequestsNestedInput = {
     create?: XOR<UserCreateWithoutFeatureRequestsInput, UserUncheckedCreateWithoutFeatureRequestsInput>
     connectOrCreate?: UserCreateOrConnectWithoutFeatureRequestsInput
     upsert?: UserUpsertWithoutFeatureRequestsInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFeatureRequestsInput, UserUpdateWithoutFeatureRequestsInput>, UserUncheckedUpdateWithoutFeatureRequestsInput>
+  }
+
+  export type FeatureRequestMessageUpdateManyWithoutFeatureRequestNestedInput = {
+    create?: XOR<FeatureRequestMessageCreateWithoutFeatureRequestInput, FeatureRequestMessageUncheckedCreateWithoutFeatureRequestInput> | FeatureRequestMessageCreateWithoutFeatureRequestInput[] | FeatureRequestMessageUncheckedCreateWithoutFeatureRequestInput[]
+    connectOrCreate?: FeatureRequestMessageCreateOrConnectWithoutFeatureRequestInput | FeatureRequestMessageCreateOrConnectWithoutFeatureRequestInput[]
+    upsert?: FeatureRequestMessageUpsertWithWhereUniqueWithoutFeatureRequestInput | FeatureRequestMessageUpsertWithWhereUniqueWithoutFeatureRequestInput[]
+    createMany?: FeatureRequestMessageCreateManyFeatureRequestInputEnvelope
+    set?: FeatureRequestMessageWhereUniqueInput | FeatureRequestMessageWhereUniqueInput[]
+    disconnect?: FeatureRequestMessageWhereUniqueInput | FeatureRequestMessageWhereUniqueInput[]
+    delete?: FeatureRequestMessageWhereUniqueInput | FeatureRequestMessageWhereUniqueInput[]
+    connect?: FeatureRequestMessageWhereUniqueInput | FeatureRequestMessageWhereUniqueInput[]
+    update?: FeatureRequestMessageUpdateWithWhereUniqueWithoutFeatureRequestInput | FeatureRequestMessageUpdateWithWhereUniqueWithoutFeatureRequestInput[]
+    updateMany?: FeatureRequestMessageUpdateManyWithWhereWithoutFeatureRequestInput | FeatureRequestMessageUpdateManyWithWhereWithoutFeatureRequestInput[]
+    deleteMany?: FeatureRequestMessageScalarWhereInput | FeatureRequestMessageScalarWhereInput[]
+  }
+
+  export type FeatureRequestMessageUncheckedUpdateManyWithoutFeatureRequestNestedInput = {
+    create?: XOR<FeatureRequestMessageCreateWithoutFeatureRequestInput, FeatureRequestMessageUncheckedCreateWithoutFeatureRequestInput> | FeatureRequestMessageCreateWithoutFeatureRequestInput[] | FeatureRequestMessageUncheckedCreateWithoutFeatureRequestInput[]
+    connectOrCreate?: FeatureRequestMessageCreateOrConnectWithoutFeatureRequestInput | FeatureRequestMessageCreateOrConnectWithoutFeatureRequestInput[]
+    upsert?: FeatureRequestMessageUpsertWithWhereUniqueWithoutFeatureRequestInput | FeatureRequestMessageUpsertWithWhereUniqueWithoutFeatureRequestInput[]
+    createMany?: FeatureRequestMessageCreateManyFeatureRequestInputEnvelope
+    set?: FeatureRequestMessageWhereUniqueInput | FeatureRequestMessageWhereUniqueInput[]
+    disconnect?: FeatureRequestMessageWhereUniqueInput | FeatureRequestMessageWhereUniqueInput[]
+    delete?: FeatureRequestMessageWhereUniqueInput | FeatureRequestMessageWhereUniqueInput[]
+    connect?: FeatureRequestMessageWhereUniqueInput | FeatureRequestMessageWhereUniqueInput[]
+    update?: FeatureRequestMessageUpdateWithWhereUniqueWithoutFeatureRequestInput | FeatureRequestMessageUpdateWithWhereUniqueWithoutFeatureRequestInput[]
+    updateMany?: FeatureRequestMessageUpdateManyWithWhereWithoutFeatureRequestInput | FeatureRequestMessageUpdateManyWithWhereWithoutFeatureRequestInput[]
+    deleteMany?: FeatureRequestMessageScalarWhereInput | FeatureRequestMessageScalarWhereInput[]
+  }
+
+  export type FeatureRequestCreateNestedOneWithoutMessagesInput = {
+    create?: XOR<FeatureRequestCreateWithoutMessagesInput, FeatureRequestUncheckedCreateWithoutMessagesInput>
+    connectOrCreate?: FeatureRequestCreateOrConnectWithoutMessagesInput
+    connect?: FeatureRequestWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutFeatureRequestMessagesInput = {
+    create?: XOR<UserCreateWithoutFeatureRequestMessagesInput, UserUncheckedCreateWithoutFeatureRequestMessagesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFeatureRequestMessagesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type FeatureRequestUpdateOneRequiredWithoutMessagesNestedInput = {
+    create?: XOR<FeatureRequestCreateWithoutMessagesInput, FeatureRequestUncheckedCreateWithoutMessagesInput>
+    connectOrCreate?: FeatureRequestCreateOrConnectWithoutMessagesInput
+    upsert?: FeatureRequestUpsertWithoutMessagesInput
+    connect?: FeatureRequestWhereUniqueInput
+    update?: XOR<XOR<FeatureRequestUpdateToOneWithWhereWithoutMessagesInput, FeatureRequestUpdateWithoutMessagesInput>, FeatureRequestUncheckedUpdateWithoutMessagesInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutFeatureRequestMessagesNestedInput = {
+    create?: XOR<UserCreateWithoutFeatureRequestMessagesInput, UserUncheckedCreateWithoutFeatureRequestMessagesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFeatureRequestMessagesInput
+    upsert?: UserUpsertWithoutFeatureRequestMessagesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFeatureRequestMessagesInput, UserUpdateWithoutFeatureRequestMessagesInput>, UserUncheckedUpdateWithoutFeatureRequestMessagesInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -24795,6 +26420,23 @@ export namespace Prisma {
     _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
+  export type NestedEnumFeatureRequestStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.FeatureRequestStatus | EnumFeatureRequestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.FeatureRequestStatus[] | ListEnumFeatureRequestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FeatureRequestStatus[] | ListEnumFeatureRequestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumFeatureRequestStatusFilter<$PrismaModel> | $Enums.FeatureRequestStatus
+  }
+
+  export type NestedEnumFeatureRequestStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.FeatureRequestStatus | EnumFeatureRequestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.FeatureRequestStatus[] | ListEnumFeatureRequestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FeatureRequestStatus[] | ListEnumFeatureRequestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumFeatureRequestStatusWithAggregatesFilter<$PrismaModel> | $Enums.FeatureRequestStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumFeatureRequestStatusFilter<$PrismaModel>
+    _max?: NestedEnumFeatureRequestStatusFilter<$PrismaModel>
+  }
+
   export type DbCredentialsCreateWithoutUsersInput = {
     id?: string
     host: string
@@ -24963,20 +26605,24 @@ export namespace Prisma {
     id?: string
     requestText: string
     responseText?: string | null
-    status?: string
+    status?: $Enums.FeatureRequestStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     answeredAt?: Date | string | null
+    resolvedAt?: Date | string | null
+    messages?: FeatureRequestMessageCreateNestedManyWithoutFeatureRequestInput
   }
 
   export type FeatureRequestUncheckedCreateWithoutUserInput = {
     id?: string
     requestText: string
     responseText?: string | null
-    status?: string
+    status?: $Enums.FeatureRequestStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     answeredAt?: Date | string | null
+    resolvedAt?: Date | string | null
+    messages?: FeatureRequestMessageUncheckedCreateNestedManyWithoutFeatureRequestInput
   }
 
   export type FeatureRequestCreateOrConnectWithoutUserInput = {
@@ -24986,6 +26632,30 @@ export namespace Prisma {
 
   export type FeatureRequestCreateManyUserInputEnvelope = {
     data: FeatureRequestCreateManyUserInput | FeatureRequestCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FeatureRequestMessageCreateWithoutSenderInput = {
+    id?: string
+    message: string
+    createdAt?: Date | string
+    featureRequest: FeatureRequestCreateNestedOneWithoutMessagesInput
+  }
+
+  export type FeatureRequestMessageUncheckedCreateWithoutSenderInput = {
+    id?: string
+    featureRequestId: string
+    message: string
+    createdAt?: Date | string
+  }
+
+  export type FeatureRequestMessageCreateOrConnectWithoutSenderInput = {
+    where: FeatureRequestMessageWhereUniqueInput
+    create: XOR<FeatureRequestMessageCreateWithoutSenderInput, FeatureRequestMessageUncheckedCreateWithoutSenderInput>
+  }
+
+  export type FeatureRequestMessageCreateManySenderInputEnvelope = {
+    data: FeatureRequestMessageCreateManySenderInput | FeatureRequestMessageCreateManySenderInput[]
     skipDuplicates?: boolean
   }
 
@@ -25208,10 +26878,38 @@ export namespace Prisma {
     userId?: StringFilter<"FeatureRequest"> | string
     requestText?: StringFilter<"FeatureRequest"> | string
     responseText?: StringNullableFilter<"FeatureRequest"> | string | null
-    status?: StringFilter<"FeatureRequest"> | string
+    status?: EnumFeatureRequestStatusFilter<"FeatureRequest"> | $Enums.FeatureRequestStatus
     createdAt?: DateTimeFilter<"FeatureRequest"> | Date | string
     updatedAt?: DateTimeFilter<"FeatureRequest"> | Date | string
     answeredAt?: DateTimeNullableFilter<"FeatureRequest"> | Date | string | null
+    resolvedAt?: DateTimeNullableFilter<"FeatureRequest"> | Date | string | null
+  }
+
+  export type FeatureRequestMessageUpsertWithWhereUniqueWithoutSenderInput = {
+    where: FeatureRequestMessageWhereUniqueInput
+    update: XOR<FeatureRequestMessageUpdateWithoutSenderInput, FeatureRequestMessageUncheckedUpdateWithoutSenderInput>
+    create: XOR<FeatureRequestMessageCreateWithoutSenderInput, FeatureRequestMessageUncheckedCreateWithoutSenderInput>
+  }
+
+  export type FeatureRequestMessageUpdateWithWhereUniqueWithoutSenderInput = {
+    where: FeatureRequestMessageWhereUniqueInput
+    data: XOR<FeatureRequestMessageUpdateWithoutSenderInput, FeatureRequestMessageUncheckedUpdateWithoutSenderInput>
+  }
+
+  export type FeatureRequestMessageUpdateManyWithWhereWithoutSenderInput = {
+    where: FeatureRequestMessageScalarWhereInput
+    data: XOR<FeatureRequestMessageUpdateManyMutationInput, FeatureRequestMessageUncheckedUpdateManyWithoutSenderInput>
+  }
+
+  export type FeatureRequestMessageScalarWhereInput = {
+    AND?: FeatureRequestMessageScalarWhereInput | FeatureRequestMessageScalarWhereInput[]
+    OR?: FeatureRequestMessageScalarWhereInput[]
+    NOT?: FeatureRequestMessageScalarWhereInput | FeatureRequestMessageScalarWhereInput[]
+    id?: StringFilter<"FeatureRequestMessage"> | string
+    featureRequestId?: StringFilter<"FeatureRequestMessage"> | string
+    senderId?: StringFilter<"FeatureRequestMessage"> | string
+    message?: StringFilter<"FeatureRequestMessage"> | string
+    createdAt?: DateTimeFilter<"FeatureRequestMessage"> | Date | string
   }
 
   export type UserCreateWithoutPlanInput = {
@@ -25230,6 +26928,7 @@ export namespace Prisma {
     announcementViews?: AnnouncementViewCreateNestedManyWithoutUserInput
     usageAlertLogs?: UsageAlertLogCreateNestedManyWithoutUserInput
     featureRequests?: FeatureRequestCreateNestedManyWithoutUserInput
+    featureRequestMessages?: FeatureRequestMessageCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutPlanInput = {
@@ -25248,6 +26947,7 @@ export namespace Prisma {
     announcementViews?: AnnouncementViewUncheckedCreateNestedManyWithoutUserInput
     usageAlertLogs?: UsageAlertLogUncheckedCreateNestedManyWithoutUserInput
     featureRequests?: FeatureRequestUncheckedCreateNestedManyWithoutUserInput
+    featureRequestMessages?: FeatureRequestMessageUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutPlanInput = {
@@ -25309,6 +27009,7 @@ export namespace Prisma {
     announcementViews?: AnnouncementViewCreateNestedManyWithoutUserInput
     usageAlertLogs?: UsageAlertLogCreateNestedManyWithoutUserInput
     featureRequests?: FeatureRequestCreateNestedManyWithoutUserInput
+    featureRequestMessages?: FeatureRequestMessageCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutRequestLogsInput = {
@@ -25327,6 +27028,7 @@ export namespace Prisma {
     announcementViews?: AnnouncementViewUncheckedCreateNestedManyWithoutUserInput
     usageAlertLogs?: UsageAlertLogUncheckedCreateNestedManyWithoutUserInput
     featureRequests?: FeatureRequestUncheckedCreateNestedManyWithoutUserInput
+    featureRequestMessages?: FeatureRequestMessageUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutRequestLogsInput = {
@@ -25361,6 +27063,7 @@ export namespace Prisma {
     announcementViews?: AnnouncementViewUpdateManyWithoutUserNestedInput
     usageAlertLogs?: UsageAlertLogUpdateManyWithoutUserNestedInput
     featureRequests?: FeatureRequestUpdateManyWithoutUserNestedInput
+    featureRequestMessages?: FeatureRequestMessageUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRequestLogsInput = {
@@ -25379,6 +27082,7 @@ export namespace Prisma {
     announcementViews?: AnnouncementViewUncheckedUpdateManyWithoutUserNestedInput
     usageAlertLogs?: UsageAlertLogUncheckedUpdateManyWithoutUserNestedInput
     featureRequests?: FeatureRequestUncheckedUpdateManyWithoutUserNestedInput
+    featureRequestMessages?: FeatureRequestMessageUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserCreateWithoutInvitationInput = {
@@ -25397,6 +27101,7 @@ export namespace Prisma {
     announcementViews?: AnnouncementViewCreateNestedManyWithoutUserInput
     usageAlertLogs?: UsageAlertLogCreateNestedManyWithoutUserInput
     featureRequests?: FeatureRequestCreateNestedManyWithoutUserInput
+    featureRequestMessages?: FeatureRequestMessageCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutInvitationInput = {
@@ -25415,6 +27120,7 @@ export namespace Prisma {
     announcementViews?: AnnouncementViewUncheckedCreateNestedManyWithoutUserInput
     usageAlertLogs?: UsageAlertLogUncheckedCreateNestedManyWithoutUserInput
     featureRequests?: FeatureRequestUncheckedCreateNestedManyWithoutUserInput
+    featureRequestMessages?: FeatureRequestMessageUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutInvitationInput = {
@@ -25449,6 +27155,7 @@ export namespace Prisma {
     announcementViews?: AnnouncementViewUpdateManyWithoutUserNestedInput
     usageAlertLogs?: UsageAlertLogUpdateManyWithoutUserNestedInput
     featureRequests?: FeatureRequestUpdateManyWithoutUserNestedInput
+    featureRequestMessages?: FeatureRequestMessageUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInvitationInput = {
@@ -25467,6 +27174,7 @@ export namespace Prisma {
     announcementViews?: AnnouncementViewUncheckedUpdateManyWithoutUserNestedInput
     usageAlertLogs?: UsageAlertLogUncheckedUpdateManyWithoutUserNestedInput
     featureRequests?: FeatureRequestUncheckedUpdateManyWithoutUserNestedInput
+    featureRequestMessages?: FeatureRequestMessageUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserCreateWithoutDbCredentialsInput = {
@@ -25485,6 +27193,7 @@ export namespace Prisma {
     announcementViews?: AnnouncementViewCreateNestedManyWithoutUserInput
     usageAlertLogs?: UsageAlertLogCreateNestedManyWithoutUserInput
     featureRequests?: FeatureRequestCreateNestedManyWithoutUserInput
+    featureRequestMessages?: FeatureRequestMessageCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutDbCredentialsInput = {
@@ -25503,6 +27212,7 @@ export namespace Prisma {
     announcementViews?: AnnouncementViewUncheckedCreateNestedManyWithoutUserInput
     usageAlertLogs?: UsageAlertLogUncheckedCreateNestedManyWithoutUserInput
     featureRequests?: FeatureRequestUncheckedCreateNestedManyWithoutUserInput
+    featureRequestMessages?: FeatureRequestMessageUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutDbCredentialsInput = {
@@ -25565,6 +27275,7 @@ export namespace Prisma {
     announcementViews?: AnnouncementViewCreateNestedManyWithoutUserInput
     usageAlertLogs?: UsageAlertLogCreateNestedManyWithoutUserInput
     featureRequests?: FeatureRequestCreateNestedManyWithoutUserInput
+    featureRequestMessages?: FeatureRequestMessageCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutRoleInput = {
@@ -25583,6 +27294,7 @@ export namespace Prisma {
     announcementViews?: AnnouncementViewUncheckedCreateNestedManyWithoutUserInput
     usageAlertLogs?: UsageAlertLogUncheckedCreateNestedManyWithoutUserInput
     featureRequests?: FeatureRequestUncheckedCreateNestedManyWithoutUserInput
+    featureRequestMessages?: FeatureRequestMessageUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutRoleInput = {
@@ -25961,6 +27673,7 @@ export namespace Prisma {
     requestLogs?: RequestLogCreateNestedManyWithoutUserInput
     usageAlertLogs?: UsageAlertLogCreateNestedManyWithoutUserInput
     featureRequests?: FeatureRequestCreateNestedManyWithoutUserInput
+    featureRequestMessages?: FeatureRequestMessageCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutAnnouncementViewsInput = {
@@ -25979,6 +27692,7 @@ export namespace Prisma {
     requestLogs?: RequestLogUncheckedCreateNestedManyWithoutUserInput
     usageAlertLogs?: UsageAlertLogUncheckedCreateNestedManyWithoutUserInput
     featureRequests?: FeatureRequestUncheckedCreateNestedManyWithoutUserInput
+    featureRequestMessages?: FeatureRequestMessageUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutAnnouncementViewsInput = {
@@ -26052,6 +27766,7 @@ export namespace Prisma {
     requestLogs?: RequestLogUpdateManyWithoutUserNestedInput
     usageAlertLogs?: UsageAlertLogUpdateManyWithoutUserNestedInput
     featureRequests?: FeatureRequestUpdateManyWithoutUserNestedInput
+    featureRequestMessages?: FeatureRequestMessageUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAnnouncementViewsInput = {
@@ -26070,6 +27785,7 @@ export namespace Prisma {
     requestLogs?: RequestLogUncheckedUpdateManyWithoutUserNestedInput
     usageAlertLogs?: UsageAlertLogUncheckedUpdateManyWithoutUserNestedInput
     featureRequests?: FeatureRequestUncheckedUpdateManyWithoutUserNestedInput
+    featureRequestMessages?: FeatureRequestMessageUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserCreateWithoutUsageAlertLogsInput = {
@@ -26088,6 +27804,7 @@ export namespace Prisma {
     requestLogs?: RequestLogCreateNestedManyWithoutUserInput
     announcementViews?: AnnouncementViewCreateNestedManyWithoutUserInput
     featureRequests?: FeatureRequestCreateNestedManyWithoutUserInput
+    featureRequestMessages?: FeatureRequestMessageCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutUsageAlertLogsInput = {
@@ -26106,6 +27823,7 @@ export namespace Prisma {
     requestLogs?: RequestLogUncheckedCreateNestedManyWithoutUserInput
     announcementViews?: AnnouncementViewUncheckedCreateNestedManyWithoutUserInput
     featureRequests?: FeatureRequestUncheckedCreateNestedManyWithoutUserInput
+    featureRequestMessages?: FeatureRequestMessageUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutUsageAlertLogsInput = {
@@ -26140,6 +27858,7 @@ export namespace Prisma {
     requestLogs?: RequestLogUpdateManyWithoutUserNestedInput
     announcementViews?: AnnouncementViewUpdateManyWithoutUserNestedInput
     featureRequests?: FeatureRequestUpdateManyWithoutUserNestedInput
+    featureRequestMessages?: FeatureRequestMessageUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUsageAlertLogsInput = {
@@ -26158,6 +27877,7 @@ export namespace Prisma {
     requestLogs?: RequestLogUncheckedUpdateManyWithoutUserNestedInput
     announcementViews?: AnnouncementViewUncheckedUpdateManyWithoutUserNestedInput
     featureRequests?: FeatureRequestUncheckedUpdateManyWithoutUserNestedInput
+    featureRequestMessages?: FeatureRequestMessageUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserCreateWithoutFeatureRequestsInput = {
@@ -26176,6 +27896,7 @@ export namespace Prisma {
     requestLogs?: RequestLogCreateNestedManyWithoutUserInput
     announcementViews?: AnnouncementViewCreateNestedManyWithoutUserInput
     usageAlertLogs?: UsageAlertLogCreateNestedManyWithoutUserInput
+    featureRequestMessages?: FeatureRequestMessageCreateNestedManyWithoutSenderInput
   }
 
   export type UserUncheckedCreateWithoutFeatureRequestsInput = {
@@ -26194,11 +27915,36 @@ export namespace Prisma {
     requestLogs?: RequestLogUncheckedCreateNestedManyWithoutUserInput
     announcementViews?: AnnouncementViewUncheckedCreateNestedManyWithoutUserInput
     usageAlertLogs?: UsageAlertLogUncheckedCreateNestedManyWithoutUserInput
+    featureRequestMessages?: FeatureRequestMessageUncheckedCreateNestedManyWithoutSenderInput
   }
 
   export type UserCreateOrConnectWithoutFeatureRequestsInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutFeatureRequestsInput, UserUncheckedCreateWithoutFeatureRequestsInput>
+  }
+
+  export type FeatureRequestMessageCreateWithoutFeatureRequestInput = {
+    id?: string
+    message: string
+    createdAt?: Date | string
+    sender: UserCreateNestedOneWithoutFeatureRequestMessagesInput
+  }
+
+  export type FeatureRequestMessageUncheckedCreateWithoutFeatureRequestInput = {
+    id?: string
+    senderId: string
+    message: string
+    createdAt?: Date | string
+  }
+
+  export type FeatureRequestMessageCreateOrConnectWithoutFeatureRequestInput = {
+    where: FeatureRequestMessageWhereUniqueInput
+    create: XOR<FeatureRequestMessageCreateWithoutFeatureRequestInput, FeatureRequestMessageUncheckedCreateWithoutFeatureRequestInput>
+  }
+
+  export type FeatureRequestMessageCreateManyFeatureRequestInputEnvelope = {
+    data: FeatureRequestMessageCreateManyFeatureRequestInput | FeatureRequestMessageCreateManyFeatureRequestInput[]
+    skipDuplicates?: boolean
   }
 
   export type UserUpsertWithoutFeatureRequestsInput = {
@@ -26228,6 +27974,7 @@ export namespace Prisma {
     requestLogs?: RequestLogUpdateManyWithoutUserNestedInput
     announcementViews?: AnnouncementViewUpdateManyWithoutUserNestedInput
     usageAlertLogs?: UsageAlertLogUpdateManyWithoutUserNestedInput
+    featureRequestMessages?: FeatureRequestMessageUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFeatureRequestsInput = {
@@ -26246,6 +27993,179 @@ export namespace Prisma {
     requestLogs?: RequestLogUncheckedUpdateManyWithoutUserNestedInput
     announcementViews?: AnnouncementViewUncheckedUpdateManyWithoutUserNestedInput
     usageAlertLogs?: UsageAlertLogUncheckedUpdateManyWithoutUserNestedInput
+    featureRequestMessages?: FeatureRequestMessageUncheckedUpdateManyWithoutSenderNestedInput
+  }
+
+  export type FeatureRequestMessageUpsertWithWhereUniqueWithoutFeatureRequestInput = {
+    where: FeatureRequestMessageWhereUniqueInput
+    update: XOR<FeatureRequestMessageUpdateWithoutFeatureRequestInput, FeatureRequestMessageUncheckedUpdateWithoutFeatureRequestInput>
+    create: XOR<FeatureRequestMessageCreateWithoutFeatureRequestInput, FeatureRequestMessageUncheckedCreateWithoutFeatureRequestInput>
+  }
+
+  export type FeatureRequestMessageUpdateWithWhereUniqueWithoutFeatureRequestInput = {
+    where: FeatureRequestMessageWhereUniqueInput
+    data: XOR<FeatureRequestMessageUpdateWithoutFeatureRequestInput, FeatureRequestMessageUncheckedUpdateWithoutFeatureRequestInput>
+  }
+
+  export type FeatureRequestMessageUpdateManyWithWhereWithoutFeatureRequestInput = {
+    where: FeatureRequestMessageScalarWhereInput
+    data: XOR<FeatureRequestMessageUpdateManyMutationInput, FeatureRequestMessageUncheckedUpdateManyWithoutFeatureRequestInput>
+  }
+
+  export type FeatureRequestCreateWithoutMessagesInput = {
+    id?: string
+    requestText: string
+    responseText?: string | null
+    status?: $Enums.FeatureRequestStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    answeredAt?: Date | string | null
+    resolvedAt?: Date | string | null
+    user: UserCreateNestedOneWithoutFeatureRequestsInput
+  }
+
+  export type FeatureRequestUncheckedCreateWithoutMessagesInput = {
+    id?: string
+    userId: string
+    requestText: string
+    responseText?: string | null
+    status?: $Enums.FeatureRequestStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    answeredAt?: Date | string | null
+    resolvedAt?: Date | string | null
+  }
+
+  export type FeatureRequestCreateOrConnectWithoutMessagesInput = {
+    where: FeatureRequestWhereUniqueInput
+    create: XOR<FeatureRequestCreateWithoutMessagesInput, FeatureRequestUncheckedCreateWithoutMessagesInput>
+  }
+
+  export type UserCreateWithoutFeatureRequestMessagesInput = {
+    id?: string
+    user: string
+    passwordHash: string
+    status?: boolean
+    email?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    storeId?: number
+    dbCredentials: DbCredentialsCreateNestedOneWithoutUsersInput
+    role?: RoleCreateNestedOneWithoutUsersInput
+    plan?: PlanCreateNestedOneWithoutUsersInput
+    invitation?: UserInvitationCreateNestedOneWithoutUserInput
+    requestLogs?: RequestLogCreateNestedManyWithoutUserInput
+    announcementViews?: AnnouncementViewCreateNestedManyWithoutUserInput
+    usageAlertLogs?: UsageAlertLogCreateNestedManyWithoutUserInput
+    featureRequests?: FeatureRequestCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutFeatureRequestMessagesInput = {
+    id?: string
+    user: string
+    passwordHash: string
+    status?: boolean
+    dbCredentialsId: string
+    email?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    storeId?: number
+    roleId?: string | null
+    planId?: string | null
+    invitation?: UserInvitationUncheckedCreateNestedOneWithoutUserInput
+    requestLogs?: RequestLogUncheckedCreateNestedManyWithoutUserInput
+    announcementViews?: AnnouncementViewUncheckedCreateNestedManyWithoutUserInput
+    usageAlertLogs?: UsageAlertLogUncheckedCreateNestedManyWithoutUserInput
+    featureRequests?: FeatureRequestUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutFeatureRequestMessagesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutFeatureRequestMessagesInput, UserUncheckedCreateWithoutFeatureRequestMessagesInput>
+  }
+
+  export type FeatureRequestUpsertWithoutMessagesInput = {
+    update: XOR<FeatureRequestUpdateWithoutMessagesInput, FeatureRequestUncheckedUpdateWithoutMessagesInput>
+    create: XOR<FeatureRequestCreateWithoutMessagesInput, FeatureRequestUncheckedCreateWithoutMessagesInput>
+    where?: FeatureRequestWhereInput
+  }
+
+  export type FeatureRequestUpdateToOneWithWhereWithoutMessagesInput = {
+    where?: FeatureRequestWhereInput
+    data: XOR<FeatureRequestUpdateWithoutMessagesInput, FeatureRequestUncheckedUpdateWithoutMessagesInput>
+  }
+
+  export type FeatureRequestUpdateWithoutMessagesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    requestText?: StringFieldUpdateOperationsInput | string
+    responseText?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumFeatureRequestStatusFieldUpdateOperationsInput | $Enums.FeatureRequestStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    answeredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneRequiredWithoutFeatureRequestsNestedInput
+  }
+
+  export type FeatureRequestUncheckedUpdateWithoutMessagesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    requestText?: StringFieldUpdateOperationsInput | string
+    responseText?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumFeatureRequestStatusFieldUpdateOperationsInput | $Enums.FeatureRequestStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    answeredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type UserUpsertWithoutFeatureRequestMessagesInput = {
+    update: XOR<UserUpdateWithoutFeatureRequestMessagesInput, UserUncheckedUpdateWithoutFeatureRequestMessagesInput>
+    create: XOR<UserCreateWithoutFeatureRequestMessagesInput, UserUncheckedCreateWithoutFeatureRequestMessagesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutFeatureRequestMessagesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutFeatureRequestMessagesInput, UserUncheckedUpdateWithoutFeatureRequestMessagesInput>
+  }
+
+  export type UserUpdateWithoutFeatureRequestMessagesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    status?: BoolFieldUpdateOperationsInput | boolean
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    storeId?: IntFieldUpdateOperationsInput | number
+    dbCredentials?: DbCredentialsUpdateOneRequiredWithoutUsersNestedInput
+    role?: RoleUpdateOneWithoutUsersNestedInput
+    plan?: PlanUpdateOneWithoutUsersNestedInput
+    invitation?: UserInvitationUpdateOneWithoutUserNestedInput
+    requestLogs?: RequestLogUpdateManyWithoutUserNestedInput
+    announcementViews?: AnnouncementViewUpdateManyWithoutUserNestedInput
+    usageAlertLogs?: UsageAlertLogUpdateManyWithoutUserNestedInput
+    featureRequests?: FeatureRequestUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutFeatureRequestMessagesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    status?: BoolFieldUpdateOperationsInput | boolean
+    dbCredentialsId?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    storeId?: IntFieldUpdateOperationsInput | number
+    roleId?: NullableStringFieldUpdateOperationsInput | string | null
+    planId?: NullableStringFieldUpdateOperationsInput | string | null
+    invitation?: UserInvitationUncheckedUpdateOneWithoutUserNestedInput
+    requestLogs?: RequestLogUncheckedUpdateManyWithoutUserNestedInput
+    announcementViews?: AnnouncementViewUncheckedUpdateManyWithoutUserNestedInput
+    usageAlertLogs?: UsageAlertLogUncheckedUpdateManyWithoutUserNestedInput
+    featureRequests?: FeatureRequestUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type RequestLogCreateManyUserInput = {
@@ -26275,10 +28195,18 @@ export namespace Prisma {
     id?: string
     requestText: string
     responseText?: string | null
-    status?: string
+    status?: $Enums.FeatureRequestStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     answeredAt?: Date | string | null
+    resolvedAt?: Date | string | null
+  }
+
+  export type FeatureRequestMessageCreateManySenderInput = {
+    id?: string
+    featureRequestId: string
+    message: string
+    createdAt?: Date | string
   }
 
   export type RequestLogUpdateWithoutUserInput = {
@@ -26354,30 +28282,56 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     requestText?: StringFieldUpdateOperationsInput | string
     responseText?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumFeatureRequestStatusFieldUpdateOperationsInput | $Enums.FeatureRequestStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     answeredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    messages?: FeatureRequestMessageUpdateManyWithoutFeatureRequestNestedInput
   }
 
   export type FeatureRequestUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     requestText?: StringFieldUpdateOperationsInput | string
     responseText?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumFeatureRequestStatusFieldUpdateOperationsInput | $Enums.FeatureRequestStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     answeredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    messages?: FeatureRequestMessageUncheckedUpdateManyWithoutFeatureRequestNestedInput
   }
 
   export type FeatureRequestUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     requestText?: StringFieldUpdateOperationsInput | string
     responseText?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumFeatureRequestStatusFieldUpdateOperationsInput | $Enums.FeatureRequestStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     answeredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type FeatureRequestMessageUpdateWithoutSenderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    featureRequest?: FeatureRequestUpdateOneRequiredWithoutMessagesNestedInput
+  }
+
+  export type FeatureRequestMessageUncheckedUpdateWithoutSenderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    featureRequestId?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FeatureRequestMessageUncheckedUpdateManyWithoutSenderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    featureRequestId?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UserCreateManyPlanInput = {
@@ -26409,6 +28363,7 @@ export namespace Prisma {
     announcementViews?: AnnouncementViewUpdateManyWithoutUserNestedInput
     usageAlertLogs?: UsageAlertLogUpdateManyWithoutUserNestedInput
     featureRequests?: FeatureRequestUpdateManyWithoutUserNestedInput
+    featureRequestMessages?: FeatureRequestMessageUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPlanInput = {
@@ -26427,6 +28382,7 @@ export namespace Prisma {
     announcementViews?: AnnouncementViewUncheckedUpdateManyWithoutUserNestedInput
     usageAlertLogs?: UsageAlertLogUncheckedUpdateManyWithoutUserNestedInput
     featureRequests?: FeatureRequestUncheckedUpdateManyWithoutUserNestedInput
+    featureRequestMessages?: FeatureRequestMessageUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutPlanInput = {
@@ -26471,6 +28427,7 @@ export namespace Prisma {
     announcementViews?: AnnouncementViewUpdateManyWithoutUserNestedInput
     usageAlertLogs?: UsageAlertLogUpdateManyWithoutUserNestedInput
     featureRequests?: FeatureRequestUpdateManyWithoutUserNestedInput
+    featureRequestMessages?: FeatureRequestMessageUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDbCredentialsInput = {
@@ -26489,6 +28446,7 @@ export namespace Prisma {
     announcementViews?: AnnouncementViewUncheckedUpdateManyWithoutUserNestedInput
     usageAlertLogs?: UsageAlertLogUncheckedUpdateManyWithoutUserNestedInput
     featureRequests?: FeatureRequestUncheckedUpdateManyWithoutUserNestedInput
+    featureRequestMessages?: FeatureRequestMessageUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutDbCredentialsInput = {
@@ -26549,6 +28507,7 @@ export namespace Prisma {
     announcementViews?: AnnouncementViewUpdateManyWithoutUserNestedInput
     usageAlertLogs?: UsageAlertLogUpdateManyWithoutUserNestedInput
     featureRequests?: FeatureRequestUpdateManyWithoutUserNestedInput
+    featureRequestMessages?: FeatureRequestMessageUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRoleInput = {
@@ -26567,6 +28526,7 @@ export namespace Prisma {
     announcementViews?: AnnouncementViewUncheckedUpdateManyWithoutUserNestedInput
     usageAlertLogs?: UsageAlertLogUncheckedUpdateManyWithoutUserNestedInput
     featureRequests?: FeatureRequestUncheckedUpdateManyWithoutUserNestedInput
+    featureRequestMessages?: FeatureRequestMessageUncheckedUpdateManyWithoutSenderNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutRoleInput = {
@@ -26674,6 +28634,34 @@ export namespace Prisma {
     active?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FeatureRequestMessageCreateManyFeatureRequestInput = {
+    id?: string
+    senderId: string
+    message: string
+    createdAt?: Date | string
+  }
+
+  export type FeatureRequestMessageUpdateWithoutFeatureRequestInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sender?: UserUpdateOneRequiredWithoutFeatureRequestMessagesNestedInput
+  }
+
+  export type FeatureRequestMessageUncheckedUpdateWithoutFeatureRequestInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    senderId?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FeatureRequestMessageUncheckedUpdateManyWithoutFeatureRequestInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    senderId?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

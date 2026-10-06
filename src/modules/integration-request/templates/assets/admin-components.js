@@ -435,7 +435,8 @@ const Components = {
     const tabs = [
       { id: 'ALL', label: 'Todas', icon: 'bx-list-ul' },
       { id: 'PENDING', label: 'Pendentes', icon: 'bx-time' },
-      { id: 'ANSWERED', label: 'Respondidas', icon: 'bx-check-circle' },
+      { id: 'ANSWERED', label: 'Respondidas', icon: 'bx-reply' },
+      { id: 'RESOLVED', label: 'Resolvidas', icon: 'bx-check-double' },
     ];
     return `
       <div class="filter-tabs-wrapper" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 10px;">
@@ -472,10 +473,18 @@ const Components = {
     `;
   },
   FeatureRequestRow: (req) => {
+    const ticketNum = req.ticketNumber || ('#' + (req.id ? req.id.slice(0, 8).toUpperCase() : ''));
+    const isResolved = req.status === 'RESOLVED';
     const isAnswered = req.status === 'ANSWERED';
-    const statusBadge = isAnswered
-      ? `<span style="background: rgba(16, 185, 129, 0.15); color: var(--primary); border: 1px solid rgba(16, 185, 129, 0.3); padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;"><i class='bx bx-check-circle'></i> Respondida</span>`
-      : `<span style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;"><i class='bx bx-time'></i> Pendente</span>`;
+
+    let statusBadge;
+    if (isResolved) {
+      statusBadge = `<span style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;"><i class='bx bx-check-double'></i> Resolvido</span>`;
+    } else if (isAnswered) {
+      statusBadge = `<span style="background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;"><i class='bx bx-reply'></i> Respondida</span>`;
+    } else {
+      statusBadge = `<span style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;"><i class='bx bx-time'></i> Pendente</span>`;
+    }
 
     const dateFormatted = new Date(req.createdAt).toLocaleString('pt-BR', {
       day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
@@ -483,17 +492,18 @@ const Components = {
 
     const clientDisplay = req.user ? `${req.user.user} ${req.user.email ? `<small style="display: block; color: var(--text-muted); font-size: 0.8rem;">${req.user.email}</small>` : ''}` : 'Usuário desconhecido';
 
-    const shortText = req.requestText.length > 120 ? req.requestText.slice(0, 120) + '...' : req.requestText;
+    const shortText = req.requestText.length > 100 ? req.requestText.slice(0, 100) + '...' : req.requestText;
 
     return `
       <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
+          <td style="white-space: nowrap;"><span style="font-family: monospace; font-weight: 700; color: #fff; background: rgba(255, 255, 255, 0.08); padding: 2px 7px; border-radius: 4px; font-size: 0.85rem;">${ticketNum}</span></td>
           <td style="white-space: nowrap; font-size: 0.85rem; color: var(--text-muted);">${dateFormatted}</td>
           <td style="font-weight: 600; color: #fff;">${clientDisplay}</td>
-          <td style="max-width: 340px; font-size: 0.9rem; color: #e2e8f0; line-height: 1.4;">${shortText}</td>
+          <td style="max-width: 300px; font-size: 0.9rem; color: #e2e8f0; line-height: 1.4;">${shortText}</td>
           <td style="text-align: center;">${statusBadge}</td>
           <td style="white-space: nowrap; text-align: right;">
               <button class="btn btn-outline btn-sm" onclick="UI.openFeatureResponseModal('${req.id}')" style="display: inline-flex; align-items: center; gap: 5px;">
-                  <i class='bx ${isAnswered ? 'bx-edit' : 'bx-reply'}'></i> ${isAnswered ? 'Ver / Editar' : 'Responder'}
+                  <i class='bx bx-conversation'></i> Conversa
               </button>
           </td>
       </tr>
@@ -505,64 +515,137 @@ const Components = {
             <table>
                 <thead>
                     <tr>
+                        <th style="width: 110px;">Ticket</th>
                         <th style="width: 140px;">Data / Hora</th>
                         <th style="width: 200px;">Cliente Solicitante</th>
                         <th>Solicitação</th>
-                        <th style="width: 130px; text-align: center;">Status</th>
-                        <th style="width: 130px; text-align: right;">Ação</th>
+                        <th style="width: 140px; text-align: center;">Status</th>
+                        <th style="width: 120px; text-align: right;">Ação</th>
                     </tr>
                 </thead>
                 <tbody>
                     ${requests.length > 0 
                       ? requests.map(Components.FeatureRequestRow).join('') 
-                      : '<tr><td colspan="5" style="text-align: center; padding: 3rem; color: var(--text-muted);">Nenhuma solicitação de funcionalidade encontrada com este filtro.</td></tr>'}
+                      : '<tr><td colspan="6" style="text-align: center; padding: 3rem; color: var(--text-muted);">Nenhuma solicitação de funcionalidade encontrada com este filtro.</td></tr>'}
                 </tbody>
             </table>
         </div>
     </div>
   `,
   FeatureRequestModal: (req) => {
+    const ticketNum = req.ticketNumber || ('#' + (req.id ? req.id.slice(0, 8).toUpperCase() : ''));
+    const isResolved = req.status === 'RESOLVED';
     const isAnswered = req.status === 'ANSWERED';
     const clientName = req.user?.user || 'Cliente';
     const clientEmail = req.user?.email || 'Sem e-mail cadastrado';
     const dateFormatted = new Date(req.createdAt).toLocaleString('pt-BR');
 
+    let statusBadge;
+    if (isResolved) {
+      statusBadge = `<span style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;"><i class='bx bx-check-double'></i> Resolvido (Fechado)</span>`;
+    } else if (isAnswered) {
+      statusBadge = `<span style="background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;"><i class='bx bx-reply'></i> Respondida</span>`;
+    } else {
+      statusBadge = `<span style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;"><i class='bx bx-time'></i> Pendente</span>`;
+    }
+
+    // Histórico de mensagens da conversa
+    let conversationHtml = '';
+    if (req.messages && req.messages.length > 0) {
+      conversationHtml = req.messages.map(msg => {
+        const isStaff = msg.sender?.role?.name === 'Admin' || (msg.senderId !== req.userId);
+        const senderLabel = isStaff ? (msg.sender?.user || 'Equipe Suporte') : clientName;
+        const msgDate = new Date(msg.createdAt).toLocaleString('pt-BR');
+
+        return `
+          <div style="margin-bottom: 12px; padding: 12px 14px; border-radius: 8px; ${isStaff ? 'background: rgba(16, 185, 129, 0.08); border-left: 3px solid var(--primary);' : 'background: rgba(255, 255, 255, 0.04); border-left: 3px solid #64748b;'}">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 0.8rem;">
+              <strong style="color: ${isStaff ? 'var(--primary)' : '#e2e8f0'}; display: flex; align-items: center; gap: 5px;">
+                <i class='bx ${isStaff ? 'bx-check-shield' : 'bx-user'}'></i> ${senderLabel} ${isStaff ? '<span style="font-size: 0.7rem; font-weight: normal; opacity: 0.8;">(Staff)</span>' : ''}
+              </strong>
+              <span style="color: var(--text-muted); font-size: 0.75rem;">${msgDate}</span>
+            </div>
+            <div style="font-size: 0.9rem; color: #f1f5f9; white-space: pre-wrap; line-height: 1.5;">${msg.message}</div>
+          </div>
+        `;
+      }).join('');
+    } else if (isAnswered && req.responseText) {
+      conversationHtml = `
+        <div style="margin-bottom: 12px; padding: 12px 14px; border-radius: 8px; background: rgba(16, 185, 129, 0.08); border-left: 3px solid var(--primary);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 0.8rem;">
+            <strong style="color: var(--primary); display: flex; align-items: center; gap: 5px;">
+              <i class='bx bx-check-shield'></i> Resposta da Equipe
+            </strong>
+            <span style="color: var(--text-muted); font-size: 0.75rem;">${req.answeredAt ? new Date(req.answeredAt).toLocaleString('pt-BR') : ''}</span>
+          </div>
+          <div style="font-size: 0.9rem; color: #f1f5f9; white-space: pre-wrap; line-height: 1.5;">${req.responseText}</div>
+        </div>
+      `;
+    }
+
     return `
       <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--border);">
-          <h3 style="margin: 0; color: #fff; font-size: 1.25rem; display: flex; align-items: center; gap: 8px;">
-              <i class='bx bx-reply' style="color: var(--primary);"></i> ${isAnswered ? 'Detalhes e Resposta da Solicitação' : 'Responder Solicitação de Funcionalidade'}
-          </h3>
+          <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="font-family: monospace; font-size: 1.1rem; font-weight: 800; color: #fff; background: rgba(255, 255, 255, 0.1); padding: 4px 10px; border-radius: 6px;">${ticketNum}</span>
+              <h3 style="margin: 0; color: #fff; font-size: 1.2rem; display: flex; align-items: center; gap: 8px;">
+                  Conversa da Solicitação
+              </h3>
+              ${statusBadge}
+          </div>
           <button onclick="UI.closeModal()" style="background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer;">&times;</button>
       </div>
-      <div style="padding: 1.5rem;">
+      <div style="padding: 1.5rem; max-height: 75vh; overflow-y: auto;">
           <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; margin-bottom: 1.2rem;">
               <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.85rem;">
                   <span style="color: var(--text-muted);">Solicitante: <strong style="color: #fff;">${clientName}</strong> (${clientEmail})</span>
                   <span style="color: var(--text-muted);">${dateFormatted}</span>
               </div>
-              <div style="font-size: 0.95rem; color: #f1f5f9; white-space: pre-wrap; line-height: 1.5; margin-top: 8px; background: rgba(0, 0, 0, 0.2); padding: 10px; border-radius: 6px;">${req.requestText}</div>
+              <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600; margin-top: 8px;">Demanda Inicial:</div>
+              <div style="font-size: 0.95rem; color: #f1f5f9; white-space: pre-wrap; line-height: 1.5; margin-top: 4px; background: rgba(0, 0, 0, 0.25); padding: 10px; border-radius: 6px;">${req.requestText}</div>
           </div>
 
-          <form onsubmit="UI.submitFeatureResponse(event, '${req.id}')">
-              <div class="form-group" style="margin-bottom: 1.2rem;">
-                  <label for="feature-response-input" style="display: block; font-weight: 600; color: #fff; margin-bottom: 6px;">
-                      Resposta da Equipe Técnica / Produto
-                  </label>
-                  <textarea id="feature-response-input" rows="5" required minlength="2" maxlength="5000"
-                      placeholder="Digite aqui o parecer sobre a solicitação (ex: viabilidade técnica, previsão de lançamento, alternativa de integração)..."
-                      style="width: 100%; box-sizing: border-box; background: rgba(0, 0, 0, 0.25); border: 1px solid var(--border); border-radius: 8px; padding: 12px; color: #fff; font-family: inherit; font-size: 0.95rem; resize: vertical; line-height: 1.5; outline: none;">${req.responseText || ''}</textarea>
-                  <small style="color: var(--text-muted); display: block; margin-top: 4px;">
-                      ${clientEmail !== 'Sem e-mail cadastrado' ? '✉ Ao salvar, uma notificação por e-mail será enviada automaticamente para o cliente.' : '⚠ Cliente sem e-mail cadastrado; a resposta ficará visível na aba Solicitações do painel dele.'}
-                  </small>
+          <div style="margin-bottom: 1.2rem;">
+              <h4 style="color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+                  <i class='bx bx-chat'></i> Histórico da Conversa
+              </h4>
+              <div style="display: flex; flex-direction: column;">
+                  ${conversationHtml || '<div style="font-size: 0.85rem; color: var(--text-muted); padding: 10px; text-align: center;">Nenhuma resposta enviada ainda nesta solicitação.</div>'}
               </div>
+          </div>
 
-              <div style="display: flex; justify-content: flex-end; gap: 10px;">
-                  <button type="button" class="btn btn-outline" onclick="UI.closeModal()">Cancelar</button>
-                  <button type="submit" id="btn-save-feature-resp" class="btn btn-primary" style="display: flex; align-items: center; gap: 6px;">
-                      <i class='bx bx-send'></i> <span>Salvar Resposta</span>
-                  </button>
+          ${isResolved ? `
+              <div style="background: rgba(16, 185, 129, 0.1); border: 1px dashed rgba(16, 185, 129, 0.4); border-radius: 8px; padding: 16px; text-align: center; color: #34d399;">
+                  <i class='bx bx-check-double' style="font-size: 2rem; display: block; margin-bottom: 6px;"></i>
+                  <strong>Ticket Resolvido e Fechado</strong>
+                  <p style="margin: 4px 0 0 0; font-size: 0.85rem; color: #cbd5e1;">Este ticket foi formalmente concluído${req.resolvedAt ? ' em ' + new Date(req.resolvedAt).toLocaleString('pt-BR') : ''}. Novas respostas estão bloqueadas.</p>
               </div>
-          </form>
+          ` : `
+              <form onsubmit="UI.submitFeatureResponse(event, '${req.id}')" style="margin-top: 1.2rem; border-top: 1px solid var(--border); padding-top: 1.2rem;">
+                  <div class="form-group" style="margin-bottom: 1.2rem;">
+                      <label for="feature-response-input" style="display: block; font-weight: 600; color: #fff; margin-bottom: 6px;">
+                          Enviar Mensagem / Resposta
+                      </label>
+                      <textarea id="feature-response-input" rows="4" required minlength="1" maxlength="5000"
+                          placeholder="Digite aqui sua mensagem na conversa do ticket..."
+                          style="width: 100%; box-sizing: border-box; background: rgba(0, 0, 0, 0.25); border: 1px solid var(--border); border-radius: 8px; padding: 12px; color: #fff; font-family: inherit; font-size: 0.95rem; resize: vertical; line-height: 1.5; outline: none;"></textarea>
+                      <small style="color: var(--text-muted); display: block; margin-top: 4px;">
+                          ✉ Uma notificação com o link da solicitação será disparada por e-mail para ${clientEmail}.
+                      </small>
+                  </div>
+
+                  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                      <button type="button" class="btn" onclick="UI.resolveFeatureTicket('${req.id}')" style="background: #10b981; color: white; display: inline-flex; align-items: center; gap: 6px; font-weight: 600;">
+                          <i class='bx bx-check-double'></i> <span>Marcar como Resolvido (Fechar Ticket)</span>
+                      </button>
+                      <div style="display: flex; gap: 8px;">
+                          <button type="button" class="btn btn-outline" onclick="UI.closeModal()">Fechar</button>
+                          <button type="submit" id="btn-save-feature-resp" class="btn btn-primary" style="display: flex; align-items: center; gap: 6px;">
+                              <i class='bx bx-send'></i> <span>Enviar Mensagem</span>
+                          </button>
+                      </div>
+                  </div>
+              </form>
+          `}
       </div>
     `;
   },

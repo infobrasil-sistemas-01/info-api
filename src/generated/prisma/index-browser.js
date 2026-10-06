@@ -270,7 +270,16 @@ exports.Prisma.FeatureRequestScalarFieldEnum = {
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  answeredAt: 'answeredAt'
+  answeredAt: 'answeredAt',
+  resolvedAt: 'resolvedAt'
+};
+
+exports.Prisma.FeatureRequestMessageScalarFieldEnum = {
+  id: 'id',
+  featureRequestId: 'featureRequestId',
+  senderId: 'senderId',
+  message: 'message',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -309,6 +318,12 @@ exports.AnnouncementType = exports.$Enums.AnnouncementType = {
   ALERT: 'ALERT'
 };
 
+exports.FeatureRequestStatus = exports.$Enums.FeatureRequestStatus = {
+  PENDING: 'PENDING',
+  ANSWERED: 'ANSWERED',
+  RESOLVED: 'RESOLVED'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Plan: 'Plan',
@@ -325,7 +340,8 @@ exports.Prisma.ModelName = {
   StatusLog: 'StatusLog',
   SystemHeartbeat: 'SystemHeartbeat',
   UsageAlertLog: 'UsageAlertLog',
-  FeatureRequest: 'FeatureRequest'
+  FeatureRequest: 'FeatureRequest',
+  FeatureRequestMessage: 'FeatureRequestMessage'
 };
 
 /**

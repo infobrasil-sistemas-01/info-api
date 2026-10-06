@@ -161,34 +161,55 @@ const Data = {
             console.error('Erro ao buscar solicitações de funcionalidades:', error);
         }
     },
-    async respondFeatureRequest(id, responseText) {
+    async sendFeatureMessage(id, message) {
         const btn = document.getElementById('btn-save-feature-resp');
         if (btn) {
             btn.disabled = true;
-            btn.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i> <span>Salvando...</span>";
+            btn.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i> <span>Enviando...</span>";
         }
         try {
-            const res = await this.fetch(`${API_URL}/feature-requests/${id}/respond`, {
-                method: 'PATCH',
-                body: JSON.stringify({ responseText })
+            const res = await this.fetch(`${API_URL}/feature-requests/${id}/messages`, {
+                method: 'POST',
+                body: JSON.stringify({ message })
             });
             if (res.ok) {
-                alert('Resposta salva e notificação enviada com sucesso!');
-                UI.closeModal();
                 await this.fetchFeatureRequests();
+                UI.openFeatureResponseModal(id);
             } else {
                 const err = await res.json().catch(() => ({}));
-                alert('Erro ao responder: ' + (err.message || 'Falha na requisição'));
+                alert('Erro ao enviar mensagem: ' + (err.message || 'Falha na requisição'));
             }
         } catch (err) {
             console.error(err);
-            alert('Falha ao conectar com o servidor para salvar a resposta.');
+            alert('Falha ao conectar com o servidor para enviar mensagem.');
         } finally {
             if (btn) {
                 btn.disabled = false;
-                btn.innerHTML = "<i class='bx bx-send'></i> <span>Salvar Resposta</span>";
+                btn.innerHTML = "<i class='bx bx-send'></i> <span>Enviar Mensagem</span>";
             }
         }
+    },
+    async resolveFeatureRequest(id, closingMessage) {
+        try {
+            const res = await this.fetch(`${API_URL}/feature-requests/${id}/resolve`, {
+                method: 'PATCH',
+                body: JSON.stringify({ closingMessage: closingMessage || undefined })
+            });
+            if (res.ok) {
+                alert('Ticket marcado como RESOLVIDO e fechado com sucesso!');
+                await this.fetchFeatureRequests();
+                UI.openFeatureResponseModal(id);
+            } else {
+                const err = await res.json().catch(() => ({}));
+                alert('Erro ao resolver ticket: ' + (err.message || 'Falha na requisição'));
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Falha ao conectar com o servidor para resolver o ticket.');
+        }
+    },
+    async respondFeatureRequest(id, responseText) {
+        return this.sendFeatureMessage(id, responseText);
     },
     async fetchUsers() {
         const res = await this.fetch(`${API_URL}/users`);
@@ -1062,12 +1083,22 @@ const UI = {
         event.preventDefault();
         const input = document.getElementById('feature-response-input');
         if (!input) return;
-        const responseText = input.value.trim();
-        if (responseText.length < 2) {
-            alert('A resposta deve conter ao menos 2 caracteres.');
+        const message = input.value.trim();
+        if (message.length < 1) {
+            alert('A mensagem não pode ser vazia.');
             return;
         }
-        await Data.respondFeatureRequest(id, responseText);
+        await Data.sendFeatureMessage(id, message);
+    },
+    async resolveFeatureTicket(id) {
+        const req = State.allFeatureRequests.find(r => r.id === id);
+        const ticketNum = req ? (req.ticketNumber || ('#' + req.id.slice(0, 8).toUpperCase())) : '';
+        const confirmClose = confirm(`Tem certeza que deseja marcar o Ticket ${ticketNum} como RESOLVIDO e fechá-lo?`);
+        if (!confirmClose) return;
+
+        const closingMessage = prompt('Mensagem de encerramento para o cliente (opcional):');
+        if (closingMessage === null) return;
+        await Data.resolveFeatureRequest(id, closingMessage);
     },
     toggleDetails(id) {
         const el = document.getElementById(`details-${id}`);

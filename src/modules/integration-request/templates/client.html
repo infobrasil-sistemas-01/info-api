@@ -815,36 +815,112 @@ print(f'Basic {auth}')</code></pre>
                 }
 
                 listEl.innerHTML = requests.map(req => {
+                    const ticketNum = req.ticketNumber || ('#' + (req.id ? req.id.slice(0, 8).toUpperCase() : ''));
+                    const isResolved = req.status === 'RESOLVED';
                     const isAnswered = req.status === 'ANSWERED';
-                    const statusBadge = isAnswered
-                        ? `<span style="background: rgba(16, 185, 129, 0.15); color: var(--primary); border: 1px solid rgba(16, 185, 129, 0.3); padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;"><i class='bx bx-check-circle'></i> Respondida</span>`
-                        : `<span style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;"><i class='bx bx-time'></i> Em Análise</span>`;
+
+                    let statusBadge;
+                    if (isResolved) {
+                        statusBadge = `<span style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;"><i class='bx bx-check-double'></i> Resolvido (Fechado)</span>`;
+                    } else if (isAnswered) {
+                        statusBadge = `<span style="background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;"><i class='bx bx-reply'></i> Respondida</span>`;
+                    } else {
+                        statusBadge = `<span style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;"><i class='bx bx-time'></i> Em Análise</span>`;
+                    }
 
                     const dateFormatted = new Date(req.createdAt).toLocaleString('pt-BR', {
                         day: '2-digit', month: '2-digit', year: 'numeric',
                         hour: '2-digit', minute: '2-digit'
                     });
 
-                    const responseHtml = isAnswered && req.responseText ? `
-                        <div style="margin-top: 1rem; background: rgba(16, 185, 129, 0.08); border-left: 3px solid var(--primary); border-radius: 0 8px 8px 0; padding: 12px 16px;">
-                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
-                                <strong style="color: var(--primary); font-size: 0.85rem; display: flex; align-items: center; gap: 5px;">
-                                    <i class='bx bx-check-shield'></i> Retorno da Equipe InfoBrasil
-                                </strong>
-                                ${req.answeredAt ? `<span style="font-size: 0.75rem; color: var(--text-muted);">${new Date(req.answeredAt).toLocaleString('pt-BR')}</span>` : ''}
+                    // Renderiza mensagens adicionais da conversa
+                    let messagesHtml = '';
+                    if (req.messages && req.messages.length > 0) {
+                        messagesHtml = req.messages.map(msg => {
+                            const isStaff = msg.sender?.role?.name === 'Admin' || (msg.senderId !== req.userId);
+                            const msgDate = new Date(msg.createdAt).toLocaleString('pt-BR', {
+                                day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'
+                            });
+
+                            if (isStaff) {
+                                return `
+                                    <div style="margin-top: 0.8rem; background: rgba(16, 185, 129, 0.08); border-left: 3px solid var(--primary); border-radius: 0 8px 8px 0; padding: 10px 14px;">
+                                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                                            <strong style="color: var(--primary); font-size: 0.8rem; display: flex; align-items: center; gap: 4px;">
+                                                <i class='bx bx-check-shield'></i> Equipe InfoBrasil
+                                            </strong>
+                                            <span style="font-size: 0.75rem; color: var(--text-muted);">${msgDate}</span>
+                                        </div>
+                                        <p style="margin: 0; font-size: 0.9rem; color: #e2e8f0; white-space: pre-wrap; line-height: 1.5;">${msg.message}</p>
+                                    </div>
+                                `;
+                            } else {
+                                return `
+                                    <div style="margin-top: 0.8rem; background: rgba(255, 255, 255, 0.04); border-left: 3px solid #64748b; border-radius: 0 8px 8px 0; padding: 10px 14px;">
+                                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                                            <strong style="color: #cbd5e1; font-size: 0.8rem; display: flex; align-items: center; gap: 4px;">
+                                                <i class='bx bx-user'></i> Você (Réplica)
+                                            </strong>
+                                            <span style="font-size: 0.75rem; color: var(--text-muted);">${msgDate}</span>
+                                        </div>
+                                        <p style="margin: 0; font-size: 0.9rem; color: #f1f5f9; white-space: pre-wrap; line-height: 1.5;">${msg.message}</p>
+                                    </div>
+                                `;
+                            }
+                        }).join('');
+                    } else if (isAnswered && req.responseText) {
+                        // Resposta única legada
+                        messagesHtml = `
+                            <div style="margin-top: 0.8rem; background: rgba(16, 185, 129, 0.08); border-left: 3px solid var(--primary); border-radius: 0 8px 8px 0; padding: 10px 14px;">
+                                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                                    <strong style="color: var(--primary); font-size: 0.8rem; display: flex; align-items: center; gap: 4px;">
+                                        <i class='bx bx-check-shield'></i> Retorno da Equipe InfoBrasil
+                                    </strong>
+                                    ${req.answeredAt ? `<span style="font-size: 0.75rem; color: var(--text-muted);">${new Date(req.answeredAt).toLocaleString('pt-BR')}</span>` : ''}
+                                </div>
+                                <p style="margin: 0; font-size: 0.9rem; color: #e2e8f0; white-space: pre-wrap; line-height: 1.5;">${req.responseText}</p>
                             </div>
-                            <p style="margin: 0; font-size: 0.9rem; color: #e2e8f0; white-space: pre-wrap; line-height: 1.5;">${req.responseText}</p>
-                        </div>
-                    ` : '';
+                        `;
+                    }
+
+                    // Seção de ação / réplica ou aviso de fechamento
+                    let actionSection = '';
+                    if (isResolved) {
+                        actionSection = `
+                            <div style="margin-top: 12px; padding: 10px 14px; background: rgba(16, 185, 129, 0.1); border-radius: 8px; border: 1px dashed rgba(16, 185, 129, 0.3); display: flex; align-items: center; gap: 8px; color: #34d399; font-size: 0.85rem;">
+                                <i class='bx bx-lock-alt' style="font-size: 1.1rem;"></i>
+                                <span>Este ticket foi <strong>resolvido e encerrado</strong>${req.resolvedAt ? ' em ' + new Date(req.resolvedAt).toLocaleString('pt-BR') : ''}. Agradecemos sua colaboração!</span>
+                            </div>
+                        `;
+                    } else {
+                        actionSection = `
+                            <div style="margin-top: 14px; border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: 12px;">
+                                <form onsubmit="submitClientMessage(event, '${req.id}')" style="display: flex; gap: 8px;">
+                                    <input type="text" id="reply-input-${req.id}" placeholder="Escreva uma resposta ou dúvida na conversa..." required maxlength="5000"
+                                        style="flex: 1; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 6px; padding: 8px 12px; color: #fff; font-size: 0.88rem; outline: none;">
+                                    <button type="submit" id="btn-reply-${req.id}" class="btn btn-primary" style="padding: 8px 16px; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap;">
+                                        <i class='bx bx-send'></i> <span>Responder</span>
+                                    </button>
+                                </form>
+                            </div>
+                        `;
+                    }
 
                     return `
-                        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 10px; padding: 16px; margin-bottom: 1rem; transition: border-color 0.2s;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 0.5rem;">
-                                <span style="font-size: 0.8rem; color: var(--text-muted);"><i class='bx bx-calendar'></i> ${dateFormatted}</span>
+                        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 10px; padding: 16px; margin-bottom: 1.2rem; transition: border-color 0.2s;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 0.5rem;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span style="font-size: 0.85rem; font-weight: 700; color: #fff; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.12); padding: 2px 8px; border-radius: 4px; font-family: monospace;">${ticketNum}</span>
+                                    <span style="font-size: 0.8rem; color: var(--text-muted);"><i class='bx bx-calendar'></i> ${dateFormatted}</span>
+                                </div>
                                 ${statusBadge}
                             </div>
-                            <p style="margin: 0; font-size: 0.95rem; color: #f8fafc; white-space: pre-wrap; line-height: 1.5;">${req.requestText}</p>
-                            ${responseHtml}
+                            <div style="background: rgba(0, 0, 0, 0.2); border-radius: 6px; padding: 10px 14px; margin-bottom: 4px;">
+                                <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600; margin-bottom: 4px;">Solicitação Original:</div>
+                                <p style="margin: 0; font-size: 0.95rem; color: #f8fafc; white-space: pre-wrap; line-height: 1.5;">${req.requestText}</p>
+                            </div>
+                            ${messagesHtml}
+                            ${actionSection}
                         </div>
                     `;
                 }).join('');
@@ -856,6 +932,50 @@ print(f'Basic {auth}')</code></pre>
                         <p>Erro ao carregar solicitações. Tente novamente mais tarde.</p>
                     </div>
                 `;
+            }
+        }
+
+        async function submitClientMessage(event, id) {
+            event.preventDefault();
+            const input = document.getElementById(`reply-input-${id}`);
+            const btn = document.getElementById(`btn-reply-${id}`);
+            if (!input) return;
+
+            const message = input.value.trim();
+            if (message.length < 1) return;
+
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i>";
+            }
+
+            try {
+                const res = await fetch(`/api/v1/feature-requests/${id}/messages`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ message })
+                });
+
+                if (!res.ok) {
+                    const err = await res.json().catch(() => ({}));
+                    throw new Error(err.message || 'Erro ao enviar mensagem');
+                }
+
+                input.value = '';
+                await loadMyFeatureRequests();
+            } catch (err) {
+                console.error(err);
+                alert(err.message || 'Falha ao enviar resposta na conversa.');
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = "<i class='bx bx-send'></i> <span>Responder</span>";
+                }
             }
         }
 
