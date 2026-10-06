@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.16.32](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.16.31...v1.16.32) (2026-10-06)
+
+
+### Bug Fixes
+
+* add feature request endpoints to plan limit exceptions ([43c803e](https://github.com/infobrasil-sistemas-01/info-api/commit/43c803e9ae2175640309942cc5054b80279b525a))
+* GET adjustement 500 errors] ([a4e2bda](https://github.com/infobrasil-sistemas-01/info-api/commit/a4e2bdab8f8ee8000e3bc3a6dce8903f5009ecfe))
+* get adjustment by id ([6269a95](https://github.com/infobrasil-sistemas-01/info-api/commit/6269a95fa6036531f3970be6693090736a6a361e))
+
 ## [1.16.31](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.16.30...v1.16.31) (2026-10-06)
 
 
