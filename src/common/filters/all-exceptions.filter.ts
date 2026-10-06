@@ -25,7 +25,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
   constructor(
     private readonly ipBlocklist: IpBlocklistService,
     private readonly planService: PlanService,
-  ) {}
+  ) { }
 
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
@@ -75,7 +75,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
             const payload = JSON.parse(payloadDecoded);
             userId = payload.sub || payload.userId;
           }
-        } catch {}
+        } catch { }
       }
     }
 
@@ -91,6 +91,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
       '/api/v1/announcements',
       '/api/v1/dashboard',
       '/api/v1/newsletter',
+      '/api/v1/feature-requests',
       '/integration',
       '/status',
     ].some((excluded) => urlPath.startsWith(excluded));
@@ -113,7 +114,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
           undefined, // durationMs
           false, // success
         )
-        .catch(() => {});
+        .catch(() => { });
     }
 
     const user = request.user;
@@ -160,16 +161,16 @@ export class AllExceptionsFilter implements ExceptionFilter {
     response.status(status).json(
       typeof body === 'object'
         ? {
-            ...body,
-            timestamp: new Date().toISOString(),
-            path: request.url,
-          }
+          ...body,
+          timestamp: new Date().toISOString(),
+          path: request.url,
+        }
         : {
-            message: body,
-            statusCode: status,
-            timestamp: new Date().toISOString(),
-            path: request.url,
-          },
+          message: body,
+          statusCode: status,
+          timestamp: new Date().toISOString(),
+          path: request.url,
+        },
     );
   }
 }
