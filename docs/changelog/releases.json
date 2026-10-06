@@ -1,5 +1,63 @@
 [
   {
+    "version": "1.16.30",
+    "date": "2026-10-06",
+    "title": "changelog links e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral & Usabilidade, Geral, Informativos.",
+    "highlights": [
+      "changelog links",
+      "feature request"
+    ],
+    "items": [
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "changelog links",
+        "description": "Atualização no módulo de Geral & Usabilidade: changelog links.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "changelog links",
+        "commitHash": "1ce899d"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "feature request",
+        "description": "Atualização no módulo de Geral & Usabilidade: feature request.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "feature request",
+        "commitHash": "aba77b5"
+      },
+      {
+        "module": "Geral",
+        "type": "feature",
+        "title": "return more data on GET endpoints",
+        "description": "Atualização no módulo de Geral: return more data on GET endpoints.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "return more data on GET endpoints",
+        "commitHash": "111b2d4"
+      },
+      {
+        "module": "Informativos",
+        "type": "feature",
+        "title": "Módulo de Informativos & Novidades",
+        "description": "Canal oficial para disparo de comunicados técnicos e comunicados de novidades aos usuários integradores.",
+        "impact": "Comunicação direta de atualizações importantes e avisos operacionais.",
+        "originalCommit": "urgent newsletter",
+        "commitHash": "18e2704"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "Ajuste em human changelog style",
+        "description": "Atualização no módulo de Geral & Usabilidade: adjust human changelog style.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "adjust human changelog style",
+        "commitHash": "b2d67f0"
+      }
+    ],
+    "totalChanges": 5
+  },
+  {
     "version": "1.16.29",
     "date": "2026-10-05",
     "title": "GET /adjustment && get /adjustment/:id e melhorias",

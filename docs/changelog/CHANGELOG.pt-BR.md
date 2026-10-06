@@ -6,6 +6,26 @@ Para visualizar a versão interativa com busca em tempo real, acesse o portal we
 
 ---
 
+## [v1.16.30] - 2026-10-06
+
+### 📌 changelog links e melhorias
+> Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral & Usabilidade, Geral, Informativos.
+
+**Destaques:**
+- ⭐ changelog links
+- ⭐ feature request
+
+#### 🚀 Novidades & Melhorias
+- **[Geral & Usabilidade]** changelog links: Atualização no módulo de Geral & Usabilidade: changelog links.
+- **[Geral & Usabilidade]** feature request: Atualização no módulo de Geral & Usabilidade: feature request.
+- **[Geral]** return more data on GET endpoints: Atualização no módulo de Geral: return more data on GET endpoints.
+- **[Informativos]** Módulo de Informativos & Novidades: Canal oficial para disparo de comunicados técnicos e comunicados de novidades aos usuários integradores.
+
+#### 🛠️ Correções & Estabilidade
+- **[Geral & Usabilidade]** Ajuste em human changelog style: Atualização no módulo de Geral & Usabilidade: adjust human changelog style.
+
+---
+
 ## [v1.16.29] - 2026-10-05
 
 ### 📌 GET /adjustment && get /adjustment/:id e melhorias
