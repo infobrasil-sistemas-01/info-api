@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.16.31](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.16.30...v1.16.31) (2026-10-06)
+
+
+### Features
+
+* chat on feature requests ([397fc8a](https://github.com/infobrasil-sistemas-01/info-api/commit/397fc8a01a2fd690cabd6d42b5af32564cacd5f3))
+
+
+### Bug Fixes
+
+* remove /feature-requests endpoinds by all-exception filter ([5f307e5](https://github.com/infobrasil-sistemas-01/info-api/commit/5f307e543fce3ee0a47a7f313d813d996cf9ef3f))
+
 ## [1.16.30](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.16.29...v1.16.30) (2026-10-06)
 
 
