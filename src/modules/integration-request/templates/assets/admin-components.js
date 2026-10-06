@@ -413,6 +413,159 @@ const Components = {
             </div>
         `;
   },
+  RequestSubTabs: (activeSubTab) => `
+    <div style="display: flex; gap: 8px; margin-bottom: 1.5rem; background: rgba(0, 0, 0, 0.25); padding: 6px; border-radius: 12px; border: 1px solid var(--border); width: fit-content;">
+        <button onclick="switchRequestSubTab('access')" 
+                style="display: flex; align-items: center; gap: 8px; padding: 8px 18px; border-radius: 8px; border: none; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.2s;
+                background: ${activeSubTab === 'access' ? 'var(--primary)' : 'transparent'};
+                color: ${activeSubTab === 'access' ? '#000' : 'var(--text-muted)'};">
+            <i class='bx bx-key' style="font-size: 1.1rem;"></i>
+            Acessos
+        </button>
+        <button onclick="switchRequestSubTab('features')" 
+                style="display: flex; align-items: center; gap: 8px; padding: 8px 18px; border-radius: 8px; border: none; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.2s;
+                background: ${activeSubTab === 'features' ? 'var(--primary)' : 'transparent'};
+                color: ${activeSubTab === 'features' ? '#000' : 'var(--text-muted)'};">
+            <i class='bx bx-bulb' style="font-size: 1.1rem;"></i>
+            Funcionalidades
+        </button>
+    </div>
+  `,
+  FeatureRequestFilterTabs: (activeFilter) => {
+    const tabs = [
+      { id: 'ALL', label: 'Todas', icon: 'bx-list-ul' },
+      { id: 'PENDING', label: 'Pendentes', icon: 'bx-time' },
+      { id: 'ANSWERED', label: 'Respondidas', icon: 'bx-check-circle' },
+    ];
+    return `
+      <div class="filter-tabs-wrapper" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 10px;">
+          <div class="filter-tabs" style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px;">
+              ${tabs.map(t => `
+                  <button class="filter-tab ${activeFilter === t.id ? 'active' : ''}" 
+                          onclick="switchFeatureFilter('${t.id}')"
+                          style="
+                              display: flex; 
+                              align-items: center; 
+                              gap: 8px; 
+                              padding: 8px 16px; 
+                              border-radius: 10px; 
+                              border: 1px solid ${activeFilter === t.id ? 'var(--primary)' : 'var(--border)'}; 
+                              background: ${activeFilter === t.id ? 'rgba(16, 185, 129, 0.1)' : 'var(--card-bg)'}; 
+                              color: ${activeFilter === t.id ? 'var(--primary)' : 'var(--text-muted)'}; 
+                              cursor: pointer;
+                              white-space: nowrap;
+                              font-size: 0.9rem;
+                              font-weight: 500;
+                              transition: all 0.2s;
+                          ">
+                      <i class='bx ${t.icon}'></i>
+                      ${t.label}
+                  </button>
+              `).join('')}
+          </div>
+          <div style="display: flex; gap: 8px;">
+              <button class="btn btn-outline" onclick="Data.fetchFeatureRequests()" title="Atualizar solicitações" style="padding: 10px 14px; border-radius: 10px; display: flex; align-items: center; gap: 6px;">
+                  <i class='bx bx-refresh' style="font-size: 1.2rem;"></i> Atualizar
+              </button>
+          </div>
+      </div>
+    `;
+  },
+  FeatureRequestRow: (req) => {
+    const isAnswered = req.status === 'ANSWERED';
+    const statusBadge = isAnswered
+      ? `<span style="background: rgba(16, 185, 129, 0.15); color: var(--primary); border: 1px solid rgba(16, 185, 129, 0.3); padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;"><i class='bx bx-check-circle'></i> Respondida</span>`
+      : `<span style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;"><i class='bx bx-time'></i> Pendente</span>`;
+
+    const dateFormatted = new Date(req.createdAt).toLocaleString('pt-BR', {
+      day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+    });
+
+    const clientDisplay = req.user ? `${req.user.user} ${req.user.email ? `<small style="display: block; color: var(--text-muted); font-size: 0.8rem;">${req.user.email}</small>` : ''}` : 'Usuário desconhecido';
+
+    const shortText = req.requestText.length > 120 ? req.requestText.slice(0, 120) + '...' : req.requestText;
+
+    return `
+      <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
+          <td style="white-space: nowrap; font-size: 0.85rem; color: var(--text-muted);">${dateFormatted}</td>
+          <td style="font-weight: 600; color: #fff;">${clientDisplay}</td>
+          <td style="max-width: 340px; font-size: 0.9rem; color: #e2e8f0; line-height: 1.4;">${shortText}</td>
+          <td style="text-align: center;">${statusBadge}</td>
+          <td style="white-space: nowrap; text-align: right;">
+              <button class="btn btn-outline btn-sm" onclick="UI.openFeatureResponseModal('${req.id}')" style="display: inline-flex; align-items: center; gap: 5px;">
+                  <i class='bx ${isAnswered ? 'bx-edit' : 'bx-reply'}'></i> ${isAnswered ? 'Ver / Editar' : 'Responder'}
+              </button>
+          </td>
+      </tr>
+    `;
+  },
+  FeatureRequestTable: (requests) => `
+    <div class="card">
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 140px;">Data / Hora</th>
+                        <th style="width: 200px;">Cliente Solicitante</th>
+                        <th>Solicitação</th>
+                        <th style="width: 130px; text-align: center;">Status</th>
+                        <th style="width: 130px; text-align: right;">Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${requests.length > 0 
+                      ? requests.map(Components.FeatureRequestRow).join('') 
+                      : '<tr><td colspan="5" style="text-align: center; padding: 3rem; color: var(--text-muted);">Nenhuma solicitação de funcionalidade encontrada com este filtro.</td></tr>'}
+                </tbody>
+            </table>
+        </div>
+    </div>
+  `,
+  FeatureRequestModal: (req) => {
+    const isAnswered = req.status === 'ANSWERED';
+    const clientName = req.user?.user || 'Cliente';
+    const clientEmail = req.user?.email || 'Sem e-mail cadastrado';
+    const dateFormatted = new Date(req.createdAt).toLocaleString('pt-BR');
+
+    return `
+      <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--border);">
+          <h3 style="margin: 0; color: #fff; font-size: 1.25rem; display: flex; align-items: center; gap: 8px;">
+              <i class='bx bx-reply' style="color: var(--primary);"></i> ${isAnswered ? 'Detalhes e Resposta da Solicitação' : 'Responder Solicitação de Funcionalidade'}
+          </h3>
+          <button onclick="UI.closeModal()" style="background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer;">&times;</button>
+      </div>
+      <div style="padding: 1.5rem;">
+          <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; margin-bottom: 1.2rem;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.85rem;">
+                  <span style="color: var(--text-muted);">Solicitante: <strong style="color: #fff;">${clientName}</strong> (${clientEmail})</span>
+                  <span style="color: var(--text-muted);">${dateFormatted}</span>
+              </div>
+              <div style="font-size: 0.95rem; color: #f1f5f9; white-space: pre-wrap; line-height: 1.5; margin-top: 8px; background: rgba(0, 0, 0, 0.2); padding: 10px; border-radius: 6px;">${req.requestText}</div>
+          </div>
+
+          <form onsubmit="UI.submitFeatureResponse(event, '${req.id}')">
+              <div class="form-group" style="margin-bottom: 1.2rem;">
+                  <label for="feature-response-input" style="display: block; font-weight: 600; color: #fff; margin-bottom: 6px;">
+                      Resposta da Equipe Técnica / Produto
+                  </label>
+                  <textarea id="feature-response-input" rows="5" required minlength="2" maxlength="5000"
+                      placeholder="Digite aqui o parecer sobre a solicitação (ex: viabilidade técnica, previsão de lançamento, alternativa de integração)..."
+                      style="width: 100%; box-sizing: border-box; background: rgba(0, 0, 0, 0.25); border: 1px solid var(--border); border-radius: 8px; padding: 12px; color: #fff; font-family: inherit; font-size: 0.95rem; resize: vertical; line-height: 1.5; outline: none;">${req.responseText || ''}</textarea>
+                  <small style="color: var(--text-muted); display: block; margin-top: 4px;">
+                      ${clientEmail !== 'Sem e-mail cadastrado' ? '✉ Ao salvar, uma notificação por e-mail será enviada automaticamente para o cliente.' : '⚠ Cliente sem e-mail cadastrado; a resposta ficará visível na aba Solicitações do painel dele.'}
+                  </small>
+              </div>
+
+              <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                  <button type="button" class="btn btn-outline" onclick="UI.closeModal()">Cancelar</button>
+                  <button type="submit" id="btn-save-feature-resp" class="btn btn-primary" style="display: flex; align-items: center; gap: 6px;">
+                      <i class='bx bx-send'></i> <span>Salvar Resposta</span>
+                  </button>
+              </div>
+          </form>
+      </div>
+    `;
+  },
   LinksGrid: () => `
 
     <div class="links-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; padding: 1rem 0;">

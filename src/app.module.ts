@@ -43,6 +43,7 @@ import { PurchaseModule } from './modules/purchase/purchase.module';
 import { FiscalEntryModule } from './modules/fiscal-entry/fiscal-entry.module';
 import { ChangelogModule } from './modules/changelog/changelog.module';
 import { AdjustmentModule } from './modules/adjustment/adjustment.module';
+import { FeatureRequestModule } from './modules/feature-request/feature-request.module';
 
 import { AppController } from './app.controller';
 
@@ -86,6 +87,7 @@ import { AppController } from './app.controller';
     StatusModule,
     DashboardModule,
     ChangelogModule,
+    FeatureRequestModule,
   ],
   controllers: [AppController],
   providers: [

@@ -59,6 +59,9 @@ const State = {
     allRequests: [],
     allAnnouncements: [],
     currentRequestFilter: 'ALL',
+    activeRequestSubTab: 'access',
+    allFeatureRequests: [],
+    currentFeatureFilter: 'ALL',
     dashboardIntervalId: null,
     currentZoomRange: null,
     isUpdatingChart: false,
@@ -101,7 +104,10 @@ const Data = {
         const canViewRequests = State.currentUser.permissions.includes('integration-request.view');
         const canViewAnns = State.currentUser.permissions.includes('core.announcement.view');
 
-        if (canViewRequests) this.fetchRequests();
+        if (canViewRequests) {
+            this.fetchRequests();
+            this.fetchFeatureRequests();
+        }
         if (canViewAnns) this.fetchAnnouncements();
         if (canViewUsers) {
             this.fetchUsers();
@@ -133,13 +139,55 @@ const Data = {
                 UI.renderRequests();
             }
         } catch (error) {
-            console.error('Erro ao buscar solicitações:', error);
-            document.getElementById('section-requests').innerHTML = `
-                <div class="card" style="text-align: center; padding: 2rem; color: var(--danger);">
-                    <i class='bx bx-error-circle' style="font-size: 2rem;"></i>
-                    <p>Erro ao carregar solicitações. Verifique o console.</p>
-                </div>
-            `;
+            console.error('Erro ao buscar solicitações de acesso:', error);
+            if (State.activeRequestSubTab === 'access') {
+                document.getElementById('section-requests').innerHTML = `
+                    <div class="card" style="text-align: center; padding: 2rem; color: var(--danger);">
+                        <i class='bx bx-error-circle' style="font-size: 2rem;"></i>
+                        <p>Erro ao carregar solicitações. Verifique o console.</p>
+                    </div>
+                `;
+            }
+        }
+    },
+    async fetchFeatureRequests() {
+        try {
+            const res = await this.fetch(`${API_URL}/feature-requests`);
+            if (res.ok) {
+                State.allFeatureRequests = await res.json();
+                UI.renderRequests();
+            }
+        } catch (error) {
+            console.error('Erro ao buscar solicitações de funcionalidades:', error);
+        }
+    },
+    async respondFeatureRequest(id, responseText) {
+        const btn = document.getElementById('btn-save-feature-resp');
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i> <span>Salvando...</span>";
+        }
+        try {
+            const res = await this.fetch(`${API_URL}/feature-requests/${id}/respond`, {
+                method: 'PATCH',
+                body: JSON.stringify({ responseText })
+            });
+            if (res.ok) {
+                alert('Resposta salva e notificação enviada com sucesso!');
+                UI.closeModal();
+                await this.fetchFeatureRequests();
+            } else {
+                const err = await res.json().catch(() => ({}));
+                alert('Erro ao responder: ' + (err.message || 'Falha na requisição'));
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Falha ao conectar com o servidor para salvar a resposta.');
+        } finally {
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = "<i class='bx bx-send'></i> <span>Salvar Resposta</span>";
+            }
         }
     },
     async fetchUsers() {
@@ -966,25 +1014,60 @@ const UI = {
     },
     renderRequests() {
         const section = document.getElementById('section-requests');
-        const filtered = State.currentRequestFilter === 'ALL'
-            ? State.allRequests
-            : State.allRequests.filter(r => r.status === State.currentRequestFilter);
+        if (!section) return;
 
-        let content = Components.RequestFilterTabs(State.currentRequestFilter);
+        let content = Components.RequestSubTabs(State.activeRequestSubTab);
 
-        if (filtered.length === 0) {
-            content += `
-                <div class="card" style="text-align: center; padding: 4rem; background: rgba(16, 185, 129, 0.05); border: 1px dashed var(--primary);">
-                    <div style="font-size: 4rem; color: var(--primary); margin-bottom: 1.5rem;"><i class='bx bx-check-circle'></i></div>
-                    <h2 style="color: #fff; margin-bottom: 1rem;">Tudo limpo por aqui!</h2>
-                    <p style="color: var(--text-muted);">Nenhuma solicitação encontrada com este filtro.</p>
-                </div>
-            `;
+        if (State.activeRequestSubTab === 'access') {
+            const filtered = State.currentRequestFilter === 'ALL'
+                ? State.allRequests
+                : State.allRequests.filter(r => r.status === State.currentRequestFilter);
+
+            content += Components.RequestFilterTabs(State.currentRequestFilter);
+
+            if (filtered.length === 0) {
+                content += `
+                    <div class="card" style="text-align: center; padding: 4rem; background: rgba(16, 185, 129, 0.05); border: 1px dashed var(--primary);">
+                        <div style="font-size: 4rem; color: var(--primary); margin-bottom: 1.5rem;"><i class='bx bx-check-circle'></i></div>
+                        <h2 style="color: #fff; margin-bottom: 1rem;">Tudo limpo por aqui!</h2>
+                        <p style="color: var(--text-muted);">Nenhuma solicitação de acesso encontrada com este filtro.</p>
+                    </div>
+                `;
+            } else {
+                content += `<div class="requests-grid">${filtered.map(Components.RequestCard).join('')}</div>`;
+            }
         } else {
-            content += `<div class="requests-grid">${filtered.map(Components.RequestCard).join('')}</div>`;
+            // Sub-aba: 'features'
+            const filtered = State.currentFeatureFilter === 'ALL'
+                ? State.allFeatureRequests
+                : State.allFeatureRequests.filter(r => r.status === State.currentFeatureFilter);
+
+            content += Components.FeatureRequestFilterTabs(State.currentFeatureFilter);
+            content += Components.FeatureRequestTable(filtered);
         }
 
         section.innerHTML = content;
+    },
+    openFeatureResponseModal(id) {
+        const req = State.allFeatureRequests.find(r => r.id === id);
+        if (!req) return;
+        document.getElementById('modal-container').classList.remove('hidden');
+        const modal = document.getElementById('feature-request-modal');
+        if (modal) {
+            modal.classList.remove('hidden');
+            modal.innerHTML = Components.FeatureRequestModal(req);
+        }
+    },
+    async submitFeatureResponse(event, id) {
+        event.preventDefault();
+        const input = document.getElementById('feature-response-input');
+        if (!input) return;
+        const responseText = input.value.trim();
+        if (responseText.length < 2) {
+            alert('A resposta deve conter ao menos 2 caracteres.');
+            return;
+        }
+        await Data.respondFeatureRequest(id, responseText);
     },
     toggleDetails(id) {
         const el = document.getElementById(`details-${id}`);
@@ -1653,5 +1736,15 @@ window.onhashchange = () => {
 
 function switchRequestFilter(status) {
     State.currentRequestFilter = status;
+    UI.renderRequests();
+}
+
+function switchRequestSubTab(subTab) {
+    State.activeRequestSubTab = subTab;
+    UI.renderRequests();
+}
+
+function switchFeatureFilter(status) {
+    State.currentFeatureFilter = status;
     UI.renderRequests();
 }
