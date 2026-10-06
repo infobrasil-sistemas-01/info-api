@@ -6,6 +6,22 @@ Para visualizar a versão interativa com busca em tempo real, acesse o portal we
 
 ---
 
+## [v1.16.32] - 2026-10-06
+
+### 📌 Correções de estabilidade e aprimoramentos
+> Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Planos & Quotas, Geral & Usabilidade.
+
+**Destaques:**
+- ⭐ Inclusão de feature request endpoints to plan limit exceptions
+- ⭐ GET adjustement 500 errors]
+
+#### 🛠️ Correções & Estabilidade
+- **[Planos & Quotas]** Inclusão de feature request endpoints to plan limit exceptions: Atualização no módulo de Planos & Quotas: add feature request endpoints to plan limit exceptions.
+- **[Geral & Usabilidade]** GET adjustement 500 errors]: Atualização no módulo de Geral & Usabilidade: GET adjustement 500 errors].
+- **[Geral & Usabilidade]** get adjustment by id: Atualização no módulo de Geral & Usabilidade: get adjustment by id.
+
+---
+
 ## [v1.16.31] - 2026-10-06
 
 ### 📌 chat on feature requests e melhorias

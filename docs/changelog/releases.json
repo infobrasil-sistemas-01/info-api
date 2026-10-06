@@ -1,5 +1,45 @@
 [
   {
+    "version": "1.16.32",
+    "date": "2026-10-06",
+    "title": "Correções de estabilidade e aprimoramentos",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Planos & Quotas, Geral & Usabilidade.",
+    "highlights": [
+      "Inclusão de feature request endpoints to plan limit exceptions",
+      "GET adjustement 500 errors]"
+    ],
+    "items": [
+      {
+        "module": "Planos & Quotas",
+        "type": "fix",
+        "title": "Inclusão de feature request endpoints to plan limit exceptions",
+        "description": "Atualização no módulo de Planos & Quotas: add feature request endpoints to plan limit exceptions.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add feature request endpoints to plan limit exceptions",
+        "commitHash": "43c803e"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "GET adjustement 500 errors]",
+        "description": "Atualização no módulo de Geral & Usabilidade: GET adjustement 500 errors].",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "GET adjustement 500 errors]",
+        "commitHash": "a4e2bda"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "get adjustment by id",
+        "description": "Atualização no módulo de Geral & Usabilidade: get adjustment by id.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "get adjustment by id",
+        "commitHash": "6269a95"
+      }
+    ],
+    "totalChanges": 3
+  },
+  {
     "version": "1.16.31",
     "date": "2026-10-06",
     "title": "chat on feature requests e melhorias",
