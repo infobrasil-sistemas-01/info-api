@@ -24,11 +24,7 @@ import { ProductService } from './product.service';
 import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
 import { IncludeCount } from 'src/common/decorators/include-count.decorator';
-import {
-  ProductResponseDto,
-  ProductDetailResponseDto,
-  ProductBarcodeResponseDto,
-} from './dto/product-response.dto';
+import { ProductResponseDto } from './dto/product-response.dto';
 
 import { GetProductsQueryDto } from './dto/get-products-query.dto';
 import { GetProductQueryDto } from './dto/get-product-query.dto';
@@ -161,7 +157,7 @@ export class ProductController {
   @ApiResponse({
     status: 200,
     description: 'Detalhes do produto retornados com sucesso.',
-    type: ProductDetailResponseDto,
+    type: ProductResponseDto,
   })
   @ApiResponse({
     status: 400,
@@ -221,7 +217,7 @@ export class ProductController {
   @ApiResponse({
     status: 200,
     description: 'Detalhes do produto retornados com sucesso.',
-    type: ProductBarcodeResponseDto,
+    type: ProductResponseDto,
   })
   @ApiResponse({
     status: 400,

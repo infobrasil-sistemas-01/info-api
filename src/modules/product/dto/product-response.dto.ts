@@ -39,6 +39,18 @@ export class ProductResponseDto {
     description: 'Data de Alteração do estoque',
   })
   EST_DTALTERACAO: string;
+
+  @ApiProperty({ example: 10.0, description: 'Preço de compra' })
+  PRO_PRCCOMPRA: number;
+
+  @ApiProperty({ example: 12.5, description: 'Preço de custo' })
+  PRO_PRCCUSTO: number;
+
+  @ApiProperty({ example: 11.0, description: 'Preço de compra fiscal' })
+  PRO_PRCCOMPRAFISCAL: number;
+
+  @ApiProperty({ example: 13.0, description: 'Custo fiscal' })
+  PRO_CUSTOFISCAL: number;
 }
 
 export class ProductDetailResponseDto {

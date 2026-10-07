@@ -284,6 +284,56 @@ describe('ProductService', () => {
 
       expect(result).toEqual(mockProduct);
     });
+
+    it('should include cost and fiscal purchase columns in get SELECT query', async () => {
+      mockConnection.query.mockImplementation(
+        (query: string, params: any[], callback: Function) => {
+          callback(null, []);
+        },
+      );
+
+      await service.get('cred-1', 1, 1, 10);
+
+      expect(mockConnection.query).toHaveBeenCalledWith(
+        expect.stringContaining(
+          'P.PRO_PRCCOMPRA, P.PRO_PRCCUSTO, P.PRO_PRCCOMPRAFISCAL, P.PRO_CUSTOFISCAL',
+        ),
+        expect.anything(),
+        expect.any(Function),
+      );
+    });
+
+    it('should include all aligned columns and LEFT JOINs in getUnique query', async () => {
+      mockConnection.query.mockImplementation(
+        (query: string, params: any[], callback: Function) => {
+          callback(null, [{ PRO_CODIGO: 1 }]);
+        },
+      );
+
+      await service.getUnique('cred-1', 1, 10, undefined, 2);
+
+      expect(mockConnection.query).toHaveBeenCalledWith(
+        expect.stringContaining(
+          'E.EST_ATUAL, E.EST_APOIO, PRO_PRECO2 PRECO, E.EST_DTALTERACAO, P.PRO_PRCCOMPRA, P.PRO_PRCCUSTO, P.PRO_PRCCOMPRAFISCAL, P.PRO_CUSTOFISCAL',
+        ),
+        expect.anything(),
+        expect.any(Function),
+      );
+      expect(mockConnection.query).toHaveBeenCalledWith(
+        expect.stringContaining(
+          'LEFT JOIN marcas M ON P.MAR_CODIGO = M.MAR_CODIGO',
+        ),
+        expect.anything(),
+        expect.any(Function),
+      );
+      expect(mockConnection.query).toHaveBeenCalledWith(
+        expect.stringContaining(
+          'LEFT JOIN grupospro G ON P.GRU_CODIGO = G.GRU_CODIGO',
+        ),
+        expect.anything(),
+        expect.any(Function),
+      );
+    });
   });
 
   describe('FAILING: product search edge cases', () => {

@@ -92,7 +92,7 @@ export class ProductService {
         whereClauses.length > 0 ? ` WHERE ${whereClauses.join(' AND ')}` : '';
 
       const query = `SELECT FIRST ? SKIP ? 
-                      P.PRO_CODIGO, P.PRO_CODIGOBAR, P.PRO_DESCRICAO, M.MAR_CODIGO, M.MAR_DESCRICAO, G.GRU_CODIGO, G.GRU_DESCRICAO, E.EST_ATUAL, E.EST_APOIO, PRO_PRECO${priceTable} PRECO, E.EST_DTALTERACAO
+                      P.PRO_CODIGO, P.PRO_CODIGOBAR, P.PRO_DESCRICAO, M.MAR_CODIGO, M.MAR_DESCRICAO, G.GRU_CODIGO, G.GRU_DESCRICAO, E.EST_ATUAL, E.EST_APOIO, PRO_PRECO${priceTable} PRECO, E.EST_DTALTERACAO, P.PRO_PRCCOMPRA, P.PRO_PRCCUSTO, P.PRO_PRCCOMPRAFISCAL, P.PRO_CUSTOFISCAL
                       FROM produtos P 
                       INNER JOIN estoque E ON P.PRO_CODIGO = E.PRO_CODIGO AND E.LOJ_CODIGO = ?
                       LEFT JOIN marcas M ON P.MAR_CODIGO = M.MAR_CODIGO 
@@ -216,11 +216,11 @@ export class ProductService {
 
     try {
       let query = `SELECT
-                      P.PRO_CODIGO, P.PRO_CODIGOBAR, P.PRO_DESCRICAO, M.MAR_CODIGO, M.MAR_DESCRICAO, G.GRU_CODIGO, G.GRU_DESCRICAO, E.EST_ATUAL ESTOQUE, E.PRO_PRECO${priceTable} PRECO
+                      P.PRO_CODIGO, P.PRO_CODIGOBAR, P.PRO_DESCRICAO, M.MAR_CODIGO, M.MAR_DESCRICAO, G.GRU_CODIGO, G.GRU_DESCRICAO, E.EST_ATUAL, E.EST_APOIO, PRO_PRECO${priceTable} PRECO, E.EST_DTALTERACAO, P.PRO_PRCCOMPRA, P.PRO_PRCCUSTO, P.PRO_PRCCOMPRAFISCAL, P.PRO_CUSTOFISCAL
                       FROM produtos P 
-                      INNER JOIN marcas M ON P.MAR_CODIGO = M.MAR_CODIGO 
-                      INNER JOIN grupospro G ON P.GRU_CODIGO = G.GRU_CODIGO
-                      INNER JOIN estoque E ON P.PRO_CODIGO = E.PRO_CODIGO AND E.LOJ_CODIGO = ?`;
+                      INNER JOIN estoque E ON P.PRO_CODIGO = E.PRO_CODIGO AND E.LOJ_CODIGO = ?
+                      LEFT JOIN marcas M ON P.MAR_CODIGO = M.MAR_CODIGO 
+                      LEFT JOIN grupospro G ON P.GRU_CODIGO = G.GRU_CODIGO`;
       let params = [store_id];
 
       if (!id && !codigoBar) {
