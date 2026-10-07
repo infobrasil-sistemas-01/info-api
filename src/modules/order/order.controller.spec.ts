@@ -233,19 +233,12 @@ describe('OrderController', () => {
         pageSize: 10,
       });
 
-      expect(orderService.get).toHaveBeenCalledWith(
-        'cred-1',
-        1,
-        2,
-        10,
-        false,
-        {
-          clientId: undefined,
-          employeeId: undefined,
-          endDate: undefined,
-          startDate: undefined,
-        },
-      );
+      expect(orderService.get).toHaveBeenCalledWith('cred-1', 1, 2, 10, false, {
+        clientId: undefined,
+        employeeId: undefined,
+        endDate: undefined,
+        startDate: undefined,
+      });
       expect(result).toEqual([{ id: 1 }, { id: 2 }]);
     });
 
@@ -335,14 +328,10 @@ describe('OrderController', () => {
 
       const result = await controller.getOrderMetrics(mockReq, query);
 
-      expect(orderService.getOrderMetrics).toHaveBeenCalledWith(
-        'cred-1',
-        2,
-        {
-          startDate: '2026-09-01',
-          endDate: '2026-09-30',
-        },
-      );
+      expect(orderService.getOrderMetrics).toHaveBeenCalledWith('cred-1', 2, {
+        startDate: '2026-09-01',
+        endDate: '2026-09-30',
+      });
       expect(result).toEqual(mockResult);
     });
 
@@ -363,14 +352,10 @@ describe('OrderController', () => {
         storeId: 99,
       });
 
-      expect(orderService.getOrderMetrics).toHaveBeenCalledWith(
-        'cred-1',
-        10,
-        {
-          startDate: '2026-09-01',
-          endDate: '2026-09-30',
-        },
-      );
+      expect(orderService.getOrderMetrics).toHaveBeenCalledWith('cred-1', 10, {
+        startDate: '2026-09-01',
+        endDate: '2026-09-30',
+      });
     });
 
     it('should throw error if credentialsId is not in token', async () => {
@@ -387,4 +372,3 @@ describe('OrderController', () => {
     });
   });
 });
-

@@ -182,7 +182,9 @@ export class NewsletterService {
       : `<span style="background-color: rgba(16, 185, 129, 0.15); color: #34d399; font-size: 0.75rem; font-weight: bold; padding: 4px 10px; border-radius: 9999px; border: 1px solid rgba(16, 185, 129, 0.25);">v${version}</span>`;
 
     const greetingColor = isUrgent ? '#991b1b' : '#0f172a';
-    const greetingText = isUrgent ? `Aos cuidados de ${username},` : `Olá, ${username}!`;
+    const greetingText = isUrgent
+      ? `Aos cuidados de ${username},`
+      : `Olá, ${username}!`;
 
     const footerBg = isUrgent
       ? 'background-color: #fef2f2; border-top: 2px solid #fecaca;'
@@ -400,5 +402,4 @@ export class NewsletterService {
       return newsletter;
     });
   }
-
 }

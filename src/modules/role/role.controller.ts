@@ -19,7 +19,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
 import { RoleService } from './role.service';
-import type { CreateRoleDto, UpdateRoleDto } from './dto/role.dto';
+import { CreateRoleDto, UpdateRoleDto } from './dto/role.dto';
 
 @ApiTags('Role')
 @ApiExcludeController()

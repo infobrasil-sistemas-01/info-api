@@ -209,9 +209,6 @@ export class AdjustmentController {
       throw new Error('Credentials ID not found in token');
     }
 
-    return this.adjustmentService.getItemsByAdjustmentNumber(
-      credentialsId,
-      id,
-    );
+    return this.adjustmentService.getItemsByAdjustmentNumber(credentialsId, id);
   }
 }

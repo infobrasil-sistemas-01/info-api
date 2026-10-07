@@ -19,14 +19,17 @@ describe('extractIncludeCountFromRequest', () => {
     ['no', false],
     ['anything_else', false],
     ['', false],
-  ])('para header x-request-count = "%s", deve retornar %s', (input, expected) => {
-    const req = {
-      headers: {
-        'x-request-count': input,
-      },
-    };
-    expect(extractIncludeCountFromRequest(req)).toBe(expected);
-  });
+  ])(
+    'para header x-request-count = "%s", deve retornar %s',
+    (input, expected) => {
+      const req = {
+        headers: {
+          'x-request-count': input,
+        },
+      };
+      expect(extractIncludeCountFromRequest(req)).toBe(expected);
+    },
+  );
 
   it('deve lidar com arrays de headers (se o proxy/framework passar array)', () => {
     const req = {

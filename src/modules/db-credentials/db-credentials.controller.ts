@@ -18,7 +18,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
 import { DbCredentialsService } from './db-credentials.service';
-import type {
+import {
   CreateDbCredentialsDto,
   UpdateDbCredentialsDto,
 } from './dto/db-credentials.dto';

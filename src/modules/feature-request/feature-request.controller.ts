@@ -28,7 +28,9 @@ export class FeatureRequestController {
   constructor(private readonly service: FeatureRequestService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Cria uma nova solicitação de funcionalidade (Cliente)' })
+  @ApiOperation({
+    summary: 'Cria uma nova solicitação de funcionalidade (Cliente)',
+  })
   create(
     @CurrentUser() user: JwtPayload,
     @Body() dto: CreateFeatureRequestDto,
@@ -37,22 +39,25 @@ export class FeatureRequestController {
   }
 
   @Get('my')
-  @ApiOperation({ summary: 'Lista as solicitações do usuário logado (Cliente)' })
+  @ApiOperation({
+    summary: 'Lista as solicitações do usuário logado (Cliente)',
+  })
   findMy(@CurrentUser() user: JwtPayload) {
     return this.service.findByUser(user.sub);
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Obtém detalhes e histórico de mensagens de uma solicitação' })
-  findOne(
-    @Param('id') id: string,
-    @CurrentUser() user: JwtPayload,
-  ) {
+  @ApiOperation({
+    summary: 'Obtém detalhes e histórico de mensagens de uma solicitação',
+  })
+  findOne(@Param('id') id: string, @CurrentUser() user: JwtPayload) {
     return this.service.findOne(id, user);
   }
 
   @Post(':id/messages')
-  @ApiOperation({ summary: 'Envia uma mensagem na conversa da solicitação (Cliente ou Admin)' })
+  @ApiOperation({
+    summary: 'Envia uma mensagem na conversa da solicitação (Cliente ou Admin)',
+  })
   addMessage(
     @Param('id') id: string,
     @CurrentUser() user: JwtPayload,
@@ -64,7 +69,9 @@ export class FeatureRequestController {
   @Patch(':id/resolve')
   @UseGuards(JwtAuthGuard, PermissionsGuard)
   @RequirePermissions({ anyOf: ['integration-request.approve'] })
-  @ApiOperation({ summary: 'Marca a solicitação como RESOLVIDA e fecha o ticket (Admin)' })
+  @ApiOperation({
+    summary: 'Marca a solicitação como RESOLVIDA e fecha o ticket (Admin)',
+  })
   resolve(
     @Param('id') id: string,
     @CurrentUser() user: JwtPayload,
@@ -76,7 +83,9 @@ export class FeatureRequestController {
   @Get()
   @UseGuards(JwtAuthGuard, PermissionsGuard)
   @RequirePermissions({ anyOf: ['integration-request.view'] })
-  @ApiOperation({ summary: 'Lista todas as solicitações de funcionalidades (Admin)' })
+  @ApiOperation({
+    summary: 'Lista todas as solicitações de funcionalidades (Admin)',
+  })
   findAll(@Query('status') status?: string) {
     return this.service.findAll(status);
   }
@@ -84,7 +93,10 @@ export class FeatureRequestController {
   @Patch(':id/respond')
   @UseGuards(JwtAuthGuard, PermissionsGuard)
   @RequirePermissions({ anyOf: ['integration-request.approve'] })
-  @ApiOperation({ summary: 'Responde a uma solicitação e notifica o cliente por e-mail (Admin - Legado)' })
+  @ApiOperation({
+    summary:
+      'Responde a uma solicitação e notifica o cliente por e-mail (Admin - Legado)',
+  })
   respond(
     @Param('id') id: string,
     @CurrentUser() user: JwtPayload,

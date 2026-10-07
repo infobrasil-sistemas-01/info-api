@@ -45,7 +45,7 @@ export class OrderController {
   constructor(
     private readonly orderService: OrderService,
     private readonly orderItemService: OrderItemService,
-  ) { }
+  ) {}
 
   @Post()
   @UseGuards(JwtAuthGuard, PermissionsGuard)
@@ -191,7 +191,11 @@ export class OrderController {
       },
     },
   })
-  getOrders(@Req() req: ReqWithAuthContext, @Query() query: GetOrdersQueryDto, @IncludeCount() includeCount: boolean = false) {
+  getOrders(
+    @Req() req: ReqWithAuthContext,
+    @Query() query: GetOrdersQueryDto,
+    @IncludeCount() includeCount: boolean = false,
+  ) {
     const {
       credentialsId,
       storeId: storeIdToken,

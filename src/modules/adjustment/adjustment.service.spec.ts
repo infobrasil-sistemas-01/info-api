@@ -53,13 +53,22 @@ describe('AdjustmentService', () => {
         callback(null, mockResult);
       });
 
-      const response = await service.get('cred-1', 1, { page: 1, pageSize: 10 }, false);
+      const response = await service.get(
+        'cred-1',
+        1,
+        { page: 1, pageSize: 10 },
+        false,
+      );
 
       expect(response).toBeInstanceOf(PaginatedResponse);
       expect(response.data).toEqual(mockResult);
       expect(response.total).toBeUndefined();
-      expect(mockTenantConnectionService.getConnection).toHaveBeenCalledWith('cred-1');
-      expect(mockTenantConnectionService.releaseConnection).toHaveBeenCalledWith(mockConnection);
+      expect(mockTenantConnectionService.getConnection).toHaveBeenCalledWith(
+        'cred-1',
+      );
+      expect(
+        mockTenantConnectionService.releaseConnection,
+      ).toHaveBeenCalledWith(mockConnection);
     });
 
     it('deve calcular contagem quando includeCount = true e retornar total no PaginatedResponse', async () => {
@@ -79,7 +88,12 @@ describe('AdjustmentService', () => {
           callback(null, mockCountResult);
         });
 
-      const response = await service.get('cred-1', 1, { page: 1, pageSize: 10 }, true);
+      const response = await service.get(
+        'cred-1',
+        1,
+        { page: 1, pageSize: 10 },
+        true,
+      );
 
       expect(response).toBeInstanceOf(PaginatedResponse);
       expect(response.data).toEqual(mockResult);
@@ -147,7 +161,9 @@ describe('AdjustmentService', () => {
       const result = await service.getById('cred-1', 1, 105);
 
       expect(result).toEqual(mockAdjustment);
-      expect(mockTenantConnectionService.releaseConnection).toHaveBeenCalledWith(mockConnection);
+      expect(
+        mockTenantConnectionService.releaseConnection,
+      ).toHaveBeenCalledWith(mockConnection);
     });
 
     it('deve retornar null quando acerto não for encontrado', async () => {
@@ -158,7 +174,9 @@ describe('AdjustmentService', () => {
       const result = await service.getById('cred-1', 1, 999);
 
       expect(result).toBeNull();
-      expect(mockTenantConnectionService.releaseConnection).toHaveBeenCalledWith(mockConnection);
+      expect(
+        mockTenantConnectionService.releaseConnection,
+      ).toHaveBeenCalledWith(mockConnection);
     });
   });
 
@@ -188,7 +206,9 @@ describe('AdjustmentService', () => {
       const result = await service.getItemsByAdjustmentNumber('cred-1', 105);
 
       expect(result).toEqual(mockItems);
-      expect(mockTenantConnectionService.releaseConnection).toHaveBeenCalledWith(mockConnection);
+      expect(
+        mockTenantConnectionService.releaseConnection,
+      ).toHaveBeenCalledWith(mockConnection);
     });
   });
 });
