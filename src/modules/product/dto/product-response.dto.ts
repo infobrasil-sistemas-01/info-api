@@ -43,13 +43,13 @@ export class ProductResponseDto {
   @ApiProperty({ example: 10.0, description: 'Preço de compra' })
   PRO_PRCCOMPRA: number;
 
-  @ApiProperty({ example: 12.5, description: 'Preço de custo' })
+  @ApiProperty({ example: 12.5, description: 'Preço de custo gerencial' })
   PRO_PRCCUSTO: number;
 
   @ApiProperty({ example: 11.0, description: 'Preço de compra fiscal' })
   PRO_PRCCOMPRAFISCAL: number;
 
-  @ApiProperty({ example: 13.0, description: 'Custo fiscal' })
+  @ApiProperty({ example: 13.0, description: 'Preço de custo fiscal' })
   PRO_CUSTOFISCAL: number;
 }
 
@@ -63,13 +63,13 @@ export class ProductDetailResponseDto {
   @ApiProperty({ example: 10.0, description: 'Preço de compra' })
   PRO_PRCCOMPRA: number;
 
-  @ApiProperty({ example: 12.5, description: 'Preço de custo' })
+  @ApiProperty({ example: 12.5, description: 'Preço de custo gerencial' })
   PRO_PRCCUSTO: number;
 
   @ApiProperty({ example: 11.0, description: 'Preço de compra fiscal' })
   PRO_PRCCOMPRAFISCAL: number;
 
-  @ApiProperty({ example: 13.0, description: 'Custo fiscal' })
+  @ApiProperty({ example: 13.0, description: 'Preço de custo fiscal' })
   PRO_CUSTOFISCAL: number;
 
   @ApiProperty({ example: 19.99, description: 'Preço 1' })
