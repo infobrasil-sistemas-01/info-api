@@ -27,25 +27,46 @@ export class AdjustmentQueryDto extends ZodDto(AdjustmentQuerySchema) {
   @ApiPropertyOptional({ description: 'Itens por página', example: 10 })
   pageSize?: number;
 
-  @ApiPropertyOptional({ description: 'Código da loja (LOJ_CODIGO)', example: 1 })
+  @ApiPropertyOptional({
+    description: 'Código da loja (LOJ_CODIGO)',
+    example: 1,
+  })
   storeId?: number;
 
-  @ApiPropertyOptional({ description: 'Código da situação (SIT_CODIGO)', example: 1 })
+  @ApiPropertyOptional({
+    description: 'Código da situação (SIT_CODIGO)',
+    example: 1,
+  })
   statusId?: number;
 
-  @ApiPropertyOptional({ description: 'Tipo de acerto (ACE_TIPO)', example: '1' })
+  @ApiPropertyOptional({
+    description: 'Tipo de acerto (ACE_TIPO)',
+    example: '1',
+  })
   type?: string;
 
-  @ApiPropertyOptional({ description: 'Código do usuário (USU_CODIGO)', example: 1 })
+  @ApiPropertyOptional({
+    description: 'Código do usuário (USU_CODIGO)',
+    example: 1,
+  })
   userId?: number;
 
-  @ApiPropertyOptional({ description: 'Número do acerto (ACE_NUMERO)', example: 105 })
+  @ApiPropertyOptional({
+    description: 'Número do acerto (ACE_NUMERO)',
+    example: 105,
+  })
   adjustmentNumber?: number;
 
-  @ApiPropertyOptional({ description: 'Data inicial (YYYY-MM-DD)', example: '2026-01-01' })
+  @ApiPropertyOptional({
+    description: 'Data inicial (YYYY-MM-DD)',
+    example: '2026-01-01',
+  })
   startDate?: string;
 
-  @ApiPropertyOptional({ description: 'Data final (YYYY-MM-DD)', example: '2026-01-31' })
+  @ApiPropertyOptional({
+    description: 'Data final (YYYY-MM-DD)',
+    example: '2026-01-31',
+  })
   endDate?: string;
 }
 
@@ -53,7 +74,12 @@ export const GetAdjustmentByIdQuerySchema = z.object({
   storeId: z.coerce.number().int().optional(),
 });
 
-export class GetAdjustmentByIdQueryDto extends ZodDto(GetAdjustmentByIdQuerySchema) {
-  @ApiPropertyOptional({ description: 'Código da loja (LOJ_CODIGO)', example: 1 })
+export class GetAdjustmentByIdQueryDto extends ZodDto(
+  GetAdjustmentByIdQuerySchema,
+) {
+  @ApiPropertyOptional({
+    description: 'Código da loja (LOJ_CODIGO)',
+    example: 1,
+  })
   storeId?: number;
 }

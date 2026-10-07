@@ -1,5 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
 import { FeatureRequestService } from './feature-request.service';
 import { RegistryPrismaService } from 'src/infra/prisma/registry-prisma.service';
 import { EmailService } from 'src/infra/email/email.service';
@@ -137,7 +141,10 @@ describe('FeatureRequestService', () => {
       mockPrisma.featureRequest.findUnique.mockResolvedValue(request);
       mockPrisma.user.findUnique.mockResolvedValue(clientSender);
       mockPrisma.featureRequestMessage.create.mockResolvedValue(createdMessage);
-      mockPrisma.featureRequest.update.mockResolvedValue({ ...request, status: 'PENDING' });
+      mockPrisma.featureRequest.update.mockResolvedValue({
+        ...request,
+        status: 'PENDING',
+      });
 
       const result = await service.addMessage(request.id, 'client-1', {
         message: 'Ainda restou uma dúvida sobre o endpoint.',
@@ -175,7 +182,10 @@ describe('FeatureRequestService', () => {
       mockPrisma.featureRequest.findUnique.mockResolvedValue(request);
       mockPrisma.user.findUnique.mockResolvedValue(adminSender);
       mockPrisma.featureRequestMessage.create.mockResolvedValue(createdMessage);
-      mockPrisma.featureRequest.update.mockResolvedValue({ ...request, status: 'ANSWERED' });
+      mockPrisma.featureRequest.update.mockResolvedValue({
+        ...request,
+        status: 'ANSWERED',
+      });
 
       const result = await service.addMessage(request.id, 'admin-1', {
         message: 'Estamos analisando a solicitação!',

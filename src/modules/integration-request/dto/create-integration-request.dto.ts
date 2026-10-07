@@ -5,35 +5,50 @@ import { z } from 'zod';
 const HostingTypeEnum = z.enum(['DATACENTER', 'CLIENT_SERVER']);
 
 export const CreateIntegrationRequestSchema = z.object({
-  clientName: z.string().min(3, 'Nome do cliente muito curto'),
-  legalName: z.string().min(3, 'Razão social muito curta'),
-  cnpj: z.string().optional(),
+  clientName: z
+    .string()
+    .min(3, 'Nome do cliente muito curto')
+    .max(255, 'Nome do cliente não pode ultrapassar 255 caracteres'),
+  legalName: z
+    .string()
+    .min(3, 'Razão social muito curta')
+    .max(255, 'Razão social não pode ultrapassar 255 caracteres'),
+  cnpj: z
+    .string()
+    .max(20, 'CNPJ não pode ultrapassar 20 caracteres')
+    .optional(),
   hostingType: HostingTypeEnum.optional(),
-  fixedIp: z.string().optional(),
+  fixedIp: z
+    .string()
+    .max(45, 'IP fixo não pode ultrapassar 45 caracteres')
+    .optional(),
   database: z
     .object({
-      host: z.string(),
+      host: z.string().max(255),
       port: z.number(),
-      database: z.string(),
+      database: z.string().max(255),
     })
     .optional(),
   modules: z.array(z.string()).min(1, 'Selecione ao menos um módulo'),
   scopes: z.array(
     z.object({
-      resource: z.string(),
+      resource: z.string().max(100),
       actions: z.array(z.enum(['read', 'create', 'update', 'delete'])),
     }),
   ),
-  objective: z.string().min(10, 'Objetivo muito curto'),
+  objective: z
+    .string()
+    .min(10, 'Objetivo muito curto')
+    .max(5000, 'Objetivo não pode ultrapassar 5.000 caracteres'),
   technicalContact: z.object({
-    name: z.string(),
-    email: z.string().email('E-mail inválido'),
-    phone: z.string(),
+    name: z.string().max(255),
+    email: z.string().email('E-mail inválido').max(255),
+    phone: z.string().max(50),
   }),
   responsiblePerson: z.object({
-    name: z.string(),
-    email: z.string().email('E-mail inválido'),
-    phone: z.string(),
+    name: z.string().max(255),
+    email: z.string().email('E-mail inválido').max(255),
+    phone: z.string().max(50),
   }),
 });
 

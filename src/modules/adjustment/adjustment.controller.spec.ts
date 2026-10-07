@@ -57,12 +57,7 @@ describe('AdjustmentController', () => {
       const query = { page: 1, pageSize: 10, storeId: 2 };
       const result = await controller.get(mockReq, query, true);
 
-      expect(service.get).toHaveBeenCalledWith(
-        'cred-1',
-        2,
-        query,
-        true,
-      );
+      expect(service.get).toHaveBeenCalledWith('cred-1', 2, query, true);
       expect(result).toBe(mockResult);
     });
 
@@ -113,7 +108,9 @@ describe('AdjustmentController', () => {
       ];
 
       mockAdjustmentService.getById.mockResolvedValue(mockHeader);
-      mockAdjustmentService.getItemsByAdjustmentNumber.mockResolvedValue(mockItems);
+      mockAdjustmentService.getItemsByAdjustmentNumber.mockResolvedValue(
+        mockItems,
+      );
 
       const result = await controller.getById(mockReq, 105, {});
 
@@ -148,7 +145,9 @@ describe('AdjustmentController', () => {
         },
       ];
 
-      mockAdjustmentService.getItemsByAdjustmentNumber.mockResolvedValue(mockItems);
+      mockAdjustmentService.getItemsByAdjustmentNumber.mockResolvedValue(
+        mockItems,
+      );
 
       const result = await controller.getItems(mockReq, 105);
 

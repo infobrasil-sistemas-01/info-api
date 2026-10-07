@@ -9,7 +9,7 @@ export class AdjustmentService {
 
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
-  ) { }
+  ) {}
 
   async get(
     credentialsId: string,
@@ -33,7 +33,9 @@ export class AdjustmentService {
     }
 
     if (pageSize < 1) {
-      throw new BadRequestException('O tamanho da página deve ser maior ou igual a 1');
+      throw new BadRequestException(
+        'O tamanho da página deve ser maior ou igual a 1',
+      );
     }
 
     const connection =
@@ -157,7 +159,8 @@ export class AdjustmentService {
       this.logger.log(
         `Busca de acertos executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
           { storeId: finalStoreId, page, pageSize, ...queryDto },
-        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${endTime - startTime
+        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${
+          endTime - startTime
         }ms`,
       );
 
@@ -226,7 +229,8 @@ export class AdjustmentService {
       const endTime = Date.now();
 
       this.logger.log(
-        `Busca de acerto por ID executada. Tenant: ${credentialsId}, ID: ${id}, Tempo SQL: ${endTime - startTime
+        `Busca de acerto por ID executada. Tenant: ${credentialsId}, ID: ${id}, Tempo SQL: ${
+          endTime - startTime
         }ms`,
       );
 
@@ -283,7 +287,8 @@ export class AdjustmentService {
       const endTime = Date.now();
 
       this.logger.log(
-        `Busca de itens do acerto executada. Tenant: ${credentialsId}, Acerto: ${adjustmentNumber}, Itens: ${Array.isArray(result) ? result.length : 0
+        `Busca de itens do acerto executada. Tenant: ${credentialsId}, Acerto: ${adjustmentNumber}, Itens: ${
+          Array.isArray(result) ? result.length : 0
         }, Tempo SQL: ${endTime - startTime}ms`,
       );
 

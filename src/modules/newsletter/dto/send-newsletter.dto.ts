@@ -14,7 +14,10 @@ export const SendNewsletterSchema = z.object({
   announcementIds: z
     .array(z.string().uuid())
     .min(1, 'Selecione ao menos um aviso'),
-  subject: z.string().min(3, 'Assunto muito curto'),
+  subject: z
+    .string()
+    .min(3, 'Assunto muito curto')
+    .max(255, 'Assunto não pode ultrapassar 255 caracteres'),
   initialMessage: z.string().optional().nullable(),
   finalMessage: z.string().optional().nullable(),
   type: NewsletterTypeEnum.optional(),

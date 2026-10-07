@@ -14,7 +14,8 @@ export class CreateFeatureRequestMessageDto extends ZodDto(
   CreateFeatureRequestMessageSchema,
 ) {
   @ApiProperty({
-    example: 'Poderiam confirmar se esse endpoint também atenderá a devoluções de troca rápida?',
+    example:
+      'Poderiam confirmar se esse endpoint também atenderá a devoluções de troca rápida?',
     description: 'Texto da mensagem enviada na conversa do ticket',
   })
   message!: string;

@@ -13,7 +13,8 @@ export class CreateFeatureRequestDto extends ZodDto(
   CreateFeatureRequestSchema,
 ) {
   @ApiProperty({
-    example: 'Gostaria de solicitar a integração com a rota de listagem de devoluções.',
+    example:
+      'Gostaria de solicitar a integração com a rota de listagem de devoluções.',
     description: 'Texto detalhado da funcionalidade ou melhoria solicitada',
   })
   requestText!: string;

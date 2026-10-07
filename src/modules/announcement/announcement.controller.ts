@@ -13,6 +13,10 @@ import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
 import { CurrentUser } from 'src/modules/auth/decorators/current-user.decorator';
 import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
 import { ApiExcludeController } from '@nestjs/swagger';
+import {
+  CreateAnnouncementDto,
+  UpdateAnnouncementDto,
+} from './dto/announcement.dto';
 
 @Controller('announcements')
 @ApiExcludeController()
@@ -45,13 +49,13 @@ export class AnnouncementController {
 
   @Post()
   @RequirePermissions({ allOf: ['core.announcement.create'] })
-  create(@Body() data: any) {
+  create(@Body() data: CreateAnnouncementDto) {
     return this.announcementService.create(data);
   }
 
   @Patch(':id')
   @RequirePermissions({ allOf: ['core.announcement.update'] })
-  update(@Param('id') id: string, @Body() data: any) {
+  update(@Param('id') id: string, @Body() data: UpdateAnnouncementDto) {
     return this.announcementService.update(id, data);
   }
 

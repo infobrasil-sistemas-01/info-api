@@ -118,8 +118,8 @@ export function setupSwagger(app: INestApplication) {
   // Lista todos os arquivos swagger-*.json para registrar as versões
   const files = fs.existsSync(docsDir)
     ? fs
-      .readdirSync(docsDir)
-      .filter((f) => f.startsWith('swagger-') && f.endsWith('.json'))
+        .readdirSync(docsDir)
+        .filter((f) => f.startsWith('swagger-') && f.endsWith('.json'))
     : [];
 
   // Mapear versões encontradas

@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.17.0](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.16.32...v1.17.0) (2026-10-07)
+
+
+### Features
+
+* limit validation on core endpoints ([c3a2a96](https://github.com/infobrasil-sistemas-01/info-api/commit/c3a2a9650de8acc377d3acc8b9e36dac0d6d5fb5))
+
 ## [1.16.32](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.16.31...v1.16.32) (2026-10-06)
 
 

@@ -27,7 +27,9 @@ export class FeatureRequestService {
     return id ? id.split('-')[0].toUpperCase() : '';
   }
 
-  private enrichTicket<T extends { id: string }>(item: T): T & { ticketNumber: string } {
+  private enrichTicket<T extends { id: string }>(
+    item: T,
+  ): T & { ticketNumber: string } {
     return {
       ...item,
       ticketNumber: `#${this.getTicketNumber(item.id)}`,
@@ -58,7 +60,12 @@ export class FeatureRequestService {
           orderBy: { createdAt: 'asc' },
           include: {
             sender: {
-              select: { id: true, user: true, email: true, role: { select: { name: true } } },
+              select: {
+                id: true,
+                user: true,
+                email: true,
+                role: { select: { name: true } },
+              },
             },
           },
         },
@@ -102,7 +109,9 @@ export class FeatureRequestService {
       `;
 
       await this.emailService.sendToSupport(subject, html);
-      this.logger.log(`E-mail de novo ticket #${ticketNumber} enviado ao suporte para o cliente ${user.user}`);
+      this.logger.log(
+        `E-mail de novo ticket #${ticketNumber} enviado ao suporte para o cliente ${user.user}`,
+      );
     } catch (err: any) {
       this.logger.warn(
         `Falha ao disparar e-mail de novo ticket #${ticketNumber} ao suporte: ${err.message}`,
@@ -130,7 +139,12 @@ export class FeatureRequestService {
           orderBy: { createdAt: 'asc' },
           include: {
             sender: {
-              select: { id: true, user: true, email: true, role: { select: { name: true } } },
+              select: {
+                id: true,
+                user: true,
+                email: true,
+                role: { select: { name: true } },
+              },
             },
           },
         },
@@ -149,7 +163,12 @@ export class FeatureRequestService {
           orderBy: { createdAt: 'asc' },
           include: {
             sender: {
-              select: { id: true, user: true, email: true, role: { select: { name: true } } },
+              select: {
+                id: true,
+                user: true,
+                email: true,
+                role: { select: { name: true } },
+              },
             },
           },
         },
@@ -170,7 +189,12 @@ export class FeatureRequestService {
           orderBy: { createdAt: 'asc' },
           include: {
             sender: {
-              select: { id: true, user: true, email: true, role: { select: { name: true } } },
+              select: {
+                id: true,
+                user: true,
+                email: true,
+                role: { select: { name: true } },
+              },
             },
           },
         },
@@ -178,7 +202,9 @@ export class FeatureRequestService {
     });
 
     if (!item) {
-      throw new NotFoundException('Solicitação de funcionalidade não encontrada');
+      throw new NotFoundException(
+        'Solicitação de funcionalidade não encontrada',
+      );
     }
 
     if (currentUser && currentUser.sub !== item.userId) {
@@ -187,14 +213,20 @@ export class FeatureRequestService {
         select: { role: { select: { name: true } } },
       });
       if (requester?.role?.name !== 'Admin') {
-        throw new ForbiddenException('Acesso não autorizado a esta solicitação');
+        throw new ForbiddenException(
+          'Acesso não autorizado a esta solicitação',
+        );
       }
     }
 
     return this.enrichTicket(item);
   }
 
-  async addMessage(id: string, senderId: string, dto: CreateFeatureRequestMessageDto) {
+  async addMessage(
+    id: string,
+    senderId: string,
+    dto: CreateFeatureRequestMessageDto,
+  ) {
     const request = await this.prisma.featureRequest.findUnique({
       where: { id },
       include: {
@@ -205,7 +237,9 @@ export class FeatureRequestService {
     });
 
     if (!request) {
-      throw new NotFoundException('Solicitação de funcionalidade não encontrada');
+      throw new NotFoundException(
+        'Solicitação de funcionalidade não encontrada',
+      );
     }
 
     if (request.status === 'RESOLVED') {
@@ -227,7 +261,9 @@ export class FeatureRequestService {
     const isAdmin = sender.role?.name === 'Admin';
 
     if (!isClient && !isAdmin) {
-      throw new ForbiddenException('Você não tem permissão para responder nesta solicitação');
+      throw new ForbiddenException(
+        'Você não tem permissão para responder nesta solicitação',
+      );
     }
 
     // Salva a nova mensagem na conversa
@@ -239,7 +275,12 @@ export class FeatureRequestService {
       },
       include: {
         sender: {
-          select: { id: true, user: true, email: true, role: { select: { name: true } } },
+          select: {
+            id: true,
+            user: true,
+            email: true,
+            role: { select: { name: true } },
+          },
         },
       },
     });
@@ -291,7 +332,9 @@ export class FeatureRequestService {
           `;
 
           await this.emailService.sendEmail(clientEmail, subject, html);
-          this.logger.log(`E-mail de resposta no ticket #${ticketNumber} enviado para ${clientEmail}`);
+          this.logger.log(
+            `E-mail de resposta no ticket #${ticketNumber} enviado para ${clientEmail}`,
+          );
         } catch (err: any) {
           this.logger.warn(
             `Falha ao disparar e-mail de resposta no ticket #${ticketNumber} ao cliente: ${err.message}`,
@@ -333,7 +376,9 @@ export class FeatureRequestService {
         `;
 
         await this.emailService.sendToSupport(subject, html);
-        this.logger.log(`E-mail de réplica no ticket #${ticketNumber} enviado ao suporte`);
+        this.logger.log(
+          `E-mail de réplica no ticket #${ticketNumber} enviado ao suporte`,
+        );
       } catch (err: any) {
         this.logger.warn(
           `Falha ao disparar e-mail de réplica no ticket #${ticketNumber} ao suporte: ${err.message}`,
@@ -345,7 +390,11 @@ export class FeatureRequestService {
     return messageRecord;
   }
 
-  async resolve(id: string, adminUserId: string, dto?: ResolveFeatureRequestDto) {
+  async resolve(
+    id: string,
+    adminUserId: string,
+    dto?: ResolveFeatureRequestDto,
+  ) {
     const request = await this.prisma.featureRequest.findUnique({
       where: { id },
       include: {
@@ -356,7 +405,9 @@ export class FeatureRequestService {
     });
 
     if (!request) {
-      throw new NotFoundException('Solicitação de funcionalidade não encontrada');
+      throw new NotFoundException(
+        'Solicitação de funcionalidade não encontrada',
+      );
     }
 
     // Se houver mensagem de encerramento, registra na conversa
@@ -375,7 +426,9 @@ export class FeatureRequestService {
       data: {
         status: 'RESOLVED',
         resolvedAt: new Date(),
-        responseText: dto?.closingMessage ? dto.closingMessage.trim() : request.responseText,
+        responseText: dto?.closingMessage
+          ? dto.closingMessage.trim()
+          : request.responseText,
       },
       include: {
         user: {
@@ -385,7 +438,12 @@ export class FeatureRequestService {
           orderBy: { createdAt: 'asc' },
           include: {
             sender: {
-              select: { id: true, user: true, email: true, role: { select: { name: true } } },
+              select: {
+                id: true,
+                user: true,
+                email: true,
+                role: { select: { name: true } },
+              },
             },
           },
         },
@@ -429,7 +487,9 @@ export class FeatureRequestService {
         `;
 
         await this.emailService.sendEmail(clientEmail, subject, html);
-        this.logger.log(`E-mail de resolução do ticket #${ticketNumber} enviado para ${clientEmail}`);
+        this.logger.log(
+          `E-mail de resolução do ticket #${ticketNumber} enviado para ${clientEmail}`,
+        );
       } catch (err: any) {
         this.logger.warn(
           `Falha ao disparar e-mail de resolução do ticket #${ticketNumber}: ${err.message}`,
@@ -442,7 +502,11 @@ export class FeatureRequestService {
   }
 
   // Compatibilidade legada com endpoint anterior respond
-  async respond(id: string, dto: RespondFeatureRequestDto, adminUserId?: string) {
+  async respond(
+    id: string,
+    dto: RespondFeatureRequestDto,
+    adminUserId?: string,
+  ) {
     if (adminUserId) {
       await this.addMessage(id, adminUserId, { message: dto.responseText });
       return this.findOne(id);
@@ -458,7 +522,9 @@ export class FeatureRequestService {
     });
 
     if (!existing) {
-      throw new NotFoundException('Solicitação de funcionalidade não encontrada');
+      throw new NotFoundException(
+        'Solicitação de funcionalidade não encontrada',
+      );
     }
 
     const updated = await this.prisma.featureRequest.update({
@@ -476,7 +542,12 @@ export class FeatureRequestService {
           orderBy: { createdAt: 'asc' },
           include: {
             sender: {
-              select: { id: true, user: true, email: true, role: { select: { name: true } } },
+              select: {
+                id: true,
+                user: true,
+                email: true,
+                role: { select: { name: true } },
+              },
             },
           },
         },

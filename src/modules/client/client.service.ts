@@ -14,7 +14,7 @@ export class ClientService {
 
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
-  ) { }
+  ) {}
 
   async get(
     credentialsId: string,
@@ -123,7 +123,8 @@ export class ClientService {
       const endTime = Date.now();
 
       this.logger.log(
-        `Busca de cliente por ID executada. Tenant: ${credentialsId}, ID: ${id}, Tempo SQL: ${endTime - startTime
+        `Busca de cliente por ID executada. Tenant: ${credentialsId}, ID: ${id}, Tempo SQL: ${
+          endTime - startTime
         }ms`,
       );
       return result;
@@ -244,7 +245,8 @@ export class ClientService {
       const endTime = Date.now();
 
       this.logger.log(
-        `Cliente atualizado. Tenant: ${credentialsId}, ID: ${id}, Tempo SQL: ${endTime - startTime
+        `Cliente atualizado. Tenant: ${credentialsId}, ID: ${id}, Tempo SQL: ${
+          endTime - startTime
         }ms`,
       );
 

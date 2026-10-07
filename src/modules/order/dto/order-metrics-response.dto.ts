@@ -15,13 +15,15 @@ export class OrderMetricsResponseDto {
 
   @ApiProperty({
     example: 2245.98,
-    description: 'Ticket médio por pedido baixado no período (billing / totalOrders)',
+    description:
+      'Ticket médio por pedido baixado no período (billing / totalOrders)',
   })
   averageTicket: number;
 
   @ApiProperty({
     example: 22,
-    description: 'Total de pedidos em aberto (pendentes ou aprovados) no período',
+    description:
+      'Total de pedidos em aberto (pendentes ou aprovados) no período',
   })
   openOrders: number;
 }

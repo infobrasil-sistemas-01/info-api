@@ -135,7 +135,8 @@ describe('OrderService', () => {
       // Total calculated: 10.5 * 2 = 21
       // Net liquid: 21 + 2 (taxes) - 5 (discount) = 18
       const updateVendasCall = mockTransaction.query.mock.calls.find(
-        (call: any[]) => typeof call[0] === 'string' && call[0].includes('UPDATE VENDAS'),
+        (call: any[]) =>
+          typeof call[0] === 'string' && call[0].includes('UPDATE VENDAS'),
       );
 
       expect(updateVendasCall).toBeDefined();
@@ -145,8 +146,8 @@ describe('OrderService', () => {
       expect(params[2]).toBe(18); // VEN_TOTALPP1
       expect(params[3]).toBe(18); // VEN_TOTALPPA1
       expect(params[4]).toBe(21); // VEN_TOTALBRUTO
-      expect(params[5]).toBe(5);  // VEN_TOTALDESC
-      expect(params[6]).toBe(2);  // VEN_TOTALACRESC
+      expect(params[5]).toBe(5); // VEN_TOTALDESC
+      expect(params[6]).toBe(2); // VEN_TOTALACRESC
       expect(params[7]).toBe(18); // VEN_TOTALLIQUIDO
     });
   });
@@ -412,7 +413,11 @@ describe('OrderService', () => {
         ]);
       });
 
-      const result = await service.getOrderMetrics('cred-1', undefined, filters);
+      const result = await service.getOrderMetrics(
+        'cred-1',
+        undefined,
+        filters,
+      );
 
       expect(result).toEqual({
         totalOrders: 50,
@@ -440,4 +445,3 @@ describe('OrderService', () => {
     });
   });
 });
-

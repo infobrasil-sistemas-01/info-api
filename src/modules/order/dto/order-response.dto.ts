@@ -132,7 +132,10 @@ export class OrderResponseDto {
   PLP_DESCRICAO?: string;
 
   // Forma 2
-  @ApiPropertyOptional({ example: 2, description: 'Código da forma de pagamento 2' })
+  @ApiPropertyOptional({
+    example: 2,
+    description: 'Código da forma de pagamento 2',
+  })
   FP2_CODIGO?: number;
 
   @ApiPropertyOptional({
@@ -148,7 +151,10 @@ export class OrderResponseDto {
   VEN_TOTALPP2?: number;
 
   // Forma 3
-  @ApiPropertyOptional({ example: 3, description: 'Código da forma de pagamento 3' })
+  @ApiPropertyOptional({
+    example: 3,
+    description: 'Código da forma de pagamento 3',
+  })
   FP3_CODIGO?: number;
 
   @ApiPropertyOptional({
@@ -164,7 +170,10 @@ export class OrderResponseDto {
   VEN_TOTALPP3?: number;
 
   // Forma 4
-  @ApiPropertyOptional({ example: 4, description: 'Código da forma de pagamento 4' })
+  @ApiPropertyOptional({
+    example: 4,
+    description: 'Código da forma de pagamento 4',
+  })
   FP4_CODIGO?: number;
 
   @ApiPropertyOptional({
@@ -181,7 +190,8 @@ export class OrderResponseDto {
 
   @ApiPropertyOptional({
     type: [OrderPaymentDto],
-    description: 'Lista consolidada das formas de pagamento com seus respectivos valores',
+    description:
+      'Lista consolidada das formas de pagamento com seus respectivos valores',
   })
   PAYMENTS?: OrderPaymentDto[];
 

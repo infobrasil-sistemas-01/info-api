@@ -24,7 +24,7 @@ export class OrderService {
     private readonly orderItemService: OrderItemService,
     private readonly productService: ProductService,
     private readonly receiptService: ReceiptService,
-  ) { }
+  ) {}
 
   async post(credentialsId: string, data: PostOrderDto, storeId: number) {
     let connection: any;
@@ -347,12 +347,12 @@ export class OrderService {
                              LEFT JOIN FUNCIONARIOS F ON F.FUN_CODIGO = V.FUN_CODIGO
                              LEFT JOIN USUARIOS U ON U.USU_CODIGO = V.USU_CODIGO
                              ${whereClause}`;
-        const countRes = (await new Promise((resolve, reject) => {
+        const countRes = await new Promise((resolve, reject) => {
           connection.query(countQuery, filterParams, (err: any, res: any) => {
             if (err) return reject(err);
             resolve(res);
           });
-        }));
+        });
 
         const rawTotal =
           countRes?.[0]?.TOTAL ??
@@ -366,7 +366,8 @@ export class OrderService {
       this.logger.log(
         `Busca de pedidos executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
           { storeId, page, pageSize, ...filters },
-        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${queryEndTime - queryStartTime
+        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${
+          queryEndTime - queryStartTime
         }ms`,
       );
 
@@ -374,12 +375,7 @@ export class OrderService {
         this.enrichOrderRow(row),
       );
 
-      return new PaginatedResponse(
-        enrichedResult,
-        total,
-        page,
-        pageSize
-      );
+      return new PaginatedResponse(enrichedResult, total, page, pageSize);
     } finally {
       this.tenantConnectionService.releaseConnection(connection);
     }
@@ -491,7 +487,11 @@ export class OrderService {
   private enrichOrderRow(row: any): any {
     if (!row) return row;
 
-    const payments: Array<{ codigo: number; descricao: string; valor: number }> = [];
+    const payments: Array<{
+      codigo: number;
+      descricao: string;
+      valor: number;
+    }> = [];
 
     // Forma 1
     if (row.FP1_CODIGO && Number(row.FP1_CODIGO) > 0) {
@@ -772,7 +772,8 @@ export class OrderService {
       this.logger.log(
         `Métricas de pedidos executadas. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
           { storeId, ...filters },
-        )}, TotalOrders: ${totalOrders}, Billing: ${billing}, OpenOrders: ${openOrders}, Tempo SQL: ${queryEndTime - queryStartTime
+        )}, TotalOrders: ${totalOrders}, Billing: ${billing}, OpenOrders: ${openOrders}, Tempo SQL: ${
+          queryEndTime - queryStartTime
         }ms`,
       );
 
@@ -787,4 +788,3 @@ export class OrderService {
     }
   }
 }
-

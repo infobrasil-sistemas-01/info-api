@@ -27,7 +27,11 @@ export class PaginationHeadersInterceptor implements NestInterceptor {
         if (body instanceof PaginatedResponse) {
           const res = context.switchToHttp().getResponse();
 
-          if (body.total !== undefined && res && typeof res.setHeader === 'function') {
+          if (
+            body.total !== undefined &&
+            res &&
+            typeof res.setHeader === 'function'
+          ) {
             const pageSize =
               body.pageSize && body.pageSize > 0 ? body.pageSize : 100;
             const totalPages =

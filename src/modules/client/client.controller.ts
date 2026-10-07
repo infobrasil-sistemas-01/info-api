@@ -36,7 +36,7 @@ import { CurrentUser } from 'src/modules/auth/decorators/current-user.decorator'
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 @Controller('clients')
 export class ClientController {
-  constructor(private readonly clientService: ClientService) { }
+  constructor(private readonly clientService: ClientService) {}
 
   @Get()
   @RequirePermissions({ allOf: ['tenant.clients.view'] })
@@ -58,9 +58,7 @@ export class ClientController {
     }
 
     const storeId =
-      user.type === 'H2M'
-        ? user.store_id
-        : (query.storeId ?? user.store_id);
+      user.type === 'H2M' ? user.store_id : (query.storeId ?? user.store_id);
 
     return this.clientService.get(
       user.credentials_id,

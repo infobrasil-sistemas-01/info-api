@@ -115,11 +115,15 @@ describe('NewsletterService', () => {
         type: 'URGENT',
       });
 
-      expect(result.subject).toEqual('[URGENTE] InfoAPI - Instabilidade Temporária');
+      expect(result.subject).toEqual(
+        '[URGENTE] InfoAPI - Instabilidade Temporária',
+      );
       expect(result.type).toEqual('URGENT');
       expect(result.html).toContain('COMUNICADO DE URGÊNCIA');
       expect(result.html).toContain('ALERTA CRÍTICO');
-      expect(result.html).toContain('Instabilidade detectada no módulo de pagamentos.');
+      expect(result.html).toContain(
+        'Instabilidade detectada no módulo de pagamentos.',
+      );
       expect(result.html).toContain('Procedimentos &amp; Recomendações');
     });
   });
@@ -224,4 +228,3 @@ describe('NewsletterService', () => {
     });
   });
 });
-
