@@ -1,5 +1,47 @@
 [
   {
+    "version": "1.17.1",
+    "date": "2026-10-07",
+    "title": "return more data on GET /products endpoints e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Catálogo de Produtos.",
+    "highlights": [
+      "return more data on GET /products endpoints"
+    ],
+    "items": [
+      {
+        "module": "Catálogo de Produtos",
+        "type": "feature",
+        "title": "return more data on GET /products endpoints",
+        "description": "Atualização no módulo de Catálogo de Produtos: return more data on GET /products endpoints.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "return more data on GET /products endpoints",
+        "commitHash": "f7b44e5"
+      }
+    ],
+    "totalChanges": 1
+  },
+  {
+    "version": "1.17.0",
+    "date": "2026-10-07",
+    "title": "limit validation on core endpoints e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral & Usabilidade.",
+    "highlights": [
+      "limit validation on core endpoints"
+    ],
+    "items": [
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "limit validation on core endpoints",
+        "description": "Atualização no módulo de Geral & Usabilidade: limit validation on core endpoints.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "limit validation on core endpoints",
+        "commitHash": "c3a2a96"
+      }
+    ],
+    "totalChanges": 1
+  },
+  {
     "version": "1.16.32",
     "date": "2026-10-06",
     "title": "Correções de estabilidade e aprimoramentos",

@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.17.1](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.17.0...v1.17.1) (2026-10-07)
+
+
+### Features
+
+* return more data on GET /products endpoints ([f7b44e5](https://github.com/infobrasil-sistemas-01/info-api/commit/f7b44e575a84809ed16dd625d2ddab7c40bafebf))
+
 ## [1.17.0](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.16.32...v1.17.0) (2026-10-07)
 
 

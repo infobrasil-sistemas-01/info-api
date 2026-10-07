@@ -6,6 +6,32 @@ Para visualizar a versão interativa com busca em tempo real, acesse o portal we
 
 ---
 
+## [v1.17.1] - 2026-10-07
+
+### 📌 return more data on GET /products endpoints e melhorias
+> Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Catálogo de Produtos.
+
+**Destaques:**
+- ⭐ return more data on GET /products endpoints
+
+#### 🚀 Novidades & Melhorias
+- **[Catálogo de Produtos]** return more data on GET /products endpoints: Atualização no módulo de Catálogo de Produtos: return more data on GET /products endpoints.
+
+---
+
+## [v1.17.0] - 2026-10-07
+
+### 📌 limit validation on core endpoints e melhorias
+> Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral & Usabilidade.
+
+**Destaques:**
+- ⭐ limit validation on core endpoints
+
+#### 🚀 Novidades & Melhorias
+- **[Geral & Usabilidade]** limit validation on core endpoints: Atualização no módulo de Geral & Usabilidade: limit validation on core endpoints.
+
+---
+
 ## [v1.16.32] - 2026-10-06
 
 ### 📌 Correções de estabilidade e aprimoramentos
