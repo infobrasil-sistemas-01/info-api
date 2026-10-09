@@ -36,7 +36,7 @@ export class IntegrationRequestController {
     private readonly userService: UserService,
   ) {}
 
-  @Get('/')
+  @Get(['', '/'])
   @ApiOperation({ summary: 'Serve a landing page do serviço' })
   serveLanding(@Res() res: Response) {
     const path = this.getTemplatePath('landing.html');

@@ -1,6 +1,6 @@
 import { Controller, Get, Res } from '@nestjs/common';
 import { ApiExcludeController } from '@nestjs/swagger';
-import { Response } from 'express';
+import type { Response } from 'express';
 import { join } from 'path';
 import { existsSync } from 'fs';
 
@@ -69,7 +69,57 @@ export class AppController {
   }
 
   @Get()
-  index(@Res() res: any) {
+  index(@Res() res: Response) {
+    const paths = [
+      join(
+        __dirname,
+        'modules',
+        'integration-request',
+        'templates',
+        'landing.html',
+      ),
+      join(
+        __dirname,
+        '..',
+        'src',
+        'modules',
+        'integration-request',
+        'templates',
+        'landing.html',
+      ),
+      join(
+        process.cwd(),
+        'src',
+        'modules',
+        'integration-request',
+        'templates',
+        'landing.html',
+      ),
+      join(
+        __dirname,
+        '..',
+        'modules',
+        'integration-request',
+        'templates',
+        'landing.html',
+      ),
+      join(
+        __dirname,
+        '..',
+        '..',
+        'modules',
+        'integration-request',
+        'templates',
+        'landing.html',
+      ),
+    ];
+
+    for (const p of paths) {
+      if (existsSync(p)) {
+        return res.sendFile(p);
+      }
+    }
+
     return res.redirect('/integration');
   }
 }
