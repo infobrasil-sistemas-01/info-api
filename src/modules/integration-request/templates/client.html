@@ -456,7 +456,7 @@ print(f'Basic {auth}')</code></pre>
                         para sua integração. Recomendamos fazer isso periodicamente.</p>
 
                     <div id="rotation-action-box">
-                        <button onclick="UI.confirmRotation()" class="btn-primary"
+                        <button id="btn-rotate-password" onclick="UI.confirmRotation()" class="btn-primary btn-rotate"
                             style="width: auto; padding: 12px 32px;">
                             <i class='bx bx-refresh'></i> Rotacionar Senha Agora
                         </button>
@@ -646,7 +646,7 @@ print(f'Basic {auth}')</code></pre>
         </div>
     </div>
 
-    <script src="/integration/assets/client-core.js"></script>
+    <script src="/integration/assets/client-core.js?v=1.17.1"></script>
     <script>
         // Lógica de Status da Conexão
         async function refreshTenantStatus() {

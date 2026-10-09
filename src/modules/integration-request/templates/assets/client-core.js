@@ -528,10 +528,12 @@ const UI = {
         const confirmed = confirm("TEM CERTEZA? Sua senha atual deixará de funcionar imediatamente em todos os sistemas integrados.");
         if (!confirmed) return;
 
-        const btn = document.querySelector('.btn-rotate');
-        const originalHtml = btn.innerHTML;
-        btn.disabled = true;
-        btn.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i> Processando...";
+        const btn = document.getElementById('btn-rotate-password') || document.querySelector('.btn-rotate');
+        const originalHtml = btn ? btn.innerHTML : '';
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i> Processando...";
+        }
 
         try {
             const res = await fetch(`${API_URL}/users/me/rotate-password`, {
@@ -546,13 +548,17 @@ const UI = {
                 document.getElementById('new-password-value').textContent = data.password;
             } else {
                 alert('Erro ao rotacionar senha. Tente novamente mais tarde.');
-                btn.disabled = false;
-                btn.innerHTML = originalHtml;
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = originalHtml;
+                }
             }
         } catch (e) {
             alert('Erro de conexão.');
-            btn.disabled = false;
-            btn.innerHTML = originalHtml;
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+            }
         }
     },
     copyText(text, message) {
