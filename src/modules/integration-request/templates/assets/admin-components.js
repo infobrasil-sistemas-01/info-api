@@ -24,6 +24,46 @@ const translateStatus = (s) =>
 
 // --- Components ---
 const Components = {
+  escapeHtml: (str) => {
+    if (str === null || str === undefined) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  },
+
+  toggleLogParams: (rowId) => {
+    const detailsRow = document.getElementById(`details-${rowId}`);
+    const iconChevron = document.getElementById(`icon-chevron-${rowId}`);
+    if (!detailsRow) return;
+
+    const isHidden = detailsRow.style.display === 'none' || detailsRow.style.display === '';
+    detailsRow.style.display = isHidden ? 'table-row' : 'none';
+    if (iconChevron) {
+      iconChevron.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+    }
+  },
+
+  copyToClipboard: async (text, btnElement) => {
+    try {
+      if (!text) return;
+      await navigator.clipboard.writeText(text);
+      if (btnElement) {
+        const originalContent = btnElement.innerHTML;
+        btnElement.innerHTML = `<i class='bx bx-check' style='color: var(--primary);'></i> <span style='color: var(--primary); font-weight: 600;'>Copiado!</span>`;
+        btnElement.style.borderColor = 'var(--primary)';
+        setTimeout(() => {
+          btnElement.innerHTML = originalContent;
+          btnElement.style.borderColor = 'rgba(255,255,255,0.1)';
+        }, 2000);
+      }
+    } catch (err) {
+      console.error('Falha ao copiar para clipboard:', err);
+    }
+  },
+
   RequestCard: (req) => {
     const db = req.database || {};
     const contact = req.technicalContact || {};
@@ -799,7 +839,7 @@ const Components = {
     `;
   },
 
-  DashboardRequestLogRow: (log) => {
+  DashboardRequestLogRow: (log, idx) => {
     const methodColor = {
       GET: 'var(--primary)',
       POST: 'var(--success)',
@@ -810,15 +850,91 @@ const Components = {
     const statusColor = log.status >= 500 ? 'var(--danger)' : log.status >= 400 ? 'var(--warning)' : 'var(--success)';
     const dateStr = new Date(log.timestamp).toLocaleString('pt-BR');
 
+    // Decomposição estrutural da URL (Abordagem C)
+    const fullPath = log.path || '';
+    const qIndex = fullPath.indexOf('?');
+    const pathname = qIndex !== -1 ? fullPath.slice(0, qIndex) : fullPath;
+    const queryString = qIndex !== -1 ? fullPath.slice(qIndex + 1) : '';
+
+    let paramsList = [];
+    if (queryString) {
+      try {
+        const searchParams = new URLSearchParams(queryString);
+        for (const [key, val] of searchParams.entries()) {
+          paramsList.push({ key, val });
+        }
+      } catch (err) {
+        paramsList = queryString.split('&').filter(Boolean).map(pair => {
+          const [k, ...v] = pair.split('=');
+          return { key: k, val: decodeURIComponent(v.join('=')) };
+        });
+      }
+    }
+
+    const rowId = 'req-log-' + (idx !== undefined ? idx : Math.random().toString(36).substring(2, 8));
+    const hasParams = paramsList.length > 0;
+
     return `
-      <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-          <td style="padding: 10px; font-family: monospace; color: var(--text-muted);">${dateStr}</td>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); transition: background 0.15s ease;">
+          <td style="padding: 10px; font-family: monospace; color: var(--text-muted); white-space: nowrap;">${dateStr}</td>
           <td style="padding: 10px;"><span class="tag-pill" style="background: rgba(255,255,255,0.05); color: ${methodColor}; border: 1px solid ${methodColor}; font-weight: 700; width: 60px; text-align: center; display: inline-block;">${log.method}</span></td>
-          <td style="padding: 10px; font-family: monospace; color: white;">${log.path}</td>
+          <td style="padding: 10px; font-family: monospace; color: white;">
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                  <span style="font-weight: 600; color: #fff; word-break: break-all;" title="${Components.escapeHtml(pathname)}">${Components.escapeHtml(pathname)}</span>
+                  ${hasParams ? `
+                      <button type="button" 
+                          onclick="event.stopPropagation(); Components.toggleLogParams('${rowId}')" 
+                          style="background: rgba(16, 185, 129, 0.12); color: var(--primary); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 999px; padding: 2px 8px; font-size: 0.72rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s ease;"
+                          title="Clique para inspecionar os parâmetros desta requisição">
+                          <span>?params (${paramsList.length})</span>
+                          <i class='bx bx-chevron-down' id="icon-chevron-${rowId}" style="transition: transform 0.2s ease;"></i>
+                      </button>
+                  ` : ''}
+              </div>
+          </td>
           <td style="padding: 10px;"><span style="color: ${statusColor}; font-weight: 700;">${log.status}</span></td>
-          <td style="padding: 10px; font-family: monospace; color: white;">${log.durationMs ? log.durationMs.toFixed(2) + ' ms' : '-'}</td>
-          <td style="padding: 10px; color: white;"><strong>${log.username}</strong> <span style="color: var(--text-muted); font-size: 0.8rem;">(${log.email})</span></td>
+          <td style="padding: 10px; font-family: monospace; color: white; white-space: nowrap;">${log.durationMs ? log.durationMs.toFixed(2) + ' ms' : '-'}</td>
+          <td style="padding: 10px; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${Components.escapeHtml(log.username)} (${Components.escapeHtml(log.email)})">
+              <strong>${Components.escapeHtml(log.username)}</strong> <span style="color: var(--text-muted); font-size: 0.8rem;">(${Components.escapeHtml(log.email)})</span>
+          </td>
       </tr>
+      ${hasParams ? `
+      <tr id="details-${rowId}" style="display: none; background: rgba(0, 0, 0, 0.25); border-bottom: 1px solid rgba(255,255,255,0.08);">
+          <td colspan="6" style="padding: 12px 16px;">
+              <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 10px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                      <div style="display: flex; align-items: center; gap: 8px;">
+                          <i class='bx bx-code-curly' style="color: var(--primary); font-size: 1.1rem;"></i>
+                          <span style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);">
+                              Parâmetros da Consulta (Query String)
+                          </span>
+                          <span style="font-size: 0.72rem; color: var(--primary); background: rgba(16, 185, 129, 0.1); padding: 1px 6px; border-radius: 4px; font-weight: 600;">
+                              ${paramsList.length} ${paramsList.length === 1 ? 'parâmetro' : 'parâmetros'}
+                          </span>
+                      </div>
+                      <button type="button" 
+                          data-url="${Components.escapeHtml(fullPath)}"
+                          onclick="Components.copyToClipboard(this.getAttribute('data-url'), this)" 
+                          style="background: rgba(255,255,255,0.05); color: var(--text-muted); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 4px 10px; font-size: 0.75rem; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: all 0.2s ease;">
+                          <i class='bx bx-copy'></i>
+                          <span>Copiar URL Completa</span>
+                      </button>
+                  </div>
+                  <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                      ${paramsList.map(p => `
+                          <div style="display: inline-flex; align-items: center; background: rgba(12, 31, 24, 0.9); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 6px; padding: 4px 10px; font-size: 0.78rem; font-family: monospace;">
+                              <span style="color: var(--primary); font-weight: 600; margin-right: 6px;">${Components.escapeHtml(p.key)}:</span>
+                              <span style="color: #f1f5f9; word-break: break-all;">${Components.escapeHtml(p.val)}</span>
+                          </div>
+                      `).join('')}
+                  </div>
+                  <div style="font-family: monospace; font-size: 0.72rem; color: var(--text-muted); background: rgba(0,0,0,0.35); padding: 6px 10px; border-radius: 4px; word-break: break-all; border: 1px solid rgba(255,255,255,0.02);">
+                      <span style="color: #64748b;">Raw:</span> <span style="color: #cbd5e1;">${Components.escapeHtml(fullPath)}</span>
+                  </div>
+              </div>
+          </td>
+      </tr>
+      ` : ''}
     `;
   },
 
@@ -1128,16 +1244,16 @@ const Components = {
               </div>
               <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; background: rgba(255,255,255,0.05); padding: 4px 12px; border-radius: 20px;">Auditoria de Performance</span>
           </div>
-          <div class="table-container" style="max-height: 450px; overflow-y: auto;">
-              <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+          <div class="table-container" style="max-height: 450px; overflow-y: auto; overflow-x: auto;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; table-layout: fixed;">
                   <thead>
                       <tr style="border-bottom: 1px solid var(--border); text-align: left; color: var(--text-muted);">
-                          <th style="padding: 10px; width: 180px; color: var(--text-muted);">Timestamp</th>
-                          <th style="padding: 10px; width: 80px; color: var(--text-muted);">Método</th>
+                          <th style="padding: 10px; width: 170px; color: var(--text-muted);">Timestamp</th>
+                          <th style="padding: 10px; width: 75px; color: var(--text-muted);">Método</th>
                           <th style="padding: 10px; color: var(--text-muted);">Endpoint</th>
-                          <th style="padding: 10px; width: 80px; color: var(--text-muted);">Status</th>
-                          <th style="padding: 10px; width: 120px; color: var(--text-muted);">Tempo Resposta</th>
-                          <th style="padding: 10px; color: var(--text-muted);">Usuário Chamador</th>
+                          <th style="padding: 10px; width: 75px; color: var(--text-muted);">Status</th>
+                          <th style="padding: 10px; width: 130px; color: var(--text-muted);">Tempo Resposta</th>
+                          <th style="padding: 10px; width: 230px; color: var(--text-muted);">Usuário Chamador</th>
                       </tr>
                   </thead>
                   <tbody>
