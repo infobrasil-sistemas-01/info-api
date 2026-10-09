@@ -105,9 +105,9 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1240px;
             margin: 0 auto;
-            padding: 0 24px;
+            padding: 0 28px;
             position: relative;
             z-index: 1;
         }
@@ -122,13 +122,13 @@
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--border);
-            padding: 0.65rem 0;
+            padding: 0.85rem 0;
             position: sticky;
             top: 16px;
             z-index: 1000;
             border-radius: 20px;
-            margin: 16px auto 24px;
-            max-width: 1200px;
+            margin: 16px auto 32px;
+            max-width: 1240px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -140,14 +140,14 @@
             border-color: transparent transparent var(--border) transparent;
             background: rgba(6, 17, 13, 0.96);
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
-            padding: 0.6rem 0;
+            padding: 0.75rem 0;
         }
 
         .header-content {
-            max-width: 1200px;
+            max-width: 1240px;
             margin: 0 auto;
             width: 100%;
-            padding: 0 24px;
+            padding: 0 28px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -203,7 +203,7 @@
         .nav-menu {
             display: flex;
             align-items: center;
-            gap: 1.25rem;
+            gap: 1.6rem;
             list-style: none;
         }
 
@@ -215,8 +215,8 @@
             color: var(--text-muted);
             text-decoration: none;
             font-weight: 500;
-            font-size: 0.88rem;
-            padding: 8px 12px;
+            font-size: 0.9rem;
+            padding: 8px 14px;
             border-radius: 8px;
             transition: all 0.2s ease;
             display: inline-flex;
@@ -434,7 +434,7 @@
            HERO SECTION
         -------------------------------------------------------------------------- */
         .hero {
-            padding: 5rem 0 6rem;
+            padding: clamp(6.5rem, 9vw, 8.5rem) 0 clamp(7rem, 10vw, 9rem);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -526,14 +526,14 @@
            SECTION SHARED STYLES
         -------------------------------------------------------------------------- */
         section {
-            padding: 5rem 0;
+            padding: clamp(6.5rem, 9vw, 9.5rem) 0;
             position: relative;
         }
 
         .section-header {
             text-align: center;
-            max-width: 700px;
-            margin: 0 auto 3.5rem;
+            max-width: 740px;
+            margin: 0 auto 4.5rem;
         }
 
         .section-tag {
@@ -1081,8 +1081,8 @@
         footer {
             background: #040c09;
             border-top: 1px solid var(--border);
-            padding: 4rem 0 2rem;
-            margin-top: 6rem;
+            padding: 5rem 0 2.5rem;
+            margin-top: 8rem;
         }
 
         .footer-grid {
@@ -1202,8 +1202,6 @@
                 <img src="/integration/assets/logo-infoapi-white.png" alt="InfoAPI" class="brand-logo"
                     onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
                 <span class="brand-name" style="display: none;">Info<span>API</span></span>
-                <span class="brand-divider"></span>
-                <span class="panel-name">Integração</span>
             </a>
 
             <!-- Desktop Nav Menu -->

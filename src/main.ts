@@ -1,6 +1,7 @@
 import './instrument';
 
 import { NestFactory } from '@nestjs/core';
+import { RequestMethod } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { setupSwagger } from './config/swagger';
 import { GlobalLoggerService } from './common/logger/logger.service';
@@ -102,6 +103,8 @@ async function bootstrap() {
   });
   app.setGlobalPrefix('api/v1', {
     exclude: [
+      { path: '', method: RequestMethod.GET },
+      { path: '/', method: RequestMethod.GET },
       'integration',
       'integration/*path',
       'favicon.ico',

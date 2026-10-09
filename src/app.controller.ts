@@ -68,7 +68,7 @@ export class AppController {
     return res.status(404).send();
   }
 
-  @Get()
+  @Get(['', '/'])
   index(@Res() res: Response) {
     const paths = [
       join(
