@@ -366,7 +366,9 @@
   <div class="container" id="form-container">
     <header>
       <div class="brand-login">
-        <span class="brand-name">Info<span>API</span></span>
+        <a href="/" target="_blank">
+          <span class="brand-name">Info<span>API</span></span>
+        </a>
       </div>
       <h1>Solicitar Integração</h1>
       <p class="subtitle">
@@ -773,15 +775,15 @@
         fixedIp: isClientServer ? hostVal : undefined,
         database: isClientServer
           ? {
-              host: hostVal,
-              port: portVal,
-              database: dbNameVal,
-            }
+            host: hostVal,
+            port: portVal,
+            database: dbNameVal,
+          }
           : {
-              host: 'DATACENTER',
-              port: 0,
-              database: 'DATACENTER',
-            },
+            host: 'DATACENTER',
+            port: 0,
+            database: 'DATACENTER',
+          },
         modules: selectedScopes.map((s) => s.resource),
         scopes: selectedScopes.map((s) => ({
           resource: s.resource,

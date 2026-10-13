@@ -370,6 +370,13 @@ header.scrolled {
     gap: 1rem;
 }
 
+.brand a, .brand-login a {
+    text-decoration: none;
+    color: inherit;
+    display: inline-flex;
+    align-items: center;
+}
+
 .brand-divider {
     width: 1px;
     height: 24px;

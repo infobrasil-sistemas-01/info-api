@@ -16,7 +16,9 @@
     <div id="login-container" class="hidden">
         <div class="login-card">
             <div class="brand-login">
-                <span class="brand-name">Info<span>API</span></span>
+                <a href="/" target="_blank">
+                    <span class="brand-name">Info<span>API</span></span>
+                </a>
             </div>
             <h1>Bem-vindo</h1>
             <p>Acesse sua área de integração</p>
@@ -64,7 +66,9 @@
         <header>
             <div class="header-content">
                 <div class="brand">
-                    <span class="brand-name">Info<span>API</span></span>
+                    <a href="/" target="_blank">
+                        <span class="brand-name">Info<span>API</span></span>
+                    </a>
                     <span class="brand-divider"></span>
                     <span class="panel-name">Área do Cliente</span>
                 </div>
@@ -553,26 +557,32 @@ print(f'Basic {auth}')</code></pre>
             <!-- Tab: Feature Requests -->
             <section id="tab-requests" class="tab-content">
                 <div class="card" style="margin-bottom: 2rem;">
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                    <div
+                        style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
                         <div>
-                            <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--primary); display: flex; align-items: center; gap: 0.6rem;">
+                            <h2
+                                style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--primary); display: flex; align-items: center; gap: 0.6rem;">
                                 <i class='bx bx-message-square-add'></i> Solicitar Funcionalidade
                             </h2>
                             <p style="color: var(--text-muted); font-size: 0.95rem; margin: 0;">
-                                Precisa de novos campos, filtros, endpoints ou melhorias na API? Descreva detalhadamente sua necessidade. Nossa equipe técnica avaliará e responderá diretamente por aqui e por e-mail.
+                                Precisa de novos campos, filtros, endpoints ou melhorias na API? Descreva detalhadamente
+                                sua necessidade. Nossa equipe técnica avaliará e responderá diretamente por aqui e por
+                                e-mail.
                             </p>
                         </div>
                     </div>
 
                     <form id="feature-request-form" onsubmit="submitFeatureRequest(event)">
                         <div class="form-group" style="margin-bottom: 1rem;">
-                            <label for="feature-request-text" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #fff;">
+                            <label for="feature-request-text"
+                                style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #fff;">
                                 Descrição da Funcionalidade / Melhoria
                             </label>
                             <textarea id="feature-request-text" required rows="5" minlength="5" maxlength="5000"
                                 placeholder="Descreva aqui sua necessidade com o máximo de detalhes (ex: modelo de dados desejado, comportamento esperado, caso de uso)..."
                                 style="width: 100%; box-sizing: border-box; background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 8px; padding: 12px 16px; color: #fff; font-family: inherit; font-size: 0.95rem; resize: vertical; line-height: 1.5; outline: none; transition: border-color 0.2s;"></textarea>
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem; font-size: 0.8rem; color: var(--text-muted);">
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem; font-size: 0.8rem; color: var(--text-muted);">
                                 <span>Mínimo de 5 caracteres. Seja claro e objetivo.</span>
                                 <span id="feature-request-char-count">0 / 5000</span>
                             </div>
@@ -580,7 +590,8 @@ print(f'Basic {auth}')</code></pre>
 
                         <div style="display: flex; justify-content: flex-end; align-items: center; gap: 1rem;">
                             <span id="feature-request-feedback" style="font-size: 0.9rem; font-weight: 500;"></span>
-                            <button type="submit" id="btn-submit-feature" class="btn btn-primary" style="display: flex; align-items: center; gap: 0.5rem; padding: 10px 24px;">
+                            <button type="submit" id="btn-submit-feature" class="btn btn-primary"
+                                style="display: flex; align-items: center; gap: 0.5rem; padding: 10px 24px;">
                                 <i class='bx bx-send'></i> <span>Enviar Solicitação</span>
                             </button>
                         </div>
@@ -588,11 +599,13 @@ print(f'Basic {auth}')</code></pre>
                 </div>
 
                 <div class="card">
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                    <div
+                        style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
                         <h3 style="margin: 0; font-size: 1.3rem; display: flex; align-items: center; gap: 0.5rem;">
                             <i class='bx bx-history' style="color: var(--primary);"></i> Histórico de Solicitações
                         </h3>
-                        <button onclick="loadMyFeatureRequests()" class="btn btn-outline" style="font-size: 0.85rem; padding: 6px 14px; display: flex; align-items: center; gap: 0.4rem;">
+                        <button onclick="loadMyFeatureRequests()" class="btn btn-outline"
+                            style="font-size: 0.85rem; padding: 6px 14px; display: flex; align-items: center; gap: 0.4rem;">
                             <i class='bx bx-refresh'></i> Atualizar
                         </button>
                     </div>

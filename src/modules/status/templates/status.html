@@ -51,6 +51,8 @@
             display: flex;
             align-items: center;
             gap: 0.75rem;
+            text-decoration: none;
+            color: inherit;
         }
 
         .logo-icon {
@@ -365,10 +367,10 @@
 <body>
     <div class="container">
         <header>
-            <div class="logo">
+            <a href="/" class="logo" title="InfoAPI Home">
                 <div class="logo-icon"><span class="material-icons" style="color: white">analytics</span></div>
                 <h1 style="font-family: 'Outfit', sans-serif;">Info<span>API</span> Status</h1>
-            </div>
+            </a>
             <div id="overall-status-badge" class="badge badge-loading">
                 <div class="status-indicator">
                     <div class="ping"></div>
