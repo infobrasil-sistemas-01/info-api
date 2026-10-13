@@ -3,6 +3,7 @@
   "compareStep": true,
   "scripts": {
     "postbump": "npm run swagger:generate",
-    "precommit": "git add docs/swagger swagger-spec.json"
+    "postchangelog": "npm run changelog:human",
+    "precommit": "git add docs/swagger swagger-spec.json docs/changelog"
   }
 }

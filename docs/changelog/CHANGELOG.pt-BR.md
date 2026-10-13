@@ -6,6 +6,26 @@ Para visualizar a versão interativa com busca em tempo real, acesse o portal we
 
 ---
 
+## [v1.19.0] - 2026-10-13
+
+### 📌 new homepage e melhorias
+> Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral & Usabilidade, Geral, Pedidos & Vendas.
+
+**Destaques:**
+- ⭐ new homepage
+- ⭐ new homepage 2
+
+#### 🚀 Novidades & Melhorias
+- **[Geral & Usabilidade]** new homepage: Atualização no módulo de Geral & Usabilidade: new homepage.
+- **[Geral & Usabilidade]** new homepage 2: Atualização no módulo de Geral & Usabilidade: new homepage 2.
+
+#### 🛠️ Correções & Estabilidade
+- **[Geral]** margins: Atualização no módulo de Geral: margins.
+- **[Pedidos & Vendas]** PostOrderDto due to change in API purpose: Atualização no módulo de Pedidos & Vendas: PostOrderDto due to change in API purpose.
+- **[Painel & Métricas]** rotate password on client dash: Atualização no módulo de Painel & Métricas: rotate password on client dash.
+
+---
+
 ## [v1.18.0] - 2026-10-13
 
 ### 📌 new homepage e melhorias
