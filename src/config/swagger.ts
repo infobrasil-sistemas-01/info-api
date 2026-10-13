@@ -1,6 +1,5 @@
 import { INestApplication } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { apiReference } from '@scalar/nestjs-api-reference';
 import path from 'path';
 import fs from 'fs';
 
@@ -148,148 +147,171 @@ export function setupSwagger(app: INestApplication) {
       });
     });
 
+  const customCss = `
+    .swagger-ui .topbar {
+      display: none !important;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #06110d;
+    }
+    .swagger-ui {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 16px 24px;
+    }
+    .swagger-ui .info {
+      margin: 20px 0;
+    }
+  `;
+
   const customJsCode = `
     (function() {
-      var availableVersions = ${JSON.stringify(availableVersions)};
-      var check = setInterval(function() {
-        var topbar = document.querySelector('.topbar-wrapper');
-        if (topbar && !document.getElementById('custom-admin-link')) {
-          clearInterval(check);
-          
-          // 1. Botão Changelog (Novo)
-          var cl = document.createElement('a');
-          cl.id = 'custom-changelog-link';
-          cl.href = '/changelog';
-          cl.title = 'Notas de Atualização (Changelog)';
-          cl.style.marginLeft = 'auto';
-          cl.style.marginRight = '8px';
-          cl.style.display = 'flex';
-          cl.style.alignItems = 'center';
-          cl.style.justifyContent = 'center';
-          cl.style.alignSelf = 'center';
-          cl.style.textDecoration = 'none';
-          cl.style.flex = '0 0 40px';
-          cl.style.width = '40px';
-          cl.style.height = '40px';
-          cl.style.borderRadius = '50%';
-          cl.style.background = 'rgba(255,255,255,0.1)';
-          cl.style.transition = 'background 0.3s';
-          cl.onmouseover = function() { this.style.background = 'rgba(99,102,241,0.3)'; };
-          cl.onmouseout = function() { this.style.background = 'rgba(255,255,255,0.1)'; };
-          cl.innerHTML = '<i class="material-icons" style="color: white; font-size: 22px;">history</i>';
-          topbar.appendChild(cl);
+      // 1. Carregar o script do Web Component se ainda não existir
+      if (!customElements.get('info-api-header')) {
+        var s = document.createElement('script');
+        s.src = '/integration/assets/info-header.js';
+        document.head.appendChild(s);
+      }
 
-          // 2. Botão Admin (Existente)
-          var a = document.createElement('a');
-          a.id = 'custom-admin-link';
-          a.href = '/integration/admin';
-          a.title = 'Painel Administrativo';
-          a.style.display = 'flex';
-          a.style.alignItems = 'center';
-          a.style.justifyContent = 'center';
-          a.style.alignSelf = 'center';
-          a.style.textDecoration = 'none';
-          a.style.flex = '0 0 40px';
-          a.style.width = '40px';
-          a.style.height = '40px';
-          a.style.borderRadius = '50%';
-          a.style.background = 'rgba(255,255,255,0.1)';
-          a.style.transition = 'background 0.3s';
-          a.onmouseover = function() { this.style.background = 'rgba(255,255,255,0.2)'; };
-          a.onmouseout = function() { this.style.background = 'rgba(255,255,255,0.1)'; };
-          a.innerHTML = '<i class="material-icons" style="color: white; font-size: 24px;">support_agent</i>';
-          topbar.appendChild(a);
-
-          // 2. Seletor de Versões
-          var selectContainer = document.createElement('div');
-          selectContainer.style.marginLeft = '15px';
-          selectContainer.style.display = 'flex';
-          selectContainer.style.alignItems = 'center';
-
-          var select = document.createElement('select');
-          select.id = 'version-selector';
-          select.style.padding = '5px 10px';
-          select.style.borderRadius = '4px';
-          select.style.border = '1px solid rgba(255,255,255,0.3)';
-          select.style.background = '#3b4151';
-          select.style.color = 'white';
-          select.style.cursor = 'pointer';
-          select.style.outline = 'none';
-
-          // Opção para a versão atual (Principal)
-          var currentOpt = document.createElement('option');
-          currentOpt.value = '';
-          currentOpt.text = 'Versão Atual (${packageVersion})';
-          select.appendChild(currentOpt);
-
-          availableVersions.forEach(function(v) {
-            if (v === '${packageVersion}') return;
-            var opt = document.createElement('option');
-            opt.value = 'v' + v;
-            opt.text = 'v' + v;
-            if (window.location.pathname.includes('/v' + v)) {
-              opt.selected = true;
-            }
-            select.appendChild(opt);
-          });
-
-          select.onchange = function(e) {
-            var val = e.target.value;
-            if (val === '') {
-              window.location.href = '/docs';
-            } else {
-              window.location.href = '/docs/' + val;
-            }
-          };
-
-          selectContainer.appendChild(select);
-          topbar.appendChild(selectContainer);
+      // 2. Injetar o <info-api-header> no topo do documento
+      function injectUnifiedHeader() {
+        if (!document.querySelector('info-api-header')) {
+          var headerEl = document.createElement('info-api-header');
+          headerEl.setAttribute('active-doc', 'swagger');
+          headerEl.setAttribute('current-version', '${packageVersion}');
+          headerEl.setAttribute('versions', ${JSON.stringify(JSON.stringify(availableVersions))});
+          document.body.prepend(headerEl);
         }
-      }, 100);
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', injectUnifiedHeader);
+      } else {
+        injectUnifiedHeader();
+      }
     })();
   `;
 
-  // Servir o JS customizado dinamicamente
-  app.getHttpAdapter().get('/swagger-custom.js', (req, res) => {
+  // Servir o script do Web Component de forma dedicada e rápida
+  const infoHeaderPath = path.join(
+    process.cwd(),
+    'src',
+    'modules',
+    'integration-request',
+    'templates',
+    'assets',
+    'info-header.js',
+  );
+
+  app.getHttpAdapter().get('/integration/assets/info-header.js', (req: any, res: any) => {
+    res.type('application/javascript');
+    if (fs.existsSync(infoHeaderPath)) {
+      res.send(fs.readFileSync(infoHeaderPath, 'utf8'));
+    } else {
+      res.status(404).send('console.error("info-header.js not found");');
+    }
+  });
+
+  // Servir o JS customizado do Swagger dinamicamente
+  app.getHttpAdapter().get('/swagger-custom.js', (req: any, res: any) => {
     res.type('application/javascript');
     res.send(customJsCode);
   });
 
-  // 1. Registro da versão principal (Atual)
+  // Função geradora de HTML do Scalar Standalone (com Shadow DOM InfoApiHeader)
+  const getScalarHtml = ({
+    specUrl,
+    version,
+  }: {
+    specUrl: string;
+    version?: string;
+  }) => {
+    const pageTitle = version
+      ? `InfoBrasil API Docs v${version}`
+      : 'InfoBrasil API Docs';
+
+    return `<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>${pageTitle}</title>
+    <meta name="description" content="Documentação interativa da API de Integração InfoBrasil ERP." />
+    <link rel="icon" type="image/x-icon" href="/integration/assets/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --scalar-font: 'Outfit', sans-serif;
+      }
+      *, *::before, *::after {
+        box-sizing: border-box;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+        background-color: #06110d;
+        color: #f0fdf4;
+        font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        min-height: 100vh;
+      }
+    </style>
+  </head>
+  <body>
+    <info-api-header
+      active-doc="scalar"
+      current-version="${packageVersion}"
+      versions='${JSON.stringify(availableVersions)}'
+    ></info-api-header>
+    <script src="/integration/assets/info-header.js"></script>
+    <script
+      id="api-reference"
+      data-url="${specUrl}"
+      data-configuration='{"theme":"purple","layout":"modern","showDeveloperTools":"localhost","pageTitle":"${pageTitle}"}'
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference"></script>
+  </body>
+</html>`;
+  };
+
+  // 1. Registro da versão principal (Swagger UI)
   SwaggerModule.setup('docs', app, document, {
     customSiteTitle: 'InfoBrasil API Docs',
-    customCssUrl: 'https://fonts.googleapis.com/icon?family=Material+Icons',
+    customCss: customCss,
     customJs: '/swagger-custom.js',
   });
 
-  app.use(
-    '/scalar',
-    apiReference({
-      theme: 'purple',
-      content: document,
-      showDeveloperTools: 'localhost',
-      pageTitle: 'InfoBrasil API Docs',
-    }),
-  );
+  // 1. Registro da versão principal (Scalar Standalone)
+  app.getHttpAdapter().get('/scalar', (req: any, res: any) => {
+    res.type('html');
+    res.send(
+      getScalarHtml({
+        specUrl: '/docs-json',
+      }),
+    );
+  });
 
   // 2. Registro das versões históricas encontradas em docs/swagger
   swaggerVersions.forEach(({ version, document: versionDoc }) => {
     // Swagger UI: /docs/v1.3.0
     SwaggerModule.setup(`docs/v${version}`, app, versionDoc, {
       customSiteTitle: `InfoBrasil API Docs v${version}`,
-      customCssUrl: 'https://fonts.googleapis.com/icon?family=Material+Icons',
+      customCss: customCss,
       customJs: '/swagger-custom.js',
     });
 
-    // Scalar: /scalar/v1.3.0
-    app.use(
-      `/scalar/v${version}`,
-      apiReference({
-        theme: 'purple',
-        content: versionDoc,
-        showDeveloperTools: 'localhost',
-        pageTitle: `InfoBrasil API Docs v${version}`,
-      }),
-    );
+    // Scalar Standalone: /scalar/v1.3.0
+    app.getHttpAdapter().get(`/scalar/v${version}`, (req: any, res: any) => {
+      res.type('html');
+      res.send(
+        getScalarHtml({
+          specUrl: `/docs/v${version}-json`,
+          version,
+        }),
+      );
+    });
   });
 }
