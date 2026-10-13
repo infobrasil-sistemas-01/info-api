@@ -107,7 +107,8 @@
         .container {
             max-width: 1240px;
             margin: 0 auto;
-            padding: 0 28px;
+            padding-left: 28px;
+            padding-right: 28px;
             position: relative;
             z-index: 1;
         }
@@ -433,8 +434,9 @@
         /* -------------------------------------------------------------------------
            HERO SECTION
         -------------------------------------------------------------------------- */
-        .hero {
-            padding: clamp(6.5rem, 9vw, 8.5rem) 0 clamp(7rem, 10vw, 9rem);
+        section.hero {
+            padding-top: clamp(4.5rem, 7vw, 6.5rem);
+            padding-bottom: clamp(3.5rem, 5vw, 5rem);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -469,6 +471,7 @@
 
         .hero h1 span {
             background: linear-gradient(135deg, #34d399 0%, #10b981 50%, #059669 100%);
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -526,8 +529,13 @@
            SECTION SHARED STYLES
         -------------------------------------------------------------------------- */
         section {
-            padding: clamp(6.5rem, 9vw, 9.5rem) 0;
+            padding: clamp(3.5rem, 5vw, 5rem) 0;
             position: relative;
+        }
+
+        section.container {
+            padding-top: clamp(3.5rem, 5vw, 5rem);
+            padding-bottom: clamp(3.5rem, 5vw, 5rem);
         }
 
         .section-header {
@@ -1082,7 +1090,7 @@
             background: #040c09;
             border-top: 1px solid var(--border);
             padding: 5rem 0 2.5rem;
-            margin-top: 8rem;
+            margin-top: 4rem;
         }
 
         .footer-grid {
@@ -1170,6 +1178,11 @@
         }
 
         @media (max-width: 600px) {
+            .container {
+                padding-left: 18px;
+                padding-right: 18px;
+            }
+
             .slider-card {
                 flex: 0 0 300px;
             }
