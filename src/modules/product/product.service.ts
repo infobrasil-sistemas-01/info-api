@@ -168,15 +168,22 @@ export class ProductService {
     credentialsId: string,
     storeId: number = 1,
     id: number | string,
+    priceTable: number = 1,
   ) {
     let connection: any;
     connection =
       await this.tenantConnectionService.getConnection(credentialsId);
 
     try {
+      const safePriceTable =
+        Number(priceTable) >= 1 && Number(priceTable) <= 12
+          ? Math.floor(Number(priceTable))
+          : 1;
+
       const query = `SELECT
                       P.PRO_CODIGO, P.PRO_CODIGOBAR, P.PRO_PRCCOMPRA, P.PRO_PRCCUSTO, P.PRO_PRCCOMPRAFISCAL, P.PRO_CUSTOFISCAL,
-                      E.PRO_PRECO1
+                      E.PRO_PRECO1,
+                      COALESCE(E.PRO_PRECO${safePriceTable}, E.PRO_PRECO1, 0) AS PRO_PRECO_TABELA
                       FROM produtos P
                       LEFT JOIN estoque E ON P.PRO_CODIGO = E.PRO_CODIGO AND E.LOJ_CODIGO = ?
                       WHERE P.PRO_CODIGO = ?`;

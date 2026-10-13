@@ -97,11 +97,19 @@ export class OrderService {
         }> = [];
 
         let totalCalculated = 0;
+        const priceTable =
+          orderData.price_table_id &&
+          Number(orderData.price_table_id) >= 1 &&
+          Number(orderData.price_table_id) <= 12
+            ? Math.floor(Number(orderData.price_table_id))
+            : 1;
+
         for (const product of products_sold) {
           const ourProduct = (await this.productService.getById(
             credentialsId,
             storeId,
             product.product_id,
+            priceTable,
           )) as any;
 
           if (!ourProduct) {
@@ -110,7 +118,12 @@ export class OrderService {
             );
           }
 
-          const price = Number(ourProduct.PRO_PRECO1) || 0;
+          const price =
+            Number(
+              ourProduct.PRO_PRECO_TABELA ??
+                ourProduct[`PRO_PRECO${priceTable}`] ??
+                ourProduct.PRO_PRECO1,
+            ) || 0;
           totalCalculated += price * product.quantity;
 
           resolvedProducts.push({
@@ -136,6 +149,7 @@ export class OrderService {
             item.ourProduct,
             order.VEN_NUMERO,
             storeId,
+            priceTable,
           );
         }
 

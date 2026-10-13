@@ -68,6 +68,34 @@ describe('OrderItemService', () => {
       expect(result).toEqual({ success: true });
     });
 
+    it('should use price from specific priceTable when provided', async () => {
+      mockTransaction.query.mockImplementation(
+        (query: string, values: any[], callback: Function) => {
+          callback(null, { success: true });
+        },
+      );
+
+      const productWithTable4 = {
+        ...mockOurProduct,
+        PRO_PRECO4: 25.0,
+      };
+
+      await service.insertSoldProductOnDb(
+        mockTransaction,
+        mockProduct,
+        productWithTable4,
+        123,
+        1,
+        4,
+      );
+
+      expect(mockTransaction.query).toHaveBeenCalledWith(
+        expect.stringContaining('INSERT INTO ITENSVEN'),
+        expect.arrayContaining([123, 1, 101, 2, 25.0, 50.0]),
+        expect.any(Function),
+      );
+    });
+
     it('should include variant data when variant_id is provided', async () => {
       mockTransaction.query.mockImplementation(
         (query: string, values: any[], callback: Function) => {

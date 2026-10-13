@@ -16,12 +16,25 @@ export class OrderItemService {
     ourProduct: any,
     ven_numero: number,
     storeId: number,
+    priceTable: number = 1,
   ) {
     if (product.quantity <= 0) {
       throw new BadRequestException('Quantity must be greater than 0');
     }
 
     try {
+      const safePriceTable =
+        Number(priceTable) >= 1 && Number(priceTable) <= 12
+          ? Math.floor(Number(priceTable))
+          : 1;
+
+      const unitPrice =
+        Number(
+          ourProduct.PRO_PRECO_TABELA ??
+            ourProduct[`PRO_PRECO${safePriceTable}`] ??
+            ourProduct.PRO_PRECO1,
+        ) || 0;
+
       const produtoVendidoInsert = {
         VEN_NUMERO: ven_numero,
         LOJ_CODIGO: storeId,
@@ -31,16 +44,16 @@ export class OrderItemService {
         COR_CODIGO: product.variant_id ? ourProduct.COR_CODIGO : null,
         PRG_CODIGO: ourProduct.PRG_CODIGO || null,
         IVD_QTDE: product.quantity,
-        IVD_PRECO: ourProduct.PRO_PRECO1,
-        IVD_TOTAL: ourProduct.PRO_PRECO1 * product.quantity,
+        IVD_PRECO: unitPrice,
+        IVD_TOTAL: unitPrice * product.quantity,
         IVD_DESCONTO: 0,
-        IVD_LIQUIDO: ourProduct.PRO_PRECO1 * product.quantity - 0,
+        IVD_LIQUIDO: unitPrice * product.quantity - 0,
         IVD_PRCCOMPRA: ourProduct.PRO_PRCCOMPRA || null,
         IVD_PRCCUSTO: ourProduct.PRO_PRCCUSTO || null,
         IVD_PRCFISCAL: ourProduct.PRO_PRCCOMPRAFISCAL || null,
         IVD_PRCCUSTOFISCAL: ourProduct.PRO_CUSTOFISCAL || null,
         IVD_ENTREGUE: 'N',
-        IVD_PRCAVISTA: ourProduct.PRO_PRECO1,
+        IVD_PRCAVISTA: unitPrice,
       };
 
       const IVD_NUMERO = 'GEN_ID(GEN_NUMEROIVD, 1)';
