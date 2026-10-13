@@ -2,6 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import path from 'path';
 import fs from 'fs';
+import { INFO_HEADER_JS } from './info-header.component';
 
 export function getSwaggerConfigBuilder(
   packageVersion: string,
@@ -167,15 +168,9 @@ export function setupSwagger(app: INestApplication) {
   `;
 
   const customJsCode = `
-    (function() {
-      // 1. Carregar o script do Web Component se ainda não existir
-      if (!customElements.get('info-api-header')) {
-        var s = document.createElement('script');
-        s.src = '/integration/assets/info-header.js';
-        document.head.appendChild(s);
-      }
+    ${INFO_HEADER_JS}
 
-      // 2. Injetar o <info-api-header> no topo do documento
+    (function() {
       function injectUnifiedHeader() {
         if (!document.querySelector('info-api-header')) {
           var headerEl = document.createElement('info-api-header');
@@ -194,24 +189,10 @@ export function setupSwagger(app: INestApplication) {
     })();
   `;
 
-  // Servir o script do Web Component de forma dedicada e rápida
-  const infoHeaderPath = path.join(
-    process.cwd(),
-    'src',
-    'modules',
-    'integration-request',
-    'templates',
-    'assets',
-    'info-header.js',
-  );
-
+  // Servir o script do Web Component de forma dedicada e rápida com o JS embutido
   app.getHttpAdapter().get('/integration/assets/info-header.js', (req: any, res: any) => {
     res.type('application/javascript');
-    if (fs.existsSync(infoHeaderPath)) {
-      res.send(fs.readFileSync(infoHeaderPath, 'utf8'));
-    } else {
-      res.status(404).send('console.error("info-header.js not found");');
-    }
+    res.send(INFO_HEADER_JS);
   });
 
   // Servir o JS customizado do Swagger dinamicamente
@@ -258,7 +239,14 @@ export function setupSwagger(app: INestApplication) {
         font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         min-height: 100vh;
       }
+      #scalar-app {
+        width: 100%;
+        min-height: calc(100vh - 65px);
+      }
     </style>
+    <script>
+      ${INFO_HEADER_JS}
+    </script>
   </head>
   <body>
     <info-api-header
@@ -266,13 +254,17 @@ export function setupSwagger(app: INestApplication) {
       current-version="${packageVersion}"
       versions='${JSON.stringify(availableVersions)}'
     ></info-api-header>
-    <script src="/integration/assets/info-header.js"></script>
-    <script
-      id="api-reference"
-      data-url="${specUrl}"
-      data-configuration='{"theme":"purple","layout":"modern","showDeveloperTools":"localhost","pageTitle":"${pageTitle}"}'
-    ></script>
+    <div id="scalar-app"></div>
     <script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference"></script>
+    <script>
+      Scalar.createApiReference('#scalar-app', {
+        url: '${specUrl}',
+        theme: 'purple',
+        layout: 'modern',
+        showDeveloperTools: 'localhost',
+        pageTitle: '${pageTitle}'
+      });
+    </script>
   </body>
 </html>`;
   };

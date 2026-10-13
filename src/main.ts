@@ -112,6 +112,11 @@ async function bootstrap() {
       'status/*path',
       'changelog',
       'changelog/*path',
+      'scalar',
+      'scalar/*path',
+      'docs',
+      'docs/*path',
+      'swagger-custom.js',
     ],
   });
 

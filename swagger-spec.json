@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.0",
   "paths": {
-    "/auth/me": {
+    "/api/v1/auth/me": {
       "get": {
         "operationId": "AuthController_me",
         "parameters": [],
@@ -28,7 +28,7 @@
         ]
       }
     },
-    "/auth/login": {
+    "/api/v1/auth/login": {
       "post": {
         "description": "Autentica o usuário usando credenciais básicas (Basic Auth) enviadas exclusivamente no cabeçalho HTTP Authorization, e retorna um token de acesso JWT.",
         "operationId": "AuthController_login",
@@ -56,7 +56,7 @@
         ]
       }
     },
-    "/auth/refresh": {
+    "/api/v1/auth/refresh": {
       "post": {
         "operationId": "AuthController_refresh",
         "parameters": [],
@@ -88,7 +88,7 @@
         ]
       }
     },
-    "/auth/operator-verify": {
+    "/api/v1/auth/operator-verify": {
       "post": {
         "description": "Endpoint chamado pelo STS via Basic Auth ou Bearer Token para validar operador no banco Firebird do tenant.",
         "operationId": "AuthController_operatorVerify",
@@ -124,7 +124,7 @@
         ]
       }
     },
-    "/auth/operator-status/{usuCodigo}": {
+    "/api/v1/auth/operator-status/{usuCodigo}": {
       "get": {
         "operationId": "AuthController_operatorStatus",
         "parameters": [
@@ -148,7 +148,7 @@
         ]
       }
     },
-    "/products": {
+    "/api/v1/products": {
       "get": {
         "description": "Retorna uma lista paginada de produtos associados às credenciais do usuário autenticado.",
         "operationId": "ProductController_getProducts",
@@ -323,7 +323,7 @@
         ]
       }
     },
-    "/products/id/{id}": {
+    "/api/v1/products/id/{id}": {
       "get": {
         "description": "Retorna os detalhes de um produto específico com base no ID fornecido.",
         "operationId": "ProductController_getProductById",
@@ -387,7 +387,7 @@
         ]
       }
     },
-    "/products/barcode/{barcode}": {
+    "/api/v1/products/barcode/{barcode}": {
       "get": {
         "description": "Retorna os detalhes de um produto específico com base no código de barras fornecido.",
         "operationId": "ProductController_getProductByBarcode",
@@ -451,7 +451,7 @@
         ]
       }
     },
-    "/products/brands": {
+    "/api/v1/products/brands": {
       "get": {
         "description": "Retorna uma lista paginada de marcas de produtos associadas às credenciais do usuário autenticado.",
         "operationId": "ProductBrandController_getBrands",
@@ -551,7 +551,7 @@
         ]
       }
     },
-    "/products/brands/{id}": {
+    "/api/v1/products/brands/{id}": {
       "patch": {
         "description": "Atualiza os dados de uma marca de produto existente no tenant.",
         "operationId": "ProductBrandController_updateBrand",
@@ -608,7 +608,7 @@
         ]
       }
     },
-    "/products/groups": {
+    "/api/v1/products/groups": {
       "get": {
         "description": "Retorna uma lista paginada de grupos de produtos associadas às credenciais do usuário autenticado.",
         "operationId": "ProductGroupController_getGroups",
@@ -708,7 +708,7 @@
         ]
       }
     },
-    "/products/groups/{id}": {
+    "/api/v1/products/groups/{id}": {
       "patch": {
         "description": "Atualiza os dados de um grupo de produto existente no tenant.",
         "operationId": "ProductGroupController_updateGroup",
@@ -765,7 +765,7 @@
         ]
       }
     },
-    "/orders": {
+    "/api/v1/orders": {
       "post": {
         "description": "Cria um novo pedido com os pedidos vendidos e informações de pagamento.",
         "operationId": "OrderController_postOrder",
@@ -804,7 +804,7 @@
             "description": "Token de autenticação inválido ou ausente."
           },
           "403": {
-            "description": "Operador não autorizado a registrar vendas em nome de outro usuário."
+            "description": "Operador não autorizado a registrar vendas em nome de outro usuário ou funcionário."
           }
         },
         "security": [
@@ -953,7 +953,7 @@
         ]
       }
     },
-    "/orders/order-metrics": {
+    "/api/v1/orders/order-metrics": {
       "get": {
         "description": "Retorna indicadores agregados (pedidos no mês, faturamento, ticket médio e pedidos em aberto) para o período informado.",
         "operationId": "OrderController_getOrderMetrics",
@@ -1018,7 +1018,7 @@
         ]
       }
     },
-    "/orders/{id}": {
+    "/api/v1/orders/{id}": {
       "get": {
         "description": "Retorna os detalhes de um pedido específico com base no ID fornecido.",
         "operationId": "OrderController_getOrderById",
@@ -1071,7 +1071,7 @@
         ]
       }
     },
-    "/order-items": {
+    "/api/v1/order-items": {
       "get": {
         "description": "Retorna uma lista de itens de pedidos com informações de marca e grupo.",
         "operationId": "OrderItemController_get",
@@ -1179,7 +1179,7 @@
         ]
       }
     },
-    "/payment-methods": {
+    "/api/v1/payment-methods": {
       "get": {
         "description": "Retorna uma lista paginada de formas de pagamento associados às credenciais do usuário autenticado.",
         "operationId": "PaymentMethodController_getPaymentMethods",
@@ -1237,7 +1237,7 @@
         ]
       }
     },
-    "/stores": {
+    "/api/v1/stores": {
       "get": {
         "description": "Retorna uma lista paginada de lojas associadas às credenciais do usuário autenticado, com suporte a filtros por código e CNPJ.",
         "operationId": "StoreController_get",
@@ -1313,7 +1313,7 @@
         ]
       }
     },
-    "/account-receivable": {
+    "/api/v1/account-receivable": {
       "get": {
         "description": "Obtém uma lista de contas a receber da loja.",
         "operationId": "AccountReceivableController_get",
@@ -1470,7 +1470,7 @@
         ]
       }
     },
-    "/health/live": {
+    "/api/v1/health/live": {
       "get": {
         "description": "Verifica rapidamente o processo e a conexão local com PostgreSQL. Ideal para probes frequentes que não devem acoplar a bancos remotos de clientes.",
         "operationId": "HealthController_checkLive",
@@ -1502,7 +1502,7 @@
         ]
       }
     },
-    "/health": {
+    "/api/v1/health": {
       "get": {
         "description": "Verifica o status da API e das dependências (PostgreSQL). Retorna 200 com `status: \"ok\"` quando tudo está operacional, ou `status: \"degraded\"` quando alguma dependência está indisponível.",
         "operationId": "HealthController_check",
@@ -1552,7 +1552,7 @@
         ]
       }
     },
-    "/plans/stats": {
+    "/api/v1/plans/stats": {
       "get": {
         "operationId": "StatsController_getStats",
         "parameters": [],
@@ -1579,7 +1579,7 @@
         ]
       }
     },
-    "/plans": {
+    "/api/v1/plans": {
       "get": {
         "operationId": "StatsController_findAll",
         "parameters": [],
@@ -1609,7 +1609,7 @@
         ]
       }
     },
-    "/clients": {
+    "/api/v1/clients": {
       "get": {
         "operationId": "ClientController_get",
         "parameters": [
@@ -1745,7 +1745,7 @@
         ]
       }
     },
-    "/clients/{id}": {
+    "/api/v1/clients/{id}": {
       "get": {
         "operationId": "ClientController_getById",
         "parameters": [
@@ -1827,7 +1827,7 @@
         ]
       }
     },
-    "/employees": {
+    "/api/v1/employees": {
       "get": {
         "operationId": "EmployeeController_get",
         "parameters": [
@@ -1921,7 +1921,7 @@
         ]
       }
     },
-    "/employees/{id}": {
+    "/api/v1/employees/{id}": {
       "get": {
         "operationId": "EmployeeController_getById",
         "parameters": [
@@ -1959,7 +1959,7 @@
         ]
       }
     },
-    "/suppliers": {
+    "/api/v1/suppliers": {
       "get": {
         "operationId": "SupplierController_get",
         "parameters": [
@@ -2041,7 +2041,7 @@
         ]
       }
     },
-    "/suppliers/{id}": {
+    "/api/v1/suppliers/{id}": {
       "get": {
         "operationId": "SupplierController_getById",
         "parameters": [
@@ -2079,7 +2079,7 @@
         ]
       }
     },
-    "/service-providers": {
+    "/api/v1/service-providers": {
       "get": {
         "operationId": "ServiceProviderController_get",
         "parameters": [
@@ -2161,7 +2161,7 @@
         ]
       }
     },
-    "/service-providers/{id}": {
+    "/api/v1/service-providers/{id}": {
       "get": {
         "operationId": "ServiceProviderController_getById",
         "parameters": [
@@ -2199,7 +2199,7 @@
         ]
       }
     },
-    "/payment-plans": {
+    "/api/v1/payment-plans": {
       "get": {
         "description": "Retorna uma lista paginada de planos de pagamento associados às credenciais do usuário autenticado.",
         "operationId": "PaymentPlanController_getPaymentPlans",
@@ -2257,7 +2257,7 @@
         ]
       }
     },
-    "/account-payable": {
+    "/api/v1/account-payable": {
       "get": {
         "description": "Retorna uma lista paginada e resumida de contas a pagar baseada nos filtros.",
         "operationId": "AccountPayableController_getAccountPayable",
@@ -2361,7 +2361,7 @@
         ]
       }
     },
-    "/account-payable/id/{id}": {
+    "/api/v1/account-payable/id/{id}": {
       "get": {
         "description": "Retorna os detalhes completos de uma conta a pagar pelo ID (PAG_NUMERO).",
         "operationId": "AccountPayableController_getAccountPayableById",
@@ -2402,7 +2402,7 @@
         ]
       }
     },
-    "/employee-roles": {
+    "/api/v1/employee-roles": {
       "get": {
         "operationId": "EmployeeRoleController_get",
         "parameters": [
@@ -2463,7 +2463,7 @@
         ]
       }
     },
-    "/deliveries": {
+    "/api/v1/deliveries": {
       "get": {
         "description": "Retorna uma lista paginada de entregas.",
         "operationId": "DeliveryController_getDeliveries",
@@ -2640,7 +2640,7 @@
         ]
       }
     },
-    "/deliveries/status": {
+    "/api/v1/deliveries/status": {
       "get": {
         "description": "Retorna uma lista de status de entregas.",
         "operationId": "DeliveryController_getDeliveriesStatus",
@@ -2674,7 +2674,7 @@
         ]
       }
     },
-    "/deliveries/{id}": {
+    "/api/v1/deliveries/{id}": {
       "get": {
         "description": "Retorna os detalhes de uma entrega específica com os itens vinculados.",
         "operationId": "DeliveryController_getDeliveryById",
@@ -2729,7 +2729,7 @@
         ]
       }
     },
-    "/call-centers": {
+    "/api/v1/call-centers": {
       "get": {
         "description": "Retorna uma lista paginada de atendimentos do Call Center com descrições das aplicações, tópicos e formas de atendimento.",
         "operationId": "CallCenterController_getCallCenters",
@@ -2838,7 +2838,7 @@
         ]
       }
     },
-    "/call-centers/{id}": {
+    "/api/v1/call-centers/{id}": {
       "get": {
         "description": "Retorna os detalhes completos de um atendimento do Call Center pelo número (CAL_NUMERO).",
         "operationId": "CallCenterController_getCallCenterById",
@@ -2879,7 +2879,7 @@
         ]
       }
     },
-    "/purchase": {
+    "/api/v1/purchase": {
       "get": {
         "description": "Retorna uma lista paginada de entradas de notas fiscais e compras da tabela COMPRAS com dados do fornecedor.",
         "operationId": "PurchaseController_get",
@@ -2988,7 +2988,7 @@
         ]
       }
     },
-    "/fiscal-entry": {
+    "/api/v1/fiscal-entry": {
       "get": {
         "description": "Retorna uma lista paginada de entradas de notas fiscais da tabela ENTRADAS_APOIO com dados do fornecedor.",
         "operationId": "FiscalEntryController_get",
@@ -3097,7 +3097,7 @@
         ]
       }
     },
-    "/adjustment": {
+    "/api/v1/adjustment": {
       "get": {
         "description": "Retorna uma lista paginada de acertos de estoque da tabela ACERTOS com informações de situação, loja e usuário.",
         "operationId": "AdjustmentController_get",
@@ -3262,7 +3262,7 @@
         ]
       }
     },
-    "/adjustment/{id}": {
+    "/api/v1/adjustment/{id}": {
       "get": {
         "description": "Retorna os detalhes completos do acerto de estoque e seu array aninhado de itens.",
         "operationId": "AdjustmentController_getById",
@@ -3314,7 +3314,7 @@
         ]
       }
     },
-    "/adjustment/{id}/items": {
+    "/api/v1/adjustment/{id}/items": {
       "get": {
         "description": "Retorna diretamente o array de itens vinculados a um acerto específico.",
         "operationId": "AdjustmentController_getItems",
@@ -3474,7 +3474,7 @@
         ]
       }
     },
-    "/feature-requests": {
+    "/api/v1/feature-requests": {
       "post": {
         "operationId": "FeatureRequestController_create",
         "parameters": [],
@@ -3531,7 +3531,7 @@
         ]
       }
     },
-    "/feature-requests/my": {
+    "/api/v1/feature-requests/my": {
       "get": {
         "operationId": "FeatureRequestController_findMy",
         "parameters": [],
@@ -3551,7 +3551,7 @@
         ]
       }
     },
-    "/feature-requests/{id}": {
+    "/api/v1/feature-requests/{id}": {
       "get": {
         "operationId": "FeatureRequestController_findOne",
         "parameters": [
@@ -3580,7 +3580,7 @@
         ]
       }
     },
-    "/feature-requests/{id}/messages": {
+    "/api/v1/feature-requests/{id}/messages": {
       "post": {
         "operationId": "FeatureRequestController_addMessage",
         "parameters": [
@@ -3619,7 +3619,7 @@
         ]
       }
     },
-    "/feature-requests/{id}/resolve": {
+    "/api/v1/feature-requests/{id}/resolve": {
       "patch": {
         "operationId": "FeatureRequestController_resolve",
         "parameters": [
@@ -3658,7 +3658,7 @@
         ]
       }
     },
-    "/feature-requests/{id}/respond": {
+    "/api/v1/feature-requests/{id}/respond": {
       "patch": {
         "operationId": "FeatureRequestController_respond",
         "parameters": [
@@ -4209,7 +4209,7 @@
           },
           "employee_id": {
             "type": "number",
-            "description": "ID do funcionário (opcional)"
+            "description": "Código do funcionário/vendedor (FUN_CODIGO). Obrigatório para integrações M2M/parceiros e deve corresponder ao funcionário vinculado ao operador (user_id). Em autenticação de operador (H2M), assume automaticamente o funcionário autenticado."
           },
           "user_id": {
             "type": "number",
@@ -5570,6 +5570,11 @@
             "type": "number",
             "example": 1,
             "description": "Código da loja associada"
+          },
+          "USU_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código do usuário/operador do sistema associado ao funcionário (USU_CODIGO)"
           }
         },
         "required": [
@@ -5637,6 +5642,11 @@
             "type": "number",
             "example": 1,
             "description": "Código da loja associada"
+          },
+          "USU_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código do usuário/operador do sistema associado ao funcionário (USU_CODIGO)"
           },
           "FUN_ENDERECO": {
             "type": "string",
