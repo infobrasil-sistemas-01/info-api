@@ -47,7 +47,12 @@ describe('EmployeeService', () => {
 
       expect(result).toEqual(mockEmployees);
       expect(mockConnection.query).toHaveBeenCalledWith(
-        expect.stringContaining('SELECT FIRST ? SKIP ?'),
+        expect.stringContaining('U.USU_CODIGO'),
+        expect.arrayContaining([10, 0, 1]),
+        expect.any(Function),
+      );
+      expect(mockConnection.query).toHaveBeenCalledWith(
+        expect.stringContaining('LEFT JOIN usuarios U ON U.FUN_CODIGO = F.FUN_CODIGO'),
         expect.arrayContaining([10, 0, 1]),
         expect.any(Function),
       );
@@ -105,7 +110,7 @@ describe('EmployeeService', () => {
 
       expect(result).toEqual(mockEmployee);
       expect(mockConnection.query).toHaveBeenCalledWith(
-        expect.stringContaining('WHERE F.FUN_CODIGO = ?'),
+        expect.stringContaining('U.USU_CODIGO'),
         [1],
         expect.any(Function),
       );

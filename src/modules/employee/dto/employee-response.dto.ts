@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class EmployeeResponseDto {
   @ApiProperty({ example: 1, description: 'Código do funcionário' })
@@ -36,6 +36,13 @@ export class EmployeeResponseDto {
 
   @ApiProperty({ example: 1, description: 'Código da loja associada' })
   LOJ_CODIGO: number;
+
+  @ApiPropertyOptional({
+    example: 1,
+    description:
+      'Código do usuário/operador do sistema associado ao funcionário (USU_CODIGO)',
+  })
+  USU_CODIGO?: number;
 }
 
 export class EmployeeDetailResponseDto extends EmployeeResponseDto {

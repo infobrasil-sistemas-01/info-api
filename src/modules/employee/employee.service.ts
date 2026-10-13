@@ -30,9 +30,10 @@ export class EmployeeService {
       let query = `SELECT FIRST ? SKIP ? 
                       F.FUN_CODIGO, F.FUN_NOME, F.FUN_APELIDO, F.FCA_CODIGO, 
                       FN.FCA_NOME, F.FUN_FONE, F.FUN_CELULAR, F.FUN_EMAIL,
-                      F.FUN_SITUACAO, F.LOJ_CODIGO
+                      F.FUN_SITUACAO, F.LOJ_CODIGO, U.USU_CODIGO
                       FROM funcionarios F 
                       INNER JOIN funcoes FN ON F.FCA_CODIGO = FN.FCA_CODIGO
+                      LEFT JOIN usuarios U ON U.FUN_CODIGO = F.FUN_CODIGO
                       WHERE F.LOJ_CODIGO = ?`;
 
       if (situation) {
@@ -101,9 +102,11 @@ export class EmployeeService {
                       F.FCA_CODIGO, FN.FCA_NOME,
                       F.FUN_CIDADE, F.FUN_UF, F.FUN_CEP, F.FUN_FONE, F.FUN_CELULAR, F.FUN_EMAIL,
                       F.FUN_CPF, F.FUN_IDENTIDADE, F.FUN_SITUACAO, F.FUN_DATANASC,
-                      F.FUN_DATAADMISSAO, F.FUN_DATADEMISSAO, F.LOJ_CODIGO
+                      F.FUN_DATAADMISSAO, F.FUN_DATADEMISSAO, F.LOJ_CODIGO,
+                      U.USU_CODIGO
                       FROM funcionarios F
                       INNER JOIN funcoes FN ON F.FCA_CODIGO = FN.FCA_CODIGO 
+                      LEFT JOIN usuarios U ON U.FUN_CODIGO = F.FUN_CODIGO
                       WHERE F.FUN_CODIGO = ?`;
       const params = [id];
 
