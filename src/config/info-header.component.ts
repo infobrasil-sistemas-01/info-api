@@ -9,10 +9,12 @@ class InfoApiHeader extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ['active-doc', 'current-version', 'versions'];
+    return ['active-doc', 'current-version', 'versions', 'theme'];
   }
 
   connectedCallback() {
+    const savedTheme = this.currentTheme;
+    this.applyTheme(savedTheme, false);
     this.render();
     this.setupListeners();
   }
@@ -32,6 +34,14 @@ class InfoApiHeader extends HTMLElement {
     return this.getAttribute('current-version') || '';
   }
 
+  get currentTheme() {
+    try {
+      return localStorage.getItem('infoapi-theme') || 'dark';
+    } catch {
+      return 'dark';
+    }
+  }
+
   get versions() {
     try {
       const raw = this.getAttribute('versions');
@@ -41,10 +51,30 @@ class InfoApiHeader extends HTMLElement {
     }
   }
 
+  applyTheme(theme, notify = true) {
+    try {
+      localStorage.setItem('infoapi-theme', theme);
+    } catch (_) {}
+    this.setAttribute('theme', theme);
+    if (typeof document !== 'undefined') {
+      document.documentElement.setAttribute('data-theme', theme);
+      document.body.classList.toggle('theme-dark', theme === 'dark');
+      document.body.classList.toggle('theme-light', theme === 'light');
+    }
+    if (notify) {
+      this.dispatchEvent(new CustomEvent('theme-changed', {
+        detail: { theme },
+        bubbles: true,
+        composed: true
+      }));
+    }
+  }
+
   render() {
     const activeDoc = this.activeDoc;
     const currentVersion = this.currentVersion;
     const versions = this.versions;
+    const isDark = (this.getAttribute('theme') || this.currentTheme) !== 'light';
 
     const path = window.location.pathname;
 
@@ -92,6 +122,20 @@ class InfoApiHeader extends HTMLElement {
           --glass: rgba(12, 31, 24, 0.95);
           width: 100%;
           box-sizing: border-box;
+          transition: background 0.25s, color 0.25s;
+        }
+
+        :host([theme="light"]) {
+          --primary: #059669;
+          --primary-hover: #047857;
+          --primary-glow: rgba(5, 150, 105, 0.2);
+          --bg: #f8fafc;
+          --card-bg: #ffffff;
+          --text: #0f172a;
+          --text-muted: #64748b;
+          --border: rgba(0, 0, 0, 0.08);
+          --border-hover: rgba(5, 150, 105, 0.35);
+          --glass: rgba(255, 255, 255, 0.95);
         }
 
         *, *::before, *::after {
@@ -149,10 +193,14 @@ class InfoApiHeader extends HTMLElement {
           display: block;
         }
 
+        :host([theme="light"]) .brand-logo {
+          filter: invert(1);
+        }
+
         .brand-text {
           font-size: 1.35rem;
           font-weight: 800;
-          color: #ffffff;
+          color: var(--text);
           letter-spacing: -0.02em;
           display: flex;
           align-items: center;
@@ -184,8 +232,12 @@ class InfoApiHeader extends HTMLElement {
         }
 
         .nav-link:hover, .nav-link.active {
-          color: #ffffff;
+          color: var(--text);
           background: rgba(255, 255, 255, 0.05);
+        }
+
+        :host([theme="light"]) .nav-link:hover, :host([theme="light"]) .nav-link.active {
+          background: rgba(0, 0, 0, 0.04);
         }
 
         .nav-link.active {
@@ -202,12 +254,12 @@ class InfoApiHeader extends HTMLElement {
           top: 100%;
           left: 0;
           margin-top: 8px;
-          background: #0c1f18;
+          background: var(--card-bg);
           border: 1px solid var(--border);
           border-radius: 12px;
           padding: 6px;
           min-width: 220px;
-          box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+          box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
           opacity: 0;
           visibility: hidden;
           transform: translateY(8px);
@@ -216,6 +268,10 @@ class InfoApiHeader extends HTMLElement {
           display: flex;
           flex-direction: column;
           gap: 3px;
+        }
+
+        :host([theme="light"]) .dropdown-menu {
+          box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
         }
 
         .dropdown:hover .dropdown-menu,
@@ -238,13 +294,13 @@ class InfoApiHeader extends HTMLElement {
         }
 
         .dropdown-item:hover, .dropdown-item.active {
-          color: #ffffff;
+          color: var(--text);
           background: rgba(16, 185, 129, 0.12);
         }
 
         .dropdown-item strong {
           display: block;
-          color: #ffffff;
+          color: var(--text);
           font-size: 0.85rem;
         }
 
@@ -280,6 +336,10 @@ class InfoApiHeader extends HTMLElement {
           padding: 3px 8px;
         }
 
+        :host([theme="light"]) .version-wrapper {
+          background: rgba(0, 0, 0, 0.03);
+        }
+
         .version-label {
           display: flex;
           align-items: center;
@@ -301,8 +361,8 @@ class InfoApiHeader extends HTMLElement {
         }
 
         .version-select option {
-          background: #0c1f18;
-          color: #ffffff;
+          background: var(--card-bg);
+          color: var(--text);
         }
 
         /* Actions */
@@ -311,6 +371,40 @@ class InfoApiHeader extends HTMLElement {
           align-items: center;
           gap: 10px;
           flex-shrink: 0;
+        }
+
+        /* Theme Toggle Button */
+        .btn-theme-toggle {
+          background: rgba(255, 255, 255, 0.04);
+          border: 1px solid var(--border);
+          color: var(--text);
+          border-radius: 9px;
+          padding: 7px;
+          cursor: pointer;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.2s ease;
+          width: 36px;
+          height: 36px;
+        }
+
+        :host([theme="light"]) .btn-theme-toggle {
+          background: rgba(0, 0, 0, 0.04);
+        }
+
+        .btn-theme-toggle:hover {
+          color: var(--primary);
+          border-color: var(--primary);
+          background: rgba(16, 185, 129, 0.12);
+        }
+
+        .theme-icon-sun {
+          display: \${isDark ? 'block' : 'none'};
+        }
+
+        .theme-icon-moon {
+          display: \${isDark ? 'none' : 'block'};
         }
 
         .btn {
@@ -331,7 +425,7 @@ class InfoApiHeader extends HTMLElement {
 
         .btn-primary {
           background: var(--primary);
-          color: #06110d;
+          color: #ffffff;
           border-color: var(--primary);
           box-shadow: 0 2px 10px var(--primary-glow);
         }
@@ -363,11 +457,11 @@ class InfoApiHeader extends HTMLElement {
           top: 60px;
           left: 12px;
           right: 12px;
-          background: #0c1f18;
+          background: var(--card-bg);
           border: 1px solid var(--border);
           border-radius: 14px;
           padding: 16px;
-          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
           flex-direction: column;
           gap: 8px;
           z-index: 100000;
@@ -489,6 +583,24 @@ class InfoApiHeader extends HTMLElement {
           </ul>
 
           <div class="header-actions">
+            <!-- Botão Seletor de Tema Claro / Escuro -->
+            <button class="btn-theme-toggle" id="theme-toggle-btn" title="Alternar entre tema Claro e Escuro" aria-label="Alternar tema">
+              <svg class="theme-icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+              </svg>
+              <svg class="theme-icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+              </svg>
+            </button>
+
             <a href="/integration/form" class="btn btn-primary" title="Solicitar Credenciais">
               <span>Solicitar Acesso</span>
             </a>
@@ -515,6 +627,9 @@ class InfoApiHeader extends HTMLElement {
         <a href="/status" class="mobile-nav-link">Status do Sistema</a>
         <a href="/integration/client" class="mobile-nav-link">Área do Cliente</a>
         <a href="/integration/admin" class="mobile-nav-link">Painel Administrativo</a>
+        <button class="mobile-nav-link" id="mobile-theme-toggle" style="background: transparent; border: none; width: 100%; cursor: pointer;">
+          <span>Alternar Tema (Claro / Escuro)</span>
+        </button>
         <a href="/integration/form" class="btn btn-primary" style="margin-top: 8px;">Solicitar Acesso</a>
       </div>
     \`;
@@ -526,6 +641,8 @@ class InfoApiHeader extends HTMLElement {
     const hamburgerBtn = shadow.getElementById('hamburger-btn');
     const mobileDrawer = shadow.getElementById('mobile-drawer');
     const docsDropdown = shadow.getElementById('docs-dropdown');
+    const themeToggleBtn = shadow.getElementById('theme-toggle-btn');
+    const mobileThemeToggle = shadow.getElementById('mobile-theme-toggle');
 
     if (versionSelect) {
       versionSelect.addEventListener('change', (e) => {
@@ -551,6 +668,20 @@ class InfoApiHeader extends HTMLElement {
           docsDropdown.classList.toggle('open');
         }
       });
+    }
+
+    const toggleTheme = () => {
+      const nextTheme = this.currentTheme === 'dark' ? 'light' : 'dark';
+      this.applyTheme(nextTheme);
+      this.render();
+      this.setupListeners();
+    };
+
+    if (themeToggleBtn) {
+      themeToggleBtn.addEventListener('click', toggleTheme);
+    }
+    if (mobileThemeToggle) {
+      mobileThemeToggle.addEventListener('click', toggleTheme);
     }
   }
 }

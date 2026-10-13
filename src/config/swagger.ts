@@ -152,18 +152,224 @@ export function setupSwagger(app: INestApplication) {
     .swagger-ui .topbar {
       display: none !important;
     }
-    body {
+    html, body {
       margin: 0;
       padding: 0;
       background-color: #06110d;
+      color: #f0fdf4;
+      font-family: 'Outfit', sans-serif;
+      transition: background-color 0.25s, color 0.25s;
+    }
+    body.theme-light {
+      background-color: #f8fafc;
+      color: #0f172a;
     }
     .swagger-ui {
       max-width: 1440px;
       margin: 0 auto;
       padding: 16px 24px;
     }
-    .swagger-ui .info {
-      margin: 20px 0;
+
+    /* =========================================================================
+       SWAGGER UI DARK THEME (Ativo quando NÃO está em .theme-light)
+    ========================================================================= */
+    body:not(.theme-light) .swagger-ui {
+      color: #f0fdf4;
+    }
+
+    /* Scheme Container (Servers & Authorize) - Elimina o bloco branco */
+    body:not(.theme-light) .swagger-ui .scheme-container {
+      background: #0c1f18 !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+      border-radius: 14px !important;
+      padding: 16px 20px !important;
+      margin-bottom: 24px !important;
+    }
+    body:not(.theme-light) .swagger-ui .scheme-container label {
+      color: #f0fdf4 !important;
+      font-weight: 600 !important;
+    }
+    body:not(.theme-light) .swagger-ui .scheme-container select {
+      background-color: #06110d !important;
+      color: #10b981 !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+      border-radius: 8px !important;
+      padding: 6px 12px !important;
+      font-weight: 500 !important;
+    }
+    body:not(.theme-light) .swagger-ui .btn.authorize {
+      background: #10b981 !important;
+      color: #06110d !important;
+      border-color: #10b981 !important;
+      border-radius: 9px !important;
+      font-weight: 700 !important;
+      box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3) !important;
+    }
+    body:not(.theme-light) .swagger-ui .btn.authorize svg {
+      fill: #06110d !important;
+    }
+
+    /* Info Section */
+    body:not(.theme-light) .swagger-ui .info {
+      margin: 20px 0 28px !important;
+    }
+    body:not(.theme-light) .swagger-ui .info .title {
+      color: #ffffff !important;
+      font-size: 2rem !important;
+      font-weight: 800 !important;
+    }
+    body:not(.theme-light) .swagger-ui .info p,
+    body:not(.theme-light) .swagger-ui .info li,
+    body:not(.theme-light) .swagger-ui .info table {
+      color: #94a3b8 !important;
+    }
+    body:not(.theme-light) .swagger-ui .info a {
+      color: #10b981 !important;
+    }
+
+    /* Opblock Tags */
+    body:not(.theme-light) .swagger-ui .opblock-tag {
+      color: #ffffff !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    }
+    body:not(.theme-light) .swagger-ui .opblock-tag small {
+      color: #94a3b8 !important;
+    }
+
+    /* Opblocks (Endpoints) */
+    body:not(.theme-light) .swagger-ui .opblock {
+      background: #0c1f18 !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      border-radius: 12px !important;
+      box-shadow: none !important;
+      margin: 0 0 12px !important;
+    }
+    body:not(.theme-light) .swagger-ui .opblock .opblock-summary {
+      border-color: transparent !important;
+    }
+    body:not(.theme-light) .swagger-ui .opblock .opblock-summary-path,
+    body:not(.theme-light) .swagger-ui .opblock .opblock-summary-operation-id {
+      color: #f0fdf4 !important;
+      font-family: 'JetBrains Mono', monospace !important;
+    }
+    body:not(.theme-light) .swagger-ui .opblock .opblock-summary-description {
+      color: #94a3b8 !important;
+    }
+    body:not(.theme-light) .swagger-ui .opblock-body {
+      background: #06110d !important;
+      border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+    }
+    body:not(.theme-light) .swagger-ui .opblock-section-header {
+      background: #0c1f18 !important;
+    }
+    body:not(.theme-light) .swagger-ui .opblock-section-header h4 {
+      color: #f0fdf4 !important;
+    }
+    body:not(.theme-light) .swagger-ui table.parameters {
+      color: #f0fdf4 !important;
+    }
+    body:not(.theme-light) .swagger-ui .parameter__name,
+    body:not(.theme-light) .swagger-ui .parameter__type {
+      color: #10b981 !important;
+    }
+    body:not(.theme-light) .swagger-ui .parameter__deprecated {
+      color: #ef4444 !important;
+    }
+    body:not(.theme-light) .swagger-ui .tab li button.tablinks {
+      color: #94a3b8 !important;
+    }
+    body:not(.theme-light) .swagger-ui .tab li button.tablinks.active {
+      color: #10b981 !important;
+      font-weight: 700 !important;
+    }
+
+    /* Forms, Inputs & Selects */
+    body:not(.theme-light) .swagger-ui select {
+      background-color: #0c1f18 !important;
+      color: #f0fdf4 !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+      border-radius: 6px !important;
+    }
+    body:not(.theme-light) .swagger-ui input[type=text],
+    body:not(.theme-light) .swagger-ui input[type=password],
+    body:not(.theme-light) .swagger-ui textarea {
+      background-color: #0c1f18 !important;
+      color: #f0fdf4 !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+      border-radius: 6px !important;
+    }
+    body:not(.theme-light) .swagger-ui .btn.execute {
+      background-color: #10b981 !important;
+      color: #06110d !important;
+      border-color: #10b981 !important;
+    }
+    body:not(.theme-light) .swagger-ui .btn.btn-clear {
+      background-color: rgba(255, 255, 255, 0.05) !important;
+      color: #94a3b8 !important;
+      border-color: rgba(255, 255, 255, 0.1) !important;
+    }
+
+    /* Responses & Code Blocks */
+    body:not(.theme-light) .swagger-ui .responses-inner h4,
+    body:not(.theme-light) .swagger-ui .responses-inner h5 {
+      color: #f0fdf4 !important;
+    }
+    body:not(.theme-light) .swagger-ui .response-col_status {
+      color: #10b981 !important;
+    }
+    body:not(.theme-light) .swagger-ui .response-col_description {
+      color: #94a3b8 !important;
+    }
+    body:not(.theme-light) .swagger-ui .highlight-code,
+    body:not(.theme-light) .swagger-ui .microlight {
+      background: #06110d !important;
+      color: #38bdf8 !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      border-radius: 8px !important;
+    }
+
+    /* Models & Schemas */
+    body:not(.theme-light) .swagger-ui section.models {
+      background: #0c1f18 !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      border-radius: 14px !important;
+    }
+    body:not(.theme-light) .swagger-ui section.models h4 {
+      color: #ffffff !important;
+    }
+    body:not(.theme-light) .swagger-ui .model-box {
+      background: #06110d !important;
+      border-radius: 8px !important;
+    }
+    body:not(.theme-light) .swagger-ui .model-title,
+    body:not(.theme-light) .swagger-ui .model {
+      color: #f0fdf4 !important;
+    }
+    body:not(.theme-light) .swagger-ui table.model tbody tr td {
+      color: #94a3b8 !important;
+    }
+
+    /* Dialog / Modal UX (Authorize Popup) */
+    body:not(.theme-light) .swagger-ui .dialog-ux .backdrop-ux {
+      background: rgba(0, 0, 0, 0.75) !important;
+      backdrop-filter: blur(6px) !important;
+    }
+    body:not(.theme-light) .swagger-ui .dialog-ux .modal-ux {
+      background: #0c1f18 !important;
+      border: 1px solid rgba(255, 255, 255, 0.12) !important;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8) !important;
+      border-radius: 16px !important;
+    }
+    body:not(.theme-light) .swagger-ui .dialog-ux .modal-ux-header h3 {
+      color: #ffffff !important;
+    }
+    body:not(.theme-light) .swagger-ui .dialog-ux .modal-ux-content h4,
+    body:not(.theme-light) .swagger-ui .dialog-ux .modal-ux-content h5 {
+      color: #f0fdf4 !important;
+    }
+    body:not(.theme-light) .swagger-ui .dialog-ux .modal-ux-content p {
+      color: #94a3b8 !important;
     }
   `;
 
