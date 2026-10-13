@@ -1,5 +1,63 @@
 [
   {
+    "version": "1.18.0",
+    "date": "2026-10-13",
+    "title": "new homepage e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral & Usabilidade, Geral, Pedidos & Vendas.",
+    "highlights": [
+      "new homepage",
+      "new homepage 2"
+    ],
+    "items": [
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "new homepage",
+        "description": "Atualização no módulo de Geral & Usabilidade: new homepage.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "new homepage",
+        "commitHash": "0ee9272"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "new homepage 2",
+        "description": "Atualização no módulo de Geral & Usabilidade: new homepage 2.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "new homepage 2",
+        "commitHash": "22b3bb2"
+      },
+      {
+        "module": "Geral",
+        "type": "fix",
+        "title": "margins",
+        "description": "Atualização no módulo de Geral: margins.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "margins",
+        "commitHash": "2874a86"
+      },
+      {
+        "module": "Pedidos & Vendas",
+        "type": "fix",
+        "title": "PostOrderDto due to change in API purpose",
+        "description": "Atualização no módulo de Pedidos & Vendas: PostOrderDto due to change in API purpose.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "PostOrderDto due to change in API purpose",
+        "commitHash": "757aa0e"
+      },
+      {
+        "module": "Painel & Métricas",
+        "type": "fix",
+        "title": "rotate password on client dash",
+        "description": "Atualização no módulo de Painel & Métricas: rotate password on client dash.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "rotate password on client dash",
+        "commitHash": "dde0b16"
+      }
+    ],
+    "totalChanges": 5
+  },
+  {
     "version": "1.17.1",
     "date": "2026-10-07",
     "title": "return more data on GET /products endpoints e melhorias",
