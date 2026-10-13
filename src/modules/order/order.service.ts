@@ -139,7 +139,7 @@ export class OrderService {
             if (err) {
               return reject(
                 new Error(
-                  `Erro ao fazer commit do pedido ${orderData.id} da loja. Erro: ${err}`,
+                  `Erro ao fazer commit do pedido ${order?.VEN_NUMERO ?? ''} da loja. Erro: ${err}`,
                 ),
               );
             }
@@ -548,11 +548,8 @@ export class OrderService {
       const VEN_NUMERO = 'GEN_ID(GEN_NUMEROVEN, 1)';
 
       const orderInsert = {
-        VEN_ID_ECOMMERCE: orderData.id,
-        VEN_NUMSITE:
-          typeof orderData.id === 'string'
-            ? orderData.id
-            : orderData.id.toString(),
+        VEN_ID_ECOMMERCE: null,
+        VEN_NUMSITE: null,
         SIT_CODIGO: 1,
         PRE_CODIGO: orderData.provider_id || 1,
         LOJ_CODIGO: orderData.store_id || storeId,

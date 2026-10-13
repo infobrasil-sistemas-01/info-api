@@ -61,7 +61,6 @@ describe('OrderService', () => {
 
   describe('post', () => {
     const mockOrderData = {
-      id: 123,
       client_id: 1,
       employee_id: 1,
       store_id: 1,
@@ -76,8 +75,6 @@ describe('OrderService', () => {
       discount: 0,
       taxes: 0,
       payment_date: '2024-01-15',
-      has_payment: true,
-      has_invoice: false,
       products_sold: [{ product_id: 1, quantity: 2 }],
     };
 
@@ -309,7 +306,6 @@ describe('OrderService', () => {
       mockProductService.getById.mockResolvedValue(null);
 
       const orderDataWithInvalidProduct = {
-        id: 123,
         date: '2024-01-15',
         hour: '10:30:00',
         payment_method: '1',
@@ -327,7 +323,6 @@ describe('OrderService', () => {
       });
 
       const orderDataWithNoProducts = {
-        id: 123,
         date: '2024-01-15',
         hour: '10:30:00',
         payment_method: '1',

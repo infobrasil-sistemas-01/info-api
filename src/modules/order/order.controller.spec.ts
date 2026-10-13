@@ -59,7 +59,6 @@ describe('OrderController', () => {
   describe('postOrder', () => {
     it('should call orderService.post with credentialsId, dto, and storeId', async () => {
       const dto = new PostOrderDto();
-      dto.id = 123;
       dto.date = '2024-01-15';
       dto.hour = '10:30:00';
       dto.client_id = 1;
@@ -70,8 +69,6 @@ describe('OrderController', () => {
       dto.price_table_id = 1;
       dto.payment_method = 'credit';
       dto.payment_date = '2024-01-15';
-      dto.has_payment = true;
-      dto.has_invoice = false;
 
       mockOrderService.post.mockResolvedValue({ orderId: 123 });
 
@@ -83,7 +80,6 @@ describe('OrderController', () => {
 
     it('should call orderService.post with storeId 1 when not provided', async () => {
       const dto = new PostOrderDto();
-      dto.id = 123;
       dto.date = '2024-01-15';
       dto.hour = '10:30:00';
       dto.client_id = 1;
@@ -94,8 +90,6 @@ describe('OrderController', () => {
       dto.price_table_id = 1;
       dto.payment_method = 'credit';
       dto.payment_date = '2024-01-15';
-      dto.has_payment = true;
-      dto.has_invoice = false;
 
       mockOrderService.post.mockResolvedValue({ orderId: 123 });
 
@@ -169,7 +163,6 @@ describe('OrderController', () => {
 
     it('should reject invalid price_table_id and return structured validation error', async () => {
       const dto = new PostOrderDto();
-      dto.id = 123;
       dto.date = '2024-01-15';
       dto.hour = '10:30:00';
       dto.client_id = 1;
@@ -180,8 +173,6 @@ describe('OrderController', () => {
       dto.price_table_id = 13; // Invalid: exceeds max of 12
       dto.payment_method = 'credit';
       dto.payment_date = '2024-01-15';
-      dto.has_payment = true;
-      dto.has_invoice = false;
 
       // The ZodValidationPipe will throw BadRequestException with structured error
       // containing the custom message from the schema

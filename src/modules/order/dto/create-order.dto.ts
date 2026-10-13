@@ -4,7 +4,6 @@ import z from 'zod';
 import { SoldProductDto, SoldProductSchema } from './sold-product.dto';
 
 export const PostOrderSchema = z.object({
-  id: z.number(),
   store_id: z.number().optional(),
   client_id: z.number().optional(),
   provider_id: z.number().optional(),
@@ -26,15 +25,10 @@ export const PostOrderSchema = z.object({
   payment_plan_code: z.number().optional(), // Código do plano de pagamento
   payment_date: z.string(), // Data de pagamento
   interest: z.number().optional(), // Juros do pedido
-  has_payment: z.boolean(), // Indica se existe pagamento confirmado
-  has_invoice: z.boolean(), // Indica se existe nota fiscal
   products_sold: z.array(SoldProductSchema).optional(), // Lista de produtos vendidos
 });
 
 export class PostOrderDto extends ZodDto(PostOrderSchema) {
-  @ApiProperty({ description: 'ID do pedido' })
-  id!: number;
-
   @ApiPropertyOptional({ description: 'ID do cliente (opcional)' })
   client_id?: number;
 
@@ -90,12 +84,6 @@ export class PostOrderDto extends ZodDto(PostOrderSchema) {
 
   @ApiPropertyOptional({ description: 'Juros do pedido' })
   interest?: number;
-
-  @ApiProperty({ description: 'Indica se existe pagamento confirmado' })
-  has_payment!: boolean;
-
-  @ApiProperty({ description: 'Indica se existe nota fiscal' })
-  has_invoice!: boolean;
 
   @ApiPropertyOptional({
     description: 'Lista de produtos vendidos',
