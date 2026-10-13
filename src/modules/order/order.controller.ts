@@ -1,6 +1,8 @@
 import {
+  BadRequestException,
   Body,
   Controller,
+  ForbiddenException,
   Get,
   NotFoundException,
   Param,
@@ -74,6 +76,11 @@ export class OrderController {
     status: 401,
     description: 'Token de autenticação inválido ou ausente.',
   })
+  @ApiResponse({
+    status: 403,
+    description:
+      'Operador não autorizado a registrar vendas em nome de outro usuário.',
+  })
   postOrder(@Req() req: ReqWithAuthContext, @Body() dto: PostOrderDto) {
     const { credentialsId, storeId, type, usuCodigo, funCodigo } =
       req.authContext || {};
@@ -87,10 +94,26 @@ export class OrderController {
     }
 
     const isH2M = type === 'H2M';
+
+    if (
+      isH2M &&
+      dto.user_id !== undefined &&
+      usuCodigo !== undefined &&
+      dto.user_id !== usuCodigo
+    ) {
+      throw new ForbiddenException(
+        'Operador não autorizado a registrar vendas em nome de outro usuário.',
+      );
+    }
+
+    if (!isH2M && !dto.user_id) {
+      throw new BadRequestException(
+        'Para integrações M2M/parceiros, é obrigatório informar o campo user_id (código do operador no ERP).',
+      );
+    }
+
     const effectiveStoreId = isH2M ? storeId : dto.store_id || storeId;
-    const effectiveUserId = isH2M
-      ? (usuCodigo ?? 9999)
-      : dto.user_id || dto.employee_id || 9999;
+    const effectiveUserId = isH2M ? (usuCodigo ?? 9999) : dto.user_id!;
     const effectiveEmployeeId = isH2M
       ? (funCodigo ?? usuCodigo ?? 9999)
       : dto.employee_id || 9999;

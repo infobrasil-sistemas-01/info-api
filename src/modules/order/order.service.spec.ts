@@ -59,28 +59,36 @@ describe('OrderService', () => {
     jest.clearAllMocks();
   });
 
+  const mockOrderData = {
+    client_id: 1,
+    employee_id: 1,
+    store_id: 1,
+    provider_id: 1,
+    price_table_id: 1,
+    user_id: 1,
+    date: '2024-01-15',
+    hour: '10:30:00',
+    store_note: 'Test note',
+    payment_method: '1',
+    installment: 1,
+    discount: 0,
+    taxes: 0,
+    payment_date: '2024-01-15',
+    products_sold: [{ product_id: 1, quantity: 2 }],
+  };
+
   describe('post', () => {
-    const mockOrderData = {
-      client_id: 1,
-      employee_id: 1,
-      store_id: 1,
-      provider_id: 1,
-      price_table_id: 1,
-      user_id: 1,
-      date: '2024-01-15',
-      hour: '10:30:00',
-      store_note: 'Test note',
-      payment_method: '1',
-      installment: 1,
-      discount: 0,
-      taxes: 0,
-      payment_date: '2024-01-15',
-      products_sold: [{ product_id: 1, quantity: 2 }],
-    };
 
     beforeEach(() => {
       mockConnection.startTransaction.mockImplementation((callback) => {
         callback(null, mockTransaction);
+      });
+
+      mockConnection.query.mockImplementation((query, params, callback) => {
+        if (typeof query === 'string' && query.includes('FROM USUARIOS')) {
+          return callback(null, [{ USU_CODIGO: 1, USU_SITUACAO: 'A' }]);
+        }
+        callback(null, []);
       });
 
       mockTransaction.query.mockImplementation((query, params, callback) => {
@@ -306,6 +314,7 @@ describe('OrderService', () => {
       mockProductService.getById.mockResolvedValue(null);
 
       const orderDataWithInvalidProduct = {
+        user_id: 1,
         date: '2024-01-15',
         hour: '10:30:00',
         payment_method: '1',
@@ -323,6 +332,7 @@ describe('OrderService', () => {
       });
 
       const orderDataWithNoProducts = {
+        user_id: 1,
         date: '2024-01-15',
         hour: '10:30:00',
         payment_method: '1',
@@ -332,6 +342,44 @@ describe('OrderService', () => {
       await expect(
         service.post('cred-1', orderDataWithNoProducts as any, 1),
       ).rejects.toThrow();
+    });
+
+    it('should throw BadRequestException when user_id is missing in service', async () => {
+      const { user_id, ...orderWithoutUser } = mockOrderData;
+
+      await expect(
+        service.post('cred-1', orderWithoutUser as any, 1),
+      ).rejects.toThrow(
+        new BadRequestException(
+          'O campo user_id (código do operador no ERP) é obrigatório.',
+        ),
+      );
+    });
+
+    it('should throw BadRequestException when user_id is not found in database', async () => {
+      mockConnection.query.mockImplementation((query, params, callback) => {
+        if (typeof query === 'string' && query.includes('FROM USUARIOS')) {
+          return callback(null, []); // Usuário inexistente
+        }
+        callback(null, []);
+      });
+
+      await expect(
+        service.post('cred-1', { ...mockOrderData, user_id: 999 } as any, 1),
+      ).rejects.toThrow(new BadRequestException('Usuário/operador com ID 999 não encontrado.'));
+    });
+
+    it('should throw BadRequestException when user_id is inactive', async () => {
+      mockConnection.query.mockImplementation((query, params, callback) => {
+        if (typeof query === 'string' && query.includes('FROM USUARIOS')) {
+          return callback(null, [{ USU_CODIGO: 1, USU_SITUACAO: 'I' }]); // Inativo
+        }
+        callback(null, []);
+      });
+
+      await expect(
+        service.post('cred-1', { ...mockOrderData, user_id: 1 } as any, 1),
+      ).rejects.toThrow(new BadRequestException('Usuário/operador com ID 1 está inativo ou desligado.'));
     });
   });
 

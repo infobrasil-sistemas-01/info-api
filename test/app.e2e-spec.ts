@@ -251,6 +251,7 @@ describe('API E2E Tests', () => {
     describe('POST /api/v1/orders', () => {
       it('should return 200 with valid token', async () => {
         const dto: PostOrderDto = {
+          user_id: 1,
           date: generateDate(),
           hour: generateHour(),
           client_id: 1,

@@ -1,5 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
 import { OrderController } from './order.controller';
 import { OrderService } from './order.service';
 import { OrderItemService } from './order-item/order-item.service';
@@ -99,7 +103,7 @@ describe('OrderController', () => {
       expect(result).toEqual({ orderId: 123 });
     });
 
-    it('should enforce H2M authenticated operator and storeId, ignoring body values', async () => {
+    it('should reject H2M request with 403 Forbidden if body user_id differs from token usuCodigo', async () => {
       const h2mReq = {
         authContext: {
           userId: 'h2m-operator',
@@ -112,9 +116,28 @@ describe('OrderController', () => {
       } as any;
 
       const dto = new PostOrderDto();
-      dto.id = 123;
+      dto.user_id = 1; // Divergente do token usuCodigo (42)
+
+      expect(() => controller.postOrder(h2mReq, dto)).toThrow(
+        ForbiddenException,
+      );
+    });
+
+    it('should enforce H2M authenticated operator and storeId when user_id is omitted or matching', async () => {
+      const h2mReq = {
+        authContext: {
+          userId: 'h2m-operator',
+          credentialsId: 'cred-1',
+          storeId: 3,
+          type: 'H2M',
+          usuCodigo: 42,
+          funCodigo: 88,
+        },
+      } as any;
+
+      const dto = new PostOrderDto();
       dto.store_id = 99; // Attacker tries to use another store
-      dto.user_id = 1; // Attacker tries to claim another user's commission
+      dto.user_id = 42; // Matching token usuCodigo
       dto.employee_id = 2;
 
       mockOrderService.post.mockResolvedValue({ orderId: 123 });
@@ -132,7 +155,7 @@ describe('OrderController', () => {
       );
     });
 
-    it('should allow M2M partner to provide custom user_id or default to 9999', async () => {
+    it('should reject M2M request with BadRequestException when user_id is missing', async () => {
       const m2mReq = {
         authContext: {
           userId: 'm2m-partner',
@@ -143,8 +166,28 @@ describe('OrderController', () => {
       } as any;
 
       const dto = new PostOrderDto();
-      dto.id = 456;
       dto.store_id = 2;
+
+      expect(() => controller.postOrder(m2mReq, dto)).toThrow(
+        new BadRequestException(
+          'Para integrações M2M/parceiros, é obrigatório informar o campo user_id (código do operador no ERP).',
+        ),
+      );
+    });
+
+    it('should allow M2M partner to provide user_id', async () => {
+      const m2mReq = {
+        authContext: {
+          userId: 'm2m-partner',
+          credentialsId: 'cred-1',
+          storeId: 1,
+          type: 'M2M',
+        },
+      } as any;
+
+      const dto = new PostOrderDto();
+      dto.store_id = 2;
+      dto.user_id = 15;
 
       mockOrderService.post.mockResolvedValue({ orderId: 456 });
 
@@ -154,8 +197,7 @@ describe('OrderController', () => {
         'cred-1',
         expect.objectContaining({
           store_id: 2,
-          user_id: 9999,
-          employee_id: 9999,
+          user_id: 15,
         }),
         2,
       );

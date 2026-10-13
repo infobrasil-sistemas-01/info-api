@@ -62,6 +62,14 @@ export class OrderService {
         ? Number(orderData.payment_plan_code)
         : 1;
 
+      if (!orderData.user_id) {
+        throw new BadRequestException(
+          'O campo user_id (código do operador no ERP) é obrigatório.',
+        );
+      }
+
+      await this.validateUser(connection, orderData.user_id);
+
       const transaction: any = await new Promise((resolve, reject) => {
         connection.startTransaction((err: any, transaction: any) => {
           if (err) {
@@ -553,7 +561,7 @@ export class OrderService {
         SIT_CODIGO: 1,
         PRE_CODIGO: orderData.provider_id || 1,
         LOJ_CODIGO: orderData.store_id || storeId,
-        USU_CODIGO: orderData.user_id || orderData.employee_id || 9999,
+        USU_CODIGO: orderData.user_id,
         FUN_CODIGO: orderData.employee_id || 9999,
         CLI_CODIGO: orderData.client_id || 1,
         VEN_TIPO: 'I',
@@ -606,6 +614,47 @@ export class OrderService {
         }
       });
     });
+  }
+
+  private async validateUser(
+    connection: any,
+    userId: number,
+  ): Promise<void> {
+    const query = `
+      SELECT 
+        U.USU_CODIGO,
+        U.USU_SITUACAO,
+        F.FUN_DATADEMISSAO
+      FROM USUARIOS U
+      LEFT JOIN FUNCIONARIOS F ON F.FUN_CODIGO = U.FUN_CODIGO
+      WHERE U.USU_CODIGO = ?
+    `;
+
+    const rows: any = await new Promise((resolve, reject) => {
+      connection.query(query, [userId], (err: any, res: any) => {
+        if (err) return reject(err);
+        resolve(res);
+      });
+    });
+
+    const user = Array.isArray(rows) && rows.length > 0 ? rows[0] : null;
+
+    if (!user) {
+      throw new BadRequestException(
+        `Usuário/operador com ID ${userId} não encontrado.`,
+      );
+    }
+
+    const situacao = (user.USU_SITUACAO || 'A')
+      .toString()
+      .trim()
+      .toUpperCase();
+
+    if (situacao !== 'A' || user.FUN_DATADEMISSAO) {
+      throw new BadRequestException(
+        `Usuário/operador com ID ${userId} está inativo ou desligado.`,
+      );
+    }
   }
 
   private async resolvePaymentMethodCode(
