@@ -1,5 +1,72 @@
 [
   {
+    "version": "1.19.2",
+    "date": "2026-10-13",
+    "title": "return USU_CODIGO e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral, Geral & Usabilidade.",
+    "highlights": [
+      "return USU_CODIGO",
+      "header on docs"
+    ],
+    "items": [
+      {
+        "module": "Geral",
+        "type": "feature",
+        "title": "return USU_CODIGO",
+        "description": "Atualização no módulo de Geral: return USU_CODIGO.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "return USU_CODIGO",
+        "commitHash": "2c389ab"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "header on docs",
+        "description": "Atualização no módulo de Geral & Usabilidade: header on docs.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "header on docs",
+        "commitHash": "9b525f4"
+      },
+      {
+        "module": "Geral",
+        "type": "feature",
+        "title": "suportar priceTable dinamica com fallback 1 na insercao dos itens da venda",
+        "description": "Atualização no módulo de Geral: suportar priceTable dinamica com fallback 1 na insercao dos itens da venda.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "suportar priceTable dinamica com fallback 1 na insercao dos itens da venda",
+        "commitHash": "c28bba2"
+      },
+      {
+        "module": "Geral",
+        "type": "fix",
+        "title": "corrigir carregamento e interpolacao do header unificado no Swagger e Scalar",
+        "description": "Atualização no módulo de Geral: corrigir carregamento e interpolacao do header unificado no Swagger e Scalar.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "corrigir carregamento e interpolacao do header unificado no Swagger e Scalar",
+        "commitHash": "79159f9"
+      },
+      {
+        "module": "Geral",
+        "type": "fix",
+        "title": "substituir icone de cifrao por tag de release no seletor de versao",
+        "description": "Atualização no módulo de Geral: substituir icone de cifrao por tag de release no seletor de versao.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "substituir icone de cifrao por tag de release no seletor de versao",
+        "commitHash": "babcabe"
+      },
+      {
+        "module": "Geral",
+        "type": "fix",
+        "title": "employee_id validation",
+        "description": "Atualização no módulo de Geral: employee_id validation.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "employee_id validation",
+        "commitHash": "efa0c6f"
+      }
+    ],
+    "totalChanges": 6
+  },
+  {
     "version": "1.19.1",
     "date": "2026-10-13",
     "title": "Correções de estabilidade e aprimoramentos",

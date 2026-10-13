@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.0",
   "paths": {
-    "/api/v1/auth/me": {
+    "/auth/me": {
       "get": {
         "operationId": "AuthController_me",
         "parameters": [],
@@ -28,7 +28,7 @@
         ]
       }
     },
-    "/api/v1/auth/login": {
+    "/auth/login": {
       "post": {
         "description": "Autentica o usuário usando credenciais básicas (Basic Auth) enviadas exclusivamente no cabeçalho HTTP Authorization, e retorna um token de acesso JWT.",
         "operationId": "AuthController_login",
@@ -56,7 +56,7 @@
         ]
       }
     },
-    "/api/v1/auth/refresh": {
+    "/auth/refresh": {
       "post": {
         "operationId": "AuthController_refresh",
         "parameters": [],
@@ -88,7 +88,7 @@
         ]
       }
     },
-    "/api/v1/auth/operator-verify": {
+    "/auth/operator-verify": {
       "post": {
         "description": "Endpoint chamado pelo STS via Basic Auth ou Bearer Token para validar operador no banco Firebird do tenant.",
         "operationId": "AuthController_operatorVerify",
@@ -124,7 +124,7 @@
         ]
       }
     },
-    "/api/v1/auth/operator-status/{usuCodigo}": {
+    "/auth/operator-status/{usuCodigo}": {
       "get": {
         "operationId": "AuthController_operatorStatus",
         "parameters": [
@@ -148,7 +148,7 @@
         ]
       }
     },
-    "/api/v1/products": {
+    "/products": {
       "get": {
         "description": "Retorna uma lista paginada de produtos associados às credenciais do usuário autenticado.",
         "operationId": "ProductController_getProducts",
@@ -323,7 +323,7 @@
         ]
       }
     },
-    "/api/v1/products/id/{id}": {
+    "/products/id/{id}": {
       "get": {
         "description": "Retorna os detalhes de um produto específico com base no ID fornecido.",
         "operationId": "ProductController_getProductById",
@@ -387,7 +387,7 @@
         ]
       }
     },
-    "/api/v1/products/barcode/{barcode}": {
+    "/products/barcode/{barcode}": {
       "get": {
         "description": "Retorna os detalhes de um produto específico com base no código de barras fornecido.",
         "operationId": "ProductController_getProductByBarcode",
@@ -451,7 +451,7 @@
         ]
       }
     },
-    "/api/v1/products/brands": {
+    "/products/brands": {
       "get": {
         "description": "Retorna uma lista paginada de marcas de produtos associadas às credenciais do usuário autenticado.",
         "operationId": "ProductBrandController_getBrands",
@@ -551,7 +551,7 @@
         ]
       }
     },
-    "/api/v1/products/brands/{id}": {
+    "/products/brands/{id}": {
       "patch": {
         "description": "Atualiza os dados de uma marca de produto existente no tenant.",
         "operationId": "ProductBrandController_updateBrand",
@@ -608,7 +608,7 @@
         ]
       }
     },
-    "/api/v1/products/groups": {
+    "/products/groups": {
       "get": {
         "description": "Retorna uma lista paginada de grupos de produtos associadas às credenciais do usuário autenticado.",
         "operationId": "ProductGroupController_getGroups",
@@ -708,7 +708,7 @@
         ]
       }
     },
-    "/api/v1/products/groups/{id}": {
+    "/products/groups/{id}": {
       "patch": {
         "description": "Atualiza os dados de um grupo de produto existente no tenant.",
         "operationId": "ProductGroupController_updateGroup",
@@ -765,7 +765,7 @@
         ]
       }
     },
-    "/api/v1/orders": {
+    "/orders": {
       "post": {
         "description": "Cria um novo pedido com os pedidos vendidos e informações de pagamento.",
         "operationId": "OrderController_postOrder",
@@ -953,7 +953,7 @@
         ]
       }
     },
-    "/api/v1/orders/order-metrics": {
+    "/orders/order-metrics": {
       "get": {
         "description": "Retorna indicadores agregados (pedidos no mês, faturamento, ticket médio e pedidos em aberto) para o período informado.",
         "operationId": "OrderController_getOrderMetrics",
@@ -1018,7 +1018,7 @@
         ]
       }
     },
-    "/api/v1/orders/{id}": {
+    "/orders/{id}": {
       "get": {
         "description": "Retorna os detalhes de um pedido específico com base no ID fornecido.",
         "operationId": "OrderController_getOrderById",
@@ -1071,7 +1071,7 @@
         ]
       }
     },
-    "/api/v1/order-items": {
+    "/order-items": {
       "get": {
         "description": "Retorna uma lista de itens de pedidos com informações de marca e grupo.",
         "operationId": "OrderItemController_get",
@@ -1179,7 +1179,7 @@
         ]
       }
     },
-    "/api/v1/payment-methods": {
+    "/payment-methods": {
       "get": {
         "description": "Retorna uma lista paginada de formas de pagamento associados às credenciais do usuário autenticado.",
         "operationId": "PaymentMethodController_getPaymentMethods",
@@ -1237,7 +1237,7 @@
         ]
       }
     },
-    "/api/v1/stores": {
+    "/stores": {
       "get": {
         "description": "Retorna uma lista paginada de lojas associadas às credenciais do usuário autenticado, com suporte a filtros por código e CNPJ.",
         "operationId": "StoreController_get",
@@ -1313,7 +1313,7 @@
         ]
       }
     },
-    "/api/v1/account-receivable": {
+    "/account-receivable": {
       "get": {
         "description": "Obtém uma lista de contas a receber da loja.",
         "operationId": "AccountReceivableController_get",
@@ -1470,7 +1470,7 @@
         ]
       }
     },
-    "/api/v1/health/live": {
+    "/health/live": {
       "get": {
         "description": "Verifica rapidamente o processo e a conexão local com PostgreSQL. Ideal para probes frequentes que não devem acoplar a bancos remotos de clientes.",
         "operationId": "HealthController_checkLive",
@@ -1502,7 +1502,7 @@
         ]
       }
     },
-    "/api/v1/health": {
+    "/health": {
       "get": {
         "description": "Verifica o status da API e das dependências (PostgreSQL). Retorna 200 com `status: \"ok\"` quando tudo está operacional, ou `status: \"degraded\"` quando alguma dependência está indisponível.",
         "operationId": "HealthController_check",
@@ -1552,7 +1552,7 @@
         ]
       }
     },
-    "/api/v1/plans/stats": {
+    "/plans/stats": {
       "get": {
         "operationId": "StatsController_getStats",
         "parameters": [],
@@ -1579,7 +1579,7 @@
         ]
       }
     },
-    "/api/v1/plans": {
+    "/plans": {
       "get": {
         "operationId": "StatsController_findAll",
         "parameters": [],
@@ -1609,7 +1609,7 @@
         ]
       }
     },
-    "/api/v1/clients": {
+    "/clients": {
       "get": {
         "operationId": "ClientController_get",
         "parameters": [
@@ -1745,7 +1745,7 @@
         ]
       }
     },
-    "/api/v1/clients/{id}": {
+    "/clients/{id}": {
       "get": {
         "operationId": "ClientController_getById",
         "parameters": [
@@ -1827,7 +1827,7 @@
         ]
       }
     },
-    "/api/v1/employees": {
+    "/employees": {
       "get": {
         "operationId": "EmployeeController_get",
         "parameters": [
@@ -1921,7 +1921,7 @@
         ]
       }
     },
-    "/api/v1/employees/{id}": {
+    "/employees/{id}": {
       "get": {
         "operationId": "EmployeeController_getById",
         "parameters": [
@@ -1959,7 +1959,7 @@
         ]
       }
     },
-    "/api/v1/suppliers": {
+    "/suppliers": {
       "get": {
         "operationId": "SupplierController_get",
         "parameters": [
@@ -2041,7 +2041,7 @@
         ]
       }
     },
-    "/api/v1/suppliers/{id}": {
+    "/suppliers/{id}": {
       "get": {
         "operationId": "SupplierController_getById",
         "parameters": [
@@ -2079,7 +2079,7 @@
         ]
       }
     },
-    "/api/v1/service-providers": {
+    "/service-providers": {
       "get": {
         "operationId": "ServiceProviderController_get",
         "parameters": [
@@ -2161,7 +2161,7 @@
         ]
       }
     },
-    "/api/v1/service-providers/{id}": {
+    "/service-providers/{id}": {
       "get": {
         "operationId": "ServiceProviderController_getById",
         "parameters": [
@@ -2199,7 +2199,7 @@
         ]
       }
     },
-    "/api/v1/payment-plans": {
+    "/payment-plans": {
       "get": {
         "description": "Retorna uma lista paginada de planos de pagamento associados às credenciais do usuário autenticado.",
         "operationId": "PaymentPlanController_getPaymentPlans",
@@ -2257,7 +2257,7 @@
         ]
       }
     },
-    "/api/v1/account-payable": {
+    "/account-payable": {
       "get": {
         "description": "Retorna uma lista paginada e resumida de contas a pagar baseada nos filtros.",
         "operationId": "AccountPayableController_getAccountPayable",
@@ -2361,7 +2361,7 @@
         ]
       }
     },
-    "/api/v1/account-payable/id/{id}": {
+    "/account-payable/id/{id}": {
       "get": {
         "description": "Retorna os detalhes completos de uma conta a pagar pelo ID (PAG_NUMERO).",
         "operationId": "AccountPayableController_getAccountPayableById",
@@ -2402,7 +2402,7 @@
         ]
       }
     },
-    "/api/v1/employee-roles": {
+    "/employee-roles": {
       "get": {
         "operationId": "EmployeeRoleController_get",
         "parameters": [
@@ -2463,7 +2463,7 @@
         ]
       }
     },
-    "/api/v1/deliveries": {
+    "/deliveries": {
       "get": {
         "description": "Retorna uma lista paginada de entregas.",
         "operationId": "DeliveryController_getDeliveries",
@@ -2640,7 +2640,7 @@
         ]
       }
     },
-    "/api/v1/deliveries/status": {
+    "/deliveries/status": {
       "get": {
         "description": "Retorna uma lista de status de entregas.",
         "operationId": "DeliveryController_getDeliveriesStatus",
@@ -2674,7 +2674,7 @@
         ]
       }
     },
-    "/api/v1/deliveries/{id}": {
+    "/deliveries/{id}": {
       "get": {
         "description": "Retorna os detalhes de uma entrega específica com os itens vinculados.",
         "operationId": "DeliveryController_getDeliveryById",
@@ -2729,7 +2729,7 @@
         ]
       }
     },
-    "/api/v1/call-centers": {
+    "/call-centers": {
       "get": {
         "description": "Retorna uma lista paginada de atendimentos do Call Center com descrições das aplicações, tópicos e formas de atendimento.",
         "operationId": "CallCenterController_getCallCenters",
@@ -2838,7 +2838,7 @@
         ]
       }
     },
-    "/api/v1/call-centers/{id}": {
+    "/call-centers/{id}": {
       "get": {
         "description": "Retorna os detalhes completos de um atendimento do Call Center pelo número (CAL_NUMERO).",
         "operationId": "CallCenterController_getCallCenterById",
@@ -2879,7 +2879,7 @@
         ]
       }
     },
-    "/api/v1/purchase": {
+    "/purchase": {
       "get": {
         "description": "Retorna uma lista paginada de entradas de notas fiscais e compras da tabela COMPRAS com dados do fornecedor.",
         "operationId": "PurchaseController_get",
@@ -2988,7 +2988,7 @@
         ]
       }
     },
-    "/api/v1/fiscal-entry": {
+    "/fiscal-entry": {
       "get": {
         "description": "Retorna uma lista paginada de entradas de notas fiscais da tabela ENTRADAS_APOIO com dados do fornecedor.",
         "operationId": "FiscalEntryController_get",
@@ -3097,7 +3097,7 @@
         ]
       }
     },
-    "/api/v1/adjustment": {
+    "/adjustment": {
       "get": {
         "description": "Retorna uma lista paginada de acertos de estoque da tabela ACERTOS com informações de situação, loja e usuário.",
         "operationId": "AdjustmentController_get",
@@ -3262,7 +3262,7 @@
         ]
       }
     },
-    "/api/v1/adjustment/{id}": {
+    "/adjustment/{id}": {
       "get": {
         "description": "Retorna os detalhes completos do acerto de estoque e seu array aninhado de itens.",
         "operationId": "AdjustmentController_getById",
@@ -3314,7 +3314,7 @@
         ]
       }
     },
-    "/api/v1/adjustment/{id}/items": {
+    "/adjustment/{id}/items": {
       "get": {
         "description": "Retorna diretamente o array de itens vinculados a um acerto específico.",
         "operationId": "AdjustmentController_getItems",
@@ -3474,7 +3474,7 @@
         ]
       }
     },
-    "/api/v1/feature-requests": {
+    "/feature-requests": {
       "post": {
         "operationId": "FeatureRequestController_create",
         "parameters": [],
@@ -3531,7 +3531,7 @@
         ]
       }
     },
-    "/api/v1/feature-requests/my": {
+    "/feature-requests/my": {
       "get": {
         "operationId": "FeatureRequestController_findMy",
         "parameters": [],
@@ -3551,7 +3551,7 @@
         ]
       }
     },
-    "/api/v1/feature-requests/{id}": {
+    "/feature-requests/{id}": {
       "get": {
         "operationId": "FeatureRequestController_findOne",
         "parameters": [
@@ -3580,7 +3580,7 @@
         ]
       }
     },
-    "/api/v1/feature-requests/{id}/messages": {
+    "/feature-requests/{id}/messages": {
       "post": {
         "operationId": "FeatureRequestController_addMessage",
         "parameters": [
@@ -3619,7 +3619,7 @@
         ]
       }
     },
-    "/api/v1/feature-requests/{id}/resolve": {
+    "/feature-requests/{id}/resolve": {
       "patch": {
         "operationId": "FeatureRequestController_resolve",
         "parameters": [
@@ -3658,7 +3658,7 @@
         ]
       }
     },
-    "/api/v1/feature-requests/{id}/respond": {
+    "/feature-requests/{id}/respond": {
       "patch": {
         "operationId": "FeatureRequestController_respond",
         "parameters": [
@@ -3701,7 +3701,7 @@
   "info": {
     "title": "InfoBrasil API",
     "description": "API de integração do sistema Retaguarda (by InfoBrasil) com outros sistemas, como ERPs, e-commerce, etc. <br><br>\n      Se deseja solicitar um acesso, preencha o formulário em: <a href='https://info-api.infobrasilsistemas.com.br/integration/form'>Solicitar Acesso</a>\n      <br><br>\n      **O sistema conta com duas formas de autenticação:**<br> \n      - Basic Auth para login e obtenção de token JWT<br>\n      - JWT para acesso aos endpoints protegidos.\n      <br><br>\n      Para verificar a disponibilidade da API acesse nossa <a href='/status'>Página de Status</a> | Para novidades e histórico de versões acesse o <a href='/changelog'>Changelog Oficial</a>\n      <br><br>\n      A API é organizada em módulos, cada um responsável por uma área específica do sistema, como produtos, clientes, vendas, etc.",
-    "version": "1.19.1",
+    "version": "1.19.2",
     "contact": {
       "name": "InfoBrasil Sistemas",
       "url": "https://www.infobrasilsistemas.com.br",

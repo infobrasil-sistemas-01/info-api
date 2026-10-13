@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.19.2](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.19.1...v1.19.2) (2026-10-13)
+
+
+### Features
+
+* **employees:** return USU_CODIGO ([2c389ab](https://github.com/infobrasil-sistemas-01/info-api/commit/2c389abcf887228041e86e3f5e7a1eab5a9e001a))
+* header on docs ([9b525f4](https://github.com/infobrasil-sistemas-01/info-api/commit/9b525f4450d2e6a1128b31d4cb50b65d8fe89ed1))
+* **orders:** suportar priceTable dinamica com fallback 1 na insercao dos itens da venda ([c28bba2](https://github.com/infobrasil-sistemas-01/info-api/commit/c28bba23aa811e19d2ba3a84e3d924bf7e7fbf75))
+
+
+### Bug Fixes
+
+* **docs:** corrigir carregamento e interpolacao do header unificado no Swagger e Scalar ([79159f9](https://github.com/infobrasil-sistemas-01/info-api/commit/79159f906f5961dcfe40f3d7fbedb22123dc08e4))
+* **docs:** substituir icone de cifrao por tag de release no seletor de versao ([babcabe](https://github.com/infobrasil-sistemas-01/info-api/commit/babcabe8a9329ef7e2fab59030b4057180a9c6c4))
+* **orders:** employee_id validation ([efa0c6f](https://github.com/infobrasil-sistemas-01/info-api/commit/efa0c6f705e3d8a7367975fdd7a67f4fca54828d))
+
 ## [1.19.1](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.19.0...v1.19.1) (2026-10-13)
 
 

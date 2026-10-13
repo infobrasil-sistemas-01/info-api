@@ -6,6 +6,27 @@ Para visualizar a versão interativa com busca em tempo real, acesse o portal we
 
 ---
 
+## [v1.19.2] - 2026-10-13
+
+### 📌 return USU_CODIGO e melhorias
+> Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral, Geral & Usabilidade.
+
+**Destaques:**
+- ⭐ return USU_CODIGO
+- ⭐ header on docs
+
+#### 🚀 Novidades & Melhorias
+- **[Geral]** return USU_CODIGO: Atualização no módulo de Geral: return USU_CODIGO.
+- **[Geral & Usabilidade]** header on docs: Atualização no módulo de Geral & Usabilidade: header on docs.
+- **[Geral]** suportar priceTable dinamica com fallback 1 na insercao dos itens da venda: Atualização no módulo de Geral: suportar priceTable dinamica com fallback 1 na insercao dos itens da venda.
+
+#### 🛠️ Correções & Estabilidade
+- **[Geral]** corrigir carregamento e interpolacao do header unificado no Swagger e Scalar: Atualização no módulo de Geral: corrigir carregamento e interpolacao do header unificado no Swagger e Scalar.
+- **[Geral]** substituir icone de cifrao por tag de release no seletor de versao: Atualização no módulo de Geral: substituir icone de cifrao por tag de release no seletor de versao.
+- **[Geral]** employee_id validation: Atualização no módulo de Geral: employee_id validation.
+
+---
+
 ## [v1.19.1] - 2026-10-13
 
 ### 📌 Correções de estabilidade e aprimoramentos
