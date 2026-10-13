@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.19.0](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.17.1...v1.19.0) (2026-10-13)
+
+
+### Features
+
+* new homepage ([0ee9272](https://github.com/infobrasil-sistemas-01/info-api/commit/0ee92722286d433e8b410159cc71ffddfbb07e44))
+* new homepage 2 ([22b3bb2](https://github.com/infobrasil-sistemas-01/info-api/commit/22b3bb25bb463153b06655c06bb944a7672f07c7))
+
+
+### Bug Fixes
+
+* **landing:** margins ([2874a86](https://github.com/infobrasil-sistemas-01/info-api/commit/2874a861b1ba09b11c609a1140aba51e750afc61))
+* **order:** PostOrderDto due to change in API purpose ([757aa0e](https://github.com/infobrasil-sistemas-01/info-api/commit/757aa0ecb79a362a555110b2d7f82bd62c2eb83d))
+* rotate password on client dash ([dde0b16](https://github.com/infobrasil-sistemas-01/info-api/commit/dde0b16857e67f6f97a0e3b17e1add44e4bbc098))
+
 ## [1.18.0](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.17.1...v1.18.0) (2026-10-13)
 
 
