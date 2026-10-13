@@ -6,6 +6,19 @@ Para visualizar a versão interativa com busca em tempo real, acesse o portal we
 
 ---
 
+## [v1.19.1] - 2026-10-13
+
+### 📌 Correções de estabilidade e aprimoramentos
+> Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral.
+
+**Destaques:**
+- ⭐ POST orders
+
+#### 🛠️ Correções & Estabilidade
+- **[Geral]** POST orders: Atualização no módulo de Geral: POST orders.
+
+---
+
 ## [v1.19.0] - 2026-10-13
 
 ### 📌 new homepage e melhorias

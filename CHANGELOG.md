@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.19.1](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.19.0...v1.19.1) (2026-10-13)
+
+
+### Bug Fixes
+
+* **orders:** POST orders ([615d1aa](https://github.com/infobrasil-sistemas-01/info-api/commit/615d1aa71ea1c1256999fcf2226a10b6baabc7ef))
+
 ## [1.19.0](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.17.1...v1.19.0) (2026-10-13)
 
 

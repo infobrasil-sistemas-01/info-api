@@ -1,5 +1,26 @@
 [
   {
+    "version": "1.19.1",
+    "date": "2026-10-13",
+    "title": "Correções de estabilidade e aprimoramentos",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral.",
+    "highlights": [
+      "POST orders"
+    ],
+    "items": [
+      {
+        "module": "Geral",
+        "type": "fix",
+        "title": "POST orders",
+        "description": "Atualização no módulo de Geral: POST orders.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "POST orders",
+        "commitHash": "615d1aa"
+      }
+    ],
+    "totalChanges": 1
+  },
+  {
     "version": "1.19.0",
     "date": "2026-10-13",
     "title": "new homepage e melhorias",
