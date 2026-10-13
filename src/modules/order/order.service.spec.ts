@@ -86,7 +86,15 @@ describe('OrderService', () => {
 
       mockConnection.query.mockImplementation((query, params, callback) => {
         if (typeof query === 'string' && query.includes('FROM USUARIOS')) {
-          return callback(null, [{ USU_CODIGO: 1, USU_SITUACAO: 'A' }]);
+          return callback(null, [
+            {
+              USU_CODIGO: 1,
+              USU_SITUACAO: 'A',
+              FUN_CODIGO: 1,
+              FUN_SITUACAO: 'A',
+              FUN_DATADEMISSAO: null,
+            },
+          ]);
         }
         callback(null, []);
       });
@@ -356,6 +364,18 @@ describe('OrderService', () => {
       );
     });
 
+    it('should throw BadRequestException when employee_id is missing in service', async () => {
+      const { employee_id, ...orderWithoutEmployee } = mockOrderData;
+
+      await expect(
+        service.post('cred-1', orderWithoutEmployee as any, 1),
+      ).rejects.toThrow(
+        new BadRequestException(
+          'O campo employee_id (código do funcionário/vendedor no ERP) é obrigatório.',
+        ),
+      );
+    });
+
     it('should throw BadRequestException when user_id is not found in database', async () => {
       mockConnection.query.mockImplementation((query, params, callback) => {
         if (typeof query === 'string' && query.includes('FROM USUARIOS')) {
@@ -379,7 +399,72 @@ describe('OrderService', () => {
 
       await expect(
         service.post('cred-1', { ...mockOrderData, user_id: 1 } as any, 1),
-      ).rejects.toThrow(new BadRequestException('Usuário/operador com ID 1 está inativo ou desligado.'));
+      ).rejects.toThrow(new BadRequestException('Usuário/operador com ID 1 está inativo.'));
+    });
+
+    it('should throw BadRequestException when user has no FUN_CODIGO linked', async () => {
+      mockConnection.query.mockImplementation((query, params, callback) => {
+        if (typeof query === 'string' && query.includes('FROM USUARIOS')) {
+          return callback(null, [{ USU_CODIGO: 1, USU_SITUACAO: 'A', FUN_CODIGO: null }]);
+        }
+        callback(null, []);
+      });
+
+      await expect(
+        service.post('cred-1', mockOrderData as any, 1),
+      ).rejects.toThrow(
+        new BadRequestException(
+          'O usuário/operador com ID 1 não possui um funcionário vinculado no ERP.',
+        ),
+      );
+    });
+
+    it('should throw BadRequestException when user FUN_CODIGO differs from employee_id', async () => {
+      mockConnection.query.mockImplementation((query, params, callback) => {
+        if (typeof query === 'string' && query.includes('FROM USUARIOS')) {
+          return callback(null, [
+            {
+              USU_CODIGO: 1,
+              USU_SITUACAO: 'A',
+              FUN_CODIGO: 99,
+              FUN_SITUACAO: 'A',
+            },
+          ]);
+        }
+        callback(null, []);
+      });
+
+      await expect(
+        service.post('cred-1', { ...mockOrderData, employee_id: 1 } as any, 1),
+      ).rejects.toThrow(
+        new BadRequestException(
+          'O funcionário informado (1) não corresponde ao funcionário vinculado ao usuário/operador 1 no ERP (99).',
+        ),
+      );
+    });
+
+    it('should throw BadRequestException when linked employee is inactive or dismissed', async () => {
+      mockConnection.query.mockImplementation((query, params, callback) => {
+        if (typeof query === 'string' && query.includes('FROM USUARIOS')) {
+          return callback(null, [
+            {
+              USU_CODIGO: 1,
+              USU_SITUACAO: 'A',
+              FUN_CODIGO: 1,
+              FUN_SITUACAO: 'I',
+            },
+          ]);
+        }
+        callback(null, []);
+      });
+
+      await expect(
+        service.post('cred-1', mockOrderData as any, 1),
+      ).rejects.toThrow(
+        new BadRequestException(
+          'O funcionário com ID 1 está inativo ou desligado no ERP.',
+        ),
+      );
     });
   });
 

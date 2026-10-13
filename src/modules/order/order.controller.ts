@@ -79,7 +79,7 @@ export class OrderController {
   @ApiResponse({
     status: 403,
     description:
-      'Operador não autorizado a registrar vendas em nome de outro usuário.',
+      'Operador não autorizado a registrar vendas em nome de outro usuário ou funcionário.',
   })
   postOrder(@Req() req: ReqWithAuthContext, @Body() dto: PostOrderDto) {
     const { credentialsId, storeId, type, usuCodigo, funCodigo } =
@@ -106,9 +106,26 @@ export class OrderController {
       );
     }
 
+    if (
+      isH2M &&
+      dto.employee_id !== undefined &&
+      funCodigo !== undefined &&
+      dto.employee_id !== funCodigo
+    ) {
+      throw new ForbiddenException(
+        'Operador não autorizado a registrar vendas em nome de outro funcionário.',
+      );
+    }
+
     if (!isH2M && !dto.user_id) {
       throw new BadRequestException(
         'Para integrações M2M/parceiros, é obrigatório informar o campo user_id (código do operador no ERP).',
+      );
+    }
+
+    if (!isH2M && !dto.employee_id) {
+      throw new BadRequestException(
+        'Para integrações M2M/parceiros, é obrigatório informar o campo employee_id (código do funcionário no ERP).',
       );
     }
 
@@ -116,7 +133,7 @@ export class OrderController {
     const effectiveUserId = isH2M ? (usuCodigo ?? 9999) : dto.user_id!;
     const effectiveEmployeeId = isH2M
       ? (funCodigo ?? usuCodigo ?? 9999)
-      : dto.employee_id || 9999;
+      : dto.employee_id!;
 
     const sanitizedDto: PostOrderDto = {
       ...dto,

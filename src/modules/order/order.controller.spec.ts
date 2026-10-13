@@ -123,6 +123,27 @@ describe('OrderController', () => {
       );
     });
 
+    it('should reject H2M request with 403 Forbidden if body employee_id differs from token funCodigo', async () => {
+      const h2mReq = {
+        authContext: {
+          userId: 'h2m-operator',
+          credentialsId: 'cred-1',
+          storeId: 3,
+          type: 'H2M',
+          usuCodigo: 42,
+          funCodigo: 88,
+        },
+      } as any;
+
+      const dto = new PostOrderDto();
+      dto.user_id = 42;
+      dto.employee_id = 99; // Divergente do token funCodigo (88)
+
+      expect(() => controller.postOrder(h2mReq, dto)).toThrow(
+        ForbiddenException,
+      );
+    });
+
     it('should enforce H2M authenticated operator and storeId when user_id is omitted or matching', async () => {
       const h2mReq = {
         authContext: {
@@ -138,7 +159,7 @@ describe('OrderController', () => {
       const dto = new PostOrderDto();
       dto.store_id = 99; // Attacker tries to use another store
       dto.user_id = 42; // Matching token usuCodigo
-      dto.employee_id = 2;
+      dto.employee_id = 88; // Matching token funCodigo
 
       mockOrderService.post.mockResolvedValue({ orderId: 123 });
 
@@ -167,6 +188,7 @@ describe('OrderController', () => {
 
       const dto = new PostOrderDto();
       dto.store_id = 2;
+      dto.employee_id = 15;
 
       expect(() => controller.postOrder(m2mReq, dto)).toThrow(
         new BadRequestException(
@@ -175,7 +197,7 @@ describe('OrderController', () => {
       );
     });
 
-    it('should allow M2M partner to provide user_id', async () => {
+    it('should reject M2M request with BadRequestException when employee_id is missing', async () => {
       const m2mReq = {
         authContext: {
           userId: 'm2m-partner',
@@ -189,6 +211,28 @@ describe('OrderController', () => {
       dto.store_id = 2;
       dto.user_id = 15;
 
+      expect(() => controller.postOrder(m2mReq, dto)).toThrow(
+        new BadRequestException(
+          'Para integrações M2M/parceiros, é obrigatório informar o campo employee_id (código do funcionário no ERP).',
+        ),
+      );
+    });
+
+    it('should allow M2M partner to provide user_id and employee_id', async () => {
+      const m2mReq = {
+        authContext: {
+          userId: 'm2m-partner',
+          credentialsId: 'cred-1',
+          storeId: 1,
+          type: 'M2M',
+        },
+      } as any;
+
+      const dto = new PostOrderDto();
+      dto.store_id = 2;
+      dto.user_id = 15;
+      dto.employee_id = 15;
+
       mockOrderService.post.mockResolvedValue({ orderId: 456 });
 
       await controller.postOrder(m2mReq, dto);
@@ -198,6 +242,7 @@ describe('OrderController', () => {
         expect.objectContaining({
           store_id: 2,
           user_id: 15,
+          employee_id: 15,
         }),
         2,
       );

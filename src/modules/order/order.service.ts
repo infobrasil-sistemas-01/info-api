@@ -68,7 +68,17 @@ export class OrderService {
         );
       }
 
-      await this.validateUser(connection, orderData.user_id);
+      if (!orderData.employee_id) {
+        throw new BadRequestException(
+          'O campo employee_id (código do funcionário/vendedor no ERP) é obrigatório.',
+        );
+      }
+
+      await this.validateUserAndEmployee(
+        connection,
+        orderData.user_id,
+        orderData.employee_id,
+      );
 
       const transaction: any = await new Promise((resolve, reject) => {
         connection.startTransaction((err: any, transaction: any) => {
@@ -562,7 +572,7 @@ export class OrderService {
         PRE_CODIGO: orderData.provider_id || 1,
         LOJ_CODIGO: orderData.store_id || storeId,
         USU_CODIGO: orderData.user_id,
-        FUN_CODIGO: orderData.employee_id || 9999,
+        FUN_CODIGO: orderData.employee_id,
         CLI_CODIGO: orderData.client_id || 1,
         VEN_TIPO: 'I',
         VEN_PRECO: orderData.price_table_id?.toString() || '1',
@@ -616,14 +626,17 @@ export class OrderService {
     });
   }
 
-  private async validateUser(
+  private async validateUserAndEmployee(
     connection: any,
     userId: number,
+    employeeId: number,
   ): Promise<void> {
     const query = `
       SELECT 
         U.USU_CODIGO,
         U.USU_SITUACAO,
+        U.FUN_CODIGO,
+        F.FUN_SITUACAO,
         F.FUN_DATADEMISSAO
       FROM USUARIOS U
       LEFT JOIN FUNCIONARIOS F ON F.FUN_CODIGO = U.FUN_CODIGO
@@ -645,14 +658,37 @@ export class OrderService {
       );
     }
 
-    const situacao = (user.USU_SITUACAO || 'A')
+    const userSituacao = (user.USU_SITUACAO || 'A')
       .toString()
       .trim()
       .toUpperCase();
 
-    if (situacao !== 'A' || user.FUN_DATADEMISSAO) {
+    if (userSituacao !== 'A') {
       throw new BadRequestException(
-        `Usuário/operador com ID ${userId} está inativo ou desligado.`,
+        `Usuário/operador com ID ${userId} está inativo.`,
+      );
+    }
+
+    if (user.FUN_CODIGO === null || user.FUN_CODIGO === undefined) {
+      throw new BadRequestException(
+        `O usuário/operador com ID ${userId} não possui um funcionário vinculado no ERP.`,
+      );
+    }
+
+    if (Number(user.FUN_CODIGO) !== Number(employeeId)) {
+      throw new BadRequestException(
+        `O funcionário informado (${employeeId}) não corresponde ao funcionário vinculado ao usuário/operador ${userId} no ERP (${user.FUN_CODIGO}).`,
+      );
+    }
+
+    const funSituacao = (user.FUN_SITUACAO || 'A')
+      .toString()
+      .trim()
+      .toUpperCase();
+
+    if (funSituacao !== 'A' || user.FUN_DATADEMISSAO) {
+      throw new BadRequestException(
+        `O funcionário com ID ${employeeId} está inativo ou desligado no ERP.`,
       );
     }
   }

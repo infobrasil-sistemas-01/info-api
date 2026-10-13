@@ -37,7 +37,10 @@ export class PostOrderDto extends ZodDto(PostOrderSchema) {
   })
   provider_id?: number;
 
-  @ApiPropertyOptional({ description: 'ID do funcionário (opcional)' })
+  @ApiPropertyOptional({
+    description:
+      'Código do funcionário/vendedor (FUN_CODIGO). Obrigatório para integrações M2M/parceiros e deve corresponder ao funcionário vinculado ao operador (user_id). Em autenticação de operador (H2M), assume automaticamente o funcionário autenticado.',
+  })
   employee_id?: number;
 
   @ApiPropertyOptional({
