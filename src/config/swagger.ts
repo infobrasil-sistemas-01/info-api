@@ -155,14 +155,18 @@ export function setupSwagger(app: INestApplication) {
     html, body {
       margin: 0;
       padding: 0;
-      background-color: #06110d;
-      color: #f0fdf4;
       font-family: 'Outfit', sans-serif;
-      transition: background-color 0.25s, color 0.25s;
+      transition: background-color 0.2s ease, color 0.2s ease;
     }
+    html:not([data-theme="light"]),
+    body:not(.theme-light) {
+      background-color: #06110d !important;
+      color: #f0fdf4 !important;
+    }
+    html[data-theme="light"],
     body.theme-light {
-      background-color: #f8fafc;
-      color: #0f172a;
+      background-color: #fafafa !important;
+      color: #3b4151 !important;
     }
     .swagger-ui {
       max-width: 1440px;
@@ -372,224 +376,37 @@ export function setupSwagger(app: INestApplication) {
       color: #94a3b8 !important;
     }
 
-    /* =========================================================================
-       SWAGGER UI LIGHT THEME (Ativo quando está em .theme-light)
-    ========================================================================= */
-    body.theme-light .swagger-ui {
-      color: #0f172a;
-    }
-
-    /* Scheme Container (Servers & Authorize) */
-    body.theme-light .swagger-ui .scheme-container {
-      background: #ffffff !important;
-      border: 1px solid #e2e8f0 !important;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
-      border-radius: 14px !important;
-      padding: 16px 20px !important;
-      margin-bottom: 24px !important;
-    }
-    body.theme-light .swagger-ui .scheme-container label {
-      color: #0f172a !important;
-      font-weight: 600 !important;
-    }
-    body.theme-light .swagger-ui .scheme-container select {
-      background-color: #f8fafc !important;
-      color: #0f172a !important;
-      border: 1px solid #cbd5e1 !important;
-      border-radius: 8px !important;
-      padding: 6px 12px !important;
-      font-weight: 500 !important;
-    }
-    body.theme-light .swagger-ui .btn.authorize {
-      background: #059669 !important;
-      color: #ffffff !important;
-      border-color: #059669 !important;
-      border-radius: 9px !important;
-      font-weight: 700 !important;
-      box-shadow: 0 2px 8px rgba(5, 150, 105, 0.25) !important;
-    }
-    body.theme-light .swagger-ui .btn.authorize svg {
-      fill: #ffffff !important;
-    }
-
-    /* Info Section */
-    body.theme-light .swagger-ui .info {
-      margin: 20px 0 28px !important;
-    }
-    body.theme-light .swagger-ui .info .title {
-      color: #0f172a !important;
-      font-size: 2rem !important;
-      font-weight: 800 !important;
-    }
-    body.theme-light .swagger-ui .info p,
-    body.theme-light .swagger-ui .info li,
-    body.theme-light .swagger-ui .info table {
-      color: #475569 !important;
-    }
-    body.theme-light .swagger-ui .info a {
-      color: #059669 !important;
-    }
-
-    /* Opblock Tags */
-    body.theme-light .swagger-ui .opblock-tag {
-      color: #0f172a !important;
-      border-bottom: 1px solid #e2e8f0 !important;
-    }
-    body.theme-light .swagger-ui .opblock-tag small {
-      color: #64748b !important;
-    }
-
-    /* Opblocks (Endpoints) */
-    body.theme-light .swagger-ui .opblock {
-      background: #ffffff !important;
-      border: 1px solid #e2e8f0 !important;
-      border-radius: 12px !important;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
-      margin: 0 0 12px !important;
-    }
-    body.theme-light .swagger-ui .opblock .opblock-summary {
-      border-color: transparent !important;
-    }
-    body.theme-light .swagger-ui .opblock .opblock-summary-path,
-    body.theme-light .swagger-ui .opblock .opblock-summary-operation-id {
-      color: #0f172a !important;
-      font-family: 'JetBrains Mono', monospace !important;
-    }
-    body.theme-light .swagger-ui .opblock .opblock-summary-description {
-      color: #64748b !important;
-    }
-    body.theme-light .swagger-ui .opblock-body {
-      background: #f8fafc !important;
-      border-top: 1px solid #e2e8f0 !important;
-    }
-    body.theme-light .swagger-ui .opblock-section-header {
-      background: #f1f5f9 !important;
-    }
-    body.theme-light .swagger-ui .opblock-section-header h4 {
-      color: #0f172a !important;
-    }
-    body.theme-light .swagger-ui table.parameters {
-      color: #0f172a !important;
-    }
-    body.theme-light .swagger-ui .parameter__name,
-    body.theme-light .swagger-ui .parameter__type {
-      color: #059669 !important;
-    }
-    body.theme-light .swagger-ui .parameter__deprecated {
-      color: #ef4444 !important;
-    }
-    body.theme-light .swagger-ui .tab li button.tablinks {
-      color: #64748b !important;
-    }
-    body.theme-light .swagger-ui .tab li button.tablinks.active {
-      color: #059669 !important;
-      font-weight: 700 !important;
-    }
-
-    /* Forms, Inputs & Selects */
-    body.theme-light .swagger-ui select {
-      background-color: #ffffff !important;
-      color: #0f172a !important;
-      border: 1px solid #cbd5e1 !important;
-      border-radius: 6px !important;
-    }
-    body.theme-light .swagger-ui input[type=text],
-    body.theme-light .swagger-ui input[type=password],
-    body.theme-light .swagger-ui textarea {
-      background-color: #ffffff !important;
-      color: #0f172a !important;
-      border: 1px solid #cbd5e1 !important;
-      border-radius: 6px !important;
-    }
-    body.theme-light .swagger-ui .btn.execute {
-      background-color: #059669 !important;
-      color: #ffffff !important;
-      border-color: #059669 !important;
-    }
-    body.theme-light .swagger-ui .btn.btn-clear {
-      background-color: #f1f5f9 !important;
-      color: #475569 !important;
-      border-color: #cbd5e1 !important;
-    }
-
-    /* Responses & Code Blocks */
-    body.theme-light .swagger-ui .responses-inner h4,
-    body.theme-light .swagger-ui .responses-inner h5 {
-      color: #0f172a !important;
-    }
-    body.theme-light .swagger-ui .response-col_status {
-      color: #059669 !important;
-    }
-    body.theme-light .swagger-ui .response-col_description {
-      color: #475569 !important;
-    }
-    body.theme-light .swagger-ui .highlight-code,
-    body.theme-light .swagger-ui .microlight {
-      background: #0f172a !important;
-      color: #38bdf8 !important;
-      border: 1px solid #e2e8f0 !important;
-      border-radius: 8px !important;
-    }
-
-    /* Models & Schemas */
-    body.theme-light .swagger-ui section.models {
-      background: #ffffff !important;
-      border: 1px solid #e2e8f0 !important;
-      border-radius: 14px !important;
-    }
-    body.theme-light .swagger-ui section.models h4 {
-      color: #0f172a !important;
-    }
-    body.theme-light .swagger-ui .model-box {
-      background: #f8fafc !important;
-      border-radius: 8px !important;
-    }
-    body.theme-light .swagger-ui .model-title,
-    body.theme-light .swagger-ui .model {
-      color: #0f172a !important;
-    }
-    body.theme-light .swagger-ui table.model tbody tr td {
-      color: #475569 !important;
-    }
-
-    /* Dialog / Modal UX (Authorize Popup) */
-    body.theme-light .swagger-ui .dialog-ux .backdrop-ux {
-      background: rgba(15, 23, 42, 0.4) !important;
-      backdrop-filter: blur(4px) !important;
-    }
-    body.theme-light .swagger-ui .dialog-ux .modal-ux {
-      background: #ffffff !important;
-      border: 1px solid #e2e8f0 !important;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15) !important;
-      border-radius: 16px !important;
-    }
-    body.theme-light .swagger-ui .dialog-ux .modal-ux-header h3 {
-      color: #0f172a !important;
-    }
-    body.theme-light .swagger-ui .dialog-ux .modal-ux-content h4,
-    body.theme-light .swagger-ui .dialog-ux .modal-ux-content h5 {
-      color: #0f172a !important;
-    }
-    body.theme-light .swagger-ui .dialog-ux .modal-ux-content p {
-      color: #475569 !important;
-    }
   `;
 
   const customJsCode = `
     ${INFO_HEADER_JS}
 
     (function() {
-      // 1. Sincronizar o tema salvo imediatamente no body
-      try {
-        var savedTheme = localStorage.getItem('infoapi-theme') || 'dark';
-        document.documentElement.setAttribute('data-theme', savedTheme);
+      // 1. Sincronizar tema no HTML e Body (com suporte reativo ao evento theme-changed)
+      function syncTheme(theme) {
+        var isLight = theme === 'light';
+        document.documentElement.setAttribute('data-theme', isLight ? 'light' : 'dark');
         if (document.body) {
-          document.body.classList.toggle('theme-dark', savedTheme === 'dark');
-          document.body.classList.toggle('theme-light', savedTheme === 'light');
+          document.body.classList.toggle('theme-light', isLight);
+          document.body.classList.toggle('theme-dark', !isLight);
+          document.body.style.backgroundColor = isLight ? '#fafafa' : '#06110d';
         }
-      } catch(e) {}
+        document.documentElement.style.backgroundColor = isLight ? '#fafafa' : '#06110d';
+      }
 
-      // 2. Injetar o header
+      var savedTheme = 'dark';
+      try {
+        savedTheme = localStorage.getItem('infoapi-theme') || 'dark';
+      } catch(e) {}
+      syncTheme(savedTheme);
+
+      window.addEventListener('theme-changed', function(e) {
+        if (e && e.detail && e.detail.theme) {
+          syncTheme(e.detail.theme);
+        }
+      });
+
+      // 2. Injetar o header unificado
       function injectUnifiedHeader() {
         if (!document.querySelector('info-api-header')) {
           var headerEl = document.createElement('info-api-header');
@@ -601,8 +418,16 @@ export function setupSwagger(app: INestApplication) {
       }
 
       if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', injectUnifiedHeader);
+        document.addEventListener('DOMContentLoaded', function() {
+          var current = 'dark';
+          try {
+            current = localStorage.getItem('infoapi-theme') || 'dark';
+          } catch(e) {}
+          syncTheme(current);
+          injectUnifiedHeader();
+        });
       } else {
+        syncTheme(savedTheme);
         injectUnifiedHeader();
       }
     })();
