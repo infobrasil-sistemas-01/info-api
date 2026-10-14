@@ -6,6 +6,19 @@ Para visualizar a versão interativa com busca em tempo real, acesse o portal we
 
 ---
 
+## [v1.20.0] - 2026-10-14
+
+### 📌 Módulo de Compras & Suporte a RBAC e melhorias
+> Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Compras.
+
+**Destaques:**
+- ⭐ Módulo de Compras & Suporte a RBAC
+
+#### 🚀 Novidades & Melhorias
+- **[Compras]** Módulo de Compras & Suporte a RBAC: Nova integração para sincronização e acompanhamento de pedidos de compra e cotações com fornecedores.
+
+---
+
 ## [v1.19.4] - 2026-10-14
 
 ### 📌 Inclusão de X-Request-Count and pagination headers support e melhorias

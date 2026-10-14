@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.20.0](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.19.4...v1.20.0) (2026-10-14)
+
+
+### Features
+
+* GET /purchases ([5ad9335](https://github.com/infobrasil-sistemas-01/info-api/commit/5ad93355af42798b80fd0e9735128c62ee8cf234))
+
 ## [1.19.4](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.19.3...v1.19.4) (2026-10-14)
 
 
