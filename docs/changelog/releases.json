@@ -1,5 +1,90 @@
 [
   {
+    "version": "1.19.3",
+    "date": "2026-10-14",
+    "title": "implements GET /cities e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral, Geral & Usabilidade.",
+    "highlights": [
+      "implements GET /cities",
+      "complements POST /clients"
+    ],
+    "items": [
+      {
+        "module": "Geral",
+        "type": "feature",
+        "title": "implements GET /cities",
+        "description": "Atualização no módulo de Geral: implements GET /cities.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "implements GET /cities",
+        "commitHash": "ac5448e"
+      },
+      {
+        "module": "Geral",
+        "type": "feature",
+        "title": "complements POST /clients",
+        "description": "Atualização no módulo de Geral: complements POST /clients.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "complements POST /clients",
+        "commitHash": "fe74fbb"
+      },
+      {
+        "module": "Geral",
+        "type": "feature",
+        "title": "restaurar swagger nativo padrao de fabrica com header institucional e sem seletor de tema",
+        "description": "Atualização no módulo de Geral: restaurar swagger nativo padrao de fabrica com header institucional e sem seletor de tema.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "restaurar swagger nativo padrao de fabrica com header institucional e sem seletor de tema",
+        "commitHash": "4665d36"
+      },
+      {
+        "module": "Geral",
+        "type": "feature",
+        "title": "tema dark completo no Swagger UI e seletor de tema claro/escuro no header",
+        "description": "Atualização no módulo de Geral: tema dark completo no Swagger UI e seletor de tema claro/escuro no header.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "tema dark completo no Swagger UI e seletor de tema claro/escuro no header",
+        "commitHash": "421b12b"
+      },
+      {
+        "module": "Geral",
+        "type": "feature",
+        "title": "implementar seletor paralelo no header integrado ao gatilho nativo do swagger",
+        "description": "Atualização no módulo de Geral: implementar seletor paralelo no header integrado ao gatilho nativo do swagger.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "implementar seletor paralelo no header integrado ao gatilho nativo do swagger",
+        "commitHash": "b89f61d"
+      },
+      {
+        "module": "Geral",
+        "type": "feature",
+        "title": "restaurar topbar nativa e implementar alternancia de tema via stylesheet dinamico",
+        "description": "Atualização no módulo de Geral: restaurar topbar nativa e implementar alternancia de tema via stylesheet dinamico.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "restaurar topbar nativa e implementar alternancia de tema via stylesheet dinamico",
+        "commitHash": "45f690f"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "implementar tema claro completo para Swagger UI e sincronizacao",
+        "description": "Atualização no módulo de Geral & Usabilidade: implementar tema claro completo para Swagger UI e sincronizacao.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "implementar tema claro completo para Swagger UI e sincronizacao",
+        "commitHash": "5785117"
+      },
+      {
+        "module": "Geral",
+        "type": "fix",
+        "title": "isolar tema escuro sob seletor dedicado e habilitar fallback nativo no tema claro",
+        "description": "Atualização no módulo de Geral: isolar tema escuro sob seletor dedicado e habilitar fallback nativo no tema claro.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "isolar tema escuro sob seletor dedicado e habilitar fallback nativo no tema claro",
+        "commitHash": "98362e2"
+      }
+    ],
+    "totalChanges": 8
+  },
+  {
     "version": "1.19.2",
     "date": "2026-10-13",
     "title": "return USU_CODIGO e melhorias",

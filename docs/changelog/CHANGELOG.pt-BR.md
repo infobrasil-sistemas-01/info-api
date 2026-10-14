@@ -6,6 +6,29 @@ Para visualizar a versão interativa com busca em tempo real, acesse o portal we
 
 ---
 
+## [v1.19.3] - 2026-10-14
+
+### 📌 implements GET /cities e melhorias
+> Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral, Geral & Usabilidade.
+
+**Destaques:**
+- ⭐ implements GET /cities
+- ⭐ complements POST /clients
+
+#### 🚀 Novidades & Melhorias
+- **[Geral]** implements GET /cities: Atualização no módulo de Geral: implements GET /cities.
+- **[Geral]** complements POST /clients: Atualização no módulo de Geral: complements POST /clients.
+- **[Geral]** restaurar swagger nativo padrao de fabrica com header institucional e sem seletor de tema: Atualização no módulo de Geral: restaurar swagger nativo padrao de fabrica com header institucional e sem seletor de tema.
+- **[Geral]** tema dark completo no Swagger UI e seletor de tema claro/escuro no header: Atualização no módulo de Geral: tema dark completo no Swagger UI e seletor de tema claro/escuro no header.
+- **[Geral]** implementar seletor paralelo no header integrado ao gatilho nativo do swagger: Atualização no módulo de Geral: implementar seletor paralelo no header integrado ao gatilho nativo do swagger.
+- **[Geral]** restaurar topbar nativa e implementar alternancia de tema via stylesheet dinamico: Atualização no módulo de Geral: restaurar topbar nativa e implementar alternancia de tema via stylesheet dinamico.
+
+#### 🛠️ Correções & Estabilidade
+- **[Geral & Usabilidade]** implementar tema claro completo para Swagger UI e sincronizacao: Atualização no módulo de Geral & Usabilidade: implementar tema claro completo para Swagger UI e sincronizacao.
+- **[Geral]** isolar tema escuro sob seletor dedicado e habilitar fallback nativo no tema claro: Atualização no módulo de Geral: isolar tema escuro sob seletor dedicado e habilitar fallback nativo no tema claro.
+
+---
+
 ## [v1.19.2] - 2026-10-13
 
 ### 📌 return USU_CODIGO e melhorias

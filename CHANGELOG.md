@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.19.3](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.19.2...v1.19.3) (2026-10-14)
+
+
+### Features
+
+* **cities:** implements GET /cities ([ac5448e](https://github.com/infobrasil-sistemas-01/info-api/commit/ac5448e8db7b3dc0d8e7993dfb0bc9908909acc7))
+* **clients:** complements POST /clients ([fe74fbb](https://github.com/infobrasil-sistemas-01/info-api/commit/fe74fbbb66f0171e60a66f5b68c37fb198a567dc))
+* **docs:** restaurar swagger nativo padrao de fabrica com header institucional e sem seletor de tema ([4665d36](https://github.com/infobrasil-sistemas-01/info-api/commit/4665d361bd7cad5892c2440bd9268cebaa39f657))
+* **docs:** tema dark completo no Swagger UI e seletor de tema claro/escuro no header ([421b12b](https://github.com/infobrasil-sistemas-01/info-api/commit/421b12b8d5a3145383ecd448fb938ba1a4a108a1))
+* **swagger:** implementar seletor paralelo no header integrado ao gatilho nativo do swagger ([b89f61d](https://github.com/infobrasil-sistemas-01/info-api/commit/b89f61d7d7762c6fbb0ff0a1a37a2446ba64d3fe))
+* **swagger:** restaurar topbar nativa e implementar alternancia de tema via stylesheet dinamico ([45f690f](https://github.com/infobrasil-sistemas-01/info-api/commit/45f690f8f62ff5df9eef1f18cd4b00359d1d4721))
+
+
+### Bug Fixes
+
+* implementar tema claro completo para Swagger UI e sincronizacao ([5785117](https://github.com/infobrasil-sistemas-01/info-api/commit/578511768a27854428db5c9bfffd79777f2c086f))
+* **swagger:** isolar tema escuro sob seletor dedicado e habilitar fallback nativo no tema claro ([98362e2](https://github.com/infobrasil-sistemas-01/info-api/commit/98362e26fdb61e50617967403bbf4e81a042ac2a))
+
 ## [1.19.2](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.19.1...v1.19.2) (2026-10-13)
 
 
