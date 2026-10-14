@@ -100,6 +100,26 @@ describe('ClientController', () => {
     });
   });
 
+  describe('create', () => {
+    it('should create client and return result', async () => {
+      const mockResult = { CLI_CODIGO: 99 };
+      mockService.create.mockResolvedValue(mockResult);
+
+      const user = { credentials_id: 'cred-1', store_id: 1 };
+      const payload: any = {
+        LOJ_CODIGO: 1,
+        CLI_NOME: 'New Client',
+        CLI_SITUACAO: 'A',
+        CLI_UF: 'CE',
+        MUN_CODIGO: 2302404,
+      };
+      const result = await controller.create(user, payload);
+
+      expect(result).toEqual(mockResult);
+      expect(mockService.create).toHaveBeenCalledWith('cred-1', 1, payload);
+    });
+  });
+
   describe('update', () => {
     it('should update client for valid numeric ID', async () => {
       const mockResult = { CLI_CODIGO: 1, CLI_NOME: 'Updated Name' };

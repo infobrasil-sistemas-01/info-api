@@ -109,20 +109,114 @@ describe('ClientService', () => {
   });
 
   describe('create', () => {
-    it('should insert a new client', async () => {
+    it('should insert a new client with required fields and leave optional fields as null', async () => {
       mockConnection.query.mockImplementation(
         (query: string, params: any[], callback: Function) => {
           callback(null, { CLI_CODIGO: 99 });
         },
       );
 
-      const payload = { CLI_NOME: 'New Client' } as any;
+      const payload = {
+        LOJ_CODIGO: 1,
+        CLI_NOME: 'New Client',
+        CLI_SITUACAO: 'A',
+        CLI_UF: 'CE',
+        MUN_CODIGO: 2302404,
+      } as any;
       const result = await service.create('cred-1', 1, payload);
 
       expect(result).toEqual({ CLI_CODIGO: 99 });
       expect(mockConnection.query).toHaveBeenCalledWith(
         expect.stringContaining('INSERT INTO clientes'),
-        expect.arrayContaining([1, 'New Client']),
+        [
+          1,
+          'New Client',
+          'A',
+          'CE',
+          2302404,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+        ],
+        expect.any(Function),
+      );
+    });
+
+    it('should insert a new client with all fields provided', async () => {
+      mockConnection.query.mockImplementation(
+        (query: string, params: any[], callback: Function) => {
+          callback(null, { CLI_CODIGO: 100 });
+        },
+      );
+
+      const payload = {
+        LOJ_CODIGO: 2,
+        CLI_NOME: 'Complete Client',
+        CLI_SITUACAO: 'A',
+        CLI_UF: 'SP',
+        MUN_CODIGO: 3550308,
+        CLI_FANTASIA: 'Fantasia Teste',
+        CLI_SEXO: 'F',
+        CLI_ENDERECO: 'Rua Teste, 100',
+        CLI_COMPL_ENDERECO: 'Apto 1',
+        CLI_CEP: '01001-000',
+        CLI_BAIRRO: 'Centro',
+        CLI_FONE: '1133334444',
+        CLI_CELULAR: '11999998888',
+        CLI_EMAIL: 'cliente@teste.com',
+        CLI_DATANASC: '1990-05-20',
+        CLI_CPF_CNPJ: '12345678901',
+        CLI_IDENTIDADE: 'MG123456',
+        CLI_MAE: 'Mae Teste',
+        CLI_PAI: 'Pai Teste',
+        CLI_ESTADOCIVIL: 'C',
+        CLI_NATURALIDADE: 'São Paulo',
+        ROT_CODIGO: 5,
+      };
+
+      const result = await service.create('cred-1', 2, payload);
+
+      expect(result).toEqual({ CLI_CODIGO: 100 });
+      expect(mockConnection.query).toHaveBeenCalledWith(
+        expect.stringContaining('INSERT INTO clientes'),
+        [
+          2,
+          'Complete Client',
+          'A',
+          'SP',
+          3550308,
+          'Fantasia Teste',
+          'F',
+          'Rua Teste, 100',
+          'Apto 1',
+          '01001-000',
+          'Centro',
+          '1133334444',
+          '11999998888',
+          'cliente@teste.com',
+          '1990-05-20',
+          '12345678901',
+          'MG123456',
+          'Mae Teste',
+          'Pai Teste',
+          'C',
+          'São Paulo',
+          5,
+        ],
         expect.any(Function),
       );
     });

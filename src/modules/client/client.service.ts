@@ -139,27 +139,42 @@ export class ClientService {
 
     try {
       const query = `INSERT INTO clientes (
-                      LOJ_CODIGO, CLI_NOME, CLI_FANTASIA, CLI_ENDERECO, CLI_COMPL_ENDERECO,
-                      CLI_CEP, CLI_BAIRRO, CLI_UF, CLI_FONE, CLI_CELULAR, CLI_CPF_CNPJ,
-                      CLI_SITUACAO, CLI_CODIGO
+                      LOJ_CODIGO, CLI_NOME, CLI_SITUACAO, CLI_UF, MUN_CODIGO,
+                      CLI_FANTASIA, CLI_SEXO, CLI_ENDERECO, CLI_COMPL_ENDERECO, CLI_CEP,
+                      CLI_BAIRRO, CLI_FONE, CLI_CELULAR, CLI_EMAIL, CLI_DATANASC,
+                      CLI_CPF_CNPJ, CLI_IDENTIDADE, CLI_MAE, CLI_PAI, CLI_ESTADOCIVIL,
+                      CLI_NATURALIDADE, ROT_CODIGO, CLI_CODIGO
                     ) VALUES (
                       ?, ?, ?, ?, ?,
-                      ?, ?, ?, ?, ?, ?,
-                      'A', GEN_ID(GEN_CODIGOCLI, 1)
+                      ?, ?, ?, ?, ?,
+                      ?, ?, ?, ?, ?,
+                      ?, ?, ?, ?, ?,
+                      ?, ?, GEN_ID(GEN_CODIGOCLI, 1)
                     ) RETURNING CLI_CODIGO`;
 
       const params = [
-        data.LOJ_CODIGO || storeId,
+        data.LOJ_CODIGO,
         data.CLI_NOME,
-        data.CLI_FANTASIA || null,
-        data.CLI_ENDERECO || null,
-        data.CLI_COMPL_ENDERECO || null,
-        data.CLI_CEP || null,
-        data.CLI_BAIRRO || null,
-        data.CLI_UF || 'CE',
-        data.CLI_FONE || null,
-        data.CLI_CELULAR || null,
-        data.CLI_CPF_CNPJ || null,
+        data.CLI_SITUACAO,
+        data.CLI_UF,
+        data.MUN_CODIGO,
+        data.CLI_FANTASIA ?? null,
+        data.CLI_SEXO ?? null,
+        data.CLI_ENDERECO ?? null,
+        data.CLI_COMPL_ENDERECO ?? null,
+        data.CLI_CEP ?? null,
+        data.CLI_BAIRRO ?? null,
+        data.CLI_FONE ?? null,
+        data.CLI_CELULAR ?? null,
+        data.CLI_EMAIL ?? null,
+        data.CLI_DATANASC ?? null,
+        data.CLI_CPF_CNPJ ?? null,
+        data.CLI_IDENTIDADE ?? null,
+        data.CLI_MAE ?? null,
+        data.CLI_PAI ?? null,
+        data.CLI_ESTADOCIVIL ?? null,
+        data.CLI_NATURALIDADE ?? null,
+        data.ROT_CODIGO ?? null,
       ];
 
       const startTime = Date.now();
