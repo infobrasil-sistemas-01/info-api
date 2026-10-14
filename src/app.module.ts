@@ -27,6 +27,7 @@ import { PlanLimitInterceptor } from './modules/plan/interceptors/plan-limit.int
 import { AnnouncementModule } from './modules/announcement/announcement.module';
 import { UptimeModule } from './modules/uptime/uptime.module';
 import { ClientModule } from './modules/client/client.module';
+import { CityModule } from './modules/city/city.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { StatusModule } from './modules/status/status.module';
 import { EmployeeModule } from './modules/employee/employee.module';
@@ -71,6 +72,7 @@ import { AppController } from './app.controller';
     AnnouncementModule,
     UptimeModule,
     ClientModule,
+    CityModule,
     EmployeeModule,
     SupplierModule,
     ServiceProviderModule,

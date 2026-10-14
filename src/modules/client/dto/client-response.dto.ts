@@ -59,7 +59,7 @@ export class ClientDetailResponseDto extends ClientResponseDto {
 
   @ApiPropertyOptional({
     example: 2304400,
-    description: 'Código IBGE do município',
+    description: 'Código IBGE do município (consulte GET /cities)',
   })
   MUN_CODIGO?: number;
 

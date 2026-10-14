@@ -44,7 +44,8 @@ export class CreateClientDto extends ZodDto(CreateClientSchema) {
   CLI_UF: string;
 
   @ApiProperty({
-    description: 'Código IBGE do município',
+    description:
+      'Código IBGE do município (consulte GET /cities para listar municípios válidos)',
     example: 2302404,
   })
   MUN_CODIGO: number;

@@ -36,7 +36,8 @@ VALUES
     (gen_random_uuid(), 'tenant.clients.create', 'Criar clientes do tenant', 'Criar clientes do tenant'),
     (gen_random_uuid(), 'tenant.clients.update', 'Atualizar clientes do tenant', 'Atualizar clientes do tenant'),
     (gen_random_uuid(), 'tenant.clients.delete', 'Deletar clientes do tenant', 'Deletar clientes do tenant'),
-    (gen_random_uuid(), 'tenant.clients.view', 'Visualizar clientes do tenant', 'Visualizar clientes do tenant')
+    (gen_random_uuid(), 'tenant.clients.view', 'Visualizar clientes do tenant', 'Visualizar clientes do tenant'),
+    (gen_random_uuid(), 'tenant.cities.view', 'Visualizar municípios do tenant', 'Visualizar municípios do tenant')
 ON CONFLICT ("key") DO UPDATE 
 SET "name" = EXCLUDED."name", 
     "description" = EXCLUDED."description";
@@ -74,7 +75,8 @@ JOIN "permissions" p ON p."key" IN (
     'tenant.clients.view',
     'tenant.clients.create',
     'tenant.clients.update',
-    'tenant.clients.delete'
+    'tenant.clients.delete',
+    'tenant.cities.view'
 )
 WHERE r."name" = 'Admin'
 ON CONFLICT ("roleId", "permissionId") DO NOTHING;

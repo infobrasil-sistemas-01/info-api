@@ -44,6 +44,7 @@ INSERT INTO permissions (id, key, name, description) VALUES
 (gen_random_uuid(), 'tenant.clients.create', 'Criar clientes', 'Criar clientes do tenant'),
 (gen_random_uuid(), 'tenant.clients.update', 'Atualizar clientes', 'Atualizar clientes do tenant'),
 (gen_random_uuid(), 'tenant.clients.delete', 'Deletar clientes', 'Deletar clientes do tenant'),
+(gen_random_uuid(), 'tenant.cities.view', 'Visualizar municípios', 'Visualizar municípios do tenant'),
 (gen_random_uuid(), 'tenant.account-receivable.view', 'Visualizar contas a receber', 'Visualizar contas a receber do tenant'),
 (gen_random_uuid(), 'tenant.account-receivable.create', 'Criar contas a receber', 'Criar contas a receber do tenant'),
 (gen_random_uuid(), 'tenant.account-receivable.update', 'Atualizar contas a receber', 'Atualizar contas a receber do tenant'),

@@ -175,6 +175,11 @@ export const PERMISSIONS = [
     module: 'tenant',
   },
   {
+    key: 'tenant.cities.view',
+    descricao: 'Visualizar municípios do tenant',
+    module: 'tenant',
+  },
+  {
     key: 'tenant.account-receivable.view',
     descricao: 'Visualizar contas a receber do tenant',
     module: 'tenant',
