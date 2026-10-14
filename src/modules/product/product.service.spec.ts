@@ -301,6 +301,41 @@ describe('ProductService', () => {
         expect.anything(),
         expect.any(Function),
       );
+      expect(mockConnection.query).toHaveBeenCalledWith(
+        expect.stringContaining('P.CRE_CODIGO, CR.CRE_NOME'),
+        expect.anything(),
+        expect.any(Function),
+      );
+      expect(mockConnection.query).toHaveBeenCalledWith(
+        expect.stringContaining(
+          'LEFT JOIN credores CR ON P.CRE_CODIGO = CR.CRE_CODIGO',
+        ),
+        expect.anything(),
+        expect.any(Function),
+      );
+    });
+
+    it('should include supplier columns and join in getById query', async () => {
+      mockConnection.query.mockImplementation(
+        (query: string, params: any[], callback: Function) => {
+          callback(null, [{ PRO_CODIGO: 1 }]);
+        },
+      );
+
+      await service.getById('cred-1', 1, 10);
+
+      expect(mockConnection.query).toHaveBeenCalledWith(
+        expect.stringContaining('P.CRE_CODIGO, CR.CRE_NOME'),
+        expect.anything(),
+        expect.any(Function),
+      );
+      expect(mockConnection.query).toHaveBeenCalledWith(
+        expect.stringContaining(
+          'LEFT JOIN credores CR ON P.CRE_CODIGO = CR.CRE_CODIGO',
+        ),
+        expect.anything(),
+        expect.any(Function),
+      );
     });
 
     it('should include all aligned columns and LEFT JOINs in getUnique query', async () => {
@@ -320,6 +355,11 @@ describe('ProductService', () => {
         expect.any(Function),
       );
       expect(mockConnection.query).toHaveBeenCalledWith(
+        expect.stringContaining('P.CRE_CODIGO, CR.CRE_NOME'),
+        expect.anything(),
+        expect.any(Function),
+      );
+      expect(mockConnection.query).toHaveBeenCalledWith(
         expect.stringContaining(
           'LEFT JOIN marcas M ON P.MAR_CODIGO = M.MAR_CODIGO',
         ),
@@ -329,6 +369,13 @@ describe('ProductService', () => {
       expect(mockConnection.query).toHaveBeenCalledWith(
         expect.stringContaining(
           'LEFT JOIN grupospro G ON P.GRU_CODIGO = G.GRU_CODIGO',
+        ),
+        expect.anything(),
+        expect.any(Function),
+      );
+      expect(mockConnection.query).toHaveBeenCalledWith(
+        expect.stringContaining(
+          'LEFT JOIN credores CR ON P.CRE_CODIGO = CR.CRE_CODIGO',
         ),
         expect.anything(),
         expect.any(Function),

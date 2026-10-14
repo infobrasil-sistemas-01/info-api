@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class ProductResponseDto {
   @ApiProperty({ example: 101, description: 'Código do produto' })
@@ -24,6 +24,18 @@ export class ProductResponseDto {
 
   @ApiProperty({ example: 'Grupo Exemplo', description: 'Descrição do grupo' })
   GRU_DESCRICAO: string;
+
+  @ApiPropertyOptional({
+    example: 1,
+    description: 'Código do fornecedor/credor',
+  })
+  CRE_CODIGO?: number | null;
+
+  @ApiPropertyOptional({
+    example: 'Distribuidora Exemplo LTDA',
+    description: 'Nome ou razão social do fornecedor/credor',
+  })
+  CRE_NOME?: string | null;
 
   @ApiProperty({ example: 50, description: 'Estoque atual' })
   EST_ATUAL: number;
@@ -59,6 +71,18 @@ export class ProductDetailResponseDto {
 
   @ApiProperty({ example: '7891234567890', description: 'Código de barras' })
   PRO_CODIGOBAR: string;
+
+  @ApiPropertyOptional({
+    example: 1,
+    description: 'Código do fornecedor/credor',
+  })
+  CRE_CODIGO?: number | null;
+
+  @ApiPropertyOptional({
+    example: 'Distribuidora Exemplo LTDA',
+    description: 'Nome ou razão social do fornecedor/credor',
+  })
+  CRE_NOME?: string | null;
 
   @ApiProperty({ example: 10.0, description: 'Preço de compra' })
   PRO_PRCCOMPRA: number;
@@ -100,6 +124,18 @@ export class ProductBarcodeResponseDto {
 
   @ApiProperty({ example: 'Grupo Exemplo', description: 'Descrição do grupo' })
   GRU_DESCRICAO: string;
+
+  @ApiPropertyOptional({
+    example: 1,
+    description: 'Código do fornecedor/credor',
+  })
+  CRE_CODIGO?: number | null;
+
+  @ApiPropertyOptional({
+    example: 'Distribuidora Exemplo LTDA',
+    description: 'Nome ou razão social do fornecedor/credor',
+  })
+  CRE_NOME?: string | null;
 
   @ApiProperty({ example: 50, description: 'Estoque total' })
   ESTOQUE: number;
