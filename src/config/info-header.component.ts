@@ -583,7 +583,8 @@ class InfoApiHeader extends HTMLElement {
           </ul>
 
           <div class="header-actions">
-            <!-- Botão Seletor de Tema Claro / Escuro -->
+            <!-- Botão Seletor de Tema Claro / Escuro (oculto no Swagger) -->
+            \${activeDoc !== 'swagger' ? \`
             <button class="btn-theme-toggle" id="theme-toggle-btn" title="Alternar entre tema Claro e Escuro" aria-label="Alternar tema">
               <svg class="theme-icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="5"></circle>
@@ -600,6 +601,7 @@ class InfoApiHeader extends HTMLElement {
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
               </svg>
             </button>
+            \` : ''}
 
             <a href="/integration/form" class="btn btn-primary" title="Solicitar Credenciais">
               <span>Solicitar Acesso</span>
@@ -627,9 +629,11 @@ class InfoApiHeader extends HTMLElement {
         <a href="/status" class="mobile-nav-link">Status do Sistema</a>
         <a href="/integration/client" class="mobile-nav-link">Área do Cliente</a>
         <a href="/integration/admin" class="mobile-nav-link">Painel Administrativo</a>
+        \${activeDoc !== 'swagger' ? \`
         <button class="mobile-nav-link" id="mobile-theme-toggle" style="background: transparent; border: none; width: 100%; cursor: pointer;">
           <span>Alternar Tema (Claro / Escuro)</span>
         </button>
+        \` : ''}
         <a href="/integration/form" class="btn btn-primary" style="margin-top: 8px;">Solicitar Acesso</a>
       </div>
     \`;
