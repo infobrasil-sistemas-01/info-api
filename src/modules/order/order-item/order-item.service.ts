@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { TenantConnectionService } from 'src/infra/database/tenant-connection.service';
 import { SoldProductDto } from '../dto/sold-product.dto';
+import { PaginatedResponse } from 'src/common/pagination/paginated-response';
 
 @Injectable()
 export class OrderItemService {
@@ -169,6 +170,7 @@ export class OrderItemService {
       startDate?: string;
       endDate?: string;
     },
+    includeCount: boolean = false,
   ) {
     let connection: any;
     connection =
@@ -177,36 +179,43 @@ export class OrderItemService {
     try {
       const { page = 1, pageSize = 10 } = filters;
       const params: any[] = [pageSize, (page - 1) * pageSize, storeId];
+      const filterParams: any[] = [storeId];
       let whereClause = `WHERE V.LOJ_CODIGO = ? AND V.VEN_TIPO = 'E'`;
 
       if (filters.orderId) {
         whereClause += ` AND V.VEN_NUMERO = ?`;
         params.push(filters.orderId);
+        filterParams.push(filters.orderId);
       }
 
       if (filters.productId) {
         whereClause += ` AND IV.PRO_CODIGO = ?`;
         params.push(filters.productId);
+        filterParams.push(filters.productId);
       }
 
       if (filters.brandId) {
         whereClause += ` AND P.MAR_CODIGO = ?`;
         params.push(filters.brandId);
+        filterParams.push(filters.brandId);
       }
 
       if (filters.groupId) {
         whereClause += ` AND P.GRU_CODIGO = ?`;
         params.push(filters.groupId);
+        filterParams.push(filters.groupId);
       }
 
       if (filters.startDate) {
         whereClause += ` AND V.VEN_DATA >= ?`;
         params.push(filters.startDate);
+        filterParams.push(filters.startDate);
       }
 
       if (filters.endDate) {
         whereClause += ` AND V.VEN_DATA <= ?`;
         params.push(filters.endDate);
+        filterParams.push(filters.endDate);
       }
 
       const query = `SELECT FIRST ? SKIP ? 
@@ -222,7 +231,7 @@ export class OrderItemService {
                       ORDER BY V.VEN_DATA DESC, V.VEN_NUMERO DESC`;
 
       const queryStartTime = Date.now();
-      const result = await new Promise((resolve, reject) => {
+      const result: any = await new Promise((resolve, reject) => {
         connection.query(query, params, (err: any, res: any) => {
           if (err) return reject(err);
           resolve(res);
@@ -230,15 +239,47 @@ export class OrderItemService {
       });
       const queryEndTime = Date.now();
 
+      let total: number | undefined = undefined;
+
+      if (includeCount) {
+        const countQuery = `SELECT COUNT(*) AS TOTAL
+                            FROM ITENSVEN IV
+                            INNER JOIN VENDAS V ON V.VEN_NUMERO = IV.VEN_NUMERO
+                            INNER JOIN PRODUTOS P ON P.PRO_CODIGO = IV.PRO_CODIGO
+                            LEFT JOIN MARCAS M ON M.MAR_CODIGO = P.MAR_CODIGO
+                            LEFT JOIN GRUPOSPRO G ON G.GRU_CODIGO = P.GRU_CODIGO
+                            ${whereClause}`;
+
+        const countRes: any = await new Promise((resolve, reject) => {
+          connection.query(countQuery, filterParams, (err: any, res: any) => {
+            if (err) return reject(err);
+            resolve(res);
+          });
+        });
+
+        const rawTotal =
+          countRes?.[0]?.TOTAL ??
+          countRes?.[0]?.total ??
+          countRes?.[0]?.COUNT ??
+          0;
+
+        total = Number(rawTotal);
+      }
+
       this.logger.log(
         `Busca transversal de itens de venda executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
-          { storeId, ...filters },
+          { storeId, includeCount, total, ...filters },
         )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${
           queryEndTime - queryStartTime
         }ms`,
       );
 
-      return result;
+      return new PaginatedResponse(
+        Array.isArray(result) ? result : [],
+        total,
+        page,
+        pageSize,
+      );
     } finally {
       this.tenantConnectionService.releaseConnection(connection);
     }

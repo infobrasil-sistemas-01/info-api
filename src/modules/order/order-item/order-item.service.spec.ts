@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { OrderItemService } from './order-item.service';
 import { TenantConnectionService } from 'src/infra/database/tenant-connection.service';
+import { PaginatedResponse } from 'src/common/pagination/paginated-response';
 
 describe('OrderItemService', () => {
   let service: OrderItemService;
@@ -185,6 +186,100 @@ describe('OrderItemService', () => {
 
       await expect(service.getByOrderId('cred-1', 123)).rejects.toThrow(
         'Query error',
+      );
+    });
+  });
+
+  describe('get', () => {
+    it('should return PaginatedResponse without total when includeCount is false', async () => {
+      const mockItems = [{ VEN_NUMERO: 1, PRO_CODIGO: 101 }];
+      mockConnection.query.mockImplementation(
+        (query: string, params: any[], callback: Function) => {
+          callback(null, mockItems);
+        },
+      );
+
+      const result = await service.get(
+        'cred-1',
+        1,
+        { page: 1, pageSize: 10 },
+        false,
+      );
+
+      expect(result).toBeInstanceOf(PaginatedResponse);
+      expect(result.data).toEqual(mockItems);
+      expect(result.total).toBeUndefined();
+      expect(mockConnection.query).toHaveBeenCalledWith(
+        expect.stringContaining('SELECT FIRST ? SKIP ?'),
+        [10, 0, 1],
+        expect.any(Function),
+      );
+    });
+
+    it('should query count and return PaginatedResponse with total when includeCount is true', async () => {
+      const mockItems = [{ VEN_NUMERO: 1, PRO_CODIGO: 101 }];
+      mockConnection.query.mockImplementation(
+        (query: string, params: any[], callback: Function) => {
+          if (query.includes('COUNT(*)')) {
+            callback(null, [{ TOTAL: 42 }]);
+          } else {
+            callback(null, mockItems);
+          }
+        },
+      );
+
+      const result = await service.get(
+        'cred-1',
+        1,
+        { page: 2, pageSize: 20 },
+        true,
+      );
+
+      expect(result).toBeInstanceOf(PaginatedResponse);
+      expect(result.data).toEqual(mockItems);
+      expect(result.total).toBe(42);
+      expect(result.page).toBe(2);
+      expect(result.pageSize).toBe(20);
+      expect(mockConnection.query).toHaveBeenCalledWith(
+        expect.stringContaining('SELECT COUNT(*) AS TOTAL'),
+        [1],
+        expect.any(Function),
+      );
+    });
+
+    it('should apply all filters in data query and count query', async () => {
+      mockConnection.query.mockImplementation(
+        (query: string, params: any[], callback: Function) => {
+          if (query.includes('COUNT(*)')) {
+            callback(null, [{ TOTAL: 10 }]);
+          } else {
+            callback(null, []);
+          }
+        },
+      );
+
+      const filters = {
+        page: 1,
+        pageSize: 10,
+        orderId: 100,
+        productId: 200,
+        brandId: 3,
+        groupId: 4,
+        startDate: '2026-01-01',
+        endDate: '2026-01-31',
+      };
+
+      await service.get('cred-1', 1, filters, true);
+
+      expect(mockConnection.query).toHaveBeenCalledWith(
+        expect.stringContaining('AND V.VEN_NUMERO = ?'),
+        expect.arrayContaining([10, 0, 1, 100, 200, 3, 4, '2026-01-01', '2026-01-31']),
+        expect.any(Function),
+      );
+      expect(mockConnection.query).toHaveBeenCalledWith(
+        expect.stringContaining('SELECT COUNT(*) AS TOTAL'),
+        [1, 100, 200, 3, 4, '2026-01-01', '2026-01-31'],
+        expect.any(Function),
       );
     });
   });

@@ -1151,11 +1151,51 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "X-Request-Count",
+            "in": "header",
+            "description": "Se definido como \"true\", calcula e retorna cabeçalhos de paginação (X-Total-Count, X-Total-Pages, X-Current-Page, X-Per-Page) na resposta.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "true"
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "Lista de itens retornada com sucesso.",
+            "headers": {
+              "X-Total-Count": {
+                "description": "Total de registros encontrados considerando os filtros (presente quando X-Request-Count: true)",
+                "schema": {
+                  "type": "integer",
+                  "example": 145
+                }
+              },
+              "X-Total-Pages": {
+                "description": "Total de páginas calculadas (presente quando X-Request-Count: true)",
+                "schema": {
+                  "type": "integer",
+                  "example": 3
+                }
+              },
+              "X-Current-Page": {
+                "description": "Página atual solicitada (presente quando X-Request-Count: true)",
+                "schema": {
+                  "type": "integer",
+                  "example": 1
+                }
+              },
+              "X-Per-Page": {
+                "description": "Quantidade de registros por página (presente quando X-Request-Count: true)",
+                "schema": {
+                  "type": "integer",
+                  "example": 50
+                }
+              }
+            },
             "content": {
               "application/json": {
                 "schema": {
@@ -4105,6 +4145,16 @@
             "type": "string",
             "example": "Grupo Exemplo",
             "description": "Descrição do grupo"
+          },
+          "CRE_CODIGO": {
+            "type": "object",
+            "example": 1,
+            "description": "Código do fornecedor/credor"
+          },
+          "CRE_NOME": {
+            "type": "object",
+            "example": "Distribuidora Exemplo LTDA",
+            "description": "Nome ou razão social do fornecedor/credor"
           },
           "EST_ATUAL": {
             "type": "number",
