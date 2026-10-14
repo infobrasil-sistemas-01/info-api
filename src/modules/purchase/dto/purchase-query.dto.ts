@@ -3,14 +3,16 @@ import { ZodDto } from 'src/common/validation/zod-dto';
 import { z } from 'zod';
 
 export const PurchaseQuerySchema = z.object({
-  page: z.coerce.number().min(1).optional(),
-  pageSize: z.coerce.number().min(1).optional(),
+  page: z.coerce.number().min(1).default(1).optional(),
+  pageSize: z.coerce.number().min(1).default(10).optional(),
   storeId: z.coerce.number().optional(),
   supplierId: z.coerce.number().optional(),
   startDate: z.string().optional(),
   endDate: z.string().optional(),
   invoiceNumber: z.string().optional(),
   nfeKey: z.string().optional(),
+  statusId: z.coerce.number().optional(),
+  orderNumber: z.coerce.number().optional(),
 });
 
 export class PurchaseQueryDto extends ZodDto(PurchaseQuerySchema) {
@@ -63,4 +65,16 @@ export class PurchaseQueryDto extends ZodDto(PurchaseQuerySchema) {
     type: String,
   })
   nfeKey?: string;
+
+  @ApiPropertyOptional({
+    description: 'Código da situação (SIT_CODIGO)',
+    type: Number,
+  })
+  statusId?: number;
+
+  @ApiPropertyOptional({
+    description: 'Número do pedido de compra (PED_NUMERO)',
+    type: Number,
+  })
+  orderNumber?: number;
 }
