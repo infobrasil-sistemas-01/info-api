@@ -149,8 +149,14 @@ export function setupSwagger(app: INestApplication) {
     });
 
   const customCss = `
+    /* Ocultar topbar visualmente preservando o DOM para gatilhos nativos/extensões */
     .swagger-ui .topbar {
-      display: none !important;
+      height: 0 !important;
+      min-height: 0 !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      overflow: hidden !important;
+      opacity: 0 !important;
     }
     html, body {
       margin: 0;
@@ -158,13 +164,13 @@ export function setupSwagger(app: INestApplication) {
       font-family: 'Outfit', sans-serif;
       transition: background-color 0.2s ease, color 0.2s ease;
     }
-    html:not([data-theme="light"]),
-    body:not(.theme-light) {
+    html.dark-mode,
+    body.dark-mode {
       background-color: #06110d !important;
       color: #f0fdf4 !important;
     }
-    html[data-theme="light"],
-    body.theme-light {
+    html:not(.dark-mode),
+    body:not(.dark-mode) {
       background-color: #fafafa !important;
       color: #3b4151 !important;
     }
@@ -175,14 +181,13 @@ export function setupSwagger(app: INestApplication) {
     }
 
     /* =========================================================================
-       SWAGGER UI DARK THEME (Ativo quando NÃO está em .theme-light)
+       SWAGGER UI DARK THEME (Ativo apenas sob a classe nativa .dark-mode)
     ========================================================================= */
-    body:not(.theme-light) .swagger-ui {
+    .dark-mode.swagger-ui,
+    .dark-mode .swagger-ui {
       color: #f0fdf4;
     }
-
-    /* Scheme Container (Servers & Authorize) - Elimina o bloco branco */
-    body:not(.theme-light) .swagger-ui .scheme-container {
+    .dark-mode .swagger-ui .scheme-container {
       background: #0c1f18 !important;
       border: 1px solid rgba(255, 255, 255, 0.08) !important;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
@@ -190,11 +195,11 @@ export function setupSwagger(app: INestApplication) {
       padding: 16px 20px !important;
       margin-bottom: 24px !important;
     }
-    body:not(.theme-light) .swagger-ui .scheme-container label {
+    .dark-mode .swagger-ui .scheme-container label {
       color: #f0fdf4 !important;
       font-weight: 600 !important;
     }
-    body:not(.theme-light) .swagger-ui .scheme-container select {
+    .dark-mode .swagger-ui .scheme-container select {
       background-color: #06110d !important;
       color: #10b981 !important;
       border: 1px solid rgba(255, 255, 255, 0.15) !important;
@@ -202,7 +207,7 @@ export function setupSwagger(app: INestApplication) {
       padding: 6px 12px !important;
       font-weight: 500 !important;
     }
-    body:not(.theme-light) .swagger-ui .btn.authorize {
+    .dark-mode .swagger-ui .btn.authorize {
       background: #10b981 !important;
       color: #06110d !important;
       border-color: #10b981 !important;
@@ -210,224 +215,234 @@ export function setupSwagger(app: INestApplication) {
       font-weight: 700 !important;
       box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3) !important;
     }
-    body:not(.theme-light) .swagger-ui .btn.authorize svg {
+    .dark-mode .swagger-ui .btn.authorize svg {
       fill: #06110d !important;
     }
-
-    /* Info Section */
-    body:not(.theme-light) .swagger-ui .info {
+    .dark-mode .swagger-ui .info {
       margin: 20px 0 28px !important;
     }
-    body:not(.theme-light) .swagger-ui .info .title {
+    .dark-mode .swagger-ui .info .title {
       color: #ffffff !important;
       font-size: 2rem !important;
       font-weight: 800 !important;
     }
-    body:not(.theme-light) .swagger-ui .info p,
-    body:not(.theme-light) .swagger-ui .info li,
-    body:not(.theme-light) .swagger-ui .info table {
+    .dark-mode .swagger-ui .info p,
+    .dark-mode .swagger-ui .info li,
+    .dark-mode .swagger-ui .info table {
       color: #94a3b8 !important;
     }
-    body:not(.theme-light) .swagger-ui .info a {
+    .dark-mode .swagger-ui .info a {
       color: #10b981 !important;
     }
-
-    /* Opblock Tags */
-    body:not(.theme-light) .swagger-ui .opblock-tag {
+    .dark-mode .swagger-ui .opblock-tag {
       color: #ffffff !important;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
     }
-    body:not(.theme-light) .swagger-ui .opblock-tag small {
+    .dark-mode .swagger-ui .opblock-tag small {
       color: #94a3b8 !important;
     }
-
-    /* Opblocks (Endpoints) */
-    body:not(.theme-light) .swagger-ui .opblock {
+    .dark-mode .swagger-ui .opblock {
       background: #0c1f18 !important;
       border: 1px solid rgba(255, 255, 255, 0.08) !important;
       border-radius: 12px !important;
       box-shadow: none !important;
       margin: 0 0 12px !important;
     }
-    body:not(.theme-light) .swagger-ui .opblock .opblock-summary {
+    .dark-mode .swagger-ui .opblock .opblock-summary {
       border-color: transparent !important;
     }
-    body:not(.theme-light) .swagger-ui .opblock .opblock-summary-path,
-    body:not(.theme-light) .swagger-ui .opblock .opblock-summary-operation-id {
+    .dark-mode .swagger-ui .opblock .opblock-summary-path,
+    .dark-mode .swagger-ui .opblock .opblock-summary-operation-id {
       color: #f0fdf4 !important;
       font-family: 'JetBrains Mono', monospace !important;
     }
-    body:not(.theme-light) .swagger-ui .opblock .opblock-summary-description {
+    .dark-mode .swagger-ui .opblock .opblock-summary-description {
       color: #94a3b8 !important;
     }
-    body:not(.theme-light) .swagger-ui .opblock-body {
+    .dark-mode .swagger-ui .opblock-body {
       background: #06110d !important;
       border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
     }
-    body:not(.theme-light) .swagger-ui .opblock-section-header {
+    .dark-mode .swagger-ui .opblock-section-header {
       background: #0c1f18 !important;
     }
-    body:not(.theme-light) .swagger-ui .opblock-section-header h4 {
+    .dark-mode .swagger-ui .opblock-section-header h4 {
       color: #f0fdf4 !important;
     }
-    body:not(.theme-light) .swagger-ui table.parameters {
+    .dark-mode .swagger-ui table.parameters {
       color: #f0fdf4 !important;
     }
-    body:not(.theme-light) .swagger-ui .parameter__name,
-    body:not(.theme-light) .swagger-ui .parameter__type {
+    .dark-mode .swagger-ui .parameter__name,
+    .dark-mode .swagger-ui .parameter__type {
       color: #10b981 !important;
     }
-    body:not(.theme-light) .swagger-ui .parameter__deprecated {
+    .dark-mode .swagger-ui .parameter__deprecated {
       color: #ef4444 !important;
     }
-    body:not(.theme-light) .swagger-ui .tab li button.tablinks {
+    .dark-mode .swagger-ui .tab li button.tablinks {
       color: #94a3b8 !important;
     }
-    body:not(.theme-light) .swagger-ui .tab li button.tablinks.active {
+    .dark-mode .swagger-ui .tab li button.tablinks.active {
       color: #10b981 !important;
       font-weight: 700 !important;
     }
-
-    /* Forms, Inputs & Selects */
-    body:not(.theme-light) .swagger-ui select {
+    .dark-mode .swagger-ui select {
       background-color: #0c1f18 !important;
       color: #f0fdf4 !important;
       border: 1px solid rgba(255, 255, 255, 0.15) !important;
       border-radius: 6px !important;
     }
-    body:not(.theme-light) .swagger-ui input[type=text],
-    body:not(.theme-light) .swagger-ui input[type=password],
-    body:not(.theme-light) .swagger-ui textarea {
+    .dark-mode .swagger-ui input[type=text],
+    .dark-mode .swagger-ui input[type=password],
+    .dark-mode .swagger-ui textarea {
       background-color: #0c1f18 !important;
       color: #f0fdf4 !important;
       border: 1px solid rgba(255, 255, 255, 0.15) !important;
       border-radius: 6px !important;
     }
-    body:not(.theme-light) .swagger-ui .btn.execute {
+    .dark-mode .swagger-ui .btn.execute {
       background-color: #10b981 !important;
       color: #06110d !important;
       border-color: #10b981 !important;
     }
-    body:not(.theme-light) .swagger-ui .btn.btn-clear {
+    .dark-mode .swagger-ui .btn.btn-clear {
       background-color: rgba(255, 255, 255, 0.05) !important;
       color: #94a3b8 !important;
       border-color: rgba(255, 255, 255, 0.1) !important;
     }
-
-    /* Responses & Code Blocks */
-    body:not(.theme-light) .swagger-ui .responses-inner h4,
-    body:not(.theme-light) .swagger-ui .responses-inner h5 {
+    .dark-mode .swagger-ui .responses-inner h4,
+    .dark-mode .swagger-ui .responses-inner h5 {
       color: #f0fdf4 !important;
     }
-    body:not(.theme-light) .swagger-ui .response-col_status {
+    .dark-mode .swagger-ui .response-col_status {
       color: #10b981 !important;
     }
-    body:not(.theme-light) .swagger-ui .response-col_description {
+    .dark-mode .swagger-ui .response-col_description {
       color: #94a3b8 !important;
     }
-    body:not(.theme-light) .swagger-ui .highlight-code,
-    body:not(.theme-light) .swagger-ui .microlight {
+    .dark-mode .swagger-ui .highlight-code,
+    .dark-mode .swagger-ui .microlight {
       background: #06110d !important;
       color: #38bdf8 !important;
       border: 1px solid rgba(255, 255, 255, 0.08) !important;
       border-radius: 8px !important;
     }
-
-    /* Models & Schemas */
-    body:not(.theme-light) .swagger-ui section.models {
+    .dark-mode .swagger-ui section.models {
       background: #0c1f18 !important;
       border: 1px solid rgba(255, 255, 255, 0.08) !important;
       border-radius: 14px !important;
     }
-    body:not(.theme-light) .swagger-ui section.models h4 {
+    .dark-mode .swagger-ui section.models h4 {
       color: #ffffff !important;
     }
-    body:not(.theme-light) .swagger-ui .model-box {
+    .dark-mode .swagger-ui .model-box {
       background: #06110d !important;
       border-radius: 8px !important;
     }
-    body:not(.theme-light) .swagger-ui .model-title,
-    body:not(.theme-light) .swagger-ui .model {
+    .dark-mode .swagger-ui .model-title,
+    .dark-mode .swagger-ui .model {
       color: #f0fdf4 !important;
     }
-    body:not(.theme-light) .swagger-ui table.model tbody tr td {
+    .dark-mode .swagger-ui table.model tbody tr td {
       color: #94a3b8 !important;
     }
-
-    /* Dialog / Modal UX (Authorize Popup) */
-    body:not(.theme-light) .swagger-ui .dialog-ux .backdrop-ux {
+    .dark-mode .swagger-ui .dialog-ux .backdrop-ux {
       background: rgba(0, 0, 0, 0.75) !important;
       backdrop-filter: blur(6px) !important;
     }
-    body:not(.theme-light) .swagger-ui .dialog-ux .modal-ux {
+    .dark-mode .swagger-ui .dialog-ux .modal-ux {
       background: #0c1f18 !important;
       border: 1px solid rgba(255, 255, 255, 0.12) !important;
       box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8) !important;
       border-radius: 16px !important;
     }
-    body:not(.theme-light) .swagger-ui .dialog-ux .modal-ux-header h3 {
+    .dark-mode .swagger-ui .dialog-ux .modal-ux-header h3 {
       color: #ffffff !important;
     }
-    body:not(.theme-light) .swagger-ui .dialog-ux .modal-ux-content h4,
-    body:not(.theme-light) .swagger-ui .dialog-ux .modal-ux-content h5 {
+    .dark-mode .swagger-ui .dialog-ux .modal-ux-content h4,
+    .dark-mode .swagger-ui .dialog-ux .modal-ux-content h5 {
       color: #f0fdf4 !important;
     }
-    body:not(.theme-light) .swagger-ui .dialog-ux .modal-ux-content p {
+    .dark-mode .swagger-ui .dialog-ux .modal-ux-content p {
       color: #94a3b8 !important;
     }
-
   `;
 
   const customJsCode = `
     ${INFO_HEADER_JS}
 
     (function() {
-      // 1. Sincronizar tema no HTML e Body (com suporte reativo ao evento theme-changed)
-      function syncTheme(theme) {
-        var isLight = theme === 'light';
-        document.documentElement.setAttribute('data-theme', isLight ? 'light' : 'dark');
-        if (document.body) {
-          document.body.classList.toggle('theme-light', isLight);
-          document.body.classList.toggle('theme-dark', !isLight);
-          document.body.style.backgroundColor = isLight ? '#fafafa' : '#06110d';
+      // 1. Acionar gatilho nativo do Swagger UI sincronizado com o seletor paralelo do header
+      function triggerSwaggerTheme(theme) {
+        var isDark = theme === 'dark';
+
+        // Atualizar classes nativas dark-mode e esquema de cores
+        document.documentElement.classList.toggle('dark-mode', isDark);
+        document.body.classList.toggle('dark-mode', isDark);
+        document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+        document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
+
+        var swaggerRoot = document.querySelector('.swagger-ui');
+        if (swaggerRoot) {
+          swaggerRoot.classList.toggle('dark-mode', isDark);
         }
-        document.documentElement.style.backgroundColor = isLight ? '#fafafa' : '#06110d';
+
+        // Chamar gatilho do seletor nativo do swagger / extensões se presentes na topbar
+        try {
+          var nativeToggles = document.querySelectorAll(
+            '.swagger-ui .topbar button, .topbar-wrapper button, [aria-label*="dark" i], [aria-label*="theme" i], [title*="dark" i], [title*="theme" i], .dark-mode-toggle'
+          );
+          nativeToggles.forEach(function(btn) {
+            if (!btn.closest('info-api-header')) {
+              btn.click();
+            }
+          });
+        } catch(e) {}
+
+        // Persistir nas chaves padrão do ecossistema Swagger e InfoAPI
+        try {
+          localStorage.setItem('infoapi-theme', theme);
+          localStorage.setItem('swagger-ui-theme', theme);
+          localStorage.setItem('dark-mode', isDark ? 'true' : 'false');
+        } catch(e) {}
       }
 
-      var savedTheme = 'dark';
+      var savedTheme = 'light';
       try {
-        savedTheme = localStorage.getItem('infoapi-theme') || 'dark';
+        savedTheme = localStorage.getItem('infoapi-theme') || 'light';
       } catch(e) {}
-      syncTheme(savedTheme);
+      triggerSwaggerTheme(savedTheme);
 
+      // Ouvir evento do seletor paralelo no <info-api-header>
       window.addEventListener('theme-changed', function(e) {
         if (e && e.detail && e.detail.theme) {
-          syncTheme(e.detail.theme);
+          triggerSwaggerTheme(e.detail.theme);
         }
       });
 
-      // 2. Injetar o header unificado
+      // 2. Injetar o header corporativo unificado
       function injectUnifiedHeader() {
         if (!document.querySelector('info-api-header')) {
           var headerEl = document.createElement('info-api-header');
           headerEl.setAttribute('active-doc', 'swagger');
           headerEl.setAttribute('current-version', '${packageVersion}');
           headerEl.setAttribute('versions', ${JSON.stringify(JSON.stringify(availableVersions))});
+          headerEl.setAttribute('theme', savedTheme);
           document.body.prepend(headerEl);
         }
       }
 
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', function() {
-          var current = 'dark';
+          var cur = 'light';
           try {
-            current = localStorage.getItem('infoapi-theme') || 'dark';
+            cur = localStorage.getItem('infoapi-theme') || 'light';
           } catch(e) {}
-          syncTheme(current);
+          triggerSwaggerTheme(cur);
           injectUnifiedHeader();
         });
       } else {
-        syncTheme(savedTheme);
+        triggerSwaggerTheme(savedTheme);
         injectUnifiedHeader();
       }
     })();
