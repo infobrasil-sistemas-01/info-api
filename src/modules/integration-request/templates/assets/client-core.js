@@ -29,7 +29,7 @@ window.fetch = async function (url, options = {}) {
                     if (newOptions.headers instanceof Headers) {
                         newOptions.headers.set('Authorization', 'Bearer ' + data.access_token);
                     } else if (Array.isArray(newOptions.headers)) {
-                        newOptions.headers = newOptions.headers.map(h => 
+                        newOptions.headers = newOptions.headers.map(h =>
                             h[0].toLowerCase() === 'authorization' ? [h[0], 'Bearer ' + data.access_token] : h
                         );
                     } else {
@@ -84,6 +84,7 @@ const Translations = {
         'adjustment': 'Acertos de Estoque',
         'acertos': 'Acertos de Estoque',
         'announcement': 'Avisos do Sistema',
+        'cities': 'Cidades',
     },
     actions: {
         'view': 'Visualizar',
@@ -286,7 +287,7 @@ const UI = {
                 'ALERT': 'bx-alarm-exclamation'
             };
             const icon = iconMap[ann.type] || 'bx-bell';
-            
+
             const date = new Date(ann.createdAt);
             const dateStr = date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
 
@@ -322,7 +323,7 @@ const UI = {
                 const [ann] = this.unreadAnnouncements.splice(indexUnread, 1);
                 this.readAnnouncements.unshift(ann);
                 this.announcements = this.unreadAnnouncements;
-                
+
                 this.renderAnnouncements();
                 this.updateNotificationsBadge();
                 this.renderNotificationsDrawer();

@@ -266,9 +266,9 @@ const Data = {
             if (res.ok) {
                 const data = await res.json();
                 let msg = `Sincronização concluída com sucesso!\n\n` +
-                          `• Atualizados: ${data.updatedCount}\n` +
-                          `• Não encontrados / Sem CNPJ: ${data.notFoundCount}\n` +
-                          `• Total de solicitações: ${data.total}`;
+                    `• Atualizados: ${data.updatedCount}\n` +
+                    `• Não encontrados / Sem CNPJ: ${data.notFoundCount}\n` +
+                    `• Total de solicitações: ${data.total}`;
 
                 if (data.updatedList && data.updatedList.length > 0) {
                     msg += `\n\nAtualizados:\n` + data.updatedList.map(u => `✓ ${u.clientName} (${u.cnpj || 'Sem CNPJ'}): ${u.database?.host}/${u.database?.port}:${u.database?.database}`).join('\n');
@@ -969,6 +969,7 @@ const LABEL_MAP = {
     'adjustments': 'Acertos de Estoque',
     'adjustment': 'Acertos de Estoque',
     'acertos': 'Acertos de Estoque',
+    'cities': 'Cidades',
 
     // Ações do painel de solicitação
     'approve': 'Aprovar',
