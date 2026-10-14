@@ -1,5 +1,36 @@
 [
   {
+    "version": "1.19.4",
+    "date": "2026-10-14",
+    "title": "Inclusão de X-Request-Count and pagination headers support e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral.",
+    "highlights": [
+      "Inclusão de X-Request-Count and pagination headers support",
+      "Inclusão de CRE_CODIGO and CRE_NOME to product endpoints"
+    ],
+    "items": [
+      {
+        "module": "Geral",
+        "type": "feature",
+        "title": "Inclusão de X-Request-Count and pagination headers support",
+        "description": "Atualização no módulo de Geral: add X-Request-Count and pagination headers support.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add X-Request-Count and pagination headers support",
+        "commitHash": "2272877"
+      },
+      {
+        "module": "Geral",
+        "type": "feature",
+        "title": "Inclusão de CRE_CODIGO and CRE_NOME to product endpoints",
+        "description": "Atualização no módulo de Geral: add CRE_CODIGO and CRE_NOME to product endpoints.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add CRE_CODIGO and CRE_NOME to product endpoints",
+        "commitHash": "716d7b7"
+      }
+    ],
+    "totalChanges": 2
+  },
+  {
     "version": "1.19.3",
     "date": "2026-10-14",
     "title": "implements GET /cities e melhorias",

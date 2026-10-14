@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.19.4](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.19.3...v1.19.4) (2026-10-14)
+
+
+### Features
+
+* **order-items:** add X-Request-Count and pagination headers support ([2272877](https://github.com/infobrasil-sistemas-01/info-api/commit/2272877f087e5460df88ace70c0e36f9b7223e51))
+* **products:** add CRE_CODIGO and CRE_NOME to product endpoints ([716d7b7](https://github.com/infobrasil-sistemas-01/info-api/commit/716d7b7848bbf8ee3a2b04075012bfed1f1b8af1))
+
 ## [1.19.3](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.19.2...v1.19.3) (2026-10-14)
 
 

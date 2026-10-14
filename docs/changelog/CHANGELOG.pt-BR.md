@@ -6,6 +6,21 @@ Para visualizar a versão interativa com busca em tempo real, acesse o portal we
 
 ---
 
+## [v1.19.4] - 2026-10-14
+
+### 📌 Inclusão de X-Request-Count and pagination headers support e melhorias
+> Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral.
+
+**Destaques:**
+- ⭐ Inclusão de X-Request-Count and pagination headers support
+- ⭐ Inclusão de CRE_CODIGO and CRE_NOME to product endpoints
+
+#### 🚀 Novidades & Melhorias
+- **[Geral]** Inclusão de X-Request-Count and pagination headers support: Atualização no módulo de Geral: add X-Request-Count and pagination headers support.
+- **[Geral]** Inclusão de CRE_CODIGO and CRE_NOME to product endpoints: Atualização no módulo de Geral: add CRE_CODIGO and CRE_NOME to product endpoints.
+
+---
+
 ## [v1.19.3] - 2026-10-14
 
 ### 📌 implements GET /cities e melhorias
