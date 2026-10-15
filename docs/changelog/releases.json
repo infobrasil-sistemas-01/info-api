@@ -1,5 +1,26 @@
 [
   {
+    "version": "1.20.2",
+    "date": "2026-10-15",
+    "title": "Geração de Dossiês e Relatórios em PDF e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral & Usabilidade.",
+    "highlights": [
+      "Geração de Dossiês e Relatórios em PDF"
+    ],
+    "items": [
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "Geração de Dossiês e Relatórios em PDF",
+        "description": "Exportação de relatórios gerenciais consolidados em PDF com métricas de consumo de requisições, latência e chamadas por minuto (RPM).",
+        "impact": "Facilidade de auditoria e prestação de contas com gráficos executivos.",
+        "originalCommit": "add integration guide subtabs and pdf guides catalog with L2.11.1 guide",
+        "commitHash": "f9d564f"
+      }
+    ],
+    "totalChanges": 1
+  },
+  {
     "version": "1.20.1",
     "date": "2026-10-15",
     "title": "Módulo de Compras & Suporte a RBAC e melhorias",
