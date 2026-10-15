@@ -1,5 +1,26 @@
 [
   {
+    "version": "1.20.1",
+    "date": "2026-10-15",
+    "title": "Módulo de Compras & Suporte a RBAC e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Compras.",
+    "highlights": [
+      "Módulo de Compras & Suporte a RBAC"
+    ],
+    "items": [
+      {
+        "module": "Compras",
+        "type": "feature",
+        "title": "Módulo de Compras & Suporte a RBAC",
+        "description": "Nova integração para sincronização e acompanhamento de pedidos de compra e cotações com fornecedores.",
+        "impact": "Visibilidade em tempo real das movimentações de compras realizadas no ERP.",
+        "originalCommit": "enrichment to /order-items and /purchase-items",
+        "commitHash": "eabf778"
+      }
+    ],
+    "totalChanges": 1
+  },
+  {
     "version": "1.20.0",
     "date": "2026-10-14",
     "title": "Módulo de Compras & Suporte a RBAC e melhorias",

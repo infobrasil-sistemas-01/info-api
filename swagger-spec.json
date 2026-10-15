@@ -4337,7 +4337,7 @@
   "info": {
     "title": "InfoBrasil API",
     "description": "API de integração do sistema Retaguarda (by InfoBrasil) com outros sistemas, como ERPs, e-commerce, etc. <br><br>\n      Se deseja solicitar um acesso, preencha o formulário em: <a href='https://info-api.infobrasilsistemas.com.br/integration/form'>Solicitar Acesso</a>\n      <br><br>\n      **O sistema conta com duas formas de autenticação:**<br> \n      - Basic Auth para login e obtenção de token JWT<br>\n      - JWT para acesso aos endpoints protegidos.\n      <br><br>\n      Para verificar a disponibilidade da API acesse nossa <a href='/status'>Página de Status</a> | Para novidades e histórico de versões acesse o <a href='/changelog'>Changelog Oficial</a>\n      <br><br>\n      A API é organizada em módulos, cada um responsável por uma área específica do sistema, como produtos, clientes, vendas, etc.",
-    "version": "1.20.0",
+    "version": "1.20.1",
     "contact": {
       "name": "InfoBrasil Sistemas",
       "url": "https://www.infobrasilsistemas.com.br",
@@ -5605,6 +5605,26 @@
             "type": "string",
             "example": "N",
             "description": "Item entregue (S/N)"
+          },
+          "TAM_CODIGO": {
+            "type": "string",
+            "example": "P",
+            "description": "Código do tamanho (TAM_CODIGO)"
+          },
+          "TAM_DESCRICAO": {
+            "type": "string",
+            "example": "PEQUENO",
+            "description": "Descrição do tamanho (TAM_DESCRICAO)"
+          },
+          "COR_CODIGO": {
+            "type": "number",
+            "example": 3,
+            "description": "Código da cor (COR_CODIGO)"
+          },
+          "COR_DESCRICAO": {
+            "type": "string",
+            "example": "AMARELO",
+            "description": "Descrição da cor (COR_DESCRICAO)"
           }
         },
         "required": [
@@ -8149,6 +8169,31 @@
             "type": "number",
             "description": "Valor IBS Município (ICP_VRIBSMUN)",
             "example": 0
+          },
+          "TAM_CODIGO": {
+            "type": "string",
+            "description": "Código do tamanho (TAM_CODIGO)",
+            "example": "P"
+          },
+          "TAM_DESCRICAO": {
+            "type": "string",
+            "description": "Descrição do tamanho (TAM_DESCRICAO)",
+            "example": "PEQUENO"
+          },
+          "COR_CODIGO": {
+            "type": "number",
+            "description": "Código da cor (COR_CODIGO)",
+            "example": 3
+          },
+          "COR_DESCRICAO": {
+            "type": "string",
+            "description": "Descrição da cor (COR_DESCRICAO)",
+            "example": "AMARELO"
+          },
+          "PRG_CODIGO": {
+            "type": "string",
+            "description": "Código da grade (PRG_CODIGO)",
+            "example": "000000000101"
           }
         },
         "required": [
@@ -8616,6 +8661,31 @@
             "type": "number",
             "description": "Valor IBS UF (ICP_VRIBSUF)",
             "example": 0
+          },
+          "TAM_CODIGO": {
+            "type": "string",
+            "description": "Código do tamanho (TAM_CODIGO)",
+            "example": "P"
+          },
+          "TAM_DESCRICAO": {
+            "type": "string",
+            "description": "Descrição do tamanho (TAM_DESCRICAO)",
+            "example": "PEQUENO"
+          },
+          "COR_CODIGO": {
+            "type": "number",
+            "description": "Código da cor (COR_CODIGO)",
+            "example": 3
+          },
+          "COR_DESCRICAO": {
+            "type": "string",
+            "description": "Descrição da cor (COR_DESCRICAO)",
+            "example": "AMARELO"
+          },
+          "PRG_CODIGO": {
+            "type": "string",
+            "description": "Código da grade (PRG_CODIGO)",
+            "example": "000000000101"
           }
         },
         "required": [
