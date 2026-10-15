@@ -1,5 +1,26 @@
 [
   {
+    "version": "1.20.4",
+    "date": "2026-10-15",
+    "title": "Correções de estabilidade e aprimoramentos",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral.",
+    "highlights": [
+      "restore CASE expression for modalidade description and remove unknown table TIPOSMODALIDADES"
+    ],
+    "items": [
+      {
+        "module": "Geral",
+        "type": "fix",
+        "title": "restore CASE expression for modalidade description and remove unknown table TIPOSMODALIDADES",
+        "description": "Atualização no módulo de Geral: restore CASE expression for modalidade description and remove unknown table TIPOSMODALIDADES.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "restore CASE expression for modalidade description and remove unknown table TIPOSMODALIDADES",
+        "commitHash": "01076e3"
+      }
+    ],
+    "totalChanges": 1
+  },
+  {
     "version": "1.20.3",
     "date": "2026-10-15",
     "title": "Correções de estabilidade e aprimoramentos",

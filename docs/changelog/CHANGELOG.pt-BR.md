@@ -6,6 +6,19 @@ Para visualizar a versão interativa com busca em tempo real, acesse o portal we
 
 ---
 
+## [v1.20.4] - 2026-10-15
+
+### 📌 Correções de estabilidade e aprimoramentos
+> Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral.
+
+**Destaques:**
+- ⭐ restore CASE expression for modalidade description and remove unknown table TIPOSMODALIDADES
+
+#### 🛠️ Correções & Estabilidade
+- **[Geral]** restore CASE expression for modalidade description and remove unknown table TIPOSMODALIDADES: Atualização no módulo de Geral: restore CASE expression for modalidade description and remove unknown table TIPOSMODALIDADES.
+
+---
+
 ## [v1.20.3] - 2026-10-15
 
 ### 📌 Correções de estabilidade e aprimoramentos
