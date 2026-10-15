@@ -6,6 +6,19 @@ Para visualizar a versão interativa com busca em tempo real, acesse o portal we
 
 ---
 
+## [v1.20.3] - 2026-10-15
+
+### 📌 Correções de estabilidade e aprimoramentos
+> Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Infraestrutura & Resiliência.
+
+**Destaques:**
+- ⭐ Inclusão de prisma migration for integration_guides and remove hardcoded guides fallback
+
+#### 🛠️ Correções & Estabilidade
+- **[Infraestrutura & Resiliência]** Inclusão de prisma migration for integration_guides and remove hardcoded guides fallback: Atualização no módulo de Infraestrutura & Resiliência: add prisma migration for integration_guides and remove hardcoded guides fallback.
+
+---
+
 ## [v1.20.2] - 2026-10-15
 
 ### 📌 Geração de Dossiês e Relatórios em PDF e melhorias

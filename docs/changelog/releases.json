@@ -1,5 +1,26 @@
 [
   {
+    "version": "1.20.3",
+    "date": "2026-10-15",
+    "title": "Correções de estabilidade e aprimoramentos",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Infraestrutura & Resiliência.",
+    "highlights": [
+      "Inclusão de prisma migration for integration_guides and remove hardcoded guides fallback"
+    ],
+    "items": [
+      {
+        "module": "Infraestrutura & Resiliência",
+        "type": "fix",
+        "title": "Inclusão de prisma migration for integration_guides and remove hardcoded guides fallback",
+        "description": "Atualização no módulo de Infraestrutura & Resiliência: add prisma migration for integration_guides and remove hardcoded guides fallback.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add prisma migration for integration_guides and remove hardcoded guides fallback",
+        "commitHash": "9ed306f"
+      }
+    ],
+    "totalChanges": 1
+  },
+  {
     "version": "1.20.2",
     "date": "2026-10-15",
     "title": "Geração de Dossiês e Relatórios em PDF e melhorias",

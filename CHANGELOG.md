@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.20.3](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.20.2...v1.20.3) (2026-10-15)
+
+
+### Bug Fixes
+
+* add prisma migration for integration_guides and remove hardcoded guides fallback ([9ed306f](https://github.com/infobrasil-sistemas-01/info-api/commit/9ed306feab6ee90115ef293ea85a2c90fee6d9ce))
+
 ## [1.20.2](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.20.1...v1.20.2) (2026-10-15)
 
 
