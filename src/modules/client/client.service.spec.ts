@@ -44,7 +44,7 @@ describe('ClientService', () => {
 
       expect(result).toEqual(mockClients);
       expect(mockConnection.query).toHaveBeenCalledWith(
-        expect.stringContaining('SELECT FIRST ? SKIP ?'),
+        expect.stringContaining('C.CLI_CPF_CNPJ'),
         expect.arrayContaining([10, 0, 1]),
         expect.any(Function),
       );
@@ -62,6 +62,22 @@ describe('ClientService', () => {
       expect(mockConnection.query).toHaveBeenCalledWith(
         expect.stringContaining('CLI_SITUACAO = ?'),
         expect.arrayContaining(['A', '2000-01-01', '%abc%']),
+        expect.any(Function),
+      );
+    });
+
+    it('should search by formatted and clean CPF/CNPJ', async () => {
+      mockConnection.query.mockImplementation(
+        (query: string, params: any[], callback: Function) => {
+          callback(null, []);
+        },
+      );
+
+      await service.get('cred-1', 1, 1, 10, '123.456.789-01');
+
+      expect(mockConnection.query).toHaveBeenCalledWith(
+        expect.stringContaining('C.CLI_CPF_CNPJ LIKE ?'),
+        expect.arrayContaining(['%123.456.789-01%', '%12345678901%']),
         expect.any(Function),
       );
     });

@@ -26,7 +26,9 @@ export class GetClientsQueryDto extends ZodDto(GetClientsQuerySchema) {
   @ApiPropertyOptional({ description: 'Itens por página', example: 10 })
   pageSize?: number;
 
-  @ApiPropertyOptional({ description: 'Busca por nome ou fantasia' })
+  @ApiPropertyOptional({
+    description: 'Busca por nome, fantasia ou CPF/CNPJ (mínimo 3 caracteres)',
+  })
   search?: string;
 
   @ApiPropertyOptional({ description: 'Situação do cliente', enum: ['A', 'I'] })

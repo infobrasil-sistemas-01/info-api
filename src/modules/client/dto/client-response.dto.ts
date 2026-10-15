@@ -45,6 +45,13 @@ export class ClientResponseDto {
 
   @ApiPropertyOptional({ example: 'ROTA CENTRO', description: 'Nome da rota' })
   ROT_NOME?: string;
+
+  @ApiPropertyOptional({
+    example: '111.222.333-44',
+    description: 'CPF ou CNPJ do cliente',
+    nullable: true,
+  })
+  CLI_CPF_CNPJ?: string | null;
 }
 
 export class ClientDetailResponseDto extends ClientResponseDto {
@@ -71,9 +78,6 @@ export class ClientDetailResponseDto extends ClientResponseDto {
 
   @ApiProperty({ example: 'SP', description: 'UF' })
   CLI_UF: string;
-
-  @ApiProperty({ example: '111.222.333-44', description: 'CPF ou CNPJ' })
-  CLI_CPF_CNPJ: string;
 
   @ApiProperty({ example: '12.345.678-9', description: 'Identidade (RG)' })
   CLI_IDENTIDADE: string;

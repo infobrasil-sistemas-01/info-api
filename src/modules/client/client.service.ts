@@ -36,7 +36,7 @@ export class ClientService {
         storeId,
       ];
       let query = `SELECT FIRST ? SKIP ? 
-                      C.CLI_CODIGO, C.CLI_SITUACAO, C.CLI_NOME, C.CLI_FANTASIA, C.CLI_SEXO, C.CLI_ENDERECO, C.CLI_FONE, C.CLI_EMAIL, C.CLI_DATANASC, R.ROT_CODIGO, R.ROT_NOME
+                      C.CLI_CODIGO, C.CLI_SITUACAO, C.CLI_NOME, C.CLI_FANTASIA, C.CLI_CPF_CNPJ, C.CLI_SEXO, C.CLI_ENDERECO, C.CLI_FONE, C.CLI_EMAIL, C.CLI_DATANASC, R.ROT_CODIGO, R.ROT_NOME
                       FROM clientes C
                       LEFT JOIN rotas R ON R.rot_codigo = C.rot_codigo
                       WHERE C.LOJ_CODIGO = ?`;
@@ -57,8 +57,19 @@ export class ClientService {
             'Pesquisa precisa ter pelo menos 3 caracteres.',
           );
         }
-        query += ` AND (C.CLI_NOME LIKE ? OR C.CLI_FANTASIA LIKE ?)`;
-        params.push(`%${search}%`, `%${search}%`);
+        const cleanDigits = search.replace(/\D/g, '');
+        if (cleanDigits.length >= 3 && cleanDigits !== search) {
+          query += ` AND (C.CLI_NOME LIKE ? OR C.CLI_FANTASIA LIKE ? OR C.CLI_CPF_CNPJ LIKE ? OR C.CLI_CPF_CNPJ LIKE ?)`;
+          params.push(
+            `%${search}%`,
+            `%${search}%`,
+            `%${search}%`,
+            `%${cleanDigits}%`,
+          );
+        } else {
+          query += ` AND (C.CLI_NOME LIKE ? OR C.CLI_FANTASIA LIKE ? OR C.CLI_CPF_CNPJ LIKE ?)`;
+          params.push(`%${search}%`, `%${search}%`, `%${search}%`);
+        }
       }
 
       if (routeId) {
