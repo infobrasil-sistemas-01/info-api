@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.20.5](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.20.4...v1.20.5) (2026-10-15)
+
+
+### Features
+
+* **integration:** add pdf guide management in admin and redesign client announcement banner ([e20d90f](https://github.com/infobrasil-sistemas-01/info-api/commit/e20d90f8dd5da99031050b2e302864321b755702))
+
 ## [1.20.4](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.20.3...v1.20.4) (2026-10-15)
 
 

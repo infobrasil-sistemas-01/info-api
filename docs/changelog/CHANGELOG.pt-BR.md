@@ -6,6 +6,19 @@ Para visualizar a versão interativa com busca em tempo real, acesse o portal we
 
 ---
 
+## [v1.20.5] - 2026-10-15
+
+### 📌 Geração de Dossiês e Relatórios em PDF e melhorias
+> Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral.
+
+**Destaques:**
+- ⭐ Geração de Dossiês e Relatórios em PDF
+
+#### 🚀 Novidades & Melhorias
+- **[Geral]** Geração de Dossiês e Relatórios em PDF: Exportação de relatórios gerenciais consolidados em PDF com métricas de consumo de requisições, latência e chamadas por minuto (RPM).
+
+---
+
 ## [v1.20.4] - 2026-10-15
 
 ### 📌 Correções de estabilidade e aprimoramentos

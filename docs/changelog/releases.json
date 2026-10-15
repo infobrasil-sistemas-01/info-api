@@ -1,5 +1,26 @@
 [
   {
+    "version": "1.20.5",
+    "date": "2026-10-15",
+    "title": "Geração de Dossiês e Relatórios em PDF e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral.",
+    "highlights": [
+      "Geração de Dossiês e Relatórios em PDF"
+    ],
+    "items": [
+      {
+        "module": "Geral",
+        "type": "feature",
+        "title": "Geração de Dossiês e Relatórios em PDF",
+        "description": "Exportação de relatórios gerenciais consolidados em PDF com métricas de consumo de requisições, latência e chamadas por minuto (RPM).",
+        "impact": "Facilidade de auditoria e prestação de contas com gráficos executivos.",
+        "originalCommit": "add pdf guide management in admin and redesign client announcement banner",
+        "commitHash": "e20d90f"
+      }
+    ],
+    "totalChanges": 1
+  },
+  {
     "version": "1.20.4",
     "date": "2026-10-15",
     "title": "Correções de estabilidade e aprimoramentos",
