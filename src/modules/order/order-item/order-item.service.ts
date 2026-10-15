@@ -9,7 +9,7 @@ export class OrderItemService {
 
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
-  ) {}
+  ) { }
 
   async insertSoldProductOnDb(
     transaction: any,
@@ -32,8 +32,8 @@ export class OrderItemService {
       const unitPrice =
         Number(
           ourProduct.PRO_PRECO_TABELA ??
-            ourProduct[`PRO_PRECO${safePriceTable}`] ??
-            ourProduct.PRO_PRECO1,
+          ourProduct[`PRO_PRECO${safePriceTable}`] ??
+          ourProduct.PRO_PRECO1,
         ) || 0;
 
       const produtoVendidoInsert = {
@@ -128,11 +128,12 @@ export class OrderItemService {
     try {
       const query = `SELECT 
                       IV.PRO_CODIGO, P.PRO_DESCRICAO, P.PRO_PESO, IV.IVD_PRECO, IV.IVD_QTDE, IV.IVD_TOTAL, IV.IVD_DESCONTO, IV.IVD_LIQUIDO,
-                      IV.TRM_CODIGO, TM.TRM_DESCRICAO, IV.AMB_CODIGO, A.AMB_DESCRICAO, IV.IVD_OPERACAO, IV.IVD_ENTREGUE,
+                      IV.TRM_CODIGO, 
+                      CASE IV.TRM_CODIGO WHEN '1' THEN 'IMEDIATA' WHEN '2' THEN 'RETIRADA' WHEN '3' THEN 'ENTREGA' END AS TRM_DESCRICAO,
+                      IV.AMB_CODIGO, A.AMB_DESCRICAO, IV.IVD_OPERACAO, IV.IVD_ENTREGUE,
                       IV.TAM_CODIGO, T.TAM_DESCRICAO, IV.COR_CODIGO, C.COR_DESCRICAO
                       FROM ITENSVEN IV
                       INNER JOIN PRODUTOS P ON P.PRO_CODIGO = IV.PRO_CODIGO
-                      LEFT JOIN TIPOSMODALIDADES TM ON TM.TRM_CODIGO = IV.TRM_CODIGO
                       LEFT JOIN AMBIENTES A ON A.AMB_CODIGO = IV.AMB_CODIGO
                       LEFT JOIN TAMANHOS T ON T.TAM_CODIGO = IV.TAM_CODIGO
                       LEFT JOIN CORES C ON C.COR_CODIGO = IV.COR_CODIGO
@@ -151,8 +152,7 @@ export class OrderItemService {
       this.logger.log(
         `Busca de itens do pedido executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
           { orderId },
-        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${
-          queryEndTime - queryStartTime
+        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${queryEndTime - queryStartTime
         }ms`,
       );
 
@@ -277,8 +277,7 @@ export class OrderItemService {
       this.logger.log(
         `Busca transversal de itens de venda executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
           { storeId, includeCount, total, ...filters },
-        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${
-          queryEndTime - queryStartTime
+        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${queryEndTime - queryStartTime
         }ms`,
       );
 
