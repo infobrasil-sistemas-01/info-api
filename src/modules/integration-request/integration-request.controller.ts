@@ -93,6 +93,64 @@ export class IntegrationRequestController {
     return this.service.getGuides();
   }
 
+  @Get('api/admin/guides')
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @RequirePermissions({
+    anyOf: [
+      'integration-request.view',
+      'integration-request.approve',
+      'core.announcement.view',
+      'core.user.view',
+    ],
+  })
+  @ApiOperation({ summary: 'Lista todos os guias para o painel administrativo' })
+  async getAdminGuides() {
+    return this.service.getAllGuidesAdmin();
+  }
+
+  @Post('api/admin/guides')
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @RequirePermissions({
+    anyOf: [
+      'integration-request.approve',
+      'core.announcement.create',
+      'core.user.create',
+    ],
+  })
+  @ApiOperation({ summary: 'Cria um novo guia no catálogo' })
+  async createAdminGuide(@Body() body: any) {
+    return this.service.createGuide(body);
+  }
+
+  @Patch('api/admin/guides/:id')
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @RequirePermissions({
+    anyOf: [
+      'integration-request.approve',
+      'core.announcement.create',
+      'core.user.create',
+    ],
+  })
+  @ApiOperation({ summary: 'Atualiza dados ou status de um guia' })
+  async updateAdminGuide(@Param('id') id: string, @Body() body: any) {
+    return this.service.updateGuide(id, body);
+  }
+
+  @Delete('api/admin/guides/:id')
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @RequirePermissions({
+    anyOf: [
+      'integration-request.delete',
+      'integration-request.approve',
+      'core.announcement.delete',
+      'core.user.delete',
+    ],
+  })
+  @ApiOperation({ summary: 'Exclui um guia' })
+  async deleteAdminGuide(@Param('id') id: string) {
+    return this.service.deleteGuide(id);
+  }
+
   @Get('guides/:file')
   @ApiOperation({ summary: 'Serve os guias em PDF públicos' })
   serveGuide(@Param('file') file: string, @Res() res: Response) {

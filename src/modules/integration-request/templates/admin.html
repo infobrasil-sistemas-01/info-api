@@ -80,6 +80,7 @@
                 <div id="tab-roles" class="tab-btn hidden" onclick="switchTab('roles')">Perfis de Acesso</div>
                 <div id="tab-creds" class="tab-btn hidden" onclick="switchTab('creds')">Credenciais DB</div>
                 <div id="tab-announcements" class="tab-btn hidden" onclick="switchTab('announcements')">Avisos</div>
+                <div id="tab-guides" class="tab-btn" onclick="switchTab('guides')">Guias PDF</div>
                 <div id="tab-links" class="tab-btn" onclick="switchTab('links')">Links Úteis</div>
             </nav>
 
@@ -90,6 +91,7 @@
             <section id="section-roles" class="tab-content hidden"></section>
             <section id="section-creds" class="tab-content hidden"></section>
             <section id="section-announcements" class="tab-content hidden"></section>
+            <section id="section-guides" class="tab-content hidden"></section>
             <section id="section-links" class="tab-content hidden"></section>
         </div>
 
@@ -121,6 +123,7 @@
         <div id="newsletter-modal" class="modal hidden" style="max-width: 800px; width: 90%;"></div>
         <div id="dossier-modal" class="modal hidden" style="max-width: 400px; width: 95%;"></div>
         <div id="feature-request-modal" class="modal hidden" style="max-width: 650px; width: 95%;"></div>
+        <div id="guide-modal" class="modal hidden" style="max-width: 650px; width: 95%;"></div>
     </div>
 
     <script>const API_URL = '/api/v1';</script>

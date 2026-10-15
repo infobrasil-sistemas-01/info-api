@@ -46,23 +46,6 @@
 
     <!-- App Section -->
     <div id="app-container" class="hidden">
-        <div id="announcement-bar" class="top-announcement hidden">
-            <div id="announcement-slider" class="announcement-slider">
-                <!-- Slides dinâmicos entram aqui -->
-            </div>
-            <div class="announcement-controls">
-                <button id="announcement-prev" class="announcement-btn hidden" onclick="UI.prevAnnouncement()">
-                    <i class='bx bx-chevron-left'></i>
-                </button>
-                <button id="announcement-next" class="announcement-btn hidden" onclick="UI.nextAnnouncement()">
-                    <i class='bx bx-chevron-right'></i>
-                </button>
-                <button class="announcement-btn" onclick="UI.dismissAnnouncement()" title="Fechar aviso">
-                    <i class='bx bx-x'></i>
-                </button>
-            </div>
-        </div>
-
         <header>
             <div class="header-content">
                 <div class="brand">
@@ -96,6 +79,24 @@
                 </div>
             </div>
         </header>
+
+        <!-- Announcement Banner Hero (Below Header) -->
+        <div id="announcement-bar" class="announcement-hero-wrapper hidden">
+            <div class="announcement-hero-card">
+                <div id="announcement-slider" class="announcement-hero-slider">
+                    <!-- Slides dinâmicos entram aqui -->
+                </div>
+                <button id="announcement-prev" class="announcement-hero-nav prev hidden" onclick="UI.prevAnnouncement()" title="Aviso anterior">
+                    <i class='bx bx-chevron-left'></i>
+                </button>
+                <button id="announcement-next" class="announcement-hero-nav next hidden" onclick="UI.nextAnnouncement()" title="Próximo aviso">
+                    <i class='bx bx-chevron-right'></i>
+                </button>
+                <button class="announcement-hero-dismiss" onclick="UI.dismissAnnouncement()" title="Fechar aviso">
+                    <i class='bx bx-x'></i>
+                </button>
+            </div>
+        </div>
 
         <main class="dashboard">
             <div class="tabs">

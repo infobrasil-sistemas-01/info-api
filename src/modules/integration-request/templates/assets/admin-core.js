@@ -58,6 +58,7 @@ const State = {
     allPlans: [],
     allRequests: [],
     allAnnouncements: [],
+    allGuides: [],
     currentRequestFilter: 'ALL',
     activeRequestSubTab: 'access',
     allFeatureRequests: [],
@@ -109,6 +110,7 @@ const Data = {
             this.fetchFeatureRequests();
         }
         if (canViewAnns) this.fetchAnnouncements();
+        this.fetchGuides();
         if (canViewUsers) {
             this.fetchUsers();
             this.fetchRoles();
@@ -129,6 +131,99 @@ const Data = {
         if (confirm('Excluir este aviso?')) {
             const res = await this.fetch(`${API_URL}/announcements/${id}`, { method: 'DELETE' });
             if (res.ok) this.fetchAnnouncements();
+        }
+    },
+    async fetchGuides() {
+        try {
+            const res = await this.fetch('/integration/api/admin/guides');
+            if (res.ok) {
+                State.allGuides = await res.json();
+                const section = document.getElementById('section-guides');
+                if (section) section.innerHTML = Components.GuideTable(State.allGuides);
+            }
+        } catch (error) {
+            console.error('Erro ao buscar guias em PDF:', error);
+        }
+    },
+    async saveGuide(event, id) {
+        event.preventDefault();
+        const btn = document.getElementById('btn-save-guide');
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = "<i class='bx bx-loader-alt bx-spin'></i> Salvando...";
+        }
+
+        const title = document.getElementById('guide-title')?.value.trim();
+        const code = document.getElementById('guide-code')?.value.trim();
+        const category = document.getElementById('guide-category')?.value.trim();
+        const description = document.getElementById('guide-description')?.value.trim();
+        const publicUrl = document.getElementById('guide-public-url')?.value.trim();
+        const active = document.getElementById('guide-active')?.checked;
+        const fileInput = document.getElementById('guide-file');
+
+        const payload = { title, code, category, description, publicUrl, active };
+
+        const submit = async (bodyData) => {
+            try {
+                const method = id ? 'PATCH' : 'POST';
+                const url = id ? `/integration/api/admin/guides/${id}` : '/integration/api/admin/guides';
+                const res = await this.fetch(url, {
+                    method,
+                    body: JSON.stringify(bodyData)
+                });
+                if (res.ok) {
+                    UI.closeGuideModal();
+                    await this.fetchGuides();
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Erro ao salvar guia: ' + (err.message || 'Erro de conexão'));
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = "Salvar Guia";
+                }
+            }
+        };
+
+        if (fileInput && fileInput.files && fileInput.files[0]) {
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            reader.onload = () => {
+                payload.fileName = file.name;
+                payload.fileBase64 = reader.result;
+                submit(payload);
+            };
+            reader.readAsDataURL(file);
+        } else {
+            submit(payload);
+        }
+    },
+    async toggleGuideActive(id, currentActive) {
+        try {
+            const res = await this.fetch(`/integration/api/admin/guides/${id}`, {
+                method: 'PATCH',
+                body: JSON.stringify({ active: !currentActive })
+            });
+            if (res.ok) {
+                await this.fetchGuides();
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    },
+    async deleteGuide(id) {
+        if (!confirm('Deseja realmente excluir este guia em PDF?')) return;
+        try {
+            const res = await this.fetch(`/integration/api/admin/guides/${id}`, {
+                method: 'DELETE'
+            });
+            if (res.ok) {
+                await this.fetchGuides();
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Falha ao excluir o guia.');
         }
     },
     async fetchRequests() {
@@ -1724,6 +1819,20 @@ const UI = {
             console.error(e);
             alert('Falha ao processar o envio da newsletter.');
         }
+    },
+    openGuideModal(id = null) {
+        let guide = null;
+        if (id) {
+            guide = State.allGuides.find(g => g.id === id);
+        }
+        const modal = document.getElementById('guide-modal');
+        if (!modal) return;
+        modal.innerHTML = Components.GuideModal(guide);
+        document.getElementById('modal-container').classList.remove('hidden');
+        modal.classList.remove('hidden');
+    },
+    closeGuideModal() {
+        this.closeModal();
     }
 };
 
@@ -1747,6 +1856,9 @@ function switchTab(tab, updateHash = true) {
         }
         if (tab === 'announcements') {
             Data.fetchAnnouncements();
+        }
+        if (tab === 'guides') {
+            Data.fetchGuides();
         }
         if (tab === 'dashboard') {
             Data.fetchDashboard();

@@ -357,13 +357,32 @@ const UI = {
                 'WARNING': 'bx-error-alt',
                 'ALERT': 'bx-alarm-exclamation'
             };
+            const labelMap = {
+                'DOC': 'Documentação & Guia',
+                'INFO': 'Informativo',
+                'WARNING': 'Atenção Operacional',
+                'ALERT': 'Urgente / Alerta'
+            };
             const icon = iconMap[ann.type] || 'bx-bell';
+            const label = labelMap[ann.type] || ann.type;
 
             return `
-                <div class="announcement-slide ${ann.type.toLowerCase()}">
-                    <i class='bx ${icon}'></i>
-                    <span>${ann.text}</span>
-                    ${ann.ctaText ? `<a href="${ann.ctaLink || '#'}" target="_blank" class="announcement-link">${ann.ctaText}</a>` : ''}
+                <div class="announcement-hero-slide ${ann.type.toLowerCase()}">
+                    <div class="announcement-hero-badge">
+                        <i class='bx ${icon}'></i>
+                        <span>${label}</span>
+                    </div>
+                    <div class="announcement-hero-text">
+                        ${ann.text}
+                    </div>
+                    ${ann.ctaText ? `
+                        <div class="announcement-hero-action">
+                            <a href="${ann.ctaLink || '#'}" target="_blank" class="announcement-hero-cta">
+                                <span>${ann.ctaText}</span>
+                                <i class='bx bx-right-arrow-alt'></i>
+                            </a>
+                        </div>
+                    ` : ''}
                 </div>
             `;
         }).join('');

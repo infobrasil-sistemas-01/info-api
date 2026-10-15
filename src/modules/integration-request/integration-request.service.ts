@@ -5,8 +5,8 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import { existsSync, readFileSync } from 'fs';
-import { join } from 'path';
+import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
+import { join, basename } from 'path';
 import { RegistryPrismaService } from 'src/infra/prisma/registry-prisma.service';
 import { CreateIntegrationRequestDto } from './dto/create-integration-request.dto';
 import { EmailService } from 'src/infra/email/email.service';
@@ -513,5 +513,96 @@ export class IntegrationRequestService {
       return [];
     }
   }
+
+  async getAllGuidesAdmin() {
+    return this.prisma.integrationGuide.findMany({
+      orderBy: [{ createdAt: 'desc' }],
+    });
+  }
+
+  async createGuide(dto: {
+    title: string;
+    code?: string;
+    description: string;
+    category: string;
+    publicUrl?: string;
+    active?: boolean;
+    fileName?: string;
+    fileBase64?: string;
+  }) {
+    let finalUrl = dto.publicUrl;
+
+    if (dto.fileBase64 && dto.fileName) {
+      const safeName = basename(dto.fileName).replace(/[^a-zA-Z0-9._-]/g, '_');
+      const targetDir = join(process.cwd(), 'docs', 'guides');
+      if (!existsSync(targetDir)) {
+        mkdirSync(targetDir, { recursive: true });
+      }
+      const rawBase64 = dto.fileBase64.replace(/^data:application\/pdf;base64,/, '');
+      writeFileSync(join(targetDir, safeName), Buffer.from(rawBase64, 'base64'));
+      finalUrl = `https://info-api.infobrasilsistemas.com.br/integration/guides/${safeName}`;
+    }
+
+    if (!finalUrl) {
+      throw new BadRequestException('É necessário informar a URL ou anexar o arquivo PDF.');
+    }
+
+    return this.prisma.integrationGuide.create({
+      data: {
+        title: dto.title,
+        code: dto.code || null,
+        description: dto.description,
+        category: dto.category,
+        publicUrl: finalUrl,
+        active: dto.active !== undefined ? dto.active : true,
+      },
+    });
+  }
+
+  async updateGuide(
+    id: string,
+    dto: {
+      title?: string;
+      code?: string;
+      description?: string;
+      category?: string;
+      publicUrl?: string;
+      active?: boolean;
+      fileName?: string;
+      fileBase64?: string;
+    },
+  ) {
+    let finalUrl = dto.publicUrl;
+
+    if (dto.fileBase64 && dto.fileName) {
+      const safeName = basename(dto.fileName).replace(/[^a-zA-Z0-9._-]/g, '_');
+      const targetDir = join(process.cwd(), 'docs', 'guides');
+      if (!existsSync(targetDir)) {
+        mkdirSync(targetDir, { recursive: true });
+      }
+      const rawBase64 = dto.fileBase64.replace(/^data:application\/pdf;base64,/, '');
+      writeFileSync(join(targetDir, safeName), Buffer.from(rawBase64, 'base64'));
+      finalUrl = `https://info-api.infobrasilsistemas.com.br/integration/guides/${safeName}`;
+    }
+
+    return this.prisma.integrationGuide.update({
+      where: { id },
+      data: {
+        ...(dto.title !== undefined && { title: dto.title }),
+        ...(dto.code !== undefined && { code: dto.code }),
+        ...(dto.description !== undefined && { description: dto.description }),
+        ...(dto.category !== undefined && { category: dto.category }),
+        ...(finalUrl !== undefined && { publicUrl: finalUrl }),
+        ...(dto.active !== undefined && { active: dto.active }),
+      },
+    });
+  }
+
+  async deleteGuide(id: string) {
+    return this.prisma.integrationGuide.delete({
+      where: { id },
+    });
+  }
 }
+
 

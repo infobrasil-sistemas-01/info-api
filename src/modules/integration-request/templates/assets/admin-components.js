@@ -1348,4 +1348,149 @@ const Components = {
 
       `;
   },
+  GuideRow: (g) => {
+    const isAct = g.active !== false;
+    const dateFormatted = g.createdAt
+      ? new Date(g.createdAt).toLocaleDateString('pt-BR')
+      : '-';
+    const codeTag = g.code
+      ? `<span style="font-family: monospace; font-weight: 700; color: var(--primary); background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); padding: 3px 8px; border-radius: 6px; font-size: 0.8rem;">${g.code}</span>`
+      : `<span style="color: var(--text-muted); font-size: 0.8rem;">-</span>`;
+
+    const statusBadge = isAct
+      ? `<span style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">Ativo</span>`
+      : `<span style="background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700;">Inativo</span>`;
+
+    const desc = g.description && g.description.length > 70
+      ? g.description.substring(0, 70) + '...'
+      : (g.description || '-');
+
+    return `
+      <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
+        <td>${codeTag}</td>
+        <td><span style="background: rgba(255, 255, 255, 0.06); color: var(--text-muted); padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; text-transform: uppercase; font-weight: 600;">${g.category || 'Geral'}</span></td>
+        <td>
+          <div style="font-weight: 600; color: #fff; margin-bottom: 2px;">${g.title}</div>
+          <small style="color: var(--text-muted); font-size: 0.8rem;" title="${g.description || ''}">${desc}</small>
+        </td>
+        <td>
+          <a href="${g.publicUrl || '#'}" target="_blank" style="color: var(--primary); text-decoration: none; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 4px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+            <i class='bx bxs-file-pdf'></i> Abrir PDF
+          </a>
+        </td>
+        <td style="font-size: 0.85rem; color: var(--text-muted);">${dateFormatted}</td>
+        <td style="text-align: center;">${statusBadge}</td>
+        <td>
+          <div style="display: flex; gap: 6px; justify-content: flex-end;">
+            <button class="btn btn-outline btn-sm" onclick="UI.openGuideModal('${g.id}')" title="Editar Guia">
+              <i class='bx bx-edit'></i>
+            </button>
+            <button class="btn btn-sm ${isAct ? 'btn-outline' : 'btn-primary'}" onclick="Data.toggleGuideActive('${g.id}', ${isAct})" title="${isAct ? 'Desativar Guia' : 'Ativar Guia'}">
+              <i class='bx ${isAct ? 'bx-hide' : 'bx-show'}'></i>
+            </button>
+            <button class="btn btn-danger btn-sm" onclick="Data.deleteGuide('${g.id}')" title="Excluir Guia">
+              <i class='bx bx-trash'></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+    `;
+  },
+
+  GuideTable: (guides) => `
+    <div class="card">
+      <div class="card-header" style="flex-wrap: wrap; gap: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div>
+          <h2 style="margin: 0 0 4px 0; font-size: 1.35rem; display: flex; align-items: center; gap: 8px;">
+            <i class='bx bxs-file-pdf' style="color: var(--primary);"></i> Gestão de Guias em PDF
+          </h2>
+          <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0;">Cadastre, edite e controle a visibilidade dos guias técnicos exibidos no portal do cliente.</p>
+        </div>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <button class="btn btn-outline" onclick="Data.fetchGuides()" title="Atualizar listagem"><i class='bx bx-refresh'></i></button>
+          <button class="btn btn-primary" onclick="UI.openGuideModal()">+ Novo Guia</button>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 100px;">Código</th>
+              <th style="width: 120px;">Categoria</th>
+              <th>Título / Descrição</th>
+              <th style="width: 140px;">Arquivo / URL</th>
+              <th style="width: 100px;">Criado em</th>
+              <th style="width: 90px; text-align: center;">Status</th>
+              <th style="width: 130px; text-align: right;">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${guides && guides.length > 0
+              ? guides.map(Components.GuideRow).join('')
+              : '<tr><td colspan="7" style="text-align: center; padding: 3rem; color: var(--text-muted);"><i class="bx bx-file" style="font-size: 2.5rem; opacity: 0.3; display: block; margin-bottom: 8px;"></i>Nenhum guia cadastrado até o momento.</td></tr>'}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `,
+
+  GuideModal: (guide) => {
+    const isEdit = !!guide;
+    const title = isEdit ? 'Editar Guia em PDF' : 'Novo Guia em PDF';
+    const g = guide || {};
+
+    return `
+      <div class="modal-header">
+        <h3><i class='bx bxs-file-pdf' style="color: var(--primary);"></i> ${title}</h3>
+        <button class="btn-close" onclick="UI.closeGuideModal()">&times;</button>
+      </div>
+      <form id="guide-form" onsubmit="Data.saveGuide(event, '${g.id || ''}')" style="display: flex; flex-direction: column; gap: 16px;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group" style="margin: 0;">
+            <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Código (ex: L2.11.1)</label>
+            <input type="text" id="guide-code" class="input" placeholder="L2.11.1" value="${g.code || ''}">
+          </div>
+          <div class="form-group" style="margin: 0;">
+            <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Categoria *</label>
+            <input type="text" id="guide-category" class="input" required placeholder="Listagens, Cadastros, Financeiro..." value="${g.category || 'Listagens'}">
+          </div>
+        </div>
+
+        <div class="form-group" style="margin: 0;">
+          <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Título do Guia *</label>
+          <input type="text" id="guide-title" class="input" required placeholder="Ex: Listagem de Giro de Estoque Físico" value="${g.title || ''}">
+        </div>
+
+        <div class="form-group" style="margin: 0;">
+          <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">Descrição Detalhada *</label>
+          <textarea id="guide-description" class="input" required rows="3" placeholder="Explique resumidamente as regras de negócio e objetivos do guia...">${g.description || ''}</textarea>
+        </div>
+
+        <div class="form-group" style="margin: 0; background: rgba(0,0,0,0.25); border: 1px dashed var(--border); padding: 14px; border-radius: 10px;">
+          <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">
+            <i class='bx bx-upload'></i> Enviar Arquivo PDF
+          </label>
+          <input type="file" id="guide-file" accept=".pdf" style="font-size: 0.85rem; color: var(--text-muted); width: 100%;">
+          <small style="display: block; color: var(--text-muted); font-size: 0.78rem; margin-top: 6px;">Ao anexar um arquivo, o upload salvará o PDF diretamente no servidor e gerará o link automaticamente.</small>
+        </div>
+
+        <div class="form-group" style="margin: 0;">
+          <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;">URL Pública do Arquivo</label>
+          <input type="text" id="guide-public-url" class="input" placeholder="https://info-api.infobrasilsistemas.com.br/integration/guides/..." value="${g.publicUrl || ''}">
+          <small style="display: block; color: var(--text-muted); font-size: 0.78rem; margin-top: 4px;">Pode ser preenchido manualmente ou gerado via upload do arquivo acima.</small>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
+          <input type="checkbox" id="guide-active" style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--primary);" ${g.active !== false ? 'checked' : ''}>
+          <label for="guide-active" style="margin: 0; cursor: pointer; user-select: none; font-size: 0.9rem;">Guia ativo e visível no portal do cliente</label>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px; border-top: 1px solid var(--border); padding-top: 16px;">
+          <button type="button" class="btn btn-outline" onclick="UI.closeGuideModal()">Cancelar</button>
+          <button type="submit" id="btn-save-guide" class="btn btn-primary">Salvar Guia</button>
+        </div>
+      </form>
+    `;
+  },
 };
