@@ -20,6 +20,10 @@ npx prisma migrate deploy # Apply migrations (prod)
 
 ## Important Patterns
 
+### PDF Generation Guidance
+
+Whenever generating, styling, designing, or implementing PDF documents, guides, dossiers, or exports in this project, you MUST ALWAYS consult and strictly adhere to the guidelines defined in `docs/guidelines/pdf-guidance.md`.
+
 ### Implementation Plans Location
 
 All design, architecture, and development implementation plans created during the lifecycle of this project MUST be systematically saved in the project's documentation folder: `docs/implementation-plans/`. 

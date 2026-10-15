@@ -282,6 +282,18 @@ exports.Prisma.FeatureRequestMessageScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.IntegrationGuideScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  code: 'code',
+  description: 'description',
+  category: 'category',
+  publicUrl: 'publicUrl',
+  active: 'active',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -341,7 +353,8 @@ exports.Prisma.ModelName = {
   SystemHeartbeat: 'SystemHeartbeat',
   UsageAlertLog: 'UsageAlertLog',
   FeatureRequest: 'FeatureRequest',
-  FeatureRequestMessage: 'FeatureRequestMessage'
+  FeatureRequestMessage: 'FeatureRequestMessage',
+  IntegrationGuide: 'IntegrationGuide'
 };
 
 /**

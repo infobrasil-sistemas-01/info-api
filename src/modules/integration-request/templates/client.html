@@ -8,7 +8,7 @@
     <link rel="icon" type="image/x-icon" href="/integration/assets/favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="/integration/assets/client.css">
+    <link rel="stylesheet" href="/integration/assets/client.css?v=1.18.0">
 </head>
 
 <body>
@@ -114,112 +114,158 @@
 
             <!-- Tab: Guide -->
             <section id="tab-guide" class="tab-content active">
-                <div class="card guide-container">
-                    <div style="text-align: center; margin-bottom: 40px;">
-                        <h2 style="font-size: 1.8rem; margin-bottom: 12px; color: var(--primary);">Manual de Integração
-                        </h2>
-                        <p style="color: var(--text-muted);">Siga estes passos para conectar sua aplicação à InfoAPI em
-                            minutos.</p>
-                    </div>
-
-                    <!-- Vídeo de Boas-vindas em Accordion -->
-                    <div class="accordion-video" style="margin-bottom: 40px;">
-                        <button onclick="UI.toggleAccordion(this)" class="accordion-header"
-                            style="width: 100%; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.15); padding: 18px 24px; border-radius: 12px; color: var(--primary); display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.3s ease; font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 1.1rem; outline: none;">
-                            <span style="display: flex; align-items: center;">
-                                <i class='bx bx-play-circle'
-                                    style="margin-right: 12px; font-size: 1.6rem; opacity: 0.9;"></i>
-                                Fluxo de Autenticação e Primeira Requisição
-                            </span>
-                            <i class='bx bx-chevron-down accordion-icon'
-                                style="font-size: 1.5rem; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);"></i>
+                <div class="guide-layout">
+                    <!-- Sidebar de Subabas Laterais -->
+                    <aside class="guide-sidebar">
+                        <button id="guide-subtab-btn-start" class="guide-subtab-btn active" onclick="UI.switchGuideSubtab('start')">
+                            <i class='bx bx-rocket'></i>
+                            <span>Primeiros Passos</span>
                         </button>
-                        <div class="accordion-content"
-                            style="max-height: 0; overflow: hidden; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); background: rgba(0,0,0,0.15); border-radius: 0 0 12px 12px; margin-top: 0; border: 1px solid rgba(16, 185, 129, 0.1); border-top: none; opacity: 0;">
-                            <div style="padding: 24px;">
-                                <p
-                                    style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.95rem; line-height: 1.5;">
-                                    Confira no tutorial em vídeo como realizar o fluxo completo de autenticação e a
-                                    primeira chamada à API de forma correta:
-                                </p>
-                                <div class="video-wrapper"
-                                    style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.5); border: 1px solid rgba(255,255,255,0.05); background: #000;">
-                                    <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-                                        src="https://www.youtube.com/embed/OykdP33Glps"
-                                        title="Fluxo de Autenticação e Primeira Requisição" frameborder="0"
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        <button id="guide-subtab-btn-pdf" class="guide-subtab-btn" onclick="UI.switchGuideSubtab('pdf')">
+                            <i class='bx bxs-file-pdf'></i>
+                            <span>Guias em PDF</span>
+                            <span class="guide-badge-count" id="pdf-guides-count">1</span>
+                        </button>
+                    </aside>
+
+                    <!-- Conteúdo das Subabas -->
+                    <div class="guide-content-area">
+                        <!-- Subaba 1: Primeiros Passos -->
+                        <div id="guide-subtab-start" class="guide-subtab-pane active">
+                            <div class="card guide-container">
+                                <div style="text-align: center; margin-bottom: 40px;">
+                                    <h2 style="font-size: 1.8rem; margin-bottom: 12px; color: var(--primary);">Manual de Integração</h2>
+                                    <p style="color: var(--text-muted);">Siga estes passos para conectar sua aplicação à InfoAPI em minutos.</p>
+                                </div>
+
+                                <!-- Vídeo de Boas-vindas em Accordion -->
+                                <div class="accordion-video" style="margin-bottom: 40px;">
+                                    <button onclick="UI.toggleAccordion(this)" class="accordion-header"
+                                        style="width: 100%; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.15); padding: 18px 24px; border-radius: 12px; color: var(--primary); display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.3s ease; font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 1.1rem; outline: none;">
+                                        <span style="display: flex; align-items: center;">
+                                            <i class='bx bx-play-circle'
+                                                style="margin-right: 12px; font-size: 1.6rem; opacity: 0.9;"></i>
+                                            Fluxo de Autenticação e Primeira Requisição
+                                        </span>
+                                        <i class='bx bx-chevron-down accordion-icon'
+                                            style="font-size: 1.5rem; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);"></i>
+                                    </button>
+                                    <div class="accordion-content"
+                                        style="max-height: 0; overflow: hidden; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); background: rgba(0,0,0,0.15); border-radius: 0 0 12px 12px; margin-top: 0; border: 1px solid rgba(16, 185, 129, 0.1); border-top: none; opacity: 0;">
+                                        <div style="padding: 24px;">
+                                            <p
+                                                style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.95rem; line-height: 1.5;">
+                                                Confira no tutorial em vídeo como realizar o fluxo completo de autenticação e a
+                                                primeira chamada à API de forma correta:
+                                            </p>
+                                            <div class="video-wrapper"
+                                                style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.5); border: 1px solid rgba(255,255,255,0.05); background: #000;">
+                                                <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+                                                    src="https://www.youtube.com/embed/OykdP33Glps"
+                                                    title="Fluxo de Autenticação e Primeira Requisição" frameborder="0"
+                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                                    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="guide-step">
+                                    <div class="step-number">1</div>
+                                    <div class="step-content">
+                                        <h3>Autenticação (Obter Token)</h3>
+                                        <p>Toda comunicação é protegida. Primeiro, você deve trocar suas credenciais por um token de
+                                            acesso.</p>
+                                        <div class="code-block">
+                                            POST /api/v1/auth/login<br>
+                                            Authorization: Basic [USUARIO:SENHA em Base64]
+                                        </div>
+                                        <p style="font-size: 0.85rem;">O retorno conterá um <code>access_token</code> (válido por
+                                            1h) e um <code>refresh_token</code>.</p>
+                                    </div>
+                                </div>
+
+                                <div class="guide-step">
+                                    <div class="step-number">2</div>
+                                    <div class="step-content">
+                                        <h3>Realizar Requisições</h3>
+                                        <p>Com o token em mãos, adicione-o ao cabeçalho de todas as chamadas seguintes.</p>
+                                        <div class="code-block">
+                                            GET /api/v1/products<br>
+                                            Authorization: Bearer [SEU_ACCESS_TOKEN]
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="guide-step">
+                                    <div class="step-number">3</div>
+                                    <div class="step-content">
+                                        <h3>Renovação Automática (Refresh)</h3>
+                                        <p>Para evitar que sua integração pare de funcionar quando o token expirar, use o
+                                            <code>refresh_token</code>.
+                                        </p>
+                                        <div class="guide-tip">
+                                            <i class='bx bx-bulb'></i> <strong>Dica:</strong> Não peça para o usuário logar de novo.
+                                            Use o refresh token para pegar um novo acesso silenciosamente.
+                                        </div>
+                                        <div class="code-block">
+                                            POST /api/v1/auth/refresh<br>
+                                            Body: { "refresh_token": "..." }
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="ai-prompt-box">
+                                    <div class="ai-header">
+                                        <i class='bx bxs-bot'></i>
+                                        <h4>Manual para sua IA (Claude, ChatGPT, etc)</h4>
+                                    </div>
+                                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 16px;">Copie o prompt
+                                        abaixo e cole na sua IA favorita para gerar o código de integração instantaneamente:</p>
+                                    <div class="prompt-text">
+                                        "Preciso de um script em <strong>Python</strong> (ou sua linguagem) para integrar com a
+                                        InfoAPI.
+                                        1. O login é em /api/v1/auth/login usando Basic Auth.
+                                        2. Salve o access_token e o refresh_token.
+                                        3. Faça um GET em /api/v1/products com o token.
+                                        4. Se receber erro 401, use o refresh_token em /api/v1/auth/refresh para renovar o acesso e
+                                        tente novamente."
+
+                                        <button onclick="UI.copyText(this.parentElement.innerText, 'Prompt copiado!')"
+                                            class="btn-copy-small"
+                                            style="position: absolute; top: 10px; right: 10px; background: var(--primary); border: none; border-radius: 4px; padding: 4px; cursor: pointer;">
+                                            <i class='bx bx-copy'></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="guide-step">
-                        <div class="step-number">1</div>
-                        <div class="step-content">
-                            <h3>Autenticação (Obter Token)</h3>
-                            <p>Toda comunicação é protegida. Primeiro, você deve trocar suas credenciais por um token de
-                                acesso.</p>
-                            <div class="code-block">
-                                POST /api/v1/auth/login<br>
-                                Authorization: Basic [USUARIO:SENHA em Base64]
+                        <!-- Subaba 2: Guias em PDF -->
+                        <div id="guide-subtab-pdf" class="guide-subtab-pane" style="display: none;">
+                            <div class="card guide-container">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+                                    <div>
+                                        <h2 style="font-size: 1.6rem; margin-bottom: 6px; color: var(--primary); display: flex; align-items: center; gap: 8px;">
+                                            <i class='bx bxs-file-pdf'></i> Guias Práticos em PDF
+                                        </h2>
+                                        <p style="color: var(--text-muted); font-size: 0.95rem;">
+                                            Instruções passo a passo e regras de negócio para reproduzir relatórios e processos do ERP via API.
+                                        </p>
+                                    </div>
+                                    <div style="display: flex; gap: 8px; align-items: center;" id="pdf-categories-filters">
+                                        <button class="category-pill active" onclick="UI.filterPdfGuides('all', this)">Todos</button>
+                                        <button class="category-pill" onclick="UI.filterPdfGuides('Listagens', this)">Listagens</button>
+                                    </div>
+                                </div>
+
+                                <div id="pdf-guides-grid" class="pdf-guides-grid">
+                                    <div style="color: var(--text-muted); padding: 40px; text-align: center; width: 100%;">
+                                        <i class='bx bx-loader-alt bx-spin' style="font-size: 2rem; color: var(--primary);"></i>
+                                        <p style="margin-top: 10px;">Carregando guias disponíveis...</p>
+                                    </div>
+                                </div>
                             </div>
-                            <p style="font-size: 0.85rem;">O retorno conterá um <code>access_token</code> (válido por
-                                1h) e um <code>refresh_token</code>.</p>
-                        </div>
-                    </div>
-
-                    <div class="guide-step">
-                        <div class="step-number">2</div>
-                        <div class="step-content">
-                            <h3>Realizar Requisições</h3>
-                            <p>Com o token em mãos, adicione-o ao cabeçalho de todas as chamadas seguintes.</p>
-                            <div class="code-block">
-                                GET /api/v1/products<br>
-                                Authorization: Bearer [SEU_ACCESS_TOKEN]
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="guide-step">
-                        <div class="step-number">3</div>
-                        <div class="step-content">
-                            <h3>Renovação Automática (Refresh)</h3>
-                            <p>Para evitar que sua integração pare de funcionar quando o token expirar, use o
-                                <code>refresh_token</code>.
-                            </p>
-                            <div class="guide-tip">
-                                <i class='bx bx-bulb'></i> <strong>Dica:</strong> Não peça para o usuário logar de novo.
-                                Use o refresh token para pegar um novo acesso silenciosamente.
-                            </div>
-                            <div class="code-block">
-                                POST /api/v1/auth/refresh<br>
-                                Body: { "refresh_token": "..." }
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="ai-prompt-box">
-                        <div class="ai-header">
-                            <i class='bx bxs-bot'></i>
-                            <h4>Manual para sua IA (Claude, ChatGPT, etc)</h4>
-                        </div>
-                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 16px;">Copie o prompt
-                            abaixo e cole na sua IA favorita para gerar o código de integração instantaneamente:</p>
-                        <div class="prompt-text">
-                            "Preciso de um script em <strong>Python</strong> (ou sua linguagem) para integrar com a
-                            InfoAPI.
-                            1. O login é em /api/v1/auth/login usando Basic Auth.
-                            2. Salve o access_token e o refresh_token.
-                            3. Faça um GET em /api/v1/products com o token.
-                            4. Se receber erro 401, use o refresh_token em /api/v1/auth/refresh para renovar o acesso e
-                            tente novamente."
-
-                            <button onclick="UI.copyText(this.parentElement.innerText, 'Prompt copiado!')"
-                                class="btn-copy-small"
-                                style="position: absolute; top: 10px; right: 10px; background: var(--primary); border: none; border-radius: 4px; padding: 4px; cursor: pointer;">
-                                <i class='bx bx-copy'></i>
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -785,15 +831,169 @@ print(f'Basic {auth}')</code></pre>
                 }
             };
 
+            // Adiciona controle de Subabas do Guia ao objeto UI global
+            UI.switchGuideSubtab = function (subtabId) {
+                const btnStart = document.getElementById('guide-subtab-btn-start');
+                const btnPdf = document.getElementById('guide-subtab-btn-pdf');
+                const paneStart = document.getElementById('guide-subtab-start');
+                const panePdf = document.getElementById('guide-subtab-pdf');
+
+                if (subtabId === 'start') {
+                    if (btnStart) btnStart.classList.add('active');
+                    if (btnPdf) btnPdf.classList.remove('active');
+                    if (paneStart) {
+                        paneStart.style.display = 'block';
+                        paneStart.classList.add('active');
+                    }
+                    if (panePdf) {
+                        panePdf.style.display = 'none';
+                        panePdf.classList.remove('active');
+                    }
+                } else if (subtabId === 'pdf') {
+                    if (btnPdf) btnPdf.classList.add('active');
+                    if (btnStart) btnStart.classList.remove('active');
+                    if (panePdf) {
+                        panePdf.style.display = 'block';
+                        panePdf.classList.add('active');
+                    }
+                    if (paneStart) {
+                        paneStart.style.display = 'none';
+                        paneStart.classList.remove('active');
+                    }
+                    loadPdfGuides();
+                }
+            };
+
+            // Filtragem por categoria de guias
+            UI.filterPdfGuides = function (category, btnEl) {
+                const pills = document.querySelectorAll('#pdf-categories-filters .category-pill');
+                pills.forEach(p => p.classList.remove('active'));
+                if (btnEl) btnEl.classList.add('active');
+
+                if (!window.cachedPdfGuides) return;
+                const filtered = category === 'all'
+                    ? window.cachedPdfGuides
+                    : window.cachedPdfGuides.filter(g => (g.category || '').toLowerCase() === category.toLowerCase());
+
+                renderPdfGuides(filtered);
+            };
+
             const originalSwitchTab = UI.switchTab;
             UI.switchTab = function (tabId) {
                 originalSwitchTab(tabId);
                 if (tabId === 'usage') refreshTenantStatus();
                 if (tabId === 'requests') loadMyFeatureRequests();
+                if (tabId === 'guide') loadPdfGuides();
             };
+
+            // Pré-carrega guias em background para exibir badge
+            loadPdfGuides();
         }
 
         initStatusLogic();
+
+        // Lógica de Guias em PDF
+        window.cachedPdfGuides = null;
+
+        async function loadPdfGuides() {
+            const gridEl = document.getElementById('pdf-guides-grid');
+            const countEl = document.getElementById('pdf-guides-count');
+
+            try {
+                const res = await fetch('/integration/api/guides');
+                if (!res.ok) throw new Error('Falha ao carregar guias');
+                const guides = await res.json();
+                window.cachedPdfGuides = guides;
+
+                if (countEl) countEl.innerText = guides.length;
+
+                updateCategoryFilters(guides);
+                renderPdfGuides(guides);
+            } catch (err) {
+                console.error('[Guides Error]', err);
+                if (gridEl) {
+                    gridEl.innerHTML = `
+                        <div style="color: var(--danger); text-align: center; padding: 40px; width: 100%; grid-column: 1/-1;">
+                            <i class='bx bx-error-circle' style="font-size: 2.5rem; margin-bottom: 8px;"></i>
+                            <p>Não foi possível carregar os guias no momento.</p>
+                            <button onclick="loadPdfGuides()" class="btn btn-outline" style="margin-top: 12px; font-size: 0.85rem;">
+                                <i class='bx bx-refresh'></i> Tentar novamente
+                            </button>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        function updateCategoryFilters(guides) {
+            const container = document.getElementById('pdf-categories-filters');
+            if (!container) return;
+
+            const categories = Array.from(new Set(guides.map(g => g.category).filter(Boolean)));
+            if (categories.length === 0) return;
+
+            let html = `<button class="category-pill active" onclick="UI.filterPdfGuides('all', this)">Todos</button>`;
+            categories.forEach(cat => {
+                html += `<button class="category-pill" onclick="UI.filterPdfGuides('${cat}', this)">${cat}</button>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function renderPdfGuides(guides) {
+            const gridEl = document.getElementById('pdf-guides-grid');
+            if (!gridEl) return;
+
+            if (!guides || guides.length === 0) {
+                gridEl.innerHTML = `
+                    <div style="color: var(--text-muted); text-align: center; padding: 40px; width: 100%; grid-column: 1/-1;">
+                        <i class='bx bx-file' style="font-size: 2.5rem; opacity: 0.4; margin-bottom: 8px;"></i>
+                        <p>Nenhum guia encontrado para esta categoria.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            gridEl.innerHTML = guides.map(g => {
+                const codeBadge = g.code ? `<span class="pdf-card-code">${escapeHtml(g.code)}</span>` : '';
+                const categoryBadge = g.category ? `<span class="pdf-card-category">${escapeHtml(g.category)}</span>` : '';
+                const url = g.public_url || '#';
+                const filename = url.split('/').pop() || `${g.code || 'guia'}.pdf`;
+
+                return `
+                    <div class="pdf-guide-card">
+                        <div>
+                            <div class="pdf-card-header">
+                                ${codeBadge}
+                                ${categoryBadge}
+                            </div>
+                            <div class="pdf-card-body" style="margin-top: 14px;">
+                                <h4>${escapeHtml(g.title)}</h4>
+                                <p title="${escapeHtml(g.description || '')}">${escapeHtml(g.description || 'Sem descrição informada.')}</p>
+                            </div>
+                        </div>
+                        <div class="pdf-card-footer">
+                            <a href="${url}" target="_blank" class="btn-view-pdf" title="Visualizar guia em nova aba">
+                                <i class='bx bx-show'></i>
+                                <span>Visualizar Guia</span>
+                            </a>
+                            <a href="${url}" download="${filename}" class="btn-download-pdf" title="Baixar arquivo PDF">
+                                <i class='bx bx-download'></i>
+                            </a>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
 
         // Lógica de Solicitações de Funcionalidades (Cliente)
         const featureTextarea = document.getElementById('feature-request-text');

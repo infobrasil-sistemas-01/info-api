@@ -498,4 +498,35 @@ export class IntegrationRequestService {
       request: updated,
     };
   }
+
+  async getGuides() {
+    try {
+      const guides = await (this.prisma as any).integrationGuide.findMany({
+        where: { active: true },
+        orderBy: [{ category: 'asc' }, { code: 'asc' }],
+      });
+      if (guides && guides.length > 0) {
+        return guides;
+      }
+    } catch (err: any) {
+      this.logger.warn(
+        `Não foi possível consultar integration_guides no banco (${err?.message || err}). Utilizando catálogo padrão.`,
+      );
+    }
+
+    return [
+      {
+        id: '1',
+        title: 'Listagem de Giro de Estoque Físico (Entradas / Saídas)',
+        code: 'L2.11.1',
+        description:
+          'Guia técnico e prático demonstrando como recriar com 100% de fidelidade o relatório gerencial L2.11.1 do ERP através da InfoAPI, agregando produtos, estoque físico atual da filial, entradas de compras e saídas de vendas com suporte a variantes de grade (tamanho e cor).',
+        category: 'Listagens',
+        publicUrl:
+          '/integration/guides/L2.11.1_guia_relatorio_giro_estoque.pdf',
+        active: true,
+      },
+    ];
+  }
 }
+

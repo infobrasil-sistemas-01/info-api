@@ -9,6 +9,7 @@ import {
   Delete,
   Param,
   InternalServerErrorException,
+  NotFoundException,
   Render,
 } from '@nestjs/common';
 import {
@@ -18,7 +19,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import type { Response } from 'express';
-import { join } from 'path';
+import { join, basename } from 'path';
 import { existsSync } from 'fs';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
@@ -84,6 +85,36 @@ export class IntegrationRequestController {
   serveAssets(@Param('file') file: string, @Res() res: Response) {
     const path = this.getTemplatePath(join('assets', file));
     return res.sendFile(path);
+  }
+
+  @Get('api/guides')
+  @ApiOperation({ summary: 'Lista os guias de integração disponíveis' })
+  async getGuides() {
+    return this.service.getGuides();
+  }
+
+  @Get('guides/:file')
+  @ApiOperation({ summary: 'Serve os guias em PDF públicos' })
+  serveGuide(@Param('file') file: string, @Res() res: Response) {
+    const safeFile = basename(file);
+    const paths = [
+      join(process.cwd(), 'docs', 'guides', safeFile),
+      join(__dirname, '..', '..', '..', '..', 'docs', 'guides', safeFile),
+      join(__dirname, '..', '..', '..', 'docs', 'guides', safeFile),
+      join(__dirname, '..', '..', 'docs', 'guides', safeFile),
+      join(__dirname, '..', 'docs', 'guides', safeFile),
+      join(__dirname, 'docs', 'guides', safeFile),
+    ];
+
+    for (const p of paths) {
+      if (existsSync(p)) {
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', `inline; filename="${safeFile}"`);
+        return res.sendFile(p);
+      }
+    }
+
+    throw new NotFoundException(`Guia ${safeFile} não encontrado.`);
   }
 
   private getTemplatePath(fileName: string): string {

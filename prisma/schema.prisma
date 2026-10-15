@@ -258,3 +258,18 @@ model FeatureRequestMessage {
   @@index([senderId])
   @@map("feature_request_messages")
 }
+
+model IntegrationGuide {
+  id          String   @id @default(uuid())
+  title       String   @db.VarChar(150)
+  code        String?  @db.VarChar(50)
+  description String   @db.Text
+  category    String   @db.VarChar(100)
+  publicUrl   String   @map("public_url") @db.VarChar(255)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("integration_guides")
+}
+
