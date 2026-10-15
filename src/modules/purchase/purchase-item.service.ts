@@ -52,9 +52,16 @@ export class PurchaseItemService {
                        CAST(ICP.ICP_PERCIBSUF AS NUMERIC(15,4)) as ICP_PERCIBSUF,
                        CAST(ICP.ICP_VRIBSUF AS NUMERIC(15,4)) as ICP_VRIBSUF,
                        CAST(ICP.ICP_PERCIBSMUN AS NUMERIC(15,4)) as ICP_PERCIBSMUN,
-                       CAST(ICP.ICP_VRIBSMUN AS NUMERIC(15,4)) as ICP_VRIBSMUN
+                       CAST(ICP.ICP_VRIBSMUN AS NUMERIC(15,4)) as ICP_VRIBSMUN,
+                       ICP.TAM_CODIGO,
+                       T.TAM_DESCRICAO,
+                       ICP.COR_CODIGO,
+                       C.COR_DESCRICAO,
+                       ICP.PRG_CODIGO
                      FROM ITENSCOM ICP
                      LEFT JOIN PRODUTOS P ON P.PRO_CODIGO = ICP.PRO_CODIGO
+                     LEFT JOIN TAMANHOS T ON T.TAM_CODIGO = ICP.TAM_CODIGO
+                     LEFT JOIN CORES C ON C.COR_CODIGO = ICP.COR_CODIGO
                      WHERE ICP.COM_NUMERO = ?
                      ORDER BY ICP.ICP_NUMERO ASC`;
 
@@ -201,13 +208,20 @@ export class PurchaseItemService {
                        CAST(ICP.ICP_PERCCBS AS NUMERIC(15,4)) as ICP_PERCCBS,
                        CAST(ICP.ICP_VRCBS AS NUMERIC(15,4)) as ICP_VRCBS,
                        CAST(ICP.ICP_PERCIBSUF AS NUMERIC(15,4)) as ICP_PERCIBSUF,
-                       CAST(ICP.ICP_VRIBSUF AS NUMERIC(15,4)) as ICP_VRIBSUF
+                       CAST(ICP.ICP_VRIBSUF AS NUMERIC(15,4)) as ICP_VRIBSUF,
+                       ICP.TAM_CODIGO,
+                       T.TAM_DESCRICAO,
+                       ICP.COR_CODIGO,
+                       C.COR_DESCRICAO,
+                       ICP.PRG_CODIGO
                      FROM ITENSCOM ICP
                      INNER JOIN COMPRAS COM ON COM.COM_NUMERO = ICP.COM_NUMERO
                      LEFT JOIN PRODUTOS P ON P.PRO_CODIGO = ICP.PRO_CODIGO
                      LEFT JOIN MARCAS M ON M.MAR_CODIGO = P.MAR_CODIGO
                      LEFT JOIN GRUPOSPRO G ON G.GRU_CODIGO = P.GRU_CODIGO
                      LEFT JOIN CREDORES CR ON CR.CRE_CODIGO = COM.CRE_CODIGO
+                     LEFT JOIN TAMANHOS T ON T.TAM_CODIGO = ICP.TAM_CODIGO
+                     LEFT JOIN CORES C ON C.COR_CODIGO = ICP.COR_CODIGO
                      ${whereClause}
                      ORDER BY COM.COM_DATA DESC, COM.COM_NUMERO DESC, ICP.ICP_NUMERO ASC`;
 

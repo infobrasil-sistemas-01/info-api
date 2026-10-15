@@ -106,7 +106,7 @@ export class OrderItemService {
         produtoVendidoInsert.IVD_PRCAVISTA,
       ];
 
-      return new Promise((resolve, reject) => {
+      return await new Promise((resolve, reject) => {
         transaction.query(query, values, (err: any, result: any) => {
           if (err) {
             return reject(err);
@@ -114,8 +114,9 @@ export class OrderItemService {
           resolve(result);
         });
       });
-    } catch (error) {
-      console.error('Error inserting sold products:', error);
+    } catch (err: any) {
+      this.logger.error('Error inserting product sold on DB', err);
+      throw err;
     }
   }
 
@@ -126,17 +127,21 @@ export class OrderItemService {
 
     try {
       const query = `SELECT 
-      IV.PRO_CODIGO, P.PRO_DESCRICAO, P.PRO_PESO, IV.IVD_PRECO, IV.IVD_QTDE, IV.IVD_TOTAL, IV.IVD_DESCONTO, IV.IVD_LIQUIDO, IV.TRM_CODIGO, CASE IV.TRM_CODIGO WHEN '1' THEN 'IMEDIATA' WHEN '2' THEN 'RETIRADA' WHEN '3' THEN 'ENTREGA' END AS TRM_DESCRICAO, A.AMB_CODIGO, A.AMB_DESCRICAO, IV.IVD_OPERACAO, IV.IVD_ENTREGUE
-      FROM ITENSVEN IV
-      INNER JOIN PRODUTOS P ON IV.PRO_CODIGO = P.PRO_CODIGO
-      LEFT JOIN AMBIENTES A ON IV.AMB_CODIGO = A.AMB_CODIGO
-      WHERE IV.VEN_NUMERO = ?`;
-
-      const params = [orderId];
+                      IV.PRO_CODIGO, P.PRO_DESCRICAO, P.PRO_PESO, IV.IVD_PRECO, IV.IVD_QTDE, IV.IVD_TOTAL, IV.IVD_DESCONTO, IV.IVD_LIQUIDO,
+                      IV.TRM_CODIGO, TM.TRM_DESCRICAO, IV.AMB_CODIGO, A.AMB_DESCRICAO, IV.IVD_OPERACAO, IV.IVD_ENTREGUE,
+                      IV.TAM_CODIGO, T.TAM_DESCRICAO, IV.COR_CODIGO, C.COR_DESCRICAO
+                      FROM ITENSVEN IV
+                      INNER JOIN PRODUTOS P ON P.PRO_CODIGO = IV.PRO_CODIGO
+                      LEFT JOIN TIPOSMODALIDADES TM ON TM.TRM_CODIGO = IV.TRM_CODIGO
+                      LEFT JOIN AMBIENTES A ON A.AMB_CODIGO = IV.AMB_CODIGO
+                      LEFT JOIN TAMANHOS T ON T.TAM_CODIGO = IV.TAM_CODIGO
+                      LEFT JOIN CORES C ON C.COR_CODIGO = IV.COR_CODIGO
+                      WHERE IV.VEN_NUMERO = ?
+                      ORDER BY IV.IVD_NUMERO ASC`;
 
       const queryStartTime = Date.now();
       const result = await new Promise((resolve, reject) => {
-        connection.query(query, params, (err: any, res: any) => {
+        connection.query(query, [orderId], (err: any, res: any) => {
           if (err) return reject(err);
           resolve(res);
         });
@@ -221,12 +226,15 @@ export class OrderItemService {
       const query = `SELECT FIRST ? SKIP ? 
                       V.VEN_NUMERO, V.VEN_DATA, IV.PRO_CODIGO, P.PRO_DESCRICAO, 
                       IV.IVD_QTDE, IV.IVD_PRECO, IV.IVD_TOTAL, IV.IVD_DESCONTO, IV.IVD_LIQUIDO,
+                      IV.TAM_CODIGO, T.TAM_DESCRICAO, IV.COR_CODIGO, C.COR_DESCRICAO,
                       M.MAR_CODIGO, M.MAR_DESCRICAO, G.GRU_CODIGO, G.GRU_DESCRICAO
                       FROM ITENSVEN IV
                       INNER JOIN VENDAS V ON V.VEN_NUMERO = IV.VEN_NUMERO
                       INNER JOIN PRODUTOS P ON P.PRO_CODIGO = IV.PRO_CODIGO
                       LEFT JOIN MARCAS M ON M.MAR_CODIGO = P.MAR_CODIGO
                       LEFT JOIN GRUPOSPRO G ON G.GRU_CODIGO = P.GRU_CODIGO
+                      LEFT JOIN TAMANHOS T ON T.TAM_CODIGO = IV.TAM_CODIGO
+                      LEFT JOIN CORES C ON C.COR_CODIGO = IV.COR_CODIGO
                       ${whereClause}
                       ORDER BY V.VEN_DATA DESC, V.VEN_NUMERO DESC`;
 

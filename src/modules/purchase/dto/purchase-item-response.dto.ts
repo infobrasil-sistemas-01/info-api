@@ -100,4 +100,19 @@ export class PurchaseItemEnrichedResponseDto {
 
   @ApiPropertyOptional({ description: 'Valor IBS UF (ICP_VRIBSUF)', example: 0.0 })
   ICP_VRIBSUF?: number;
+
+  @ApiPropertyOptional({ description: 'Código do tamanho (TAM_CODIGO)', example: 'P' })
+  TAM_CODIGO?: string;
+
+  @ApiPropertyOptional({ description: 'Descrição do tamanho (TAM_DESCRICAO)', example: 'PEQUENO' })
+  TAM_DESCRICAO?: string;
+
+  @ApiPropertyOptional({ description: 'Código da cor (COR_CODIGO)', example: 3 })
+  COR_CODIGO?: number;
+
+  @ApiPropertyOptional({ description: 'Descrição da cor (COR_DESCRICAO)', example: 'AMARELO' })
+  COR_DESCRICAO?: string;
+
+  @ApiPropertyOptional({ description: 'Código da grade (PRG_CODIGO)', example: '000000000101' })
+  PRG_CODIGO?: string;
 }

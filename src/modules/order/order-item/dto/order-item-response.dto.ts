@@ -63,4 +63,16 @@ export class OrderItemEnrichedResponseDto {
 
   @ApiPropertyOptional({ example: 'N', description: 'Item entregue (S/N)' })
   IVD_ENTREGUE?: string;
+
+  @ApiPropertyOptional({ example: 'P', description: 'Código do tamanho (TAM_CODIGO)' })
+  TAM_CODIGO?: string;
+
+  @ApiPropertyOptional({ example: 'PEQUENO', description: 'Descrição do tamanho (TAM_DESCRICAO)' })
+  TAM_DESCRICAO?: string;
+
+  @ApiPropertyOptional({ example: 3, description: 'Código da cor (COR_CODIGO)' })
+  COR_CODIGO?: number;
+
+  @ApiPropertyOptional({ example: 'AMARELO', description: 'Descrição da cor (COR_DESCRICAO)' })
+  COR_DESCRICAO?: string;
 }
