@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.20.6](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.20.5...v1.20.6) (2026-10-22)
+
+
+### Features
+
+* GET /orders/abc-curve ([b85cd47](https://github.com/infobrasil-sistemas-01/info-api/commit/b85cd47167319a2aec0b2fff74ec8cc72e015d79))
+* return cpf_cnpj on GET /clients ([c726cab](https://github.com/infobrasil-sistemas-01/info-api/commit/c726cabd83b8ddfc5c9188a867368299d2c28cd6))
+
 ## [1.20.5](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.20.4...v1.20.5) (2026-10-15)
 
 

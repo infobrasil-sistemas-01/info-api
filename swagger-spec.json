@@ -1018,6 +1018,167 @@
         ]
       }
     },
+    "/orders/abc-curve": {
+      "get": {
+        "description": "Retorna a análise da Curva ABC (Princípio de Pareto) agrupada pela dimensão solicitada (Vendedor, Loja, Grupo, Marca, Cliente ou Produto), calculando volume, faturamento, percentuais e classificação A/B/C.",
+        "operationId": "OrderController_getAbcCurve",
+        "parameters": [
+          {
+            "name": "startDate",
+            "required": true,
+            "in": "query",
+            "description": "Data inicial no formato YYYY-MM-DD",
+            "schema": {
+              "example": "2026-01-22",
+              "type": "string"
+            }
+          },
+          {
+            "name": "endDate",
+            "required": true,
+            "in": "query",
+            "description": "Data final no formato YYYY-MM-DD",
+            "schema": {
+              "example": "2026-10-22",
+              "type": "string"
+            }
+          },
+          {
+            "name": "groupBy",
+            "required": false,
+            "in": "query",
+            "description": "Dimensão para agrupamento da curva (SELLER, STORE, GROUP, BRAND, CUSTOMER, PRODUCT)",
+            "schema": {
+              "default": "SELLER",
+              "example": "SELLER",
+              "type": "string",
+              "enum": [
+                "SELLER",
+                "STORE",
+                "GROUP",
+                "BRAND",
+                "CUSTOMER",
+                "PRODUCT"
+              ]
+            }
+          },
+          {
+            "name": "storeId",
+            "required": false,
+            "in": "query",
+            "description": "Código da loja/filial no ERP",
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "system",
+            "required": false,
+            "in": "query",
+            "description": "Sistema de origem das vendas (PED: Retaguarda, PDV: Frente de caixa, ALL: Ambos)",
+            "schema": {
+              "default": "PED",
+              "example": "PED",
+              "type": "string",
+              "enum": [
+                "PED",
+                "PDV",
+                "ALL"
+              ]
+            }
+          },
+          {
+            "name": "situation",
+            "required": false,
+            "in": "query",
+            "description": "Código da situação da venda no ERP (padrão: 2 - Fechada/Faturada)",
+            "schema": {
+              "default": 2,
+              "example": 2,
+              "type": "number"
+            }
+          },
+          {
+            "name": "orderBy",
+            "required": false,
+            "in": "query",
+            "description": "Critério de ordenação das linhas da curva (NAME, VALUE, QUANTITY)",
+            "schema": {
+              "default": "NAME",
+              "example": "NAME",
+              "type": "string",
+              "enum": [
+                "NAME",
+                "VALUE",
+                "QUANTITY"
+              ]
+            }
+          },
+          {
+            "name": "orderDirection",
+            "required": false,
+            "in": "query",
+            "description": "Direção da ordenação (ASC, DESC)",
+            "schema": {
+              "example": "ASC",
+              "type": "string",
+              "enum": [
+                "ASC",
+                "DESC"
+              ]
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Número da página (obrigatório para CUSTOMER e PRODUCT; opcional para as demais)",
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "description": "Quantidade de registros por página (máx: 100; obrigatório para CUSTOMER e PRODUCT)",
+            "schema": {
+              "example": 50,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Curva ABC retornada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AbcCurveResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Parâmetros inválidos (ex: datas inválidas ou falta de paginação obrigatória para Cliente/Produto)."
+          },
+          "401": {
+            "description": "Token de autenticação inválido ou ausente."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Obter Curva ABC dimensional de vendas",
+        "tags": [
+          "Order"
+        ]
+      }
+    },
     "/orders/{id}": {
       "get": {
         "description": "Retorna os detalhes de um pedido específico com base no ID fornecido.",
@@ -1687,7 +1848,7 @@
             "name": "search",
             "required": false,
             "in": "query",
-            "description": "Busca por nome ou fantasia",
+            "description": "Busca por nome, fantasia ou CPF/CNPJ (mínimo 3 caracteres)",
             "schema": {
               "type": "string"
             }
@@ -4337,7 +4498,7 @@
   "info": {
     "title": "InfoBrasil API",
     "description": "API de integração do sistema Retaguarda (by InfoBrasil) com outros sistemas, como ERPs, e-commerce, etc. <br><br>\n      Se deseja solicitar um acesso, preencha o formulário em: <a href='https://info-api.infobrasilsistemas.com.br/integration/form'>Solicitar Acesso</a>\n      <br><br>\n      **O sistema conta com duas formas de autenticação:**<br> \n      - Basic Auth para login e obtenção de token JWT<br>\n      - JWT para acesso aos endpoints protegidos.\n      <br><br>\n      Para verificar a disponibilidade da API acesse nossa <a href='/status'>Página de Status</a> | Para novidades e histórico de versões acesse o <a href='/changelog'>Changelog Oficial</a>\n      <br><br>\n      A API é organizada em módulos, cada um responsável por uma área específica do sistema, como produtos, clientes, vendas, etc.",
-    "version": "1.20.5",
+    "version": "1.20.6",
     "contact": {
       "name": "InfoBrasil Sistemas",
       "url": "https://www.infobrasilsistemas.com.br",
@@ -5171,6 +5332,202 @@
           "openOrders"
         ]
       },
+      "AbcCurvePeriodDto": {
+        "type": "object",
+        "properties": {
+          "startDate": {
+            "type": "string",
+            "example": "2026-01-22",
+            "description": "Data inicial apurada"
+          },
+          "endDate": {
+            "type": "string",
+            "example": "2026-10-22",
+            "description": "Data final apurada"
+          }
+        },
+        "required": [
+          "startDate",
+          "endDate"
+        ]
+      },
+      "AbcCurveSummaryDto": {
+        "type": "object",
+        "properties": {
+          "totalQuantity": {
+            "type": "number",
+            "example": 57,
+            "description": "Quantidade física total de itens vendidos no período apurado"
+          },
+          "totalValue": {
+            "type": "number",
+            "example": 27275.88,
+            "description": "Valor financeiro total faturado no período apurado"
+          },
+          "entityCount": {
+            "type": "number",
+            "example": 6,
+            "description": "Quantidade total de entidades apuradas nesta dimensão"
+          }
+        },
+        "required": [
+          "totalQuantity",
+          "totalValue",
+          "entityCount"
+        ]
+      },
+      "AbcCurvePaginationDto": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "number",
+            "example": 1,
+            "description": "Página atual"
+          },
+          "pageSize": {
+            "type": "number",
+            "example": 50,
+            "description": "Quantidade de registros por página"
+          },
+          "totalPages": {
+            "type": "number",
+            "example": 1,
+            "description": "Total de páginas"
+          },
+          "totalItems": {
+            "type": "number",
+            "example": 6,
+            "description": "Total geral de registros encontrados"
+          }
+        },
+        "required": [
+          "page",
+          "pageSize",
+          "totalPages",
+          "totalItems"
+        ]
+      },
+      "AbcCurveItemDto": {
+        "type": "object",
+        "properties": {
+          "position": {
+            "type": "number",
+            "example": 1,
+            "description": "Posição na ordenação / ranking"
+          },
+          "code": {
+            "type": "number",
+            "example": 41,
+            "description": "Código identificador da entidade no ERP (Vendedor, Loja, Grupo, Marca, Cliente ou Produto)"
+          },
+          "name": {
+            "type": "string",
+            "example": "ALISSON - HOMOBR",
+            "description": "Nome ou descrição textual da entidade apurada"
+          },
+          "soldQuantity": {
+            "type": "number",
+            "example": 1,
+            "description": "Quantidade física acumulada vendida no período"
+          },
+          "soldValue": {
+            "type": "number",
+            "example": 100,
+            "description": "Valor financeiro líquido total faturado pela entidade no período"
+          },
+          "quantityPercent": {
+            "type": "number",
+            "example": 1.75,
+            "description": "Percentual da quantidade desta entidade em relação ao total (% Qtd)"
+          },
+          "valuePercent": {
+            "type": "number",
+            "example": 0.37,
+            "description": "Percentual do valor desta entidade em relação ao total (% Valor)"
+          },
+          "cumulativePercent": {
+            "type": "number",
+            "example": 0.37,
+            "description": "Percentual acumulado progressivo do faturamento (% Acum)"
+          },
+          "classification": {
+            "type": "string",
+            "example": "A",
+            "description": "Classificação na Curva ABC (A: até 70%, B: 70-90%, C: 90-100%)",
+            "enum": [
+              "A",
+              "B",
+              "C"
+            ]
+          }
+        },
+        "required": [
+          "position",
+          "code",
+          "name",
+          "soldQuantity",
+          "soldValue",
+          "quantityPercent",
+          "valuePercent",
+          "cumulativePercent",
+          "classification"
+        ]
+      },
+      "AbcCurveResponseDto": {
+        "type": "object",
+        "properties": {
+          "dimension": {
+            "type": "string",
+            "example": "SELLER",
+            "description": "Dimensão de agrupamento apurada",
+            "enum": [
+              "SELLER",
+              "STORE",
+              "GROUP",
+              "BRAND",
+              "CUSTOMER",
+              "PRODUCT"
+            ]
+          },
+          "period": {
+            "description": "Período filtrado na consulta",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AbcCurvePeriodDto"
+              }
+            ]
+          },
+          "summary": {
+            "description": "Totais consolidados do período",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AbcCurveSummaryDto"
+              }
+            ]
+          },
+          "pagination": {
+            "description": "Metadados de paginação (presente quando page e pageSize são aplicados)",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AbcCurvePaginationDto"
+              }
+            ]
+          },
+          "items": {
+            "description": "Linhas detalhadas da Curva ABC ordenadas conforme solicitado",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AbcCurveItemDto"
+            }
+          }
+        },
+        "required": [
+          "dimension",
+          "period",
+          "summary",
+          "items"
+        ]
+      },
       "OrderItemResponseDto": {
         "type": "object",
         "properties": {
@@ -5893,6 +6250,12 @@
             "type": "string",
             "example": "ROTA CENTRO",
             "description": "Nome da rota"
+          },
+          "CLI_CPF_CNPJ": {
+            "type": "object",
+            "example": "111.222.333-44",
+            "description": "CPF ou CNPJ do cliente",
+            "nullable": true
           }
         },
         "required": [
@@ -5966,6 +6329,12 @@
             "example": "ROTA CENTRO",
             "description": "Nome da rota"
           },
+          "CLI_CPF_CNPJ": {
+            "type": "object",
+            "example": "111.222.333-44",
+            "description": "CPF ou CNPJ do cliente",
+            "nullable": true
+          },
           "CLI_COMPL_ENDERECO": {
             "type": "string",
             "example": "Apto 101",
@@ -5995,11 +6364,6 @@
             "type": "string",
             "example": "SP",
             "description": "UF"
-          },
-          "CLI_CPF_CNPJ": {
-            "type": "string",
-            "example": "111.222.333-44",
-            "description": "CPF ou CNPJ"
           },
           "CLI_IDENTIDADE": {
             "type": "string",
@@ -6041,7 +6405,6 @@
           "CLI_CEP",
           "CLI_BAIRRO",
           "CLI_UF",
-          "CLI_CPF_CNPJ",
           "CLI_IDENTIDADE",
           "CLI_MAE",
           "CLI_PAI",

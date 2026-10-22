@@ -1,5 +1,36 @@
 [
   {
+    "version": "1.20.6",
+    "date": "2026-10-22",
+    "title": "Operações de Vendas & Pedidos e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Pedidos & Vendas, Clientes.",
+    "highlights": [
+      "Operações de Vendas & Pedidos",
+      "return cpf_cnpj on GET /clients"
+    ],
+    "items": [
+      {
+        "module": "Pedidos & Vendas",
+        "type": "feature",
+        "title": "Operações de Vendas & Pedidos",
+        "description": "Aprimoramento nos fluxos de consulta e criação de pedidos de venda com suporte a novos campos e formas de pagamento.",
+        "impact": "Integração de vendas rápida, robusta e com validações completas.",
+        "originalCommit": "GET /orders/abc-curve",
+        "commitHash": "b85cd47"
+      },
+      {
+        "module": "Clientes",
+        "type": "feature",
+        "title": "return cpf_cnpj on GET /clients",
+        "description": "Atualização no módulo de Clientes: return cpf_cnpj on GET /clients.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "return cpf_cnpj on GET /clients",
+        "commitHash": "c726cab"
+      }
+    ],
+    "totalChanges": 2
+  },
+  {
     "version": "1.20.5",
     "date": "2026-10-15",
     "title": "Geração de Dossiês e Relatórios em PDF e melhorias",

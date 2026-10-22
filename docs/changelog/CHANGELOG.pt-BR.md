@@ -6,6 +6,21 @@ Para visualizar a versão interativa com busca em tempo real, acesse o portal we
 
 ---
 
+## [v1.20.6] - 2026-10-22
+
+### 📌 Operações de Vendas & Pedidos e melhorias
+> Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Pedidos & Vendas, Clientes.
+
+**Destaques:**
+- ⭐ Operações de Vendas & Pedidos
+- ⭐ return cpf_cnpj on GET /clients
+
+#### 🚀 Novidades & Melhorias
+- **[Pedidos & Vendas]** Operações de Vendas & Pedidos: Aprimoramento nos fluxos de consulta e criação de pedidos de venda com suporte a novos campos e formas de pagamento.
+- **[Clientes]** return cpf_cnpj on GET /clients: Atualização no módulo de Clientes: return cpf_cnpj on GET /clients.
+
+---
+
 ## [v1.20.5] - 2026-10-15
 
 ### 📌 Geração de Dossiês e Relatórios em PDF e melhorias
