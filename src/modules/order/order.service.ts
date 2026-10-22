@@ -14,6 +14,11 @@ import { ReceiptService } from '../receipt/receipt.service';
 import { OrderItemService } from './order-item/order-item.service';
 import { PaginatedResponse } from 'src/common/pagination/paginated-response';
 import { OrderMetricsResponseDto } from './dto/order-metrics-response.dto';
+import { GetAbcCurveQueryDto } from './dto/get-abc-curve-query.dto';
+import {
+  AbcCurveResponseDto,
+  AbcCurveItemDto,
+} from './dto/abc-curve-response.dto';
 
 @Injectable()
 export class OrderService {
@@ -879,6 +884,275 @@ export class OrderService {
         averageTicket,
         openOrders,
       };
+    } finally {
+      this.tenantConnectionService.releaseConnection(connection);
+    }
+  }
+
+  async getAbcCurve(
+    credentialsId: string,
+    storeId: number | undefined,
+    query: GetAbcCurveQueryDto,
+  ): Promise<AbcCurveResponseDto> {
+    const {
+      startDate,
+      endDate,
+      groupBy = 'SELLER',
+      system = 'PED',
+      situation = 2,
+      orderBy = 'NAME',
+      orderDirection,
+      page,
+      pageSize,
+    } = query;
+
+    let connection: any;
+    connection =
+      await this.tenantConnectionService.getConnection(credentialsId);
+
+    try {
+      let codeCol = '';
+      let nameCol = '';
+      let extraJoin = '';
+      let nullFilter = '';
+
+      switch (groupBy) {
+        case 'STORE':
+          codeCol = 'V.LOJ_CODIGO';
+          nameCol =
+            "COALESCE(LOJ.LOJ_FANTASIA, LOJ.LOJ_NOME, 'LOJA ' || V.LOJ_CODIGO)";
+          extraJoin = 'LEFT JOIN LOJAS LOJ ON LOJ.LOJ_CODIGO = V.LOJ_CODIGO';
+          nullFilter = 'V.LOJ_CODIGO IS NOT NULL';
+          break;
+        case 'GROUP':
+          codeCol = 'P.GRU_CODIGO';
+          nameCol = "COALESCE(G.GRU_DESCRICAO, 'GRUPO ' || P.GRU_CODIGO)";
+          extraJoin =
+            'INNER JOIN PRODUTOS P ON P.PRO_CODIGO = IV.PRO_CODIGO LEFT JOIN GRUPOSPRO G ON G.GRU_CODIGO = P.GRU_CODIGO';
+          nullFilter = 'P.GRU_CODIGO IS NOT NULL';
+          break;
+        case 'BRAND':
+          codeCol = 'P.MAR_CODIGO';
+          nameCol = "COALESCE(M.MAR_DESCRICAO, 'MARCA ' || P.MAR_CODIGO)";
+          extraJoin =
+            'INNER JOIN PRODUTOS P ON P.PRO_CODIGO = IV.PRO_CODIGO LEFT JOIN MARCAS M ON M.MAR_CODIGO = P.MAR_CODIGO';
+          nullFilter = 'P.MAR_CODIGO IS NOT NULL';
+          break;
+        case 'CUSTOMER':
+          codeCol = 'V.CLI_CODIGO';
+          nameCol = "COALESCE(C.CLI_NOME, 'CLIENTE ' || V.CLI_CODIGO)";
+          extraJoin = 'LEFT JOIN CLIENTES C ON C.CLI_CODIGO = V.CLI_CODIGO';
+          nullFilter = 'V.CLI_CODIGO IS NOT NULL';
+          break;
+        case 'PRODUCT':
+          codeCol = 'IV.PRO_CODIGO';
+          nameCol = "COALESCE(P.PRO_DESCRICAO, 'PRODUTO ' || IV.PRO_CODIGO)";
+          extraJoin = 'INNER JOIN PRODUTOS P ON P.PRO_CODIGO = IV.PRO_CODIGO';
+          nullFilter = 'IV.PRO_CODIGO IS NOT NULL';
+          break;
+        case 'SELLER':
+        default:
+          codeCol = 'V.FUN_CODIGO';
+          nameCol = "COALESCE(F.FUN_NOME, 'VENDEDOR ' || V.FUN_CODIGO)";
+          extraJoin = 'LEFT JOIN FUNCIONARIOS F ON F.FUN_CODIGO = V.FUN_CODIGO';
+          nullFilter = 'V.FUN_CODIGO IS NOT NULL';
+          break;
+      }
+
+      const filterConditions: string[] = [nullFilter];
+      const filterParams: any[] = [];
+
+      filterConditions.push('V.VEN_DATA BETWEEN ? AND ?');
+      filterParams.push(startDate, endDate);
+
+      if (storeId) {
+        filterConditions.push('V.LOJ_CODIGO = ?');
+        filterParams.push(storeId);
+      }
+
+      if (system === 'PED') {
+        filterConditions.push("V.VEN_TIPO = 'E'");
+      } else if (system === 'PDV') {
+        filterConditions.push("V.VEN_TIPO <> 'E'");
+      }
+
+      if (situation !== undefined) {
+        filterConditions.push('V.SIT_CODIGO = ?');
+        filterParams.push(situation);
+      }
+
+      const whereClause = `WHERE ${filterConditions.join(' AND ')}`;
+
+      const summaryQuery = `
+        SELECT 
+          COALESCE(SUM(IV.IVD_QTDE), 0) AS GLOBAL_QTD,
+          COALESCE(SUM(IV.IVD_LIQUIDO), 0) AS GLOBAL_VALOR,
+          COUNT(DISTINCT ${codeCol}) AS ENTITY_COUNT
+        FROM VENDAS V
+        INNER JOIN ITENSVEN IV ON IV.VEN_NUMERO = V.VEN_NUMERO
+        ${extraJoin}
+        ${whereClause}
+      `;
+
+      const summaryRes: any = await new Promise((resolve, reject) => {
+        connection.query(summaryQuery, filterParams, (err: any, res: any) => {
+          if (err) return reject(err);
+          resolve(res);
+        });
+      });
+
+      const summaryRow = Array.isArray(summaryRes)
+        ? summaryRes[0]
+        : summaryRes;
+      const totalQuantity = Number(
+        Number(summaryRow?.GLOBAL_QTD ?? summaryRow?.global_qtd ?? 0).toFixed(
+          2,
+        ),
+      );
+      const totalValue = Number(
+        Number(
+          summaryRow?.GLOBAL_VALOR ?? summaryRow?.global_valor ?? 0,
+        ).toFixed(2),
+      );
+      const entityCount = Number(
+        summaryRow?.ENTITY_COUNT ?? summaryRow?.entity_count ?? 0,
+      );
+
+      let effectiveDirection = orderDirection;
+      if (!effectiveDirection) {
+        effectiveDirection = orderBy === 'NAME' ? 'ASC' : 'DESC';
+      }
+
+      let orderSql = 'ORDER BY 2 ASC';
+      if (orderBy === 'VALUE') {
+        orderSql = `ORDER BY 4 ${effectiveDirection}`;
+      } else if (orderBy === 'QUANTITY') {
+        orderSql = `ORDER BY 3 ${effectiveDirection}`;
+      } else {
+        orderSql = `ORDER BY 2 ${effectiveDirection}`;
+      }
+
+      const isPaginated = page !== undefined && pageSize !== undefined;
+      let paginationSql = '';
+      const queryParams: any[] = [];
+
+      if (isPaginated) {
+        paginationSql = 'FIRST ? SKIP ?';
+        queryParams.push(pageSize, (page - 1) * pageSize);
+      }
+
+      queryParams.push(...filterParams);
+
+      const itemsQuery = `
+        SELECT ${paginationSql}
+          ${codeCol} AS ENTITY_CODE,
+          ${nameCol} AS ENTITY_NAME,
+          COALESCE(SUM(IV.IVD_QTDE), 0) AS SOLD_QUANTITY,
+          COALESCE(SUM(IV.IVD_LIQUIDO), 0) AS SOLD_VALUE
+        FROM VENDAS V
+        INNER JOIN ITENSVEN IV ON IV.VEN_NUMERO = V.VEN_NUMERO
+        ${extraJoin}
+        ${whereClause}
+        GROUP BY ${codeCol}, ${nameCol}
+        ${orderSql}
+      `;
+
+      const startTime = Date.now();
+      const rows: any = await new Promise((resolve, reject) => {
+        connection.query(itemsQuery, queryParams, (err: any, res: any) => {
+          if (err) return reject(err);
+          resolve(res);
+        });
+      });
+      const endTime = Date.now();
+
+      const itemsArray = Array.isArray(rows) ? rows : rows ? [rows] : [];
+
+      let runningCumulative = 0;
+      const items: AbcCurveItemDto[] = itemsArray.map(
+        (row: any, index: number) => {
+          const code = Number(row?.ENTITY_CODE ?? row?.entity_code ?? 0);
+          const name = String(row?.ENTITY_NAME ?? row?.entity_name ?? '').trim();
+          const soldQuantity = Number(
+            Number(
+              row?.SOLD_QUANTITY ?? row?.sold_quantity ?? 0,
+            ).toFixed(2),
+          );
+          const soldValue = Number(
+            Number(row?.SOLD_VALUE ?? row?.sold_value ?? 0).toFixed(2),
+          );
+
+          const quantityPercent =
+            totalQuantity > 0
+              ? Number(((soldQuantity / totalQuantity) * 100).toFixed(2))
+              : 0;
+          const valuePercent =
+            totalValue > 0
+              ? Number(((soldValue / totalValue) * 100).toFixed(2))
+              : 0;
+
+          runningCumulative = Number(
+            (runningCumulative + valuePercent).toFixed(2),
+          );
+          if (runningCumulative > 100) runningCumulative = 100;
+
+          let classification: 'A' | 'B' | 'C' = 'A';
+          if (runningCumulative <= 70.0) {
+            classification = 'A';
+          } else if (runningCumulative <= 90.0) {
+            classification = 'B';
+          } else {
+            classification = 'C';
+          }
+
+          const position = isPaginated
+            ? (page - 1) * pageSize + index + 1
+            : index + 1;
+
+          return {
+            position,
+            code,
+            name,
+            soldQuantity,
+            soldValue,
+            quantityPercent,
+            valuePercent,
+            cumulativePercent: runningCumulative,
+            classification,
+          };
+        },
+      );
+
+      this.logger.log(
+        `Curva ABC executada. Tenant: ${credentialsId}, Dimensão: ${groupBy}, Itens: ${items.length}, Tempo SQL: ${endTime - startTime}ms`,
+      );
+
+      const resolvedEntityCount = isPaginated ? entityCount : itemsArray.length;
+
+      const response: AbcCurveResponseDto = {
+        dimension: groupBy,
+        period: {
+          startDate,
+          endDate,
+        },
+        summary: {
+          totalQuantity,
+          totalValue,
+          entityCount: resolvedEntityCount,
+        },
+        items,
+      };
+
+      if (isPaginated) {
+        response.pagination = {
+          page,
+          pageSize,
+          totalPages: Math.ceil(resolvedEntityCount / pageSize) || 1,
+          totalItems: resolvedEntityCount,
+        };
+      }
+
+      return response;
     } finally {
       this.tenantConnectionService.releaseConnection(connection);
     }

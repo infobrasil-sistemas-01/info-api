@@ -39,6 +39,8 @@ import { GetOrdersQueryDto } from './dto/get-orders-query.dto';
 import { GetOrderByIdQueryDto } from './dto/get-order-by-id-query.dto';
 import { GetOrderMetricsQueryDto } from './dto/get-order-metrics-query.dto';
 import { OrderMetricsResponseDto } from './dto/order-metrics-response.dto';
+import { GetAbcCurveQueryDto } from './dto/get-abc-curve-query.dto';
+import { AbcCurveResponseDto } from './dto/abc-curve-response.dto';
 import { IncludeCount } from 'src/common/decorators/include-count.decorator';
 import { SkipDateRangeLimit } from '../plan/decorators/skip-date-range-limit.decorator';
 
@@ -316,6 +318,54 @@ export class OrderController {
       startDate: query.startDate,
       endDate: query.endDate,
     });
+  }
+
+  @Get('abc-curve')
+  @SkipDateRangeLimit()
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @RequirePermissions({ allOf: ['tenant.orders.view'] })
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Obter Curva ABC dimensional de vendas',
+    description:
+      'Retorna a análise da Curva ABC (Princípio de Pareto) agrupada pela dimensão solicitada (Vendedor, Loja, Grupo, Marca, Cliente ou Produto), calculando volume, faturamento, percentuais e classificação A/B/C.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Curva ABC retornada com sucesso.',
+    type: AbcCurveResponseDto,
+  })
+  @ApiResponse({
+    status: 400,
+    description:
+      'Parâmetros inválidos (ex: datas inválidas ou falta de paginação obrigatória para Cliente/Produto).',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Token de autenticação inválido ou ausente.',
+  })
+  getAbcCurve(
+    @Req() req: ReqWithAuthContext,
+    @Query() query: GetAbcCurveQueryDto,
+  ) {
+    const {
+      credentialsId,
+      storeId: storeIdToken,
+      type,
+    } = req.authContext || {};
+
+    if (!credentialsId) {
+      throw new Error('Credentials ID not found in token');
+    }
+
+    const finalStoreId =
+      type === 'H2M'
+        ? storeIdToken
+        : query.storeId
+          ? Number(query.storeId)
+          : storeIdToken;
+
+    return this.orderService.getAbcCurve(credentialsId, finalStoreId, query);
   }
 
   @Get(':id')

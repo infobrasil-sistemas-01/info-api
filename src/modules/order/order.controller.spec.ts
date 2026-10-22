@@ -23,6 +23,7 @@ describe('OrderController', () => {
     getById: jest.fn(),
     generateReceipt: jest.fn(),
     getOrderMetrics: jest.fn(),
+    getAbcCurve: jest.fn(),
   };
 
   const mockOrderItemService = {
@@ -446,6 +447,74 @@ describe('OrderController', () => {
           startDate: '2026-09-01',
           endDate: '2026-09-30',
         }),
+      ).toThrow('Credentials ID not found in token');
+    });
+  });
+
+  describe('getAbcCurve', () => {
+    it('should call orderService.getAbcCurve with resolved storeId and query', async () => {
+      const mockResult = {
+        dimension: 'SELLER',
+        period: { startDate: '2026-01-22', endDate: '2026-10-22' },
+        summary: { totalQuantity: 57, totalValue: 27275.88, entityCount: 6 },
+        items: [],
+      };
+
+      mockOrderService.getAbcCurve.mockResolvedValue(mockResult);
+
+      const query: any = {
+        startDate: '2026-01-22',
+        endDate: '2026-10-22',
+        groupBy: 'SELLER',
+        storeId: 2,
+      };
+
+      const result = await controller.getAbcCurve(mockReq, query);
+
+      expect(orderService.getAbcCurve).toHaveBeenCalledWith(
+        'cred-1',
+        2,
+        query,
+      );
+      expect(result).toEqual(mockResult);
+    });
+
+    it('should use token storeId in H2M context', async () => {
+      const h2mReq = {
+        authContext: {
+          credentialsId: 'cred-1',
+          storeId: 10,
+          type: 'H2M',
+        },
+      } as any;
+
+      mockOrderService.getAbcCurve.mockResolvedValue({} as any);
+
+      const query: any = {
+        startDate: '2026-01-22',
+        endDate: '2026-10-22',
+        storeId: 99,
+      };
+
+      await controller.getAbcCurve(h2mReq, query);
+
+      expect(orderService.getAbcCurve).toHaveBeenCalledWith(
+        'cred-1',
+        10,
+        query,
+      );
+    });
+
+    it('should throw error if credentialsId is missing in token', async () => {
+      const reqWithoutCreds = {
+        authContext: {},
+      } as any;
+
+      expect(() =>
+        controller.getAbcCurve(reqWithoutCreds, {
+          startDate: '2026-01-22',
+          endDate: '2026-10-22',
+        } as any),
       ).toThrow('Credentials ID not found in token');
     });
   });

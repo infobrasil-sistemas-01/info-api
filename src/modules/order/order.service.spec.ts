@@ -572,4 +572,105 @@ describe('OrderService', () => {
       );
     });
   });
+
+  describe('getAbcCurve', () => {
+    const query = {
+      startDate: '2026-01-22',
+      endDate: '2026-10-22',
+      groupBy: 'SELLER' as const,
+    };
+
+    it('should calculate ABC curve for sellers matching print data', async () => {
+      mockConnection.query.mockImplementation((sql: string, params: any, callback: any) => {
+        if (sql.includes('GLOBAL_QTD')) {
+          callback(null, [
+            { GLOBAL_QTD: 57, GLOBAL_VALOR: 27275.88, ENTITY_COUNT: 6 },
+          ]);
+        } else {
+          callback(null, [
+            {
+              ENTITY_CODE: 41,
+              ENTITY_NAME: 'ALISSON - HOMOBR',
+              SOLD_QUANTITY: 1.0,
+              SOLD_VALUE: 100.0,
+            },
+            {
+              ENTITY_CODE: 49,
+              ENTITY_NAME: 'CARLOS CESAR - DAVI',
+              SOLD_QUANTITY: 8.0,
+              SOLD_VALUE: 6632.0,
+            },
+            {
+              ENTITY_CODE: 18,
+              ENTITY_NAME: 'THIAGO - HOMOBR',
+              SOLD_QUANTITY: 30.0,
+              SOLD_VALUE: 8583.33,
+            },
+          ]);
+        }
+      });
+
+      const result = await service.getAbcCurve('cred-1', 1, query);
+
+      expect(result.dimension).toBe('SELLER');
+      expect(result.summary.totalQuantity).toBe(57);
+      expect(result.summary.totalValue).toBe(27275.88);
+      expect(result.items.length).toBe(3);
+      expect(result.items[0]).toMatchObject({
+        code: 41,
+        name: 'ALISSON - HOMOBR',
+        soldQuantity: 1,
+        soldValue: 100,
+        classification: 'A',
+      });
+      expect(mockTenantConnection.releaseConnection).toHaveBeenCalledWith(
+        mockConnection,
+      );
+    });
+
+    it('should handle pagination and return pagination metadata', async () => {
+      mockConnection.query.mockImplementation((sql: string, params: any, callback: any) => {
+        if (sql.includes('GLOBAL_QTD')) {
+          callback(null, [
+            { GLOBAL_QTD: 100, GLOBAL_VALOR: 50000, ENTITY_COUNT: 15 },
+          ]);
+        } else {
+          callback(null, [
+            {
+              ENTITY_CODE: 1,
+              ENTITY_NAME: 'CLIENTE 1',
+              SOLD_QUANTITY: 10,
+              SOLD_VALUE: 5000,
+            },
+          ]);
+        }
+      });
+
+      const result = await service.getAbcCurve('cred-1', 1, {
+        ...query,
+        groupBy: 'CUSTOMER' as const,
+        page: 1,
+        pageSize: 10,
+      });
+
+      expect(result.pagination).toBeDefined();
+      expect(result.pagination?.page).toBe(1);
+      expect(result.pagination?.pageSize).toBe(10);
+      expect(result.pagination?.totalItems).toBe(15);
+      expect(result.pagination?.totalPages).toBe(2);
+    });
+
+    it('should release connection if query fails', async () => {
+      mockConnection.query.mockImplementation((sql: string, params: any, callback: any) => {
+        callback(new Error('Query failed'), null);
+      });
+
+      await expect(service.getAbcCurve('cred-1', 1, query)).rejects.toThrow(
+        'Query failed',
+      );
+      expect(mockTenantConnection.releaseConnection).toHaveBeenCalledWith(
+        mockConnection,
+      );
+    });
+  });
 });
