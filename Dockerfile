@@ -1,5 +1,5 @@
 # ---------- BUILD ----------
-FROM node:22-alpine AS builder
+FROM node:22.23.4 AS builder
 
 WORKDIR /app
 
@@ -34,19 +34,19 @@ RUN cp -r /app/src/generated/prisma/. /app/dist/src/generated/prisma/
 
 
 # ---------- PRODUCTION ----------
-FROM node:22-alpine
+FROM node:22.23.4
 
 WORKDIR /app
 
 # Utilitário e dependências do Chromium para geração de PDF
 RUN apk add --no-cache \
-      curl \
-      chromium \
-      nss \
-      freetype \
-      harfbuzz \
-      ca-certificates \
-      ttf-freefont
+    curl \
+    chromium \
+    nss \
+    freetype \
+    harfbuzz \
+    ca-certificates \
+    ttf-freefont
 
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
     PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
