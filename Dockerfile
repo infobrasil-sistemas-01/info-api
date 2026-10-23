@@ -1,5 +1,5 @@
 # ---------- BUILD ----------
-FROM node:22.23.4 AS builder
+FROM node:22.23.4-alpine AS builder
 
 WORKDIR /app
 
@@ -34,7 +34,7 @@ RUN cp -r /app/src/generated/prisma/. /app/dist/src/generated/prisma/
 
 
 # ---------- PRODUCTION ----------
-FROM node:22.23.4
+FROM node:22.23.4-alpine
 
 WORKDIR /app
 
