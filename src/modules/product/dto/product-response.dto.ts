@@ -13,6 +13,12 @@ export class ProductResponseDto {
   })
   PRO_DESCRICAO: string;
 
+  @ApiPropertyOptional({
+    example: 'UN',
+    description: 'Unidade de medida do produto (ex: UN, KG, CX, LT)',
+  })
+  PRO_UNIDADE?: string | null;
+
   @ApiProperty({ example: 1, description: 'Código da marca' })
   MAR_CODIGO: number;
 
@@ -73,6 +79,12 @@ export class ProductDetailResponseDto {
   PRO_CODIGOBAR: string;
 
   @ApiPropertyOptional({
+    example: 'UN',
+    description: 'Unidade de medida do produto (ex: UN, KG, CX, LT)',
+  })
+  PRO_UNIDADE?: string | null;
+
+  @ApiPropertyOptional({
     example: 1,
     description: 'Código do fornecedor/credor',
   })
@@ -112,6 +124,12 @@ export class ProductBarcodeResponseDto {
     description: 'Descrição do produto',
   })
   PRO_DESCRICAO: string;
+
+  @ApiPropertyOptional({
+    example: 'UN',
+    description: 'Unidade de medida do produto (ex: UN, KG, CX, LT)',
+  })
+  PRO_UNIDADE?: string | null;
 
   @ApiProperty({ example: 1, description: 'Código da marca' })
   MAR_CODIGO: number;
