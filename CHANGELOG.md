@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.20.7](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.20.6...v1.20.7) (2026-10-23)
+
+
+### Features
+
+* return PRO_UNIDADE on GET /products endpoints family ([12cfc0b](https://github.com/infobrasil-sistemas-01/info-api/commit/12cfc0bcd9be972ab1d8b007cf1916974329cc1f))
+
 ## [1.20.6](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.20.5...v1.20.6) (2026-10-22)
 
 

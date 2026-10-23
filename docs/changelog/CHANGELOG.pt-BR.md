@@ -6,6 +6,19 @@ Para visualizar a versão interativa com busca em tempo real, acesse o portal we
 
 ---
 
+## [v1.20.7] - 2026-10-23
+
+### 📌 return PRO_UNIDADE on GET /products endpoints family e melhorias
+> Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Catálogo de Produtos.
+
+**Destaques:**
+- ⭐ return PRO_UNIDADE on GET /products endpoints family
+
+#### 🚀 Novidades & Melhorias
+- **[Catálogo de Produtos]** return PRO_UNIDADE on GET /products endpoints family: Atualização no módulo de Catálogo de Produtos: return PRO_UNIDADE on GET /products endpoints family.
+
+---
+
 ## [v1.20.6] - 2026-10-22
 
 ### 📌 Operações de Vendas & Pedidos e melhorias
