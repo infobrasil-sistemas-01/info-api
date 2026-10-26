@@ -1,5 +1,35 @@
 [
   {
+    "version": "1.20.8",
+    "date": "2026-10-26",
+    "title": "Inclusão de new fields on POST /clients and PATCH /clients e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Clientes, Geral & Usabilidade.",
+    "highlights": [
+      "Inclusão de new fields on POST /clients and PATCH /clients"
+    ],
+    "items": [
+      {
+        "module": "Clientes",
+        "type": "feature",
+        "title": "Inclusão de new fields on POST /clients and PATCH /clients",
+        "description": "Atualização no módulo de Clientes: add new fields on POST /clients and PATCH /clients.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add new fields on POST /clients and PATCH /clients",
+        "commitHash": "c09fc78"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "security",
+        "title": "connection security on firebird module",
+        "description": "Atualização no módulo de Geral & Usabilidade: connection security on firebird module.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "connection security on firebird module",
+        "commitHash": "50b4541"
+      }
+    ],
+    "totalChanges": 2
+  },
+  {
     "version": "1.20.7",
     "date": "2026-10-23",
     "title": "return PRO_UNIDADE on GET /products endpoints family e melhorias",

@@ -6,6 +6,22 @@ Para visualizar a versão interativa com busca em tempo real, acesse o portal we
 
 ---
 
+## [v1.20.8] - 2026-10-26
+
+### 📌 Inclusão de new fields on POST /clients and PATCH /clients e melhorias
+> Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Clientes, Geral & Usabilidade.
+
+**Destaques:**
+- ⭐ Inclusão de new fields on POST /clients and PATCH /clients
+
+#### 🚀 Novidades & Melhorias
+- **[Clientes]** Inclusão de new fields on POST /clients and PATCH /clients: Atualização no módulo de Clientes: add new fields on POST /clients and PATCH /clients.
+
+#### 🔒 Segurança & Infraestrutura
+- **[Geral & Usabilidade]** connection security on firebird module: Atualização no módulo de Geral & Usabilidade: connection security on firebird module.
+
+---
+
 ## [v1.20.7] - 2026-10-23
 
 ### 📌 return PRO_UNIDADE on GET /products endpoints family e melhorias

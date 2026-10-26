@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.20.8](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.20.7...v1.20.8) (2026-10-26)
+
+
+### Features
+
+* add new fields on POST /clients and PATCH /clients ([c09fc78](https://github.com/infobrasil-sistemas-01/info-api/commit/c09fc786ace85957cc9e21f27348ab19619e358b))
+
+
+### Bug Fixes
+
+* connection security on firebird module ([50b4541](https://github.com/infobrasil-sistemas-01/info-api/commit/50b4541e7386200bf55c7e1a01e9f89442fa3bb0))
+
 ## [1.20.7](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.20.6...v1.20.7) (2026-10-23)
 
 
