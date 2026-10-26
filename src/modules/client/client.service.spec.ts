@@ -150,23 +150,24 @@ describe('ClientService', () => {
           'A',
           'CE',
           2302404,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
+          null, // CLI_FANTASIA
+          null, // CLI_SEXO
+          null, // CLI_ENDERECO
+          null, // CLI_NUMERO
+          null, // CLI_COMPL_ENDERECO
+          null, // CLI_CEP
+          null, // CLI_BAIRRO
+          null, // CLI_FONE
+          null, // CLI_CELULAR
+          null, // CLI_EMAIL
+          null, // CLI_DATANASC
+          null, // CLI_CPF_CNPJ
+          null, // CLI_IDENTIDADE
+          null, // CLI_MAE
+          null, // CLI_PAI
+          null, // CLI_ESTADOCIVIL
+          null, // CLI_NATURALIDADE
+          null, // ROT_CODIGO
         ],
         expect.any(Function),
       );
@@ -188,6 +189,7 @@ describe('ClientService', () => {
         CLI_FANTASIA: 'Fantasia Teste',
         CLI_SEXO: 'F',
         CLI_ENDERECO: 'Rua Teste, 100',
+        CLI_NUMERO: '100',
         CLI_COMPL_ENDERECO: 'Apto 1',
         CLI_CEP: '01001-000',
         CLI_BAIRRO: 'Centro',
@@ -218,6 +220,7 @@ describe('ClientService', () => {
           'Fantasia Teste',
           'F',
           'Rua Teste, 100',
+          '100',
           'Apto 1',
           '01001-000',
           'Centro',
@@ -239,7 +242,7 @@ describe('ClientService', () => {
   });
 
   describe('update', () => {
-    it('should update existing client', async () => {
+    it('should update existing client with all newly supported fields including CLI_NUMERO', async () => {
       // Mock para getById usado no update
       mockConnection.query.mockImplementationOnce(
         (query: string, params: any[], callback: Function) => {
@@ -257,17 +260,25 @@ describe('ClientService', () => {
       // Mock para getById no final
       mockConnection.query.mockImplementationOnce(
         (query: string, params: any[], callback: Function) => {
-          callback(null, [{ CLI_CODIGO: 1, CLI_NOME: 'Updated Name' }]);
+          callback(null, [{ CLI_CODIGO: 1, CLI_NOME: 'Updated Name', CLI_NUMERO: '500' }]);
         },
       );
 
-      const payload = { CLI_NOME: 'Updated Name' } as any;
+      const payload = {
+        CLI_NOME: 'Updated Name',
+        CLI_NUMERO: '500',
+        CLI_SITUACAO: 'I',
+        MUN_CODIGO: 3550308,
+        CLI_EMAIL: 'novo@email.com',
+      } as any;
       const result = await service.update('cred-1', 1, 1, payload);
 
-      expect(result).toEqual({ CLI_CODIGO: 1, CLI_NOME: 'Updated Name' });
+      expect(result).toEqual({ CLI_CODIGO: 1, CLI_NOME: 'Updated Name', CLI_NUMERO: '500' });
       expect(mockConnection.query).toHaveBeenCalledWith(
-        expect.stringContaining('UPDATE clientes SET CLI_NOME = ?'),
-        ['Updated Name', 1, 1],
+        expect.stringContaining(
+          'UPDATE clientes SET CLI_NOME = ?, CLI_SITUACAO = ?, MUN_CODIGO = ?, CLI_NUMERO = ?, CLI_EMAIL = ?',
+        ),
+        ['Updated Name', 'I', 3550308, '500', 'novo@email.com', 1, 1],
         expect.any(Function),
       );
     });

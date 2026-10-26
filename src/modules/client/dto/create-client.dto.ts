@@ -11,6 +11,7 @@ export const CreateClientSchema = z.object({
   CLI_FANTASIA: z.string().max(40).optional().nullable(),
   CLI_SEXO: z.string().max(1).optional().nullable(),
   CLI_ENDERECO: z.string().max(120).optional().nullable(),
+  CLI_NUMERO: z.string().max(20).optional().nullable(),
   CLI_COMPL_ENDERECO: z.string().max(40).optional().nullable(),
   CLI_CEP: z.string().max(9).optional().nullable(),
   CLI_BAIRRO: z.string().max(40).optional().nullable(),
@@ -58,6 +59,9 @@ export class CreateClientDto extends ZodDto(CreateClientSchema) {
 
   @ApiPropertyOptional({ description: 'Endereço', example: 'Rua ABC, 123' })
   CLI_ENDERECO?: string | null;
+
+  @ApiPropertyOptional({ description: 'Número do endereço', example: '123' })
+  CLI_NUMERO?: string | null;
 
   @ApiPropertyOptional({ description: 'Complemento', example: 'Apto 101' })
   CLI_COMPL_ENDERECO?: string | null;

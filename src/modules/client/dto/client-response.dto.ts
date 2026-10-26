@@ -31,6 +31,13 @@ export class ClientResponseDto {
   })
   CLI_ENDERECO: string;
 
+  @ApiPropertyOptional({
+    example: '1000',
+    description: 'Número do endereço',
+    nullable: true,
+  })
+  CLI_NUMERO?: string | null;
+
   @ApiProperty({ example: '11988887777', description: 'Telefone' })
   CLI_FONE: string;
 
