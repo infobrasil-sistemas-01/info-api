@@ -149,6 +149,14 @@ export function setupSwagger(app: INestApplication) {
     });
 
   const customCss = `
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #1c2022 !important;
+      background-color: #1c2022 !important;
+      min-height: 100vh;
+      color-scheme: dark;
+    }
     .swagger-ui .topbar {
       display: none !important;
     }
@@ -156,6 +164,7 @@ export function setupSwagger(app: INestApplication) {
       max-width: 1440px;
       margin: 0 auto;
       padding: 16px 24px;
+      background-color: #1c2022 !important;
     }
   `;
 
@@ -169,7 +178,7 @@ export function setupSwagger(app: INestApplication) {
           headerEl.setAttribute('active-doc', 'swagger');
           headerEl.setAttribute('current-version', '${packageVersion}');
           headerEl.setAttribute('versions', ${JSON.stringify(JSON.stringify(availableVersions))});
-          headerEl.setAttribute('theme', 'light');
+          headerEl.setAttribute('theme', 'dark');
           document.body.prepend(headerEl);
         }
       }
