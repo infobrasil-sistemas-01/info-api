@@ -19,6 +19,9 @@ export class TenantConnectionService implements OnModuleInit, OnModuleDestroy {
   /** Cache de pools de conexão Firebird. Um pool por tenant. */
   private poolCache = new Map<string, firebird.ConnectionPool>();
 
+  /** Cache da preferência de wireCrypt negociada com sucesso por tenant (DISABLE vs ENABLE). */
+  private wireCryptMap = new Map<string, number>();
+
   /** Rastreamento do último uso de cada pool para evicção por inatividade. */
   private lastUsedMap = new Map<string, number>();
 
@@ -187,16 +190,20 @@ export class TenantConnectionService implements OnModuleInit, OnModuleDestroy {
         });
       });
     } catch (err: any) {
-      this.logger.warn(
-        `Falha ao obter conexão para o tenant ${credentialsId}: ${err.message}`,
+      this.logger.error(
+        `Falha ao obter conexão para o tenant ${credentialsId}: ${err?.message}${this.extractErrorDetails(err)}`,
+        err?.stack,
       );
 
       // Invalida o pool problemático removendo-o do cache e destruindo-o
       await this.destroyPool(credentialsId);
 
       if (!isRetry) {
+        const nextWireCrypt = this.toggleWireCrypt(credentialsId);
+        const modeLabel =
+          nextWireCrypt === firebird.WIRE_CRYPT_ENABLE ? 'ENABLE' : 'DISABLE';
         this.logger.log(
-          `Tentando recriar o pool para o tenant ${credentialsId} após falha...`,
+          `Tentando reconectar para o tenant ${credentialsId} alternando wireCrypt para ${modeLabel}...`,
         );
         return this.getConnection(credentialsId, true);
       }
@@ -339,6 +346,7 @@ export class TenantConnectionService implements OnModuleInit, OnModuleDestroy {
   async invalidateCredentials(credentialsId: string): Promise<void> {
     await this.destroyPool(credentialsId);
     this.credentialsCache.delete(credentialsId);
+    this.wireCryptMap.delete(credentialsId);
   }
 
   /**
@@ -389,15 +397,16 @@ export class TenantConnectionService implements OnModuleInit, OnModuleDestroy {
         poolEntries.map(async ([credentialsId, pool]) => {
           const start = Date.now();
           try {
-            await this.pingPool(pool);
+            await this.pingPool(pool, credentialsId);
             return {
               credentialsId,
               status: 'up' as const,
               responseTimeMs: Date.now() - start,
             };
           } catch (err: any) {
-            this.logger.warn(
-              `Ping falhou no tenant ${credentialsId} (${err?.message}). Reciclando pool para purgar conexões zumbis...`,
+            this.logger.error(
+              `Ping falhou no tenant ${credentialsId} (${err?.message}${this.extractErrorDetails(err)}). Reciclando pool para purgar conexões zumbis...`,
+              err?.stack,
             );
             // Destrói o pool problemático para não acumular sockets zumbis
             await this.destroyPool(credentialsId);
@@ -416,20 +425,35 @@ export class TenantConnectionService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
-  async ping(credentialsId: string): Promise<void> {
+  async ping(credentialsId: string, isRetry = false): Promise<void> {
     const pool = await this.getPool(credentialsId);
     try {
-      await this.pingPool(pool);
+      await this.pingPool(pool, credentialsId);
     } catch (err: any) {
-      this.logger.warn(
-        `Ping individual falhou no tenant ${credentialsId}: ${err?.message}. Reciclando pool...`,
+      this.logger.error(
+        `Ping individual falhou no tenant ${credentialsId}: ${err?.message}${this.extractErrorDetails(err)}. Reciclando pool...`,
+        err?.stack,
       );
       await this.destroyPool(credentialsId);
+
+      if (!isRetry) {
+        const nextWireCrypt = this.toggleWireCrypt(credentialsId);
+        const modeLabel =
+          nextWireCrypt === firebird.WIRE_CRYPT_ENABLE ? 'ENABLE' : 'DISABLE';
+        this.logger.log(
+          `Tentando ping novamente no tenant ${credentialsId} alternando wireCrypt para ${modeLabel}...`,
+        );
+        return this.ping(credentialsId, true);
+      }
+
       throw err;
     }
   }
 
-  private pingPool(pool: firebird.ConnectionPool): Promise<void> {
+  private pingPool(
+    pool: firebird.ConnectionPool,
+    credentialsId?: string,
+  ): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       let isSettled = false;
       const timeout = setTimeout(() => {
@@ -442,6 +466,12 @@ export class TenantConnectionService implements OnModuleInit, OnModuleDestroy {
       pool.get((err, db) => {
         clearTimeout(timeout);
         if (isSettled) {
+          if (err) {
+            this.logger.error(
+              `Erro retornado pelo driver Firebird após timeout de ping no tenant ${credentialsId ?? 'desconhecido'}: ${err?.message}${this.extractErrorDetails(err)}`,
+              err?.stack,
+            );
+          }
           // Timeout já ocorreu: descarta imediatamente a conexão para não vazar no pool
           if (db) {
             try {
@@ -459,7 +489,8 @@ export class TenantConnectionService implements OnModuleInit, OnModuleDestroy {
         if ((db as any).listenerCount('error') === 0) {
           (db as any).on('error', (dbErr: any) => {
             this.logger.error(
-              `Erro na conexão Firebird durante pingPool: ${dbErr?.message}`,
+              `Erro na conexão Firebird durante pingPool no tenant ${credentialsId ?? 'desconhecido'}: ${dbErr?.message}${this.extractErrorDetails(dbErr)}`,
+              dbErr?.stack,
             );
           });
         }
@@ -511,8 +542,12 @@ export class TenantConnectionService implements OnModuleInit, OnModuleDestroy {
     const connectionOptions = await this.getCredentials(credentialsId);
     const pool = this.firebirdService.createPool(connectionOptions);
 
+    const wireCryptLabel =
+      connectionOptions.wireCrypt === firebird.WIRE_CRYPT_ENABLE
+        ? 'ENABLE'
+        : 'DISABLE';
     this.logger.log(
-      `Novo pool de conexões criado para o tenant: ${credentialsId} (${connectionOptions.host})`,
+      `Novo pool de conexões criado para o tenant: ${credentialsId} (${connectionOptions.host}, wireCrypt: ${wireCryptLabel})`,
     );
     this.poolCache.set(credentialsId, pool);
 
@@ -553,10 +588,12 @@ export class TenantConnectionService implements OnModuleInit, OnModuleDestroy {
       );
     }
 
+    const wireCrypt = this.getWireCrypt(credentialsId);
+
     const options: IConnectionOptions = {
       host: credentials.host,
       database: credentials.database,
-      wireCrypt: firebird.WIRE_CRYPT_ENABLE,
+      wireCrypt,
       user: credentials.user,
       id: credentials?.dbId,
       port: credentials.port,
@@ -566,5 +603,35 @@ export class TenantConnectionService implements OnModuleInit, OnModuleDestroy {
     this.credentialsCache.set(credentialsId, options);
 
     return options;
+  }
+
+  private extractErrorDetails(err: any): string {
+    if (!err || typeof err !== 'object') return '';
+    const details: string[] = [];
+    if (err.code) details.push(`code: ${err.code}`);
+    if (err.errno) details.push(`errno: ${err.errno}`);
+    if (err.syscall) details.push(`syscall: ${err.syscall}`);
+    if (err.address) details.push(`address: ${err.address}`);
+    if (err.port) details.push(`port: ${err.port}`);
+    return details.length > 0 ? ` [${details.join(', ')}]` : '';
+  }
+
+  private getWireCrypt(credentialsId: string): number {
+    if (this.wireCryptMap.has(credentialsId)) {
+      return this.wireCryptMap.get(credentialsId)!;
+    }
+    // Padrão inicial: WIRE_CRYPT_DISABLE (alinhado com servidores FB 3.0/2.5 que operam com WireCrypt=Disabled)
+    return firebird.WIRE_CRYPT_DISABLE;
+  }
+
+  private toggleWireCrypt(credentialsId: string): number {
+    const current = this.getWireCrypt(credentialsId);
+    const next =
+      current === firebird.WIRE_CRYPT_DISABLE
+        ? firebird.WIRE_CRYPT_ENABLE
+        : firebird.WIRE_CRYPT_DISABLE;
+    this.wireCryptMap.set(credentialsId, next);
+    this.credentialsCache.delete(credentialsId);
+    return next;
   }
 }

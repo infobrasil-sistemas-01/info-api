@@ -33,7 +33,7 @@ export class FirebirdService {
       password: decrypt(ids(options.id)),
     };
 
-    if (options.wireCrypt) {
+    if (options.wireCrypt !== undefined) {
       optionsFinal.wireCrypt = options.wireCrypt;
     }
 
