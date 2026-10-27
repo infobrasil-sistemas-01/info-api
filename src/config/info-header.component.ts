@@ -436,6 +436,23 @@ class InfoApiHeader extends HTMLElement {
           box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
         }
 
+        .btn-outline {
+          background: rgba(255, 255, 255, 0.05);
+          color: var(--text);
+          border: 1px solid var(--border);
+        }
+
+        .btn-outline:hover {
+          background: rgba(16, 185, 129, 0.12);
+          border-color: var(--primary);
+          color: var(--primary);
+          transform: translateY(-1px);
+        }
+
+        :host([theme="light"]) .btn-outline {
+          background: rgba(0, 0, 0, 0.04);
+        }
+
         .btn-hamburger {
           display: none;
           background: transparent;
@@ -556,6 +573,17 @@ class InfoApiHeader extends HTMLElement {
                     <span class="desc">Histórico de versões da API</span>
                   </div>
                 </a>
+                <a href="/docs/postman" class="dropdown-item" download="infoapi-postman-collection.json">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                  </svg>
+                  <div>
+                    <strong>Coleção Postman</strong>
+                    <span class="desc">Download da coleção oficial</span>
+                  </div>
+                </a>
               </div>
             </li>
 
@@ -603,6 +631,15 @@ class InfoApiHeader extends HTMLElement {
             </button>
             \` : ''}
 
+            <a href="/docs/postman" class="btn btn-outline" title="Baixar Postman Collection" download="infoapi-postman-collection.json">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <span>Baixar Postman</span>
+            </a>
+
             <a href="/integration/form" class="btn btn-primary" title="Solicitar Credenciais">
               <span>Solicitar Acesso</span>
             </a>
@@ -626,6 +663,14 @@ class InfoApiHeader extends HTMLElement {
         <a href="/docs" class="mobile-nav-link \${activeDoc === 'swagger' ? 'active' : ''}">Swagger UI</a>
         <a href="/scalar" class="mobile-nav-link \${activeDoc === 'scalar' ? 'active' : ''}">Scalar Reference</a>
         <a href="/changelog" class="mobile-nav-link">Changelog</a>
+        <a href="/docs/postman" class="mobile-nav-link" download="infoapi-postman-collection.json">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span>Baixar Coleção Postman</span>
+        </a>
         <a href="/status" class="mobile-nav-link">Status do Sistema</a>
         <a href="/integration/client" class="mobile-nav-link">Área do Cliente</a>
         <a href="/integration/admin" class="mobile-nav-link">Painel Administrativo</a>

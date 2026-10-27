@@ -203,6 +203,47 @@ export function setupSwagger(app: INestApplication) {
     res.send(customJsCode);
   });
 
+  // Servir o arquivo da Postman Collection oficial
+  const postmanFilePath = path.join(docsDir, 'infoapi-postman-collection.json');
+  const rootPostmanFilePath = path.join(
+    process.cwd(),
+    'infoapi-postman-collection.json',
+  );
+
+  const sendPostmanCollection = (res: any, isAttachment = false) => {
+    const targetFile = fs.existsSync(postmanFilePath)
+      ? postmanFilePath
+      : fs.existsSync(rootPostmanFilePath)
+        ? rootPostmanFilePath
+        : null;
+
+    if (!targetFile) {
+      return res.status(404).json({
+        statusCode: 404,
+        message:
+          'Postman collection não encontrada. Execute `npm run postman:generate`.',
+      });
+    }
+
+    if (isAttachment) {
+      res.setHeader(
+        'Content-Disposition',
+        'attachment; filename="infoapi-postman-collection.json"',
+      );
+    }
+    res.setHeader('Content-Type', 'application/json');
+    const content = fs.readFileSync(targetFile, 'utf8');
+    res.send(content);
+  };
+
+  app.getHttpAdapter().get('/docs/postman', (req: any, res: any) => {
+    sendPostmanCollection(res, true);
+  });
+
+  app.getHttpAdapter().get('/docs/postman.json', (req: any, res: any) => {
+    sendPostmanCollection(res, false);
+  });
+
   // Função geradora de HTML do Scalar Standalone (com Shadow DOM InfoApiHeader)
   const getScalarHtml = ({
     specUrl,
