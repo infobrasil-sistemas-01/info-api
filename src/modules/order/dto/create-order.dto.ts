@@ -29,71 +29,82 @@ export const PostOrderSchema = z.object({
 });
 
 export class PostOrderDto extends ZodDto(PostOrderSchema) {
-  @ApiPropertyOptional({ description: 'ID do cliente (opcional)' })
+  @ApiPropertyOptional({ description: 'ID do cliente (opcional)', example: 1001 })
   client_id?: number;
 
   @ApiPropertyOptional({
     description: 'ID do prestador de serviços (opcional)',
+    example: 1,
   })
   provider_id?: number;
 
   @ApiPropertyOptional({
     description:
       'Código do funcionário/vendedor (FUN_CODIGO). Obrigatório para integrações M2M/parceiros e deve corresponder ao funcionário vinculado ao operador (user_id). Em autenticação de operador (H2M), assume automaticamente o funcionário autenticado.',
+    example: 10,
   })
   employee_id?: number;
 
   @ApiPropertyOptional({
     description:
       'Código do usuário/operador (USU_CODIGO). Obrigatório para integrações M2M/parceiros. Em autenticação de operador (H2M), assume automaticamente o usuário autenticado ou deve ser idêntico ao mesmo.',
+    example: 9999,
   })
   user_id?: number;
 
-  @ApiPropertyOptional({ description: 'ID da loja (opcional)' })
+  @ApiPropertyOptional({ description: 'ID da loja (opcional)', example: 1 })
   store_id?: number;
 
-  @ApiPropertyOptional({ description: 'ID da tabela de preços (opcional)' })
+  @ApiPropertyOptional({ description: 'ID da tabela de preços (opcional)', example: 1 })
   price_table_id?: number;
 
-  @ApiProperty({ description: 'Data do pedido' })
+  @ApiProperty({ description: 'Data do pedido (YYYY-MM-DD)', example: '2026-10-27' })
   date!: string;
 
-  @ApiProperty({ description: 'Hora do pedido' })
+  @ApiProperty({ description: 'Hora do pedido (HH:MM:SS)', example: '14:30:00' })
   hour!: string;
 
-  @ApiPropertyOptional({ description: 'Valor de acréscimo/taxa' })
+  @ApiPropertyOptional({ description: 'Valor de acréscimo/taxa', example: 5.5 })
   taxes?: number;
 
-  @ApiPropertyOptional({ description: 'Valor de desconto' })
+  @ApiPropertyOptional({ description: 'Valor de desconto', example: 10.0 })
   discount?: number;
 
-  @ApiPropertyOptional({ description: 'Informações adicionais da loja' })
+  @ApiPropertyOptional({ description: 'Informações adicionais da loja', example: 'Entregar no período da tarde' })
   store_note?: string;
 
-  @ApiPropertyOptional({ description: 'Taxa do meio de pagamento' })
+  @ApiPropertyOptional({ description: 'Taxa do meio de pagamento', example: 1.99 })
   payment_method_rate?: number;
 
   @ApiPropertyOptional({
     description:
       'Quantidade de parcelas (apenas para meios de pagamento com parcelamento)',
+    example: 1,
   })
   installment?: number;
 
-  @ApiProperty({ description: 'Meio de pagamento' })
+  @ApiProperty({ description: 'Meio de pagamento', example: 'PIX' })
   payment_method!: string;
 
-  @ApiPropertyOptional({ description: 'Código do plano de pagamento' })
+  @ApiPropertyOptional({ description: 'Código do plano de pagamento', example: 1 })
   payment_plan_code?: number;
 
-  @ApiProperty({ description: 'Data de pagamento' })
+  @ApiProperty({ description: 'Data de pagamento (YYYY-MM-DD)', example: '2026-10-27' })
   payment_date!: string;
 
-  @ApiPropertyOptional({ description: 'Juros do pedido' })
+  @ApiPropertyOptional({ description: 'Juros do pedido', example: 0 })
   interest?: number;
 
   @ApiPropertyOptional({
     description: 'Lista de produtos vendidos',
     type: [SoldProductDto],
+    example: [
+      {
+        product_id: 101,
+        quantity: 2,
+        variant_id: 1,
+      },
+    ],
   })
   products_sold?: SoldProductDto[];
 }

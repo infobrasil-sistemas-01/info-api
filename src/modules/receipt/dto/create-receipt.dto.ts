@@ -9,6 +9,7 @@ export const PostReceiptSchema = z.object({
 export class PostReceiptDto extends ZodDto(PostReceiptSchema) {
   @ApiProperty({
     description: 'ID do pedido para o qual o cupom fiscal será gerado',
+    example: 12345,
   })
   orderId: number;
 }

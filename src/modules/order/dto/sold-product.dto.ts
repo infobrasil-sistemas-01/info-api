@@ -9,12 +9,15 @@ export const SoldProductSchema = z.object({
 });
 
 export class SoldProductDto extends ZodDto(SoldProductSchema) {
-  @ApiProperty({ description: 'ID do produto' })
+  @ApiProperty({ description: 'ID do produto', example: 101 })
   product_id: number;
 
-  @ApiProperty({ description: 'Quantidade vendida' })
+  @ApiProperty({ description: 'Quantidade vendida', example: 2 })
   quantity: number;
 
-  @ApiPropertyOptional({ description: 'ID da variante do produto' })
+  @ApiPropertyOptional({
+    description: 'ID da variante do produto',
+    example: 1,
+  })
   variant_id?: number;
 }

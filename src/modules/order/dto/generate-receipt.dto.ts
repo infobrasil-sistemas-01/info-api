@@ -8,9 +8,16 @@ export const GenerateReceiptSchema = z.object({
 });
 
 export class GenerateReceiptDto extends ZodDto(GenerateReceiptSchema) {
-  @ApiProperty({ description: 'Email do cliente para envio do cupom fiscal' })
+  @ApiProperty({
+    description: 'Email do cliente para envio do cupom fiscal',
+    example: 'cliente@exemplo.com.br',
+  })
   email!: string;
 
-  @ApiProperty({ description: 'CPF do cliente (opcional, para fins fiscais)' })
+  @ApiProperty({
+    description: 'CPF do cliente (opcional, para fins fiscais)',
+    example: '12345678901',
+    required: false,
+  })
   cpf?: string;
 }
