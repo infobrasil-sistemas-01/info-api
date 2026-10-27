@@ -628,13 +628,6 @@ class InfoApiHeader extends HTMLElement {
                 <span>Área do Cliente</span>
               </a>
             </li>
-
-            <!-- Admin -->
-            <li>
-              <a href="/integration/admin" class="nav-link" title="Painel Administrativo">
-                <span>Admin</span>
-              </a>
-            </li>
           </ul>
 
           <div class="header-actions">
@@ -701,7 +694,6 @@ class InfoApiHeader extends HTMLElement {
         </a>
         <a href="/status" class="mobile-nav-link">Status do Sistema</a>
         <a href="/integration/client" class="mobile-nav-link">Área do Cliente</a>
-        <a href="/integration/admin" class="mobile-nav-link">Painel Administrativo</a>
         \${activeDoc !== 'swagger' ? \`
         <button class="mobile-nav-link" id="mobile-theme-toggle" style="background: transparent; border: none; width: 100%; cursor: pointer;">
           <span>Alternar Tema (Claro / Escuro)</span>
