@@ -1,5 +1,45 @@
 [
   {
+    "version": "1.20.9",
+    "date": "2026-10-27",
+    "title": "Inclusão de download button and endpoints for Postman collection in Swagger and Scalar e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral.",
+    "highlights": [
+      "Inclusão de download button and endpoints for Postman collection in Swagger and Scalar",
+      "Implementação de build script to generate official Postman collection"
+    ],
+    "items": [
+      {
+        "module": "Geral",
+        "type": "feature",
+        "title": "Inclusão de download button and endpoints for Postman collection in Swagger and Scalar",
+        "description": "Atualização no módulo de Geral: add download button and endpoints for Postman collection in Swagger and Scalar.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add download button and endpoints for Postman collection in Swagger and Scalar",
+        "commitHash": "c9a26e8"
+      },
+      {
+        "module": "Geral",
+        "type": "feature",
+        "title": "Implementação de build script to generate official Postman collection",
+        "description": "Atualização no módulo de Geral: implement build script to generate official Postman collection.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "implement build script to generate official Postman collection",
+        "commitHash": "5c1c74f"
+      },
+      {
+        "module": "Geral",
+        "type": "fix",
+        "title": "improve header responsiveness and prevent button cutoff on medium viewports",
+        "description": "Atualização no módulo de Geral: improve header responsiveness and prevent button cutoff on medium viewports.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "improve header responsiveness and prevent button cutoff on medium viewports",
+        "commitHash": "05b4383"
+      }
+    ],
+    "totalChanges": 3
+  },
+  {
     "version": "1.20.8",
     "date": "2026-10-26",
     "title": "Inclusão de new fields on POST /clients and PATCH /clients e melhorias",

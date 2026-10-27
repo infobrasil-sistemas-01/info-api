@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.20.9](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.20.8...v1.20.9) (2026-10-27)
+
+
+### Features
+
+* **docs:** add download button and endpoints for Postman collection in Swagger and Scalar ([c9a26e8](https://github.com/infobrasil-sistemas-01/info-api/commit/c9a26e880503d757fbe115523efd48436e1d8793))
+* **postman:** implement build script to generate official Postman collection ([5c1c74f](https://github.com/infobrasil-sistemas-01/info-api/commit/5c1c74ff22982ce2690b697436bb5aa14f6c12fe))
+
+
+### Bug Fixes
+
+* **docs:** improve header responsiveness and prevent button cutoff on medium viewports ([05b4383](https://github.com/infobrasil-sistemas-01/info-api/commit/05b4383226901b42ab9c19c4753fed320ec2245a))
+
 ## [1.20.8](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.20.7...v1.20.8) (2026-10-26)
 
 

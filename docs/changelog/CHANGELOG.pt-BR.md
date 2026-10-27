@@ -6,6 +6,24 @@ Para visualizar a versão interativa com busca em tempo real, acesse o portal we
 
 ---
 
+## [v1.20.9] - 2026-10-27
+
+### 📌 Inclusão de download button and endpoints for Postman collection in Swagger and Scalar e melhorias
+> Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral.
+
+**Destaques:**
+- ⭐ Inclusão de download button and endpoints for Postman collection in Swagger and Scalar
+- ⭐ Implementação de build script to generate official Postman collection
+
+#### 🚀 Novidades & Melhorias
+- **[Geral]** Inclusão de download button and endpoints for Postman collection in Swagger and Scalar: Atualização no módulo de Geral: add download button and endpoints for Postman collection in Swagger and Scalar.
+- **[Geral]** Implementação de build script to generate official Postman collection: Atualização no módulo de Geral: implement build script to generate official Postman collection.
+
+#### 🛠️ Correções & Estabilidade
+- **[Geral]** improve header responsiveness and prevent button cutoff on medium viewports: Atualização no módulo de Geral: improve header responsiveness and prevent button cutoff on medium viewports.
+
+---
+
 ## [v1.20.8] - 2026-10-26
 
 ### 📌 Inclusão de new fields on POST /clients and PATCH /clients e melhorias

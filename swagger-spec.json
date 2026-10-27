@@ -4498,7 +4498,7 @@
   "info": {
     "title": "InfoBrasil API",
     "description": "API de integração do sistema Retaguarda (by InfoBrasil) com outros sistemas, como ERPs, e-commerce, etc. <br><br>\n      Se deseja solicitar um acesso, preencha o formulário em: <a href='https://info-api.infobrasilsistemas.com.br/integration/form'>Solicitar Acesso</a>\n      <br><br>\n      **O sistema conta com duas formas de autenticação:**<br> \n      - Basic Auth para login e obtenção de token JWT<br>\n      - JWT para acesso aos endpoints protegidos.\n      <br><br>\n      Para verificar a disponibilidade da API acesse nossa <a href='/status'>Página de Status</a> | Para novidades e histórico de versões acesse o <a href='/changelog'>Changelog Oficial</a>\n      <br><br>\n      A API é organizada em módulos, cada um responsável por uma área específica do sistema, como produtos, clientes, vendas, etc.",
-    "version": "1.20.8",
+    "version": "1.20.9",
     "contact": {
       "name": "InfoBrasil Sistemas",
       "url": "https://www.infobrasilsistemas.com.br",
@@ -4720,7 +4720,8 @@
         "properties": {
           "refresh_token": {
             "type": "string",
-            "description": "Token de refresh para obter um novo token de acesso"
+            "description": "Token de refresh para obter um novo token de acesso",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
           }
         },
         "required": [
@@ -4992,15 +4993,18 @@
         "properties": {
           "product_id": {
             "type": "number",
-            "description": "ID do produto"
+            "description": "ID do produto",
+            "example": 101
           },
           "quantity": {
             "type": "number",
-            "description": "Quantidade vendida"
+            "description": "Quantidade vendida",
+            "example": 2
           },
           "variant_id": {
             "type": "number",
-            "description": "ID da variante do produto"
+            "description": "ID da variante do produto",
+            "example": 1
           }
         },
         "required": [
@@ -5013,74 +5017,98 @@
         "properties": {
           "client_id": {
             "type": "number",
-            "description": "ID do cliente (opcional)"
+            "description": "ID do cliente (opcional)",
+            "example": 1001
           },
           "provider_id": {
             "type": "number",
-            "description": "ID do prestador de serviços (opcional)"
+            "description": "ID do prestador de serviços (opcional)",
+            "example": 1
           },
           "employee_id": {
             "type": "number",
-            "description": "Código do funcionário/vendedor (FUN_CODIGO). Obrigatório para integrações M2M/parceiros e deve corresponder ao funcionário vinculado ao operador (user_id). Em autenticação de operador (H2M), assume automaticamente o funcionário autenticado."
+            "description": "Código do funcionário/vendedor (FUN_CODIGO). Obrigatório para integrações M2M/parceiros e deve corresponder ao funcionário vinculado ao operador (user_id). Em autenticação de operador (H2M), assume automaticamente o funcionário autenticado.",
+            "example": 10
           },
           "user_id": {
             "type": "number",
-            "description": "Código do usuário/operador (USU_CODIGO). Obrigatório para integrações M2M/parceiros. Em autenticação de operador (H2M), assume automaticamente o usuário autenticado ou deve ser idêntico ao mesmo."
+            "description": "Código do usuário/operador (USU_CODIGO). Obrigatório para integrações M2M/parceiros. Em autenticação de operador (H2M), assume automaticamente o usuário autenticado ou deve ser idêntico ao mesmo.",
+            "example": 9999
           },
           "store_id": {
             "type": "number",
-            "description": "ID da loja (opcional)"
+            "description": "ID da loja (opcional)",
+            "example": 1
           },
           "price_table_id": {
             "type": "number",
-            "description": "ID da tabela de preços (opcional)"
+            "description": "ID da tabela de preços (opcional)",
+            "example": 1
           },
           "date": {
             "type": "string",
-            "description": "Data do pedido"
+            "description": "Data do pedido (YYYY-MM-DD)",
+            "example": "2026-10-27"
           },
           "hour": {
             "type": "string",
-            "description": "Hora do pedido"
+            "description": "Hora do pedido (HH:MM:SS)",
+            "example": "14:30:00"
           },
           "taxes": {
             "type": "number",
-            "description": "Valor de acréscimo/taxa"
+            "description": "Valor de acréscimo/taxa",
+            "example": 5.5
           },
           "discount": {
             "type": "number",
-            "description": "Valor de desconto"
+            "description": "Valor de desconto",
+            "example": 10
           },
           "store_note": {
             "type": "string",
-            "description": "Informações adicionais da loja"
+            "description": "Informações adicionais da loja",
+            "example": "Entregar no período da tarde"
           },
           "payment_method_rate": {
             "type": "number",
-            "description": "Taxa do meio de pagamento"
+            "description": "Taxa do meio de pagamento",
+            "example": 1.99
           },
           "installment": {
             "type": "number",
-            "description": "Quantidade de parcelas (apenas para meios de pagamento com parcelamento)"
+            "description": "Quantidade de parcelas (apenas para meios de pagamento com parcelamento)",
+            "example": 1
           },
           "payment_method": {
             "type": "string",
-            "description": "Meio de pagamento"
+            "description": "Meio de pagamento",
+            "example": "PIX"
           },
           "payment_plan_code": {
             "type": "number",
-            "description": "Código do plano de pagamento"
+            "description": "Código do plano de pagamento",
+            "example": 1
           },
           "payment_date": {
             "type": "string",
-            "description": "Data de pagamento"
+            "description": "Data de pagamento (YYYY-MM-DD)",
+            "example": "2026-10-27"
           },
           "interest": {
             "type": "number",
-            "description": "Juros do pedido"
+            "description": "Juros do pedido",
+            "example": 0
           },
           "products_sold": {
             "description": "Lista de produtos vendidos",
+            "example": [
+              {
+                "product_id": 101,
+                "quantity": 2,
+                "variant_id": 1
+              }
+            ],
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/SoldProductDto"
