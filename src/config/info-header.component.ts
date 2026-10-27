@@ -453,6 +453,10 @@ class InfoApiHeader extends HTMLElement {
           background: rgba(0, 0, 0, 0.04);
         }
 
+        .btn-text-short {
+          display: none;
+        }
+
         .btn-hamburger {
           display: none;
           background: transparent;
@@ -505,7 +509,30 @@ class InfoApiHeader extends HTMLElement {
           color: var(--primary);
         }
 
-        @media (max-width: 1080px) {
+        @media (max-width: 1400px) {
+          .header-inner {
+            gap: 0.85rem;
+          }
+          .nav-menu {
+            gap: 0.65rem;
+          }
+          .nav-link {
+            font-size: 0.82rem;
+            padding: 5px 8px;
+          }
+          .btn {
+            padding: 6px 11px;
+            font-size: 0.82rem;
+          }
+          .btn-text-full {
+            display: none;
+          }
+          .btn-text-short {
+            display: inline;
+          }
+        }
+
+        @media (max-width: 1240px) {
           .nav-menu {
             display: none;
           }
@@ -637,7 +664,8 @@ class InfoApiHeader extends HTMLElement {
                 <polyline points="7 10 12 15 17 10"></polyline>
                 <line x1="12" y1="15" x2="12" y2="3"></line>
               </svg>
-              <span>Baixar Postman</span>
+              <span class="btn-text-full">Baixar Postman</span>
+              <span class="btn-text-short">Postman</span>
             </a>
 
             <a href="/integration/form" class="btn btn-primary" title="Solicitar Credenciais">
@@ -713,7 +741,7 @@ class InfoApiHeader extends HTMLElement {
 
     if (docsDropdown) {
       docsDropdown.addEventListener('click', (e) => {
-        if (window.innerWidth <= 1080) {
+        if (window.innerWidth <= 1240) {
           docsDropdown.classList.toggle('open');
         }
       });
