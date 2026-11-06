@@ -6,6 +6,22 @@ Para visualizar a versão interativa com busca em tempo real, acesse o portal we
 
 ---
 
+## [v1.20.10] - 2026-11-06
+
+### 📌 Implementação de GET endpoints, RBAC permissions and frontend integration for production orders e melhorias
+> Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral.
+
+**Destaques:**
+- ⭐ Implementação de GET endpoints, RBAC permissions and frontend integration for production orders
+
+#### 🚀 Novidades & Melhorias
+- **[Geral]** Implementação de GET endpoints, RBAC permissions and frontend integration for production orders: Atualização no módulo de Geral: implement GET endpoints, RBAC permissions and frontend integration for production orders.
+
+#### 🛠️ Correções & Estabilidade
+- **[Geral]** Correção em postgresql permission migration script according to ddl schema: Atualização no módulo de Geral: fix postgresql permission migration script according to ddl schema.
+
+---
+
 ## [v1.20.9] - 2026-10-27
 
 ### 📌 Inclusão de download button and endpoints for Postman collection in Swagger and Scalar e melhorias

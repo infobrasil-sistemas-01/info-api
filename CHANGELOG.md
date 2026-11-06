@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.20.10](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.20.9...v1.20.10) (2026-11-06)
+
+
+### Features
+
+* **production-order:** implement GET endpoints, RBAC permissions and frontend integration for production orders ([7eaa309](https://github.com/infobrasil-sistemas-01/info-api/commit/7eaa3095749bdaebf4e39ff1556a08aef2c3e7c1))
+
+
+### Bug Fixes
+
+* **rbac:** fix postgresql permission migration script according to ddl schema ([d57d538](https://github.com/infobrasil-sistemas-01/info-api/commit/d57d538c30cfc7776717bcedc5973e9e63be050f))
+
 ## [1.20.9](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.20.8...v1.20.9) (2026-10-27)
 
 

@@ -4493,12 +4493,281 @@
           "Feature Requests"
         ]
       }
+    },
+    "/production-order": {
+      "get": {
+        "description": "Retorna uma lista paginada de ordens de produção da tabela ORDENSPRODUCAO com informações de situação, loja, usuário e produto acabado.",
+        "operationId": "ProductionOrderController_get",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Página atual",
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "description": "Itens por página",
+            "schema": {
+              "example": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "storeId",
+            "required": false,
+            "in": "query",
+            "description": "Código da loja (LOJ_CODIGO)",
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "statusId",
+            "required": false,
+            "in": "query",
+            "description": "Código da situação (SIT_CODIGO)",
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "productCode",
+            "required": false,
+            "in": "query",
+            "description": "Código do produto produzido (PRO_CODIGO)",
+            "schema": {
+              "example": "00000000000001",
+              "type": "string"
+            }
+          },
+          {
+            "name": "productionOrderNumber",
+            "required": false,
+            "in": "query",
+            "description": "Número da ordem de produção (ORP_NUMERO)",
+            "schema": {
+              "example": 201,
+              "type": "number"
+            }
+          },
+          {
+            "name": "startDate",
+            "required": false,
+            "in": "query",
+            "description": "Data de cadastro inicial (YYYY-MM-DD)",
+            "schema": {
+              "example": "2026-01-01",
+              "type": "string"
+            }
+          },
+          {
+            "name": "endDate",
+            "required": false,
+            "in": "query",
+            "description": "Data de cadastro final (YYYY-MM-DD)",
+            "schema": {
+              "example": "2026-01-31",
+              "type": "string"
+            }
+          },
+          {
+            "name": "startDateBaixa",
+            "required": false,
+            "in": "query",
+            "description": "Data de baixa inicial (YYYY-MM-DD)",
+            "schema": {
+              "example": "2026-01-01",
+              "type": "string"
+            }
+          },
+          {
+            "name": "endDateBaixa",
+            "required": false,
+            "in": "query",
+            "description": "Data de baixa final (YYYY-MM-DD)",
+            "schema": {
+              "example": "2026-01-31",
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Request-Count",
+            "in": "header",
+            "description": "Se definido como \"true\", calcula e retorna cabeçalhos de paginação (X-Total-Count, X-Total-Pages, X-Current-Page, X-Per-Page) na resposta.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "true"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de ordens de produção retornada com sucesso.",
+            "headers": {
+              "X-Total-Count": {
+                "description": "Total de registros encontrados considerando os filtros (presente quando X-Request-Count: true)",
+                "schema": {
+                  "type": "integer",
+                  "example": 120
+                }
+              },
+              "X-Total-Pages": {
+                "description": "Total de páginas calculadas (presente quando X-Request-Count: true)",
+                "schema": {
+                  "type": "integer",
+                  "example": 12
+                }
+              },
+              "X-Current-Page": {
+                "description": "Página atual solicitada (presente quando X-Request-Count: true)",
+                "schema": {
+                  "type": "integer",
+                  "example": 1
+                }
+              },
+              "X-Per-Page": {
+                "description": "Quantidade de registros por página (presente quando X-Request-Count: true)",
+                "schema": {
+                  "type": "integer",
+                  "example": 10
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProductionOrderResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Parâmetros de busca inválidos."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Listar ordens de produção",
+        "tags": [
+          "Production Order"
+        ]
+      }
+    },
+    "/production-order/{id}": {
+      "get": {
+        "description": "Retorna os detalhes completos da ordem de produção e seu array aninhado de insumos/itens.",
+        "operationId": "ProductionOrderController_getById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Número da ordem de produção (ORP_NUMERO)",
+            "schema": {
+              "example": 201,
+              "type": "number"
+            }
+          },
+          {
+            "name": "storeId",
+            "required": false,
+            "in": "query",
+            "description": "Código da loja (LOJ_CODIGO)",
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes da ordem de produção com itens retornados com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductionOrderDetailResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Ordem de produção não encontrada."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Obter ordem de produção por ID com insumos",
+        "tags": [
+          "Production Order"
+        ]
+      }
+    },
+    "/production-order/{id}/items": {
+      "get": {
+        "description": "Retorna diretamente o array de insumos consumidos vinculados a uma ordem de produção específica.",
+        "operationId": "ProductionOrderController_getItems",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Número da ordem de produção (ORP_NUMERO)",
+            "schema": {
+              "example": 201,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Itens da ordem de produção retornados com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProductionOrderItemResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Listar itens/insumos de uma ordem de produção",
+        "tags": [
+          "Production Order"
+        ]
+      }
     }
   },
   "info": {
     "title": "InfoBrasil API",
     "description": "API de integração do sistema Retaguarda (by InfoBrasil) com outros sistemas, como ERPs, e-commerce, etc. <br><br>\n      Se deseja solicitar um acesso, preencha o formulário em: <a href='https://info-api.infobrasilsistemas.com.br/integration/form'>Solicitar Acesso</a>\n      <br><br>\n      **O sistema conta com duas formas de autenticação:**<br> \n      - Basic Auth para login e obtenção de token JWT<br>\n      - JWT para acesso aos endpoints protegidos.\n      <br><br>\n      Para verificar a disponibilidade da API acesse nossa <a href='/status'>Página de Status</a> | Para novidades e histórico de versões acesse o <a href='/changelog'>Changelog Oficial</a>\n      <br><br>\n      A API é organizada em módulos, cada um responsável por uma área específica do sistema, como produtos, clientes, vendas, etc.",
-    "version": "1.20.9",
+    "version": "1.20.10",
     "contact": {
       "name": "InfoBrasil Sistemas",
       "url": "https://www.infobrasilsistemas.com.br",
@@ -4537,6 +4806,10 @@
     {
       "name": "Product / Group",
       "description": "Endpoints relacionados à gestão de grupos e produtos vinculados a grupos"
+    },
+    {
+      "name": "Production Order",
+      "description": "Endpoints relacionados à gestão de ordens de produção e insumos consumidos"
     },
     {
       "name": "Order",
@@ -9791,6 +10064,380 @@
         },
         "required": [
           "responseText"
+        ]
+      },
+      "ProductionOrderResponseDto": {
+        "type": "object",
+        "properties": {
+          "ORP_NUMERO": {
+            "type": "number",
+            "example": 201,
+            "description": "Número identificador da Ordem de Produção (ORP_NUMERO)"
+          },
+          "SIT_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código da situação da ordem (SIT_CODIGO)"
+          },
+          "SIT_DESCRICAO": {
+            "type": "string",
+            "example": "EM ANDAMENTO",
+            "description": "Descrição da situação"
+          },
+          "LOJ_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código da loja/filial (LOJ_CODIGO)"
+          },
+          "LOJ_NOME": {
+            "type": "string",
+            "example": "LOJA MATRIZ",
+            "description": "Razão social da loja"
+          },
+          "LOJ_FANTASIA": {
+            "type": "string",
+            "example": "MATRIZ",
+            "description": "Nome fantasia da loja"
+          },
+          "USU_CODIGO": {
+            "type": "number",
+            "example": 10,
+            "description": "Código do usuário operador/criador (USU_CODIGO)"
+          },
+          "USU_APELIDO": {
+            "type": "string",
+            "example": "operador.joao",
+            "description": "Apelido do usuário responsável"
+          },
+          "ORP_DATA": {
+            "type": "string",
+            "example": "2026-03-15T00:00:00.000Z",
+            "description": "Data de registro da ordem (ORP_DATA)"
+          },
+          "ORP_HORA": {
+            "type": "string",
+            "example": "08:30:00",
+            "description": "Hora de registro da ordem (ORP_HORA)"
+          },
+          "ORP_DATAINICIO": {
+            "type": "string",
+            "example": "2026-03-15T00:00:00.000Z",
+            "description": "Data de início prevista ou real (ORP_DATAINICIO)"
+          },
+          "ORP_DATAFINAL": {
+            "type": "string",
+            "example": "2026-03-20T00:00:00.000Z",
+            "description": "Data final prevista ou real (ORP_DATAFINAL)"
+          },
+          "PRO_CODIGO": {
+            "type": "string",
+            "example": "00000000000045",
+            "description": "Código do produto acabado produzido (PRO_CODIGO)"
+          },
+          "PRO_DESCRICAO": {
+            "type": "string",
+            "example": "BOLO DE CHOCOLATE 1KG",
+            "description": "Descrição do produto principal produzido"
+          },
+          "PRO_UNIDADE": {
+            "type": "string",
+            "example": "UN",
+            "description": "Unidade de medida do produto principal"
+          },
+          "PRO_CODIGOBAR": {
+            "type": "string",
+            "example": "7891234560045",
+            "description": "Código de barras do produto principal"
+          },
+          "ETA_NUMERO": {
+            "type": "number",
+            "example": 2,
+            "description": "Etapa / fase do processo produtivo (ETA_NUMERO)"
+          },
+          "COM_NUMERO": {
+            "type": "number",
+            "example": 105,
+            "description": "Identificador de composição / compra 1 (COM_NUMERO)"
+          },
+          "COM_NUMERO2": {
+            "type": "number",
+            "example": 105,
+            "description": "Identificador de composição / compra 2 (COM_NUMERO2)"
+          },
+          "ORP_QUANTIDADE": {
+            "type": "number",
+            "example": 50,
+            "description": "Quantidade planejada a ser produzida (ORP_QUANTIDADE)"
+          },
+          "ORP_QUANTIDADEACABADA": {
+            "type": "number",
+            "example": 48,
+            "description": "Quantidade efetivamente acabada (ORP_QUANTIDADEACABADA)"
+          },
+          "ORP_TOTAL": {
+            "type": "number",
+            "example": 720.5,
+            "description": "Valor total acumulado da produção (ORP_TOTAL)"
+          },
+          "ORP_OBS": {
+            "type": "string",
+            "example": "Produção lote especial de páscoa",
+            "description": "Observações da ordem de produção (ORP_OBS)"
+          },
+          "ORP_DATABAIXA": {
+            "type": "string",
+            "example": "2026-03-20T00:00:00.000Z",
+            "description": "Data em que a ordem foi baixada/finalizada (ORP_DATABAIXA)"
+          },
+          "ORP_HORABAIXA": {
+            "type": "string",
+            "example": "17:45:00",
+            "description": "Hora da baixa da ordem (ORP_HORABAIXA)"
+          },
+          "SDA_NUMERO": {
+            "type": "number",
+            "example": 301,
+            "description": "Número de saída / documento auxiliar (SDA_NUMERO)"
+          }
+        },
+        "required": [
+          "ORP_NUMERO",
+          "SIT_CODIGO",
+          "LOJ_CODIGO",
+          "USU_CODIGO",
+          "ORP_DATA",
+          "PRO_CODIGO"
+        ]
+      },
+      "ProductionOrderItemResponseDto": {
+        "type": "object",
+        "properties": {
+          "OPI_NUMERO": {
+            "type": "number",
+            "example": 1,
+            "description": "Identificador do item da ordem de produção (OPI_NUMERO)"
+          },
+          "ORP_NUMERO": {
+            "type": "number",
+            "example": 201,
+            "description": "Número da ordem de produção vinculada (ORP_NUMERO)"
+          },
+          "PRO_CODIGO": {
+            "type": "string",
+            "example": "00000000000012",
+            "description": "Código do produto/insumo consumido (PRO_CODIGO)"
+          },
+          "PRO_CODIGOBAR": {
+            "type": "string",
+            "example": "7891234560012",
+            "description": "Código de barras do insumo"
+          },
+          "PRO_DESCRICAO": {
+            "type": "string",
+            "example": "FARINHA DE TRIGO ESPECIAL 1KG",
+            "description": "Descrição do insumo consumido"
+          },
+          "PRO_UNIDADE": {
+            "type": "string",
+            "example": "KG",
+            "description": "Unidade de medida do insumo"
+          },
+          "PRO_REFERENCIA": {
+            "type": "string",
+            "example": "REF-FAR-01",
+            "description": "Referência do insumo"
+          },
+          "MAR_CODIGO": {
+            "type": "number",
+            "example": 5,
+            "description": "Código da marca do insumo (MAR_CODIGO)"
+          },
+          "MAR_DESCRICAO": {
+            "type": "string",
+            "example": "DONA BENTA",
+            "description": "Descrição da marca do insumo"
+          },
+          "GRU_CODIGO": {
+            "type": "number",
+            "example": 3,
+            "description": "Código do grupo do insumo (GRU_CODIGO)"
+          },
+          "GRU_DESCRICAO": {
+            "type": "string",
+            "example": "MATÉRIA PRIMA",
+            "description": "Descrição do grupo do insumo"
+          },
+          "OPI_PRECO": {
+            "type": "number",
+            "example": 4.5,
+            "description": "Preço/custo unitário do insumo (OPI_PRECO)"
+          },
+          "OPI_QTDE": {
+            "type": "number",
+            "example": 20,
+            "description": "Quantidade consumida/utilizada (OPI_QTDE)"
+          },
+          "OPI_TOTAL": {
+            "type": "number",
+            "example": 90,
+            "description": "Valor total do insumo consumido (OPI_TOTAL)"
+          }
+        },
+        "required": [
+          "OPI_NUMERO",
+          "ORP_NUMERO",
+          "PRO_CODIGO"
+        ]
+      },
+      "ProductionOrderDetailResponseDto": {
+        "type": "object",
+        "properties": {
+          "ORP_NUMERO": {
+            "type": "number",
+            "example": 201,
+            "description": "Número identificador da Ordem de Produção (ORP_NUMERO)"
+          },
+          "SIT_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código da situação da ordem (SIT_CODIGO)"
+          },
+          "SIT_DESCRICAO": {
+            "type": "string",
+            "example": "EM ANDAMENTO",
+            "description": "Descrição da situação"
+          },
+          "LOJ_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código da loja/filial (LOJ_CODIGO)"
+          },
+          "LOJ_NOME": {
+            "type": "string",
+            "example": "LOJA MATRIZ",
+            "description": "Razão social da loja"
+          },
+          "LOJ_FANTASIA": {
+            "type": "string",
+            "example": "MATRIZ",
+            "description": "Nome fantasia da loja"
+          },
+          "USU_CODIGO": {
+            "type": "number",
+            "example": 10,
+            "description": "Código do usuário operador/criador (USU_CODIGO)"
+          },
+          "USU_APELIDO": {
+            "type": "string",
+            "example": "operador.joao",
+            "description": "Apelido do usuário responsável"
+          },
+          "ORP_DATA": {
+            "type": "string",
+            "example": "2026-03-15T00:00:00.000Z",
+            "description": "Data de registro da ordem (ORP_DATA)"
+          },
+          "ORP_HORA": {
+            "type": "string",
+            "example": "08:30:00",
+            "description": "Hora de registro da ordem (ORP_HORA)"
+          },
+          "ORP_DATAINICIO": {
+            "type": "string",
+            "example": "2026-03-15T00:00:00.000Z",
+            "description": "Data de início prevista ou real (ORP_DATAINICIO)"
+          },
+          "ORP_DATAFINAL": {
+            "type": "string",
+            "example": "2026-03-20T00:00:00.000Z",
+            "description": "Data final prevista ou real (ORP_DATAFINAL)"
+          },
+          "PRO_CODIGO": {
+            "type": "string",
+            "example": "00000000000045",
+            "description": "Código do produto acabado produzido (PRO_CODIGO)"
+          },
+          "PRO_DESCRICAO": {
+            "type": "string",
+            "example": "BOLO DE CHOCOLATE 1KG",
+            "description": "Descrição do produto principal produzido"
+          },
+          "PRO_UNIDADE": {
+            "type": "string",
+            "example": "UN",
+            "description": "Unidade de medida do produto principal"
+          },
+          "PRO_CODIGOBAR": {
+            "type": "string",
+            "example": "7891234560045",
+            "description": "Código de barras do produto principal"
+          },
+          "ETA_NUMERO": {
+            "type": "number",
+            "example": 2,
+            "description": "Etapa / fase do processo produtivo (ETA_NUMERO)"
+          },
+          "COM_NUMERO": {
+            "type": "number",
+            "example": 105,
+            "description": "Identificador de composição / compra 1 (COM_NUMERO)"
+          },
+          "COM_NUMERO2": {
+            "type": "number",
+            "example": 105,
+            "description": "Identificador de composição / compra 2 (COM_NUMERO2)"
+          },
+          "ORP_QUANTIDADE": {
+            "type": "number",
+            "example": 50,
+            "description": "Quantidade planejada a ser produzida (ORP_QUANTIDADE)"
+          },
+          "ORP_QUANTIDADEACABADA": {
+            "type": "number",
+            "example": 48,
+            "description": "Quantidade efetivamente acabada (ORP_QUANTIDADEACABADA)"
+          },
+          "ORP_TOTAL": {
+            "type": "number",
+            "example": 720.5,
+            "description": "Valor total acumulado da produção (ORP_TOTAL)"
+          },
+          "ORP_OBS": {
+            "type": "string",
+            "example": "Produção lote especial de páscoa",
+            "description": "Observações da ordem de produção (ORP_OBS)"
+          },
+          "ORP_DATABAIXA": {
+            "type": "string",
+            "example": "2026-03-20T00:00:00.000Z",
+            "description": "Data em que a ordem foi baixada/finalizada (ORP_DATABAIXA)"
+          },
+          "ORP_HORABAIXA": {
+            "type": "string",
+            "example": "17:45:00",
+            "description": "Hora da baixa da ordem (ORP_HORABAIXA)"
+          },
+          "SDA_NUMERO": {
+            "type": "number",
+            "example": 301,
+            "description": "Número de saída / documento auxiliar (SDA_NUMERO)"
+          },
+          "items": {
+            "description": "Lista de insumos/itens da ordem de produção (ORDENSPRODUCAOITENS)",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductionOrderItemResponseDto"
+            }
+          }
+        },
+        "required": [
+          "ORP_NUMERO",
+          "SIT_CODIGO",
+          "LOJ_CODIGO",
+          "USU_CODIGO",
+          "ORP_DATA",
+          "PRO_CODIGO",
+          "items"
         ]
       }
     }
