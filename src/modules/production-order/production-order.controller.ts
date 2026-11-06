@@ -32,7 +32,10 @@ import {
 import { ProductionOrderResponseDto } from './dto/production-order-response.dto';
 import { ProductionOrderDetailResponseDto } from './dto/production-order-detail-response.dto';
 import { ProductionOrderItemResponseDto } from './dto/production-order-item-response.dto';
-import { CreateProductionOrderDto } from './dto/create-production-order.dto';
+import {
+  CreateProductionOrderDto,
+  PostProductionOrderDto,
+} from './dto/create-production-order.dto';
 
 @ApiTags('Production Order')
 @Controller('production-order')
@@ -48,7 +51,7 @@ export class ProductionOrderController {
   @ApiOperation({
     summary: 'Criar ordem de produção',
     description:
-      'Cria uma nova ordem de produção na tabela ORDENSPRODUCAO e seus respectivos insumos na tabela ORDENSPRODUCAOITENS, calculando os preços a partir do custo fiscal dos produtos.',
+      'Cria uma nova ordem de produção na tabela ORDENSPRODUCAO e seus respectivos insumos na tabela ORDENSPRODUCAOITENS, seguindo as nomenclaturas e padrões do endpoint POST /orders.',
   })
   @ApiResponse({
     status: 201,
@@ -59,9 +62,9 @@ export class ProductionOrderController {
     status: 400,
     description: 'Dados inválidos ou insumos não encontrados.',
   })
-  async create(
+  async createProductionOrder(
     @Req() req: ReqWithAuthContext,
-    @Body() body: CreateProductionOrderDto,
+    @Body() body: PostProductionOrderDto,
   ) {
     const {
       credentialsId,
@@ -74,22 +77,24 @@ export class ProductionOrderController {
       throw new Error('Credentials ID not found in token');
     }
 
+    const requestedStoreId = body.store_id ?? body.storeId;
     const finalStoreId =
       type === 'H2M'
         ? storeIdToken
-        : body.storeId
-          ? Number(body.storeId)
+        : requestedStoreId
+          ? Number(requestedStoreId)
           : storeIdToken;
 
     if (!finalStoreId) {
       throw new BadRequestException('ID da loja não informado');
     }
 
+    const requestedUserId = body.user_id ?? body.userId;
     const finalOperatorId =
       type === 'H2M'
         ? Number(userIdToken) || 1
-        : body.userId
-          ? Number(body.userId)
+        : requestedUserId
+          ? Number(requestedUserId)
           : Number(userIdToken) || 1;
 
     return this.productionOrderService.create(
@@ -98,6 +103,14 @@ export class ProductionOrderController {
       finalOperatorId,
       body,
     );
+  }
+
+  // Alias para retrocompatibilidade
+  async create(
+    req: ReqWithAuthContext,
+    body: PostProductionOrderDto,
+  ) {
+    return this.createProductionOrder(req, body);
   }
 
   @Get()

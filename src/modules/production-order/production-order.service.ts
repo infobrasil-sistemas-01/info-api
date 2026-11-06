@@ -2,7 +2,10 @@ import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { TenantConnectionService } from 'src/infra/database/tenant-connection.service';
 import { PaginatedResponse } from 'src/common/pagination/paginated-response';
 import { ProductionOrderQueryDto } from './dto/production-order-query.dto';
-import { CreateProductionOrderDto } from './dto/create-production-order.dto';
+import {
+  CreateProductionOrderDto,
+  PostProductionOrderDto,
+} from './dto/create-production-order.dto';
 
 @Injectable()
 export class ProductionOrderService {
@@ -313,16 +316,35 @@ export class ProductionOrderService {
     credentialsId: string,
     storeId: number,
     operatorId: number,
-    createDto: CreateProductionOrderDto,
+    createDto: PostProductionOrderDto,
   ) {
     const connection: any =
       await this.tenantConnectionService.getConnection(credentialsId);
 
     try {
+      // Normalização de códigos (aceita product_id ou product_code no padrão POST /orders)
+      const finalProductCode = String(
+        createDto.product_id ??
+          createDto.product_code ??
+          createDto.productCode,
+      ).trim();
+
+      const itemsList =
+        (createDto.products_sold && createDto.products_sold.length > 0
+          ? createDto.products_sold
+          : createDto.items) || [];
+
+      const normalizedItems = itemsList.map((item) => ({
+        productCode: String(
+          item.product_id ?? item.product_code ?? item.productCode,
+        ).trim(),
+        quantity: Number(item.quantity),
+      }));
+
       // 1. Coleta todos os códigos de produtos envolvidos (produto final + insumos)
       const allProductCodes = [
-        createDto.productCode,
-        ...new Set(createDto.items.map((i) => i.productCode)),
+        finalProductCode,
+        ...new Set(normalizedItems.map((i) => i.productCode)),
       ];
 
       // 2. Busca em lote na tabela PRODUTOS para validação e obtenção de preços fiscais
@@ -353,15 +375,15 @@ export class ProductionOrderService {
       }
 
       // Validação do produto final produzido
-      if (!priceMap.has(createDto.productCode.trim())) {
+      if (!priceMap.has(finalProductCode)) {
         throw new BadRequestException(
-          `Produto final a produzir (${createDto.productCode}) não encontrado no catálogo`,
+          `Produto final a produzir (${finalProductCode}) não encontrado no catálogo`,
         );
       }
 
       // Validação dos insumos
-      const missingItems = createDto.items
-        .map((i) => i.productCode.trim())
+      const missingItems = normalizedItems
+        .map((i) => i.productCode)
         .filter((code) => !priceMap.has(code));
 
       if (missingItems.length > 0) {
@@ -371,11 +393,11 @@ export class ProductionOrderService {
       }
 
       // 3. Pré-cálculo dos itens e somatória do total da ordem
-      const calculatedItems = createDto.items.map((item) => {
-        const itemPrice = priceMap.get(item.productCode.trim()) ?? 0;
+      const calculatedItems = normalizedItems.map((item) => {
+        const itemPrice = priceMap.get(item.productCode) ?? 0;
         const itemTotal = Number((item.quantity * itemPrice).toFixed(2));
         return {
-          productCode: item.productCode.trim(),
+          productCode: item.productCode,
           quantity: item.quantity,
           price: itemPrice,
           total: itemTotal,
@@ -392,6 +414,13 @@ export class ProductionOrderService {
       const now = new Date();
       const dateVal = now.toISOString().split('T')[0];
       const timeVal = now.toTimeString().split(' ')[0];
+
+      const startDateVal =
+        createDto.start_date ??
+        createDto.startDate ??
+        createDto.date ??
+        null;
+      const endDateVal = createDto.end_date ?? createDto.endDate ?? null;
 
       const orpNumero = await new Promise<number>((resolve, reject) => {
         const startTx =
@@ -439,9 +468,9 @@ export class ProductionOrderService {
             operatorId,
             dateVal,
             timeVal,
-            createDto.startDate ?? null,
-            createDto.endDate ?? null,
-            createDto.productCode.trim(),
+            startDateVal,
+            endDateVal,
+            finalProductCode,
             createDto.quantity,
             totalOrder,
             hardcodedObs,

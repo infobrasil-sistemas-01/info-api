@@ -54,18 +54,21 @@ describe('ProductionOrderController', () => {
 
   describe('create', () => {
     const validBody = {
-      productCode: '00000000000045',
+      product_id: 45,
       quantity: 50,
-      storeId: 2,
-      userId: 10,
-      items: [{ productCode: 'INSUMO-1', quantity: 20 }],
+      store_id: 2,
+      user_id: 10,
+      products_sold: [{ product_id: 12, quantity: 20 }],
     };
 
-    it('deve chamar productionOrderService.create com credenciais, loja, operador e body', async () => {
+    it('deve chamar productionOrderService.create com credenciais, loja, operador e body no padrão POST /orders', async () => {
       const mockCreated = { ORP_NUMERO: 201, items: [] };
       mockProductionOrderService.create.mockResolvedValue(mockCreated as any);
 
-      const result = await controller.create(mockReq, validBody as any);
+      const result = await controller.createProductionOrder(
+        mockReq,
+        validBody as any,
+      );
 
       expect(service.create).toHaveBeenCalledWith(
         'cred-1',
@@ -88,21 +91,24 @@ describe('ProductionOrderController', () => {
 
       mockProductionOrderService.create.mockResolvedValue({} as any);
 
-      await controller.create(h2mReq, { ...validBody, storeId: 99 } as any);
+      await controller.createProductionOrder(h2mReq, {
+        ...validBody,
+        store_id: 99,
+      } as any);
 
       expect(service.create).toHaveBeenCalledWith(
         'cred-1',
         1,
         5,
-        expect.objectContaining({ storeId: 99 }),
+        expect.objectContaining({ store_id: 99 }),
       );
     });
 
     it('deve lançar erro se credentialsId não estiver presente no token', async () => {
       const invalidReq = { authContext: {} } as any;
-      await expect(controller.create(invalidReq, validBody as any)).rejects.toThrow(
-        'Credentials ID not found in token',
-      );
+      await expect(
+        controller.createProductionOrder(invalidReq, validBody as any),
+      ).rejects.toThrow('Credentials ID not found in token');
     });
 
     it('deve lançar BadRequestException se storeId não for fornecido e nem existir no token', async () => {
@@ -114,7 +120,10 @@ describe('ProductionOrderController', () => {
       } as any;
 
       await expect(
-        controller.create(noStoreReq, { ...validBody, storeId: undefined } as any),
+        controller.createProductionOrder(noStoreReq, {
+          ...validBody,
+          store_id: undefined,
+        } as any),
       ).rejects.toThrow(BadRequestException);
     });
   });

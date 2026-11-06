@@ -232,16 +232,16 @@ describe('ProductionOrderService', () => {
 
   describe('create', () => {
     const createDto = {
-      productCode: 'PROD-FINAL',
+      product_id: 'PROD-FINAL',
       quantity: 10,
-      storeId: 1,
-      userId: 5,
-      startDate: '2026-04-01',
-      endDate: '2026-04-05',
-      obs: 'Produção teste',
-      items: [
-        { productCode: 'INSUMO-1', quantity: 2 },
-        { productCode: 'INSUMO-2', quantity: 5 },
+      store_id: 1,
+      user_id: 5,
+      start_date: '2026-04-01',
+      end_date: '2026-04-05',
+      store_note: 'Produção teste',
+      products_sold: [
+        { product_id: 'INSUMO-1', quantity: 2 },
+        { product_id: 'INSUMO-2', quantity: 5 },
       ],
     };
 

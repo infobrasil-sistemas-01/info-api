@@ -17,29 +17,29 @@ O endpoint permite que integradores criem ordens de fabricação indicando o pro
 | `USU_CODIGO` | Token / Body | Em M2M recebe no DTO (`body.userId` ou fallback token). Em H2M usa operador do token |
 | `ORP_DATA` | Sistema | Data atual do servidor (`YYYY-MM-DD`) |
 | `ORP_HORA` | Sistema | Hora atual do servidor (`HH:mm:ss`) |
-| `ORP_DATAINICIO` | DTO (Opcional) | Data prevista de início da fabricação (`startDate`) |
-| `ORP_DATAFINAL` | DTO (Opcional) | Data prevista de término da fabricação (`endDate`) |
-| `PRO_CODIGO` | DTO (Obrigatório) | Código do produto final a ser produzido (`productCode`) |
+| `ORP_DATAINICIO` | DTO (Opcional) | Data prevista de início da fabricação (`start_date` / `date`) |
+| `ORP_DATAFINAL` | DTO (Opcional) | Data prevista de término da fabricação (`end_date`) |
+| `PRO_CODIGO` | DTO (Obrigatório) | Código/ID do produto final a ser produzido (`product_id` / `product_code`) |
 | `ORP_QUANTIDADE` | DTO (Obrigatório) | Quantidade planejada a produzir (`quantity`, maior que 0) |
 | `ORP_QUANTIDADEACABADA` | Fixo | `0` (nenhuma quantidade baixada no momento da criação) |
 | `ORP_TOTAL` | Sistema | Somatória calculada de todos os insumos: $\sum (\text{OPI\_QTDE} \times \text{OPI\_PRECO})$ |
-| `ORP_OBS` | DTO (Opcional) | Observações da ordem (até 200 caracteres) |
+| `ORP_OBS` | Sistema / Hard-coded | Sempre `'Ordem de Produção emitida via integração'` na coluna `ORP_OBS` |
 
 ### 2.2 Itens / Insumos (`ORDENSPRODUCAOITENS`)
 | Coluna Firebird | Origem | Comportamento / Regra |
 | :--- | :--- | :--- |
 | `OPI_NUMERO` | Firebird Generator | `GEN_ID(GEN_NUMEROOPI, 1)` |
 | `ORP_NUMERO` | FK | Vinculado ao `ORP_NUMERO` gerado no cabeçalho |
-| `PRO_CODIGO` | DTO (`items[].productCode`) | Código do insumo consumido |
-| `OPI_QTDE` | DTO (`items[].quantity`) | Quantidade consumida (maior que 0) |
+| `PRO_CODIGO` | DTO (`products_sold[].product_id`) | Código/ID do insumo consumido |
+| `OPI_QTDE` | DTO (`products_sold[].quantity`) | Quantidade consumida (maior que 0) |
 | `OPI_PRECO` | Tabela `PRODUTOS` | Custo fiscal do insumo (`PRO_PRCCOMPRAFISCAL ?? 0.00`) |
 | `OPI_TOTAL` | Sistema | $\text{OPI\_QTDE} \times \text{OPI\_PRECO}$ |
 
 ### 2.3 Validações e Tratamento de Erros
 1. **Insumos inexistentes:** Busca em lote `SELECT PRO_CODIGO, PRO_PRCCOMPRAFISCAL FROM PRODUTOS WHERE PRO_CODIGO IN (...)`. Se algum código não for retornado, lança `BadRequestException('Produto(s)/Insumo(s) não encontrado(s) no cadastro: [...]')`.
-2. **Array de itens vazio:** O schema Zod valida `items: z.array(...).min(1, 'A ordem de produção deve conter pelo menos 1 insumo')`.
-3. **Produto acabado inexistente:** Validação da existência do produto acabado a ser produzido (`PRO_CODIGO`).
-4. **Atomicidade:** Transação Firebird (`startTransaction`). Caso qualquer insert falhe, executa `transaction.rollback` e lança a exceção correspondente.
+2. **Array de itens vazio:** O schema Zod valida `products_sold: z.array(...).min(1, 'A ordem de produção deve conter pelo menos 1 insumo')` (com alias `items`).
+3. **Produto acabado inexistente:** Validação da existência do produto acabado a ser produzido (`product_id`).
+4. **Atomicidade:** Transação Firebird atômica. Caso qualquer insert falhe, executa `transaction.rollback` e lança a exceção correspondente.
 
 ---
 
@@ -53,14 +53,14 @@ O endpoint permite que integradores criem ordens de fabricação indicando o pro
 
 ---
 
-## 4. Estrutura de Arquivos a Criar/Modificar
+## 4. Estrutura de Arquivos Criados/Modificados
 
 1. **DTOs:**
    - `src/modules/production-order/dto/create-production-order.dto.ts`:
-     - `CreateProductionOrderItemSchema`: `productCode` (string), `quantity` (number > 0)
-     - `CreateProductionOrderSchema`: `productCode` (string), `quantity` (number > 0), `storeId` (opcional), `userId` (opcional), `startDate` (YYYY-MM-DD opcional), `endDate` (YYYY-MM-DD opcional), `obs` (string <= 200 opcional), `items` (array min 1).
+     - `ProductionOrderItemSchema` / `ProductionOrderItemDto`: `product_id` (string | number), `quantity` (number > 0).
+     - `PostProductionOrderSchema` / `PostProductionOrderDto`: `product_id` (string | number), `quantity` (number > 0), `store_id` (opcional), `user_id` (opcional), `start_date` / `date` (YYYY-MM-DD opcional), `end_date` (YYYY-MM-DD opcional), `store_note` (string <= 200 opcional), `products_sold` (array min 1, alias `items`).
 2. **Service (`production-order.service.ts`):**
-   - Método `create(credentialsId, storeId, operatorId, dto: CreateProductionOrderDto)`.
+   - Método `create(credentialsId, storeId, operatorId, dto: PostProductionOrderDto)`.
    - Consulta em lote dos insumos e do produto acabado.
    - Transação Firebird com inserts sequenciais de cabeçalho e itens.
    - Retorno da ordem criada chamando `getById(credentialsId, storeId, orderNumber)` com `getItemsByProductionOrderNumber`.
