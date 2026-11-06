@@ -37,7 +37,11 @@ VALUES
     (gen_random_uuid(), 'tenant.clients.update', 'Atualizar clientes do tenant', 'Atualizar clientes do tenant'),
     (gen_random_uuid(), 'tenant.clients.delete', 'Deletar clientes do tenant', 'Deletar clientes do tenant'),
     (gen_random_uuid(), 'tenant.clients.view', 'Visualizar clientes do tenant', 'Visualizar clientes do tenant'),
-    (gen_random_uuid(), 'tenant.cities.view', 'Visualizar municípios do tenant', 'Visualizar municípios do tenant')
+    (gen_random_uuid(), 'tenant.cities.view', 'Visualizar municípios do tenant', 'Visualizar municípios do tenant'),
+    (gen_random_uuid(), 'tenant.production-orders.view', 'Visualizar ordens de produção do tenant', 'Visualizar ordens de produção do tenant'),
+    (gen_random_uuid(), 'tenant.production-orders.create', 'Criar ordens de produção do tenant', 'Criar ordens de produção do tenant'),
+    (gen_random_uuid(), 'tenant.production-orders.update', 'Atualizar ordens de produção do tenant', 'Atualizar ordens de produção do tenant'),
+    (gen_random_uuid(), 'tenant.production-orders.delete', 'Deletar ordens de produção do tenant', 'Deletar ordens de produção do tenant')
 ON CONFLICT ("key") DO UPDATE 
 SET "name" = EXCLUDED."name", 
     "description" = EXCLUDED."description";
@@ -76,7 +80,11 @@ JOIN "permissions" p ON p."key" IN (
     'tenant.clients.create',
     'tenant.clients.update',
     'tenant.clients.delete',
-    'tenant.cities.view'
+    'tenant.cities.view',
+    'tenant.production-orders.view',
+    'tenant.production-orders.create',
+    'tenant.production-orders.update',
+    'tenant.production-orders.delete'
 )
 WHERE r."name" = 'Admin'
 ON CONFLICT ("roleId", "permissionId") DO NOTHING;

@@ -148,22 +148,29 @@ Adicionar:
 
 ### 4.2 Script de Permissões SQL (`PostgreSQL`)
 ```sql
--- Inserção das novas permissões de Ordens de Produção
-INSERT INTO permissions (id, key, name, description, created_at, updated_at)
+-- Inserção das novas permissões de Ordens de Produção no catálogo
+INSERT INTO "permissions" ("id", "key", "name", "description")
 VALUES 
-  (gen_random_uuid(), 'tenant.production-orders.view', 'Visualizar ordens de produção do tenant', 'Visualizar ordens de produção do tenant', NOW(), NOW()),
-  (gen_random_uuid(), 'tenant.production-orders.create', 'Criar ordens de produção do tenant', 'Criar ordens de produção do tenant', NOW(), NOW()),
-  (gen_random_uuid(), 'tenant.production-orders.update', 'Atualizar ordens de produção do tenant', 'Atualizar ordens de produção do tenant', NOW(), NOW()),
-  (gen_random_uuid(), 'tenant.production-orders.delete', 'Deletar ordens de produção do tenant', 'Deletar ordens de produção do tenant', NOW(), NOW())
-ON CONFLICT (key) DO UPDATE 
-SET description = EXCLUDED.description, updated_at = NOW();
+    (gen_random_uuid(), 'tenant.production-orders.view', 'Visualizar ordens de produção do tenant', 'Visualizar ordens de produção do tenant'),
+    (gen_random_uuid(), 'tenant.production-orders.create', 'Criar ordens de produção do tenant', 'Criar ordens de produção do tenant'),
+    (gen_random_uuid(), 'tenant.production-orders.update', 'Atualizar ordens de produção do tenant', 'Atualizar ordens de produção do tenant'),
+    (gen_random_uuid(), 'tenant.production-orders.delete', 'Deletar ordens de produção do tenant', 'Deletar ordens de produção do tenant')
+ON CONFLICT ("key") DO UPDATE 
+SET "name" = EXCLUDED."name", 
+    "description" = EXCLUDED."description";
 
 -- Associação automática ao perfil 'Admin'
-INSERT INTO role_permissions (role_id, permission_id)
-SELECT r.id, p.id
-FROM roles r, permissions p
-WHERE r.name = 'Admin' AND p.key LIKE 'tenant.production-orders.%'
-ON CONFLICT DO NOTHING;
+INSERT INTO "role_permissions" ("roleId", "permissionId")
+SELECT r."id", p."id"
+FROM "roles" r
+JOIN "permissions" p ON p."key" IN (
+    'tenant.production-orders.view',
+    'tenant.production-orders.create',
+    'tenant.production-orders.update',
+    'tenant.production-orders.delete'
+)
+WHERE r."name" = 'Admin'
+ON CONFLICT ("roleId", "permissionId") DO NOTHING;
 ```
 
 ---

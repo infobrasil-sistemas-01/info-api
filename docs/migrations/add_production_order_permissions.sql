@@ -3,51 +3,26 @@
 -- Permissões: tenant.production-orders.view, create, update, delete
 -- ==============================================================================
 
--- 1. Inserir permissões no catálogo de permissions (PostgreSQL)
-INSERT INTO permissions (id, key, name, description, created_at, updated_at)
+-- 1. Inserir ou atualizar as Permissões no catálogo ("permissions")
+INSERT INTO "permissions" ("id", "key", "name", "description")
 VALUES 
-  (
-    gen_random_uuid(),
+    (gen_random_uuid(), 'tenant.production-orders.view', 'Visualizar ordens de produção do tenant', 'Visualizar ordens de produção do tenant'),
+    (gen_random_uuid(), 'tenant.production-orders.create', 'Criar ordens de produção do tenant', 'Criar ordens de produção do tenant'),
+    (gen_random_uuid(), 'tenant.production-orders.update', 'Atualizar ordens de produção do tenant', 'Atualizar ordens de produção do tenant'),
+    (gen_random_uuid(), 'tenant.production-orders.delete', 'Deletar ordens de produção do tenant', 'Deletar ordens de produção do tenant')
+ON CONFLICT ("key") DO UPDATE 
+SET "name" = EXCLUDED."name", 
+    "description" = EXCLUDED."description";
+
+-- 2. Associar as novas permissões à Role "Admin" (Administrador do Sistema)
+INSERT INTO "role_permissions" ("roleId", "permissionId")
+SELECT r."id", p."id"
+FROM "roles" r
+JOIN "permissions" p ON p."key" IN (
     'tenant.production-orders.view',
-    'Visualizar ordens de produção do tenant',
-    'Visualizar ordens de produção do tenant',
-    NOW(),
-    NOW()
-  ),
-  (
-    gen_random_uuid(),
     'tenant.production-orders.create',
-    'Criar ordens de produção do tenant',
-    'Criar ordens de produção do tenant',
-    NOW(),
-    NOW()
-  ),
-  (
-    gen_random_uuid(),
     'tenant.production-orders.update',
-    'Atualizar ordens de produção do tenant',
-    'Atualizar ordens de produção do tenant',
-    NOW(),
-    NOW()
-  ),
-  (
-    gen_random_uuid(),
-    'tenant.production-orders.delete',
-    'Deletar ordens de produção do tenant',
-    'Deletar ordens de produção do tenant',
-    NOW(),
-    NOW()
-  )
-ON CONFLICT (key) DO UPDATE 
-SET 
-  description = EXCLUDED.description,
-  updated_at = NOW();
-
--- 2. Associar automaticamente todas as permissões de ordens de produção ao perfil 'Admin'
-INSERT INTO role_permissions (role_id, permission_id)
-SELECT r.id, p.id
-FROM roles r, permissions p
-WHERE r.name = 'Admin' 
-  AND p.key LIKE 'tenant.production-orders.%'
-ON CONFLICT DO NOTHING;
-
+    'tenant.production-orders.delete'
+)
+WHERE r."name" = 'Admin'
+ON CONFLICT ("roleId", "permissionId") DO NOTHING;
