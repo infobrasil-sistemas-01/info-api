@@ -305,12 +305,14 @@ async function generatePdf() {
       background-color: var(--slate-900);
       color: #f8fafc;
       font-family: 'Fira Code', 'JetBrains Mono', Consolas, monospace;
-      font-size: 8px;
-      padding: 8px 10px;
+      font-size: 7.5px;
+      padding: 6px 10px;
       border-radius: 5px;
       line-height: 1.35;
-      margin: 4px 0 8px 0;
+      margin: 4px 0 6px 0;
       overflow: hidden;
+      white-space: pre-wrap;
+      word-break: break-word;
     }
 
     .json-key { color: #38bdf8; }
@@ -553,8 +555,7 @@ async function generatePdf() {
   </div>
 
   <h2>4. Exemplo de Payload para Emissão (<span class="code-tag">POST /api/v1/production-order</span>)</h2>
-  <div class="json-box">
-{
+  <pre class="json-box"><code>{
   <span class="json-key">"product_id"</span>: <span class="json-number">45</span>, <span class="json-comment">// ID ou código do produto acabado a produzir</span>
   <span class="json-key">"quantity"</span>: <span class="json-number">50.0</span>, <span class="json-comment">// Quantidade a produzir (maior que zero)</span>
   <span class="json-key">"store_id"</span>: <span class="json-number">1</span>, <span class="json-comment">// Loja/filial emitente (em M2M pode ser herdado do token)</span>
@@ -566,8 +567,7 @@ async function generatePdf() {
     { <span class="json-key">"product_id"</span>: <span class="json-number">101</span>, <span class="json-key">"quantity"</span>: <span class="json-number">25.0</span> },
     { <span class="json-key">"product_id"</span>: <span class="json-number">102</span>, <span class="json-key">"quantity"</span>: <span class="json-number">12.5</span> }
   ]
-}
-  </div>
+}</code></pre>
 
   <!-- ASSINATURA -->
   <div class="signature-card avoid-break">
@@ -613,6 +613,15 @@ async function generatePdf() {
     console.log('Aguardando fontes...');
     await page.evaluateHandle('document.fonts.ready');
 
+    const artifactDir = 'C:\\Users\\gabriel.bezerra\\.gemini\\antigravity\\brain\\307eb63c-771a-4415-8de8-ba59cab029fc';
+    const jsonElement = await page.$('.json-box');
+    if (jsonElement) {
+      await jsonElement.screenshot({
+        path: path.join(artifactDir, 'json_box_preview.png'),
+      });
+      console.log('📸 Screenshot da caixa JSON salva para validação');
+    }
+
     console.log('Compilando PDF em formato A4...');
     await page.pdf({
       path: targetPdfPath,
@@ -642,7 +651,6 @@ async function generatePdf() {
     console.log(`✅ Sucesso! PDF gerado em: ${targetPdfPath}`);
 
     // Copiar também para o diretório de artefatos da conversa
-    const artifactDir = 'C:\\Users\\gabriel.bezerra\\.gemini\\antigravity\\brain\\307eb63c-771a-4415-8de8-ba59cab029fc';
     if (fs.existsSync(artifactDir)) {
       const artifactPdfPath = path.join(artifactDir, pdfFileName);
       fs.copyFileSync(targetPdfPath, artifactPdfPath);
@@ -658,3 +666,4 @@ generatePdf().catch((err) => {
   console.error('❌ Erro na geração do Guia PDF:', err);
   process.exit(1);
 });
+
