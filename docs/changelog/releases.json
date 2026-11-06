@@ -1,5 +1,44 @@
 [
   {
+    "version": "1.20.11",
+    "date": "2026-11-06",
+    "title": "Implementação de POST endpoint with atomic transaction and item enrichment e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral, Pedidos & Vendas.",
+    "highlights": [
+      "Implementação de POST endpoint with atomic transaction and item enrichment"
+    ],
+    "items": [
+      {
+        "module": "Geral",
+        "type": "feature",
+        "title": "Implementação de POST endpoint with atomic transaction and item enrichment",
+        "description": "Atualização no módulo de Geral: implement POST endpoint with atomic transaction and item enrichment.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "implement POST endpoint with atomic transaction and item enrichment",
+        "commitHash": "ddc3a70"
+      },
+      {
+        "module": "Pedidos & Vendas",
+        "type": "fix",
+        "title": "production order item",
+        "description": "Atualização no módulo de Pedidos & Vendas: production order item.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "production order item",
+        "commitHash": "14131fe"
+      },
+      {
+        "module": "Geral",
+        "type": "fix",
+        "title": "Remoção de duplicate create method in service",
+        "description": "Atualização no módulo de Geral: remove duplicate create method in service.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "remove duplicate create method in service",
+        "commitHash": "688c801"
+      }
+    ],
+    "totalChanges": 3
+  },
+  {
     "version": "1.20.10",
     "date": "2026-11-06",
     "title": "Implementação de GET endpoints, RBAC permissions and frontend integration for production orders e melhorias",

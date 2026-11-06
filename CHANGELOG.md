@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.20.11](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.20.10...v1.20.11) (2026-11-06)
+
+
+### Features
+
+* **production-order:** implement POST endpoint with atomic transaction and item enrichment ([ddc3a70](https://github.com/infobrasil-sistemas-01/info-api/commit/ddc3a7020acc1f88a8fb29e019bcec0811ed766f))
+
+
+### Bug Fixes
+
+* production order item ([14131fe](https://github.com/infobrasil-sistemas-01/info-api/commit/14131fec1d40c694de432b01e36b71ce797e1543))
+* **production-order:** remove duplicate create method in service ([688c801](https://github.com/infobrasil-sistemas-01/info-api/commit/688c801108a98bbf8bdc986854f4823b7725dfda))
+
 ## [1.20.10](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.20.9...v1.20.10) (2026-11-06)
 
 

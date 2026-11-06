@@ -6,6 +6,23 @@ Para visualizar a versão interativa com busca em tempo real, acesse o portal we
 
 ---
 
+## [v1.20.11] - 2026-11-06
+
+### 📌 Implementação de POST endpoint with atomic transaction and item enrichment e melhorias
+> Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral, Pedidos & Vendas.
+
+**Destaques:**
+- ⭐ Implementação de POST endpoint with atomic transaction and item enrichment
+
+#### 🚀 Novidades & Melhorias
+- **[Geral]** Implementação de POST endpoint with atomic transaction and item enrichment: Atualização no módulo de Geral: implement POST endpoint with atomic transaction and item enrichment.
+
+#### 🛠️ Correções & Estabilidade
+- **[Pedidos & Vendas]** production order item: Atualização no módulo de Pedidos & Vendas: production order item.
+- **[Geral]** Remoção de duplicate create method in service: Atualização no módulo de Geral: remove duplicate create method in service.
+
+---
+
 ## [v1.20.10] - 2026-11-06
 
 ### 📌 Implementação de GET endpoints, RBAC permissions and frontend integration for production orders e melhorias
