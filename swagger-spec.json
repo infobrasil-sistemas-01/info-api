@@ -4496,15 +4496,15 @@
     },
     "/production-order": {
       "post": {
-        "description": "Cria uma nova ordem de produção na tabela ORDENSPRODUCAO e seus respectivos insumos na tabela ORDENSPRODUCAOITENS, calculando os preços a partir do custo fiscal dos produtos.",
-        "operationId": "ProductionOrderController_create",
+        "description": "Cria uma nova ordem de produção na tabela ORDENSPRODUCAO e seus respectivos insumos na tabela ORDENSPRODUCAOITENS, seguindo as nomenclaturas e padrões do endpoint POST /orders.",
+        "operationId": "ProductionOrderController_createProductionOrder",
         "parameters": [],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateProductionOrderDto"
+                "$ref": "#/components/schemas/PostProductionOrderDto"
               }
             }
           }
@@ -10105,13 +10105,13 @@
           "responseText"
         ]
       },
-      "CreateProductionOrderItemDto": {
+      "ProductionOrderItemDto": {
         "type": "object",
         "properties": {
-          "productCode": {
-            "type": "string",
-            "description": "Código do produto/insumo consumido (PRO_CODIGO)",
-            "example": "00000000000012"
+          "product_id": {
+            "type": "object",
+            "description": "ID ou código do produto/insumo consumido (PRO_CODIGO)",
+            "example": 101
           },
           "quantity": {
             "type": "number",
@@ -10120,60 +10120,73 @@
           }
         },
         "required": [
-          "productCode",
+          "product_id",
           "quantity"
         ]
       },
-      "CreateProductionOrderDto": {
+      "PostProductionOrderDto": {
         "type": "object",
         "properties": {
-          "productCode": {
-            "type": "string",
-            "description": "Código do produto final a ser produzido (PRO_CODIGO)",
-            "example": "00000000000045"
+          "product_id": {
+            "type": "object",
+            "description": "ID ou código do produto final a ser produzido (PRO_CODIGO)",
+            "example": 45
           },
           "quantity": {
             "type": "number",
             "description": "Quantidade total a ser produzida (ORP_QUANTIDADE)",
             "example": 50
           },
-          "storeId": {
+          "store_id": {
             "type": "number",
             "description": "Código da loja/filial (LOJ_CODIGO). Em autenticação M2M, usa este valor ou herda do token. Em H2M, herda do token.",
             "example": 1
           },
-          "userId": {
+          "user_id": {
             "type": "number",
             "description": "Código do usuário operador (USU_CODIGO). Obrigatório/utilizado para M2M.",
             "example": 10
           },
-          "startDate": {
+          "start_date": {
             "type": "string",
             "description": "Data de início prevista da produção (YYYY-MM-DD)",
             "example": "2026-04-01"
           },
-          "endDate": {
+          "end_date": {
             "type": "string",
             "description": "Data de término prevista da produção (YYYY-MM-DD)",
             "example": "2026-04-05"
           },
-          "obs": {
+          "store_note": {
             "type": "string",
-            "description": "Observações gerais da ordem de produção (ORP_OBS)",
+            "description": "Informações adicionais/observações da ordem",
             "example": "Lote especial de teste"
           },
-          "items": {
-            "description": "Lista de insumos/componentes consumidos na produção",
+          "products_sold": {
+            "description": "Lista de insumos/produtos consumidos na produção (padrão products_sold ou items)",
+            "example": [
+              {
+                "product_id": 12,
+                "quantity": 10.5
+              }
+            ],
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/CreateProductionOrderItemDto"
+              "$ref": "#/components/schemas/ProductionOrderItemDto"
+            }
+          },
+          "items": {
+            "description": "Alias alternativo para lista de insumos",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductionOrderItemDto"
             }
           }
         },
         "required": [
-          "productCode",
+          "product_id",
           "quantity",
-          "items"
+          "products_sold"
         ]
       },
       "ProductionOrderItemResponseDto": {
