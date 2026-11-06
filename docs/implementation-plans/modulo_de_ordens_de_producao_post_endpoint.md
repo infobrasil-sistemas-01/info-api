@@ -15,8 +15,8 @@ O endpoint permite que integradores criem ordens de fabricação indicando o pro
 | `SIT_CODIGO` | Fixo | Sempre `1` (Aberta/Pendente), não editável pelo integrador |
 | `LOJ_CODIGO` | Token / Body | Em M2M usa `body.storeId` ou fallback `token.storeId`. Em H2M força `token.storeId` |
 | `USU_CODIGO` | Token / Body | Em M2M recebe no DTO (`body.userId` ou fallback token). Em H2M usa operador do token |
-| `ORP_DATA` | Sistema | Data atual do servidor (`YYYY-MM-DD`) |
-| `ORP_HORA` | Sistema | Hora atual do servidor (`HH:mm:ss`) |
+| `ORP_DATA` | Sistema | Data atual do servidor em UTC-3 (`America/Sao_Paulo`, `YYYY-MM-DD`) |
+| `ORP_HORA` | Sistema | Hora atual do servidor em UTC-3 (`America/Sao_Paulo`, `HH:mm:ss`) |
 | `ORP_DATAINICIO` | DTO (Opcional) | Data prevista de início da fabricação (`start_date` / `date`) |
 | `ORP_DATAFINAL` | DTO (Opcional) | Data prevista de término da fabricação (`end_date`) |
 | `PRO_CODIGO` | DTO (Obrigatório) | Código/ID do produto final a ser produzido (`product_id` / `product_code`) |
@@ -30,14 +30,14 @@ O endpoint permite que integradores criem ordens de fabricação indicando o pro
 | :--- | :--- | :--- |
 | `OPI_NUMERO` | Firebird Generator | `GEN_ID(GEN_NUMEROOPI, 1)` |
 | `ORP_NUMERO` | FK | Vinculado ao `ORP_NUMERO` gerado no cabeçalho |
-| `PRO_CODIGO` | DTO (`products_sold[].product_id`) | Código/ID do insumo consumido |
-| `OPI_QTDE` | DTO (`products_sold[].quantity`) | Quantidade consumida (maior que 0) |
+| `PRO_CODIGO` | DTO (`items[].product_id`) | Código/ID do insumo consumido |
+| `OPI_QTDE` | DTO (`items[].quantity`) | Quantidade consumida (maior que 0) |
 | `OPI_PRECO` | Tabela `PRODUTOS` | Custo fiscal do insumo (`PRO_PRCCOMPRAFISCAL ?? 0.00`) |
 | `OPI_TOTAL` | Sistema | $\text{OPI\_QTDE} \times \text{OPI\_PRECO}$ |
 
 ### 2.3 Validações e Tratamento de Erros
 1. **Insumos inexistentes:** Busca em lote `SELECT PRO_CODIGO, PRO_PRCCOMPRAFISCAL FROM PRODUTOS WHERE PRO_CODIGO IN (...)`. Se algum código não for retornado, lança `BadRequestException('Produto(s)/Insumo(s) não encontrado(s) no cadastro: [...]')`.
-2. **Array de itens vazio:** O schema Zod valida `products_sold: z.array(...).min(1, 'A ordem de produção deve conter pelo menos 1 insumo')` (com alias `items`).
+2. **Array de itens vazio:** O schema Zod valida `items: z.array(...).min(1, 'A ordem de produção deve conter pelo menos 1 insumo')`.
 3. **Produto acabado inexistente:** Validação da existência do produto acabado a ser produzido (`product_id`).
 4. **Atomicidade:** Transação Firebird atômica. Caso qualquer insert falhe, executa `transaction.rollback` e lança a exceção correspondente.
 
@@ -58,10 +58,11 @@ O endpoint permite que integradores criem ordens de fabricação indicando o pro
 1. **DTOs:**
    - `src/modules/production-order/dto/create-production-order.dto.ts`:
      - `ProductionOrderItemSchema` / `ProductionOrderItemDto`: `product_id` (string | number), `quantity` (number > 0).
-     - `PostProductionOrderSchema` / `PostProductionOrderDto`: `product_id` (string | number), `quantity` (number > 0), `store_id` (opcional), `user_id` (opcional), `start_date` / `date` (YYYY-MM-DD opcional), `end_date` (YYYY-MM-DD opcional), `store_note` (string <= 200 opcional), `products_sold` (array min 1, alias `items`).
+     - `PostProductionOrderSchema` / `PostProductionOrderDto`: `product_id` (string | number), `quantity` (number > 0), `store_id` (opcional), `user_id` (opcional), `start_date` / `date` (YYYY-MM-DD opcional), `end_date` (YYYY-MM-DD opcional), `store_note` (string <= 200 opcional), `items` (array min 1 obrigatório).
 2. **Service (`production-order.service.ts`):**
    - Método `create(credentialsId, storeId, operatorId, dto: PostProductionOrderDto)`.
    - Consulta em lote dos insumos e do produto acabado.
+   - Data e hora convertidas explicitamente para o fuso horário `America/Sao_Paulo` (UTC-3).
    - Transação Firebird com inserts sequenciais de cabeçalho e itens.
    - Retorno da ordem criada chamando `getById(credentialsId, storeId, orderNumber)` com `getItemsByProductionOrderNumber`.
 3. **Controller (`production-order.controller.ts`):**

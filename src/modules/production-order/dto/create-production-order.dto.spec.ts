@@ -57,7 +57,7 @@ describe('PostProductionOrderDto', () => {
   });
 
   describe('PostProductionOrderSchema', () => {
-    const validOrderOrdersPattern = {
+    const validOrderPattern = {
       product_id: 45,
       quantity: 50,
       store_id: 1,
@@ -65,7 +65,7 @@ describe('PostProductionOrderDto', () => {
       start_date: '2026-04-01',
       end_date: '2026-04-05',
       store_note: 'Produção lote inicial',
-      products_sold: [
+      items: [
         {
           product_id: 12,
           quantity: 25,
@@ -73,21 +73,19 @@ describe('PostProductionOrderDto', () => {
       ],
     };
 
-    it('deve aceitar payload completo válido no padrão POST /orders', () => {
-      const result = PostProductionOrderSchema.safeParse(
-        validOrderOrdersPattern,
-      );
+    it('deve aceitar payload completo válido com items', () => {
+      const result = PostProductionOrderSchema.safeParse(validOrderPattern);
       expect(result.success).toBe(true);
       if (result.success) {
         expect(result.data.product_id).toBe(45);
         expect(result.data.quantity).toBe(50);
         expect(result.data.store_id).toBe(1);
         expect(result.data.user_id).toBe(10);
-        expect(result.data.products_sold).toHaveLength(1);
+        expect(result.data.items).toHaveLength(1);
       }
     });
 
-    it('deve aceitar payload com aliases retrocompatíveis (items, productCode, obs)', () => {
+    it('deve aceitar payload com aliases retrocompatíveis (productCode, obs)', () => {
       const validWithAliases = {
         productCode: '00000000000045',
         quantity: 10,
@@ -107,34 +105,41 @@ describe('PostProductionOrderDto', () => {
       const minimal = {
         product_id: 45,
         quantity: 10,
-        products_sold: [{ product_id: 12, quantity: 2 }],
+        items: [{ product_id: 12, quantity: 2 }],
       };
 
       const result = PostProductionOrderSchema.safeParse(minimal);
       expect(result.success).toBe(true);
     });
 
-    it('deve rejeitar payload com array de itens vazio', () => {
+    it('deve rejeitar payload com array items vazio', () => {
       const invalid = {
-        ...validOrderOrdersPattern,
-        products_sold: [],
+        ...validOrderPattern,
+        items: [],
       };
 
       const result = PostProductionOrderSchema.safeParse(invalid);
       expect(result.success).toBe(false);
     });
 
+    it('deve rejeitar payload sem o campo items', () => {
+      const { items, ...withoutItems } = validOrderPattern;
+
+      const result = PostProductionOrderSchema.safeParse(withoutItems);
+      expect(result.success).toBe(false);
+    });
+
     it('deve rejeitar quantidade a produzir menor ou igual a zero', () => {
       expect(
         PostProductionOrderSchema.safeParse({
-          ...validOrderOrdersPattern,
+          ...validOrderPattern,
           quantity: 0,
         }).success,
       ).toBe(false);
 
       expect(
         PostProductionOrderSchema.safeParse({
-          ...validOrderOrdersPattern,
+          ...validOrderPattern,
           quantity: -10,
         }).success,
       ).toBe(false);
@@ -143,14 +148,14 @@ describe('PostProductionOrderDto', () => {
     it('deve rejeitar formato inválido de datas', () => {
       expect(
         PostProductionOrderSchema.safeParse({
-          ...validOrderOrdersPattern,
+          ...validOrderPattern,
           start_date: '01/04/2026',
         }).success,
       ).toBe(false);
 
       expect(
         PostProductionOrderSchema.safeParse({
-          ...validOrderOrdersPattern,
+          ...validOrderPattern,
           end_date: '2026-4-5',
         }).success,
       ).toBe(false);
@@ -158,7 +163,7 @@ describe('PostProductionOrderDto', () => {
 
     it('deve rejeitar observações com mais de 200 caracteres', () => {
       const result = PostProductionOrderSchema.safeParse({
-        ...validOrderOrdersPattern,
+        ...validOrderPattern,
         store_note: 'A'.repeat(201),
       });
       expect(result.success).toBe(false);

@@ -10162,8 +10162,8 @@
             "description": "Informações adicionais/observações da ordem",
             "example": "Lote especial de teste"
           },
-          "products_sold": {
-            "description": "Lista de insumos/produtos consumidos na produção (padrão products_sold ou items)",
+          "items": {
+            "description": "Lista de insumos/produtos consumidos na produção",
             "example": [
               {
                 "product_id": 12,
@@ -10174,19 +10174,12 @@
             "items": {
               "$ref": "#/components/schemas/ProductionOrderItemDto"
             }
-          },
-          "items": {
-            "description": "Alias alternativo para lista de insumos",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ProductionOrderItemDto"
-            }
           }
         },
         "required": [
           "product_id",
           "quantity",
-          "products_sold"
+          "items"
         ]
       },
       "ProductionOrderItemResponseDto": {

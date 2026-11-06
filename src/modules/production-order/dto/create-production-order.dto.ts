@@ -79,8 +79,9 @@ export const PostProductionOrderSchema = z
       .string()
       .max(200, 'Observações devem ter no máximo 200 caracteres')
       .optional(),
-    products_sold: z.array(ProductionOrderItemSchema).optional(),
-    items: z.array(ProductionOrderItemSchema).optional(),
+    items: z
+      .array(ProductionOrderItemSchema)
+      .min(1, 'A ordem de produção deve conter pelo menos 1 insumo'),
   })
   .refine(
     (data) =>
@@ -89,15 +90,6 @@ export const PostProductionOrderSchema = z
       data.productCode !== undefined,
     {
       message: 'O campo product_id (ou product_code) é obrigatório',
-    },
-  )
-  .refine(
-    (data) =>
-      (data.products_sold && data.products_sold.length > 0) ||
-      (data.items && data.items.length > 0),
-    {
-      message:
-        'A ordem de produção deve conter pelo menos 1 insumo em products_sold (ou items)',
     },
   );
 
@@ -147,8 +139,7 @@ export class PostProductionOrderDto extends ZodDto(PostProductionOrderSchema) {
   store_note?: string;
 
   @ApiProperty({
-    description:
-      'Lista de insumos/produtos consumidos na produção (padrão products_sold ou items)',
+    description: 'Lista de insumos/produtos consumidos na produção',
     type: [ProductionOrderItemDto],
     example: [
       {
@@ -157,13 +148,7 @@ export class PostProductionOrderDto extends ZodDto(PostProductionOrderSchema) {
       },
     ],
   })
-  products_sold?: ProductionOrderItemDto[];
-
-  @ApiPropertyOptional({
-    description: 'Alias alternativo para lista de insumos',
-    type: [ProductionOrderItemDto],
-  })
-  items?: ProductionOrderItemDto[];
+  items!: ProductionOrderItemDto[];
 }
 
 // Aliases para retrocompatibilidade

@@ -239,7 +239,7 @@ describe('ProductionOrderService', () => {
       start_date: '2026-04-01',
       end_date: '2026-04-05',
       store_note: 'Produção teste',
-      products_sold: [
+      items: [
         { product_id: 'INSUMO-1', quantity: 2 },
         { product_id: 'INSUMO-2', quantity: 5 },
       ],
@@ -287,7 +287,11 @@ describe('ProductionOrderService', () => {
 
       expect(mockTransaction.query).toHaveBeenCalledWith(
         expect.stringContaining('INSERT INTO ORDENSPRODUCAO'),
-        expect.arrayContaining(['Ordem de Produção emitida via integração']),
+        expect.arrayContaining([
+          'Ordem de Produção emitida via integração',
+          expect.stringMatching(/^\d{4}-\d{2}-\d{2}$/),
+          expect.stringMatching(/^\d{2}:\d{2}:\d{2}$/),
+        ]),
         expect.any(Function),
       );
       expect(mockTransaction.commit).toHaveBeenCalled();

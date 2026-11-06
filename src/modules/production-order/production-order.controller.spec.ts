@@ -58,7 +58,7 @@ describe('ProductionOrderController', () => {
       quantity: 50,
       store_id: 2,
       user_id: 10,
-      products_sold: [{ product_id: 12, quantity: 20 }],
+      items: [{ product_id: 12, quantity: 20 }],
     };
 
     it('deve chamar productionOrderService.create com credenciais, loja, operador e body no padrão POST /orders', async () => {

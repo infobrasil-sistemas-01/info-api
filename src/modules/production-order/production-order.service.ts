@@ -329,10 +329,7 @@ export class ProductionOrderService {
           createDto.productCode,
       ).trim();
 
-      const itemsList =
-        (createDto.products_sold && createDto.products_sold.length > 0
-          ? createDto.products_sold
-          : createDto.items) || [];
+      const itemsList = createDto.items || [];
 
       const normalizedItems = itemsList.map((item) => ({
         productCode: String(
@@ -410,10 +407,21 @@ export class ProductionOrderService {
           .toFixed(2),
       );
 
-      // 4. Execução da transação atômica no Firebird
+      // 4. Execução da transação atômica no Firebird (fuso horário America/Sao_Paulo UTC-3)
       const now = new Date();
-      const dateVal = now.toISOString().split('T')[0];
-      const timeVal = now.toTimeString().split(' ')[0];
+      const dateVal = new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'America/Sao_Paulo',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      }).format(now);
+      const timeVal = new Intl.DateTimeFormat('en-GB', {
+        timeZone: 'America/Sao_Paulo',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+      }).format(now);
 
       const startDateVal =
         createDto.start_date ??
