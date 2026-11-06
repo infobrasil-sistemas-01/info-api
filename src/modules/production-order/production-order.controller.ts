@@ -1,9 +1,12 @@
 import {
+  BadRequestException,
+  Body,
   Controller,
   Get,
   NotFoundException,
   Param,
   ParseIntPipe,
+  Post,
   Query,
   Req,
   UseGuards,
@@ -29,6 +32,7 @@ import {
 import { ProductionOrderResponseDto } from './dto/production-order-response.dto';
 import { ProductionOrderDetailResponseDto } from './dto/production-order-detail-response.dto';
 import { ProductionOrderItemResponseDto } from './dto/production-order-item-response.dto';
+import { CreateProductionOrderDto } from './dto/create-production-order.dto';
 
 @ApiTags('Production Order')
 @Controller('production-order')
@@ -36,6 +40,65 @@ export class ProductionOrderController {
   constructor(
     private readonly productionOrderService: ProductionOrderService,
   ) {}
+
+  @Post()
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @RequirePermissions({ allOf: ['tenant.production-orders.create'] })
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Criar ordem de produção',
+    description:
+      'Cria uma nova ordem de produção na tabela ORDENSPRODUCAO e seus respectivos insumos na tabela ORDENSPRODUCAOITENS, calculando os preços a partir do custo fiscal dos produtos.',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Ordem de produção criada com sucesso.',
+    type: ProductionOrderDetailResponseDto,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Dados inválidos ou insumos não encontrados.',
+  })
+  async create(
+    @Req() req: ReqWithAuthContext,
+    @Body() body: CreateProductionOrderDto,
+  ) {
+    const {
+      credentialsId,
+      storeId: storeIdToken,
+      userId: userIdToken,
+      type,
+    } = req.authContext || {};
+
+    if (!credentialsId) {
+      throw new Error('Credentials ID not found in token');
+    }
+
+    const finalStoreId =
+      type === 'H2M'
+        ? storeIdToken
+        : body.storeId
+          ? Number(body.storeId)
+          : storeIdToken;
+
+    if (!finalStoreId) {
+      throw new BadRequestException('ID da loja não informado');
+    }
+
+    const finalOperatorId =
+      type === 'H2M'
+        ? Number(userIdToken) || 1
+        : body.userId
+          ? Number(body.userId)
+          : Number(userIdToken) || 1;
+
+    return this.productionOrderService.create(
+      credentialsId,
+      finalStoreId,
+      finalOperatorId,
+      body,
+    );
+  }
 
   @Get()
   @UseGuards(JwtAuthGuard, PermissionsGuard)

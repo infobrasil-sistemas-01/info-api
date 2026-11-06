@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { NotFoundException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { ProductionOrderController } from './production-order.controller';
 import { ProductionOrderService } from './production-order.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -14,6 +14,7 @@ describe('ProductionOrderController', () => {
     get: jest.fn(),
     getById: jest.fn(),
     getItemsByProductionOrderNumber: jest.fn(),
+    create: jest.fn(),
   };
 
   const mockReq = {
@@ -49,6 +50,73 @@ describe('ProductionOrderController', () => {
 
   afterEach(() => {
     jest.clearAllMocks();
+  });
+
+  describe('create', () => {
+    const validBody = {
+      productCode: '00000000000045',
+      quantity: 50,
+      storeId: 2,
+      userId: 10,
+      items: [{ productCode: 'INSUMO-1', quantity: 20 }],
+    };
+
+    it('deve chamar productionOrderService.create com credenciais, loja, operador e body', async () => {
+      const mockCreated = { ORP_NUMERO: 201, items: [] };
+      mockProductionOrderService.create.mockResolvedValue(mockCreated as any);
+
+      const result = await controller.create(mockReq, validBody as any);
+
+      expect(service.create).toHaveBeenCalledWith(
+        'cred-1',
+        2,
+        10,
+        validBody,
+      );
+      expect(result).toBe(mockCreated);
+    });
+
+    it('deve forçar storeId do token quando usuário for H2M', async () => {
+      const h2mReq = {
+        authContext: {
+          userId: '5',
+          credentialsId: 'cred-1',
+          storeId: 1,
+          type: 'H2M',
+        },
+      } as any;
+
+      mockProductionOrderService.create.mockResolvedValue({} as any);
+
+      await controller.create(h2mReq, { ...validBody, storeId: 99 } as any);
+
+      expect(service.create).toHaveBeenCalledWith(
+        'cred-1',
+        1,
+        5,
+        expect.objectContaining({ storeId: 99 }),
+      );
+    });
+
+    it('deve lançar erro se credentialsId não estiver presente no token', async () => {
+      const invalidReq = { authContext: {} } as any;
+      await expect(controller.create(invalidReq, validBody as any)).rejects.toThrow(
+        'Credentials ID not found in token',
+      );
+    });
+
+    it('deve lançar BadRequestException se storeId não for fornecido e nem existir no token', async () => {
+      const noStoreReq = {
+        authContext: {
+          credentialsId: 'cred-1',
+          type: 'M2M',
+        },
+      } as any;
+
+      await expect(
+        controller.create(noStoreReq, { ...validBody, storeId: undefined } as any),
+      ).rejects.toThrow(BadRequestException);
+    });
   });
 
   describe('get', () => {

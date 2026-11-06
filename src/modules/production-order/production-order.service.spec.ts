@@ -229,5 +229,250 @@ describe('ProductionOrderService', () => {
       ).toHaveBeenCalledWith(mockConnection);
     });
   });
+
+  describe('create', () => {
+    const createDto = {
+      productCode: 'PROD-FINAL',
+      quantity: 10,
+      storeId: 1,
+      userId: 5,
+      startDate: '2026-04-01',
+      endDate: '2026-04-05',
+      obs: 'Produção teste',
+      items: [
+        { productCode: 'INSUMO-1', quantity: 2 },
+        { productCode: 'INSUMO-2', quantity: 5 },
+      ],
+    };
+
+    it('deve criar a ordem de produção com sucesso e retornar o espelho com itens', async () => {
+      const mockProducts = [
+        { PRO_CODIGO: 'PROD-FINAL', PRO_PRCCOMPRAFISCAL: 50.0 },
+        { PRO_CODIGO: 'INSUMO-1', PRO_PRCCOMPRAFISCAL: 10.0 },
+        { PRO_CODIGO: 'INSUMO-2', PRO_PRCCOMPRAFISCAL: 4.0 },
+      ];
+
+      const mockTransaction = {
+        query: jest.fn((query, params, callback) => {
+          if (query.includes('INSERT INTO ORDENSPRODUCAO ')) {
+            callback(null, [{ ORP_NUMERO: 305 }]);
+          } else {
+            callback(null, [{ OPI_NUMERO: 1 }]);
+          }
+        }),
+        commit: jest.fn((callback) => callback(null)),
+        rollback: jest.fn((callback) => callback?.()),
+      };
+
+      mockConnection.startTransaction = jest.fn((callback) => {
+        callback(null, mockTransaction);
+      });
+
+      mockConnection.query.mockImplementation((query, params, callback) => {
+        if (query.includes('FROM PRODUTOS P')) {
+          callback(null, mockProducts);
+        } else if (query.includes('FROM ORDENSPRODUCAO OP')) {
+          callback(null, [{ ORP_NUMERO: 305, PRO_CODIGO: 'PROD-FINAL' }]);
+        } else if (query.includes('FROM ORDENSPRODUCAOITENS OPI')) {
+          callback(null, [
+            { OPI_NUMERO: 1, PRO_CODIGO: 'INSUMO-1', OPI_TOTAL: 20 },
+            { OPI_NUMERO: 2, PRO_CODIGO: 'INSUMO-2', OPI_TOTAL: 20 },
+          ]);
+        } else {
+          callback(null, []);
+        }
+      });
+
+      const result = await service.create('cred-1', 1, 5, createDto as any);
+
+      expect(mockTransaction.query).toHaveBeenCalledWith(
+        expect.stringContaining('INSERT INTO ORDENSPRODUCAO'),
+        expect.arrayContaining(['Ordem de Produção emitida via integração']),
+        expect.any(Function),
+      );
+      expect(mockTransaction.commit).toHaveBeenCalled();
+      expect(result.ORP_NUMERO).toBe(305);
+      expect(result.items).toHaveLength(2);
+      expect(mockTenantConnectionService.releaseConnection).toHaveBeenCalledWith(
+        mockConnection,
+      );
+    });
+
+    it('deve lançar BadRequestException se o produto final não existir no catálogo', async () => {
+      mockConnection.query.mockImplementation((query, params, callback) => {
+        callback(null, [{ PRO_CODIGO: 'INSUMO-1', PRO_PRCCOMPRAFISCAL: 10.0 }]);
+      });
+
+      await expect(
+        service.create('cred-1', 1, 5, createDto as any),
+      ).rejects.toThrow(BadRequestException);
+    });
+
+    it('deve lançar BadRequestException se algum insumo não for encontrado no catálogo', async () => {
+      mockConnection.query.mockImplementation((query, params, callback) => {
+        callback(null, [
+          { PRO_CODIGO: 'PROD-FINAL', PRO_PRCCOMPRAFISCAL: 50.0 },
+          { PRO_CODIGO: 'INSUMO-1', PRO_PRCCOMPRAFISCAL: 10.0 },
+        ]);
+      });
+
+      await expect(
+        service.create('cred-1', 1, 5, createDto as any),
+      ).rejects.toThrow(
+        /Produto\(s\)\/Insumo\(s\) não encontrado\(s\) no cadastro/,
+      );
+    });
+
+    it('deve realizar rollback na transação se o insert do cabeçalho falhar', async () => {
+      const mockProducts = [
+        { PRO_CODIGO: 'PROD-FINAL', PRO_PRCCOMPRAFISCAL: 50.0 },
+        { PRO_CODIGO: 'INSUMO-1', PRO_PRCCOMPRAFISCAL: 10.0 },
+        { PRO_CODIGO: 'INSUMO-2', PRO_PRCCOMPRAFISCAL: 4.0 },
+      ];
+
+      const mockTransaction = {
+        query: jest.fn((query, params, callback) => {
+          callback(new Error('Insert header failed'));
+        }),
+        commit: jest.fn(),
+        rollback: jest.fn((callback) => callback?.()),
+      };
+
+      mockConnection.startTransaction = jest.fn((callback) => {
+        callback(null, mockTransaction);
+      });
+
+      mockConnection.query.mockImplementation((query, params, callback) => {
+        callback(null, mockProducts);
+      });
+
+      await expect(
+        service.create('cred-1', 1, 5, createDto as any),
+      ).rejects.toThrow('Insert header failed');
+
+      expect(mockTransaction.rollback).toHaveBeenCalled();
+      expect(mockTransaction.commit).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('create', () => {
+    const createDto = {
+      productCode: 'PROD-FINAL',
+      quantity: 10,
+      storeId: 1,
+      userId: 5,
+      startDate: '2026-04-01',
+      endDate: '2026-04-05',
+      obs: 'Produção teste',
+      items: [
+        { productCode: 'INSUMO-1', quantity: 2 },
+        { productCode: 'INSUMO-2', quantity: 5 },
+      ],
+    };
+
+    it('deve criar a ordem de produção com sucesso e retornar o espelho com itens', async () => {
+      const mockProducts = [
+        { PRO_CODIGO: 'PROD-FINAL', PRO_PRCCOMPRAFISCAL: 50.0 },
+        { PRO_CODIGO: 'INSUMO-1', PRO_PRCCOMPRAFISCAL: 10.0 },
+        { PRO_CODIGO: 'INSUMO-2', PRO_PRCCOMPRAFISCAL: 4.0 },
+      ];
+
+      const mockTransaction = {
+        query: jest.fn((query, params, callback) => {
+          if (query.includes('INSERT INTO ORDENSPRODUCAO ')) {
+            callback(null, [{ ORP_NUMERO: 305 }]);
+          } else {
+            callback(null, [{ OPI_NUMERO: 1 }]);
+          }
+        }),
+        commit: jest.fn((callback) => callback(null)),
+        rollback: jest.fn((callback) => callback?.()),
+      };
+
+      mockConnection.startTransaction = jest.fn((callback) => {
+        callback(null, mockTransaction);
+      });
+
+      mockConnection.query.mockImplementation((query, params, callback) => {
+        if (query.includes('FROM PRODUTOS P')) {
+          callback(null, mockProducts);
+        } else if (query.includes('FROM ORDENSPRODUCAO OP')) {
+          callback(null, [{ ORP_NUMERO: 305, PRO_CODIGO: 'PROD-FINAL' }]);
+        } else if (query.includes('FROM ORDENSPRODUCAOITENS OPI')) {
+          callback(null, [
+            { OPI_NUMERO: 1, PRO_CODIGO: 'INSUMO-1', OPI_TOTAL: 20 },
+            { OPI_NUMERO: 2, PRO_CODIGO: 'INSUMO-2', OPI_TOTAL: 20 },
+          ]);
+        } else {
+          callback(null, []);
+        }
+      });
+
+      const result = await service.create('cred-1', 1, 5, createDto as any);
+
+      expect(mockTransaction.commit).toHaveBeenCalled();
+      expect(result.ORP_NUMERO).toBe(305);
+      expect(result.items).toHaveLength(2);
+      expect(mockTenantConnectionService.releaseConnection).toHaveBeenCalledWith(
+        mockConnection,
+      );
+    });
+
+    it('deve lançar BadRequestException se o produto final não existir no catálogo', async () => {
+      mockConnection.query.mockImplementation((query, params, callback) => {
+        callback(null, [{ PRO_CODIGO: 'INSUMO-1', PRO_PRCCOMPRAFISCAL: 10.0 }]);
+      });
+
+      await expect(
+        service.create('cred-1', 1, 5, createDto as any),
+      ).rejects.toThrow(BadRequestException);
+    });
+
+    it('deve lançar BadRequestException se algum insumo não for encontrado no catálogo', async () => {
+      mockConnection.query.mockImplementation((query, params, callback) => {
+        callback(null, [
+          { PRO_CODIGO: 'PROD-FINAL', PRO_PRCCOMPRAFISCAL: 50.0 },
+          { PRO_CODIGO: 'INSUMO-1', PRO_PRCCOMPRAFISCAL: 10.0 },
+        ]);
+      });
+
+      await expect(
+        service.create('cred-1', 1, 5, createDto as any),
+      ).rejects.toThrow(
+        /Produto\(s\)\/Insumo\(s\) não encontrado\(s\) no cadastro/,
+      );
+    });
+
+    it('deve realizar rollback na transação se o insert do cabeçalho falhar', async () => {
+      const mockProducts = [
+        { PRO_CODIGO: 'PROD-FINAL', PRO_PRCCOMPRAFISCAL: 50.0 },
+        { PRO_CODIGO: 'INSUMO-1', PRO_PRCCOMPRAFISCAL: 10.0 },
+        { PRO_CODIGO: 'INSUMO-2', PRO_PRCCOMPRAFISCAL: 4.0 },
+      ];
+
+      const mockTransaction = {
+        query: jest.fn((query, params, callback) => {
+          callback(new Error('Insert header failed'));
+        }),
+        commit: jest.fn(),
+        rollback: jest.fn((callback) => callback?.()),
+      };
+
+      mockConnection.startTransaction = jest.fn((callback) => {
+        callback(null, mockTransaction);
+      });
+
+      mockConnection.query.mockImplementation((query, params, callback) => {
+        callback(null, mockProducts);
+      });
+
+      await expect(
+        service.create('cred-1', 1, 5, createDto as any),
+      ).rejects.toThrow('Insert header failed');
+
+      expect(mockTransaction.rollback).toHaveBeenCalled();
+      expect(mockTransaction.commit).not.toHaveBeenCalled();
+    });
+  });
 });
 
