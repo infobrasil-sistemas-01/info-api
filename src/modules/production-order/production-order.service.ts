@@ -9,7 +9,7 @@ export class ProductionOrderService {
 
   constructor(
     private readonly tenantConnectionService: TenantConnectionService,
-  ) {}
+  ) { }
 
   async get(
     credentialsId: string,
@@ -173,8 +173,7 @@ export class ProductionOrderService {
       this.logger.log(
         `Busca de ordens de produção executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
           { storeId: finalStoreId, page, pageSize, ...queryDto },
-        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${
-          endTime - startTime
+        )}, Itens: ${Array.isArray(result) ? result.length : result ? 1 : 0}, Tempo SQL: ${endTime - startTime
         }ms`,
       );
 
@@ -250,8 +249,7 @@ export class ProductionOrderService {
       const endTime = Date.now();
 
       this.logger.log(
-        `Busca de ordem de produção por ID executada. Tenant: ${credentialsId}, ID: ${id}, Tempo SQL: ${
-          endTime - startTime
+        `Busca de ordem de produção por ID executada. Tenant: ${credentialsId}, ID: ${id}, Tempo SQL: ${endTime - startTime
         }ms`,
       );
 
@@ -276,7 +274,6 @@ export class ProductionOrderService {
                       P.PRO_CODIGOBAR,
                       P.PRO_DESCRICAO,
                       P.PRO_UNIDADE,
-                      P.PRO_REFERENCIA,
                       M.MAR_CODIGO,
                       M.MAR_DESCRICAO,
                       G.GRU_CODIGO,
@@ -301,8 +298,7 @@ export class ProductionOrderService {
       const endTime = Date.now();
 
       this.logger.log(
-        `Busca de itens da ordem de produção executada. Tenant: ${credentialsId}, Ordem: ${orderNumber}, Itens: ${
-          Array.isArray(result) ? result.length : 0
+        `Busca de itens da ordem de produção executada. Tenant: ${credentialsId}, Ordem: ${orderNumber}, Itens: ${Array.isArray(result) ? result.length : 0
         }, Tempo SQL: ${endTime - startTime}ms`,
       );
 

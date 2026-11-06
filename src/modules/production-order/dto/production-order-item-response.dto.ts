@@ -38,12 +38,6 @@ export class ProductionOrderItemResponseDto {
   PRO_UNIDADE?: string;
 
   @ApiPropertyOptional({
-    example: 'REF-FAR-01',
-    description: 'Referência do insumo',
-  })
-  PRO_REFERENCIA?: string;
-
-  @ApiPropertyOptional({
     example: 5,
     description: 'Código da marca do insumo (MAR_CODIGO)',
   })
