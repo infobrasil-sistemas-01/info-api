@@ -380,6 +380,28 @@ export const PERMISSIONS = [
     module: 'tenant',
   },
 
+  // ========= ORDENS DE PRODUÇÃO =========
+  {
+    key: 'tenant.production-orders.view',
+    descricao: 'Visualizar ordens de produção do tenant',
+    module: 'tenant',
+  },
+  {
+    key: 'tenant.production-orders.create',
+    descricao: 'Criar ordens de produção do tenant',
+    module: 'tenant',
+  },
+  {
+    key: 'tenant.production-orders.update',
+    descricao: 'Atualizar ordens de produção do tenant',
+    module: 'tenant',
+  },
+  {
+    key: 'tenant.production-orders.delete',
+    descricao: 'Deletar ordens de produção do tenant',
+    module: 'tenant',
+  },
+
   // ========= SOLICITAÇÕES =========
   {
     key: 'integration-request.view',

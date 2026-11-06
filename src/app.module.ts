@@ -45,6 +45,7 @@ import { FiscalEntryModule } from './modules/fiscal-entry/fiscal-entry.module';
 import { ChangelogModule } from './modules/changelog/changelog.module';
 import { AdjustmentModule } from './modules/adjustment/adjustment.module';
 import { FeatureRequestModule } from './modules/feature-request/feature-request.module';
+import { ProductionOrderModule } from './modules/production-order/production-order.module';
 
 import { AppController } from './app.controller';
 
@@ -90,6 +91,7 @@ import { AppController } from './app.controller';
     DashboardModule,
     ChangelogModule,
     FeatureRequestModule,
+    ProductionOrderModule,
   ],
   controllers: [AppController],
   providers: [

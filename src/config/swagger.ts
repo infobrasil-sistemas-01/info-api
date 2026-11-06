@@ -55,6 +55,12 @@ export function getSwaggerConfigBuilder(
       'Endpoints relacionados à gestão de grupos e produtos vinculados a grupos',
     )
 
+    // --- Produção & Estoque ---
+    .addTag(
+      'Production Order',
+      'Endpoints relacionados à gestão de ordens de produção e insumos consumidos',
+    )
+
     // --- Vendas ---
     .addTag('Order', 'Endpoints relacionados à gestão de pedidos')
     .addTag(
