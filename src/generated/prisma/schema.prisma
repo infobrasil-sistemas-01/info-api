@@ -58,7 +58,26 @@ model RequestLog {
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, createdAt])
+  @@index([createdAt])
+  @@index([createdAt, status])
   @@map("request_logs")
+}
+
+model DashboardHourlyRollup {
+  id               String   @id @default(uuid())
+  bucket           DateTime @unique
+  totalRequests    Int      @map("total_requests")
+  successCount     Int      @map("success_count")
+  clientErrorCount Int      @map("client_error_count")
+  serverErrorCount Int      @map("server_error_count")
+  rateLimitCount   Int      @map("rate_limit_count")
+  avgDurationMs    Float    @map("avg_duration_ms")
+  p95DurationMs    Float    @map("p95_duration_ms")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  @@index([bucket])
+  @@map("dashboard_hourly_rollups")
 }
 
 model UserInvitation {

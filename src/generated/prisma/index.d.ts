@@ -29,6 +29,11 @@ export type Plan = $Result.DefaultSelection<Prisma.$PlanPayload>
  */
 export type RequestLog = $Result.DefaultSelection<Prisma.$RequestLogPayload>
 /**
+ * Model DashboardHourlyRollup
+ * 
+ */
+export type DashboardHourlyRollup = $Result.DefaultSelection<Prisma.$DashboardHourlyRollupPayload>
+/**
  * Model UserInvitation
  * 
  */
@@ -298,6 +303,16 @@ export class PrismaClient<
     * ```
     */
   get requestLog(): Prisma.RequestLogDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.dashboardHourlyRollup`: Exposes CRUD operations for the **DashboardHourlyRollup** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DashboardHourlyRollups
+    * const dashboardHourlyRollups = await prisma.dashboardHourlyRollup.findMany()
+    * ```
+    */
+  get dashboardHourlyRollup(): Prisma.DashboardHourlyRollupDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.userInvitation`: Exposes CRUD operations for the **UserInvitation** model.
@@ -885,6 +900,7 @@ export namespace Prisma {
     User: 'User',
     Plan: 'Plan',
     RequestLog: 'RequestLog',
+    DashboardHourlyRollup: 'DashboardHourlyRollup',
     UserInvitation: 'UserInvitation',
     DbCredentials: 'DbCredentials',
     Role: 'Role',
@@ -915,7 +931,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "plan" | "requestLog" | "userInvitation" | "dbCredentials" | "role" | "permission" | "rolePermission" | "integrationRequest" | "announcement" | "newsletter" | "announcementView" | "statusLog" | "systemHeartbeat" | "usageAlertLog" | "featureRequest" | "featureRequestMessage" | "integrationGuide"
+      modelProps: "user" | "plan" | "requestLog" | "dashboardHourlyRollup" | "userInvitation" | "dbCredentials" | "role" | "permission" | "rolePermission" | "integrationRequest" | "announcement" | "newsletter" | "announcementView" | "statusLog" | "systemHeartbeat" | "usageAlertLog" | "featureRequest" | "featureRequestMessage" | "integrationGuide"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1138,6 +1154,80 @@ export namespace Prisma {
           count: {
             args: Prisma.RequestLogCountArgs<ExtArgs>
             result: $Utils.Optional<RequestLogCountAggregateOutputType> | number
+          }
+        }
+      }
+      DashboardHourlyRollup: {
+        payload: Prisma.$DashboardHourlyRollupPayload<ExtArgs>
+        fields: Prisma.DashboardHourlyRollupFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DashboardHourlyRollupFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DashboardHourlyRollupPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DashboardHourlyRollupFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DashboardHourlyRollupPayload>
+          }
+          findFirst: {
+            args: Prisma.DashboardHourlyRollupFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DashboardHourlyRollupPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DashboardHourlyRollupFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DashboardHourlyRollupPayload>
+          }
+          findMany: {
+            args: Prisma.DashboardHourlyRollupFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DashboardHourlyRollupPayload>[]
+          }
+          create: {
+            args: Prisma.DashboardHourlyRollupCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DashboardHourlyRollupPayload>
+          }
+          createMany: {
+            args: Prisma.DashboardHourlyRollupCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DashboardHourlyRollupCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DashboardHourlyRollupPayload>[]
+          }
+          delete: {
+            args: Prisma.DashboardHourlyRollupDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DashboardHourlyRollupPayload>
+          }
+          update: {
+            args: Prisma.DashboardHourlyRollupUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DashboardHourlyRollupPayload>
+          }
+          deleteMany: {
+            args: Prisma.DashboardHourlyRollupDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DashboardHourlyRollupUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.DashboardHourlyRollupUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DashboardHourlyRollupPayload>[]
+          }
+          upsert: {
+            args: Prisma.DashboardHourlyRollupUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DashboardHourlyRollupPayload>
+          }
+          aggregate: {
+            args: Prisma.DashboardHourlyRollupAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDashboardHourlyRollup>
+          }
+          groupBy: {
+            args: Prisma.DashboardHourlyRollupGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DashboardHourlyRollupGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DashboardHourlyRollupCountArgs<ExtArgs>
+            result: $Utils.Optional<DashboardHourlyRollupCountAggregateOutputType> | number
           }
         }
       }
@@ -2362,6 +2452,7 @@ export namespace Prisma {
     user?: UserOmit
     plan?: PlanOmit
     requestLog?: RequestLogOmit
+    dashboardHourlyRollup?: DashboardHourlyRollupOmit
     userInvitation?: UserInvitationOmit
     dbCredentials?: DbCredentialsOmit
     role?: RoleOmit
@@ -6444,6 +6535,1142 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: RequestLogInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model DashboardHourlyRollup
+   */
+
+  export type AggregateDashboardHourlyRollup = {
+    _count: DashboardHourlyRollupCountAggregateOutputType | null
+    _avg: DashboardHourlyRollupAvgAggregateOutputType | null
+    _sum: DashboardHourlyRollupSumAggregateOutputType | null
+    _min: DashboardHourlyRollupMinAggregateOutputType | null
+    _max: DashboardHourlyRollupMaxAggregateOutputType | null
+  }
+
+  export type DashboardHourlyRollupAvgAggregateOutputType = {
+    totalRequests: number | null
+    successCount: number | null
+    clientErrorCount: number | null
+    serverErrorCount: number | null
+    rateLimitCount: number | null
+    avgDurationMs: number | null
+    p95DurationMs: number | null
+  }
+
+  export type DashboardHourlyRollupSumAggregateOutputType = {
+    totalRequests: number | null
+    successCount: number | null
+    clientErrorCount: number | null
+    serverErrorCount: number | null
+    rateLimitCount: number | null
+    avgDurationMs: number | null
+    p95DurationMs: number | null
+  }
+
+  export type DashboardHourlyRollupMinAggregateOutputType = {
+    id: string | null
+    bucket: Date | null
+    totalRequests: number | null
+    successCount: number | null
+    clientErrorCount: number | null
+    serverErrorCount: number | null
+    rateLimitCount: number | null
+    avgDurationMs: number | null
+    p95DurationMs: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DashboardHourlyRollupMaxAggregateOutputType = {
+    id: string | null
+    bucket: Date | null
+    totalRequests: number | null
+    successCount: number | null
+    clientErrorCount: number | null
+    serverErrorCount: number | null
+    rateLimitCount: number | null
+    avgDurationMs: number | null
+    p95DurationMs: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DashboardHourlyRollupCountAggregateOutputType = {
+    id: number
+    bucket: number
+    totalRequests: number
+    successCount: number
+    clientErrorCount: number
+    serverErrorCount: number
+    rateLimitCount: number
+    avgDurationMs: number
+    p95DurationMs: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type DashboardHourlyRollupAvgAggregateInputType = {
+    totalRequests?: true
+    successCount?: true
+    clientErrorCount?: true
+    serverErrorCount?: true
+    rateLimitCount?: true
+    avgDurationMs?: true
+    p95DurationMs?: true
+  }
+
+  export type DashboardHourlyRollupSumAggregateInputType = {
+    totalRequests?: true
+    successCount?: true
+    clientErrorCount?: true
+    serverErrorCount?: true
+    rateLimitCount?: true
+    avgDurationMs?: true
+    p95DurationMs?: true
+  }
+
+  export type DashboardHourlyRollupMinAggregateInputType = {
+    id?: true
+    bucket?: true
+    totalRequests?: true
+    successCount?: true
+    clientErrorCount?: true
+    serverErrorCount?: true
+    rateLimitCount?: true
+    avgDurationMs?: true
+    p95DurationMs?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DashboardHourlyRollupMaxAggregateInputType = {
+    id?: true
+    bucket?: true
+    totalRequests?: true
+    successCount?: true
+    clientErrorCount?: true
+    serverErrorCount?: true
+    rateLimitCount?: true
+    avgDurationMs?: true
+    p95DurationMs?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DashboardHourlyRollupCountAggregateInputType = {
+    id?: true
+    bucket?: true
+    totalRequests?: true
+    successCount?: true
+    clientErrorCount?: true
+    serverErrorCount?: true
+    rateLimitCount?: true
+    avgDurationMs?: true
+    p95DurationMs?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type DashboardHourlyRollupAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DashboardHourlyRollup to aggregate.
+     */
+    where?: DashboardHourlyRollupWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DashboardHourlyRollups to fetch.
+     */
+    orderBy?: DashboardHourlyRollupOrderByWithRelationInput | DashboardHourlyRollupOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DashboardHourlyRollupWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DashboardHourlyRollups from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DashboardHourlyRollups.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned DashboardHourlyRollups
+    **/
+    _count?: true | DashboardHourlyRollupCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: DashboardHourlyRollupAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: DashboardHourlyRollupSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DashboardHourlyRollupMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DashboardHourlyRollupMaxAggregateInputType
+  }
+
+  export type GetDashboardHourlyRollupAggregateType<T extends DashboardHourlyRollupAggregateArgs> = {
+        [P in keyof T & keyof AggregateDashboardHourlyRollup]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDashboardHourlyRollup[P]>
+      : GetScalarType<T[P], AggregateDashboardHourlyRollup[P]>
+  }
+
+
+
+
+  export type DashboardHourlyRollupGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DashboardHourlyRollupWhereInput
+    orderBy?: DashboardHourlyRollupOrderByWithAggregationInput | DashboardHourlyRollupOrderByWithAggregationInput[]
+    by: DashboardHourlyRollupScalarFieldEnum[] | DashboardHourlyRollupScalarFieldEnum
+    having?: DashboardHourlyRollupScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DashboardHourlyRollupCountAggregateInputType | true
+    _avg?: DashboardHourlyRollupAvgAggregateInputType
+    _sum?: DashboardHourlyRollupSumAggregateInputType
+    _min?: DashboardHourlyRollupMinAggregateInputType
+    _max?: DashboardHourlyRollupMaxAggregateInputType
+  }
+
+  export type DashboardHourlyRollupGroupByOutputType = {
+    id: string
+    bucket: Date
+    totalRequests: number
+    successCount: number
+    clientErrorCount: number
+    serverErrorCount: number
+    rateLimitCount: number
+    avgDurationMs: number
+    p95DurationMs: number
+    createdAt: Date
+    updatedAt: Date
+    _count: DashboardHourlyRollupCountAggregateOutputType | null
+    _avg: DashboardHourlyRollupAvgAggregateOutputType | null
+    _sum: DashboardHourlyRollupSumAggregateOutputType | null
+    _min: DashboardHourlyRollupMinAggregateOutputType | null
+    _max: DashboardHourlyRollupMaxAggregateOutputType | null
+  }
+
+  type GetDashboardHourlyRollupGroupByPayload<T extends DashboardHourlyRollupGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DashboardHourlyRollupGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DashboardHourlyRollupGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DashboardHourlyRollupGroupByOutputType[P]>
+            : GetScalarType<T[P], DashboardHourlyRollupGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DashboardHourlyRollupSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    bucket?: boolean
+    totalRequests?: boolean
+    successCount?: boolean
+    clientErrorCount?: boolean
+    serverErrorCount?: boolean
+    rateLimitCount?: boolean
+    avgDurationMs?: boolean
+    p95DurationMs?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["dashboardHourlyRollup"]>
+
+  export type DashboardHourlyRollupSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    bucket?: boolean
+    totalRequests?: boolean
+    successCount?: boolean
+    clientErrorCount?: boolean
+    serverErrorCount?: boolean
+    rateLimitCount?: boolean
+    avgDurationMs?: boolean
+    p95DurationMs?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["dashboardHourlyRollup"]>
+
+  export type DashboardHourlyRollupSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    bucket?: boolean
+    totalRequests?: boolean
+    successCount?: boolean
+    clientErrorCount?: boolean
+    serverErrorCount?: boolean
+    rateLimitCount?: boolean
+    avgDurationMs?: boolean
+    p95DurationMs?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["dashboardHourlyRollup"]>
+
+  export type DashboardHourlyRollupSelectScalar = {
+    id?: boolean
+    bucket?: boolean
+    totalRequests?: boolean
+    successCount?: boolean
+    clientErrorCount?: boolean
+    serverErrorCount?: boolean
+    rateLimitCount?: boolean
+    avgDurationMs?: boolean
+    p95DurationMs?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type DashboardHourlyRollupOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "bucket" | "totalRequests" | "successCount" | "clientErrorCount" | "serverErrorCount" | "rateLimitCount" | "avgDurationMs" | "p95DurationMs" | "createdAt" | "updatedAt", ExtArgs["result"]["dashboardHourlyRollup"]>
+
+  export type $DashboardHourlyRollupPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "DashboardHourlyRollup"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      bucket: Date
+      totalRequests: number
+      successCount: number
+      clientErrorCount: number
+      serverErrorCount: number
+      rateLimitCount: number
+      avgDurationMs: number
+      p95DurationMs: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["dashboardHourlyRollup"]>
+    composites: {}
+  }
+
+  type DashboardHourlyRollupGetPayload<S extends boolean | null | undefined | DashboardHourlyRollupDefaultArgs> = $Result.GetResult<Prisma.$DashboardHourlyRollupPayload, S>
+
+  type DashboardHourlyRollupCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<DashboardHourlyRollupFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: DashboardHourlyRollupCountAggregateInputType | true
+    }
+
+  export interface DashboardHourlyRollupDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DashboardHourlyRollup'], meta: { name: 'DashboardHourlyRollup' } }
+    /**
+     * Find zero or one DashboardHourlyRollup that matches the filter.
+     * @param {DashboardHourlyRollupFindUniqueArgs} args - Arguments to find a DashboardHourlyRollup
+     * @example
+     * // Get one DashboardHourlyRollup
+     * const dashboardHourlyRollup = await prisma.dashboardHourlyRollup.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DashboardHourlyRollupFindUniqueArgs>(args: SelectSubset<T, DashboardHourlyRollupFindUniqueArgs<ExtArgs>>): Prisma__DashboardHourlyRollupClient<$Result.GetResult<Prisma.$DashboardHourlyRollupPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one DashboardHourlyRollup that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {DashboardHourlyRollupFindUniqueOrThrowArgs} args - Arguments to find a DashboardHourlyRollup
+     * @example
+     * // Get one DashboardHourlyRollup
+     * const dashboardHourlyRollup = await prisma.dashboardHourlyRollup.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DashboardHourlyRollupFindUniqueOrThrowArgs>(args: SelectSubset<T, DashboardHourlyRollupFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DashboardHourlyRollupClient<$Result.GetResult<Prisma.$DashboardHourlyRollupPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DashboardHourlyRollup that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DashboardHourlyRollupFindFirstArgs} args - Arguments to find a DashboardHourlyRollup
+     * @example
+     * // Get one DashboardHourlyRollup
+     * const dashboardHourlyRollup = await prisma.dashboardHourlyRollup.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DashboardHourlyRollupFindFirstArgs>(args?: SelectSubset<T, DashboardHourlyRollupFindFirstArgs<ExtArgs>>): Prisma__DashboardHourlyRollupClient<$Result.GetResult<Prisma.$DashboardHourlyRollupPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DashboardHourlyRollup that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DashboardHourlyRollupFindFirstOrThrowArgs} args - Arguments to find a DashboardHourlyRollup
+     * @example
+     * // Get one DashboardHourlyRollup
+     * const dashboardHourlyRollup = await prisma.dashboardHourlyRollup.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DashboardHourlyRollupFindFirstOrThrowArgs>(args?: SelectSubset<T, DashboardHourlyRollupFindFirstOrThrowArgs<ExtArgs>>): Prisma__DashboardHourlyRollupClient<$Result.GetResult<Prisma.$DashboardHourlyRollupPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more DashboardHourlyRollups that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DashboardHourlyRollupFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DashboardHourlyRollups
+     * const dashboardHourlyRollups = await prisma.dashboardHourlyRollup.findMany()
+     * 
+     * // Get first 10 DashboardHourlyRollups
+     * const dashboardHourlyRollups = await prisma.dashboardHourlyRollup.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const dashboardHourlyRollupWithIdOnly = await prisma.dashboardHourlyRollup.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends DashboardHourlyRollupFindManyArgs>(args?: SelectSubset<T, DashboardHourlyRollupFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DashboardHourlyRollupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a DashboardHourlyRollup.
+     * @param {DashboardHourlyRollupCreateArgs} args - Arguments to create a DashboardHourlyRollup.
+     * @example
+     * // Create one DashboardHourlyRollup
+     * const DashboardHourlyRollup = await prisma.dashboardHourlyRollup.create({
+     *   data: {
+     *     // ... data to create a DashboardHourlyRollup
+     *   }
+     * })
+     * 
+     */
+    create<T extends DashboardHourlyRollupCreateArgs>(args: SelectSubset<T, DashboardHourlyRollupCreateArgs<ExtArgs>>): Prisma__DashboardHourlyRollupClient<$Result.GetResult<Prisma.$DashboardHourlyRollupPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many DashboardHourlyRollups.
+     * @param {DashboardHourlyRollupCreateManyArgs} args - Arguments to create many DashboardHourlyRollups.
+     * @example
+     * // Create many DashboardHourlyRollups
+     * const dashboardHourlyRollup = await prisma.dashboardHourlyRollup.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DashboardHourlyRollupCreateManyArgs>(args?: SelectSubset<T, DashboardHourlyRollupCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many DashboardHourlyRollups and returns the data saved in the database.
+     * @param {DashboardHourlyRollupCreateManyAndReturnArgs} args - Arguments to create many DashboardHourlyRollups.
+     * @example
+     * // Create many DashboardHourlyRollups
+     * const dashboardHourlyRollup = await prisma.dashboardHourlyRollup.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many DashboardHourlyRollups and only return the `id`
+     * const dashboardHourlyRollupWithIdOnly = await prisma.dashboardHourlyRollup.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DashboardHourlyRollupCreateManyAndReturnArgs>(args?: SelectSubset<T, DashboardHourlyRollupCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DashboardHourlyRollupPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a DashboardHourlyRollup.
+     * @param {DashboardHourlyRollupDeleteArgs} args - Arguments to delete one DashboardHourlyRollup.
+     * @example
+     * // Delete one DashboardHourlyRollup
+     * const DashboardHourlyRollup = await prisma.dashboardHourlyRollup.delete({
+     *   where: {
+     *     // ... filter to delete one DashboardHourlyRollup
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DashboardHourlyRollupDeleteArgs>(args: SelectSubset<T, DashboardHourlyRollupDeleteArgs<ExtArgs>>): Prisma__DashboardHourlyRollupClient<$Result.GetResult<Prisma.$DashboardHourlyRollupPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one DashboardHourlyRollup.
+     * @param {DashboardHourlyRollupUpdateArgs} args - Arguments to update one DashboardHourlyRollup.
+     * @example
+     * // Update one DashboardHourlyRollup
+     * const dashboardHourlyRollup = await prisma.dashboardHourlyRollup.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DashboardHourlyRollupUpdateArgs>(args: SelectSubset<T, DashboardHourlyRollupUpdateArgs<ExtArgs>>): Prisma__DashboardHourlyRollupClient<$Result.GetResult<Prisma.$DashboardHourlyRollupPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more DashboardHourlyRollups.
+     * @param {DashboardHourlyRollupDeleteManyArgs} args - Arguments to filter DashboardHourlyRollups to delete.
+     * @example
+     * // Delete a few DashboardHourlyRollups
+     * const { count } = await prisma.dashboardHourlyRollup.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DashboardHourlyRollupDeleteManyArgs>(args?: SelectSubset<T, DashboardHourlyRollupDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DashboardHourlyRollups.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DashboardHourlyRollupUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DashboardHourlyRollups
+     * const dashboardHourlyRollup = await prisma.dashboardHourlyRollup.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DashboardHourlyRollupUpdateManyArgs>(args: SelectSubset<T, DashboardHourlyRollupUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DashboardHourlyRollups and returns the data updated in the database.
+     * @param {DashboardHourlyRollupUpdateManyAndReturnArgs} args - Arguments to update many DashboardHourlyRollups.
+     * @example
+     * // Update many DashboardHourlyRollups
+     * const dashboardHourlyRollup = await prisma.dashboardHourlyRollup.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more DashboardHourlyRollups and only return the `id`
+     * const dashboardHourlyRollupWithIdOnly = await prisma.dashboardHourlyRollup.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends DashboardHourlyRollupUpdateManyAndReturnArgs>(args: SelectSubset<T, DashboardHourlyRollupUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DashboardHourlyRollupPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one DashboardHourlyRollup.
+     * @param {DashboardHourlyRollupUpsertArgs} args - Arguments to update or create a DashboardHourlyRollup.
+     * @example
+     * // Update or create a DashboardHourlyRollup
+     * const dashboardHourlyRollup = await prisma.dashboardHourlyRollup.upsert({
+     *   create: {
+     *     // ... data to create a DashboardHourlyRollup
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DashboardHourlyRollup we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DashboardHourlyRollupUpsertArgs>(args: SelectSubset<T, DashboardHourlyRollupUpsertArgs<ExtArgs>>): Prisma__DashboardHourlyRollupClient<$Result.GetResult<Prisma.$DashboardHourlyRollupPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of DashboardHourlyRollups.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DashboardHourlyRollupCountArgs} args - Arguments to filter DashboardHourlyRollups to count.
+     * @example
+     * // Count the number of DashboardHourlyRollups
+     * const count = await prisma.dashboardHourlyRollup.count({
+     *   where: {
+     *     // ... the filter for the DashboardHourlyRollups we want to count
+     *   }
+     * })
+    **/
+    count<T extends DashboardHourlyRollupCountArgs>(
+      args?: Subset<T, DashboardHourlyRollupCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DashboardHourlyRollupCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DashboardHourlyRollup.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DashboardHourlyRollupAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DashboardHourlyRollupAggregateArgs>(args: Subset<T, DashboardHourlyRollupAggregateArgs>): Prisma.PrismaPromise<GetDashboardHourlyRollupAggregateType<T>>
+
+    /**
+     * Group by DashboardHourlyRollup.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DashboardHourlyRollupGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DashboardHourlyRollupGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DashboardHourlyRollupGroupByArgs['orderBy'] }
+        : { orderBy?: DashboardHourlyRollupGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DashboardHourlyRollupGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDashboardHourlyRollupGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the DashboardHourlyRollup model
+   */
+  readonly fields: DashboardHourlyRollupFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DashboardHourlyRollup.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DashboardHourlyRollupClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the DashboardHourlyRollup model
+   */
+  interface DashboardHourlyRollupFieldRefs {
+    readonly id: FieldRef<"DashboardHourlyRollup", 'String'>
+    readonly bucket: FieldRef<"DashboardHourlyRollup", 'DateTime'>
+    readonly totalRequests: FieldRef<"DashboardHourlyRollup", 'Int'>
+    readonly successCount: FieldRef<"DashboardHourlyRollup", 'Int'>
+    readonly clientErrorCount: FieldRef<"DashboardHourlyRollup", 'Int'>
+    readonly serverErrorCount: FieldRef<"DashboardHourlyRollup", 'Int'>
+    readonly rateLimitCount: FieldRef<"DashboardHourlyRollup", 'Int'>
+    readonly avgDurationMs: FieldRef<"DashboardHourlyRollup", 'Float'>
+    readonly p95DurationMs: FieldRef<"DashboardHourlyRollup", 'Float'>
+    readonly createdAt: FieldRef<"DashboardHourlyRollup", 'DateTime'>
+    readonly updatedAt: FieldRef<"DashboardHourlyRollup", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * DashboardHourlyRollup findUnique
+   */
+  export type DashboardHourlyRollupFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DashboardHourlyRollup
+     */
+    select?: DashboardHourlyRollupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DashboardHourlyRollup
+     */
+    omit?: DashboardHourlyRollupOmit<ExtArgs> | null
+    /**
+     * Filter, which DashboardHourlyRollup to fetch.
+     */
+    where: DashboardHourlyRollupWhereUniqueInput
+  }
+
+  /**
+   * DashboardHourlyRollup findUniqueOrThrow
+   */
+  export type DashboardHourlyRollupFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DashboardHourlyRollup
+     */
+    select?: DashboardHourlyRollupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DashboardHourlyRollup
+     */
+    omit?: DashboardHourlyRollupOmit<ExtArgs> | null
+    /**
+     * Filter, which DashboardHourlyRollup to fetch.
+     */
+    where: DashboardHourlyRollupWhereUniqueInput
+  }
+
+  /**
+   * DashboardHourlyRollup findFirst
+   */
+  export type DashboardHourlyRollupFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DashboardHourlyRollup
+     */
+    select?: DashboardHourlyRollupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DashboardHourlyRollup
+     */
+    omit?: DashboardHourlyRollupOmit<ExtArgs> | null
+    /**
+     * Filter, which DashboardHourlyRollup to fetch.
+     */
+    where?: DashboardHourlyRollupWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DashboardHourlyRollups to fetch.
+     */
+    orderBy?: DashboardHourlyRollupOrderByWithRelationInput | DashboardHourlyRollupOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DashboardHourlyRollups.
+     */
+    cursor?: DashboardHourlyRollupWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DashboardHourlyRollups from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DashboardHourlyRollups.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DashboardHourlyRollups.
+     */
+    distinct?: DashboardHourlyRollupScalarFieldEnum | DashboardHourlyRollupScalarFieldEnum[]
+  }
+
+  /**
+   * DashboardHourlyRollup findFirstOrThrow
+   */
+  export type DashboardHourlyRollupFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DashboardHourlyRollup
+     */
+    select?: DashboardHourlyRollupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DashboardHourlyRollup
+     */
+    omit?: DashboardHourlyRollupOmit<ExtArgs> | null
+    /**
+     * Filter, which DashboardHourlyRollup to fetch.
+     */
+    where?: DashboardHourlyRollupWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DashboardHourlyRollups to fetch.
+     */
+    orderBy?: DashboardHourlyRollupOrderByWithRelationInput | DashboardHourlyRollupOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DashboardHourlyRollups.
+     */
+    cursor?: DashboardHourlyRollupWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DashboardHourlyRollups from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DashboardHourlyRollups.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DashboardHourlyRollups.
+     */
+    distinct?: DashboardHourlyRollupScalarFieldEnum | DashboardHourlyRollupScalarFieldEnum[]
+  }
+
+  /**
+   * DashboardHourlyRollup findMany
+   */
+  export type DashboardHourlyRollupFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DashboardHourlyRollup
+     */
+    select?: DashboardHourlyRollupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DashboardHourlyRollup
+     */
+    omit?: DashboardHourlyRollupOmit<ExtArgs> | null
+    /**
+     * Filter, which DashboardHourlyRollups to fetch.
+     */
+    where?: DashboardHourlyRollupWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DashboardHourlyRollups to fetch.
+     */
+    orderBy?: DashboardHourlyRollupOrderByWithRelationInput | DashboardHourlyRollupOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing DashboardHourlyRollups.
+     */
+    cursor?: DashboardHourlyRollupWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DashboardHourlyRollups from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DashboardHourlyRollups.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DashboardHourlyRollups.
+     */
+    distinct?: DashboardHourlyRollupScalarFieldEnum | DashboardHourlyRollupScalarFieldEnum[]
+  }
+
+  /**
+   * DashboardHourlyRollup create
+   */
+  export type DashboardHourlyRollupCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DashboardHourlyRollup
+     */
+    select?: DashboardHourlyRollupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DashboardHourlyRollup
+     */
+    omit?: DashboardHourlyRollupOmit<ExtArgs> | null
+    /**
+     * The data needed to create a DashboardHourlyRollup.
+     */
+    data: XOR<DashboardHourlyRollupCreateInput, DashboardHourlyRollupUncheckedCreateInput>
+  }
+
+  /**
+   * DashboardHourlyRollup createMany
+   */
+  export type DashboardHourlyRollupCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many DashboardHourlyRollups.
+     */
+    data: DashboardHourlyRollupCreateManyInput | DashboardHourlyRollupCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DashboardHourlyRollup createManyAndReturn
+   */
+  export type DashboardHourlyRollupCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DashboardHourlyRollup
+     */
+    select?: DashboardHourlyRollupSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DashboardHourlyRollup
+     */
+    omit?: DashboardHourlyRollupOmit<ExtArgs> | null
+    /**
+     * The data used to create many DashboardHourlyRollups.
+     */
+    data: DashboardHourlyRollupCreateManyInput | DashboardHourlyRollupCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DashboardHourlyRollup update
+   */
+  export type DashboardHourlyRollupUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DashboardHourlyRollup
+     */
+    select?: DashboardHourlyRollupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DashboardHourlyRollup
+     */
+    omit?: DashboardHourlyRollupOmit<ExtArgs> | null
+    /**
+     * The data needed to update a DashboardHourlyRollup.
+     */
+    data: XOR<DashboardHourlyRollupUpdateInput, DashboardHourlyRollupUncheckedUpdateInput>
+    /**
+     * Choose, which DashboardHourlyRollup to update.
+     */
+    where: DashboardHourlyRollupWhereUniqueInput
+  }
+
+  /**
+   * DashboardHourlyRollup updateMany
+   */
+  export type DashboardHourlyRollupUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update DashboardHourlyRollups.
+     */
+    data: XOR<DashboardHourlyRollupUpdateManyMutationInput, DashboardHourlyRollupUncheckedUpdateManyInput>
+    /**
+     * Filter which DashboardHourlyRollups to update
+     */
+    where?: DashboardHourlyRollupWhereInput
+    /**
+     * Limit how many DashboardHourlyRollups to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * DashboardHourlyRollup updateManyAndReturn
+   */
+  export type DashboardHourlyRollupUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DashboardHourlyRollup
+     */
+    select?: DashboardHourlyRollupSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DashboardHourlyRollup
+     */
+    omit?: DashboardHourlyRollupOmit<ExtArgs> | null
+    /**
+     * The data used to update DashboardHourlyRollups.
+     */
+    data: XOR<DashboardHourlyRollupUpdateManyMutationInput, DashboardHourlyRollupUncheckedUpdateManyInput>
+    /**
+     * Filter which DashboardHourlyRollups to update
+     */
+    where?: DashboardHourlyRollupWhereInput
+    /**
+     * Limit how many DashboardHourlyRollups to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * DashboardHourlyRollup upsert
+   */
+  export type DashboardHourlyRollupUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DashboardHourlyRollup
+     */
+    select?: DashboardHourlyRollupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DashboardHourlyRollup
+     */
+    omit?: DashboardHourlyRollupOmit<ExtArgs> | null
+    /**
+     * The filter to search for the DashboardHourlyRollup to update in case it exists.
+     */
+    where: DashboardHourlyRollupWhereUniqueInput
+    /**
+     * In case the DashboardHourlyRollup found by the `where` argument doesn't exist, create a new DashboardHourlyRollup with this data.
+     */
+    create: XOR<DashboardHourlyRollupCreateInput, DashboardHourlyRollupUncheckedCreateInput>
+    /**
+     * In case the DashboardHourlyRollup was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DashboardHourlyRollupUpdateInput, DashboardHourlyRollupUncheckedUpdateInput>
+  }
+
+  /**
+   * DashboardHourlyRollup delete
+   */
+  export type DashboardHourlyRollupDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DashboardHourlyRollup
+     */
+    select?: DashboardHourlyRollupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DashboardHourlyRollup
+     */
+    omit?: DashboardHourlyRollupOmit<ExtArgs> | null
+    /**
+     * Filter which DashboardHourlyRollup to delete.
+     */
+    where: DashboardHourlyRollupWhereUniqueInput
+  }
+
+  /**
+   * DashboardHourlyRollup deleteMany
+   */
+  export type DashboardHourlyRollupDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DashboardHourlyRollups to delete
+     */
+    where?: DashboardHourlyRollupWhereInput
+    /**
+     * Limit how many DashboardHourlyRollups to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * DashboardHourlyRollup without action
+   */
+  export type DashboardHourlyRollupDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DashboardHourlyRollup
+     */
+    select?: DashboardHourlyRollupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DashboardHourlyRollup
+     */
+    omit?: DashboardHourlyRollupOmit<ExtArgs> | null
   }
 
 
@@ -22736,6 +23963,23 @@ export namespace Prisma {
   export type RequestLogScalarFieldEnum = (typeof RequestLogScalarFieldEnum)[keyof typeof RequestLogScalarFieldEnum]
 
 
+  export const DashboardHourlyRollupScalarFieldEnum: {
+    id: 'id',
+    bucket: 'bucket',
+    totalRequests: 'totalRequests',
+    successCount: 'successCount',
+    clientErrorCount: 'clientErrorCount',
+    serverErrorCount: 'serverErrorCount',
+    rateLimitCount: 'rateLimitCount',
+    avgDurationMs: 'avgDurationMs',
+    p95DurationMs: 'p95DurationMs',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type DashboardHourlyRollupScalarFieldEnum = (typeof DashboardHourlyRollupScalarFieldEnum)[keyof typeof DashboardHourlyRollupScalarFieldEnum]
+
+
   export const UserInvitationScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
@@ -23353,6 +24597,90 @@ export namespace Prisma {
     durationMs?: FloatNullableWithAggregatesFilter<"RequestLog"> | number | null
     success?: BoolWithAggregatesFilter<"RequestLog"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"RequestLog"> | Date | string
+  }
+
+  export type DashboardHourlyRollupWhereInput = {
+    AND?: DashboardHourlyRollupWhereInput | DashboardHourlyRollupWhereInput[]
+    OR?: DashboardHourlyRollupWhereInput[]
+    NOT?: DashboardHourlyRollupWhereInput | DashboardHourlyRollupWhereInput[]
+    id?: StringFilter<"DashboardHourlyRollup"> | string
+    bucket?: DateTimeFilter<"DashboardHourlyRollup"> | Date | string
+    totalRequests?: IntFilter<"DashboardHourlyRollup"> | number
+    successCount?: IntFilter<"DashboardHourlyRollup"> | number
+    clientErrorCount?: IntFilter<"DashboardHourlyRollup"> | number
+    serverErrorCount?: IntFilter<"DashboardHourlyRollup"> | number
+    rateLimitCount?: IntFilter<"DashboardHourlyRollup"> | number
+    avgDurationMs?: FloatFilter<"DashboardHourlyRollup"> | number
+    p95DurationMs?: FloatFilter<"DashboardHourlyRollup"> | number
+    createdAt?: DateTimeFilter<"DashboardHourlyRollup"> | Date | string
+    updatedAt?: DateTimeFilter<"DashboardHourlyRollup"> | Date | string
+  }
+
+  export type DashboardHourlyRollupOrderByWithRelationInput = {
+    id?: SortOrder
+    bucket?: SortOrder
+    totalRequests?: SortOrder
+    successCount?: SortOrder
+    clientErrorCount?: SortOrder
+    serverErrorCount?: SortOrder
+    rateLimitCount?: SortOrder
+    avgDurationMs?: SortOrder
+    p95DurationMs?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DashboardHourlyRollupWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    bucket?: Date | string
+    AND?: DashboardHourlyRollupWhereInput | DashboardHourlyRollupWhereInput[]
+    OR?: DashboardHourlyRollupWhereInput[]
+    NOT?: DashboardHourlyRollupWhereInput | DashboardHourlyRollupWhereInput[]
+    totalRequests?: IntFilter<"DashboardHourlyRollup"> | number
+    successCount?: IntFilter<"DashboardHourlyRollup"> | number
+    clientErrorCount?: IntFilter<"DashboardHourlyRollup"> | number
+    serverErrorCount?: IntFilter<"DashboardHourlyRollup"> | number
+    rateLimitCount?: IntFilter<"DashboardHourlyRollup"> | number
+    avgDurationMs?: FloatFilter<"DashboardHourlyRollup"> | number
+    p95DurationMs?: FloatFilter<"DashboardHourlyRollup"> | number
+    createdAt?: DateTimeFilter<"DashboardHourlyRollup"> | Date | string
+    updatedAt?: DateTimeFilter<"DashboardHourlyRollup"> | Date | string
+  }, "id" | "bucket">
+
+  export type DashboardHourlyRollupOrderByWithAggregationInput = {
+    id?: SortOrder
+    bucket?: SortOrder
+    totalRequests?: SortOrder
+    successCount?: SortOrder
+    clientErrorCount?: SortOrder
+    serverErrorCount?: SortOrder
+    rateLimitCount?: SortOrder
+    avgDurationMs?: SortOrder
+    p95DurationMs?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: DashboardHourlyRollupCountOrderByAggregateInput
+    _avg?: DashboardHourlyRollupAvgOrderByAggregateInput
+    _max?: DashboardHourlyRollupMaxOrderByAggregateInput
+    _min?: DashboardHourlyRollupMinOrderByAggregateInput
+    _sum?: DashboardHourlyRollupSumOrderByAggregateInput
+  }
+
+  export type DashboardHourlyRollupScalarWhereWithAggregatesInput = {
+    AND?: DashboardHourlyRollupScalarWhereWithAggregatesInput | DashboardHourlyRollupScalarWhereWithAggregatesInput[]
+    OR?: DashboardHourlyRollupScalarWhereWithAggregatesInput[]
+    NOT?: DashboardHourlyRollupScalarWhereWithAggregatesInput | DashboardHourlyRollupScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"DashboardHourlyRollup"> | string
+    bucket?: DateTimeWithAggregatesFilter<"DashboardHourlyRollup"> | Date | string
+    totalRequests?: IntWithAggregatesFilter<"DashboardHourlyRollup"> | number
+    successCount?: IntWithAggregatesFilter<"DashboardHourlyRollup"> | number
+    clientErrorCount?: IntWithAggregatesFilter<"DashboardHourlyRollup"> | number
+    serverErrorCount?: IntWithAggregatesFilter<"DashboardHourlyRollup"> | number
+    rateLimitCount?: IntWithAggregatesFilter<"DashboardHourlyRollup"> | number
+    avgDurationMs?: FloatWithAggregatesFilter<"DashboardHourlyRollup"> | number
+    p95DurationMs?: FloatWithAggregatesFilter<"DashboardHourlyRollup"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"DashboardHourlyRollup"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"DashboardHourlyRollup"> | Date | string
   }
 
   export type UserInvitationWhereInput = {
@@ -24560,6 +25888,104 @@ export namespace Prisma {
     durationMs?: NullableFloatFieldUpdateOperationsInput | number | null
     success?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DashboardHourlyRollupCreateInput = {
+    id?: string
+    bucket: Date | string
+    totalRequests: number
+    successCount: number
+    clientErrorCount: number
+    serverErrorCount: number
+    rateLimitCount: number
+    avgDurationMs: number
+    p95DurationMs: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DashboardHourlyRollupUncheckedCreateInput = {
+    id?: string
+    bucket: Date | string
+    totalRequests: number
+    successCount: number
+    clientErrorCount: number
+    serverErrorCount: number
+    rateLimitCount: number
+    avgDurationMs: number
+    p95DurationMs: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DashboardHourlyRollupUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bucket?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalRequests?: IntFieldUpdateOperationsInput | number
+    successCount?: IntFieldUpdateOperationsInput | number
+    clientErrorCount?: IntFieldUpdateOperationsInput | number
+    serverErrorCount?: IntFieldUpdateOperationsInput | number
+    rateLimitCount?: IntFieldUpdateOperationsInput | number
+    avgDurationMs?: FloatFieldUpdateOperationsInput | number
+    p95DurationMs?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DashboardHourlyRollupUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bucket?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalRequests?: IntFieldUpdateOperationsInput | number
+    successCount?: IntFieldUpdateOperationsInput | number
+    clientErrorCount?: IntFieldUpdateOperationsInput | number
+    serverErrorCount?: IntFieldUpdateOperationsInput | number
+    rateLimitCount?: IntFieldUpdateOperationsInput | number
+    avgDurationMs?: FloatFieldUpdateOperationsInput | number
+    p95DurationMs?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DashboardHourlyRollupCreateManyInput = {
+    id?: string
+    bucket: Date | string
+    totalRequests: number
+    successCount: number
+    clientErrorCount: number
+    serverErrorCount: number
+    rateLimitCount: number
+    avgDurationMs: number
+    p95DurationMs: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DashboardHourlyRollupUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bucket?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalRequests?: IntFieldUpdateOperationsInput | number
+    successCount?: IntFieldUpdateOperationsInput | number
+    clientErrorCount?: IntFieldUpdateOperationsInput | number
+    serverErrorCount?: IntFieldUpdateOperationsInput | number
+    rateLimitCount?: IntFieldUpdateOperationsInput | number
+    avgDurationMs?: FloatFieldUpdateOperationsInput | number
+    p95DurationMs?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DashboardHourlyRollupUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bucket?: DateTimeFieldUpdateOperationsInput | Date | string
+    totalRequests?: IntFieldUpdateOperationsInput | number
+    successCount?: IntFieldUpdateOperationsInput | number
+    clientErrorCount?: IntFieldUpdateOperationsInput | number
+    serverErrorCount?: IntFieldUpdateOperationsInput | number
+    rateLimitCount?: IntFieldUpdateOperationsInput | number
+    avgDurationMs?: FloatFieldUpdateOperationsInput | number
+    p95DurationMs?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UserInvitationCreateInput = {
@@ -25961,6 +27387,95 @@ export namespace Prisma {
     _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
+  export type FloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type DashboardHourlyRollupCountOrderByAggregateInput = {
+    id?: SortOrder
+    bucket?: SortOrder
+    totalRequests?: SortOrder
+    successCount?: SortOrder
+    clientErrorCount?: SortOrder
+    serverErrorCount?: SortOrder
+    rateLimitCount?: SortOrder
+    avgDurationMs?: SortOrder
+    p95DurationMs?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DashboardHourlyRollupAvgOrderByAggregateInput = {
+    totalRequests?: SortOrder
+    successCount?: SortOrder
+    clientErrorCount?: SortOrder
+    serverErrorCount?: SortOrder
+    rateLimitCount?: SortOrder
+    avgDurationMs?: SortOrder
+    p95DurationMs?: SortOrder
+  }
+
+  export type DashboardHourlyRollupMaxOrderByAggregateInput = {
+    id?: SortOrder
+    bucket?: SortOrder
+    totalRequests?: SortOrder
+    successCount?: SortOrder
+    clientErrorCount?: SortOrder
+    serverErrorCount?: SortOrder
+    rateLimitCount?: SortOrder
+    avgDurationMs?: SortOrder
+    p95DurationMs?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DashboardHourlyRollupMinOrderByAggregateInput = {
+    id?: SortOrder
+    bucket?: SortOrder
+    totalRequests?: SortOrder
+    successCount?: SortOrder
+    clientErrorCount?: SortOrder
+    serverErrorCount?: SortOrder
+    rateLimitCount?: SortOrder
+    avgDurationMs?: SortOrder
+    p95DurationMs?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DashboardHourlyRollupSumOrderByAggregateInput = {
+    totalRequests?: SortOrder
+    successCount?: SortOrder
+    clientErrorCount?: SortOrder
+    serverErrorCount?: SortOrder
+    rateLimitCount?: SortOrder
+    avgDurationMs?: SortOrder
+    p95DurationMs?: SortOrder
+  }
+
+  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
   export type DateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -27000,6 +28515,14 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutRequestLogsInput, UserUpdateWithoutRequestLogsInput>, UserUncheckedUpdateWithoutRequestLogsInput>
   }
 
+  export type FloatFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type UserCreateNestedOneWithoutInvitationInput = {
     create?: XOR<UserCreateWithoutInvitationInput, UserUncheckedCreateWithoutInvitationInput>
     connectOrCreate?: UserCreateOrConnectWithoutInvitationInput
@@ -27670,6 +29193,22 @@ export namespace Prisma {
     _sum?: NestedFloatNullableFilter<$PrismaModel>
     _min?: NestedFloatNullableFilter<$PrismaModel>
     _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
   }
 
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {

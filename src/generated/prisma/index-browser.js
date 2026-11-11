@@ -156,6 +156,20 @@ exports.Prisma.RequestLogScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.DashboardHourlyRollupScalarFieldEnum = {
+  id: 'id',
+  bucket: 'bucket',
+  totalRequests: 'totalRequests',
+  successCount: 'successCount',
+  clientErrorCount: 'clientErrorCount',
+  serverErrorCount: 'serverErrorCount',
+  rateLimitCount: 'rateLimitCount',
+  avgDurationMs: 'avgDurationMs',
+  p95DurationMs: 'p95DurationMs',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.UserInvitationScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -340,6 +354,7 @@ exports.Prisma.ModelName = {
   User: 'User',
   Plan: 'Plan',
   RequestLog: 'RequestLog',
+  DashboardHourlyRollup: 'DashboardHourlyRollup',
   UserInvitation: 'UserInvitation',
   DbCredentials: 'DbCredentials',
   Role: 'Role',

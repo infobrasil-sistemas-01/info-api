@@ -220,6 +220,50 @@ export class DashboardService {
       }
     }
 
+    if (!userId && (interval === 'hour' || interval === 'day')) {
+      const rollupQuery =
+        interval === 'hour'
+          ? `
+            SELECT
+              bucket as "timestamp",
+              total_requests as "count",
+              success_count as "success",
+              client_error_count as "clientError",
+              server_error_count as "serverError",
+              (client_error_count + server_error_count) as "error"
+            FROM dashboard_hourly_rollups
+            WHERE bucket >= $1 AND bucket <= $2
+            ORDER BY bucket ASC
+          `
+          : `
+            SELECT
+              DATE_TRUNC('day', bucket) as "timestamp",
+              SUM(total_requests)::int as "count",
+              SUM(success_count)::int as "success",
+              SUM(client_error_count)::int as "clientError",
+              SUM(server_error_count)::int as "serverError",
+              SUM(client_error_count + server_error_count)::int as "error"
+            FROM dashboard_hourly_rollups
+            WHERE bucket >= $1 AND bucket <= $2
+            GROUP BY 1
+            ORDER BY 1 ASC
+          `;
+
+      try {
+        const rollups = await this.prisma.$queryRawUnsafe<any[]>(
+          rollupQuery,
+          startDate,
+          endDate,
+        );
+
+        if (rollups && rollups.length > 0) {
+          return rollups;
+        }
+      } catch {
+        // Fallback para query direta em request_logs se tabela de rollups não existir no ambiente
+      }
+    }
+
     let sqlTimestampExpr = "DATE_TRUNC('day', created_at)";
     if (interval === '1m' || interval === 'minute') {
       sqlTimestampExpr = "DATE_TRUNC('minute', created_at)";
