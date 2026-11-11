@@ -29,3 +29,4 @@ INSERT INTO "integration_guides" (
     "public_url" = EXCLUDED."public_url",
     "active" = EXCLUDED."active",
     "updated_at" = CURRENT_TIMESTAMP;
+

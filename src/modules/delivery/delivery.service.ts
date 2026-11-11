@@ -327,17 +327,16 @@ export class DeliveryService {
       if (data.items && data.items.length > 0) {
         const queryItem = `
           INSERT INTO entregasitens (
-            ETI_NUMERO, IVD_NUMERO, VEN_NUMERO, PRO_CODIGO, USU_CODIGO,
+            ETI_NUMERO, VEN_NUMERO, PRO_CODIGO, USU_CODIGO,
             ETI_DATA, ETI_HORA, ETI_QTDE, ETI_IMPRIMIR, ETI_QTDECLIENTE
           ) VALUES (
-            GEN_ID(GEN_NUMEROETI, 1), ?, ?, ?, ?,
+            GEN_ID(GEN_NUMEROETI, 1), ?, ?, ?,
             ?, ?, ?, ?, ?
           )
         `;
 
         for (const item of data.items) {
           const itemParams = [
-            item.IVD_NUMERO,
             data.VEN_NUMERO,
             item.PRO_CODIGO,
             item.USU_CODIGO ?? 9999,

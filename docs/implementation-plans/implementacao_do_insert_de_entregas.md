@@ -43,7 +43,7 @@ Criaremos o DTO de criação de entregas em um novo arquivo com suporte para val
   - `ENT_LOTEPRODUTO` (opcional)
   - `ENT_GERARROTAS` (opcional, padrão `'N'`)
   - `AJ2_CODIGO` (opcional)
-  - `items` (opcional, array de itens da entrega contendo `IVD_NUMERO`, `PRO_CODIGO`, `ETI_QTDE`, `ETI_QTDECLIENTE`, `ETI_IMPRIMIR`, `USU_CODIGO`)
+  - `items` (opcional, array de itens da entrega contendo `PRO_CODIGO`, `ETI_QTDE`, `ETI_QTDECLIENTE`, `ETI_IMPRIMIR`, `USU_CODIGO`; `IVD_NUMERO` é gerado automaticamente no banco de dados)
 
 ---
 

@@ -169,7 +169,6 @@ describe('DeliveryService', () => {
       ENT_HORA: '14:30:00',
       items: [
         {
-          IVD_NUMERO: 50,
           PRO_CODIGO: 'PROD-1',
           ETI_QTDE: 2,
         },

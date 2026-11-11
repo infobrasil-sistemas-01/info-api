@@ -3,7 +3,6 @@ import { ZodDto } from 'src/common/validation/zod-dto';
 import { z } from 'zod';
 
 export const CreateDeliveryItemSchema = z.object({
-  IVD_NUMERO: z.number().int().min(1, 'Número do item de venda é obrigatório.'),
   PRO_CODIGO: z.string().min(1, 'Código do produto é obrigatório.').max(15),
   ETI_QTDE: z.number().min(0.001, 'Quantidade deve deve ser maior que 0.'),
   ETI_QTDECLIENTE: z.number().min(0).optional(),
@@ -12,12 +11,6 @@ export const CreateDeliveryItemSchema = z.object({
 });
 
 export class CreateDeliveryItemDto extends ZodDto(CreateDeliveryItemSchema) {
-  @ApiProperty({
-    description: 'Número do item de venda (IVD_NUMERO)',
-    example: 50,
-  })
-  IVD_NUMERO: number;
-
   @ApiProperty({
     description: 'Código do produto (PRO_CODIGO)',
     example: 'PROD-123',
