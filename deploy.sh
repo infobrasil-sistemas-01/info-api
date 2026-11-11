@@ -27,8 +27,8 @@ TARGET_PORT=$APP_PORT
 echo "Ambiente ativo: $LIVE_SERVICE"
 echo "Novo deploy em: $TARGET_SERVICE"
 
-echo "Buildando nova versão..."
-docker compose build $TARGET_SERVICE
+echo "Buildando nova versão com prioridade reduzida de CPU/IO..."
+nice -n 19 ionice -c 3 docker compose build $TARGET_SERVICE
 
 echo "Executando migrations..."
 docker compose run --rm $TARGET_SERVICE npx prisma migrate deploy
@@ -58,6 +58,9 @@ echo "Nova versão saudável."
 echo "Atualizando upstream do nginx..."
 
 docker exec $GATEWAY_CONTAINER sh -c "sed -i -E 's/(api-blue|infoapi-blue|api-green|infoapi-green)/$TARGET_SERVICE/g' /etc/nginx/conf.d/default.conf && nginx -s reload"
+
+echo "Aguardando 5 segundos para drenagem graciosa de requisições em voo..."
+sleep 5
 
 echo "Derrubando ambiente antigo..."
 docker compose stop $LIVE_SERVICE
