@@ -7,9 +7,9 @@ services:
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://127.0.0.1:${PORT}/api/v1/health/live || exit 1"]
       interval: 10s
-      timeout: 5s
-      retries: 3
-      start_period: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 45s
     env_file:
       - .env
     environment:
@@ -29,8 +29,6 @@ services:
       - net.ipv4.tcp_keepalive_time=60
       - net.ipv4.tcp_keepalive_intvl=10
       - net.ipv4.tcp_keepalive_probes=5
-    labels:
-      - "autoheal=true"
     restart: unless-stopped
 
   infoapi-green:
@@ -41,9 +39,9 @@ services:
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://127.0.0.1:${PORT}/api/v1/health/live || exit 1"]
       interval: 10s
-      timeout: 5s
-      retries: 3
-      start_period: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 45s
     env_file:
       - .env
     environment:
@@ -63,8 +61,6 @@ services:
       - net.ipv4.tcp_keepalive_time=60
       - net.ipv4.tcp_keepalive_intvl=10
       - net.ipv4.tcp_keepalive_probes=5
-    labels:
-      - "autoheal=true"
     restart: unless-stopped
 
   gateway:

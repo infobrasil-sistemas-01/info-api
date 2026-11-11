@@ -34,11 +34,11 @@ echo "Executando migrations..."
 docker compose run --rm $TARGET_SERVICE npx prisma migrate deploy
 
 echo "Subindo nova versão..."
-docker compose up -d $TARGET_SERVICE autoheal
+docker compose up -d $TARGET_SERVICE
 
 echo "Aguardando healthcheck..."
 
-ATTEMPTS=30
+ATTEMPTS=45
 COUNT=0
 
 until [ "$(docker inspect --format='{{.State.Health.Status}}' $TARGET_SERVICE)" = "healthy" ]; do
