@@ -8217,11 +8217,6 @@
       "CreateDeliveryItemDto": {
         "type": "object",
         "properties": {
-          "IVD_NUMERO": {
-            "type": "number",
-            "description": "Número do item de venda (IVD_NUMERO)",
-            "example": 50
-          },
           "PRO_CODIGO": {
             "type": "string",
             "description": "Código do produto (PRO_CODIGO)",
@@ -8255,7 +8250,6 @@
           }
         },
         "required": [
-          "IVD_NUMERO",
           "PRO_CODIGO",
           "ETI_QTDE"
         ]
