@@ -69,6 +69,30 @@ export class ProductResponseDto {
 
   @ApiProperty({ example: 13.0, description: 'Preço de custo fiscal' })
   PRO_CUSTOFISCAL: number;
+
+  @ApiPropertyOptional({
+    example: 'Descrição detalhada e especificações técnicas completas do produto.',
+    description: 'Descrição longa / especificação do produto',
+  })
+  PRO_ESPECIFICACAO?: string | null;
+
+  @ApiPropertyOptional({ example: 15.0, description: 'Altura do produto' })
+  PRO_ALTURA?: number | null;
+
+  @ApiPropertyOptional({ example: 20.0, description: 'Largura do produto' })
+  PRO_LARGURA?: number | null;
+
+  @ApiPropertyOptional({
+    example: 30.0,
+    description: 'Comprimento / profundidade do produto',
+  })
+  PRO_COMPRIMENTO?: number | null;
+
+  @ApiPropertyOptional({ example: 1.5, description: 'Peso do produto' })
+  PRO_PESO?: number | null;
+
+  @ApiPropertyOptional({ example: 'Azul', description: 'Cor do produto' })
+  PRO_COR?: string | null;
 }
 
 export class ProductDetailResponseDto {
@@ -110,6 +134,30 @@ export class ProductDetailResponseDto {
 
   @ApiProperty({ example: 19.99, description: 'Preço 1' })
   PRO_PRECO1: number;
+
+  @ApiPropertyOptional({
+    example: 'Descrição detalhada e especificações técnicas completas do produto.',
+    description: 'Descrição longa / especificação do produto',
+  })
+  PRO_ESPECIFICACAO?: string | null;
+
+  @ApiPropertyOptional({ example: 15.0, description: 'Altura do produto' })
+  PRO_ALTURA?: number | null;
+
+  @ApiPropertyOptional({ example: 20.0, description: 'Largura do produto' })
+  PRO_LARGURA?: number | null;
+
+  @ApiPropertyOptional({
+    example: 30.0,
+    description: 'Comprimento / profundidade do produto',
+  })
+  PRO_COMPRIMENTO?: number | null;
+
+  @ApiPropertyOptional({ example: 1.5, description: 'Peso do produto' })
+  PRO_PESO?: number | null;
+
+  @ApiPropertyOptional({ example: 'Azul', description: 'Cor do produto' })
+  PRO_COR?: string | null;
 }
 
 export class ProductBarcodeResponseDto {

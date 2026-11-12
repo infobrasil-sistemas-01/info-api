@@ -375,11 +375,40 @@ describe('ProductService', () => {
       );
       expect(mockConnection.query).toHaveBeenCalledWith(
         expect.stringContaining(
+          'P.PRO_ESPECIFICACAO, P.PRO_ALTURA, P.PRO_LARGURA, P.PRO_COMPRIMENTO, P.PRO_PESO, P.PRO_COR',
+        ),
+        expect.anything(),
+        expect.any(Function),
+      );
+      expect(mockConnection.query).toHaveBeenCalledWith(
+        expect.stringContaining(
           'LEFT JOIN credores CR ON P.CRE_CODIGO = CR.CRE_CODIGO',
         ),
         expect.anything(),
         expect.any(Function),
       );
+    });
+
+    it('should return database result directly in getUnique pass-through', async () => {
+      const mockRawProduct = {
+        PRO_CODIGO: 101,
+        PRO_ESPECIFICACAO: 'Descrição detalhada do produto',
+        PRO_COR: 'Azul',
+        PRO_ALTURA: 15.5,
+        PRO_LARGURA: 20.0,
+        PRO_COMPRIMENTO: 30.25,
+        PRO_PESO: 1.75,
+      };
+
+      mockConnection.query.mockImplementation(
+        (query: string, params: any[], callback: Function) => {
+          callback(null, [mockRawProduct]);
+        },
+      );
+
+      const result = await service.getUnique('cred-1', 1, 101);
+
+      expect(result).toEqual(mockRawProduct);
     });
   });
 
