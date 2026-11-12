@@ -323,6 +323,147 @@
         ]
       }
     },
+    "/products/stock": {
+      "get": {
+        "description": "Retorna uma lista paginada de produtos com seus respectivos saldos de estoque (atual e apoio) em cada loja disponível.",
+        "operationId": "ProductController_getProductStock",
+        "parameters": [
+          {
+            "name": "storeId",
+            "required": false,
+            "in": "query",
+            "description": "Código da loja para filtrar apenas estoques da loja especificada (opcional; se omitido, retorna todas as lojas)",
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Página atual (padrão: 1)",
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "description": "Itens por página (padrão: 50, máx: 100)",
+            "schema": {
+              "example": 50,
+              "type": "number"
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Termo de busca para filtrar produtos por descrição",
+            "schema": {
+              "example": "Arroz",
+              "type": "string"
+            }
+          },
+          {
+            "name": "startDateAlteracao",
+            "required": false,
+            "in": "query",
+            "description": "Data inicial para filtrar produtos por data de alteração (YYYY-MM-DD)",
+            "schema": {
+              "example": "2026-01-01",
+              "type": "string"
+            }
+          },
+          {
+            "name": "endDateAlteracao",
+            "required": false,
+            "in": "query",
+            "description": "Data final para filtrar produtos por data de alteração (YYYY-MM-DD)",
+            "schema": {
+              "example": "2026-12-31",
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Request-Count",
+            "in": "header",
+            "description": "Se definido como \"true\", calcula e retorna cabeçalhos de paginação (X-Total-Count, X-Total-Pages, X-Current-Page, X-Per-Page) na resposta.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "true"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de saldos de estoques por produto retornada com sucesso.",
+            "headers": {
+              "X-Total-Count": {
+                "description": "Total de registros encontrados considerando os filtros (presente quando X-Request-Count: true)",
+                "schema": {
+                  "type": "integer",
+                  "example": 145
+                }
+              },
+              "X-Total-Pages": {
+                "description": "Total de páginas calculadas (presente quando X-Request-Count: true)",
+                "schema": {
+                  "type": "integer",
+                  "example": 3
+                }
+              },
+              "X-Current-Page": {
+                "description": "Página atual solicitada (presente quando X-Request-Count: true)",
+                "schema": {
+                  "type": "integer",
+                  "example": 1
+                }
+              },
+              "X-Per-Page": {
+                "description": "Quantidade de registros por página (presente quando X-Request-Count: true)",
+                "schema": {
+                  "type": "integer",
+                  "example": 50
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProductStockResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro de requisição, como parâmetros inválidos."
+          },
+          "401": {
+            "description": "Token de autenticação inválido ou ausente."
+          },
+          "403": {
+            "description": "Operador não autorizado a consultar dados de outra filial."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Listar estoques de produtos por loja",
+        "tags": [
+          "Product"
+        ]
+      }
+    },
     "/products/id/{id}": {
       "get": {
         "description": "Retorna os detalhes de um produto específico com base no ID fornecido.",
@@ -4806,7 +4947,7 @@
   "info": {
     "title": "InfoBrasil API",
     "description": "API de integração do sistema Retaguarda (by InfoBrasil) com outros sistemas, como ERPs, e-commerce, etc. <br><br>\n      Se deseja solicitar um acesso, preencha o formulário em: <a href='https://info-api.infobrasilsistemas.com.br/integration/form'>Solicitar Acesso</a>\n      <br><br>\n      **O sistema conta com duas formas de autenticação:**<br> \n      - Basic Auth para login e obtenção de token JWT<br>\n      - JWT para acesso aos endpoints protegidos.\n      <br><br>\n      Para verificar a disponibilidade da API acesse nossa <a href='/status'>Página de Status</a> | Para novidades e histórico de versões acesse o <a href='/changelog'>Changelog Oficial</a>\n      <br><br>\n      A API é organizada em módulos, cada um responsável por uma área específica do sistema, como produtos, clientes, vendas, etc.",
-    "version": "1.20.11",
+    "version": "1.20.12",
     "contact": {
       "name": "InfoBrasil Sistemas",
       "url": "https://www.infobrasilsistemas.com.br",
@@ -5196,6 +5337,36 @@
             "type": "number",
             "example": 13,
             "description": "Preço de custo fiscal"
+          },
+          "PRO_ESPECIFICACAO": {
+            "type": "object",
+            "example": "Descrição detalhada e especificações técnicas completas do produto.",
+            "description": "Descrição longa / especificação do produto"
+          },
+          "PRO_ALTURA": {
+            "type": "object",
+            "example": 15,
+            "description": "Altura do produto"
+          },
+          "PRO_LARGURA": {
+            "type": "object",
+            "example": 20,
+            "description": "Largura do produto"
+          },
+          "PRO_COMPRIMENTO": {
+            "type": "object",
+            "example": 30,
+            "description": "Comprimento / profundidade do produto"
+          },
+          "PRO_PESO": {
+            "type": "object",
+            "example": 1.5,
+            "description": "Peso do produto"
+          },
+          "PRO_COR": {
+            "type": "object",
+            "example": "Azul",
+            "description": "Cor do produto"
           }
         },
         "required": [
@@ -5214,6 +5385,63 @@
           "PRO_PRCCUSTO",
           "PRO_PRCCOMPRAFISCAL",
           "PRO_CUSTOFISCAL"
+        ]
+      },
+      "StoreStockDto": {
+        "type": "object",
+        "properties": {
+          "LOJ_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código da filial / loja"
+          },
+          "EST_ATUAL": {
+            "type": "number",
+            "example": 15.5,
+            "description": "Estoque atual na loja"
+          },
+          "EST_APOIO": {
+            "type": "number",
+            "example": 5,
+            "description": "Estoque de apoio na loja"
+          }
+        },
+        "required": [
+          "LOJ_CODIGO",
+          "EST_ATUAL",
+          "EST_APOIO"
+        ]
+      },
+      "ProductStockResponseDto": {
+        "type": "object",
+        "properties": {
+          "PRO_CODIGO": {
+            "type": "object",
+            "example": "101",
+            "description": "Código do produto"
+          },
+          "PRO_CODIGOBAR": {
+            "type": "object",
+            "example": "7891234567890",
+            "description": "Código de barras"
+          },
+          "PRO_DESCRICAO": {
+            "type": "string",
+            "example": "Produto Exemplo",
+            "description": "Descrição do produto"
+          },
+          "STOCKS": {
+            "description": "Lista de saldos de estoque por loja cadastrada",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StoreStockDto"
+            }
+          }
+        },
+        "required": [
+          "PRO_CODIGO",
+          "PRO_DESCRICAO",
+          "STOCKS"
         ]
       },
       "ProductBrandResponseDto": {
