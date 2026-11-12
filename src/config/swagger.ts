@@ -323,6 +323,9 @@ export function setupSwagger(app: INestApplication) {
     customSiteTitle: 'InfoBrasil API Docs',
     customCss: customCss,
     customJs: '/swagger-custom.js',
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
   });
 
   // 1. Registro da versão principal (Scalar Standalone)
@@ -342,6 +345,9 @@ export function setupSwagger(app: INestApplication) {
       customSiteTitle: `InfoBrasil API Docs v${version}`,
       customCss: customCss,
       customJs: '/swagger-custom.js',
+      swaggerOptions: {
+        persistAuthorization: true,
+      },
     });
 
     // Scalar Standalone: /scalar/v1.3.0

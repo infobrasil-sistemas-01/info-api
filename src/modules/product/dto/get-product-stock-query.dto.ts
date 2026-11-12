@@ -5,7 +5,7 @@ import { z } from 'zod';
 export const GetProductStockQuerySchema = z.object({
   storeId: z.coerce.number().int().optional(),
   page: z.coerce.number().int().min(1).optional(),
-  pageSize: z.coerce.number().int().min(1).max(100).optional(),
+  pageSize: z.coerce.number().int().min(1).optional(),
   search: z.string().optional(),
   startDateAlteracao: z.string().optional(),
   endDateAlteracao: z.string().optional(),
@@ -25,7 +25,7 @@ export class GetProductStockQueryDto extends ZodDto(
   page?: number;
 
   @ApiPropertyOptional({
-    description: 'Itens por página (padrão: 50, máx: 100)',
+    description: 'Itens por página (padrão: 50)',
     example: 50,
   })
   pageSize?: number;

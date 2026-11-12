@@ -22,7 +22,7 @@ Para garantir desempenho de leitura no Firebird:
 - **Permissão RBAC:** `tenant.products.view`
 - **Query Params:**
   - `page`: number (default 1)
-  - `pageSize`: number (default 50, max 100)
+  - `pageSize`: number (default 50)
   - `search`: string (opcional, busca por descrição)
   - `storeId`: number (opcional, restringe a uma loja se informado)
   - `startDateAlteracao`: string (opcional)

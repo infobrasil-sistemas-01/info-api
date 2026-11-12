@@ -14,6 +14,7 @@ describe('GetProductStockQueryDto', () => {
     ['valid full data', validData],
     ['empty query', {}],
     ['with string storeId coerced to int', { storeId: '2' }],
+    ['with large pageSize allowed by schema (controlled by PlanLimitInterceptor)', { pageSize: 500 }],
     [
       'with only startDateAlteracao and endDateAlteracao',
       {
@@ -28,7 +29,6 @@ describe('GetProductStockQueryDto', () => {
   test.each([
     ['invalid page less than 1', { page: 0 }],
     ['invalid pageSize less than 1', { pageSize: 0 }],
-    ['invalid pageSize greater than 100', { pageSize: 101 }],
   ])('should reject %s', (_, input) => {
     expect(() => GetProductStockQuerySchema.parse(input)).toThrow();
   });
