@@ -25,8 +25,10 @@ import { PermissionsGuard } from 'src/infra/rbac/permissions.guard';
 import { RequirePermissions } from 'src/infra/rbac/permissions.decorator';
 import { IncludeCount } from 'src/common/decorators/include-count.decorator';
 import { ProductResponseDto } from './dto/product-response.dto';
+import { ProductStockResponseDto } from './dto/product-stock-response.dto';
 
 import { GetProductsQueryDto } from './dto/get-products-query.dto';
+import { GetProductStockQueryDto } from './dto/get-product-stock-query.dto';
 import { GetProductQueryDto } from './dto/get-product-query.dto';
 
 @Controller('products')
@@ -132,6 +134,100 @@ export class ProductController {
       query.group,
       query.brand,
       query.minStock,
+      query.search,
+      query.startDateAlteracao,
+      query.endDateAlteracao,
+      includeCount,
+    );
+  }
+
+  @Get('stock')
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @RequirePermissions({ allOf: ['tenant.products.view'] })
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Listar estoques de produtos por loja',
+    description:
+      'Retorna uma lista paginada de produtos com seus respectivos saldos de estoque (atual e apoio) em cada loja disponível.',
+    tags: ['Product'],
+  })
+  @ApiHeader({
+    name: 'X-Request-Count',
+    required: false,
+    description:
+      'Se definido como "true", calcula e retorna cabeçalhos de paginação (X-Total-Count, X-Total-Pages, X-Current-Page, X-Per-Page) na resposta.',
+    schema: { type: 'string', example: 'true' },
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Lista de saldos de estoques por produto retornada com sucesso.',
+    type: [ProductStockResponseDto],
+    headers: {
+      'X-Total-Count': {
+        description:
+          'Total de registros encontrados considerando os filtros (presente quando X-Request-Count: true)',
+        schema: { type: 'integer', example: 145 },
+      },
+      'X-Total-Pages': {
+        description:
+          'Total de páginas calculadas (presente quando X-Request-Count: true)',
+        schema: { type: 'integer', example: 3 },
+      },
+      'X-Current-Page': {
+        description:
+          'Página atual solicitada (presente quando X-Request-Count: true)',
+        schema: { type: 'integer', example: 1 },
+      },
+      'X-Per-Page': {
+        description:
+          'Quantidade de registros por página (presente quando X-Request-Count: true)',
+        schema: { type: 'integer', example: 50 },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Erro de requisição, como parâmetros inválidos.',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Token de autenticação inválido ou ausente.',
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Operador não autorizado a consultar dados de outra filial.',
+  })
+  getProductStock(
+    @Req() req: ReqWithAuthContext,
+    @Query() query: GetProductStockQueryDto,
+    @IncludeCount() includeCount: boolean = false,
+  ) {
+    const {
+      credentialsId,
+      storeId: tokenStoreId,
+      type,
+    } = req.authContext || {};
+
+    if (!credentialsId) {
+      throw new Error('Credentials ID not found in token');
+    }
+
+    let filterStoreId: number | undefined = query.storeId;
+
+    if (type === 'H2M') {
+      if (query.storeId && query.storeId !== tokenStoreId) {
+        throw new ForbiddenException(
+          'Operador não autorizado a consultar dados de outra filial',
+        );
+      }
+      filterStoreId = query.storeId || tokenStoreId;
+    }
+
+    return this.productService.getStock(
+      credentialsId,
+      query.page,
+      query.pageSize,
+      filterStoreId,
       query.search,
       query.startDateAlteracao,
       query.endDateAlteracao,

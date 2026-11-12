@@ -271,4 +271,181 @@ export class ProductService {
       this.tenantConnectionService.releaseConnection(connection);
     }
   }
+
+  async getStock(
+    credentialsId: string,
+    page: number = 1,
+    pageSize: number = 50,
+    storeId?: number,
+    search?: string,
+    startDateAlteracao?: string,
+    endDateAlteracao?: string,
+    includeCount: boolean = false,
+  ) {
+    let connection: any;
+    connection =
+      await this.tenantConnectionService.getConnection(credentialsId);
+
+    try {
+      if (page < 1) {
+        throw new BadRequestException(
+          'Page must be greater than or equal to 1',
+        );
+      }
+
+      if (pageSize < 1) {
+        throw new BadRequestException(
+          'Page size must be greater than or equal to 1',
+        );
+      }
+
+      if (startDateAlteracao && endDateAlteracao) {
+        if (new Date(startDateAlteracao) > new Date(endDateAlteracao)) {
+          throw new BadRequestException(
+            'Data inicial deve ser menor que a data final.',
+          );
+        }
+      }
+
+      const whereClauses: string[] = [];
+      const filterParams: (number | string)[] = [];
+
+      if (search) {
+        if (search.length < 3) {
+          throw new BadRequestException(
+            'Pesquisa precisa ter pelo menos 3 caracteres.',
+          );
+        }
+        whereClauses.push('P.PRO_DESCRICAO LIKE ?');
+        filterParams.push(`%${search}%`);
+      }
+
+      if (startDateAlteracao && endDateAlteracao) {
+        whereClauses.push('P.PRO_DATAALTERACAO BETWEEN ? AND ?');
+        filterParams.push(startDateAlteracao, endDateAlteracao);
+      }
+
+      const whereSql =
+        whereClauses.length > 0 ? ` WHERE ${whereClauses.join(' AND ')}` : '';
+
+      const productsQuery = `SELECT FIRST ? SKIP ?
+                              P.PRO_CODIGO, P.PRO_CODIGOBAR, P.PRO_DESCRICAO
+                              FROM produtos P${whereSql}
+                              ORDER BY P.PRO_DESCRICAO`;
+
+      const params = [pageSize, (page - 1) * pageSize, ...filterParams];
+
+      const queryStartTime = Date.now();
+      const products: any = await new Promise((resolve, reject) => {
+        connection.query(productsQuery, params, (err: any, res: any) => {
+          if (err) return reject(err);
+          resolve(res);
+        });
+      });
+
+      let total: number | undefined = undefined;
+
+      if (includeCount) {
+        const countQuery = `SELECT COUNT(*) AS TOTAL FROM produtos P${whereSql}`;
+        const countRes: any = await new Promise((resolve, reject) => {
+          connection.query(countQuery, filterParams, (err: any, res: any) => {
+            if (err) return reject(err);
+            resolve(res);
+          });
+        });
+
+        const rawTotal =
+          countRes?.[0]?.TOTAL ??
+          countRes?.[0]?.total ??
+          countRes?.[0]?.COUNT ??
+          0;
+        total = Number(rawTotal);
+      }
+
+      const productList = Array.isArray(products) ? products : [];
+
+      if (productList.length === 0) {
+        const queryEndTime = Date.now();
+        this.logger.log(
+          `Busca de estoque de produtos executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
+            {
+              page,
+              pageSize,
+              storeId,
+              search,
+              startDateAlteracao,
+              endDateAlteracao,
+              total,
+            },
+          )}, Itens: 0, Tempo SQL: ${queryEndTime - queryStartTime}ms`,
+        );
+        return new PaginatedResponse([], total, page, pageSize);
+      }
+
+      // Fase 2: Busca estoques em lote
+      const proCodigos = productList.map((p) => String(p.PRO_CODIGO).trim());
+      const inPlaceholders = proCodigos.map(() => '?').join(',');
+
+      const stockParams: (string | number)[] = [...proCodigos];
+      let stockStoreFilter = '';
+      if (storeId) {
+        stockStoreFilter = ' AND E.LOJ_CODIGO = ?';
+        stockParams.push(storeId);
+      }
+
+      const stockQuery = `SELECT
+                            E.PRO_CODIGO, E.LOJ_CODIGO, E.EST_ATUAL, E.EST_APOIO
+                            FROM estoque E
+                            WHERE E.PRO_CODIGO IN (${inPlaceholders})${stockStoreFilter}
+                            ORDER BY E.LOJ_CODIGO`;
+
+      const stockRows: any = await new Promise((resolve, reject) => {
+        connection.query(stockQuery, stockParams, (err: any, res: any) => {
+          if (err) return reject(err);
+          resolve(res);
+        });
+      });
+
+      const stocksByProduct = new Map<string, any[]>();
+      if (Array.isArray(stockRows)) {
+        for (const row of stockRows) {
+          const key = String(row.PRO_CODIGO).trim();
+          if (!stocksByProduct.has(key)) {
+            stocksByProduct.set(key, []);
+          }
+          stocksByProduct.get(key)!.push({
+            LOJ_CODIGO: row.LOJ_CODIGO,
+            EST_ATUAL: row.EST_ATUAL != null ? Number(row.EST_ATUAL) : 0,
+            EST_APOIO: row.EST_APOIO != null ? Number(row.EST_APOIO) : 0,
+          });
+        }
+      }
+
+      const result = productList.map((p) => ({
+        PRO_CODIGO: p.PRO_CODIGO,
+        PRO_CODIGOBAR: p.PRO_CODIGOBAR,
+        PRO_DESCRICAO: p.PRO_DESCRICAO,
+        STOCKS: stocksByProduct.get(String(p.PRO_CODIGO).trim()) || [],
+      }));
+
+      const queryEndTime = Date.now();
+      this.logger.log(
+        `Busca de estoque de produtos executada. Tenant: ${credentialsId}, Filtros: ${JSON.stringify(
+          {
+            page,
+            pageSize,
+            storeId,
+            search,
+            startDateAlteracao,
+            endDateAlteracao,
+            total,
+          },
+        )}, Itens: ${result.length}, Tempo SQL: ${queryEndTime - queryStartTime}ms`,
+      );
+
+      return new PaginatedResponse(result, total, page, pageSize);
+    } finally {
+      this.tenantConnectionService.releaseConnection(connection);
+    }
+  }
 }

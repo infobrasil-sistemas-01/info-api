@@ -412,6 +412,133 @@ describe('ProductService', () => {
     });
   });
 
+  describe('getStock', () => {
+    it('should return products with aggregated multi-store stocks', async () => {
+      const mockProducts = [
+        { PRO_CODIGO: '101', PRO_CODIGOBAR: '7891', PRO_DESCRICAO: 'Arroz' },
+        { PRO_CODIGO: '102', PRO_CODIGOBAR: '7892', PRO_DESCRICAO: 'Feijao' },
+      ];
+      const mockStocks = [
+        { PRO_CODIGO: '101', LOJ_CODIGO: 1, EST_ATUAL: 10, EST_APOIO: 2 },
+        { PRO_CODIGO: '101', LOJ_CODIGO: 2, EST_ATUAL: 15, EST_APOIO: 0 },
+        { PRO_CODIGO: '102', LOJ_CODIGO: 1, EST_ATUAL: 8, EST_APOIO: 1 },
+      ];
+
+      mockConnection.query.mockImplementation(
+        (query: string, params: any[], callback: Function) => {
+          if (query.includes('FROM produtos P')) {
+            callback(null, mockProducts);
+          } else if (query.includes('FROM estoque E')) {
+            callback(null, mockStocks);
+          }
+        },
+      );
+
+      const result = await service.getStock('cred-1', 1, 50);
+
+      expect(result.data).toHaveLength(2);
+      expect(result.data[0]).toEqual({
+        PRO_CODIGO: '101',
+        PRO_CODIGOBAR: '7891',
+        PRO_DESCRICAO: 'Arroz',
+        STOCKS: [
+          { LOJ_CODIGO: 1, EST_ATUAL: 10, EST_APOIO: 2 },
+          { LOJ_CODIGO: 2, EST_ATUAL: 15, EST_APOIO: 0 },
+        ],
+      });
+      expect(result.data[1]).toEqual({
+        PRO_CODIGO: '102',
+        PRO_CODIGOBAR: '7892',
+        PRO_DESCRICAO: 'Feijao',
+        STOCKS: [{ LOJ_CODIGO: 1, EST_ATUAL: 8, EST_APOIO: 1 }],
+      });
+      expect(result.total).toBeUndefined();
+    });
+
+    it('should return empty list when no products match', async () => {
+      mockConnection.query.mockImplementation(
+        (query: string, params: any[], callback: Function) => {
+          callback(null, []);
+        },
+      );
+
+      const result = await service.getStock('cred-1', 1, 50);
+
+      expect(result.data).toEqual([]);
+      expect(mockConnection.query).toHaveBeenCalledTimes(1);
+    });
+
+    it('should include total count when includeCount is true', async () => {
+      mockConnection.query.mockImplementation(
+        (query: string, params: any[], callback: Function) => {
+          if (query.includes('COUNT(*)')) {
+            callback(null, [{ TOTAL: 120 }]);
+          } else if (query.includes('FROM produtos P')) {
+            callback(null, [{ PRO_CODIGO: '101', PRO_DESCRICAO: 'Arroz' }]);
+          } else {
+            callback(null, []);
+          }
+        },
+      );
+
+      const result = await service.getStock(
+        'cred-1',
+        1,
+        50,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        true,
+      );
+
+      expect(result.total).toBe(120);
+      expect(result.data[0].STOCKS).toEqual([]);
+    });
+
+    it('should filter by storeId in Phase 2 when provided', async () => {
+      mockConnection.query.mockImplementation(
+        (query: string, params: any[], callback: Function) => {
+          if (query.includes('FROM produtos P')) {
+            callback(null, [{ PRO_CODIGO: '101', PRO_DESCRICAO: 'Arroz' }]);
+          } else if (query.includes('FROM estoque E')) {
+            callback(null, [
+              { PRO_CODIGO: '101', LOJ_CODIGO: 3, EST_ATUAL: 5, EST_APOIO: 0 },
+            ]);
+          }
+        },
+      );
+
+      await service.getStock('cred-1', 1, 50, 3);
+
+      expect(mockConnection.query).toHaveBeenCalledWith(
+        expect.stringContaining('AND E.LOJ_CODIGO = ?'),
+        ['101', 3],
+        expect.any(Function),
+      );
+    });
+
+    it('should throw BadRequestException when search has less than 3 chars', async () => {
+      await expect(
+        service.getStock('cred-1', 1, 50, undefined, 'ab'),
+      ).rejects.toThrow('Pesquisa precisa ter pelo menos 3 caracteres.');
+    });
+
+    it('should throw BadRequestException when startDateAlteracao is greater than endDateAlteracao', async () => {
+      await expect(
+        service.getStock(
+          'cred-1',
+          1,
+          50,
+          undefined,
+          undefined,
+          '2026-02-01',
+          '2026-01-01',
+        ),
+      ).rejects.toThrow('Data inicial deve ser menor que a data final.');
+    });
+  });
+
   describe('FAILING: product search edge cases', () => {
     it('should throw BadRequestException when page number is less than 1', async () => {
       mockConnection.query.mockImplementation(

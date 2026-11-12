@@ -16,6 +16,7 @@ describe('ProductController', () => {
   const mockProductService = {
     get: jest.fn(),
     getUnique: jest.fn(),
+    getStock: jest.fn(),
   };
 
   const mockReq = {
@@ -288,6 +289,121 @@ describe('ProductController', () => {
       await expect(
         controller.getProductByBarcode(mockReq, 999, {}),
       ).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('getProductStock', () => {
+    it('should call productService.getStock with all query parameters (M2M all stores)', async () => {
+      const mockResult = {
+        data: [
+          {
+            PRO_CODIGO: '101',
+            PRO_DESCRICAO: 'Arroz',
+            STOCKS: [{ LOJ_CODIGO: 1, EST_ATUAL: 10, EST_APOIO: 2 }],
+          },
+        ],
+      };
+      mockProductService.getStock.mockResolvedValue(mockResult);
+
+      const m2mReq = {
+        authContext: {
+          credentialsId: 'cred-1',
+          type: 'M2M',
+        },
+      } as any;
+
+      const result = await controller.getProductStock(
+        m2mReq,
+        {
+          page: 1,
+          pageSize: 50,
+          search: 'arroz',
+          startDateAlteracao: '2026-01-01',
+          endDateAlteracao: '2026-01-31',
+        },
+        true,
+      );
+
+      expect(productService.getStock).toHaveBeenCalledWith(
+        'cred-1',
+        1,
+        50,
+        undefined,
+        'arroz',
+        '2026-01-01',
+        '2026-01-31',
+        true,
+      );
+      expect(result).toEqual(mockResult);
+    });
+
+    it('should allow filtering by specific storeId in M2M', async () => {
+      mockProductService.getStock.mockResolvedValue({ data: [] });
+
+      const m2mReq = {
+        authContext: {
+          credentialsId: 'cred-1',
+          type: 'M2M',
+        },
+      } as any;
+
+      await controller.getProductStock(
+        m2mReq,
+        {
+          storeId: 3,
+        },
+        false,
+      );
+
+      expect(productService.getStock).toHaveBeenCalledWith(
+        'cred-1',
+        undefined,
+        undefined,
+        3,
+        undefined,
+        undefined,
+        undefined,
+        false,
+      );
+    });
+
+    it('should throw ForbiddenException when H2M operator requests another storeId', async () => {
+      const h2mReq = {
+        authContext: {
+          credentialsId: 'cred-1',
+          storeId: 1,
+          type: 'H2M',
+        },
+      } as any;
+
+      expect(() =>
+        controller.getProductStock(h2mReq, { storeId: 2 }),
+      ).toThrow(ForbiddenException);
+    });
+
+    it('should default to operator tokenStoreId when H2M operator does not provide storeId', async () => {
+      mockProductService.getStock.mockResolvedValue({ data: [] });
+
+      const h2mReq = {
+        authContext: {
+          credentialsId: 'cred-1',
+          storeId: 1,
+          type: 'H2M',
+        },
+      } as any;
+
+      await controller.getProductStock(h2mReq, {});
+
+      expect(productService.getStock).toHaveBeenCalledWith(
+        'cred-1',
+        undefined,
+        undefined,
+        1,
+        undefined,
+        undefined,
+        undefined,
+        false,
+      );
     });
   });
 });
