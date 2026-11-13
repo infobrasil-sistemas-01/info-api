@@ -26,6 +26,7 @@ export const CreateClientSchema = z.object({
   CLI_ESTADOCIVIL: z.string().max(1).optional().nullable(),
   CLI_NATURALIDADE: z.string().max(25).optional().nullable(),
   ROT_CODIGO: z.number().int().optional().nullable(),
+  CLI_OBS: z.string().optional().nullable(),
 });
 
 export class CreateClientDto extends ZodDto(CreateClientSchema) {
@@ -113,4 +114,10 @@ export class CreateClientDto extends ZodDto(CreateClientSchema) {
 
   @ApiPropertyOptional({ description: 'Código da rota', example: 1 })
   ROT_CODIGO?: number | null;
+
+  @ApiPropertyOptional({
+    description: 'Observações do cliente',
+    example: 'Cliente prefere entrega no período da tarde',
+  })
+  CLI_OBS?: string | null;
 }

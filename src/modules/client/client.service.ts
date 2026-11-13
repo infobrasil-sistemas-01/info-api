@@ -36,7 +36,7 @@ export class ClientService {
         storeId,
       ];
       let query = `SELECT FIRST ? SKIP ? 
-                      C.CLI_CODIGO, C.CLI_SITUACAO, C.CLI_NOME, C.CLI_FANTASIA, C.CLI_CPF_CNPJ, C.CLI_SEXO, C.CLI_ENDERECO, C.CLI_NUMERO, C.CLI_FONE, C.CLI_EMAIL, C.CLI_DATANASC, R.ROT_CODIGO, R.ROT_NOME
+                      C.CLI_CODIGO, C.CLI_SITUACAO, C.CLI_NOME, C.CLI_FANTASIA, C.CLI_CPF_CNPJ, C.CLI_SEXO, C.CLI_ENDERECO, C.CLI_NUMERO, C.CLI_FONE, C.CLI_EMAIL, C.CLI_DATANASC, R.ROT_CODIGO, R.ROT_NOME, C.CLI_OBS
                       FROM clientes C
                       LEFT JOIN rotas R ON R.rot_codigo = C.rot_codigo
                       WHERE C.LOJ_CODIGO = ?`;
@@ -117,7 +117,7 @@ export class ClientService {
     try {
       const query = `SELECT C.CLI_CODIGO, C.CLI_SITUACAO, C.CLI_NOME, C.CLI_FANTASIA, C.CLI_SEXO, C.CLI_ENDERECO, C.CLI_NUMERO, C.CLI_FONE, C.CLI_EMAIL, C.CLI_DATANASC,
                       C.CLI_COMPL_ENDERECO, C.CLI_CEP, C.CLI_BAIRRO, C.MUN_CODIGO, M.MUN_NOME, C.CLI_UF, C.CLI_CPF_CNPJ, C.CLI_IDENTIDADE, C.CLI_MAE, 
-                      C.CLI_PAI, C.CLI_ESTADOCIVIL, C.CLI_NATURALIDADE, R.ROT_CODIGO, R.ROT_NOME
+                      C.CLI_PAI, C.CLI_ESTADOCIVIL, C.CLI_NATURALIDADE, R.ROT_CODIGO, R.ROT_NOME, C.CLI_OBS
                       FROM clientes C
                       LEFT JOIN municipios M ON C.MUN_CODIGO = M.MUN_CODIGO
                       LEFT JOIN rotas R ON R.rot_codigo = C.rot_codigo
@@ -154,13 +154,13 @@ export class ClientService {
                       CLI_FANTASIA, CLI_SEXO, CLI_ENDERECO, CLI_NUMERO, CLI_COMPL_ENDERECO, CLI_CEP,
                       CLI_BAIRRO, CLI_FONE, CLI_CELULAR, CLI_EMAIL, CLI_DATANASC,
                       CLI_CPF_CNPJ, CLI_IDENTIDADE, CLI_MAE, CLI_PAI, CLI_ESTADOCIVIL,
-                      CLI_NATURALIDADE, ROT_CODIGO, CLI_CODIGO
+                      CLI_NATURALIDADE, ROT_CODIGO, CLI_OBS, CLI_CODIGO
                     ) VALUES (
                       ?, ?, ?, ?, ?,
                       ?, ?, ?, ?, ?, ?,
                       ?, ?, ?, ?, ?,
                       ?, ?, ?, ?, ?,
-                      ?, ?, GEN_ID(GEN_CODIGOCLI, 1)
+                      ?, ?, ?, GEN_ID(GEN_CODIGOCLI, 1)
                     ) RETURNING CLI_CODIGO`;
 
       const params = [
@@ -187,6 +187,7 @@ export class ClientService {
         data.CLI_ESTADOCIVIL ?? null,
         data.CLI_NATURALIDADE ?? null,
         data.ROT_CODIGO ?? null,
+        data.CLI_OBS ?? null,
       ];
 
       const startTime = Date.now();
@@ -258,6 +259,7 @@ export class ClientService {
         CLI_ESTADOCIVIL: data.CLI_ESTADOCIVIL,
         CLI_NATURALIDADE: data.CLI_NATURALIDADE,
         ROT_CODIGO: data.ROT_CODIGO,
+        CLI_OBS: data.CLI_OBS,
       };
 
       for (const [key, value] of Object.entries(mapping)) {

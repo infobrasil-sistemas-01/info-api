@@ -168,6 +168,7 @@ describe('ClientService', () => {
           null, // CLI_ESTADOCIVIL
           null, // CLI_NATURALIDADE
           null, // ROT_CODIGO
+          null, // CLI_OBS
         ],
         expect.any(Function),
       );
@@ -204,6 +205,7 @@ describe('ClientService', () => {
         CLI_ESTADOCIVIL: 'C',
         CLI_NATURALIDADE: 'São Paulo',
         ROT_CODIGO: 5,
+        CLI_OBS: 'Obs cliente teste',
       };
 
       const result = await service.create('cred-1', 2, payload);
@@ -235,6 +237,7 @@ describe('ClientService', () => {
           'C',
           'São Paulo',
           5,
+          'Obs cliente teste',
         ],
         expect.any(Function),
       );
@@ -270,15 +273,16 @@ describe('ClientService', () => {
         CLI_SITUACAO: 'I',
         MUN_CODIGO: 3550308,
         CLI_EMAIL: 'novo@email.com',
+        CLI_OBS: 'Nova observação',
       } as any;
       const result = await service.update('cred-1', 1, 1, payload);
 
       expect(result).toEqual({ CLI_CODIGO: 1, CLI_NOME: 'Updated Name', CLI_NUMERO: '500' });
       expect(mockConnection.query).toHaveBeenCalledWith(
         expect.stringContaining(
-          'UPDATE clientes SET CLI_NOME = ?, CLI_SITUACAO = ?, MUN_CODIGO = ?, CLI_NUMERO = ?, CLI_EMAIL = ?',
+          'UPDATE clientes SET CLI_NOME = ?, CLI_SITUACAO = ?, MUN_CODIGO = ?, CLI_NUMERO = ?, CLI_EMAIL = ?, CLI_OBS = ?',
         ),
-        ['Updated Name', 'I', 3550308, '500', 'novo@email.com', 1, 1],
+        ['Updated Name', 'I', 3550308, '500', 'novo@email.com', 'Nova observação', 1, 1],
         expect.any(Function),
       );
     });

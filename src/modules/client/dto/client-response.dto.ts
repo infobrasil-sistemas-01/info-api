@@ -59,6 +59,13 @@ export class ClientResponseDto {
     nullable: true,
   })
   CLI_CPF_CNPJ?: string | null;
+
+  @ApiPropertyOptional({
+    example: 'Cliente prefere entrega no período da tarde',
+    description: 'Observações do cliente',
+    nullable: true,
+  })
+  CLI_OBS?: string | null;
 }
 
 export class ClientDetailResponseDto extends ClientResponseDto {

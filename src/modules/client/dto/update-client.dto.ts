@@ -92,4 +92,10 @@ export class UpdateClientDto extends ZodDto(UpdateClientSchema) {
 
   @ApiPropertyOptional({ description: 'Código da rota', example: 1 })
   ROT_CODIGO?: number | null;
+
+  @ApiPropertyOptional({
+    description: 'Observações do cliente',
+    example: 'Cliente prefere entrega no período da tarde',
+  })
+  CLI_OBS?: string | null;
 }

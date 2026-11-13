@@ -29,6 +29,7 @@ describe('CreateClientSchema', () => {
     CLI_ESTADOCIVIL: 'S',
     CLI_NATURALIDADE: 'Fortaleza',
     ROT_CODIGO: 2,
+    CLI_OBS: 'Observação do cliente',
   };
 
   test.each([
@@ -56,6 +57,7 @@ describe('CreateClientSchema', () => {
         CLI_ESTADOCIVIL: null,
         CLI_NATURALIDADE: null,
         ROT_CODIGO: null,
+        CLI_OBS: null,
       },
     ],
   ])('should accept %s', (_, input) => {
