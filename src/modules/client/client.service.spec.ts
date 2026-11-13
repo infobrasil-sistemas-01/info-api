@@ -76,8 +76,28 @@ describe('ClientService', () => {
       await service.get('cred-1', 1, 1, 10, '123.456.789-01');
 
       expect(mockConnection.query).toHaveBeenCalledWith(
-        expect.stringContaining('C.CLI_CPF_CNPJ LIKE ?'),
+        expect.stringContaining(
+          'CAST(C.CLI_CPF_CNPJ AS VARCHAR(60)) LIKE CAST(? AS VARCHAR(60))',
+        ),
         expect.arrayContaining(['%123.456.789-01%', '%12345678901%']),
+        expect.any(Function),
+      );
+    });
+
+    it('should search by 14-digit unformatted CNPJ without truncation', async () => {
+      mockConnection.query.mockImplementation(
+        (query: string, params: any[], callback: Function) => {
+          callback(null, []);
+        },
+      );
+
+      await service.get('cred-1', 1, 1, 10, '07870381000109');
+
+      expect(mockConnection.query).toHaveBeenCalledWith(
+        expect.stringContaining(
+          'CAST(C.CLI_CPF_CNPJ AS VARCHAR(60)) LIKE CAST(? AS VARCHAR(60))',
+        ),
+        expect.arrayContaining(['%07870381000109%']),
         expect.any(Function),
       );
     });

@@ -59,7 +59,7 @@ export class ClientService {
         }
         const cleanDigits = search.replace(/\D/g, '');
         if (cleanDigits.length >= 3 && cleanDigits !== search) {
-          query += ` AND (C.CLI_NOME LIKE ? OR C.CLI_FANTASIA LIKE ? OR C.CLI_CPF_CNPJ LIKE ? OR C.CLI_CPF_CNPJ LIKE ?)`;
+          query += ` AND (C.CLI_NOME LIKE ? OR C.CLI_FANTASIA LIKE ? OR CAST(C.CLI_CPF_CNPJ AS VARCHAR(60)) LIKE CAST(? AS VARCHAR(60)) OR CAST(C.CLI_CPF_CNPJ AS VARCHAR(60)) LIKE CAST(? AS VARCHAR(60)))`;
           params.push(
             `%${search}%`,
             `%${search}%`,
@@ -67,7 +67,7 @@ export class ClientService {
             `%${cleanDigits}%`,
           );
         } else {
-          query += ` AND (C.CLI_NOME LIKE ? OR C.CLI_FANTASIA LIKE ? OR C.CLI_CPF_CNPJ LIKE ?)`;
+          query += ` AND (C.CLI_NOME LIKE ? OR C.CLI_FANTASIA LIKE ? OR CAST(C.CLI_CPF_CNPJ AS VARCHAR(60)) LIKE CAST(? AS VARCHAR(60)))`;
           params.push(`%${search}%`, `%${search}%`, `%${search}%`);
         }
       }
