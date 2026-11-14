@@ -88,9 +88,12 @@ async function bootstrap() {
     next();
   });
 
-  // Confia no primeiro proxy (Nginx) para resolver o IP real do cliente
-  // via X-Forwarded-For. Necessário para o IpBlocklistService funcionar corretamente.
-  app.getHttpAdapter().getInstance().set('trust proxy', 1);
+  // Confia em proxies de redes privadas (Nginx, Docker bridge, Cloudflare)
+  // para resolver o IP real do cliente via X-Forwarded-For.
+  app
+    .getHttpAdapter()
+    .getInstance()
+    .set('trust proxy', 'loopback, linklocal, uniquelocal');
 
   app.enableCors({
     exposedHeaders: [

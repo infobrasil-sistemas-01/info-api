@@ -1,6 +1,7 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import { IpBlocklistService } from '../throttle/ip-blocklist.service';
+import { extractClientIp } from '../../utils/ip.util';
 
 /**
  * IpBlocklistMiddleware
@@ -8,14 +9,14 @@ import { IpBlocklistService } from '../throttle/ip-blocklist.service';
  * Middleware global que short-circuits requisições de IPs bloqueados
  * antes de chegarem ao roteador do NestJS.
  *
- * Extrai o IP real do cliente usando req.ip (que já leva em conta
- * o trust proxy configurado no main.ts, respeitando X-Forwarded-For).
+ * Extrai o IP real do cliente usando extractClientIp (respeitando Cloudflare,
+ * Nginx reverse proxy e X-Forwarded-For).
  *
  * IPs de loopback (localhost) nunca são bloqueados.
  */
 @Injectable()
 export class IpBlocklistMiddleware implements NestMiddleware {
-  constructor(private readonly ipBlocklist: IpBlocklistService) {}
+  constructor(private readonly ipBlocklist: IpBlocklistService) { }
 
   use(req: Request, res: Response, next: NextFunction): void {
     const ip = this.extractIp(req);
@@ -37,17 +38,11 @@ export class IpBlocklistMiddleware implements NestMiddleware {
   }
 
   /**
-   * Extrai o IP real do cliente.
-   * req.ip já resolve X-Forwarded-For quando trust proxy está ativo.
-   * Fallback para X-Real-IP caso req.ip não esteja disponível.
+   * Extrai o IP real do cliente utilizando a ordem de precedência centralizada:
+   * cf-connecting-ip -> x-real-ip -> x-forwarded-for -> req.ip -> socket.remoteAddress
    */
   private extractIp(req: Request): string {
-    return (
-      req.ip ??
-      (req.headers['x-real-ip'] as string) ??
-      req.socket.remoteAddress ??
-      'unknown'
-    );
+    return extractClientIp(req);
   }
 
   private isLoopback(ip: string): boolean {

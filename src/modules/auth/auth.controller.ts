@@ -28,6 +28,7 @@ import { RefreshDto } from './dto/refresh.dto';
 import { LoginResponseDto } from './dto/login-response.dto';
 import { UserProfileResponseDto } from './dto/user-profile-response.dto';
 import { RefreshResponseDto } from './dto/refresh-response.dto';
+import { extractClientIp } from 'src/utils/ip.util';
 import { OperatorVerifyDto } from './dto/operator-verify.dto';
 import { OperatorVerifyResponseDto } from './dto/operator-verify-response.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
@@ -181,7 +182,7 @@ export class AuthController {
       req.header('x-request-id') ??
       undefined;
 
-    const ip = (req as any).ip ?? req.socket.remoteAddress ?? undefined;
+    const ip = extractClientIp(req);
     const userAgent = req.header('user-agent') ?? undefined;
 
     return { requestId, ip, userAgent };

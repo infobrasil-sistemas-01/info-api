@@ -7,6 +7,7 @@ import {
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import * as Sentry from '@sentry/node';
+import { extractClientIp } from 'src/utils/ip.util';
 
 /**
  * LoggingInterceptor
@@ -34,12 +35,7 @@ export class LoggingInterceptor implements NestInterceptor {
       headers['User-Agent'] ??
       'unknown'
     ).toString();
-    const clientIp = (
-      request.ip ??
-      headers['x-forwarded-for'] ??
-      request.socket?.remoteAddress ??
-      'unknown'
-    ).toString();
+    const clientIp = extractClientIp(request);
 
     // Enriquece o scope Sentry com dados da requisição atual
     Sentry.getCurrentScope().setTag('http.method', method);

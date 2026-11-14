@@ -9,6 +9,7 @@ import {
 import * as Sentry from '@sentry/node';
 import { IpBlocklistService } from '../throttle/ip-blocklist.service';
 import { PlanService } from '../../modules/plan/plan.service';
+import { extractClientIp } from 'src/utils/ip.util';
 
 /**
  * AllExceptionsFilter
@@ -96,13 +97,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
       '/status',
     ].some((excluded) => urlPath.startsWith(excluded));
 
-    const clientIp: string = (
-      request.ip ??
-      (request.headers['x-real-ip'] as string) ??
-      request.headers['x-forwarded-for'] ??
-      request.socket?.remoteAddress ??
-      'unknown'
-    ).toString();
+    const clientIp = extractClientIp(request);
 
     // Grava o log de erro no banco de dados se não tiver sido gravado pelo interceptor
     if (userId && !request.logged && !isExcluded) {
