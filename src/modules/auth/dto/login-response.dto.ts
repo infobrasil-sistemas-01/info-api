@@ -32,10 +32,22 @@ export class LoginResponseDto {
   access_token!: string;
 
   @ApiProperty({
+    description: 'Tempo de expiração do token de acesso em segundos',
+    example: 900,
+  })
+  expires_in!: number;
+
+  @ApiProperty({
     description: 'Token de refresh para obter novos tokens de acesso',
     example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
   })
   refresh_token!: string;
+
+  @ApiProperty({
+    description: 'Tempo de expiração do token de refresh em segundos',
+    example: 2592000,
+  })
+  refresh_expires_in!: number;
 
   @ApiProperty({
     description: 'Dados do usuário autenticado',

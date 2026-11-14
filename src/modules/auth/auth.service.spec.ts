@@ -118,7 +118,9 @@ describe('AuthService', () => {
           permissions: ['perm1'],
         },
         accessToken: 'access-token',
+        expiresIn: 900,
         refreshToken: 'refresh-token',
+        refreshExpiresIn: 2592000,
       });
       expect(mockPrisma.user.findUnique).toHaveBeenCalledWith({
         where: { user: 'testuser', status: true },
@@ -179,7 +181,30 @@ describe('AuthService', () => {
 
       const result = await service.refresh(refreshToken);
 
-      expect(result).toEqual({ accessToken: 'new-access-token' });
+      expect(result).toEqual({
+        accessToken: 'new-access-token',
+        expiresIn: 900,
+        refreshExpiresIn: 2592000,
+      });
+    });
+
+    it('should return remaining refresh token lifetime when exp is in payload', async () => {
+      const refreshToken = 'valid-refresh-token';
+      const futureExp = Math.floor(Date.now() / 1000) + 3600;
+      mockJwt.verifyAsync.mockResolvedValue({
+        type: 'refresh',
+        userId: '1',
+        exp: futureExp,
+      });
+      mockPrisma.user.findUnique.mockResolvedValue(mockUser);
+      mockJwt.signAsync.mockResolvedValue('new-access-token');
+
+      const result = await service.refresh(refreshToken);
+
+      expect(result.accessToken).toBe('new-access-token');
+      expect(result.expiresIn).toBe(900);
+      expect(result.refreshExpiresIn).toBeGreaterThanOrEqual(3598);
+      expect(result.refreshExpiresIn).toBeLessThanOrEqual(3600);
     });
 
     it('should throw UnauthorizedException for invalid token type', async () => {

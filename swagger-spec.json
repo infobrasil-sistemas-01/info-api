@@ -352,7 +352,7 @@
             "name": "pageSize",
             "required": false,
             "in": "query",
-            "description": "Itens por página (padrão: 50, máx: 100)",
+            "description": "Itens por página (padrão: 50)",
             "schema": {
               "example": 50,
               "type": "number"
@@ -5148,10 +5148,20 @@
             "description": "Token de acesso JWT",
             "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
           },
+          "expires_in": {
+            "type": "number",
+            "description": "Tempo de expiração do token de acesso em segundos",
+            "example": 900
+          },
           "refresh_token": {
             "type": "string",
             "description": "Token de refresh para obter novos tokens de acesso",
             "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          },
+          "refresh_expires_in": {
+            "type": "number",
+            "description": "Tempo de expiração do token de refresh em segundos",
+            "example": 2592000
           },
           "user": {
             "description": "Dados do usuário autenticado",
@@ -5164,7 +5174,9 @@
         },
         "required": [
           "access_token",
+          "expires_in",
           "refresh_token",
+          "refresh_expires_in",
           "user"
         ]
       },
@@ -5188,10 +5200,22 @@
             "type": "string",
             "description": "Novo token de acesso JWT",
             "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          },
+          "expires_in": {
+            "type": "number",
+            "description": "Tempo de expiração do novo token de acesso em segundos",
+            "example": 900
+          },
+          "refresh_expires_in": {
+            "type": "number",
+            "description": "Tempo restante de expiração do token de refresh em segundos",
+            "example": 2592000
           }
         },
         "required": [
-          "access_token"
+          "access_token",
+          "expires_in",
+          "refresh_expires_in"
         ]
       },
       "OperatorVerifyDto": {
@@ -6835,6 +6859,12 @@
             "example": "111.222.333-44",
             "description": "CPF ou CNPJ do cliente",
             "nullable": true
+          },
+          "CLI_OBS": {
+            "type": "object",
+            "example": "Cliente prefere entrega no período da tarde",
+            "description": "Observações do cliente",
+            "nullable": true
           }
         },
         "required": [
@@ -6918,6 +6948,12 @@
             "type": "object",
             "example": "111.222.333-44",
             "description": "CPF ou CNPJ do cliente",
+            "nullable": true
+          },
+          "CLI_OBS": {
+            "type": "object",
+            "example": "Cliente prefere entrega no período da tarde",
+            "description": "Observações do cliente",
             "nullable": true
           },
           "CLI_COMPL_ENDERECO": {
@@ -7114,6 +7150,11 @@
             "type": "object",
             "description": "Código da rota",
             "example": 1
+          },
+          "CLI_OBS": {
+            "type": "object",
+            "description": "Observações do cliente",
+            "example": "Cliente prefere entrega no período da tarde"
           }
         },
         "required": [
@@ -7254,6 +7295,11 @@
             "type": "object",
             "description": "Código da rota",
             "example": 1
+          },
+          "CLI_OBS": {
+            "type": "object",
+            "description": "Observações do cliente",
+            "example": "Cliente prefere entrega no período da tarde"
           }
         }
       },

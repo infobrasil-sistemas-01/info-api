@@ -69,7 +69,9 @@ describe('AuthController', () => {
       mockAuthService.login.mockResolvedValue({
         user: { id: '1', username: 'user', role: 'admin', permissions: [] },
         accessToken: 'access-token',
+        expiresIn: 900,
         refreshToken: 'refresh-token',
+        refreshExpiresIn: 2592000,
       });
 
       const result = await controller.login(headers, mockRequest, {
@@ -87,7 +89,9 @@ describe('AuthController', () => {
       expect(result).toEqual({
         user: { id: '1', username: 'user', role: 'admin', permissions: [] },
         access_token: 'access-token',
+        expires_in: 900,
         refresh_token: 'refresh-token',
+        refresh_expires_in: 2592000,
       });
     });
 
@@ -117,13 +121,19 @@ describe('AuthController', () => {
 
       mockAuthService.refresh.mockResolvedValue({
         accessToken: 'new-access-token',
+        expiresIn: 900,
+        refreshExpiresIn: 2592000,
         newRefreshToken: null,
       });
 
       const result = await controller.refresh(dto);
 
       expect(authService.refresh).toHaveBeenCalledWith('refresh-token-value');
-      expect(result).toEqual({ access_token: 'new-access-token' });
+      expect(result).toEqual({
+        access_token: 'new-access-token',
+        expires_in: 900,
+        refresh_expires_in: 2592000,
+      });
     });
   });
 

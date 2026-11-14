@@ -97,7 +97,9 @@ export class AuthController {
 
     return {
       access_token: result.accessToken,
+      expires_in: result.expiresIn,
       refresh_token: result.refreshToken,
+      refresh_expires_in: result.refreshExpiresIn,
       user: result.user,
     };
   }
@@ -116,6 +118,8 @@ export class AuthController {
     const result = await this.auth.refresh(body.refresh_token);
     return {
       access_token: result.accessToken,
+      expires_in: result.expiresIn,
+      refresh_expires_in: result.refreshExpiresIn,
     };
   }
 

@@ -1,7 +1,7 @@
 {
   "item": [
     {
-      "id": "1b2a2aa9-0467-4cdf-84b6-f6ad9f465a43",
+      "id": "79700768-1b26-4906-9b1a-6d66f59e106a",
       "name": "Auth",
       "description": {
         "content": "Endpoints relacionados à autenticação e obtenção de token JWT",
@@ -9,7 +9,7 @@
       },
       "item": [
         {
-          "id": "944b2565-6636-492a-a793-543cc1a422fc",
+          "id": "bd1358c7-2d61-4b2a-aae6-0a8cbd60135f",
           "name": "Obter perfil do usuário logado",
           "request": {
             "name": "Obter perfil do usuário logado",
@@ -44,7 +44,7 @@
           },
           "response": [
             {
-              "id": "e8419a0c-c99e-4302-a946-9a6e23b89b49",
+              "id": "93f7add9-cb57-4521-9d4c-b2fc513edb05",
               "name": "Perfil do usuário retornado com sucesso.",
               "originalRequest": {
                 "url": {
@@ -94,7 +94,7 @@
           }
         },
         {
-          "id": "3f2008ac-d7c5-49f0-9567-32de56c93e2a",
+          "id": "ea647faf-4841-4392-8fe7-41fa802bee70",
           "name": "Login do usuário",
           "request": {
             "name": "Login do usuário",
@@ -138,7 +138,7 @@
           },
           "response": [
             {
-              "id": "b45f2bf9-d0dc-4036-bb95-1ea3f3e496aa",
+              "id": "879fb62a-a2a2-4f10-bd8a-7ff701aad419",
               "name": "Login realizado com sucesso, retorna usuário e token de acesso.",
               "originalRequest": {
                 "url": {
@@ -177,7 +177,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"access_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\",\n  \"refresh_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\",\n  \"user\": {\n    \"id\": \"9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d\",\n    \"username\": \"infomobile\",\n    \"role\": {},\n    \"permissions\": [\n      \"tenant.orders.view\",\n      \"tenant.products.view\"\n    ]\n  }\n}",
+              "body": "{\n  \"access_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\",\n  \"expires_in\": 900,\n  \"refresh_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\",\n  \"refresh_expires_in\": 2592000,\n  \"user\": {\n    \"id\": \"9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d\",\n    \"username\": \"infomobile\",\n    \"role\": {},\n    \"permissions\": [\n      \"tenant.orders.view\",\n      \"tenant.products.view\"\n    ]\n  }\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -204,7 +204,7 @@
           }
         },
         {
-          "id": "1459132c-9635-4a0f-b019-76993144a388",
+          "id": "0e8ed227-264c-475a-864b-a031d631584b",
           "name": "Refresh do access token",
           "request": {
             "name": "Refresh do access token",
@@ -244,7 +244,7 @@
           },
           "response": [
             {
-              "id": "454dbf83-795b-438a-9d05-af4c525c5378",
+              "id": "9198d922-f9b1-4419-9bc0-ab0c33c04b71",
               "name": "Access token renovado com sucesso.",
               "originalRequest": {
                 "url": {
@@ -283,7 +283,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"access_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\"\n}",
+              "body": "{\n  \"access_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\",\n  \"expires_in\": 900,\n  \"refresh_expires_in\": 2592000\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -294,7 +294,7 @@
           }
         },
         {
-          "id": "9d4cb9ee-c69f-44e0-bdd1-3ce1e1d7efa7",
+          "id": "24985399-7410-4494-b968-f6e86107a37c",
           "name": "Verifica credenciais de operador do tenant (H2M Bridge)",
           "request": {
             "name": "Verifica credenciais de operador do tenant (H2M Bridge)",
@@ -337,7 +337,7 @@
           },
           "response": [
             {
-              "id": "86efa959-a3a2-4b9b-925a-1a1eac037791",
+              "id": "8bbd8fcc-4ce7-4014-bfb8-ecd93d8ae821",
               "name": "Operador validado com sucesso.",
               "originalRequest": {
                 "url": {
@@ -381,7 +381,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "aab5e655-d151-4963-8f5e-6e7b3c1576fc",
+              "id": "b34c994d-d5e4-4e6e-90ec-f429bd5599d6",
               "name": "Credenciais inválidas ou operador inativo.",
               "originalRequest": {
                 "url": {
@@ -425,7 +425,7 @@
           }
         },
         {
-          "id": "ae7aef80-22d0-44f0-8327-3b44d880d0ad",
+          "id": "e3ba3857-11e2-406e-b311-75a480a0ebf2",
           "name": "Consulta status ativo de operador para rotação de token (H2M Refresh)",
           "request": {
             "name": "Consulta status ativo de operador para rotação de token (H2M Refresh)",
@@ -444,7 +444,7 @@
                 {
                   "disabled": false,
                   "type": "any",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "key": "usuCodigo",
                   "description": "(Required) "
                 }
@@ -455,7 +455,7 @@
           },
           "response": [
             {
-              "id": "69d8fdf0-b47b-4d2f-bdbd-c348e627348f",
+              "id": "2e95ee4f-7302-4118-9a85-948647a1180a",
               "originalRequest": {
                 "url": {
                   "path": [
@@ -471,7 +471,7 @@
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "4084.664715909925",
+                      "value": "6333.630462161778",
                       "key": "usuCodigo",
                       "description": "(Required) "
                     }
@@ -502,7 +502,7 @@
       "event": []
     },
     {
-      "id": "fe5f8d06-10b0-4633-af4e-18cc942787ab",
+      "id": "570c9274-1dda-47a7-bb60-5b013efbd49b",
       "name": "Client",
       "description": {
         "content": "Endpoints relacionados à gestão de clientes",
@@ -510,7 +510,7 @@
       },
       "item": [
         {
-          "id": "c3a1761b-7632-4da9-8dcf-8654ef05bbf6",
+          "id": "6a2bb4ea-c6d4-48f8-8b33-f181b0819aaa",
           "name": "Listar clientes",
           "request": {
             "name": "Listar clientes",
@@ -562,7 +562,7 @@
                 {
                   "disabled": true,
                   "key": "routeId",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "description": "ID da rota"
                 }
               ],
@@ -587,7 +587,7 @@
           },
           "response": [
             {
-              "id": "7d010531-3398-4a96-8443-242544f21857",
+              "id": "5955e900-dcdd-4f6b-9403-4379c989e8c4",
               "name": "Lista de clientes",
               "originalRequest": {
                 "url": {
@@ -624,7 +624,7 @@
                     },
                     {
                       "key": "routeId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     }
                   ],
                   "variable": []
@@ -654,7 +654,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "[\n  {\n    \"CLI_CODIGO\": 1,\n    \"CLI_SITUACAO\": \"A\",\n    \"CLI_NOME\": \"Maria de Souza\",\n    \"CLI_FANTASIA\": \"Mariazinha\",\n    \"CLI_SEXO\": \"F\",\n    \"CLI_ENDERECO\": \"Av. Paulista, 1000\",\n    \"CLI_FONE\": \"11988887777\",\n    \"CLI_EMAIL\": \"maria@exemplo.com\",\n    \"CLI_DATANASC\": \"1963-05-30T15:22:53.407Z\",\n    \"CLI_NUMERO\": {},\n    \"ROT_CODIGO\": 1,\n    \"ROT_NOME\": \"ROTA CENTRO\",\n    \"CLI_CPF_CNPJ\": {}\n  },\n  {\n    \"CLI_CODIGO\": 1,\n    \"CLI_SITUACAO\": \"A\",\n    \"CLI_NOME\": \"Maria de Souza\",\n    \"CLI_FANTASIA\": \"Mariazinha\",\n    \"CLI_SEXO\": \"F\",\n    \"CLI_ENDERECO\": \"Av. Paulista, 1000\",\n    \"CLI_FONE\": \"11988887777\",\n    \"CLI_EMAIL\": \"maria@exemplo.com\",\n    \"CLI_DATANASC\": \"1951-07-04T12:10:42.647Z\",\n    \"CLI_NUMERO\": {},\n    \"ROT_CODIGO\": 1,\n    \"ROT_NOME\": \"ROTA CENTRO\",\n    \"CLI_CPF_CNPJ\": {}\n  }\n]",
+              "body": "[\n  {\n    \"CLI_CODIGO\": 1,\n    \"CLI_SITUACAO\": \"A\",\n    \"CLI_NOME\": \"Maria de Souza\",\n    \"CLI_FANTASIA\": \"Mariazinha\",\n    \"CLI_SEXO\": \"F\",\n    \"CLI_ENDERECO\": \"Av. Paulista, 1000\",\n    \"CLI_FONE\": \"11988887777\",\n    \"CLI_EMAIL\": \"maria@exemplo.com\",\n    \"CLI_DATANASC\": \"2006-01-21T14:12:11.392Z\",\n    \"CLI_NUMERO\": {},\n    \"ROT_CODIGO\": 1,\n    \"ROT_NOME\": \"ROTA CENTRO\",\n    \"CLI_CPF_CNPJ\": {},\n    \"CLI_OBS\": {}\n  },\n  {\n    \"CLI_CODIGO\": 1,\n    \"CLI_SITUACAO\": \"A\",\n    \"CLI_NOME\": \"Maria de Souza\",\n    \"CLI_FANTASIA\": \"Mariazinha\",\n    \"CLI_SEXO\": \"F\",\n    \"CLI_ENDERECO\": \"Av. Paulista, 1000\",\n    \"CLI_FONE\": \"11988887777\",\n    \"CLI_EMAIL\": \"maria@exemplo.com\",\n    \"CLI_DATANASC\": \"2024-09-11T19:13:53.518Z\",\n    \"CLI_NUMERO\": {},\n    \"ROT_CODIGO\": 1,\n    \"ROT_NOME\": \"ROTA CENTRO\",\n    \"CLI_CPF_CNPJ\": {},\n    \"CLI_OBS\": {}\n  }\n]",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -665,7 +665,7 @@
           }
         },
         {
-          "id": "b3fa7daf-5827-42ae-8126-22c8d414ea5e",
+          "id": "56f52c9f-f1e2-4cff-903c-2e8b5ae17b2c",
           "name": "Criar cliente",
           "request": {
             "name": "Criar cliente",
@@ -702,7 +702,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"LOJ_CODIGO\": 1,\n  \"CLI_NOME\": \"João Silva\",\n  \"CLI_SITUACAO\": \"A\",\n  \"CLI_UF\": \"CE\",\n  \"MUN_CODIGO\": 2302404,\n  \"CLI_FANTASIA\": {},\n  \"CLI_SEXO\": {},\n  \"CLI_ENDERECO\": {},\n  \"CLI_NUMERO\": {},\n  \"CLI_COMPL_ENDERECO\": {},\n  \"CLI_CEP\": {},\n  \"CLI_BAIRRO\": {},\n  \"CLI_FONE\": {},\n  \"CLI_CELULAR\": {},\n  \"CLI_EMAIL\": {},\n  \"CLI_DATANASC\": {},\n  \"CLI_CPF_CNPJ\": {},\n  \"CLI_IDENTIDADE\": {},\n  \"CLI_MAE\": {},\n  \"CLI_PAI\": {},\n  \"CLI_ESTADOCIVIL\": {},\n  \"CLI_NATURALIDADE\": {},\n  \"ROT_CODIGO\": {}\n}",
+              "raw": "{\n  \"LOJ_CODIGO\": 1,\n  \"CLI_NOME\": \"João Silva\",\n  \"CLI_SITUACAO\": \"A\",\n  \"CLI_UF\": \"CE\",\n  \"MUN_CODIGO\": 2302404,\n  \"CLI_FANTASIA\": {},\n  \"CLI_SEXO\": {},\n  \"CLI_ENDERECO\": {},\n  \"CLI_NUMERO\": {},\n  \"CLI_COMPL_ENDERECO\": {},\n  \"CLI_CEP\": {},\n  \"CLI_BAIRRO\": {},\n  \"CLI_FONE\": {},\n  \"CLI_CELULAR\": {},\n  \"CLI_EMAIL\": {},\n  \"CLI_DATANASC\": {},\n  \"CLI_CPF_CNPJ\": {},\n  \"CLI_IDENTIDADE\": {},\n  \"CLI_MAE\": {},\n  \"CLI_PAI\": {},\n  \"CLI_ESTADOCIVIL\": {},\n  \"CLI_NATURALIDADE\": {},\n  \"ROT_CODIGO\": {},\n  \"CLI_OBS\": {}\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -712,7 +712,7 @@
           },
           "response": [
             {
-              "id": "8fc5bb38-cedc-434a-9ece-be7c04ae2ffb",
+              "id": "bcb6b733-269a-476e-9546-f0cc656266c5",
               "name": "Cliente criado com sucesso.",
               "originalRequest": {
                 "url": {
@@ -742,7 +742,7 @@
                 "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"LOJ_CODIGO\": 1,\n  \"CLI_NOME\": \"João Silva\",\n  \"CLI_SITUACAO\": \"A\",\n  \"CLI_UF\": \"CE\",\n  \"MUN_CODIGO\": 2302404,\n  \"CLI_FANTASIA\": {},\n  \"CLI_SEXO\": {},\n  \"CLI_ENDERECO\": {},\n  \"CLI_NUMERO\": {},\n  \"CLI_COMPL_ENDERECO\": {},\n  \"CLI_CEP\": {},\n  \"CLI_BAIRRO\": {},\n  \"CLI_FONE\": {},\n  \"CLI_CELULAR\": {},\n  \"CLI_EMAIL\": {},\n  \"CLI_DATANASC\": {},\n  \"CLI_CPF_CNPJ\": {},\n  \"CLI_IDENTIDADE\": {},\n  \"CLI_MAE\": {},\n  \"CLI_PAI\": {},\n  \"CLI_ESTADOCIVIL\": {},\n  \"CLI_NATURALIDADE\": {},\n  \"ROT_CODIGO\": {}\n}",
+                  "raw": "{\n  \"LOJ_CODIGO\": 1,\n  \"CLI_NOME\": \"João Silva\",\n  \"CLI_SITUACAO\": \"A\",\n  \"CLI_UF\": \"CE\",\n  \"MUN_CODIGO\": 2302404,\n  \"CLI_FANTASIA\": {},\n  \"CLI_SEXO\": {},\n  \"CLI_ENDERECO\": {},\n  \"CLI_NUMERO\": {},\n  \"CLI_COMPL_ENDERECO\": {},\n  \"CLI_CEP\": {},\n  \"CLI_BAIRRO\": {},\n  \"CLI_FONE\": {},\n  \"CLI_CELULAR\": {},\n  \"CLI_EMAIL\": {},\n  \"CLI_DATANASC\": {},\n  \"CLI_CPF_CNPJ\": {},\n  \"CLI_IDENTIDADE\": {},\n  \"CLI_MAE\": {},\n  \"CLI_PAI\": {},\n  \"CLI_ESTADOCIVIL\": {},\n  \"CLI_NATURALIDADE\": {},\n  \"ROT_CODIGO\": {},\n  \"CLI_OBS\": {}\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -769,7 +769,7 @@
           }
         },
         {
-          "id": "13a97941-51ca-4ceb-b406-931759e387a3",
+          "id": "f2b454ea-37fb-43f3-a08f-4fafd52def40",
           "name": "Obter detalhe do cliente",
           "request": {
             "name": "Obter detalhe do cliente",
@@ -812,7 +812,7 @@
           },
           "response": [
             {
-              "id": "1efd62c5-f56e-4149-be49-7e2ad96b8dbc",
+              "id": "481b0918-220e-4f73-8859-64fe77d58fd7",
               "name": "Detalhes do cliente",
               "originalRequest": {
                 "url": {
@@ -859,7 +859,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"CLI_CODIGO\": 1,\n  \"CLI_SITUACAO\": \"A\",\n  \"CLI_NOME\": \"Maria de Souza\",\n  \"CLI_FANTASIA\": \"Mariazinha\",\n  \"CLI_SEXO\": \"F\",\n  \"CLI_ENDERECO\": \"Av. Paulista, 1000\",\n  \"CLI_FONE\": \"11988887777\",\n  \"CLI_EMAIL\": \"maria@exemplo.com\",\n  \"CLI_DATANASC\": \"2022-02-28T10:10:57.851Z\",\n  \"CLI_COMPL_ENDERECO\": \"Apto 101\",\n  \"CLI_CEP\": \"01310-100\",\n  \"CLI_BAIRRO\": \"Bela Vista\",\n  \"CLI_UF\": \"SP\",\n  \"CLI_IDENTIDADE\": \"12.345.678-9\",\n  \"CLI_MAE\": \"Ana de Souza\",\n  \"CLI_PAI\": \"João de Souza\",\n  \"CLI_ESTADOCIVIL\": \"Solteiro(a)\",\n  \"CLI_NATURALIDADE\": \"São Paulo - SP\",\n  \"CLI_NUMERO\": {},\n  \"ROT_CODIGO\": 1,\n  \"ROT_NOME\": \"ROTA CENTRO\",\n  \"CLI_CPF_CNPJ\": {},\n  \"MUN_CODIGO\": 2304400,\n  \"MUN_NOME\": \"FORTALEZA\"\n}",
+              "body": "{\n  \"CLI_CODIGO\": 1,\n  \"CLI_SITUACAO\": \"A\",\n  \"CLI_NOME\": \"Maria de Souza\",\n  \"CLI_FANTASIA\": \"Mariazinha\",\n  \"CLI_SEXO\": \"F\",\n  \"CLI_ENDERECO\": \"Av. Paulista, 1000\",\n  \"CLI_FONE\": \"11988887777\",\n  \"CLI_EMAIL\": \"maria@exemplo.com\",\n  \"CLI_DATANASC\": \"1963-06-22T22:46:41.020Z\",\n  \"CLI_COMPL_ENDERECO\": \"Apto 101\",\n  \"CLI_CEP\": \"01310-100\",\n  \"CLI_BAIRRO\": \"Bela Vista\",\n  \"CLI_UF\": \"SP\",\n  \"CLI_IDENTIDADE\": \"12.345.678-9\",\n  \"CLI_MAE\": \"Ana de Souza\",\n  \"CLI_PAI\": \"João de Souza\",\n  \"CLI_ESTADOCIVIL\": \"Solteiro(a)\",\n  \"CLI_NATURALIDADE\": \"São Paulo - SP\",\n  \"CLI_NUMERO\": {},\n  \"ROT_CODIGO\": 1,\n  \"ROT_NOME\": \"ROTA CENTRO\",\n  \"CLI_CPF_CNPJ\": {},\n  \"CLI_OBS\": {},\n  \"MUN_CODIGO\": 2304400,\n  \"MUN_NOME\": \"FORTALEZA\"\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -870,7 +870,7 @@
           }
         },
         {
-          "id": "d63c09d4-7715-4640-bba6-22fb3d4b8e69",
+          "id": "a6b1d619-7f41-4538-ba37-27a0ef795d1e",
           "name": "Atualizar cliente",
           "request": {
             "name": "Atualizar cliente",
@@ -888,7 +888,7 @@
                 {
                   "disabled": false,
                   "type": "any",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "key": "id",
                   "description": "(Required) "
                 }
@@ -916,7 +916,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"LOJ_CODIGO\": 1,\n  \"CLI_NOME\": \"João Silva\",\n  \"CLI_SITUACAO\": \"A\",\n  \"CLI_UF\": \"CE\",\n  \"MUN_CODIGO\": 2302404,\n  \"CLI_FANTASIA\": {},\n  \"CLI_SEXO\": {},\n  \"CLI_ENDERECO\": {},\n  \"CLI_NUMERO\": {},\n  \"CLI_COMPL_ENDERECO\": {},\n  \"CLI_CEP\": {},\n  \"CLI_BAIRRO\": {},\n  \"CLI_FONE\": {},\n  \"CLI_CELULAR\": {},\n  \"CLI_EMAIL\": {},\n  \"CLI_DATANASC\": {},\n  \"CLI_CPF_CNPJ\": {},\n  \"CLI_IDENTIDADE\": {},\n  \"CLI_MAE\": {},\n  \"CLI_PAI\": {},\n  \"CLI_ESTADOCIVIL\": {},\n  \"CLI_NATURALIDADE\": {},\n  \"ROT_CODIGO\": {}\n}",
+              "raw": "{\n  \"LOJ_CODIGO\": 1,\n  \"CLI_NOME\": \"João Silva\",\n  \"CLI_SITUACAO\": \"A\",\n  \"CLI_UF\": \"CE\",\n  \"MUN_CODIGO\": 2302404,\n  \"CLI_FANTASIA\": {},\n  \"CLI_SEXO\": {},\n  \"CLI_ENDERECO\": {},\n  \"CLI_NUMERO\": {},\n  \"CLI_COMPL_ENDERECO\": {},\n  \"CLI_CEP\": {},\n  \"CLI_BAIRRO\": {},\n  \"CLI_FONE\": {},\n  \"CLI_CELULAR\": {},\n  \"CLI_EMAIL\": {},\n  \"CLI_DATANASC\": {},\n  \"CLI_CPF_CNPJ\": {},\n  \"CLI_IDENTIDADE\": {},\n  \"CLI_MAE\": {},\n  \"CLI_PAI\": {},\n  \"CLI_ESTADOCIVIL\": {},\n  \"CLI_NATURALIDADE\": {},\n  \"ROT_CODIGO\": {},\n  \"CLI_OBS\": {}\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -926,7 +926,7 @@
           },
           "response": [
             {
-              "id": "7bbc9d6f-1ce0-4c07-9d99-ea519fc906a7",
+              "id": "850f3e1a-8d47-4282-a78a-63ca748fc794",
               "name": "Cliente atualizado com sucesso",
               "originalRequest": {
                 "url": {
@@ -942,7 +942,7 @@
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "4084.664715909925",
+                      "value": "6333.630462161778",
                       "key": "id",
                       "description": "(Required) "
                     }
@@ -965,7 +965,7 @@
                 "method": "PATCH",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"LOJ_CODIGO\": 1,\n  \"CLI_NOME\": \"João Silva\",\n  \"CLI_SITUACAO\": \"A\",\n  \"CLI_UF\": \"CE\",\n  \"MUN_CODIGO\": 2302404,\n  \"CLI_FANTASIA\": {},\n  \"CLI_SEXO\": {},\n  \"CLI_ENDERECO\": {},\n  \"CLI_NUMERO\": {},\n  \"CLI_COMPL_ENDERECO\": {},\n  \"CLI_CEP\": {},\n  \"CLI_BAIRRO\": {},\n  \"CLI_FONE\": {},\n  \"CLI_CELULAR\": {},\n  \"CLI_EMAIL\": {},\n  \"CLI_DATANASC\": {},\n  \"CLI_CPF_CNPJ\": {},\n  \"CLI_IDENTIDADE\": {},\n  \"CLI_MAE\": {},\n  \"CLI_PAI\": {},\n  \"CLI_ESTADOCIVIL\": {},\n  \"CLI_NATURALIDADE\": {},\n  \"ROT_CODIGO\": {}\n}",
+                  "raw": "{\n  \"LOJ_CODIGO\": 1,\n  \"CLI_NOME\": \"João Silva\",\n  \"CLI_SITUACAO\": \"A\",\n  \"CLI_UF\": \"CE\",\n  \"MUN_CODIGO\": 2302404,\n  \"CLI_FANTASIA\": {},\n  \"CLI_SEXO\": {},\n  \"CLI_ENDERECO\": {},\n  \"CLI_NUMERO\": {},\n  \"CLI_COMPL_ENDERECO\": {},\n  \"CLI_CEP\": {},\n  \"CLI_BAIRRO\": {},\n  \"CLI_FONE\": {},\n  \"CLI_CELULAR\": {},\n  \"CLI_EMAIL\": {},\n  \"CLI_DATANASC\": {},\n  \"CLI_CPF_CNPJ\": {},\n  \"CLI_IDENTIDADE\": {},\n  \"CLI_MAE\": {},\n  \"CLI_PAI\": {},\n  \"CLI_ESTADOCIVIL\": {},\n  \"CLI_NATURALIDADE\": {},\n  \"ROT_CODIGO\": {},\n  \"CLI_OBS\": {}\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -981,7 +981,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"CLI_CODIGO\": 1,\n  \"CLI_SITUACAO\": \"A\",\n  \"CLI_NOME\": \"Maria de Souza\",\n  \"CLI_FANTASIA\": \"Mariazinha\",\n  \"CLI_SEXO\": \"F\",\n  \"CLI_ENDERECO\": \"Av. Paulista, 1000\",\n  \"CLI_FONE\": \"11988887777\",\n  \"CLI_EMAIL\": \"maria@exemplo.com\",\n  \"CLI_DATANASC\": \"2022-02-28T10:10:57.851Z\",\n  \"CLI_COMPL_ENDERECO\": \"Apto 101\",\n  \"CLI_CEP\": \"01310-100\",\n  \"CLI_BAIRRO\": \"Bela Vista\",\n  \"CLI_UF\": \"SP\",\n  \"CLI_IDENTIDADE\": \"12.345.678-9\",\n  \"CLI_MAE\": \"Ana de Souza\",\n  \"CLI_PAI\": \"João de Souza\",\n  \"CLI_ESTADOCIVIL\": \"Solteiro(a)\",\n  \"CLI_NATURALIDADE\": \"São Paulo - SP\",\n  \"CLI_NUMERO\": {},\n  \"ROT_CODIGO\": 1,\n  \"ROT_NOME\": \"ROTA CENTRO\",\n  \"CLI_CPF_CNPJ\": {},\n  \"MUN_CODIGO\": 2304400,\n  \"MUN_NOME\": \"FORTALEZA\"\n}",
+              "body": "{\n  \"CLI_CODIGO\": 1,\n  \"CLI_SITUACAO\": \"A\",\n  \"CLI_NOME\": \"Maria de Souza\",\n  \"CLI_FANTASIA\": \"Mariazinha\",\n  \"CLI_SEXO\": \"F\",\n  \"CLI_ENDERECO\": \"Av. Paulista, 1000\",\n  \"CLI_FONE\": \"11988887777\",\n  \"CLI_EMAIL\": \"maria@exemplo.com\",\n  \"CLI_DATANASC\": \"1963-06-22T22:46:41.020Z\",\n  \"CLI_COMPL_ENDERECO\": \"Apto 101\",\n  \"CLI_CEP\": \"01310-100\",\n  \"CLI_BAIRRO\": \"Bela Vista\",\n  \"CLI_UF\": \"SP\",\n  \"CLI_IDENTIDADE\": \"12.345.678-9\",\n  \"CLI_MAE\": \"Ana de Souza\",\n  \"CLI_PAI\": \"João de Souza\",\n  \"CLI_ESTADOCIVIL\": \"Solteiro(a)\",\n  \"CLI_NATURALIDADE\": \"São Paulo - SP\",\n  \"CLI_NUMERO\": {},\n  \"ROT_CODIGO\": 1,\n  \"ROT_NOME\": \"ROTA CENTRO\",\n  \"CLI_CPF_CNPJ\": {},\n  \"CLI_OBS\": {},\n  \"MUN_CODIGO\": 2304400,\n  \"MUN_NOME\": \"FORTALEZA\"\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -995,7 +995,7 @@
       "event": []
     },
     {
-      "id": "4dca7e58-c95e-44c6-b1c8-84efc8c2d25e",
+      "id": "6e8cab61-6f15-4df9-a2c6-a79382759712",
       "name": "Employee",
       "description": {
         "content": "Endpoints relacionados à gestão de funcionários",
@@ -1003,7 +1003,7 @@
       },
       "item": [
         {
-          "id": "7c932809-30b2-4307-87fb-7cb784ba7a5b",
+          "id": "7d38ede1-f27e-46e7-8f49-f9716bc3b56f",
           "name": "Listar funcionários",
           "request": {
             "name": "Listar funcionários",
@@ -1074,7 +1074,7 @@
           },
           "response": [
             {
-              "id": "cfbd7d83-7b5c-4abe-ae68-e4b4e0d1fb80",
+              "id": "b2afc5bb-2e74-4bcc-b09e-f0e017177a61",
               "name": "Lista de funcionários",
               "originalRequest": {
                 "url": {
@@ -1148,7 +1148,7 @@
           }
         },
         {
-          "id": "0c98435a-4de0-4216-a422-90e37bd9eac3",
+          "id": "be6ba2d1-4a0f-472a-a34c-beec202c11cf",
           "name": "Obter detalhe do funcionário",
           "request": {
             "name": "Obter detalhe do funcionário",
@@ -1191,7 +1191,7 @@
           },
           "response": [
             {
-              "id": "e213d16d-8795-4346-bf02-7b2774745ff0",
+              "id": "4685b900-b3ec-441d-87df-97afa7c76ad1",
               "name": "Detalhes do funcionário",
               "originalRequest": {
                 "url": {
@@ -1238,7 +1238,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"FUN_CODIGO\": 1,\n  \"FCA_CODIGO\": 1,\n  \"FCA_NOME\": \"Vendedor\",\n  \"FUN_NOME\": \"João da Silva\",\n  \"FUN_APELIDO\": \"João\",\n  \"FUN_FONE\": \"1133334444\",\n  \"FUN_CELULAR\": \"11999998888\",\n  \"FUN_EMAIL\": \"joao@email.com\",\n  \"FUN_SITUACAO\": \"A\",\n  \"LOJ_CODIGO\": 1,\n  \"FUN_ENDERECO\": \"Rua das Flores, 123\",\n  \"FUN_BAIRRO\": \"Centro\",\n  \"FUN_CIDADE\": \"São Paulo\",\n  \"FUN_UF\": \"SP\",\n  \"FUN_CEP\": \"01000-000\",\n  \"FUN_CPF\": \"123.456.789-00\",\n  \"FUN_IDENTIDADE\": \"12.345.678-9\",\n  \"FUN_DATANASC\": \"1981-08-23T02:54:05.698Z\",\n  \"FUN_DATAADMISSAO\": \"2020-12-12T05:35:31.001Z\",\n  \"FUN_DATADEMISSAO\": \"2015-05-02T07:04:17.551Z\",\n  \"USU_CODIGO\": 1\n}",
+              "body": "{\n  \"FUN_CODIGO\": 1,\n  \"FCA_CODIGO\": 1,\n  \"FCA_NOME\": \"Vendedor\",\n  \"FUN_NOME\": \"João da Silva\",\n  \"FUN_APELIDO\": \"João\",\n  \"FUN_FONE\": \"1133334444\",\n  \"FUN_CELULAR\": \"11999998888\",\n  \"FUN_EMAIL\": \"joao@email.com\",\n  \"FUN_SITUACAO\": \"A\",\n  \"LOJ_CODIGO\": 1,\n  \"FUN_ENDERECO\": \"Rua das Flores, 123\",\n  \"FUN_BAIRRO\": \"Centro\",\n  \"FUN_CIDADE\": \"São Paulo\",\n  \"FUN_UF\": \"SP\",\n  \"FUN_CEP\": \"01000-000\",\n  \"FUN_CPF\": \"123.456.789-00\",\n  \"FUN_IDENTIDADE\": \"12.345.678-9\",\n  \"FUN_DATANASC\": \"1960-01-30T14:52:48.985Z\",\n  \"FUN_DATAADMISSAO\": \"1973-10-28T07:40:45.513Z\",\n  \"FUN_DATADEMISSAO\": \"1955-05-21T08:03:14.406Z\",\n  \"USU_CODIGO\": 1\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -1249,7 +1249,7 @@
           }
         },
         {
-          "id": "37ddee5d-b389-4676-a904-a442a58e6556",
+          "id": "dcefafab-6337-4ae4-b1f7-fecce95e56c6",
           "name": "Listar funções/cargos de funcionários",
           "request": {
             "name": "Listar funções/cargos de funcionários",
@@ -1302,7 +1302,7 @@
           },
           "response": [
             {
-              "id": "0a90e4b6-2e61-4f1e-a4cf-758fba055ba5",
+              "id": "3b7acb12-e8c8-400b-806c-d9216aae834c",
               "name": "Lista de funções/cargos de funcionários",
               "originalRequest": {
                 "url": {
@@ -1367,7 +1367,7 @@
       "event": []
     },
     {
-      "id": "fd90269e-9327-4e16-9c02-ce293a44982a",
+      "id": "162d5294-2f46-4270-8954-e15965549347",
       "name": "Supplier",
       "description": {
         "content": "Endpoints relacionados à gestão de fornecedores",
@@ -1375,7 +1375,7 @@
       },
       "item": [
         {
-          "id": "516c2f93-70fa-4357-adfa-7c794a14f834",
+          "id": "17bcf0cb-286c-4f38-a62d-e63f54ac1abd",
           "name": "Listar fornecedores",
           "request": {
             "name": "Listar fornecedores",
@@ -1415,7 +1415,7 @@
                 {
                   "disabled": true,
                   "key": "storeId",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "description": "ID da loja"
                 }
               ],
@@ -1440,7 +1440,7 @@
           },
           "response": [
             {
-              "id": "1081caa8-364f-4045-a50d-bf01cbd497cd",
+              "id": "65f1b3c6-5268-473b-9024-5af389130ffa",
               "name": "Lista de fornecedores",
               "originalRequest": {
                 "url": {
@@ -1469,7 +1469,7 @@
                     },
                     {
                       "key": "storeId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     }
                   ],
                   "variable": []
@@ -1510,7 +1510,7 @@
           }
         },
         {
-          "id": "0885868e-83c2-4451-92cf-346e0ab03e61",
+          "id": "32a4010b-20c7-44b9-a118-0f3b4e6bcaf1",
           "name": "Obter detalhe do fornecedor",
           "request": {
             "name": "Obter detalhe do fornecedor",
@@ -1553,7 +1553,7 @@
           },
           "response": [
             {
-              "id": "08929189-319e-4fcb-9328-23087f8543f0",
+              "id": "65e919ab-e55f-4182-ab36-513a8342a754",
               "name": "Detalhes do fornecedor",
               "originalRequest": {
                 "url": {
@@ -1614,7 +1614,7 @@
       "event": []
     },
     {
-      "id": "4e506c97-e777-43db-905d-a589c4ec35b7",
+      "id": "8fb45ad1-bdb5-4a02-bd90-62407b88aaa2",
       "name": "Service Providers (Prestadores)",
       "description": {
         "content": "Endpoints relacionados à gestão de prestadores de serviço",
@@ -1622,7 +1622,7 @@
       },
       "item": [
         {
-          "id": "0a198ff2-60ba-4c98-abf4-9ce9b960b470",
+          "id": "702323f5-a2e0-4503-8ece-26e71754e78f",
           "name": "Listar prestadores de serviço",
           "request": {
             "name": "Listar prestadores de serviço",
@@ -1662,7 +1662,7 @@
                 {
                   "disabled": true,
                   "key": "storeId",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "description": "ID da loja"
                 }
               ],
@@ -1687,7 +1687,7 @@
           },
           "response": [
             {
-              "id": "4023458f-6f56-4735-9726-5999f8aae9ed",
+              "id": "5d5d5a03-79b0-4274-97e5-4f8be18cae68",
               "name": "Lista de prestadores de serviço",
               "originalRequest": {
                 "url": {
@@ -1716,7 +1716,7 @@
                     },
                     {
                       "key": "storeId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     }
                   ],
                   "variable": []
@@ -1757,7 +1757,7 @@
           }
         },
         {
-          "id": "2dfe925e-e9ca-4e21-829a-042547b1a28c",
+          "id": "7c58aea6-6ca6-4c07-a5f0-23291135575e",
           "name": "Obter detalhe do prestador",
           "request": {
             "name": "Obter detalhe do prestador",
@@ -1800,7 +1800,7 @@
           },
           "response": [
             {
-              "id": "1a82d2e0-bce1-4fb5-8c01-d90ab3b29379",
+              "id": "4666b941-0a80-4b9b-9fff-4d3b165d3fc8",
               "name": "Detalhes do prestador de serviço",
               "originalRequest": {
                 "url": {
@@ -1861,7 +1861,7 @@
       "event": []
     },
     {
-      "id": "fafe446d-1c4f-4335-91df-3774560bcc6d",
+      "id": "dcd95e51-a1b7-49b2-8ae0-f1f860d82a20",
       "name": "Product",
       "description": {
         "content": "Endpoints relacionados à gestão de produtos",
@@ -1869,7 +1869,7 @@
       },
       "item": [
         {
-          "id": "20e3daa1-76f9-41b5-b329-fdcd70796697",
+          "id": "39415b30-f2cc-4584-aaad-5cf8f6c676db",
           "name": "Listar produtos",
           "request": {
             "name": "Listar produtos",
@@ -1912,19 +1912,19 @@
                 {
                   "disabled": true,
                   "key": "group",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "description": "Código do grupo para filtrar produtos"
                 },
                 {
                   "disabled": true,
                   "key": "brand",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "description": "Código da marca para filtrar produtos"
                 },
                 {
                   "disabled": true,
                   "key": "minStock",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "description": "Quantidade mínima em estoque para filtrar produtos"
                 },
                 {
@@ -1973,7 +1973,7 @@
           },
           "response": [
             {
-              "id": "501104ca-8cc4-4e81-9418-b6fbb88b03d4",
+              "id": "8c42713f-f9a4-479e-bc17-aaca7249a115",
               "name": "Lista de produtos retornada com sucesso.",
               "originalRequest": {
                 "url": {
@@ -2002,15 +2002,15 @@
                     },
                     {
                       "key": "group",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "brand",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "minStock",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "search",
@@ -2082,12 +2082,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "[\n  {\n    \"PRO_CODIGO\": 101,\n    \"PRO_CODIGOBAR\": \"7891234567890\",\n    \"PRO_DESCRICAO\": \"Produto Exemplo\",\n    \"MAR_CODIGO\": 1,\n    \"MAR_DESCRICAO\": \"Marca Exemplo\",\n    \"GRU_CODIGO\": 1,\n    \"GRU_DESCRICAO\": \"Grupo Exemplo\",\n    \"EST_ATUAL\": 50,\n    \"EST_APOIO\": 50,\n    \"PRECO\": 19.99,\n    \"EST_DTALTERACAO\": \"2026-01-01\",\n    \"PRO_PRCCOMPRA\": 10,\n    \"PRO_PRCCUSTO\": 12.5,\n    \"PRO_PRCCOMPRAFISCAL\": 11,\n    \"PRO_CUSTOFISCAL\": 13,\n    \"PRO_UNIDADE\": {},\n    \"CRE_CODIGO\": {},\n    \"CRE_NOME\": {}\n  },\n  {\n    \"PRO_CODIGO\": 101,\n    \"PRO_CODIGOBAR\": \"7891234567890\",\n    \"PRO_DESCRICAO\": \"Produto Exemplo\",\n    \"MAR_CODIGO\": 1,\n    \"MAR_DESCRICAO\": \"Marca Exemplo\",\n    \"GRU_CODIGO\": 1,\n    \"GRU_DESCRICAO\": \"Grupo Exemplo\",\n    \"EST_ATUAL\": 50,\n    \"EST_APOIO\": 50,\n    \"PRECO\": 19.99,\n    \"EST_DTALTERACAO\": \"2026-01-01\",\n    \"PRO_PRCCOMPRA\": 10,\n    \"PRO_PRCCUSTO\": 12.5,\n    \"PRO_PRCCOMPRAFISCAL\": 11,\n    \"PRO_CUSTOFISCAL\": 13,\n    \"PRO_UNIDADE\": {},\n    \"CRE_CODIGO\": {},\n    \"CRE_NOME\": {}\n  }\n]",
+              "body": "[\n  {\n    \"PRO_CODIGO\": 101,\n    \"PRO_CODIGOBAR\": \"7891234567890\",\n    \"PRO_DESCRICAO\": \"Produto Exemplo\",\n    \"MAR_CODIGO\": 1,\n    \"MAR_DESCRICAO\": \"Marca Exemplo\",\n    \"GRU_CODIGO\": 1,\n    \"GRU_DESCRICAO\": \"Grupo Exemplo\",\n    \"EST_ATUAL\": 50,\n    \"EST_APOIO\": 50,\n    \"PRECO\": 19.99,\n    \"EST_DTALTERACAO\": \"2026-01-01\",\n    \"PRO_PRCCOMPRA\": 10,\n    \"PRO_PRCCUSTO\": 12.5,\n    \"PRO_PRCCOMPRAFISCAL\": 11,\n    \"PRO_CUSTOFISCAL\": 13,\n    \"PRO_UNIDADE\": {},\n    \"CRE_CODIGO\": {},\n    \"CRE_NOME\": {},\n    \"PRO_ESPECIFICACAO\": {},\n    \"PRO_ALTURA\": {},\n    \"PRO_LARGURA\": {},\n    \"PRO_COMPRIMENTO\": {},\n    \"PRO_PESO\": {},\n    \"PRO_COR\": {}\n  },\n  {\n    \"PRO_CODIGO\": 101,\n    \"PRO_CODIGOBAR\": \"7891234567890\",\n    \"PRO_DESCRICAO\": \"Produto Exemplo\",\n    \"MAR_CODIGO\": 1,\n    \"MAR_DESCRICAO\": \"Marca Exemplo\",\n    \"GRU_CODIGO\": 1,\n    \"GRU_DESCRICAO\": \"Grupo Exemplo\",\n    \"EST_ATUAL\": 50,\n    \"EST_APOIO\": 50,\n    \"PRECO\": 19.99,\n    \"EST_DTALTERACAO\": \"2026-01-01\",\n    \"PRO_PRCCOMPRA\": 10,\n    \"PRO_PRCCUSTO\": 12.5,\n    \"PRO_PRCCOMPRAFISCAL\": 11,\n    \"PRO_CUSTOFISCAL\": 13,\n    \"PRO_UNIDADE\": {},\n    \"CRE_CODIGO\": {},\n    \"CRE_NOME\": {},\n    \"PRO_ESPECIFICACAO\": {},\n    \"PRO_ALTURA\": {},\n    \"PRO_LARGURA\": {},\n    \"PRO_COMPRIMENTO\": {},\n    \"PRO_PESO\": {},\n    \"PRO_COR\": {}\n  }\n]",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "5398447e-49eb-496b-8528-ed07f06a7175",
+              "id": "8f037166-fe5a-4881-86fa-885664ad3e92",
               "name": "Erro de requisição, como pageSize excedendo o limite ou storeId ausente para M2M.",
               "originalRequest": {
                 "url": {
@@ -2116,15 +2116,15 @@
                     },
                     {
                       "key": "group",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "brand",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "minStock",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "search",
@@ -2173,7 +2173,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "c024d213-b46a-4c08-be92-c3f4c28609b8",
+              "id": "a8db3f48-39d2-4bd1-99ee-d913927f2175",
               "name": "Token de autenticação inválido ou ausente.",
               "originalRequest": {
                 "url": {
@@ -2202,15 +2202,15 @@
                     },
                     {
                       "key": "group",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "brand",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "minStock",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "search",
@@ -2259,7 +2259,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "9622b800-e18d-4618-a907-17b5d5644f66",
+              "id": "b6a9fc8a-3d0d-420c-ab4b-85332e913e97",
               "name": "Operador não autorizado a consultar dados de outra filial.",
               "originalRequest": {
                 "url": {
@@ -2288,15 +2288,15 @@
                     },
                     {
                       "key": "group",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "brand",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "minStock",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "search",
@@ -2351,7 +2351,406 @@
           }
         },
         {
-          "id": "1ccc09a5-e2ee-4945-863f-d8b6616696e6",
+          "id": "4a78413d-a270-4385-a15e-145db65f4269",
+          "name": "Listar estoques de produtos por loja",
+          "request": {
+            "name": "Listar estoques de produtos por loja",
+            "description": {
+              "content": "Retorna uma lista paginada de produtos com seus respectivos saldos de estoque (atual e apoio) em cada loja disponível.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "products",
+                "stock"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": true,
+                  "key": "storeId",
+                  "value": "1",
+                  "description": "Código da loja para filtrar apenas estoques da loja especificada (opcional; se omitido, retorna todas as lojas)"
+                },
+                {
+                  "disabled": true,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Página atual (padrão: 1)"
+                },
+                {
+                  "disabled": true,
+                  "key": "pageSize",
+                  "value": "50",
+                  "description": "Itens por página (padrão: 50)"
+                },
+                {
+                  "disabled": true,
+                  "key": "search",
+                  "value": "Arroz",
+                  "description": "Termo de busca para filtrar produtos por descrição"
+                },
+                {
+                  "disabled": true,
+                  "key": "startDateAlteracao",
+                  "value": "2026-01-01",
+                  "description": "Data inicial para filtrar produtos por data de alteração (YYYY-MM-DD)"
+                },
+                {
+                  "disabled": true,
+                  "key": "endDateAlteracao",
+                  "value": "2026-12-31",
+                  "description": "Data final para filtrar produtos por data de alteração (YYYY-MM-DD)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": true,
+                "description": "Se definido como \"true\", calcula e retorna cabeçalhos de paginação (X-Total-Count, X-Total-Pages, X-Current-Page, X-Per-Page) na resposta.",
+                "key": "X-Request-Count",
+                "value": "true"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "65df1817-b896-45a8-903d-514d3dbdb76e",
+              "name": "Lista de saldos de estoques por produto retornada com sucesso.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    "stock"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "storeId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "50"
+                    },
+                    {
+                      "key": "search",
+                      "value": "Arroz"
+                    },
+                    {
+                      "key": "startDateAlteracao",
+                      "value": "2026-01-01"
+                    },
+                    {
+                      "key": "endDateAlteracao",
+                      "value": "2026-12-31"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": true,
+                    "description": "Se definido como \"true\", calcula e retorna cabeçalhos de paginação (X-Total-Count, X-Total-Pages, X-Current-Page, X-Per-Page) na resposta.",
+                    "key": "X-Request-Count",
+                    "value": "true"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": true,
+                  "description": "Total de registros encontrados considerando os filtros (presente quando X-Request-Count: true)",
+                  "key": "X-Total-Count",
+                  "value": "145"
+                },
+                {
+                  "disabled": true,
+                  "description": "Total de páginas calculadas (presente quando X-Request-Count: true)",
+                  "key": "X-Total-Pages",
+                  "value": "3"
+                },
+                {
+                  "disabled": true,
+                  "description": "Página atual solicitada (presente quando X-Request-Count: true)",
+                  "key": "X-Current-Page",
+                  "value": "1"
+                },
+                {
+                  "disabled": true,
+                  "description": "Quantidade de registros por página (presente quando X-Request-Count: true)",
+                  "key": "X-Per-Page",
+                  "value": "50"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"PRO_CODIGO\": {},\n    \"PRO_DESCRICAO\": \"Produto Exemplo\",\n    \"STOCKS\": [\n      {\n        \"LOJ_CODIGO\": 1,\n        \"EST_ATUAL\": 15.5,\n        \"EST_APOIO\": 5\n      },\n      {\n        \"LOJ_CODIGO\": 1,\n        \"EST_ATUAL\": 15.5,\n        \"EST_APOIO\": 5\n      }\n    ],\n    \"PRO_CODIGOBAR\": {}\n  },\n  {\n    \"PRO_CODIGO\": {},\n    \"PRO_DESCRICAO\": \"Produto Exemplo\",\n    \"STOCKS\": [\n      {\n        \"LOJ_CODIGO\": 1,\n        \"EST_ATUAL\": 15.5,\n        \"EST_APOIO\": 5\n      },\n      {\n        \"LOJ_CODIGO\": 1,\n        \"EST_ATUAL\": 15.5,\n        \"EST_APOIO\": 5\n      }\n    ],\n    \"PRO_CODIGOBAR\": {}\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3cea0ebc-330b-4c95-9622-cbac7a37923f",
+              "name": "Erro de requisição, como parâmetros inválidos.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    "stock"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "storeId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "50"
+                    },
+                    {
+                      "key": "search",
+                      "value": "Arroz"
+                    },
+                    {
+                      "key": "startDateAlteracao",
+                      "value": "2026-01-01"
+                    },
+                    {
+                      "key": "endDateAlteracao",
+                      "value": "2026-12-31"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": true,
+                    "description": "Se definido como \"true\", calcula e retorna cabeçalhos de paginação (X-Total-Count, X-Total-Pages, X-Current-Page, X-Per-Page) na resposta.",
+                    "key": "X-Request-Count",
+                    "value": "true"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f1408993-e166-421e-9259-942bc4651155",
+              "name": "Token de autenticação inválido ou ausente.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    "stock"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "storeId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "50"
+                    },
+                    {
+                      "key": "search",
+                      "value": "Arroz"
+                    },
+                    {
+                      "key": "startDateAlteracao",
+                      "value": "2026-01-01"
+                    },
+                    {
+                      "key": "endDateAlteracao",
+                      "value": "2026-12-31"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": true,
+                    "description": "Se definido como \"true\", calcula e retorna cabeçalhos de paginação (X-Total-Count, X-Total-Pages, X-Current-Page, X-Per-Page) na resposta.",
+                    "key": "X-Request-Count",
+                    "value": "true"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ba4d100c-d4c4-49ab-bd7f-114b50145ede",
+              "name": "Operador não autorizado a consultar dados de outra filial.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    "stock"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "storeId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "50"
+                    },
+                    {
+                      "key": "search",
+                      "value": "Arroz"
+                    },
+                    {
+                      "key": "startDateAlteracao",
+                      "value": "2026-01-01"
+                    },
+                    {
+                      "key": "endDateAlteracao",
+                      "value": "2026-12-31"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": true,
+                    "description": "Se definido como \"true\", calcula e retorna cabeçalhos de paginação (X-Total-Count, X-Total-Pages, X-Current-Page, X-Per-Page) na resposta.",
+                    "key": "X-Request-Count",
+                    "value": "true"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "15a7ac7d-2a15-49a4-a7ad-57e3bd0acc38",
           "name": "Obter detalhes de um produto pelo ID",
           "request": {
             "name": "Obter detalhes de um produto pelo ID",
@@ -2386,7 +2785,7 @@
                 {
                   "disabled": false,
                   "type": "any",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "key": "id",
                   "description": "(Required) ID do produto a ser retornado"
                 }
@@ -2411,7 +2810,7 @@
           },
           "response": [
             {
-              "id": "1d5158f9-72d1-447f-aac8-f57363937426",
+              "id": "f79699df-1b76-446d-bd6a-171c2b195e81",
               "name": "Detalhes do produto retornados com sucesso.",
               "originalRequest": {
                 "url": {
@@ -2437,7 +2836,7 @@
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "4084.664715909925",
+                      "value": "6333.630462161778",
                       "key": "id",
                       "description": "(Required) ID do produto a ser retornado"
                     }
@@ -2468,12 +2867,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"PRO_CODIGO\": 101,\n  \"PRO_CODIGOBAR\": \"7891234567890\",\n  \"PRO_DESCRICAO\": \"Produto Exemplo\",\n  \"MAR_CODIGO\": 1,\n  \"MAR_DESCRICAO\": \"Marca Exemplo\",\n  \"GRU_CODIGO\": 1,\n  \"GRU_DESCRICAO\": \"Grupo Exemplo\",\n  \"EST_ATUAL\": 50,\n  \"EST_APOIO\": 50,\n  \"PRECO\": 19.99,\n  \"EST_DTALTERACAO\": \"2026-01-01\",\n  \"PRO_PRCCOMPRA\": 10,\n  \"PRO_PRCCUSTO\": 12.5,\n  \"PRO_PRCCOMPRAFISCAL\": 11,\n  \"PRO_CUSTOFISCAL\": 13,\n  \"PRO_UNIDADE\": {},\n  \"CRE_CODIGO\": {},\n  \"CRE_NOME\": {}\n}",
+              "body": "{\n  \"PRO_CODIGO\": 101,\n  \"PRO_CODIGOBAR\": \"7891234567890\",\n  \"PRO_DESCRICAO\": \"Produto Exemplo\",\n  \"MAR_CODIGO\": 1,\n  \"MAR_DESCRICAO\": \"Marca Exemplo\",\n  \"GRU_CODIGO\": 1,\n  \"GRU_DESCRICAO\": \"Grupo Exemplo\",\n  \"EST_ATUAL\": 50,\n  \"EST_APOIO\": 50,\n  \"PRECO\": 19.99,\n  \"EST_DTALTERACAO\": \"2026-01-01\",\n  \"PRO_PRCCOMPRA\": 10,\n  \"PRO_PRCCUSTO\": 12.5,\n  \"PRO_PRCCOMPRAFISCAL\": 11,\n  \"PRO_CUSTOFISCAL\": 13,\n  \"PRO_UNIDADE\": {},\n  \"CRE_CODIGO\": {},\n  \"CRE_NOME\": {},\n  \"PRO_ESPECIFICACAO\": {},\n  \"PRO_ALTURA\": {},\n  \"PRO_LARGURA\": {},\n  \"PRO_COMPRIMENTO\": {},\n  \"PRO_PESO\": {},\n  \"PRO_COR\": {}\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "40306c3d-c3ae-430e-a6fe-4e98e3f49387",
+              "id": "c1b08a02-9b13-4299-a97d-97a59e31797d",
               "name": "Erro de requisição, como ID inválido.",
               "originalRequest": {
                 "url": {
@@ -2499,7 +2898,7 @@
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "4084.664715909925",
+                      "value": "6333.630462161778",
                       "key": "id",
                       "description": "(Required) ID do produto a ser retornado"
                     }
@@ -2531,7 +2930,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "41473294-7c58-4332-9863-6669c0458a3a",
+              "id": "a24dfc0c-7102-496b-b0e3-476120e06766",
               "name": "Token de autenticação inválido ou ausente.",
               "originalRequest": {
                 "url": {
@@ -2557,7 +2956,7 @@
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "4084.664715909925",
+                      "value": "6333.630462161778",
                       "key": "id",
                       "description": "(Required) ID do produto a ser retornado"
                     }
@@ -2595,7 +2994,7 @@
           }
         },
         {
-          "id": "5600976b-5f64-4808-b3e8-d63f898495b2",
+          "id": "868eabd2-a4e4-44ee-b0c2-c17f0ccc0ed0",
           "name": "Obter detalhes de um produto pelo código de barras",
           "request": {
             "name": "Obter detalhes de um produto pelo código de barras",
@@ -2630,7 +3029,7 @@
                 {
                   "disabled": false,
                   "type": "any",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "key": "barcode",
                   "description": "(Required) Código de barras do produto a ser retornado"
                 }
@@ -2655,7 +3054,7 @@
           },
           "response": [
             {
-              "id": "e3fc2613-647c-403c-82da-3f5606ba3864",
+              "id": "81535123-2a4a-49fe-8cd2-89f052ef12c9",
               "name": "Detalhes do produto retornados com sucesso.",
               "originalRequest": {
                 "url": {
@@ -2681,7 +3080,7 @@
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "4084.664715909925",
+                      "value": "6333.630462161778",
                       "key": "barcode",
                       "description": "(Required) Código de barras do produto a ser retornado"
                     }
@@ -2712,12 +3111,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"PRO_CODIGO\": 101,\n  \"PRO_CODIGOBAR\": \"7891234567890\",\n  \"PRO_DESCRICAO\": \"Produto Exemplo\",\n  \"MAR_CODIGO\": 1,\n  \"MAR_DESCRICAO\": \"Marca Exemplo\",\n  \"GRU_CODIGO\": 1,\n  \"GRU_DESCRICAO\": \"Grupo Exemplo\",\n  \"EST_ATUAL\": 50,\n  \"EST_APOIO\": 50,\n  \"PRECO\": 19.99,\n  \"EST_DTALTERACAO\": \"2026-01-01\",\n  \"PRO_PRCCOMPRA\": 10,\n  \"PRO_PRCCUSTO\": 12.5,\n  \"PRO_PRCCOMPRAFISCAL\": 11,\n  \"PRO_CUSTOFISCAL\": 13,\n  \"PRO_UNIDADE\": {},\n  \"CRE_CODIGO\": {},\n  \"CRE_NOME\": {}\n}",
+              "body": "{\n  \"PRO_CODIGO\": 101,\n  \"PRO_CODIGOBAR\": \"7891234567890\",\n  \"PRO_DESCRICAO\": \"Produto Exemplo\",\n  \"MAR_CODIGO\": 1,\n  \"MAR_DESCRICAO\": \"Marca Exemplo\",\n  \"GRU_CODIGO\": 1,\n  \"GRU_DESCRICAO\": \"Grupo Exemplo\",\n  \"EST_ATUAL\": 50,\n  \"EST_APOIO\": 50,\n  \"PRECO\": 19.99,\n  \"EST_DTALTERACAO\": \"2026-01-01\",\n  \"PRO_PRCCOMPRA\": 10,\n  \"PRO_PRCCUSTO\": 12.5,\n  \"PRO_PRCCOMPRAFISCAL\": 11,\n  \"PRO_CUSTOFISCAL\": 13,\n  \"PRO_UNIDADE\": {},\n  \"CRE_CODIGO\": {},\n  \"CRE_NOME\": {},\n  \"PRO_ESPECIFICACAO\": {},\n  \"PRO_ALTURA\": {},\n  \"PRO_LARGURA\": {},\n  \"PRO_COMPRIMENTO\": {},\n  \"PRO_PESO\": {},\n  \"PRO_COR\": {}\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "e9ce0534-b3e5-4f1b-bfbc-622fdd3bbd4f",
+              "id": "11a3e7b8-8880-499a-a48c-b2dd0f504835",
               "name": "Erro de requisição, como código de barras inválido.",
               "originalRequest": {
                 "url": {
@@ -2743,7 +3142,7 @@
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "4084.664715909925",
+                      "value": "6333.630462161778",
                       "key": "barcode",
                       "description": "(Required) Código de barras do produto a ser retornado"
                     }
@@ -2775,7 +3174,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "ea494cb0-49f8-46cb-8692-a2f984144b25",
+              "id": "6e456d36-a919-4e2e-aeba-f42c9285d8bb",
               "name": "Token de autenticação inválido ou ausente.",
               "originalRequest": {
                 "url": {
@@ -2801,7 +3200,7 @@
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "4084.664715909925",
+                      "value": "6333.630462161778",
                       "key": "barcode",
                       "description": "(Required) Código de barras do produto a ser retornado"
                     }
@@ -2842,7 +3241,7 @@
       "event": []
     },
     {
-      "id": "d767ebdd-9841-4431-8711-2913b0c99fc0",
+      "id": "c524b344-206b-4010-bb32-ff8a5610b56e",
       "name": "Product / Brand",
       "description": {
         "content": "Endpoints relacionados à gestão de marcas e produtos vinculados a marcas",
@@ -2850,7 +3249,7 @@
       },
       "item": [
         {
-          "id": "ca8f34b6-053d-4f63-91cb-7e969e2cb00a",
+          "id": "5ddd6936-4baf-4be6-af73-278e40cf4656",
           "name": "Listar marcas de produtos",
           "request": {
             "name": "Listar marcas de produtos",
@@ -2901,7 +3300,7 @@
           },
           "response": [
             {
-              "id": "070121bc-eb81-4e54-89be-9cd2f6358820",
+              "id": "842fce80-4166-48d9-ba92-d5c602ed1c75",
               "name": "Lista de marcas de produtos retornada com sucesso.",
               "originalRequest": {
                 "url": {
@@ -2954,7 +3353,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "d7a68376-582c-472c-82c6-feebb63faf32",
+              "id": "e130130b-7b81-4d24-95d1-342dd08bf1e3",
               "name": "Erro de requisição, como pageSize excedendo o limite.",
               "originalRequest": {
                 "url": {
@@ -3003,7 +3402,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "7dd2cd2f-3b79-4106-9cdd-7a720ad5a7a2",
+              "id": "9020f292-aa8f-4726-a792-4478ab60bd2c",
               "name": "Token de autenticação inválido ou ausente.",
               "originalRequest": {
                 "url": {
@@ -3058,7 +3457,7 @@
           }
         },
         {
-          "id": "a22b18d1-4036-4043-9f86-6ec97b05dd70",
+          "id": "ccecc921-402f-488e-b903-93d6ec5056d6",
           "name": "Criar marca de produto",
           "request": {
             "name": "Criar marca de produto",
@@ -3109,7 +3508,7 @@
           },
           "response": [
             {
-              "id": "0978303b-0b88-4696-ad4a-ad6a3106beb3",
+              "id": "8d831415-69aa-4be7-9b36-9d510da4de0c",
               "name": "Marca criada com sucesso.",
               "originalRequest": {
                 "url": {
@@ -3161,7 +3560,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "13882b52-b34b-4823-9daa-9fadb219d5a7",
+              "id": "d0a9de3b-32e4-4d8b-b8e8-ff8762bcbc13",
               "name": "Erro de validação ou de requisição.",
               "originalRequest": {
                 "url": {
@@ -3209,7 +3608,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "612bf77b-7792-414e-8039-656ad500fa19",
+              "id": "69a42d28-1c6e-4a15-84dd-704eff952c00",
               "name": "Token de autenticação inválido ou ausente.",
               "originalRequest": {
                 "url": {
@@ -3263,7 +3662,7 @@
           }
         },
         {
-          "id": "7654d900-f2a3-42c5-b7d2-d4f6e88ce729",
+          "id": "a366491f-762f-49a1-8486-9b45c94aca76",
           "name": "Atualizar marca de produto",
           "request": {
             "name": "Atualizar marca de produto",
@@ -3285,7 +3684,7 @@
                 {
                   "disabled": false,
                   "type": "any",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "key": "id",
                   "description": "(Required) Código da marca (MAR_CODIGO) a ser atualizada"
                 }
@@ -3323,7 +3722,7 @@
           },
           "response": [
             {
-              "id": "1bd12d01-a3f6-41a9-831f-2241c61714f9",
+              "id": "67ab5d2c-64be-426c-8c49-c0370e44c87f",
               "name": "Marca atualizada com sucesso.",
               "originalRequest": {
                 "url": {
@@ -3340,7 +3739,7 @@
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "4084.664715909925",
+                      "value": "6333.630462161778",
                       "key": "id",
                       "description": "(Required) Código da marca (MAR_CODIGO) a ser atualizada"
                     }
@@ -3384,7 +3783,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "613e6bd5-5dc0-41d5-9d0a-af3e46f86d56",
+              "id": "9dd54bfd-e8fc-4e50-9361-a436aecdf603",
               "name": "Erro de validação ou de requisição.",
               "originalRequest": {
                 "url": {
@@ -3401,7 +3800,7 @@
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "4084.664715909925",
+                      "value": "6333.630462161778",
                       "key": "id",
                       "description": "(Required) Código da marca (MAR_CODIGO) a ser atualizada"
                     }
@@ -3441,7 +3840,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "f99b3744-fc25-4a8a-98ca-ea62a849a422",
+              "id": "27f6f04e-4c21-4483-9754-ff335a1ef907",
               "name": "Token de autenticação inválido ou ausente.",
               "originalRequest": {
                 "url": {
@@ -3458,7 +3857,7 @@
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "4084.664715909925",
+                      "value": "6333.630462161778",
                       "key": "id",
                       "description": "(Required) Código da marca (MAR_CODIGO) a ser atualizada"
                     }
@@ -3498,7 +3897,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "74ad3f7e-a150-4ebe-a11d-63d79d2c2725",
+              "id": "c6e9d216-4bec-4823-b8f3-318be03beaa8",
               "name": "Marca não encontrada.",
               "originalRequest": {
                 "url": {
@@ -3515,7 +3914,7 @@
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "4084.664715909925",
+                      "value": "6333.630462161778",
                       "key": "id",
                       "description": "(Required) Código da marca (MAR_CODIGO) a ser atualizada"
                     }
@@ -3564,7 +3963,7 @@
       "event": []
     },
     {
-      "id": "f3b24905-fce5-4185-b3a9-38bdcac60174",
+      "id": "547422ca-7d95-4c2a-ac91-73e33c50e7ca",
       "name": "Product / Group",
       "description": {
         "content": "Endpoints relacionados à gestão de grupos e produtos vinculados a grupos",
@@ -3572,7 +3971,7 @@
       },
       "item": [
         {
-          "id": "8b4dada4-70ad-43de-8770-c32353a2febc",
+          "id": "a2602738-2b76-4b74-9cbc-fce90ab22bd4",
           "name": "Listar grupos de produtos",
           "request": {
             "name": "Listar grupos de produtos",
@@ -3623,7 +4022,7 @@
           },
           "response": [
             {
-              "id": "b0d66313-4f24-4b7c-894f-2dbe2db3b770",
+              "id": "1789219a-3d0d-4fd2-84a4-57a5bd696a15",
               "name": "Lista de grupos de produtos retornada com sucesso.",
               "originalRequest": {
                 "url": {
@@ -3676,7 +4075,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "69890054-e07c-4b1d-b975-be760d2c1c4c",
+              "id": "d7be9253-0735-464c-b949-0f8af770e2eb",
               "name": "Erro de requisição, como pageSize excedendo o limite.",
               "originalRequest": {
                 "url": {
@@ -3725,7 +4124,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "f55a471b-1b48-4382-92a1-21ecff8440c1",
+              "id": "90a04efe-3200-4370-9310-6f46289e59a7",
               "name": "Token de autenticação inválido ou ausente.",
               "originalRequest": {
                 "url": {
@@ -3780,7 +4179,7 @@
           }
         },
         {
-          "id": "a1eb9630-604e-49b7-b975-8746a62a5dd4",
+          "id": "88160740-f66e-4de3-a217-700eda3b859b",
           "name": "Criar grupo de produto",
           "request": {
             "name": "Criar grupo de produto",
@@ -3831,7 +4230,7 @@
           },
           "response": [
             {
-              "id": "08f4632a-41b0-4c9b-9406-816b74ddb308",
+              "id": "e105eff4-068d-408e-b203-1174d61dcd5d",
               "name": "Grupo criado com sucesso.",
               "originalRequest": {
                 "url": {
@@ -3883,7 +4282,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "51d50545-2c4a-4c30-8f39-151890ef0edd",
+              "id": "ee207c6d-39e8-4f54-be56-7632e38fc743",
               "name": "Erro de validação ou de requisição.",
               "originalRequest": {
                 "url": {
@@ -3931,7 +4330,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "084afffa-976c-4844-aae4-8dad2dc5cd4e",
+              "id": "f1cd6147-dfea-48d1-aa2e-efec2feddd01",
               "name": "Token de autenticação inválido ou ausente.",
               "originalRequest": {
                 "url": {
@@ -3985,7 +4384,7 @@
           }
         },
         {
-          "id": "5e3fda81-7c58-4d8f-8d48-47d304329144",
+          "id": "669075d4-ae0c-43b3-b52d-36ecb34446dd",
           "name": "Atualizar grupo de produto",
           "request": {
             "name": "Atualizar grupo de produto",
@@ -4007,7 +4406,7 @@
                 {
                   "disabled": false,
                   "type": "any",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "key": "id",
                   "description": "(Required) Código do grupo (GRU_CODIGO) a ser atualizado"
                 }
@@ -4045,7 +4444,7 @@
           },
           "response": [
             {
-              "id": "57378bf0-a889-41b5-be0b-a7033ba1e29d",
+              "id": "6ddfd130-b669-4a9b-a19e-b7f514805bea",
               "name": "Grupo atualizado com sucesso.",
               "originalRequest": {
                 "url": {
@@ -4062,7 +4461,7 @@
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "4084.664715909925",
+                      "value": "6333.630462161778",
                       "key": "id",
                       "description": "(Required) Código do grupo (GRU_CODIGO) a ser atualizado"
                     }
@@ -4106,7 +4505,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "1c1030cb-6dc1-4bec-a6e6-bfb7198a5349",
+              "id": "dabaf10c-95c0-47d6-9f7b-c3158f71f75d",
               "name": "Erro de validação ou de requisição.",
               "originalRequest": {
                 "url": {
@@ -4123,7 +4522,7 @@
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "4084.664715909925",
+                      "value": "6333.630462161778",
                       "key": "id",
                       "description": "(Required) Código do grupo (GRU_CODIGO) a ser atualizado"
                     }
@@ -4163,7 +4562,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "7c297f1d-35e8-41c0-814d-7d906872d138",
+              "id": "1c244192-3bab-4770-a482-ee1a8f9ba0c6",
               "name": "Token de autenticação inválido ou ausente.",
               "originalRequest": {
                 "url": {
@@ -4180,7 +4579,7 @@
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "4084.664715909925",
+                      "value": "6333.630462161778",
                       "key": "id",
                       "description": "(Required) Código do grupo (GRU_CODIGO) a ser atualizado"
                     }
@@ -4220,7 +4619,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "78d5a2bc-6b59-419b-bd4c-7fd46fd10858",
+              "id": "5db3313b-5fe2-4c2c-a22d-b69dc70aa6f7",
               "name": "Grupo não encontrado.",
               "originalRequest": {
                 "url": {
@@ -4237,7 +4636,7 @@
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "4084.664715909925",
+                      "value": "6333.630462161778",
                       "key": "id",
                       "description": "(Required) Código do grupo (GRU_CODIGO) a ser atualizado"
                     }
@@ -4286,7 +4685,7 @@
       "event": []
     },
     {
-      "id": "53ddae87-7379-4ef9-8374-971672ab6ad7",
+      "id": "7a4eb783-1676-42e2-a25b-7c4515953d8a",
       "name": "Production Order",
       "description": {
         "content": "Endpoints relacionados à gestão de ordens de produção e insumos consumidos",
@@ -4294,7 +4693,7 @@
       },
       "item": [
         {
-          "id": "a008c6ad-dbbd-442c-8464-fab7d877eb2c",
+          "id": "cc0f5165-bbdb-4ae9-8071-10ce01dad939",
           "name": "Criar ordem de produção",
           "request": {
             "name": "Criar ordem de produção",
@@ -4344,7 +4743,7 @@
           },
           "response": [
             {
-              "id": "43192989-2f3f-4217-a249-87c285b7c5e8",
+              "id": "2d24b1f5-efb2-42d4-ba53-a172e4202a08",
               "name": "Ordem de produção criada com sucesso.",
               "originalRequest": {
                 "url": {
@@ -4395,7 +4794,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "6bc14253-c662-4b76-9712-1e83385968ca",
+              "id": "59ee4c4a-b8f2-4de2-8121-e53f9cce7164",
               "name": "Dados inválidos ou insumos não encontrados.",
               "originalRequest": {
                 "url": {
@@ -4448,7 +4847,7 @@
           }
         },
         {
-          "id": "bf7f2d55-e8df-424b-8e7b-16ae2b40c05d",
+          "id": "1499b4ec-b35b-456c-be69-2ef5a99c53a7",
           "name": "Listar ordens de produção",
           "request": {
             "name": "Listar ordens de produção",
@@ -4552,7 +4951,7 @@
           },
           "response": [
             {
-              "id": "20d34014-6a4b-4196-a8c3-2f36e21c6113",
+              "id": "5fb3661f-bf3b-4bb4-bc57-c2749a96b2ca",
               "name": "Lista de ordens de produção retornada com sucesso.",
               "originalRequest": {
                 "url": {
@@ -4666,7 +5065,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "2b25facf-701d-40b3-bc05-c1e63158ebc4",
+              "id": "c84934ff-2373-451e-8925-ed14b898cf65",
               "name": "Parâmetros de busca inválidos.",
               "originalRequest": {
                 "url": {
@@ -4758,7 +5157,7 @@
           }
         },
         {
-          "id": "b6665c11-0a8a-4f9f-ae51-18caab4acfff",
+          "id": "0b151a57-c13b-4d12-b462-a05cb0d35cc0",
           "name": "Obter ordem de produção por ID com insumos",
           "request": {
             "name": "Obter ordem de produção por ID com insumos",
@@ -4811,7 +5210,7 @@
           },
           "response": [
             {
-              "id": "36f50049-bf58-44ce-a253-49e4fb1f7ed6",
+              "id": "06f0a443-dac6-434a-bdd9-39b60efe8dbf",
               "name": "Detalhes da ordem de produção com itens retornados com sucesso.",
               "originalRequest": {
                 "url": {
@@ -4868,7 +5267,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "3e762064-623d-4cc2-ab5a-efccc7268734",
+              "id": "9e4c7261-d9cd-4aad-9151-ca4d45aadcb7",
               "name": "Ordem de produção não encontrada.",
               "originalRequest": {
                 "url": {
@@ -4927,7 +5326,7 @@
           }
         },
         {
-          "id": "f7d85b5e-4211-471d-825a-d0db7c449de5",
+          "id": "394f9878-6c7a-403d-b918-4a21a9df149b",
           "name": "Listar itens/insumos de uma ordem de produção",
           "request": {
             "name": "Listar itens/insumos de uma ordem de produção",
@@ -4974,7 +5373,7 @@
           },
           "response": [
             {
-              "id": "0246a726-e4e2-4f0d-befd-732fd6d7d316",
+              "id": "59d5dae1-d6ae-4a2a-bc1e-d15e7cadc9a1",
               "name": "Itens da ordem de produção retornados com sucesso.",
               "originalRequest": {
                 "url": {
@@ -5036,7 +5435,7 @@
       "event": []
     },
     {
-      "id": "211cc7a5-dac6-4f89-bf73-954fc10851ae",
+      "id": "766beab8-fc7e-4399-8484-a5642e5eaa47",
       "name": "Order",
       "description": {
         "content": "Endpoints relacionados à gestão de pedidos",
@@ -5044,7 +5443,7 @@
       },
       "item": [
         {
-          "id": "30d8cbdd-4c69-435d-a4e5-6ba58c92e088",
+          "id": "bb13fcf1-3add-4409-b77a-65da089a180e",
           "name": "Criar um novo pedido",
           "request": {
             "name": "Criar um novo pedido",
@@ -5094,7 +5493,7 @@
           },
           "response": [
             {
-              "id": "ee7e2eef-5d6c-44cc-838f-c36a66b33a38",
+              "id": "5c4e5f6c-dcc8-4ab5-819a-4ce2cbeeaf29",
               "name": "Pedido criado com sucesso.",
               "originalRequest": {
                 "url": {
@@ -5145,7 +5544,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "08dba034-bf43-472d-8b97-7a7203dcdfd4",
+              "id": "9b302c10-5165-4358-be4f-dcf6a0d09bdd",
               "name": "Dados inválidos fornecidos.",
               "originalRequest": {
                 "url": {
@@ -5192,7 +5591,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "c75b136f-8d94-42cb-a8bb-dfc60ceba324",
+              "id": "9a4e984d-ff3c-4cf4-98f5-2f841f0f2ace",
               "name": "Token de autenticação inválido ou ausente.",
               "originalRequest": {
                 "url": {
@@ -5239,7 +5638,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "8e08ddf7-2a8f-497d-b6eb-849660c4d20a",
+              "id": "5d2f2794-ed54-4371-b4fc-5a680f1fb038",
               "name": "Operador não autorizado a registrar vendas em nome de outro usuário ou funcionário.",
               "originalRequest": {
                 "url": {
@@ -5292,7 +5691,7 @@
           }
         },
         {
-          "id": "194aaa38-fdad-42fd-b210-676f2c3711da",
+          "id": "1f8ef304-fde9-4b21-a907-9a43ab1ebf27",
           "name": "Obter pedidos",
           "request": {
             "name": "Obter pedidos",
@@ -5323,7 +5722,7 @@
                 {
                   "disabled": true,
                   "key": "storeId",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "description": "ID da loja (LOJ_CODIGO)"
                 },
                 {
@@ -5341,13 +5740,13 @@
                 {
                   "disabled": true,
                   "key": "clientId",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "description": "ID do cliente (CLI_CODIGO)"
                 },
                 {
                   "disabled": true,
                   "key": "employeeId",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "description": "ID do funcionário (FUN_CODIGO)"
                 }
               ],
@@ -5378,7 +5777,7 @@
           },
           "response": [
             {
-              "id": "87667fe8-c5bd-47c9-aed0-4d1d5b01f27a",
+              "id": "b0363fa6-ebfb-4bbd-bd7d-116a966770e1",
               "name": "Lista de pedidos retornada com sucesso.",
               "originalRequest": {
                 "url": {
@@ -5399,7 +5798,7 @@
                     },
                     {
                       "key": "storeId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "startDate",
@@ -5411,11 +5810,11 @@
                     },
                     {
                       "key": "clientId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "employeeId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     }
                   ],
                   "variable": []
@@ -5486,7 +5885,7 @@
           }
         },
         {
-          "id": "bfd3b9ff-cda9-49df-b041-635e37f50061",
+          "id": "c959dea3-68ea-4596-9a48-3546624a8ec9",
           "name": "Obter métricas consolidadas de pedidos",
           "request": {
             "name": "Obter métricas consolidadas de pedidos",
@@ -5543,7 +5942,7 @@
           },
           "response": [
             {
-              "id": "8810b8a6-4c86-431f-bd49-7f27871c2318",
+              "id": "d08234fd-5765-47c7-b90f-1498fd58ae5d",
               "name": "Métricas de pedidos retornadas com sucesso.",
               "originalRequest": {
                 "url": {
@@ -5600,7 +5999,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "ddedeff7-e79c-4cdd-a792-4b45df26c7a5",
+              "id": "0c9fddfb-8b07-415b-992f-17a5abac59f8",
               "name": "Parâmetros de data inválidos.",
               "originalRequest": {
                 "url": {
@@ -5653,7 +6052,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "35eff12e-07e2-41e2-b254-e58565d66cb1",
+              "id": "9b921afa-49b4-49fe-b237-89dcf649aa5b",
               "name": "Token de autenticação inválido ou ausente.",
               "originalRequest": {
                 "url": {
@@ -5712,7 +6111,7 @@
           }
         },
         {
-          "id": "109c7454-e95c-4f07-907e-2120931e78c6",
+          "id": "40bd52d0-675f-494e-a7c2-126d70d5d14e",
           "name": "Obter Curva ABC dimensional de vendas",
           "request": {
             "name": "Obter Curva ABC dimensional de vendas",
@@ -5811,7 +6210,7 @@
           },
           "response": [
             {
-              "id": "cd520da0-4842-41c8-a472-c3c8c33406b0",
+              "id": "cc0aadc3-d060-4859-a7ed-f0884d3456a0",
               "name": "Curva ABC retornada com sucesso.",
               "originalRequest": {
                 "url": {
@@ -5896,7 +6295,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "5258e2d1-c764-40ae-a2a6-64832e94fc9b",
+              "id": "78892967-32c6-4542-b5a3-03da2f32ebc8",
               "name": "Parâmetros inválidos (ex: datas inválidas ou falta de paginação obrigatória para Cliente/Produto).",
               "originalRequest": {
                 "url": {
@@ -5977,7 +6376,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "b982fb11-41d7-48a0-b204-a342bc3f027e",
+              "id": "6fbbd577-6b4b-4d1a-b1c1-253a2976dc76",
               "name": "Token de autenticação inválido ou ausente.",
               "originalRequest": {
                 "url": {
@@ -6064,7 +6463,7 @@
           }
         },
         {
-          "id": "ff2ab4c8-deca-4203-b516-11f31837e88b",
+          "id": "429d1760-478e-4b8d-917f-218d8604274d",
           "name": "Obter detalhes de um pedido pelo ID",
           "request": {
             "name": "Obter detalhes de um pedido pelo ID",
@@ -6084,7 +6483,7 @@
                 {
                   "disabled": true,
                   "key": "storeId",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "description": "ID da loja (LOJ_CODIGO)"
                 }
               ],
@@ -6092,7 +6491,7 @@
                 {
                   "disabled": false,
                   "type": "any",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "key": "id",
                   "description": "(Required) ID do pedido a ser retornado"
                 }
@@ -6117,7 +6516,7 @@
           },
           "response": [
             {
-              "id": "0de32f0f-cfa6-436d-a18d-5c51cc91737a",
+              "id": "ca530dd2-3684-4114-8bc4-3955aeaab1a7",
               "name": "Detalhes do pedido retornados com sucesso.",
               "originalRequest": {
                 "url": {
@@ -6131,14 +6530,14 @@
                   "query": [
                     {
                       "key": "storeId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     }
                   ],
                   "variable": [
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "4084.664715909925",
+                      "value": "6333.630462161778",
                       "key": "id",
                       "description": "(Required) ID do pedido a ser retornado"
                     }
@@ -6174,7 +6573,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "91bd52e5-1906-47e2-90c1-c58c6646cd04",
+              "id": "a5292bc0-3258-4a4a-88d1-b115d6be536c",
               "name": "Erro de requisição, como ID inválido.",
               "originalRequest": {
                 "url": {
@@ -6188,14 +6587,14 @@
                   "query": [
                     {
                       "key": "storeId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     }
                   ],
                   "variable": [
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "4084.664715909925",
+                      "value": "6333.630462161778",
                       "key": "id",
                       "description": "(Required) ID do pedido a ser retornado"
                     }
@@ -6227,7 +6626,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "ea7dba95-0a0a-4d8e-9d26-f9f75d3e0506",
+              "id": "eee4c5cc-a7d0-4fa0-bedc-03c3eb56ecdf",
               "name": "Token de autenticação inválido ou ausente.",
               "originalRequest": {
                 "url": {
@@ -6241,14 +6640,14 @@
                   "query": [
                     {
                       "key": "storeId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     }
                   ],
                   "variable": [
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "4084.664715909925",
+                      "value": "6333.630462161778",
                       "key": "id",
                       "description": "(Required) ID do pedido a ser retornado"
                     }
@@ -6289,7 +6688,7 @@
       "event": []
     },
     {
-      "id": "643f7e38-8e6d-4915-9b55-b943fc13d7ba",
+      "id": "d9690adc-761f-49f1-90d6-7e16577d9dde",
       "name": "Order Items",
       "description": {
         "content": "Endpoints relacionados à consulta de itens de pedido",
@@ -6297,7 +6696,7 @@
       },
       "item": [
         {
-          "id": "0d723861-b3f6-4b23-b5e5-ce3a40ebce5e",
+          "id": "271feb49-4637-4819-bfd4-f122c2eb8605",
           "name": "Listar itens de pedidos",
           "request": {
             "name": "Listar itens de pedidos",
@@ -6328,25 +6727,25 @@
                 {
                   "disabled": true,
                   "key": "orderId",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "description": "ID da venda (VEN_NUMERO)"
                 },
                 {
                   "disabled": true,
                   "key": "productId",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "description": "ID do produto (PRO_CODIGO)"
                 },
                 {
                   "disabled": true,
                   "key": "brandId",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "description": "ID da marca (MAR_CODIGO)"
                 },
                 {
                   "disabled": true,
                   "key": "groupId",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "description": "ID do grupo (GRU_CODIGO)"
                 },
                 {
@@ -6389,7 +6788,7 @@
           },
           "response": [
             {
-              "id": "f30ce3a8-2dfb-4c46-b0e8-50d6b8da6376",
+              "id": "4570a859-8ce0-4860-b698-b5af8ff54ad3",
               "name": "Lista de itens retornada com sucesso.",
               "originalRequest": {
                 "url": {
@@ -6410,19 +6809,19 @@
                     },
                     {
                       "key": "orderId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "productId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "brandId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "groupId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "startDate",
@@ -6504,7 +6903,7 @@
       "event": []
     },
     {
-      "id": "30e16443-73b8-41d5-8dda-1ddcca243242",
+      "id": "26a17a07-ea36-4990-83db-c406b0ad1be2",
       "name": "Delivery",
       "description": {
         "content": "Endpoints relacionados à gestão de entregas",
@@ -6512,7 +6911,7 @@
       },
       "item": [
         {
-          "id": "b0f75710-5b03-41d0-b8a9-6db05afc7798",
+          "id": "436a65de-4b8a-40e0-9756-1e379c605702",
           "name": "Obter entregas",
           "request": {
             "name": "Obter entregas",
@@ -6610,7 +7009,7 @@
           },
           "response": [
             {
-              "id": "a2d49763-644a-426c-a773-daa3c7b128f0",
+              "id": "347ade22-c264-4621-a654-33a04ccb175c",
               "name": "Lista de entregas retornada com sucesso.",
               "originalRequest": {
                 "url": {
@@ -6694,7 +7093,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "c63ea3cc-0a93-4ef5-b7bf-6674e41a2caa",
+              "id": "66378995-88d8-41cc-8acb-a8e43276a14c",
               "name": "Token de autenticação inválido ou ausente.",
               "originalRequest": {
                 "url": {
@@ -6780,7 +7179,7 @@
           }
         },
         {
-          "id": "064c65dd-79ac-4d16-a6d3-de4fa973653b",
+          "id": "73b6959f-2c52-4c25-8459-7aade0924f69",
           "name": "Inserir entrega",
           "request": {
             "name": "Inserir entrega",
@@ -6830,7 +7229,7 @@
           },
           "response": [
             {
-              "id": "bb59dffd-9eb9-42e6-9cb4-4d013e3029b7",
+              "id": "80587b8e-b9f0-418d-b372-1d02651c44c6",
               "name": "Entrega criada com sucesso.",
               "originalRequest": {
                 "url": {
@@ -6881,7 +7280,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "b455234d-6117-4d09-ac10-108579f930ce",
+              "id": "a80f45e2-eaea-459b-a7ac-f26ba3ed91a5",
               "name": "Erro de validação ou requisição inválida.",
               "originalRequest": {
                 "url": {
@@ -6928,7 +7327,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "4294a474-71b5-4bb9-9c18-eced309a78b6",
+              "id": "b677c622-04f4-4cbe-8a61-f6197bdd4fa1",
               "name": "Token de autenticação inválido ou ausente.",
               "originalRequest": {
                 "url": {
@@ -6981,7 +7380,7 @@
           }
         },
         {
-          "id": "0cbbf0bf-3399-4cd7-945b-11c1c51f4e5f",
+          "id": "3a2c560a-1be8-4651-a18d-1c8865c88db7",
           "name": "Obter status de entregas",
           "request": {
             "name": "Obter status de entregas",
@@ -7019,7 +7418,7 @@
           },
           "response": [
             {
-              "id": "105837f1-c0a3-4efd-b1c0-e650d60d6305",
+              "id": "b425736a-c5a7-43dd-878c-1e83f9c72e52",
               "name": "Lista de status de entregas retornada com sucesso.",
               "originalRequest": {
                 "url": {
@@ -7063,7 +7462,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "94db4ceb-12cb-4365-a2dd-a17cebd98a8f",
+              "id": "84904c36-1c7f-4ef6-bd82-71ac1d82cf01",
               "name": "Token de autenticação inválido ou ausente.",
               "originalRequest": {
                 "url": {
@@ -7109,7 +7508,7 @@
           }
         },
         {
-          "id": "c8381fde-9a02-425b-b207-64f3f12671db",
+          "id": "b746867b-4692-4c13-bb9c-9f42924b405d",
           "name": "Obter detalhes de uma entrega pelo ID",
           "request": {
             "name": "Obter detalhes de uma entrega pelo ID",
@@ -7162,7 +7561,7 @@
           },
           "response": [
             {
-              "id": "891b69c8-999a-4601-a714-fb375f06fb2a",
+              "id": "ea862098-1e2b-42f5-af33-8e424b11ee78",
               "name": "Detalhes da entrega retornados com sucesso.",
               "originalRequest": {
                 "url": {
@@ -7219,7 +7618,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "ec83bb0b-5a05-41cd-9f1e-8e3c7297319c",
+              "id": "bfa6cd5c-4c57-443d-852a-62d288f3ba9b",
               "name": "Token de autenticação inválido ou ausente.",
               "originalRequest": {
                 "url": {
@@ -7272,7 +7671,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "07aa9ac1-5044-4aa5-a305-1f7ebf51d604",
+              "id": "e57f4df3-00f8-4d43-8eff-4ff5f135e4af",
               "name": "Entrega não encontrada.",
               "originalRequest": {
                 "url": {
@@ -7334,7 +7733,7 @@
       "event": []
     },
     {
-      "id": "83c1ecac-a996-4d63-b3ff-b13f0211117d",
+      "id": "058c720a-fc48-4f6f-a0fa-85cfb6e1cc07",
       "name": "AccountReceivable",
       "description": {
         "content": "Endpoints relacionados à gestão de contas a receber",
@@ -7342,7 +7741,7 @@
       },
       "item": [
         {
-          "id": "a178f562-524d-4ae0-bfcd-7296aa6e917c",
+          "id": "2dc88f4a-8bd8-443f-a3f4-3684dc7e9e95",
           "name": "Obter contas a receber",
           "request": {
             "name": "Obter contas a receber",
@@ -7379,19 +7778,19 @@
                 {
                   "disabled": true,
                   "key": "clientId",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "description": "ID do cliente"
                 },
                 {
                   "disabled": true,
                   "key": "arId",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "description": "ID da conta a receber"
                 },
                 {
                   "disabled": true,
                   "key": "situation",
-                  "value": "L",
+                  "value": "A",
                   "description": "Situação da conta a receber (A - Aberto, L - Liquidado)"
                 },
                 {
@@ -7428,7 +7827,7 @@
           },
           "response": [
             {
-              "id": "4d80f1ce-3ecd-40e8-8208-143f39d254a4",
+              "id": "d6a06e8f-92bd-4b4c-956a-d1e5ea180951",
               "name": "Contas a receber obtidas com sucesso.",
               "originalRequest": {
                 "url": {
@@ -7453,15 +7852,15 @@
                     },
                     {
                       "key": "clientId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "arId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "situation",
-                      "value": "L"
+                      "value": "A"
                     },
                     {
                       "key": "startDate",
@@ -7504,7 +7903,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "305c88c7-6b07-440e-82fb-c607bc968a4a",
+              "id": "f1f93418-100e-4d27-bba1-9012f3fe18f5",
               "name": "Token de autenticação inválido ou ausente.",
               "originalRequest": {
                 "url": {
@@ -7529,15 +7928,15 @@
                     },
                     {
                       "key": "clientId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "arId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "situation",
-                      "value": "L"
+                      "value": "A"
                     },
                     {
                       "key": "startDate",
@@ -7576,7 +7975,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "e1817c1e-6a79-45ba-98bf-7cb822b4f538",
+              "id": "84d25add-e279-477f-a98a-f36f21ecb978",
               "name": "Token de autenticação inválido ou ausente.",
               "originalRequest": {
                 "url": {
@@ -7601,15 +8000,15 @@
                     },
                     {
                       "key": "clientId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "arId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "situation",
-                      "value": "L"
+                      "value": "A"
                     },
                     {
                       "key": "startDate",
@@ -7657,7 +8056,7 @@
       "event": []
     },
     {
-      "id": "9278f9ee-1c14-4885-bf0a-b9e2305ad259",
+      "id": "a76f29cb-8386-48ab-b8ee-caee24ef9278",
       "name": "Account Payable",
       "description": {
         "content": "Endpoints relacionados à gestão de contas a pagar",
@@ -7665,7 +8064,7 @@
       },
       "item": [
         {
-          "id": "7884665a-9d93-4470-be4d-a5d528b3c51c",
+          "id": "6de34c2d-d960-4608-92b7-a8f355dd2dab",
           "name": "Listar contas a pagar (Resumo)",
           "request": {
             "name": "Listar contas a pagar (Resumo)",
@@ -7696,19 +8095,19 @@
                 {
                   "disabled": true,
                   "key": "storeId",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "description": "Código da loja (LOJ_CODIGO)"
                 },
                 {
                   "disabled": true,
                   "key": "supplierId",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "description": "Código do fornecedor/credor (CRE_CODIGO)"
                 },
                 {
                   "disabled": true,
                   "key": "situation",
-                  "value": "L",
+                  "value": "A",
                   "description": "Situação da conta (A - Aberto, L - Liquidado)"
                 },
                 {
@@ -7745,7 +8144,7 @@
           },
           "response": [
             {
-              "id": "f8b79059-c6b0-4965-925f-51ccd1880af7",
+              "id": "e75456dc-d5a3-4811-a531-51ddf4da8cc5",
               "name": "Lista de contas a pagar.",
               "originalRequest": {
                 "url": {
@@ -7766,15 +8165,15 @@
                     },
                     {
                       "key": "storeId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "supplierId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "situation",
-                      "value": "L"
+                      "value": "A"
                     },
                     {
                       "key": "startDate",
@@ -7817,7 +8216,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "16d7a935-64e0-4c6f-bdb0-466e237b8c01",
+              "id": "ab92f814-dcca-4ff3-833f-0b93de197e67",
               "name": "Erro de validação nos filtros.",
               "originalRequest": {
                 "url": {
@@ -7838,15 +8237,15 @@
                     },
                     {
                       "key": "storeId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "supplierId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "situation",
-                      "value": "L"
+                      "value": "A"
                     },
                     {
                       "key": "startDate",
@@ -7891,7 +8290,7 @@
           }
         },
         {
-          "id": "1b1dd0e0-3f16-4165-a3bf-ea5eedee2840",
+          "id": "77bae9a6-c4e7-49e8-8b54-441b6788be6f",
           "name": "Buscar detalhes da conta a pagar",
           "request": {
             "name": "Buscar detalhes da conta a pagar",
@@ -7913,7 +8312,7 @@
                 {
                   "disabled": false,
                   "type": "any",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "key": "id",
                   "description": "(Required) Número da conta a pagar (PAG_NUMERO)"
                 }
@@ -7938,7 +8337,7 @@
           },
           "response": [
             {
-              "id": "327b762d-b362-4c59-8d29-335a2ea3a0de",
+              "id": "3d3bdab5-ba56-4a18-b42d-f0c312094847",
               "name": "Detalhes da conta a pagar.",
               "originalRequest": {
                 "url": {
@@ -7955,7 +8354,7 @@
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "4084.664715909925",
+                      "value": "6333.630462161778",
                       "key": "id",
                       "description": "(Required) Número da conta a pagar (PAG_NUMERO)"
                     }
@@ -7991,7 +8390,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "69057503-392f-415b-863a-b30c035d1abd",
+              "id": "6df23c98-037e-4b7a-974f-4fd9c08bef8b",
               "name": "Conta a pagar não encontrada.",
               "originalRequest": {
                 "url": {
@@ -8008,7 +8407,7 @@
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "4084.664715909925",
+                      "value": "6333.630462161778",
                       "key": "id",
                       "description": "(Required) Número da conta a pagar (PAG_NUMERO)"
                     }
@@ -8049,7 +8448,7 @@
       "event": []
     },
     {
-      "id": "c2cc32f6-fd3d-4662-ae98-5b681f3d6e90",
+      "id": "55173488-2fb0-4142-babd-7cc5d430a735",
       "name": "PaymentMethod",
       "description": {
         "content": "Endpoints relacionados à gestão de meios de pagamento",
@@ -8057,7 +8456,7 @@
       },
       "item": [
         {
-          "id": "7efe4889-e63c-4d46-9e33-12ba143fa94e",
+          "id": "70cb699c-94ef-4aa2-baa7-25df4d2c2e36",
           "name": "Listar formas de pagamento",
           "request": {
             "name": "Listar formas de pagamento",
@@ -8107,7 +8506,7 @@
           },
           "response": [
             {
-              "id": "12cf18a4-51f5-43d2-92e0-44611012fa6b",
+              "id": "b4134967-0be3-4269-8ab6-9fb5c7168c60",
               "name": "Lista de formas de pagamento retornada com sucesso.",
               "originalRequest": {
                 "url": {
@@ -8159,7 +8558,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "ac6fc67d-8d2a-4afe-9dfd-ffaa61db713a",
+              "id": "e7b510a3-8357-4433-be86-88b351bc242d",
               "name": "Erro de requisição, como pageSize excedendo o limite.",
               "originalRequest": {
                 "url": {
@@ -8207,7 +8606,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "d10c9be5-4610-4e1a-ad62-e3e2f629999e",
+              "id": "244c97dd-cd54-4952-beaf-40b69c315a34",
               "name": "Token de autenticação inválido ou ausente.",
               "originalRequest": {
                 "url": {
@@ -8264,7 +8663,7 @@
       "event": []
     },
     {
-      "id": "6a763440-6b22-4950-acf2-bc2b2c052e24",
+      "id": "09e8ca60-cf33-486a-bae7-4e79ee315807",
       "name": "Payment Plan",
       "description": {
         "content": "Endpoints relacionados à gestão de planos de pagamento",
@@ -8272,7 +8671,7 @@
       },
       "item": [
         {
-          "id": "563be403-d758-4f13-aba4-331159fa609b",
+          "id": "f7725aae-0add-4883-b626-8012b147ce08",
           "name": "Listar planos de pagamento",
           "request": {
             "name": "Listar planos de pagamento",
@@ -8322,7 +8721,7 @@
           },
           "response": [
             {
-              "id": "cc2c09be-01a0-4ce5-a028-22db6b8e2651",
+              "id": "50a187fa-1feb-4806-9920-60cc054bbd22",
               "name": "Lista de planos de pagamento retornada com sucesso.",
               "originalRequest": {
                 "url": {
@@ -8374,7 +8773,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "07f59dff-ea2e-45bd-b5b4-6b08b2270795",
+              "id": "dc52dd34-0adb-45ce-bcc9-3eaa7b2dbabe",
               "name": "Erro de requisição, como pageSize excedendo o limite.",
               "originalRequest": {
                 "url": {
@@ -8422,7 +8821,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "4f217fc0-3083-43ea-b1ed-f409d19b750c",
+              "id": "752264f5-b80d-4cfe-98da-943b41574aad",
               "name": "Token de autenticação inválido ou ausente.",
               "originalRequest": {
                 "url": {
@@ -8479,7 +8878,7 @@
       "event": []
     },
     {
-      "id": "29a4fb11-32bb-4634-b8d0-7db4c1749bea",
+      "id": "a686be09-264c-4a35-a4d5-6fdb3ea6a8e4",
       "name": "Status",
       "description": {
         "content": "Endpoints de monitoramento de instâncias e telemetria",
@@ -8487,7 +8886,7 @@
       },
       "item": [
         {
-          "id": "ca9ccd4d-012c-4d1a-b3e8-5252c114123f",
+          "id": "5dca777f-ec9d-4a6e-a783-d183575d6b61",
           "name": "Obter dados de status e histórico (Público)",
           "request": {
             "name": "Obter dados de status e histórico (Público)",
@@ -8514,7 +8913,7 @@
           },
           "response": [
             {
-              "id": "a6696f35-5d5d-40e2-9cb8-f4bc1c65e9dc",
+              "id": "976558fa-4649-4c89-942b-7582b4479a56",
               "name": "Estatísticas de status da API e banco de dados retornadas com sucesso.",
               "originalRequest": {
                 "url": {
@@ -8556,7 +8955,7 @@
           }
         },
         {
-          "id": "18e566a8-1132-4268-a2bb-7706bdae3f90",
+          "id": "7b89d613-97e0-4c07-a94d-e1c4a6ac8fe7",
           "name": "Verificar status da conexão do tenant (Usuário)",
           "request": {
             "name": "Verificar status da conexão do tenant (Usuário)",
@@ -8591,7 +8990,7 @@
           },
           "response": [
             {
-              "id": "2028486f-8882-4416-8713-67a1534cc2a0",
+              "id": "8cc296b3-7e93-4cd1-a693-485050efc407",
               "name": "Verificação em tempo real da conexão com API, Postgres e Firebird.",
               "originalRequest": {
                 "url": {
@@ -8641,7 +9040,7 @@
           }
         },
         {
-          "id": "683d97dc-9e44-4701-ba8b-dc3db0c08f66",
+          "id": "5a661dfa-8a25-4b18-b01e-3edafbe10fca",
           "name": "Página de Status visual (Pública)",
           "request": {
             "name": "Página de Status visual (Pública)",
@@ -8661,7 +9060,7 @@
           },
           "response": [
             {
-              "id": "e5a678a1-3942-4465-b237-598f8ff2efef",
+              "id": "a456fcca-8cdb-4d44-b6b7-4ab145d82c42",
               "name": "Página visual de status em HTML.",
               "originalRequest": {
                 "url": {
@@ -8699,7 +9098,7 @@
       "event": []
     },
     {
-      "id": "bdd5807a-b5b4-4fa3-bff7-4a7ef476973a",
+      "id": "f04f3991-cc18-40c3-b173-b55a57c9a88f",
       "name": "Health",
       "description": {
         "content": "Endpoints de verificação de integridade dos serviços",
@@ -8707,7 +9106,7 @@
       },
       "item": [
         {
-          "id": "5676ecdd-e585-4ec3-9bf2-7d1671eb3f6d",
+          "id": "c8ce47f4-ef2c-45f4-84e5-1af5bc6ba52b",
           "name": "Liveness check da API (Docker / Orquestradores)",
           "request": {
             "name": "Liveness check da API (Docker / Orquestradores)",
@@ -8737,7 +9136,7 @@
           },
           "response": [
             {
-              "id": "3814bd22-9436-4a65-8a21-73980a859ff3",
+              "id": "91d73229-246e-48ae-a046-84aa7e44a910",
               "name": "Status de liveness da API",
               "originalRequest": {
                 "url": {
@@ -8779,7 +9178,7 @@
           }
         },
         {
-          "id": "b32a22d8-bc73-4de3-908f-3d495a728253",
+          "id": "7d0634bf-47b3-4686-8e94-85f892926cf6",
           "name": "Health check da API",
           "request": {
             "name": "Health check da API",
@@ -8808,7 +9207,7 @@
           },
           "response": [
             {
-              "id": "3c8a35c0-2ee1-401c-a519-a5990c24567d",
+              "id": "9f39cd11-0a0b-47da-b8e9-ee1fc0329109",
               "name": "Status da API",
               "originalRequest": {
                 "url": {
@@ -8852,7 +9251,7 @@
       "event": []
     },
     {
-      "id": "56786645-1c21-4a61-b4bf-6dc013b49c0a",
+      "id": "62a990ff-8fd2-4986-aa6d-349a45e624ef",
       "name": "Changelog",
       "description": {
         "content": "Endpoints e histórico de versões da API",
@@ -8860,7 +9259,7 @@
       },
       "item": [
         {
-          "id": "b6b89448-71bb-45f4-8006-570e920473b1",
+          "id": "f0f8ecd2-29c1-44c3-bfe4-cfcfee3a2ddc",
           "name": "Obter lista de releases humanizadas e estatísticas (Público)",
           "request": {
             "name": "Obter lista de releases humanizadas e estatísticas (Público)",
@@ -8881,7 +9280,7 @@
           },
           "response": [
             {
-              "id": "636fc517-d194-4ca3-a990-8b1ea0fe1804",
+              "id": "2f161a28-986d-434c-84c1-92f2a1e23565",
               "name": "Catálogo de releases humanizadas e métricas retornado com sucesso.",
               "originalRequest": {
                 "url": {
@@ -8917,7 +9316,7 @@
           }
         },
         {
-          "id": "d3291858-1f4e-4c19-bae9-22712849ca0f",
+          "id": "2510bf8c-cfdd-4912-bca2-561120e4a57c",
           "name": "Obter detalhes de uma versão específica (Público)",
           "request": {
             "name": "Obter detalhes de uma versão específica (Público)",
@@ -8947,7 +9346,7 @@
           },
           "response": [
             {
-              "id": "72ba39a2-210a-4fcd-a683-0cd13567dc76",
+              "id": "1b1f27f8-517d-4aee-8239-3b9ba747fca0",
               "name": "Dados da versão retornados com sucesso.",
               "originalRequest": {
                 "url": {
@@ -8992,7 +9391,7 @@
           }
         },
         {
-          "id": "bba03e5a-4ab0-4f48-bd49-239268550b2a",
+          "id": "64a16173-bdad-418e-970d-603c584d34b7",
           "name": "Página interativa do Changelog Humanizado (Pública)",
           "request": {
             "name": "Página interativa do Changelog Humanizado (Pública)",
@@ -9012,7 +9411,7 @@
           },
           "response": [
             {
-              "id": "820a007f-e779-4f66-aa85-f84f4a28cd6b",
+              "id": "53cb9cfd-d5e0-42b3-b70f-17013fc0f7fe",
               "name": "Interface web do changelog em HTML.",
               "originalRequest": {
                 "url": {
@@ -9050,7 +9449,7 @@
       "event": []
     },
     {
-      "id": "d052ad4a-32ed-4f48-a579-db8437b36fc2",
+      "id": "cb58d6ca-915c-4f4c-991a-a7c6fef8ac2f",
       "name": "Plans & Usage",
       "description": {
         "content": "Endpoints relacionados aos planos comerciais da InfoAPI e métricas de uso",
@@ -9058,7 +9457,7 @@
       },
       "item": [
         {
-          "id": "ff4c074b-728a-449b-b44f-ab9099ce95b3",
+          "id": "d085d71c-7bee-4bc7-90fe-6afaaa1ba1da",
           "name": "Obtém estatísticas de uso e limites do plano do usuário logado",
           "request": {
             "name": "Obtém estatísticas de uso e limites do plano do usuário logado",
@@ -9093,7 +9492,7 @@
           },
           "response": [
             {
-              "id": "9177aee0-9ffa-4e4f-bef5-c5775980f8a2",
+              "id": "921a5f49-21dc-4f93-9b9a-bef8bc54cdd9",
               "name": "Estatísticas de uso e limites do plano retornadas com sucesso.",
               "originalRequest": {
                 "url": {
@@ -9143,7 +9542,7 @@
           }
         },
         {
-          "id": "1e727c7b-a38c-45a7-b887-955c4d51989c",
+          "id": "fc86b6e0-7161-4830-8fbc-022d112eee1c",
           "name": "Lista todos os planos disponíveis",
           "request": {
             "name": "Lista todos os planos disponíveis",
@@ -9177,7 +9576,7 @@
           },
           "response": [
             {
-              "id": "eb793c34-7256-4a7b-92d2-5ad2d5548f04",
+              "id": "15374ca8-ad83-4e1f-a3fc-6e9afb2ca00b",
               "name": "Lista de planos disponíveis retornada com sucesso.",
               "originalRequest": {
                 "url": {
@@ -9229,7 +9628,7 @@
       "event": []
     },
     {
-      "id": "f83b75ec-1b17-4247-b999-d763c722c1fe",
+      "id": "15859906-fcc7-4c77-8c01-0dcbdeffd15c",
       "name": "Store",
       "description": {
         "content": "",
@@ -9237,7 +9636,7 @@
       },
       "item": [
         {
-          "id": "a622aa3e-d29a-456e-9107-d4fd313d8648",
+          "id": "f05edccf-1d9f-4448-957f-870faf297712",
           "name": "Listar lojas",
           "request": {
             "name": "Listar lojas",
@@ -9268,7 +9667,7 @@
                 {
                   "disabled": true,
                   "key": "storeId",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "description": "Código da loja para filtrar"
                 },
                 {
@@ -9299,7 +9698,7 @@
           },
           "response": [
             {
-              "id": "108a8743-9523-4ef0-a191-ce9a239c375f",
+              "id": "2749a1c2-4385-48f2-b04d-dcb58335a761",
               "name": "Lista de lojas retornada com sucesso.",
               "originalRequest": {
                 "url": {
@@ -9320,7 +9719,7 @@
                     },
                     {
                       "key": "storeId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "storeCnpj",
@@ -9359,7 +9758,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "e06badcb-7fa5-4dac-a2f0-d896b19b6276",
+              "id": "e26c21a3-2db7-44fc-ae15-2ba053f0f519",
               "name": "Erro de requisição, como pageSize excedendo o limite.",
               "originalRequest": {
                 "url": {
@@ -9380,7 +9779,7 @@
                     },
                     {
                       "key": "storeId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "storeCnpj",
@@ -9415,7 +9814,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "be312802-2952-4035-8f66-b338d9f9c447",
+              "id": "8b554431-45c4-4633-8392-4d47de827cc8",
               "name": "Token de autenticação inválido ou ausente.",
               "originalRequest": {
                 "url": {
@@ -9436,7 +9835,7 @@
                     },
                     {
                       "key": "storeId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "storeCnpj",
@@ -9480,7 +9879,7 @@
       "event": []
     },
     {
-      "id": "a716e3d7-14ff-45ba-99dd-0497818c3c70",
+      "id": "da158284-ae59-4ed9-b3b2-7e3b829bd2a6",
       "name": "City",
       "description": {
         "content": "",
@@ -9488,7 +9887,7 @@
       },
       "item": [
         {
-          "id": "22eeb731-5436-4447-97ba-6e41ca5b4c86",
+          "id": "7fee44d6-9ada-4ee7-8641-7284f04e7245",
           "name": "Listar municípios",
           "request": {
             "name": "Listar municípios",
@@ -9550,7 +9949,7 @@
           },
           "response": [
             {
-              "id": "1db36773-db58-431f-b4d1-1bfb59d57b3e",
+              "id": "65d87122-59bb-49cd-b67c-0e674afe160f",
               "name": "Lista de municípios retornada com sucesso.",
               "originalRequest": {
                 "url": {
@@ -9619,7 +10018,7 @@
       "event": []
     },
     {
-      "id": "88a7b90f-0f36-4609-aaa4-ecbcd026c261",
+      "id": "0626b304-d887-41a0-8842-94d6b91d82ce",
       "name": "Call Center",
       "description": {
         "content": "",
@@ -9627,7 +10026,7 @@
       },
       "item": [
         {
-          "id": "41b536c1-f0dc-4b00-b0fa-5239129c2e14",
+          "id": "f4f4ae29-a1e2-4601-8a35-826ae0c61042",
           "name": "Listar atendimentos do Call Center",
           "request": {
             "name": "Listar atendimentos do Call Center",
@@ -9658,13 +10057,13 @@
                 {
                   "disabled": true,
                   "key": "clientId",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "description": "Código do cliente (CLI_CODIGO)"
                 },
                 {
                   "disabled": true,
                   "key": "userId",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "description": "Código do usuário (USU_CODIGO)"
                 },
                 {
@@ -9676,7 +10075,7 @@
                 {
                   "disabled": true,
                   "key": "storeId",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "description": "Código da loja (LOJ_CODIGO)"
                 },
                 {
@@ -9713,7 +10112,7 @@
           },
           "response": [
             {
-              "id": "0832995d-9441-490e-a478-7ecf1a234b09",
+              "id": "37fabb6a-0376-47f8-a5c8-ecdf3a4b2b07",
               "name": "Lista de atendimentos do Call Center.",
               "originalRequest": {
                 "url": {
@@ -9734,11 +10133,11 @@
                     },
                     {
                       "key": "clientId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "userId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "status",
@@ -9746,7 +10145,7 @@
                     },
                     {
                       "key": "storeId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "startDate",
@@ -9784,12 +10183,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "[\n  {\n    \"CAL_NUMERO\": 6287.97302159434,\n    \"CLI_CODIGO\": 7326.187764443815,\n    \"USU_CODIGO\": 1406.5971494495034,\n    \"CAL_DATA\": \"string\",\n    \"CAL_HORA\": \"string\",\n    \"CAL_STATUS\": \"string\",\n    \"FAT_CODIGO\": 9706.109740504571,\n    \"CLI_NOME\": \"string\",\n    \"CLI_OBS\": \"string\",\n    \"USU_NOME\": \"string\",\n    \"CAL_CONTATO\": \"string\",\n    \"CAL_DATAPROXLIGACAO\": \"string\",\n    \"CAL_HORAPROXLIGACAO\": \"string\",\n    \"CAL_DEPOIMENTO\": \"string\",\n    \"CAL_RELATORIO\": \"string\",\n    \"CAL_DATABAIXA\": \"string\",\n    \"CAL_HORABAIXA\": \"string\",\n    \"VEN_NUMERO\": 6836.363538499798,\n    \"VEN_NOME\": \"string\",\n    \"PAS_NUMERO\": 3679.330638937096,\n    \"FAT_DESCRICAO\": \"string\",\n    \"TOP_CODIGO\": 7104.518895860446,\n    \"TOP_DESCRICAO\": \"string\",\n    \"APL_CODIGO\": 4098.583440511725,\n    \"APL_DESCRICAO\": \"string\",\n    \"CAL_LOJA\": \"string\",\n    \"CAL_BLOQUEADO\": \"string\",\n    \"LOJ_CODIGO\": 4977.351457036091,\n    \"CAL_EMAILENVIADO\": \"string\",\n    \"CAL_OUTRASINFO\": \"string\"\n  },\n  {\n    \"CAL_NUMERO\": 1967.408685668899,\n    \"CLI_CODIGO\": 9183.104147501414,\n    \"USU_CODIGO\": 8495.998898570926,\n    \"CAL_DATA\": \"string\",\n    \"CAL_HORA\": \"string\",\n    \"CAL_STATUS\": \"string\",\n    \"FAT_CODIGO\": 3012.958170772794,\n    \"CLI_NOME\": \"string\",\n    \"CLI_OBS\": \"string\",\n    \"USU_NOME\": \"string\",\n    \"CAL_CONTATO\": \"string\",\n    \"CAL_DATAPROXLIGACAO\": \"string\",\n    \"CAL_HORAPROXLIGACAO\": \"string\",\n    \"CAL_DEPOIMENTO\": \"string\",\n    \"CAL_RELATORIO\": \"string\",\n    \"CAL_DATABAIXA\": \"string\",\n    \"CAL_HORABAIXA\": \"string\",\n    \"VEN_NUMERO\": 296.93784307049833,\n    \"VEN_NOME\": \"string\",\n    \"PAS_NUMERO\": 6453.302719453419,\n    \"FAT_DESCRICAO\": \"string\",\n    \"TOP_CODIGO\": 155.41445941823494,\n    \"TOP_DESCRICAO\": \"string\",\n    \"APL_CODIGO\": 690.3082136869754,\n    \"APL_DESCRICAO\": \"string\",\n    \"CAL_LOJA\": \"string\",\n    \"CAL_BLOQUEADO\": \"string\",\n    \"LOJ_CODIGO\": 8911.127498450282,\n    \"CAL_EMAILENVIADO\": \"string\",\n    \"CAL_OUTRASINFO\": \"string\"\n  }\n]",
+              "body": "[\n  {\n    \"CAL_NUMERO\": 9071.137284022105,\n    \"CLI_CODIGO\": 3628.9249993402263,\n    \"USU_CODIGO\": 3993.041567664275,\n    \"CAL_DATA\": \"string\",\n    \"CAL_HORA\": \"string\",\n    \"CAL_STATUS\": \"string\",\n    \"FAT_CODIGO\": 8504.988553957566,\n    \"CLI_NOME\": \"string\",\n    \"CLI_OBS\": \"string\",\n    \"USU_NOME\": \"string\",\n    \"CAL_CONTATO\": \"string\",\n    \"CAL_DATAPROXLIGACAO\": \"string\",\n    \"CAL_HORAPROXLIGACAO\": \"string\",\n    \"CAL_DEPOIMENTO\": \"string\",\n    \"CAL_RELATORIO\": \"string\",\n    \"CAL_DATABAIXA\": \"string\",\n    \"CAL_HORABAIXA\": \"string\",\n    \"VEN_NUMERO\": 4442.2360492688285,\n    \"VEN_NOME\": \"string\",\n    \"PAS_NUMERO\": 3736.513397239584,\n    \"FAT_DESCRICAO\": \"string\",\n    \"TOP_CODIGO\": 1309.6010557028749,\n    \"TOP_DESCRICAO\": \"string\",\n    \"APL_CODIGO\": 4116.790306028759,\n    \"APL_DESCRICAO\": \"string\",\n    \"CAL_LOJA\": \"string\",\n    \"CAL_BLOQUEADO\": \"string\",\n    \"LOJ_CODIGO\": 7148.705317985388,\n    \"CAL_EMAILENVIADO\": \"string\",\n    \"CAL_OUTRASINFO\": \"string\"\n  },\n  {\n    \"CAL_NUMERO\": 181.23172698236266,\n    \"CLI_CODIGO\": 4372.197123634065,\n    \"USU_CODIGO\": 629.9063299265117,\n    \"CAL_DATA\": \"string\",\n    \"CAL_HORA\": \"string\",\n    \"CAL_STATUS\": \"string\",\n    \"FAT_CODIGO\": 3328.6114587289594,\n    \"CLI_NOME\": \"string\",\n    \"CLI_OBS\": \"string\",\n    \"USU_NOME\": \"string\",\n    \"CAL_CONTATO\": \"string\",\n    \"CAL_DATAPROXLIGACAO\": \"string\",\n    \"CAL_HORAPROXLIGACAO\": \"string\",\n    \"CAL_DEPOIMENTO\": \"string\",\n    \"CAL_RELATORIO\": \"string\",\n    \"CAL_DATABAIXA\": \"string\",\n    \"CAL_HORABAIXA\": \"string\",\n    \"VEN_NUMERO\": 4812.2834614605235,\n    \"VEN_NOME\": \"string\",\n    \"PAS_NUMERO\": 2784.9090953425,\n    \"FAT_DESCRICAO\": \"string\",\n    \"TOP_CODIGO\": 3888.7847278535946,\n    \"TOP_DESCRICAO\": \"string\",\n    \"APL_CODIGO\": 1591.717508461087,\n    \"APL_DESCRICAO\": \"string\",\n    \"CAL_LOJA\": \"string\",\n    \"CAL_BLOQUEADO\": \"string\",\n    \"LOJ_CODIGO\": 2424.360927015938,\n    \"CAL_EMAILENVIADO\": \"string\",\n    \"CAL_OUTRASINFO\": \"string\"\n  }\n]",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "e877641f-53a7-4c6e-a85e-05f88adc7e7b",
+              "id": "f946dc7c-5622-48e6-91f5-fa28e5c4da19",
               "name": "Erro de validação nos filtros.",
               "originalRequest": {
                 "url": {
@@ -9810,11 +10209,11 @@
                     },
                     {
                       "key": "clientId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "userId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "status",
@@ -9822,7 +10221,7 @@
                     },
                     {
                       "key": "storeId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "startDate",
@@ -9867,7 +10266,7 @@
           }
         },
         {
-          "id": "9ee04ce2-4fd9-4d95-9a7c-eac0e54fb4ff",
+          "id": "9e86df06-bc00-4ec4-9fd9-5dcc46535b36",
           "name": "Buscar detalhes do atendimento do Call Center por ID",
           "request": {
             "name": "Buscar detalhes do atendimento do Call Center por ID",
@@ -9888,7 +10287,7 @@
                 {
                   "disabled": false,
                   "type": "any",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "key": "id",
                   "description": "(Required) Número do atendimento (CAL_NUMERO)"
                 }
@@ -9913,7 +10312,7 @@
           },
           "response": [
             {
-              "id": "9076bec5-bf39-4760-baac-f2740a487062",
+              "id": "6c495815-baef-49a6-aa1b-c84fa0f8251d",
               "name": "Detalhes do atendimento do Call Center.",
               "originalRequest": {
                 "url": {
@@ -9929,7 +10328,7 @@
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "4084.664715909925",
+                      "value": "6333.630462161778",
                       "key": "id",
                       "description": "(Required) Número do atendimento (CAL_NUMERO)"
                     }
@@ -9960,12 +10359,12 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"CAL_NUMERO\": 7313.483170110905,\n  \"CLI_CODIGO\": 3315.0827187767295,\n  \"USU_CODIGO\": 3445.0932613416808,\n  \"CAL_DATA\": \"string\",\n  \"CAL_HORA\": \"string\",\n  \"CAL_STATUS\": \"string\",\n  \"FAT_CODIGO\": 2557.8142189799723,\n  \"CLI_NOME\": \"string\",\n  \"CLI_OBS\": \"string\",\n  \"USU_NOME\": \"string\",\n  \"CAL_CONTATO\": \"string\",\n  \"CAL_DATAPROXLIGACAO\": \"string\",\n  \"CAL_HORAPROXLIGACAO\": \"string\",\n  \"CAL_DEPOIMENTO\": \"string\",\n  \"CAL_RELATORIO\": \"string\",\n  \"CAL_DATABAIXA\": \"string\",\n  \"CAL_HORABAIXA\": \"string\",\n  \"VEN_NUMERO\": 1650.2401708943414,\n  \"VEN_NOME\": \"string\",\n  \"PAS_NUMERO\": 2562.3593612307995,\n  \"FAT_DESCRICAO\": \"string\",\n  \"TOP_CODIGO\": 4425.366703800992,\n  \"TOP_DESCRICAO\": \"string\",\n  \"APL_CODIGO\": 6202.06863810854,\n  \"APL_DESCRICAO\": \"string\",\n  \"CAL_LOJA\": \"string\",\n  \"CAL_BLOQUEADO\": \"string\",\n  \"LOJ_CODIGO\": 2031.354725578779,\n  \"CAL_EMAILENVIADO\": \"string\",\n  \"CAL_OUTRASINFO\": \"string\"\n}",
+              "body": "{\n  \"CAL_NUMERO\": 9915.21823961255,\n  \"CLI_CODIGO\": 4430.174791809956,\n  \"USU_CODIGO\": 3268.340050630493,\n  \"CAL_DATA\": \"string\",\n  \"CAL_HORA\": \"string\",\n  \"CAL_STATUS\": \"string\",\n  \"FAT_CODIGO\": 970.0738663080865,\n  \"CLI_NOME\": \"string\",\n  \"CLI_OBS\": \"string\",\n  \"USU_NOME\": \"string\",\n  \"CAL_CONTATO\": \"string\",\n  \"CAL_DATAPROXLIGACAO\": \"string\",\n  \"CAL_HORAPROXLIGACAO\": \"string\",\n  \"CAL_DEPOIMENTO\": \"string\",\n  \"CAL_RELATORIO\": \"string\",\n  \"CAL_DATABAIXA\": \"string\",\n  \"CAL_HORABAIXA\": \"string\",\n  \"VEN_NUMERO\": 4782.040186039447,\n  \"VEN_NOME\": \"string\",\n  \"PAS_NUMERO\": 1815.1129868271287,\n  \"FAT_DESCRICAO\": \"string\",\n  \"TOP_CODIGO\": 7609.260310973199,\n  \"TOP_DESCRICAO\": \"string\",\n  \"APL_CODIGO\": 4802.773388485366,\n  \"APL_DESCRICAO\": \"string\",\n  \"CAL_LOJA\": \"string\",\n  \"CAL_BLOQUEADO\": \"string\",\n  \"LOJ_CODIGO\": 2532.9895595769613,\n  \"CAL_EMAILENVIADO\": \"string\",\n  \"CAL_OUTRASINFO\": \"string\"\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "f4362b29-3412-4f11-af18-421dbda18028",
+              "id": "029b1def-ab6e-4e7f-878f-a05e2774caa8",
               "name": "Atendimento de Call Center não encontrado.",
               "originalRequest": {
                 "url": {
@@ -9981,7 +10380,7 @@
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "4084.664715909925",
+                      "value": "6333.630462161778",
                       "key": "id",
                       "description": "(Required) Número do atendimento (CAL_NUMERO)"
                     }
@@ -10022,7 +10421,7 @@
       "event": []
     },
     {
-      "id": "71260dff-f1f8-4dc0-8548-dcd6c3304953",
+      "id": "34bc0d7e-4659-4c7c-ae35-f916f4d826ea",
       "name": "Purchase",
       "description": {
         "content": "",
@@ -10030,7 +10429,7 @@
       },
       "item": [
         {
-          "id": "d639d74a-69e5-425b-9087-161505e0d6ff",
+          "id": "c6e31914-4936-4666-83d7-84c0a9c89b3e",
           "name": "Listar compras / entradas de mercadorias",
           "request": {
             "name": "Listar compras / entradas de mercadorias",
@@ -10061,13 +10460,13 @@
                 {
                   "disabled": true,
                   "key": "storeId",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "description": "Código da loja (LOJ_CODIGO)"
                 },
                 {
                   "disabled": true,
                   "key": "supplierId",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "description": "Código do fornecedor/credor (CRE_CODIGO)"
                 },
                 {
@@ -10097,13 +10496,13 @@
                 {
                   "disabled": true,
                   "key": "statusId",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "description": "Código da situação (SIT_CODIGO)"
                 },
                 {
                   "disabled": true,
                   "key": "orderNumber",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "description": "Número do pedido de compra (PED_NUMERO)"
                 }
               ],
@@ -10134,7 +10533,7 @@
           },
           "response": [
             {
-              "id": "903adb7e-431c-4251-b749-2feafc3be890",
+              "id": "9edcdc94-6d8d-4df7-9a3a-87ed649afa70",
               "name": "Lista de compras/entradas retornada com sucesso.",
               "originalRequest": {
                 "url": {
@@ -10155,11 +10554,11 @@
                     },
                     {
                       "key": "storeId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "supplierId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "startDate",
@@ -10179,11 +10578,11 @@
                     },
                     {
                       "key": "statusId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "orderNumber",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     }
                   ],
                   "variable": []
@@ -10248,7 +10647,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "5b1a91f8-2cc6-45f3-9e38-e53627323d0d",
+              "id": "8c82dc0d-17cb-4b9a-9e59-2a05151a9193",
               "name": "Parâmetros de busca inválidos.",
               "originalRequest": {
                 "url": {
@@ -10269,11 +10668,11 @@
                     },
                     {
                       "key": "storeId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "supplierId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "startDate",
@@ -10293,11 +10692,11 @@
                     },
                     {
                       "key": "statusId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "orderNumber",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     }
                   ],
                   "variable": []
@@ -10340,7 +10739,7 @@
           }
         },
         {
-          "id": "808166e4-d862-49ef-a79a-9fe05c4f54ec",
+          "id": "4cb30ee0-5bac-4afa-bcd8-3127c31f28c4",
           "name": "Listar compras / entradas de mercadorias",
           "request": {
             "name": "Listar compras / entradas de mercadorias",
@@ -10371,13 +10770,13 @@
                 {
                   "disabled": true,
                   "key": "storeId",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "description": "Código da loja (LOJ_CODIGO)"
                 },
                 {
                   "disabled": true,
                   "key": "supplierId",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "description": "Código do fornecedor/credor (CRE_CODIGO)"
                 },
                 {
@@ -10407,13 +10806,13 @@
                 {
                   "disabled": true,
                   "key": "statusId",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "description": "Código da situação (SIT_CODIGO)"
                 },
                 {
                   "disabled": true,
                   "key": "orderNumber",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "description": "Número do pedido de compra (PED_NUMERO)"
                 }
               ],
@@ -10444,7 +10843,7 @@
           },
           "response": [
             {
-              "id": "43bda73e-a8c3-40bc-b0f2-01cbde07a85d",
+              "id": "c0e0ec9b-1b57-4821-988f-949a34863147",
               "name": "Lista de compras/entradas retornada com sucesso.",
               "originalRequest": {
                 "url": {
@@ -10465,11 +10864,11 @@
                     },
                     {
                       "key": "storeId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "supplierId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "startDate",
@@ -10489,11 +10888,11 @@
                     },
                     {
                       "key": "statusId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "orderNumber",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     }
                   ],
                   "variable": []
@@ -10558,7 +10957,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "36635b6b-9395-4044-ba12-3c4a23eb5b1e",
+              "id": "7a477dcf-80a6-4dd4-921b-3ba692baa01a",
               "name": "Parâmetros de busca inválidos.",
               "originalRequest": {
                 "url": {
@@ -10579,11 +10978,11 @@
                     },
                     {
                       "key": "storeId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "supplierId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "startDate",
@@ -10603,11 +11002,11 @@
                     },
                     {
                       "key": "statusId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "orderNumber",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     }
                   ],
                   "variable": []
@@ -10650,7 +11049,7 @@
           }
         },
         {
-          "id": "f84f9109-3c2e-400f-9a1c-05a3dae6fca6",
+          "id": "2165f0c4-6756-46a9-b6e6-74ecf31092db",
           "name": "Obter detalhes de uma compra pelo ID",
           "request": {
             "name": "Obter detalhes de uma compra pelo ID",
@@ -10670,7 +11069,7 @@
                 {
                   "disabled": false,
                   "key": "storeId",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "description": "(Required) "
                 }
               ],
@@ -10703,7 +11102,7 @@
           },
           "response": [
             {
-              "id": "562e3bfd-e079-4f32-b403-7974906ddf21",
+              "id": "834df6cc-77d1-40a4-8af9-3b76de3bb555",
               "name": "Detalhes da compra retornados com sucesso.",
               "originalRequest": {
                 "url": {
@@ -10717,7 +11116,7 @@
                   "query": [
                     {
                       "key": "storeId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     }
                   ],
                   "variable": [
@@ -10760,7 +11159,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "5375b927-8ab3-4ef5-a79d-43bce8d0913e",
+              "id": "c06fe120-0c68-4707-bb48-3936dd1ed9c9",
               "name": "Compra não encontrada.",
               "originalRequest": {
                 "url": {
@@ -10774,7 +11173,7 @@
                   "query": [
                     {
                       "key": "storeId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     }
                   ],
                   "variable": [
@@ -10819,7 +11218,7 @@
           }
         },
         {
-          "id": "afec3925-c55a-4774-b9b8-699b57765e42",
+          "id": "6d940c9e-a55b-425e-9e4e-e2bfb87878a6",
           "name": "Obter detalhes de uma compra pelo ID",
           "request": {
             "name": "Obter detalhes de uma compra pelo ID",
@@ -10839,7 +11238,7 @@
                 {
                   "disabled": false,
                   "key": "storeId",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "description": "(Required) "
                 }
               ],
@@ -10872,7 +11271,7 @@
           },
           "response": [
             {
-              "id": "09338409-b58c-4432-994f-2904a0e5af55",
+              "id": "35605c53-4de6-41d6-9a27-df542ab1ac0b",
               "name": "Detalhes da compra retornados com sucesso.",
               "originalRequest": {
                 "url": {
@@ -10886,7 +11285,7 @@
                   "query": [
                     {
                       "key": "storeId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     }
                   ],
                   "variable": [
@@ -10929,7 +11328,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "81f8776f-ef46-4527-8636-7d319ded59dd",
+              "id": "f7c80ff5-dc14-4bf8-8e5c-8697a0cc6fbf",
               "name": "Compra não encontrada.",
               "originalRequest": {
                 "url": {
@@ -10943,7 +11342,7 @@
                   "query": [
                     {
                       "key": "storeId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     }
                   ],
                   "variable": [
@@ -10991,7 +11390,7 @@
       "event": []
     },
     {
-      "id": "5001c0d5-d3d8-4ddb-ba9a-1c2a2e68aae5",
+      "id": "aca3948f-dadb-47f0-aae4-e3efd50c9416",
       "name": "Purchase Items",
       "description": {
         "content": "",
@@ -10999,7 +11398,7 @@
       },
       "item": [
         {
-          "id": "e54f3439-42b1-477b-b094-f0ba5c1529f1",
+          "id": "f14a6938-6043-42e7-a2bb-0a9b98af2603",
           "name": "Listar itens de compras de mercadorias",
           "request": {
             "name": "Listar itens de compras de mercadorias",
@@ -11115,7 +11514,7 @@
           },
           "response": [
             {
-              "id": "a5fb06a0-ce19-46a9-8f48-48d745742421",
+              "id": "eb0ff416-33f1-4cb0-a6a5-59588da746d8",
               "name": "Lista de itens de compra retornada com sucesso.",
               "originalRequest": {
                 "url": {
@@ -11237,7 +11636,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "945d29a4-e852-4d93-b1e2-7daa493b0c8a",
+              "id": "c7bad79b-5bc7-4874-b4a7-4d2aeb077d4f",
               "name": "Parâmetros de busca inválidos.",
               "originalRequest": {
                 "url": {
@@ -11340,7 +11739,7 @@
       "event": []
     },
     {
-      "id": "053bb7f7-31a6-4758-969d-d90cdd003553",
+      "id": "a4961916-ba70-4b3a-9ef4-43f0c0f1f623",
       "name": "Fiscal Entry",
       "description": {
         "content": "",
@@ -11348,7 +11747,7 @@
       },
       "item": [
         {
-          "id": "52620f9d-5d93-4cfe-8f15-a2752bafcc19",
+          "id": "462d909d-751f-466f-9107-5c70a82037a6",
           "name": "Listar entradas fiscais / apoio",
           "request": {
             "name": "Listar entradas fiscais / apoio",
@@ -11379,13 +11778,13 @@
                 {
                   "disabled": true,
                   "key": "storeId",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "description": "Código da loja (LOJ_CODIGO)"
                 },
                 {
                   "disabled": true,
                   "key": "supplierId",
-                  "value": "4084.664715909925",
+                  "value": "6333.630462161778",
                   "description": "Código do fornecedor/credor (CRE_CODIGO)"
                 },
                 {
@@ -11434,7 +11833,7 @@
           },
           "response": [
             {
-              "id": "988c9a90-40c2-4e5d-a933-f4d98e19df88",
+              "id": "8b1da79f-7fb7-46d6-a5b6-c3676b82263b",
               "name": "Lista de entradas fiscais retornada com sucesso.",
               "originalRequest": {
                 "url": {
@@ -11455,11 +11854,11 @@
                     },
                     {
                       "key": "storeId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "supplierId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "startDate",
@@ -11510,7 +11909,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "7d7c3154-7da6-419b-9c21-04a0e98cb92f",
+              "id": "93012eb2-94ef-4746-8459-17a7b98bcffb",
               "name": "Parâmetros de busca inválidos.",
               "originalRequest": {
                 "url": {
@@ -11531,11 +11930,11 @@
                     },
                     {
                       "key": "storeId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "supplierId",
-                      "value": "4084.664715909925"
+                      "value": "6333.630462161778"
                     },
                     {
                       "key": "startDate",
@@ -11591,7 +11990,7 @@
       "event": []
     },
     {
-      "id": "ca23820b-df0c-418d-a66a-6ea94036570c",
+      "id": "b83a4696-da13-4c36-9507-f727fe2524b7",
       "name": "Adjustment",
       "description": {
         "content": "",
@@ -11599,7 +11998,7 @@
       },
       "item": [
         {
-          "id": "1cd8f48a-59e3-4b72-ba71-0c20f3039692",
+          "id": "a8b3abd8-527f-47a4-bf72-1f47a87a288e",
           "name": "Listar acertos de estoque",
           "request": {
             "name": "Listar acertos de estoque",
@@ -11697,7 +12096,7 @@
           },
           "response": [
             {
-              "id": "6ba502f9-8b44-431a-82d7-36c92c32cf54",
+              "id": "4851c23b-4f4e-4c1f-a940-89e1c01b5b80",
               "name": "Lista de acertos retornada com sucesso.",
               "originalRequest": {
                 "url": {
@@ -11807,7 +12206,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "d83694a8-506e-448c-b164-3db363434eb3",
+              "id": "c041e3eb-00b9-408d-aa43-2a9f7e584575",
               "name": "Parâmetros de busca inválidos.",
               "originalRequest": {
                 "url": {
@@ -11895,7 +12294,7 @@
           }
         },
         {
-          "id": "8d890cd9-7904-4515-aa23-355c7fcb2814",
+          "id": "37032e54-91b6-45a8-90b2-8d0cf14472a7",
           "name": "Obter acerto por ID com itens",
           "request": {
             "name": "Obter acerto por ID com itens",
@@ -11948,7 +12347,7 @@
           },
           "response": [
             {
-              "id": "45ca9e10-1cde-472c-a388-5c93dba7b2c1",
+              "id": "5429a115-41a3-4ff5-a8df-df7617fce01d",
               "name": "Detalhes do acerto com itens retornados com sucesso.",
               "originalRequest": {
                 "url": {
@@ -12005,7 +12404,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "6c21f264-3472-49c4-b2b4-d1cf9546bda7",
+              "id": "1905c587-5f1c-4680-80e2-b0c69b228028",
               "name": "Acerto não encontrado.",
               "originalRequest": {
                 "url": {
@@ -12064,7 +12463,7 @@
           }
         },
         {
-          "id": "bde68742-ed02-4997-87c8-f54890d1cb9b",
+          "id": "bf9bffd4-1c17-40f9-abab-aafaad986d09",
           "name": "Listar itens de um acerto",
           "request": {
             "name": "Listar itens de um acerto",
@@ -12111,7 +12510,7 @@
           },
           "response": [
             {
-              "id": "afc7ed39-4ade-41a7-bda8-0eae35ac0da9",
+              "id": "dc6b2ed2-a1d2-45ec-93ae-91fef001b77b",
               "name": "Itens do acerto retornados com sucesso.",
               "originalRequest": {
                 "url": {
@@ -12173,7 +12572,7 @@
       "event": []
     },
     {
-      "id": "f625015c-5064-4a9e-88a0-e88eb7f7c8d7",
+      "id": "994b7e94-fafb-4230-a707-615f16a267cb",
       "name": "Feature Requests",
       "description": {
         "content": "",
@@ -12181,7 +12580,7 @@
       },
       "item": [
         {
-          "id": "35bd4255-d860-4dd6-91a4-44edfb86a3ec",
+          "id": "2f01a521-48cd-4e03-b369-6bbe9a041298",
           "name": "Cria uma nova solicitação de funcionalidade (Cliente)",
           "request": {
             "name": "Cria uma nova solicitação de funcionalidade (Cliente)",
@@ -12224,7 +12623,7 @@
           },
           "response": [
             {
-              "id": "4197dd15-e96a-4364-b39f-84d910e810cd",
+              "id": "180aedf0-8100-4190-aae5-78bcd3be2aa6",
               "originalRequest": {
                 "url": {
                   "path": [
@@ -12276,7 +12675,7 @@
           }
         },
         {
-          "id": "5c5ca482-0725-48fc-be92-260cd957dcfd",
+          "id": "22c08fe3-6e5c-4610-aeb2-ef782050d552",
           "name": "Lista todas as solicitações de funcionalidades (Admin)",
           "request": {
             "name": "Lista todas as solicitações de funcionalidades (Admin)",
@@ -12311,7 +12710,7 @@
           },
           "response": [
             {
-              "id": "e3faf143-fb84-4ee3-ad69-1ae51e92d158",
+              "id": "c28a3b38-25e2-4dda-b23d-1abc1f077383",
               "originalRequest": {
                 "url": {
                   "path": [
@@ -12360,7 +12759,7 @@
           }
         },
         {
-          "id": "a44975c2-ad0d-4a06-a334-d9882945ae8d",
+          "id": "52ab5aa0-3c64-4472-a878-b59802704a59",
           "name": "Lista as solicitações do usuário logado (Cliente)",
           "request": {
             "name": "Lista as solicitações do usuário logado (Cliente)",
@@ -12389,7 +12788,7 @@
           },
           "response": [
             {
-              "id": "92fedda2-ece9-4fbc-b3a2-d12738fb091e",
+              "id": "88db5309-294a-4395-bde5-22ef43ce4cdc",
               "originalRequest": {
                 "url": {
                   "path": [
@@ -12434,7 +12833,7 @@
           }
         },
         {
-          "id": "daba7f87-d3c9-4908-87e4-f748eee48ef1",
+          "id": "47b879b1-1c46-4ecb-843a-416ff68555ef",
           "name": "Obtém detalhes e histórico de mensagens de uma solicitação",
           "request": {
             "name": "Obtém detalhes e histórico de mensagens de uma solicitação",
@@ -12471,7 +12870,7 @@
           },
           "response": [
             {
-              "id": "f228fbc8-7949-4a61-a394-a5979b2dc1e8",
+              "id": "0d95a3dd-181c-4f8f-a578-2ac8edf106a9",
               "originalRequest": {
                 "url": {
                   "path": [
@@ -12524,7 +12923,7 @@
           }
         },
         {
-          "id": "452a6b5f-34bd-42fb-b76c-3701556d0930",
+          "id": "40c8113f-e2f6-409f-b67c-573bd7af6abb",
           "name": "Envia uma mensagem na conversa da solicitação (Cliente ou Admin)",
           "request": {
             "name": "Envia uma mensagem na conversa da solicitação (Cliente ou Admin)",
@@ -12577,7 +12976,7 @@
           },
           "response": [
             {
-              "id": "2f1653c8-6481-49ba-99bd-f9c06a74ebed",
+              "id": "0e235134-2e12-42ad-8f7a-56f1982083f6",
               "originalRequest": {
                 "url": {
                   "path": [
@@ -12639,7 +13038,7 @@
           }
         },
         {
-          "id": "dc54f09b-cb4a-43be-91ff-b3649762360c",
+          "id": "22477ea9-639a-4c9b-a976-482033ab51e0",
           "name": "Marca a solicitação como RESOLVIDA e fecha o ticket (Admin)",
           "request": {
             "name": "Marca a solicitação como RESOLVIDA e fecha o ticket (Admin)",
@@ -12692,7 +13091,7 @@
           },
           "response": [
             {
-              "id": "de4af9d3-440e-4f91-8dc8-29342c977a42",
+              "id": "6cfd58bc-2b2e-4fb4-9fa5-b8ce7777851f",
               "originalRequest": {
                 "url": {
                   "path": [
@@ -12754,7 +13153,7 @@
           }
         },
         {
-          "id": "439c063b-7ea2-4155-a06f-3a69f65d4073",
+          "id": "e3c823f5-834d-4e29-af03-d46a8359e9f8",
           "name": "Responde a uma solicitação e notifica o cliente por e-mail (Admin - Legado)",
           "request": {
             "name": "Responde a uma solicitação e notifica o cliente por e-mail (Admin - Legado)",
@@ -12807,7 +13206,7 @@
           },
           "response": [
             {
-              "id": "6583ed40-5678-4ea1-811f-11f480079e6f",
+              "id": "2197c514-dafa-456c-976c-e69f7099641c",
               "originalRequest": {
                 "url": {
                   "path": [
@@ -12896,7 +13295,7 @@
     }
   ],
   "info": {
-    "_postman_id": "3e8cc8c4-2857-47a3-a387-dac6fe8a458b",
+    "_postman_id": "b5a3e2a6-d74d-456d-9f0c-256270a5decb",
     "name": "InfoBrasil API - Postman Collection (Oficial)",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "description": "Coleção oficial da InfoAPI para testes e integrações com o ecossistema InfoBrasil ERP. Produzida para ambiente de produção."

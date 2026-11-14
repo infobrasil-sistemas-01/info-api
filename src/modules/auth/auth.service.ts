@@ -7,6 +7,7 @@ import {
 import { RegistryPrismaService } from 'src/infra/prisma/registry-prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { EnvService } from 'src/config/env/env.service';
+import ms from 'ms';
 import * as argon2 from 'argon2';
 import * as bcrypt from 'bcrypt';
 import { AUTH_CONFIG } from 'src/config/auth.config';
@@ -99,7 +100,9 @@ export class AuthService {
 
     return {
       accessToken,
+      expiresIn: this.getAccessTokenExpiresIn(),
       refreshToken,
+      refreshExpiresIn: this.getRefreshTokenExpiresIn(),
       user: {
         id: user.id.toString(),
         username: user.user,
@@ -107,6 +110,14 @@ export class AuthService {
         permissions: Array.from(permissions.allowedKeys),
       },
     };
+  }
+
+  getAccessTokenExpiresIn(): number {
+    return Math.floor(ms(this.authConfig.accessTokenTtl) / 1000);
+  }
+
+  getRefreshTokenExpiresIn(): number {
+    return this.authConfig.refreshTokenDays * 24 * 60 * 60;
   }
 
   private assertUserActive(user: { status: Boolean }) {
@@ -175,7 +186,17 @@ export class AuthService {
         storeId: user.storeId ?? undefined,
       });
       this.logger.log(`Token de acesso renovado para o usuário ID: ${user.id}`);
-      return { accessToken };
+
+      const nowSeconds = Math.floor(Date.now() / 1000);
+      const refreshExpiresIn = payload.exp
+        ? Math.max(0, payload.exp - nowSeconds)
+        : this.getRefreshTokenExpiresIn();
+
+      return {
+        accessToken,
+        expiresIn: this.getAccessTokenExpiresIn(),
+        refreshExpiresIn,
+      };
     } catch (error) {
       this.logger.warn(`Falha na renovação de token. Erro: ${error.message}`);
       throw new UnauthorizedException('Refresh token inválido.');
