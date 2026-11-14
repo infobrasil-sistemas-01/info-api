@@ -29,11 +29,36 @@ export class LoggingInterceptor implements NestInterceptor {
 
     const now = Date.now();
 
+    const userAgent = (
+      headers['user-agent'] ??
+      headers['User-Agent'] ??
+      'unknown'
+    ).toString();
+    const clientIp = (
+      request.ip ??
+      headers['x-forwarded-for'] ??
+      request.socket?.remoteAddress ??
+      'unknown'
+    ).toString();
+
     // Enriquece o scope Sentry com dados da requisição atual
     Sentry.getCurrentScope().setTag('http.method', method);
     Sentry.getCurrentScope().setTag('http.url', url);
-
-    const userAgent = headers['user-agent'] ?? 'unknown';
+    Sentry.getCurrentScope().setTag('client.user_agent', userAgent);
+    Sentry.getCurrentScope().setTag('user_agent', userAgent);
+    Sentry.getCurrentScope().setTag('client.ip', clientIp);
+    Sentry.getCurrentScope().setContext('client', {
+      userAgent,
+      ip: clientIp,
+    });
+    Sentry.getCurrentScope().setContext('request', {
+      url,
+      method,
+      headers: {
+        'user-agent': userAgent,
+        'x-forwarded-for': headers['x-forwarded-for'],
+      },
+    });
 
     return next.handle().pipe(
       tap({
@@ -63,16 +88,29 @@ export class LoggingInterceptor implements NestInterceptor {
               status_code: statusCode,
               duration_ms: delay,
               userAgent,
+              ip: clientIp,
               user: user ? { id: user.sub, name: user.username } : undefined,
             },
             level: statusCode >= 400 ? 'warning' : 'info',
           });
 
           const logMessage = `${method} ${url}${userDisplay} → ${statusCode} (${delay}ms)`;
+          const attrs: Record<string, string> = {
+            'http.method': method,
+            'http.url': url,
+            'http.status_code': String(statusCode),
+            'client.user_agent': userAgent,
+            user_agent: userAgent,
+            ip: clientIp,
+            duration_ms: String(delay),
+            ...(user?.username ? { 'user.username': user.username } : {}),
+            ...(user?.sub ? { 'user.id': user.sub } : {}),
+          };
+
           if (statusCode >= 400) {
-            Sentry.logger.warn(logMessage);
+            Sentry.logger.warn(logMessage, attrs);
           } else {
-            Sentry.logger.info(logMessage);
+            Sentry.logger.info(logMessage, attrs);
           }
         },
         error: (error: any) => {
@@ -99,10 +137,31 @@ export class LoggingInterceptor implements NestInterceptor {
               url,
               status_code: status,
               duration_ms: delay,
+              userAgent,
+              ip: clientIp,
               user: user ? { id: user.sub, name: user.username } : undefined,
             },
             level: 'error',
           });
+
+          const errorLogMessage = `${method} ${url}${userDisplay} → ${status} (${delay}ms) – ${error?.message ?? 'Unknown error'}`;
+          const errorAttrs: Record<string, string> = {
+            'http.method': method,
+            'http.url': url,
+            'http.status_code': String(status),
+            'client.user_agent': userAgent,
+            user_agent: userAgent,
+            ip: clientIp,
+            duration_ms: String(delay),
+            ...(user?.username ? { 'user.username': user.username } : {}),
+            ...(user?.sub ? { 'user.id': user.sub } : {}),
+          };
+
+          if (status >= 500) {
+            Sentry.logger.error(errorLogMessage, errorAttrs);
+          } else {
+            Sentry.logger.warn(errorLogMessage, errorAttrs);
+          }
         },
       }),
     );

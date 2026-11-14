@@ -96,21 +96,23 @@ export class AllExceptionsFilter implements ExceptionFilter {
       '/status',
     ].some((excluded) => urlPath.startsWith(excluded));
 
+    const clientIp: string = (
+      request.ip ??
+      (request.headers['x-real-ip'] as string) ??
+      request.headers['x-forwarded-for'] ??
+      request.socket?.remoteAddress ??
+      'unknown'
+    ).toString();
+
     // Grava o log de erro no banco de dados se não tiver sido gravado pelo interceptor
     if (userId && !request.logged && !isExcluded) {
-      const ip: string =
-        request.ip ??
-        (request.headers['x-real-ip'] as string) ??
-        request.socket?.remoteAddress ??
-        'unknown';
-
       this.planService
         .logRequest(
           userId,
           request.method,
           request.url,
           status,
-          ip,
+          clientIp,
           undefined, // durationMs
           false, // success
         )
@@ -119,6 +121,11 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     const user = request.user;
     const userDisplay = user ? ` [User: ${user.username} (${user.sub})]` : '';
+    const userAgent = (
+      request.headers['user-agent'] ??
+      request.headers['User-Agent'] ??
+      'unknown'
+    ).toString();
 
     // Breadcrumb para todos os erros
     Sentry.addBreadcrumb({
@@ -128,6 +135,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
       data: {
         status_code: status,
         path: request.url,
+        userAgent,
+        ip: clientIp,
         user: user ? { id: user.sub, name: user.username } : undefined,
       },
       level: status >= 500 ? 'error' : 'warning',
@@ -141,20 +150,49 @@ export class AllExceptionsFilter implements ExceptionFilter {
         }
         scope.setTag('http.status', String(status));
         scope.setTag('http.method', request.method);
+        scope.setTag('client.user_agent', userAgent);
+        scope.setTag('user_agent', userAgent);
+        scope.setTag('client.ip', clientIp);
+        scope.setContext('client', {
+          userAgent,
+          ip: clientIp,
+        });
+        scope.setContext('request', {
+          url: request.url,
+          method: request.method,
+          headers: {
+            'user-agent': userAgent,
+            'x-forwarded-for': request.headers['x-forwarded-for'],
+          },
+        });
         scope.setExtra('request.url', request.url);
         scope.setExtra('request.body', request.body);
+        scope.setExtra('request.user_agent', userAgent);
         Sentry.captureException(exception);
       });
     }
+
+    const logAttrs: Record<string, string> = {
+      'http.method': request.method,
+      'http.url': request.url,
+      'http.status_code': String(status),
+      'client.user_agent': userAgent,
+      user_agent: userAgent,
+      ip: clientIp,
+      ...(user?.username ? { 'user.username': user.username } : {}),
+      ...(user?.sub ? { 'user.id': user.sub } : {}),
+    };
 
     // Log estruturado
     if (status >= 500) {
       Sentry.logger.error(
         `${request.method} ${request.url}${userDisplay} ${status} – ${errorMessage}`,
+        logAttrs,
       );
     } else if (status >= 400) {
       Sentry.logger.warn(
         `${request.method} ${request.url}${userDisplay} ${status} – ${errorMessage}`,
+        logAttrs,
       );
     }
 
