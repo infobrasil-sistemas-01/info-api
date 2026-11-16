@@ -78,7 +78,8 @@ RUN chown -R appuser:appgroup /app
 USER appuser
 # Porta interna única (igual para blue e green)
 ARG PORT=3336
-ENV PORT=${PORT}
+ENV PORT=${PORT} \
+    NODE_OPTIONS="--max-old-space-size=3072"
 
 EXPOSE ${PORT}
 
