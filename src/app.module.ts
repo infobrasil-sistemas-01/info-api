@@ -46,6 +46,7 @@ import { ChangelogModule } from './modules/changelog/changelog.module';
 import { AdjustmentModule } from './modules/adjustment/adjustment.module';
 import { FeatureRequestModule } from './modules/feature-request/feature-request.module';
 import { ProductionOrderModule } from './modules/production-order/production-order.module';
+import { WebhookModule } from './modules/webhook/webhook.module';
 
 import { AppController } from './app.controller';
 
@@ -92,6 +93,7 @@ import { AppController } from './app.controller';
     ChangelogModule,
     FeatureRequestModule,
     ProductionOrderModule,
+    WebhookModule,
   ],
   controllers: [AppController],
   providers: [

@@ -548,4 +548,90 @@ export class DashboardService {
       };
     }
   }
+
+  async getWebhookMetrics() {
+    const now = new Date();
+    const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+    const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+
+    const [
+      totalSubscriptions,
+      activeSubscriptions,
+      totalDeliveries24h,
+      successDeliveries24h,
+      failedDeliveries24h,
+      deliveriesSample,
+      recentFailures,
+    ] = await Promise.all([
+      this.prisma.webhookSubscription.count(),
+      this.prisma.webhookSubscription.count({ where: { isActive: true } }),
+      this.prisma.webhookDelivery.count({
+        where: { createdAt: { gte: twentyFourHoursAgo } },
+      }),
+      this.prisma.webhookDelivery.count({
+        where: {
+          createdAt: { gte: twentyFourHoursAgo },
+          status: 'SUCCESS',
+        },
+      }),
+      this.prisma.webhookDelivery.count({
+        where: {
+          createdAt: { gte: twentyFourHoursAgo },
+          status: 'FAILED',
+        },
+      }),
+      this.prisma.webhookDelivery.findMany({
+        where: {
+          createdAt: { gte: sevenDaysAgo },
+          durationMs: { not: null },
+        },
+        select: { durationMs: true },
+        take: 500,
+      }),
+      this.prisma.webhookDelivery.findMany({
+        where: { status: 'FAILED' },
+        orderBy: { createdAt: 'desc' },
+        take: 5,
+        include: {
+          subscription: {
+            include: {
+              user: { select: { user: true } },
+            },
+          },
+        },
+      }),
+    ]);
+
+    const avgDurationMs =
+      deliveriesSample.length > 0
+        ? Math.round(
+            deliveriesSample.reduce((acc, d) => acc + (d.durationMs || 0), 0) /
+              deliveriesSample.length,
+          )
+        : 0;
+
+    const successRatePercent =
+      totalDeliveries24h > 0
+        ? Math.round((successDeliveries24h / totalDeliveries24h) * 100)
+        : 100;
+
+    return {
+      totalSubscriptions,
+      activeSubscriptions,
+      totalDeliveries24h,
+      successDeliveries24h,
+      failedDeliveries24h,
+      successRatePercent,
+      avgDurationMs,
+      recentFailures: recentFailures.map((f) => ({
+        id: f.id,
+        event: f.event,
+        tenant: f.subscription?.user?.user ?? 'desconhecido',
+        targetUrl: f.subscription?.targetUrl ?? '',
+        responseStatus: f.responseStatus,
+        lastError: f.lastError,
+        createdAt: f.createdAt,
+      })),
+    };
+  }
 }

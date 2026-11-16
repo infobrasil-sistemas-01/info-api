@@ -72,3 +72,6 @@ fi
 
 echo "Deploy concluído com sucesso."
 echo "Ambiente ativo atual: $TARGET_SERVICE"
+
+echo "Atualizando serviço do worker de webhooks..."
+docker compose up -d infoapi-worker

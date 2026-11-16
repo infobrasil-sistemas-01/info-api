@@ -60,6 +60,15 @@ export class DashboardController {
     return this.dashboardService.getSummary(startDate, endDate);
   }
 
+  @Get('webhooks')
+  @RequirePermissions({ allOf: ['core.dashboard.view'] })
+  @ApiOperation({
+    summary: 'Obtém métricas e telemetria de Webhooks para o painel administrativo',
+  })
+  async getWebhookMetrics() {
+    return this.dashboardService.getWebhookMetrics();
+  }
+
   @Get('top-users')
   @RequirePermissions({ allOf: ['core.dashboard.view'] })
   @ApiOperation({

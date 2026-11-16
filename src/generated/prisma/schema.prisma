@@ -28,6 +28,7 @@ model User {
   usageAlertLogs         UsageAlertLog[]
   featureRequests        FeatureRequest[]
   featureRequestMessages FeatureRequestMessage[]
+  webhookSubscription    WebhookSubscription?
 
   @@map("users")
 }
@@ -290,4 +291,62 @@ model IntegrationGuide {
   updatedAt   DateTime @updatedAt @map("updated_at")
 
   @@map("integration_guides")
+}
+
+enum WebhookDeliveryStatus {
+  PENDING
+  PROCESSING
+  SUCCESS
+  FAILED
+}
+
+model WebhookSubscription {
+  id        String   @id @default(uuid())
+  userId    String   @unique @map("user_id")
+  targetUrl String   @map("target_url") @db.VarChar(500)
+  secretKey String   @map("secret_key") @db.VarChar(128)
+  isActive  Boolean  @default(true) @map("is_active")
+  events    String[] @default(["order.created", "product.created"])
+
+  lastOrderId                 Int      @default(0) @map("last_order_id")
+  lastOrderSyncAt             DateTime @default(now()) @map("last_order_sync_at")
+  lastProductId               Int      @default(0) @map("last_product_id")
+  lastProductSyncAt           DateTime @default(now()) @map("last_product_sync_at")
+  lastDeliveryId              Int      @default(0) @map("last_delivery_id")
+  lastDeliverySyncAt          DateTime @default(now()) @map("last_delivery_sync_at")
+  lastAccountPayableId        Int      @default(0) @map("last_account_payable_id")
+  lastAccountPayableSyncAt    DateTime @default(now()) @map("last_account_payable_sync_at")
+  lastAccountReceivableId     Int      @default(0) @map("last_account_receivable_id")
+  lastAccountReceivableSyncAt DateTime @default(now()) @map("last_account_receivable_sync_at")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user       User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deliveries WebhookDelivery[]
+
+  @@map("webhook_subscriptions")
+}
+
+model WebhookDelivery {
+  id             String                @id @default(uuid())
+  subscriptionId String                @map("subscription_id")
+  event          String                @db.VarChar(50)
+  payload        Json
+  status         WebhookDeliveryStatus @default(PENDING)
+  responseStatus Int?                  @map("response_status")
+  responseBody   String?               @map("response_body") @db.Text
+  durationMs     Float?                @map("duration_ms")
+  attempts       Int                   @default(0)
+  nextRetryAt    DateTime?             @map("next_retry_at")
+  lastError      String?               @map("last_error") @db.Text
+  createdAt      DateTime              @default(now()) @map("created_at")
+  updatedAt      DateTime              @updatedAt @map("updated_at")
+
+  subscription WebhookSubscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+
+  @@index([subscriptionId, createdAt])
+  @@index([status, nextRetryAt])
+  @@index([createdAt])
+  @@map("webhook_deliveries")
 }

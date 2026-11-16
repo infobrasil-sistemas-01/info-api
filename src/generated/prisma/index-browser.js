@@ -308,6 +308,43 @@ exports.Prisma.IntegrationGuideScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.WebhookSubscriptionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  targetUrl: 'targetUrl',
+  secretKey: 'secretKey',
+  isActive: 'isActive',
+  events: 'events',
+  lastOrderId: 'lastOrderId',
+  lastOrderSyncAt: 'lastOrderSyncAt',
+  lastProductId: 'lastProductId',
+  lastProductSyncAt: 'lastProductSyncAt',
+  lastDeliveryId: 'lastDeliveryId',
+  lastDeliverySyncAt: 'lastDeliverySyncAt',
+  lastAccountPayableId: 'lastAccountPayableId',
+  lastAccountPayableSyncAt: 'lastAccountPayableSyncAt',
+  lastAccountReceivableId: 'lastAccountReceivableId',
+  lastAccountReceivableSyncAt: 'lastAccountReceivableSyncAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.WebhookDeliveryScalarFieldEnum = {
+  id: 'id',
+  subscriptionId: 'subscriptionId',
+  event: 'event',
+  payload: 'payload',
+  status: 'status',
+  responseStatus: 'responseStatus',
+  responseBody: 'responseBody',
+  durationMs: 'durationMs',
+  attempts: 'attempts',
+  nextRetryAt: 'nextRetryAt',
+  lastError: 'lastError',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -350,6 +387,13 @@ exports.FeatureRequestStatus = exports.$Enums.FeatureRequestStatus = {
   RESOLVED: 'RESOLVED'
 };
 
+exports.WebhookDeliveryStatus = exports.$Enums.WebhookDeliveryStatus = {
+  PENDING: 'PENDING',
+  PROCESSING: 'PROCESSING',
+  SUCCESS: 'SUCCESS',
+  FAILED: 'FAILED'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Plan: 'Plan',
@@ -369,7 +413,9 @@ exports.Prisma.ModelName = {
   UsageAlertLog: 'UsageAlertLog',
   FeatureRequest: 'FeatureRequest',
   FeatureRequestMessage: 'FeatureRequestMessage',
-  IntegrationGuide: 'IntegrationGuide'
+  IntegrationGuide: 'IntegrationGuide',
+  WebhookSubscription: 'WebhookSubscription',
+  WebhookDelivery: 'WebhookDelivery'
 };
 
 /**
