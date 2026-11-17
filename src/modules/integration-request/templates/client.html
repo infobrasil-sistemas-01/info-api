@@ -1610,7 +1610,25 @@ print(f'Basic {auth}')</code></pre>
 
                 if (!res.ok) throw new Error('Falha ao carregar configuração de webhook');
 
-                const sub = await res.json();
+                const resData = await res.json().catch(() => null);
+                const sub = (resData && resData.configured !== false && (resData.id || resData.subscription))
+                    ? (resData.subscription || resData)
+                    : null;
+
+                if (!sub) {
+                    window.currentWebhookSubscription = null;
+                    if (badgeContainer) {
+                        badgeContainer.innerHTML = `<span class="status-badge-mini" style="background: rgba(148, 163, 184, 0.2); color: var(--text-muted);">NÃO CONFIGURADO</span>`;
+                    }
+                    if (alertBox) alertBox.classList.add('hidden');
+                    if (secretGroup) secretGroup.classList.add('hidden');
+                    if (targetUrlInput) targetUrlInput.value = '';
+                    if (secretKeyInput) secretKeyInput.value = '';
+                    if (saveBtn) saveBtn.innerHTML = `<i class='bx bx-plus-circle'></i> <span>Criar Webhook</span>`;
+                    document.querySelectorAll('.webhook-event-checkbox').forEach(cb => { if (!cb.disabled) cb.checked = false; });
+                    return;
+                }
+
                 window.currentWebhookSubscription = sub;
 
                 if (targetUrlInput) targetUrlInput.value = sub.targetUrl || '';
@@ -1749,9 +1767,9 @@ print(f'Basic {auth}')</code></pre>
                     throw new Error(data.message || 'Falha ao rotacionar chave secreta');
                 }
 
-                const updated = await res.json();
+                const updated = await res.json().catch(() => null);
                 const secretKeyInput = document.getElementById('webhook-secret-key');
-                if (secretKeyInput) secretKeyInput.value = updated.secretKey || '';
+                if (secretKeyInput && updated) secretKeyInput.value = updated.secretKey || '';
 
                 if (feedbackMsg) {
                     feedbackMsg.style.color = 'var(--primary)';
@@ -1872,7 +1890,7 @@ print(f'Basic {auth}')</code></pre>
                 });
 
                 if (!res.ok) return;
-                const deliveries = await res.json();
+                const deliveries = await res.json().catch(() => []);
 
                 if (!deliveries || deliveries.length === 0) {
                     tbody.innerHTML = `

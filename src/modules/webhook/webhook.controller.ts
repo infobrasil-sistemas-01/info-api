@@ -53,8 +53,19 @@ export class WebhookController {
   @ApiOperation({
     summary: 'Consulta o Webhook configurado do usuário autenticado',
   })
-  getMine(@CurrentUser() user: JwtPayload) {
-    return this.service.getMine(user.sub);
+  async getMine(@CurrentUser() user: JwtPayload) {
+    const subscription = await this.service.getMine(user.sub);
+    if (!subscription) {
+      return {
+        configured: false,
+        subscription: null,
+      };
+    }
+    return {
+      configured: true,
+      subscription,
+      ...subscription,
+    };
   }
 
   @Put('me')
