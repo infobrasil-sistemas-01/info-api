@@ -482,27 +482,19 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
       const products = await queryPromise(
         `SELECT FIRST 25
            P.PRO_CODIGO, P.PRO_CODIGOBAR, P.PRO_DESCRICAO, P.PRO_UNIDADE,
-           P.PRO_PRECOVENDA, P.PRO_ATIVO,
-           P.PRO_DATACADASTRO, P.PRO_DATAALTERACAO, P.PRO_HORA,
+           P.PRO_DATAALTERACAO,
            P.MAR_CODIGO, M.MAR_DESCRICAO,
            P.GRU_CODIGO, G.GRU_DESCRICAO
          FROM PRODUTOS P
          LEFT JOIN MARCAS M ON P.MAR_CODIGO = M.MAR_CODIGO
          LEFT JOIN GRUPOSPRO G ON P.GRU_CODIGO = G.GRU_CODIGO
          WHERE
-           (COALESCE(P.PRO_DATAALTERACAO, P.PRO_DATACADASTRO) > ?)
-           OR (
-             COALESCE(P.PRO_DATAALTERACAO, P.PRO_DATACADASTRO) = ?
-             AND (
-               COALESCE(P.PRO_HORA, '00:00:00') > ?
-               OR (COALESCE(P.PRO_HORA, '00:00:00') = ? AND P.PRO_CODIGO > ?)
-             )
-           )
+           P.PRO_DATAALTERACAO > ?
+           OR (P.PRO_DATAALTERACAO = ? AND P.PRO_CODIGO > ?)
          ORDER BY
-           COALESCE(P.PRO_DATAALTERACAO, P.PRO_DATACADASTRO) ASC,
-           COALESCE(P.PRO_HORA, '00:00:00') ASC,
+           P.PRO_DATAALTERACAO ASC,
            P.PRO_CODIGO ASC`,
-        [syncDate, syncDate, syncTime, syncTime, lastProductId],
+        [syncDate, syncDate, lastProductId],
       );
 
       if (products.length > 0) {
@@ -539,16 +531,11 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
 
         for (const prod of products) {
           const proCodigo = Number(prod.PRO_CODIGO);
-          const dtCad = parseFirebirdDate(prod.PRO_DATACADASTRO);
           const dtAlt = parseFirebirdDate(prod.PRO_DATAALTERACAO);
-          const hr = parseFirebirdTime(prod.PRO_HORA);
 
-          const isCreated = !prod.PRO_DATACADASTRO || dtCad === dtAlt;
-          let eventType = isCreated ? 'product.created' : 'product.updated';
-          if (!events.includes(eventType)) {
-            if (events.includes('product.created')) eventType = 'product.created';
-            else if (events.includes('product.updated')) eventType = 'product.updated';
-          }
+          let eventType = events.includes('product.updated')
+            ? 'product.updated'
+            : 'product.created';
 
           const payload = {
             id: `evt_prd_${crypto.randomBytes(8).toString('hex')}`,
@@ -560,8 +547,6 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
               barcode: prod.PRO_CODIGOBAR ? String(prod.PRO_CODIGOBAR).trim() : null,
               description: prod.PRO_DESCRICAO ? String(prod.PRO_DESCRICAO).trim() : null,
               unit: prod.PRO_UNIDADE ? String(prod.PRO_UNIDADE).trim() : null,
-              price: Number(prod.PRO_PRECOVENDA) || 0,
-              active: prod.PRO_ATIVO === 'S' || prod.PRO_ATIVO === 1,
               brand: prod.MAR_CODIGO
                 ? {
                     id: Number(prod.MAR_CODIGO),
@@ -575,8 +560,7 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
                   }
                 : null,
               stock: stockByProduct.get(proCodigo) || [],
-              registeredAt: `${dtCad} ${hr}`.trim(),
-              updatedAt: `${dtAlt} ${hr}`.trim(),
+              updatedAt: dtAlt,
               links: { self: `/api/v1/products/id/${proCodigo}` },
             },
           };
@@ -591,8 +575,7 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
           });
 
           maxSeenId = proCodigo;
-          const latestDate = dtAlt || dtCad;
-          maxSyncAt = fromBrazilDateTimeToUtc(latestDate, hr);
+          maxSyncAt = fromBrazilDateTimeToUtc(dtAlt, '00:00:00');
         }
 
         await this.prisma.webhookSubscription.update({
@@ -893,97 +876,69 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
       }
 
       if (!wasColdStart && lastAccountReceivableId >= 0) {
-        const sync = getBrazilDateTime(sub.lastAccountReceivableSyncAt);
-        const nowBrazil = getBrazilDateTime(new Date());
+        const receivables = await queryPromise(
+          `SELECT FIRST 25 
+             REC.REC_NUMERO, CLI.LOJ_CODIGO, REC.CLI_CODIGO, CLI.CLI_NOME, CLI.CLI_CPF_CNPJ,
+             REC.REC_VALOR, REC.REC_SITUACAO, REC.REC_DATAVENC
+           FROM CONTASRECEBER REC
+           LEFT JOIN CLIENTES CLI ON CLI.CLI_CODIGO = REC.CLI_CODIGO
+           WHERE REC.REC_NUMERO > ?
+           ORDER BY REC.REC_NUMERO ASC`,
+          [lastAccountReceivableId],
+        );
 
-        let syncDate = sync.dateStr;
+        if (receivables.length > 0) {
+          let maxSeenId = lastAccountReceivableId;
 
-        // Proteção Anti-Drift: só reancora se o cursor estiver mais de 1 hora no futuro (ex: bug UTC)
-        const nowUtc = Date.now();
-        const cursorUtc = new Date(sub.lastAccountReceivableSyncAt).getTime();
-        if (cursorUtc - nowUtc > 60 * 60 * 1000) {
-          syncDate = nowBrazil.dateStr;
-        }
+          for (const r of receivables) {
+            const recNumero = Number(r.REC_NUMERO);
+            const dueDate = parseFirebirdDate(r.REC_DATAVENC);
 
-      const receivables = await queryPromise(
-        `SELECT FIRST 25 
-           REC.REC_NUMERO, REC.LOJ_CODIGO, REC.CLI_CODIGO, C.CLI_NOME, C.CLI_CPF_CNPJ,
-           REC.REC_VALOR, REC.REC_SITUACAO, REC.REC_DATAVENC, REC.REC_DATAMOV, REC.REC_DATAPAG
-         FROM CONTASRECEBER REC
-         LEFT JOIN CLIENTES C ON C.CLI_CODIGO = REC.CLI_CODIGO
-         WHERE
-           (COALESCE(REC.REC_DATAPAG, REC.REC_DATAMOV) > ?)
-           OR (
-             COALESCE(REC.REC_DATAPAG, REC.REC_DATAMOV) = ?
-             AND REC.REC_NUMERO > ?
-           )
-         ORDER BY
-           COALESCE(REC.REC_DATAPAG, REC.REC_DATAMOV) ASC,
-           REC.REC_NUMERO ASC`,
-        [syncDate, syncDate, lastAccountReceivableId],
-      );
+            let eventType = 'account_receivable.created';
+            if (!events.includes(eventType)) {
+              if (events.includes('account_receivable.updated')) eventType = 'account_receivable.updated';
+            }
 
-      if (receivables.length > 0) {
-        let maxSeenId = lastAccountReceivableId;
-        let maxSyncAt = sub.lastAccountReceivableSyncAt;
+            const payload = {
+              id: `evt_rec_${crypto.randomBytes(8).toString('hex')}`,
+              event: eventType,
+              timestamp: new Date().toISOString(),
+              tenant: sub.user.user,
+              data: {
+                receivableId: recNumero,
+                storeId: r.LOJ_CODIGO ? Number(r.LOJ_CODIGO) : null,
+                customer: r.CLI_CODIGO
+                  ? {
+                      id: Number(r.CLI_CODIGO),
+                      name: r.CLI_NOME ? String(r.CLI_NOME).trim() : null,
+                      cpfCnpj: r.CLI_CPF_CNPJ ? String(r.CLI_CPF_CNPJ).trim() : null,
+                    }
+                  : null,
+                value: Number(r.REC_VALOR) || 0,
+                dueDate,
+                situation: r.REC_SITUACAO ? String(r.REC_SITUACAO).trim() : null,
+                links: { self: `/api/v1/account-receivable/${recNumero}` },
+              },
+            };
 
-        for (const r of receivables) {
-          const recNumero = Number(r.REC_NUMERO);
-          const dtMov = parseFirebirdDate(r.REC_DATAMOV);
-          const dtPag = r.REC_DATAPAG ? parseFirebirdDate(r.REC_DATAPAG) : null;
-          const dueDate = parseFirebirdDate(r.REC_DATAVENC);
+            await this.prisma.webhookDelivery.create({
+              data: {
+                subscriptionId: sub.id,
+                event: eventType,
+                payload: payload as any,
+                status: 'PENDING',
+              },
+            });
 
-          const isUpdated = !!dtPag || r.REC_SITUACAO === 'L';
-          let eventType = isUpdated ? 'account_receivable.updated' : 'account_receivable.created';
-          if (!events.includes(eventType)) {
-            if (events.includes('account_receivable.created')) eventType = 'account_receivable.created';
-            else if (events.includes('account_receivable.updated')) eventType = 'account_receivable.updated';
+            maxSeenId = recNumero;
           }
 
-          const payload = {
-            id: `evt_rec_${crypto.randomBytes(8).toString('hex')}`,
-            event: eventType,
-            timestamp: new Date().toISOString(),
-            tenant: sub.user.user,
-            data: {
-              receivableId: recNumero,
-              storeId: r.LOJ_CODIGO ? Number(r.LOJ_CODIGO) : null,
-              customer: r.CLI_CODIGO
-                ? {
-                    id: Number(r.CLI_CODIGO),
-                    name: r.CLI_NOME ? String(r.CLI_NOME).trim() : null,
-                    cpfCnpj: r.CLI_CPF_CNPJ ? String(r.CLI_CPF_CNPJ).trim() : null,
-                  }
-                : null,
-              value: Number(r.REC_VALOR) || 0,
-              issueDate: dtMov,
-              paymentDate: dtPag,
-              dueDate,
-              situation: r.REC_SITUACAO ? String(r.REC_SITUACAO).trim() : null,
-              links: { self: `/api/v1/account-receivable/${recNumero}` },
-            },
-          };
-
-          await this.prisma.webhookDelivery.create({
-            data: {
-              subscriptionId: sub.id,
-              event: eventType,
-              payload: payload as any,
-              status: 'PENDING',
-            },
+          await this.prisma.webhookSubscription.update({
+            where: { id: sub.id },
+            data: { lastAccountReceivableId: maxSeenId, lastAccountReceivableSyncAt: new Date() },
           });
-
-          maxSeenId = recNumero;
-          const latestDate = dtPag || dtMov;
-          maxSyncAt = fromBrazilDateTimeToUtc(latestDate, '00:00:00');
         }
-
-        await this.prisma.webhookSubscription.update({
-          where: { id: sub.id },
-          data: { lastAccountReceivableId: maxSeenId, lastAccountReceivableSyncAt: maxSyncAt },
-        });
       }
-    }
   }
   } finally {
     if (connection) {
