@@ -117,15 +117,15 @@ export class WebhookService {
             () => queryMax('SELECT COALESCE(MAX(PED_CODIGO), 0) FROM PEDIDOS'),
           ),
           queryMax('SELECT COALESCE(MAX(PRO_CODIGO), 0) FROM PRODUTOS'),
-          queryMax('SELECT COALESCE(MAX(ENT_CODIGO), 0) FROM ENTREGAS').catch(
-            () => 0,
-          ),
-          queryMax(
-            'SELECT COALESCE(MAX(PAG_CODIGO), 0) FROM CONTAS_PAGAR',
-          ).catch(() => 0),
-          queryMax(
-            'SELECT COALESCE(MAX(REC_CODIGO), 0) FROM CONTAS_RECEBER',
-          ).catch(() => 0),
+          queryMax('SELECT COALESCE(MAX(ENT_NUMERO), 0) FROM ENTREGAS')
+            .catch(() => queryMax('SELECT COALESCE(MAX(ENT_CODIGO), 0) FROM ENTREGAS'))
+            .catch(() => 0),
+          queryMax('SELECT COALESCE(MAX(PAG_NUMERO), 0) FROM CONTASPAGAR')
+            .catch(() => queryMax('SELECT COALESCE(MAX(PAG_CODIGO), 0) FROM CONTAS_PAGAR'))
+            .catch(() => 0),
+          queryMax('SELECT COALESCE(MAX(REC_NUMERO), 0) FROM CONTASRECEBER')
+            .catch(() => queryMax('SELECT COALESCE(MAX(REC_CODIGO), 0) FROM CONTAS_RECEBER'))
+            .catch(() => 0),
         ]);
 
       marks.lastOrderId = maxOrder;

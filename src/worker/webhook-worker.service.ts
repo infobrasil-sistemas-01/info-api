@@ -183,89 +183,204 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
     const events = sub.events || [];
 
     // 1. Vendas / Pedidos (orders) - Requer permissão tenant.orders.view
+    // Abordagem 1: Sequência Monotônica Estrita por ID (Generator do Firebird)
     if (
       (events.includes('order.created') || events.includes('order.updated')) &&
       allowed.has('tenant.orders.view')
     ) {
-      const sync = getBrazilDateTime(sub.lastOrderSyncAt);
-      const nowBrazil = getBrazilDateTime(new Date());
-
-      let syncDate = sync.dateStr;
-      let syncTime = sync.timeStr;
-      let lastOrderId = sub.lastOrderId || 0;
-
-      // Proteção Anti-Drift: se o cursor estiver no futuro relativo ao relógio do Brasil (bug UTC),
-      // reancora com lookback de 15 minutos para processar imediatamente eventos pendentes
-      if (
-        syncDate > nowBrazil.dateStr ||
-        (syncDate === nowBrazil.dateStr && syncTime > nowBrazil.timeStr)
-      ) {
-        const lookback = new Date(Date.now() - 15 * 60 * 1000);
-        const corrected = getBrazilDateTime(lookback);
-        syncDate = corrected.dateStr;
-        syncTime = corrected.timeStr;
-        lastOrderId = 0;
-      }
+      const lastOrderId = sub.lastOrderId || 0;
 
       const sales = await queryPromise(
         `SELECT FIRST 25
-           V.VEN_NUMERO, V.LOJ_CODIGO, V.VEN_DATA, V.VEN_HORA,
-           V.SIT_CODIGO, V.CLI_CODIGO, V.VEN_TOTALLIQUIDO, V.VEN_TOTALBRUTO
+           V.VEN_NUMERO, V.LOJ_CODIGO, LOJ.LOJ_NOME, LOJ.LOJ_FANTASIA,
+           V.VEN_DATA, V.VEN_HORA,
+           V.SIT_CODIGO, S.SIT_DESCRICAO,
+           V.CLI_CODIGO, C.CLI_NOME, C.CLI_CPF_CNPJ, C.CLI_FONE, C.CLI_EMAIL,
+           V.FUN_CODIGO, F.FUN_NOME,
+           V.USU_CODIGO, U.USU_APELIDO,
+           V.VEN_NUMSITE, V.VEN_TIPO,
+           V.VEN_TOTALBRUTO, V.VEN_TOTALDESC, V.VEN_TOTALLIQUIDO,
+           V.FP1_CODIGO, FPG1.FPG_DESCRICAO AS FPG1_DESCRICAO, V.VEN_TOTALPP1,
+           V.FP2_CODIGO, FPG2.FPG_DESCRICAO AS FPG2_DESCRICAO, V.VEN_TOTALPP2,
+           V.FP3_CODIGO, FPG3.FPG_DESCRICAO AS FPG3_DESCRICAO, V.VEN_TOTALPP3,
+           V.FP4_CODIGO, FPG4.FPG_DESCRICAO AS FPG4_DESCRICAO, V.VEN_TOTALPP4
          FROM VENDAS V
-         WHERE
-           (V.VEN_DATA > ?)
-           OR (
-             V.VEN_DATA = ?
-             AND (
-               V.VEN_HORA > ?
-               OR (V.VEN_HORA = ? AND V.VEN_NUMERO > ?)
-             )
-           )
-         ORDER BY V.VEN_DATA ASC, V.VEN_HORA ASC, V.VEN_NUMERO ASC`,
-        [syncDate, syncDate, syncTime, syncTime, lastOrderId],
+         LEFT JOIN LOJAS LOJ ON LOJ.LOJ_CODIGO = V.LOJ_CODIGO
+         LEFT JOIN SITUACAO S ON S.SIT_CODIGO = V.SIT_CODIGO
+         LEFT JOIN CLIENTES C ON C.CLI_CODIGO = V.CLI_CODIGO
+         LEFT JOIN FUNCIONARIOS F ON F.FUN_CODIGO = V.FUN_CODIGO
+         LEFT JOIN USUARIOS U ON U.USU_CODIGO = V.USU_CODIGO
+         LEFT JOIN FORMASPAG FPG1 ON FPG1.FPG_CODIGO = V.FP1_CODIGO
+         LEFT JOIN FORMASPAG FPG2 ON FPG2.FPG_CODIGO = V.FP2_CODIGO
+         LEFT JOIN FORMASPAG FPG3 ON FPG3.FPG_CODIGO = V.FP3_CODIGO
+         LEFT JOIN FORMASPAG FPG4 ON FPG4.FPG_CODIGO = V.FP4_CODIGO
+         WHERE V.VEN_NUMERO > ?
+         ORDER BY V.VEN_NUMERO ASC`,
+        [lastOrderId],
       );
 
       if (sales.length > 0) {
         let maxSeenId = lastOrderId;
-        let maxSyncAt = sub.lastOrderSyncAt;
+        const saleIds = sales.map((s: any) => Number(s.VEN_NUMERO)).filter(Boolean);
+        const itemsByOrder = new Map<number, any[]>();
+
+        if (saleIds.length > 0) {
+          try {
+            const rawItems = await queryPromise(
+              `SELECT 
+                 IV.VEN_NUMERO, IV.PRO_CODIGO, P.PRO_DESCRICAO, P.PRO_UNIDADE, P.PRO_REFERENCIA,
+                 IV.IVD_QTDE, IV.IVD_PRECO, IV.IVD_DESCONTO, IV.IVD_TOTAL, IV.IVD_LIQUIDO
+               FROM ITENSVEN IV
+               LEFT JOIN PRODUTOS P ON P.PRO_CODIGO = IV.PRO_CODIGO
+               WHERE IV.VEN_NUMERO IN (${saleIds.join(',')})
+               ORDER BY IV.VEN_NUMERO ASC`,
+            );
+
+            for (const item of rawItems) {
+              const orderId = Number(item.VEN_NUMERO);
+              if (!itemsByOrder.has(orderId)) {
+                itemsByOrder.set(orderId, []);
+              }
+              itemsByOrder.get(orderId)!.push({
+                productId: Number(item.PRO_CODIGO),
+                description: item.PRO_DESCRICAO ? String(item.PRO_DESCRICAO).trim() : null,
+                reference: item.PRO_REFERENCIA ? String(item.PRO_REFERENCIA).trim() : null,
+                unit: item.PRO_UNIDADE ? String(item.PRO_UNIDADE).trim() : null,
+                quantity: Number(item.IVD_QTDE) || 0,
+                unitPrice: Number(item.IVD_PRECO) || 0,
+                discount: Number(item.IVD_DESCONTO) || 0,
+                total: Number(item.IVD_TOTAL) || 0,
+                netTotal: Number(item.IVD_LIQUIDO) || 0,
+              });
+            }
+          } catch (err: any) {
+            this.logger.warn(`Erro ao carregar itens de venda para webhook (${saleIds}): ${err.message}`);
+          }
+        }
 
         for (const sale of sales) {
           const venNumero = Number(sale.VEN_NUMERO);
+          if (venNumero > maxSeenId) maxSeenId = venNumero;
+
           const saleDate = parseFirebirdDate(sale.VEN_DATA);
           const saleTime = parseFirebirdTime(sale.VEN_HORA);
 
+          const payments: Array<{ code: number; name: string; value: number }> = [];
+          if (sale.FP1_CODIGO && Number(sale.FP1_CODIGO) > 0) {
+            const val1 =
+              sale.VEN_TOTALPP1 !== null && sale.VEN_TOTALPP1 !== undefined
+                ? Number(sale.VEN_TOTALPP1)
+                : Number(sale.VEN_TOTALLIQUIDO || 0);
+            payments.push({
+              code: Number(sale.FP1_CODIGO),
+              name: sale.FPG1_DESCRICAO ? String(sale.FPG1_DESCRICAO).trim() : 'Forma de Pagamento 1',
+              value: Number(Number(val1).toFixed(2)),
+            });
+          }
+          if (sale.FP2_CODIGO && Number(sale.FP2_CODIGO) > 0) {
+            payments.push({
+              code: Number(sale.FP2_CODIGO),
+              name: sale.FPG2_DESCRICAO ? String(sale.FPG2_DESCRICAO).trim() : 'Forma de Pagamento 2',
+              value: Number((Number(sale.VEN_TOTALPP2) || 0).toFixed(2)),
+            });
+          }
+          if (sale.FP3_CODIGO && Number(sale.FP3_CODIGO) > 0) {
+            payments.push({
+              code: Number(sale.FP3_CODIGO),
+              name: sale.FPG3_DESCRICAO ? String(sale.FPG3_DESCRICAO).trim() : 'Forma de Pagamento 3',
+              value: Number((Number(sale.VEN_TOTALPP3) || 0).toFixed(2)),
+            });
+          }
+          if (sale.FP4_CODIGO && Number(sale.FP4_CODIGO) > 0) {
+            payments.push({
+              code: Number(sale.FP4_CODIGO),
+              name: sale.FPG4_DESCRICAO ? String(sale.FPG4_DESCRICAO).trim() : 'Forma de Pagamento 4',
+              value: Number((Number(sale.VEN_TOTALPP4) || 0).toFixed(2)),
+            });
+          }
+
+          const statusDesc = sale.SIT_DESCRICAO
+            ? String(sale.SIT_DESCRICAO).trim()
+            : sale.SIT_CODIGO === 2
+              ? 'FECHADO'
+              : sale.SIT_CODIGO === 3
+                ? 'CANCELADO'
+                : 'ABERTO';
+
+          const isCreated = !sale.SIT_CODIGO || sale.SIT_CODIGO === 1;
+          let eventType = isCreated ? 'order.created' : 'order.updated';
+          if (!events.includes(eventType)) {
+            if (events.includes('order.created')) eventType = 'order.created';
+            else if (events.includes('order.updated')) eventType = 'order.updated';
+          }
+
           const payload = {
             id: `evt_ord_${crypto.randomBytes(8).toString('hex')}`,
-            event: 'order.created',
+            event: eventType,
             timestamp: new Date().toISOString(),
             tenant: sub.user.user,
             data: {
               orderId: venNumero,
-              storeId: sale.LOJ_CODIGO,
-              status: sale.SIT_CODIGO,
-              totalValue: Number(sale.VEN_TOTALLIQUIDO ?? sale.VEN_TOTALBRUTO) || 0,
-              clientId: sale.CLI_CODIGO,
-              createdAt: `${saleDate} ${saleTime}`.trim(),
-              links: { self: `/api/v1/orders/${venNumero}` },
+              siteOrderNumber: sale.VEN_NUMSITE ? String(sale.VEN_NUMSITE).trim() : null,
+              orderType: sale.VEN_TIPO ? String(sale.VEN_TIPO).trim() : null,
+              store: {
+                id: Number(sale.LOJ_CODIGO),
+                name: sale.LOJ_NOME ? String(sale.LOJ_NOME).trim() : null,
+                tradeName: sale.LOJ_FANTASIA ? String(sale.LOJ_FANTASIA).trim() : null,
+              },
+              status: {
+                code: Number(sale.SIT_CODIGO),
+                description: statusDesc,
+              },
+              customer: sale.CLI_CODIGO
+                ? {
+                    id: Number(sale.CLI_CODIGO),
+                    name: sale.CLI_NOME ? String(sale.CLI_NOME).trim() : null,
+                    cpfCnpj: sale.CLI_CPF_CNPJ ? String(sale.CLI_CPF_CNPJ).trim() : null,
+                    phone: sale.CLI_FONE ? String(sale.CLI_FONE).trim() : null,
+                    email: sale.CLI_EMAIL ? String(sale.CLI_EMAIL).trim() : null,
+                  }
+                : null,
+              seller: sale.FUN_CODIGO
+                ? {
+                    id: Number(sale.FUN_CODIGO),
+                    name: sale.FUN_NOME ? String(sale.FUN_NOME).trim() : null,
+                  }
+                : null,
+              operator: sale.USU_CODIGO
+                ? {
+                    id: Number(sale.USU_CODIGO),
+                    username: sale.USU_APELIDO ? String(sale.USU_APELIDO).trim() : null,
+                  }
+                : null,
+              totals: {
+                gross: Number(sale.VEN_TOTALBRUTO) || 0,
+                discount: Number(sale.VEN_TOTALDESC) || 0,
+                net: Number(sale.VEN_TOTALLIQUIDO ?? sale.VEN_TOTALBRUTO) || 0,
+              },
+              payments,
+              items: itemsByOrder.get(venNumero) || [],
+              issuedAt: `${saleDate} ${saleTime}`.trim(),
+              links: {
+                self: `/api/v1/orders/${venNumero}`,
+                items: `/api/v1/orders/${venNumero}/items`,
+              },
             },
           };
 
           await this.prisma.webhookDelivery.create({
             data: {
               subscriptionId: sub.id,
-              event: 'order.created',
+              event: eventType,
               payload: payload as any,
               status: 'PENDING',
             },
           });
-
-          maxSeenId = venNumero;
-          maxSyncAt = fromBrazilDateTimeToUtc(saleDate, saleTime);
         }
 
         await this.prisma.webhookSubscription.update({
           where: { id: sub.id },
-          data: { lastOrderId: maxSeenId, lastOrderSyncAt: maxSyncAt },
+          data: { lastOrderId: maxSeenId, lastOrderSyncAt: new Date() },
         });
       }
     }
@@ -280,26 +395,26 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
 
       let syncDate = sync.dateStr;
       let syncTime = sync.timeStr;
-      let lastProductId = sub.lastProductId || 0;
+      const lastProductId = sub.lastProductId || 0;
 
-      // Proteção Anti-Drift: se o cursor estiver no futuro relativo ao relógio do Brasil (bug UTC),
-      // reancora com lookback de 15 minutos para processar imediatamente eventos pendentes
-      if (
-        syncDate > nowBrazil.dateStr ||
-        (syncDate === nowBrazil.dateStr && syncTime > nowBrazil.timeStr)
-      ) {
-        const lookback = new Date(Date.now() - 15 * 60 * 1000);
-        const corrected = getBrazilDateTime(lookback);
-        syncDate = corrected.dateStr;
-        syncTime = corrected.timeStr;
-        lastProductId = 0;
+      // Proteção Anti-Drift: só reancora se o cursor estiver mais de 1 hora no futuro (ex: bug UTC)
+      const nowUtc = Date.now();
+      const cursorUtc = new Date(sub.lastProductSyncAt).getTime();
+      if (cursorUtc - nowUtc > 60 * 60 * 1000) {
+        syncDate = nowBrazil.dateStr;
+        syncTime = nowBrazil.timeStr;
       }
 
       const products = await queryPromise(
         `SELECT FIRST 25
-           P.PRO_CODIGO, P.PRO_DESCRICAO, P.PRO_REFERENCIA, P.PRO_PRECOVENDA, P.PRO_ATIVO,
-           P.PRO_DATACADASTRO, P.PRO_DATAALTERACAO, P.PRO_HORA
+           P.PRO_CODIGO, P.PRO_CODIGOBAR, P.PRO_DESCRICAO, P.PRO_REFERENCIA, P.PRO_UNIDADE,
+           P.PRO_PRECOVENDA, P.PRO_ATIVO,
+           P.PRO_DATACADASTRO, P.PRO_DATAALTERACAO, P.PRO_HORA,
+           P.MAR_CODIGO, M.MAR_DESCRICAO,
+           P.GRU_CODIGO, G.GRU_DESCRICAO
          FROM PRODUTOS P
+         LEFT JOIN MARCAS M ON P.MAR_CODIGO = M.MAR_CODIGO
+         LEFT JOIN GRUPOSPRO G ON P.GRU_CODIGO = G.GRU_CODIGO
          WHERE
            (COALESCE(P.PRO_DATAALTERACAO, P.PRO_DATACADASTRO) > ?)
            OR (
@@ -320,6 +435,34 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
         let maxSeenId = lastProductId;
         let maxSyncAt = sub.lastProductSyncAt;
 
+        const prodIds = products.map((p: any) => Number(p.PRO_CODIGO)).filter(Boolean);
+        const stockByProduct = new Map<number, any[]>();
+
+        if (prodIds.length > 0) {
+          try {
+            const rawStock = await queryPromise(
+              `SELECT E.PRO_CODIGO, E.LOJ_CODIGO, E.EST_ATUAL, E.EST_APOIO
+               FROM ESTOQUE E
+               WHERE E.PRO_CODIGO IN (${prodIds.join(',')})
+               ORDER BY E.PRO_CODIGO ASC, E.LOJ_CODIGO ASC`,
+            );
+
+            for (const st of rawStock) {
+              const pid = Number(st.PRO_CODIGO);
+              if (!stockByProduct.has(pid)) {
+                stockByProduct.set(pid, []);
+              }
+              stockByProduct.get(pid)!.push({
+                storeId: Number(st.LOJ_CODIGO),
+                current: Number(st.EST_ATUAL) || 0,
+                support: Number(st.EST_APOIO) || 0,
+              });
+            }
+          } catch (err: any) {
+            this.logger.warn(`Erro ao carregar estoque para produtos (${prodIds.join(',')}): ${err.message}`);
+          }
+        }
+
         for (const prod of products) {
           const proCodigo = Number(prod.PRO_CODIGO);
           const dtCad = parseFirebirdDate(prod.PRO_DATACADASTRO);
@@ -327,7 +470,11 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
           const hr = parseFirebirdTime(prod.PRO_HORA);
 
           const isCreated = !prod.PRO_DATACADASTRO || dtCad === dtAlt;
-          const eventType = isCreated ? 'product.created' : 'product.updated';
+          let eventType = isCreated ? 'product.created' : 'product.updated';
+          if (!events.includes(eventType)) {
+            if (events.includes('product.created')) eventType = 'product.created';
+            else if (events.includes('product.updated')) eventType = 'product.updated';
+          }
 
           const payload = {
             id: `evt_prd_${crypto.randomBytes(8).toString('hex')}`,
@@ -336,10 +483,25 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
             tenant: sub.user.user,
             data: {
               productId: proCodigo,
-              description: prod.PRO_DESCRICAO,
-              reference: prod.PRO_REFERENCIA,
+              barcode: prod.PRO_CODIGOBAR ? String(prod.PRO_CODIGOBAR).trim() : null,
+              description: prod.PRO_DESCRICAO ? String(prod.PRO_DESCRICAO).trim() : null,
+              reference: prod.PRO_REFERENCIA ? String(prod.PRO_REFERENCIA).trim() : null,
+              unit: prod.PRO_UNIDADE ? String(prod.PRO_UNIDADE).trim() : null,
               price: Number(prod.PRO_PRECOVENDA) || 0,
               active: prod.PRO_ATIVO === 'S' || prod.PRO_ATIVO === 1,
+              brand: prod.MAR_CODIGO
+                ? {
+                    id: Number(prod.MAR_CODIGO),
+                    name: prod.MAR_DESCRICAO ? String(prod.MAR_DESCRICAO).trim() : null,
+                  }
+                : null,
+              group: prod.GRU_CODIGO
+                ? {
+                    id: Number(prod.GRU_CODIGO),
+                    name: prod.GRU_DESCRICAO ? String(prod.GRU_DESCRICAO).trim() : null,
+                  }
+                : null,
+              stock: stockByProduct.get(proCodigo) || [],
               registeredAt: `${dtCad} ${hr}`.trim(),
               updatedAt: `${dtAlt} ${hr}`.trim(),
               links: { self: `/api/v1/products/id/${proCodigo}` },
@@ -373,18 +535,29 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
       allowed.has('tenant.deliveries.view')
     ) {
       const deliveries = await queryPromise(
-        `SELECT FIRST 20 ENT_CODIGO, PED_CODIGO, LOJ_CODIGO, ENT_STATUS, MOT_CODIGO, ENT_DATA
-         FROM ENTREGAS
-         WHERE ENT_CODIGO > ?
-         ORDER BY ENT_CODIGO ASC`,
+        `SELECT FIRST 20 
+           E.ENT_NUMERO, E.VEN_NUMERO, V.LOJ_CODIGO, 
+           E.PRE_CODIGO, P.PRE_NOME, 
+           E.SIT_CODIGO, 
+           E.TBS_CODIGO, T.TBS_DESCRICAO, 
+           E.VEI_PLACA, E.ENT_DATA, E.ENT_HORA
+         FROM ENTREGAS E
+         LEFT JOIN PRESTADORES P ON P.PRE_CODIGO = E.PRE_CODIGO
+         LEFT JOIN VENDAS V ON V.VEN_NUMERO = E.VEN_NUMERO
+         LEFT JOIN TABELA_STATUS T ON T.TBS_CODIGO = E.TBS_CODIGO
+         WHERE E.ENT_NUMERO > ?
+         ORDER BY E.ENT_NUMERO ASC`,
         [sub.lastDeliveryId],
       );
 
       if (deliveries.length > 0) {
         let maxSeenId = sub.lastDeliveryId;
         for (const d of deliveries) {
-          const entCodigo = Number(d.ENT_CODIGO);
-          if (entCodigo > maxSeenId) maxSeenId = entCodigo;
+          const entNumero = Number(d.ENT_NUMERO);
+          if (entNumero > maxSeenId) maxSeenId = entNumero;
+
+          const entDate = parseFirebirdDate(d.ENT_DATA);
+          const entTime = parseFirebirdTime(d.ENT_HORA);
 
           const payload = {
             id: `evt_del_${crypto.randomBytes(8).toString('hex')}`,
@@ -392,13 +565,30 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
             timestamp: new Date().toISOString(),
             tenant: sub.user.user,
             data: {
-              deliveryId: entCodigo,
-              orderId: d.PED_CODIGO,
-              storeId: d.LOJ_CODIGO,
-              status: d.ENT_STATUS,
-              driverId: d.MOT_CODIGO,
-              deliveryDate: d.ENT_DATA,
-              links: { self: `/api/v1/deliveries/${entCodigo}` },
+              deliveryId: entNumero,
+              orderId: d.VEN_NUMERO ? Number(d.VEN_NUMERO) : null,
+              storeId: d.LOJ_CODIGO ? Number(d.LOJ_CODIGO) : null,
+              driver: d.PRE_CODIGO
+                ? {
+                    id: Number(d.PRE_CODIGO),
+                    name: d.PRE_NOME ? String(d.PRE_NOME).trim() : null,
+                  }
+                : null,
+              vehiclePlate: d.VEI_PLACA ? String(d.VEI_PLACA).trim() : null,
+              status: {
+                code:
+                  d.TBS_CODIGO !== null && d.TBS_CODIGO !== undefined
+                    ? Number(d.TBS_CODIGO)
+                    : null,
+                description: d.TBS_DESCRICAO ? String(d.TBS_DESCRICAO).trim() : null,
+                situation:
+                  d.SIT_CODIGO !== null && d.SIT_CODIGO !== undefined
+                    ? Number(d.SIT_CODIGO)
+                    : null,
+              },
+              deliveryDate: entDate,
+              deliveryTime: entTime,
+              links: { self: `/api/v1/deliveries/${entNumero}` },
             },
           };
 
@@ -425,18 +615,23 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
       allowed.has('tenant.account-payable.view')
     ) {
       const payables = await queryPromise(
-        `SELECT FIRST 20 PAG_CODIGO, PAG_VALOR, PAG_VENCIMENTO, PAG_SITUACAO, FOR_CODIGO, LOJ_CODIGO
-         FROM CONTAS_PAGAR
-         WHERE PAG_CODIGO > ?
-         ORDER BY PAG_CODIGO ASC`,
+        `SELECT FIRST 20 
+           CP.PAG_NUMERO, CP.LOJ_CODIGO, CP.CRE_CODIGO, C.CRE_NOME, 
+           CP.PAG_VALOR, CP.PAG_SITUACAO, CP.PAG_DATAVENC
+         FROM CONTASPAGAR CP
+         LEFT JOIN CREDORES C ON CP.CRE_CODIGO = C.CRE_CODIGO
+         WHERE CP.PAG_NUMERO > ?
+         ORDER BY CP.PAG_NUMERO ASC`,
         [sub.lastAccountPayableId],
       );
 
       if (payables.length > 0) {
         let maxSeenId = sub.lastAccountPayableId;
         for (const p of payables) {
-          const pagCodigo = Number(p.PAG_CODIGO);
-          if (pagCodigo > maxSeenId) maxSeenId = pagCodigo;
+          const pagNumero = Number(p.PAG_NUMERO);
+          if (pagNumero > maxSeenId) maxSeenId = pagNumero;
+
+          const dueDate = parseFirebirdDate(p.PAG_DATAVENC);
 
           const payload = {
             id: `evt_pag_${crypto.randomBytes(8).toString('hex')}`,
@@ -444,13 +639,18 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
             timestamp: new Date().toISOString(),
             tenant: sub.user.user,
             data: {
-              payableId: pagCodigo,
-              storeId: p.LOJ_CODIGO,
-              supplierId: p.FOR_CODIGO,
+              payableId: pagNumero,
+              storeId: p.LOJ_CODIGO ? Number(p.LOJ_CODIGO) : null,
+              supplier: p.CRE_CODIGO
+                ? {
+                    id: Number(p.CRE_CODIGO),
+                    name: p.CRE_NOME ? String(p.CRE_NOME).trim() : null,
+                  }
+                : null,
               value: Number(p.PAG_VALOR) || 0,
-              dueDate: p.PAG_VENCIMENTO,
-              situation: p.PAG_SITUACAO,
-              links: { self: `/api/v1/account-payable/${pagCodigo}` },
+              dueDate,
+              situation: p.PAG_SITUACAO ? String(p.PAG_SITUACAO).trim() : null,
+              links: { self: `/api/v1/account-payable/${pagNumero}` },
             },
           };
 
@@ -477,18 +677,23 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
       allowed.has('tenant.account-receivable.view')
     ) {
       const receivables = await queryPromise(
-        `SELECT FIRST 20 REC_CODIGO, REC_VALOR, REC_VENCIMENTO, REC_SITUACAO, CLI_CODIGO, LOJ_CODIGO, PED_CODIGO
-         FROM CONTAS_RECEBER
-         WHERE REC_CODIGO > ?
-         ORDER BY REC_CODIGO ASC`,
+        `SELECT FIRST 20 
+           REC.REC_NUMERO, REC.LOJ_CODIGO, REC.CLI_CODIGO, C.CLI_NOME, C.CLI_CPF_CNPJ,
+           REC.REC_VALOR, REC.REC_SITUACAO, REC.REC_DATAVENC
+         FROM CONTASRECEBER REC
+         LEFT JOIN CLIENTES C ON C.CLI_CODIGO = REC.CLI_CODIGO
+         WHERE REC.REC_NUMERO > ?
+         ORDER BY REC.REC_NUMERO ASC`,
         [sub.lastAccountReceivableId],
       );
 
       if (receivables.length > 0) {
         let maxSeenId = sub.lastAccountReceivableId;
         for (const r of receivables) {
-          const recCodigo = Number(r.REC_CODIGO);
-          if (recCodigo > maxSeenId) maxSeenId = recCodigo;
+          const recNumero = Number(r.REC_NUMERO);
+          if (recNumero > maxSeenId) maxSeenId = recNumero;
+
+          const dueDate = parseFirebirdDate(r.REC_DATAVENC);
 
           const payload = {
             id: `evt_rec_${crypto.randomBytes(8).toString('hex')}`,
@@ -496,14 +701,19 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
             timestamp: new Date().toISOString(),
             tenant: sub.user.user,
             data: {
-              receivableId: recCodigo,
-              storeId: r.LOJ_CODIGO,
-              clientId: r.CLI_CODIGO,
-              orderId: r.PED_CODIGO,
+              receivableId: recNumero,
+              storeId: r.LOJ_CODIGO ? Number(r.LOJ_CODIGO) : null,
+              customer: r.CLI_CODIGO
+                ? {
+                    id: Number(r.CLI_CODIGO),
+                    name: r.CLI_NOME ? String(r.CLI_NOME).trim() : null,
+                    cpfCnpj: r.CLI_CPF_CNPJ ? String(r.CLI_CPF_CNPJ).trim() : null,
+                  }
+                : null,
               value: Number(r.REC_VALOR) || 0,
-              dueDate: r.REC_VENCIMENTO,
-              situation: r.REC_SITUACAO,
-              links: { self: `/api/v1/account-receivable/${recCodigo}` },
+              dueDate,
+              situation: r.REC_SITUACAO ? String(r.REC_SITUACAO).trim() : null,
+              links: { self: `/api/v1/account-receivable/${recNumero}` },
             },
           };
 
