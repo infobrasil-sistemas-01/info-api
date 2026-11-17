@@ -1513,6 +1513,21 @@ header.scrolled {
     z-index: 5;
 }
 
+/* WEBHOOK DEDICATED INLINE BADGES */
+.webhook-badge-pill {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px !important;
+    border-radius: 6px;
+    font-size: 0.75rem !important;
+    font-weight: 600;
+    line-height: 1.2;
+    position: static !important;
+    white-space: nowrap;
+    z-index: auto !important;
+}
+
 /* Adjust card padding to accommodate absolute badge */
 .card {
     position: relative;

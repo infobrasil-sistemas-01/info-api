@@ -414,7 +414,7 @@
                             </p>
                         </div>
                         <div id="webhook-status-badge-container">
-                            <span class="status-badge-mini" style="background: rgba(148, 163, 184, 0.2); color: var(--text-muted);">CARREGANDO...</span>
+                            <span class="webhook-badge-pill" style="background: rgba(148, 163, 184, 0.2); color: var(--text-muted);">CARREGANDO...</span>
                         </div>
                     </div>
 
@@ -599,7 +599,7 @@
                     <div id="webhook-ping-result-box" class="hidden" style="margin-top: 20px; background: rgba(0,0,0,0.4); border: 1px solid var(--border); border-radius: 10px; padding: 16px;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                             <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Resposta do Endpoint (Ping de Teste):</span>
-                            <span id="webhook-ping-status-pill" class="status-badge-mini">200 OK</span>
+                            <span id="webhook-ping-status-pill" class="webhook-badge-pill">200 OK</span>
                         </div>
                         <pre id="webhook-ping-response-body" style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; font-family: monospace; font-size: 0.85rem; color: #a7f3d0; max-height: 200px; overflow-y: auto; white-space: pre-wrap; word-break: break-all;"></pre>
                     </div>
@@ -1597,7 +1597,7 @@ print(f'Basic {auth}')</code></pre>
                 if (res.status === 404 || res.status === 204) {
                     window.currentWebhookSubscription = null;
                     if (badgeContainer) {
-                        badgeContainer.innerHTML = `<span class="status-badge-mini" style="background: rgba(148, 163, 184, 0.2); color: var(--text-muted);">NÃO CONFIGURADO</span>`;
+                        badgeContainer.innerHTML = `<span class="webhook-badge-pill" style="background: rgba(148, 163, 184, 0.2); color: var(--text-muted);">NÃO CONFIGURADO</span>`;
                     }
                     if (alertBox) alertBox.classList.add('hidden');
                     if (secretGroup) secretGroup.classList.add('hidden');
@@ -1618,7 +1618,7 @@ print(f'Basic {auth}')</code></pre>
                 if (!sub) {
                     window.currentWebhookSubscription = null;
                     if (badgeContainer) {
-                        badgeContainer.innerHTML = `<span class="status-badge-mini" style="background: rgba(148, 163, 184, 0.2); color: var(--text-muted);">NÃO CONFIGURADO</span>`;
+                        badgeContainer.innerHTML = `<span class="webhook-badge-pill" style="background: rgba(148, 163, 184, 0.2); color: var(--text-muted);">NÃO CONFIGURADO</span>`;
                     }
                     if (alertBox) alertBox.classList.add('hidden');
                     if (secretGroup) secretGroup.classList.add('hidden');
@@ -1647,7 +1647,7 @@ print(f'Basic {auth}')</code></pre>
                 // Status & Circuit Breaker
                 if (sub.isPaused) {
                     if (badgeContainer) {
-                        badgeContainer.innerHTML = `<span class="status-badge-mini" style="background: rgba(239, 68, 68, 0.2); color: var(--danger);"><i class='bx bx-error-circle'></i> PAUSADO (CIRCUIT BREAKER)</span>`;
+                        badgeContainer.innerHTML = `<span class="webhook-badge-pill" style="background: rgba(239, 68, 68, 0.2); color: var(--danger);"><i class='bx bx-error-circle'></i> PAUSADO (CIRCUIT BREAKER)</span>`;
                     }
                     if (alertBox) {
                         alertBox.classList.remove('hidden');
@@ -1656,12 +1656,12 @@ print(f'Basic {auth}')</code></pre>
                     }
                 } else if (sub.isActive) {
                     if (badgeContainer) {
-                        badgeContainer.innerHTML = `<span class="status-badge-mini" style="background: rgba(16, 185, 129, 0.2); color: var(--primary);"><i class='bx bx-check-circle'></i> ATIVO</span>`;
+                        badgeContainer.innerHTML = `<span class="webhook-badge-pill" style="background: rgba(16, 185, 129, 0.2); color: var(--primary);"><i class='bx bx-check-circle'></i> ATIVO</span>`;
                     }
                     if (alertBox) alertBox.classList.add('hidden');
                 } else {
                     if (badgeContainer) {
-                        badgeContainer.innerHTML = `<span class="status-badge-mini" style="background: rgba(148, 163, 184, 0.2); color: var(--text-muted);">INATIVO</span>`;
+                        badgeContainer.innerHTML = `<span class="webhook-badge-pill" style="background: rgba(148, 163, 184, 0.2); color: var(--text-muted);">INATIVO</span>`;
                     }
                     if (alertBox) alertBox.classList.add('hidden');
                 }
@@ -1833,7 +1833,7 @@ print(f'Basic {auth}')</code></pre>
             btn.disabled = true;
             btn.innerHTML = `<i class='bx bx-loader-alt bx-spin'></i> <span>Enviando Ping...</span>`;
             resultBox.classList.remove('hidden');
-            statusPill.className = 'status-badge-mini';
+            statusPill.className = 'webhook-badge-pill';
             statusPill.style.background = 'rgba(148, 163, 184, 0.2)';
             statusPill.style.color = 'var(--text-muted)';
             statusPill.innerText = 'DISPARANDO...';
@@ -1919,7 +1919,7 @@ print(f'Basic {auth}')</code></pre>
                                 <code style="color: #6ee7b7; font-size: 0.82rem;">${d.event}</code>
                             </td>
                             <td style="padding: 12px 16px;">
-                                <span class="status-badge-mini" style="background: ${statusBg}; color: ${statusColor}; font-size: 0.75rem;">
+                                <span class="webhook-badge-pill" style="background: ${statusBg}; color: ${statusColor};">
                                     ${statusText}
                                 </span>
                             </td>
