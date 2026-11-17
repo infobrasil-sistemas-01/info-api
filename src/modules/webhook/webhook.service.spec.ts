@@ -78,7 +78,6 @@ describe('WebhookService', () => {
       providers: [
         WebhookService,
         { provide: RegistryPrismaService, useValue: prismaMock },
-        { provide: TenantConnectionService, useValue: tenantConnectionServiceMock },
         { provide: PermissionResolver, useValue: permissionResolverMock },
       ],
     }).compile();
@@ -188,22 +187,28 @@ describe('WebhookService', () => {
       ).rejects.toThrow(BadRequestException);
     });
 
-    it('deve lancar BadGatewayException se a conexao ao Firebird falhar durante a ancoragem inicial', async () => {
+    it('deve inicializar com cursores sentinela (-1) para os eventos assinados', async () => {
       prismaMock.webhookSubscription.findUnique.mockResolvedValue(null);
-      tenantConnectionServiceMock.getConnection.mockRejectedValueOnce(
-        new Error('Firebird connection refused'),
+      let createdData: any;
+      prismaMock.webhookSubscription.create.mockImplementation(({ data }: any) => {
+        createdData = data;
+        return Promise.resolve({ id: 'wh_1', ...data });
+      });
+
+      await service.create(
+        'user_1',
+        {
+          targetUrl: 'https://api.github.com/webhook',
+          events: ['order.created'],
+        },
+        'cred_1',
       );
 
-      await expect(
-        service.create(
-          'user_1',
-          {
-            targetUrl: 'https://api.github.com/webhook',
-            events: ['order.created'],
-          },
-          'cred_offline',
-        ),
-      ).rejects.toThrow(BadGatewayException);
+      expect(createdData.lastOrderId).toBe(-1);
+      expect(createdData.lastProductId).toBe(0);
+      expect(createdData.lastDeliveryId).toBe(0);
+      expect(createdData.lastAccountPayableId).toBe(0);
+      expect(createdData.lastAccountReceivableId).toBe(0);
     });
   });
 

@@ -1,5 +1,4 @@
 import {
-  BadGatewayException,
   BadRequestException,
   ConflictException,
   ForbiddenException,
@@ -9,7 +8,6 @@ import {
 } from '@nestjs/common';
 import * as crypto from 'crypto';
 import { RegistryPrismaService } from 'src/infra/prisma/registry-prisma.service';
-import { TenantConnectionService } from 'src/infra/database/tenant-connection.service';
 import { PermissionResolver } from 'src/infra/rbac/permission-resolver.service';
 import {
   CreateWebhookDto,
@@ -29,7 +27,6 @@ export class WebhookService {
 
   constructor(
     private readonly prisma: RegistryPrismaService,
-    private readonly tenantConnectionService: TenantConnectionService,
     private readonly permissionResolver: PermissionResolver,
   ) {}
 
@@ -80,80 +77,10 @@ export class WebhookService {
   }
 
   /**
-   * Obtém os IDs máximos atuais no Firebird para inicializar os cursores no momento da ativação (Cold Start).
-   * Abordagem 1: Ancoragem Síncrona Obrigatória.
-   * Lança BadGatewayException se a conexão ou consulta ao Firebird falhar, impedindo a criação com cursores zerados.
-   */
-  private async getInitialHighWaterMarks(credentialsId: string) {
-    let connection: any;
-    try {
-      connection =
-        await this.tenantConnectionService.getConnection(credentialsId);
-    } catch (err: any) {
-      this.logger.error(
-        `Falha ao conectar no Firebird do tenant (${credentialsId}) para ancoragem inicial: ${err.message}`,
-      );
-      throw new BadGatewayException(
-        `Não foi possível conectar ao banco de dados do tenant para ancorar os cursores iniciais. Verifique a conectividade da base: ${err.message}`,
-      );
-    }
-
-    try {
-      const queryMax = (sql: string): Promise<number> => {
-        return new Promise((resolve, reject) => {
-          connection.query(sql, [], (err: any, result: any[]) => {
-            if (err) return reject(err);
-            if (!result || result.length === 0) {
-              resolve(0);
-              return;
-            }
-            const firstRow = result[0];
-            const maxVal = Object.values(firstRow)[0] as number;
-            resolve(Number(maxVal) || 0);
-          });
-        });
-      };
-
-      const [maxOrder, maxProduct, maxDelivery, maxPayable, maxReceivable] =
-        await Promise.all([
-          queryMax('SELECT COALESCE(MAX(VEN_NUMERO), 0) FROM VENDAS').catch(
-            () => queryMax('SELECT COALESCE(MAX(PED_CODIGO), 0) FROM PEDIDOS'),
-          ),
-          queryMax('SELECT COALESCE(MAX(PRO_CODIGO), 0) FROM PRODUTOS'),
-          queryMax('SELECT COALESCE(MAX(ENT_NUMERO), 0) FROM ENTREGAS')
-            .catch(() => queryMax('SELECT COALESCE(MAX(ENT_CODIGO), 0) FROM ENTREGAS'))
-            .catch(() => 0),
-          queryMax('SELECT COALESCE(MAX(PAG_NUMERO), 0) FROM CONTASPAGAR')
-            .catch(() => queryMax('SELECT COALESCE(MAX(PAG_CODIGO), 0) FROM CONTAS_PAGAR'))
-            .catch(() => 0),
-          queryMax('SELECT COALESCE(MAX(REC_NUMERO), 0) FROM CONTASRECEBER')
-            .catch(() => queryMax('SELECT COALESCE(MAX(REC_CODIGO), 0) FROM CONTAS_RECEBER'))
-            .catch(() => 0),
-        ]);
-
-      return {
-        lastOrderId: maxOrder,
-        lastProductId: maxProduct,
-        lastDeliveryId: maxDelivery,
-        lastAccountPayableId: maxPayable,
-        lastAccountReceivableId: maxReceivable,
-      };
-    } catch (err: any) {
-      this.logger.error(
-        `Falha ao consultar cursores máximos no Firebird (${credentialsId}): ${err.message}`,
-      );
-      throw new BadGatewayException(
-        `Falha ao obter marcas d'água iniciais no Firebird: ${err.message}`,
-      );
-    } finally {
-      if (connection) {
-        this.tenantConnectionService.releaseConnection(connection);
-      }
-    }
-  }
-
-  /**
-   * Cria uma nova inscrição de Webhook para o usuário (1:1)
+   * Cria uma nova inscrição de Webhook para o usuário (1:1).
+   * Abordagem 1: Lazy Watermark via Sentinela (-1) no Worker (Desacoplamento Assíncrono).
+   * O POST /webhooks responde imediatamente (< 20ms) sem travar no Firebird remoto.
+   * Marcamos -1 nos cursores dos eventos assinados para que o Worker faça a auto-calibração no primeiro tick.
    */
   async create(
     userId: string,
@@ -192,10 +119,15 @@ export class WebhookService {
     // 3. Validação profunda Anti-SSRF (sintaxe + resolução de DNS para faixas públicas)
     await assertPublicWebhookUrl(dto.targetUrl);
 
-    // 4. Ancoragem Síncrona Obrigatória (Abordagem 1): falha fast se o Firebird estiver inacessível
-    const marks = await this.getInitialHighWaterMarks(effectiveCredentialsId);
     const secretKey = this.generateSecretKey();
 
+    const hasOrder = dto.events.some((e) => e.startsWith('order.'));
+    const hasProduct = dto.events.some((e) => e.startsWith('product.'));
+    const hasDelivery = dto.events.some((e) => e.startsWith('delivery.'));
+    const hasPayable = dto.events.some((e) => e.startsWith('account_payable.'));
+    const hasReceivable = dto.events.some((e) => e.startsWith('account_receivable.'));
+
+    const now = new Date();
     const subscription = await this.prisma.webhookSubscription.create({
       data: {
         userId,
@@ -205,16 +137,21 @@ export class WebhookService {
         isActive: true,
         isPaused: false,
         consecutiveFailures: 0,
-        lastOrderId: marks.lastOrderId,
-        lastProductId: marks.lastProductId,
-        lastDeliveryId: marks.lastDeliveryId,
-        lastAccountPayableId: marks.lastAccountPayableId,
-        lastAccountReceivableId: marks.lastAccountReceivableId,
+        lastOrderId: hasOrder ? -1 : 0,
+        lastProductId: hasProduct ? -1 : 0,
+        lastDeliveryId: hasDelivery ? -1 : 0,
+        lastAccountPayableId: hasPayable ? -1 : 0,
+        lastAccountReceivableId: hasReceivable ? -1 : 0,
+        lastOrderSyncAt: now,
+        lastProductSyncAt: now,
+        lastDeliverySyncAt: now,
+        lastAccountPayableSyncAt: now,
+        lastAccountReceivableSyncAt: now,
       },
     });
 
     this.logger.log(
-      `Webhook criado para o usuário ${userId}. Initial Marks: ${JSON.stringify(marks)}`,
+      `Webhook criado para o usuário ${userId} com sentinelas cold-start (-1). URL: ${dto.targetUrl}`,
     );
 
     return subscription;
@@ -252,13 +189,48 @@ export class WebhookService {
       await assertPublicWebhookUrl(dto.targetUrl);
     }
 
+    const dataToUpdate: any = {
+      targetUrl: dto.targetUrl ?? subscription.targetUrl,
+      events: dto.events ?? subscription.events,
+      isActive: dto.isActive !== undefined ? dto.isActive : subscription.isActive,
+    };
+
+    if (dto.events && dto.events.length > 0) {
+      if (
+        dto.events.some((e) => e.startsWith('order.')) &&
+        (subscription.lastOrderId === null || subscription.lastOrderId === 0)
+      ) {
+        dataToUpdate.lastOrderId = -1;
+      }
+      if (
+        dto.events.some((e) => e.startsWith('product.')) &&
+        (subscription.lastProductId === null || subscription.lastProductId === 0)
+      ) {
+        dataToUpdate.lastProductId = -1;
+      }
+      if (
+        dto.events.some((e) => e.startsWith('delivery.')) &&
+        (subscription.lastDeliveryId === null || subscription.lastDeliveryId === 0)
+      ) {
+        dataToUpdate.lastDeliveryId = -1;
+      }
+      if (
+        dto.events.some((e) => e.startsWith('account_payable.')) &&
+        (subscription.lastAccountPayableId === null || subscription.lastAccountPayableId === 0)
+      ) {
+        dataToUpdate.lastAccountPayableId = -1;
+      }
+      if (
+        dto.events.some((e) => e.startsWith('account_receivable.')) &&
+        (subscription.lastAccountReceivableId === null || subscription.lastAccountReceivableId === 0)
+      ) {
+        dataToUpdate.lastAccountReceivableId = -1;
+      }
+    }
+
     return this.prisma.webhookSubscription.update({
       where: { userId },
-      data: {
-        targetUrl: dto.targetUrl ?? subscription.targetUrl,
-        events: dto.events ?? subscription.events,
-        isActive: dto.isActive !== undefined ? dto.isActive : subscription.isActive,
-      },
+      data: dataToUpdate,
     });
   }
 

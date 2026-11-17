@@ -169,15 +169,45 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
       const allowed = snap.allowedKeys;
 
       const queryPromise = (sql: string, params: any[] = []): Promise<any[]> => {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
           connection.query(sql, params, (err: any, result: any[]) => {
-            if (err || !result) {
-              resolve([]);
+            if (err) {
+              reject(err);
             } else {
-              resolve(result);
+              resolve(result || []);
             }
           });
         });
+      };
+
+      const queryMaxId = async (
+        sqlPrimary: string,
+        sqlFallback?: string,
+      ): Promise<number> => {
+        try {
+          const rows = await queryPromise(sqlPrimary);
+          if (rows && rows.length > 0) {
+            const firstRow = rows[0];
+            const maxVal = Object.values(firstRow)[0] as number;
+            return Number(maxVal) || 0;
+          }
+        } catch (err: any) {
+          if (sqlFallback) {
+            try {
+              const fbRows = await queryPromise(sqlFallback);
+              if (fbRows && fbRows.length > 0) {
+                const firstRow = fbRows[0];
+                const maxVal = Object.values(firstRow)[0] as number;
+                return Number(maxVal) || 0;
+              }
+            } catch (fbErr: any) {
+              this.logger.warn(`Query fallback de ancoragem falhou: ${fbErr.message}`);
+            }
+          } else {
+            this.logger.warn(`Query de ancoragem falhou: ${err.message}`);
+          }
+        }
+        return 0;
       };
 
     const events = sub.events || [];
@@ -188,33 +218,32 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
       (events.includes('order.created') || events.includes('order.updated')) &&
       allowed.has('tenant.orders.view')
     ) {
-      let lastOrderId = sub.lastOrderId || 0;
+      let lastOrderId = sub.lastOrderId ?? -1;
+      let wasColdStart = false;
 
-      // Proteção contra Cold-Start desancorado: se lastOrderId for 0, ancora imediatamente no MAX atual
-      if (lastOrderId === 0) {
-        try {
-          const maxRows = await queryPromise(
-            'SELECT COALESCE(MAX(VEN_NUMERO), 0) AS MAX_ID FROM VENDAS',
+      // Proteção contra Cold-Start: se lastOrderId for -1 (novo webhook) ou 0 (legado desancorado)
+      if (lastOrderId === -1 || lastOrderId === 0) {
+        const currentMax = await queryMaxId(
+          'SELECT COALESCE(MAX(VEN_NUMERO), 0) AS MAX_ID FROM VENDAS',
+          'SELECT COALESCE(MAX(PED_CODIGO), 0) AS MAX_ID FROM PEDIDOS',
+        );
+
+        if (lastOrderId === -1 || currentMax > 0) {
+          this.logger.log(
+            `[Cold-Start Webhook] Ancorando cursor de pedidos da sub ${sub.id} (tenant: ${sub.user.user}): lastOrderId = ${currentMax}`,
           );
-          const currentMax = Number(maxRows?.[0]?.MAX_ID || 0);
-          if (currentMax > 0) {
-            this.logger.warn(
-              `Assinatura ${sub.id} (tenant: ${sub.user.user}) possuía lastOrderId zerado. Ancorando no MAX(VEN_NUMERO) atual: ${currentMax}`,
-            );
-            await this.prisma.webhookSubscription.update({
-              where: { id: sub.id },
-              data: { lastOrderId: currentMax, lastOrderSyncAt: new Date() },
-            });
-            lastOrderId = currentMax;
-          }
-        } catch (err: any) {
-          this.logger.warn(
-            `Falha ao auto-ancorar lastOrderId zerado na sub ${sub.id}: ${err.message}`,
-          );
+          await this.prisma.webhookSubscription.update({
+            where: { id: sub.id },
+            data: { lastOrderId: currentMax, lastOrderSyncAt: new Date() },
+          });
+          sub.lastOrderId = currentMax;
+          lastOrderId = currentMax;
+          wasColdStart = true;
         }
       }
 
-      const sales = await queryPromise(
+      if (!wasColdStart && lastOrderId >= 0) {
+        const sales = await queryPromise(
         `SELECT FIRST 25
            V.VEN_NUMERO, V.LOJ_CODIGO, LOJ.LOJ_NOME, LOJ.LOJ_FANTASIA,
            V.VEN_DATA, V.VEN_HORA,
@@ -408,26 +437,48 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
         });
       }
     }
+  }
 
     // 2. Produtos (products) - Requer permissão tenant.products.view
     if (
       (events.includes('product.created') || events.includes('product.updated')) &&
       allowed.has('tenant.products.view')
     ) {
-      const sync = getBrazilDateTime(sub.lastProductSyncAt);
-      const nowBrazil = getBrazilDateTime(new Date());
+      let lastProductId = sub.lastProductId ?? -1;
+      let wasColdStart = false;
 
-      let syncDate = sync.dateStr;
-      let syncTime = sync.timeStr;
-      const lastProductId = sub.lastProductId || 0;
-
-      // Proteção Anti-Drift: só reancora se o cursor estiver mais de 1 hora no futuro (ex: bug UTC)
-      const nowUtc = Date.now();
-      const cursorUtc = new Date(sub.lastProductSyncAt).getTime();
-      if (cursorUtc - nowUtc > 60 * 60 * 1000) {
-        syncDate = nowBrazil.dateStr;
-        syncTime = nowBrazil.timeStr;
+      if (lastProductId === -1) {
+        const currentMax = await queryMaxId(
+          'SELECT COALESCE(MAX(PRO_CODIGO), 0) AS MAX_ID FROM PRODUTOS',
+        );
+        const now = new Date();
+        this.logger.log(
+          `[Cold-Start Webhook] Ancorando cursor de produtos da sub ${sub.id} (tenant: ${sub.user.user}): lastProductId = ${currentMax}`,
+        );
+        await this.prisma.webhookSubscription.update({
+          where: { id: sub.id },
+          data: { lastProductId: currentMax, lastProductSyncAt: now },
+        });
+        sub.lastProductId = currentMax;
+        sub.lastProductSyncAt = now;
+        lastProductId = currentMax;
+        wasColdStart = true;
       }
+
+      if (!wasColdStart && lastProductId >= 0) {
+        const sync = getBrazilDateTime(sub.lastProductSyncAt);
+        const nowBrazil = getBrazilDateTime(new Date());
+
+        let syncDate = sync.dateStr;
+        let syncTime = sync.timeStr;
+
+        // Proteção Anti-Drift: só reancora se o cursor estiver mais de 1 hora no futuro (ex: bug UTC)
+        const nowUtc = Date.now();
+        const cursorUtc = new Date(sub.lastProductSyncAt).getTime();
+        if (cursorUtc - nowUtc > 60 * 60 * 1000) {
+          syncDate = nowBrazil.dateStr;
+          syncTime = nowBrazil.timeStr;
+        }
 
       const products = await queryPromise(
         `SELECT FIRST 25
@@ -552,26 +603,49 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
         });
       }
     }
+  }
 
     // 3. Entregas (deliveries) - Requer permissão tenant.deliveries.view
     if (
       (events.includes('delivery.created') || events.includes('delivery.updated')) &&
       allowed.has('tenant.deliveries.view')
     ) {
-      const sync = getBrazilDateTime(sub.lastDeliverySyncAt);
-      const nowBrazil = getBrazilDateTime(new Date());
+      let lastDeliveryId = sub.lastDeliveryId ?? -1;
+      let wasColdStart = false;
 
-      let syncDate = sync.dateStr;
-      let syncTime = sync.timeStr;
-      const lastDeliveryId = sub.lastDeliveryId || 0;
-
-      // Proteção Anti-Drift: só reancora se o cursor estiver mais de 1 hora no futuro (ex: bug UTC)
-      const nowUtc = Date.now();
-      const cursorUtc = new Date(sub.lastDeliverySyncAt).getTime();
-      if (cursorUtc - nowUtc > 60 * 60 * 1000) {
-        syncDate = nowBrazil.dateStr;
-        syncTime = nowBrazil.timeStr;
+      if (lastDeliveryId === -1) {
+        const currentMax = await queryMaxId(
+          'SELECT COALESCE(MAX(ENT_NUMERO), 0) AS MAX_ID FROM ENTREGAS',
+          'SELECT COALESCE(MAX(ENT_CODIGO), 0) AS MAX_ID FROM ENTREGAS',
+        );
+        const now = new Date();
+        this.logger.log(
+          `[Cold-Start Webhook] Ancorando cursor de entregas da sub ${sub.id} (tenant: ${sub.user.user}): lastDeliveryId = ${currentMax}`,
+        );
+        await this.prisma.webhookSubscription.update({
+          where: { id: sub.id },
+          data: { lastDeliveryId: currentMax, lastDeliverySyncAt: now },
+        });
+        sub.lastDeliveryId = currentMax;
+        sub.lastDeliverySyncAt = now;
+        lastDeliveryId = currentMax;
+        wasColdStart = true;
       }
+
+      if (!wasColdStart && lastDeliveryId >= 0) {
+        const sync = getBrazilDateTime(sub.lastDeliverySyncAt);
+        const nowBrazil = getBrazilDateTime(new Date());
+
+        let syncDate = sync.dateStr;
+        let syncTime = sync.timeStr;
+
+        // Proteção Anti-Drift: só reancora se o cursor estiver mais de 1 hora no futuro (ex: bug UTC)
+        const nowUtc = Date.now();
+        const cursorUtc = new Date(sub.lastDeliverySyncAt).getTime();
+        if (cursorUtc - nowUtc > 60 * 60 * 1000) {
+          syncDate = nowBrazil.dateStr;
+          syncTime = nowBrazil.timeStr;
+        }
 
       const deliveries = await queryPromise(
         `SELECT FIRST 25 
@@ -671,24 +745,47 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
         });
       }
     }
+  }
 
     // 4. Contas a Pagar (account_payable) - Requer permissão tenant.account-payable.view
     if (
       (events.includes('account_payable.created') || events.includes('account_payable.updated')) &&
       allowed.has('tenant.account-payable.view')
     ) {
-      const sync = getBrazilDateTime(sub.lastAccountPayableSyncAt);
-      const nowBrazil = getBrazilDateTime(new Date());
+      let lastAccountPayableId = sub.lastAccountPayableId ?? -1;
+      let wasColdStart = false;
 
-      let syncDate = sync.dateStr;
-      const lastAccountPayableId = sub.lastAccountPayableId || 0;
-
-      // Proteção Anti-Drift: só reancora se o cursor estiver mais de 1 hora no futuro (ex: bug UTC)
-      const nowUtc = Date.now();
-      const cursorUtc = new Date(sub.lastAccountPayableSyncAt).getTime();
-      if (cursorUtc - nowUtc > 60 * 60 * 1000) {
-        syncDate = nowBrazil.dateStr;
+      if (lastAccountPayableId === -1) {
+        const currentMax = await queryMaxId(
+          'SELECT COALESCE(MAX(PAG_NUMERO), 0) AS MAX_ID FROM CONTASPAGAR',
+          'SELECT COALESCE(MAX(PAG_CODIGO), 0) AS MAX_ID FROM CONTAS_PAGAR',
+        );
+        const now = new Date();
+        this.logger.log(
+          `[Cold-Start Webhook] Ancorando cursor de contas a pagar da sub ${sub.id} (tenant: ${sub.user.user}): lastAccountPayableId = ${currentMax}`,
+        );
+        await this.prisma.webhookSubscription.update({
+          where: { id: sub.id },
+          data: { lastAccountPayableId: currentMax, lastAccountPayableSyncAt: now },
+        });
+        sub.lastAccountPayableId = currentMax;
+        sub.lastAccountPayableSyncAt = now;
+        lastAccountPayableId = currentMax;
+        wasColdStart = true;
       }
+
+      if (!wasColdStart && lastAccountPayableId >= 0) {
+        const sync = getBrazilDateTime(sub.lastAccountPayableSyncAt);
+        const nowBrazil = getBrazilDateTime(new Date());
+
+        let syncDate = sync.dateStr;
+
+        // Proteção Anti-Drift: só reancora se o cursor estiver mais de 1 hora no futuro (ex: bug UTC)
+        const nowUtc = Date.now();
+        const cursorUtc = new Date(sub.lastAccountPayableSyncAt).getTime();
+        if (cursorUtc - nowUtc > 60 * 60 * 1000) {
+          syncDate = nowBrazil.dateStr;
+        }
 
       const payables = await queryPromise(
         `SELECT FIRST 25 
@@ -768,24 +865,47 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
         });
       }
     }
+  }
 
     // 5. Contas a Receber (account_receivable) - Requer permissão tenant.account-receivable.view
     if (
       (events.includes('account_receivable.created') || events.includes('account_receivable.updated')) &&
       allowed.has('tenant.account-receivable.view')
     ) {
-      const sync = getBrazilDateTime(sub.lastAccountReceivableSyncAt);
-      const nowBrazil = getBrazilDateTime(new Date());
+      let lastAccountReceivableId = sub.lastAccountReceivableId ?? -1;
+      let wasColdStart = false;
 
-      let syncDate = sync.dateStr;
-      const lastAccountReceivableId = sub.lastAccountReceivableId || 0;
-
-      // Proteção Anti-Drift: só reancora se o cursor estiver mais de 1 hora no futuro (ex: bug UTC)
-      const nowUtc = Date.now();
-      const cursorUtc = new Date(sub.lastAccountReceivableSyncAt).getTime();
-      if (cursorUtc - nowUtc > 60 * 60 * 1000) {
-        syncDate = nowBrazil.dateStr;
+      if (lastAccountReceivableId === -1) {
+        const currentMax = await queryMaxId(
+          'SELECT COALESCE(MAX(REC_NUMERO), 0) AS MAX_ID FROM CONTASRECEBER',
+          'SELECT COALESCE(MAX(REC_CODIGO), 0) AS MAX_ID FROM CONTAS_RECEBER',
+        );
+        const now = new Date();
+        this.logger.log(
+          `[Cold-Start Webhook] Ancorando cursor de contas a receber da sub ${sub.id} (tenant: ${sub.user.user}): lastAccountReceivableId = ${currentMax}`,
+        );
+        await this.prisma.webhookSubscription.update({
+          where: { id: sub.id },
+          data: { lastAccountReceivableId: currentMax, lastAccountReceivableSyncAt: now },
+        });
+        sub.lastAccountReceivableId = currentMax;
+        sub.lastAccountReceivableSyncAt = now;
+        lastAccountReceivableId = currentMax;
+        wasColdStart = true;
       }
+
+      if (!wasColdStart && lastAccountReceivableId >= 0) {
+        const sync = getBrazilDateTime(sub.lastAccountReceivableSyncAt);
+        const nowBrazil = getBrazilDateTime(new Date());
+
+        let syncDate = sync.dateStr;
+
+        // Proteção Anti-Drift: só reancora se o cursor estiver mais de 1 hora no futuro (ex: bug UTC)
+        const nowUtc = Date.now();
+        const cursorUtc = new Date(sub.lastAccountReceivableSyncAt).getTime();
+        if (cursorUtc - nowUtc > 60 * 60 * 1000) {
+          syncDate = nowBrazil.dateStr;
+        }
 
       const receivables = await queryPromise(
         `SELECT FIRST 25 
@@ -866,6 +986,7 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
         });
       }
     }
+  }
   } finally {
     if (connection) {
       this.tenantConnectionService.releaseConnection(connection);
