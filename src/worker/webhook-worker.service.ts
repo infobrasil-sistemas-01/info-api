@@ -6,32 +6,58 @@ import { PermissionResolver } from 'src/infra/rbac/permission-resolver.service';
 import { EmailService } from 'src/infra/email/email.service';
 import { assertPublicWebhookUrl } from 'src/modules/webhook/utils/webhook-security.util';
 
-function formatFirebirdDate(val: any): string {
+function getBrazilDateTime(val?: Date | string | null): { dateStr: string; timeStr: string } {
   if (!val) {
-    const now = new Date();
-    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    return getBrazilDateTime(new Date());
   }
+  const d = val instanceof Date ? val : new Date(val);
+  if (isNaN(d.getTime())) {
+    const s = String(val).trim();
+    if (s.length >= 10) return { dateStr: s.slice(0, 10), timeStr: '00:00:00' };
+    return getBrazilDateTime(new Date());
+  }
+  const formatter = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'America/Sao_Paulo',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  });
+  const parts = formatter.formatToParts(d);
+  const get = (type: string) => parts.find((p) => p.type === type)?.value || '00';
+  return {
+    dateStr: `${get('year')}-${get('month')}-${get('day')}`,
+    timeStr: `${get('hour')}:${get('minute')}:${get('second')}`,
+  };
+}
+
+function parseFirebirdDate(val: any): string {
+  if (!val) return getBrazilDateTime(new Date()).dateStr;
   if (val instanceof Date) {
-    const y = val.getFullYear();
-    const m = String(val.getMonth() + 1).padStart(2, '0');
-    const d = String(val.getDate()).padStart(2, '0');
-    return `${y}-${m}-${d}`;
+    return getBrazilDateTime(val).dateStr;
   }
   const s = String(val).trim();
   return s.length >= 10 ? s.slice(0, 10) : s;
 }
 
-function formatFirebirdTime(val: any): string {
+function parseFirebirdTime(val: any): string {
   if (!val) return '00:00:00';
   if (val instanceof Date) {
-    const h = String(val.getHours()).padStart(2, '0');
-    const m = String(val.getMinutes()).padStart(2, '0');
-    const s = String(val.getSeconds()).padStart(2, '0');
-    return `${h}:${m}:${s}`;
+    return getBrazilDateTime(val).timeStr;
   }
   const s = String(val).trim();
   if (s.length === 5) return `${s}:00`;
   return s.slice(0, 8);
+}
+
+function fromBrazilDateTimeToUtc(dateStr: string, timeStr: string): Date {
+  const cleanDate = (dateStr || '').trim().slice(0, 10);
+  const cleanTime = (timeStr || '00:00:00').trim().slice(0, 8);
+  const normalizedTime = cleanTime.length === 5 ? `${cleanTime}:00` : cleanTime;
+  return new Date(`${cleanDate}T${normalizedTime}-03:00`);
 }
 
 @Injectable()
@@ -160,9 +186,25 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
       (events.includes('order.created') || events.includes('order.updated')) &&
       allowed.has('tenant.orders.view')
     ) {
-      const syncDate = formatFirebirdDate(sub.lastOrderSyncAt);
-      const syncTime = formatFirebirdTime(sub.lastOrderSyncAt);
-      const lastOrderId = sub.lastOrderId || 0;
+      const sync = getBrazilDateTime(sub.lastOrderSyncAt);
+      const nowBrazil = getBrazilDateTime(new Date());
+
+      let syncDate = sync.dateStr;
+      let syncTime = sync.timeStr;
+      let lastOrderId = sub.lastOrderId || 0;
+
+      // Proteção Anti-Drift: se o cursor estiver no futuro relativo ao relógio do Brasil (bug UTC),
+      // reancora com lookback de 15 minutos para processar imediatamente eventos pendentes
+      if (
+        syncDate > nowBrazil.dateStr ||
+        (syncDate === nowBrazil.dateStr && syncTime > nowBrazil.timeStr)
+      ) {
+        const lookback = new Date(Date.now() - 15 * 60 * 1000);
+        const corrected = getBrazilDateTime(lookback);
+        syncDate = corrected.dateStr;
+        syncTime = corrected.timeStr;
+        lastOrderId = 0;
+      }
 
       const sales = await queryPromise(
         `SELECT FIRST 25
@@ -188,8 +230,8 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
 
         for (const sale of sales) {
           const venNumero = Number(sale.VEN_NUMERO);
-          const saleDate = formatFirebirdDate(sale.VEN_DATA);
-          const saleTime = formatFirebirdTime(sale.VEN_HORA);
+          const saleDate = parseFirebirdDate(sale.VEN_DATA);
+          const saleTime = parseFirebirdTime(sale.VEN_HORA);
 
           const payload = {
             id: `evt_ord_${crypto.randomBytes(8).toString('hex')}`,
@@ -217,9 +259,7 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
           });
 
           maxSeenId = venNumero;
-          const [y, m, d] = saleDate.split('-').map(Number);
-          const [hh, mm, ss] = saleTime.split(':').map(Number);
-          maxSyncAt = new Date(y, m - 1, d, hh || 0, mm || 0, ss || 0);
+          maxSyncAt = fromBrazilDateTimeToUtc(saleDate, saleTime);
         }
 
         await this.prisma.webhookSubscription.update({
@@ -234,9 +274,25 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
       (events.includes('product.created') || events.includes('product.updated')) &&
       allowed.has('tenant.products.view')
     ) {
-      const syncDate = formatFirebirdDate(sub.lastProductSyncAt);
-      const syncTime = formatFirebirdTime(sub.lastProductSyncAt);
-      const lastProductId = sub.lastProductId || 0;
+      const sync = getBrazilDateTime(sub.lastProductSyncAt);
+      const nowBrazil = getBrazilDateTime(new Date());
+
+      let syncDate = sync.dateStr;
+      let syncTime = sync.timeStr;
+      let lastProductId = sub.lastProductId || 0;
+
+      // Proteção Anti-Drift: se o cursor estiver no futuro relativo ao relógio do Brasil (bug UTC),
+      // reancora com lookback de 15 minutos para processar imediatamente eventos pendentes
+      if (
+        syncDate > nowBrazil.dateStr ||
+        (syncDate === nowBrazil.dateStr && syncTime > nowBrazil.timeStr)
+      ) {
+        const lookback = new Date(Date.now() - 15 * 60 * 1000);
+        const corrected = getBrazilDateTime(lookback);
+        syncDate = corrected.dateStr;
+        syncTime = corrected.timeStr;
+        lastProductId = 0;
+      }
 
       const products = await queryPromise(
         `SELECT FIRST 25
@@ -265,9 +321,9 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
 
         for (const prod of products) {
           const proCodigo = Number(prod.PRO_CODIGO);
-          const dtCad = formatFirebirdDate(prod.PRO_DATACADASTRO);
-          const dtAlt = formatFirebirdDate(prod.PRO_DATAALTERACAO);
-          const hr = formatFirebirdTime(prod.PRO_HORA);
+          const dtCad = parseFirebirdDate(prod.PRO_DATACADASTRO);
+          const dtAlt = parseFirebirdDate(prod.PRO_DATAALTERACAO);
+          const hr = parseFirebirdTime(prod.PRO_HORA);
 
           const isCreated = !prod.PRO_DATACADASTRO || dtCad === dtAlt;
           const eventType = isCreated ? 'product.created' : 'product.updated';
@@ -300,9 +356,7 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
 
           maxSeenId = proCodigo;
           const latestDate = dtAlt || dtCad;
-          const [y, m, d] = latestDate.split('-').map(Number);
-          const [hh, mm, ss] = hr.split(':').map(Number);
-          maxSyncAt = new Date(y, m - 1, d, hh || 0, mm || 0, ss || 0);
+          maxSyncAt = fromBrazilDateTimeToUtc(latestDate, hr);
         }
 
         await this.prisma.webhookSubscription.update({
