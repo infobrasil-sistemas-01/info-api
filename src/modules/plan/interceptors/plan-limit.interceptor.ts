@@ -36,7 +36,7 @@ export class PlanLimitInterceptor implements NestInterceptor {
     const userId = user.sub;
     const path = request.url;
 
-    // Isentar rotas de gestão operacional e autenticação
+    // Isentar rotas de gestão operacional, autenticação e webhooks
     const isExcluded = [
       '/api/v1/auth',
       '/api/v1/plans',
@@ -48,6 +48,7 @@ export class PlanLimitInterceptor implements NestInterceptor {
       '/api/v1/dashboard',
       '/api/v1/newsletter',
       '/api/v1/feature-requests',
+      '/api/v1/webhooks',
       '/integration',
       '/status',
     ].some((excluded) => path.startsWith(excluded));

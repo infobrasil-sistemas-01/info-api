@@ -1514,18 +1514,29 @@ header.scrolled {
 }
 
 /* WEBHOOK DEDICATED INLINE BADGES */
-.webhook-badge-pill {
+.webhook-badge-pill,
+#tab-webhooks .webhook-badge-pill,
+#tab-webhooks .status-badge-mini,
+#webhook-status-badge-container span,
+#webhook-ping-status-pill,
+#webhook-deliveries-table span.webhook-badge-pill,
+#webhook-deliveries-table span.status-badge-mini {
     display: inline-flex !important;
-    align-items: center;
-    gap: 6px;
+    align-items: center !important;
+    gap: 6px !important;
     padding: 5px 12px !important;
-    border-radius: 6px;
+    border-radius: 6px !important;
     font-size: 0.75rem !important;
-    font-weight: 600;
-    line-height: 1.2;
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
     position: static !important;
-    white-space: nowrap;
-    z-index: auto !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    margin: 0 !important;
+    white-space: nowrap !important;
+    z-index: 1 !important;
 }
 
 /* Adjust card padding to accommodate absolute badge */

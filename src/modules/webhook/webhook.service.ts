@@ -112,7 +112,9 @@ export class WebhookService {
 
       const [maxOrder, maxProduct, maxDelivery, maxPayable, maxReceivable] =
         await Promise.all([
-          queryMax('SELECT COALESCE(MAX(PED_CODIGO), 0) FROM PEDIDOS'),
+          queryMax('SELECT COALESCE(MAX(VEN_NUMERO), 0) FROM VENDAS').catch(
+            () => queryMax('SELECT COALESCE(MAX(PED_CODIGO), 0) FROM PEDIDOS'),
+          ),
           queryMax('SELECT COALESCE(MAX(PRO_CODIGO), 0) FROM PRODUTOS'),
           queryMax('SELECT COALESCE(MAX(ENT_CODIGO), 0) FROM ENTREGAS').catch(
             () => 0,

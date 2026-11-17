@@ -6,6 +6,34 @@ import { PermissionResolver } from 'src/infra/rbac/permission-resolver.service';
 import { EmailService } from 'src/infra/email/email.service';
 import { assertPublicWebhookUrl } from 'src/modules/webhook/utils/webhook-security.util';
 
+function formatFirebirdDate(val: any): string {
+  if (!val) {
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+  }
+  if (val instanceof Date) {
+    const y = val.getFullYear();
+    const m = String(val.getMonth() + 1).padStart(2, '0');
+    const d = String(val.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
+  const s = String(val).trim();
+  return s.length >= 10 ? s.slice(0, 10) : s;
+}
+
+function formatFirebirdTime(val: any): string {
+  if (!val) return '00:00:00';
+  if (val instanceof Date) {
+    const h = String(val.getHours()).padStart(2, '0');
+    const m = String(val.getMinutes()).padStart(2, '0');
+    const s = String(val.getSeconds()).padStart(2, '0');
+    return `${h}:${m}:${s}`;
+  }
+  const s = String(val).trim();
+  if (s.length === 5) return `${s}:00`;
+  return s.slice(0, 8);
+}
+
 @Injectable()
 export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicationShutdown {
   private readonly logger = new Logger(WebhookWorkerService.name);
@@ -127,24 +155,41 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
 
     const events = sub.events || [];
 
-    // 1. Pedidos (orders) - Requer permissão tenant.orders.view
+    // 1. Vendas / Pedidos (orders) - Requer permissão tenant.orders.view
     if (
       (events.includes('order.created') || events.includes('order.updated')) &&
       allowed.has('tenant.orders.view')
     ) {
-      const orders = await queryPromise(
-        `SELECT FIRST 20 PED_CODIGO, LOJ_CODIGO, PED_TOTAL, PED_SITUACAO, CLI_CODIGO, PED_DATA, PED_HORA
-         FROM PEDIDOS
-         WHERE PED_CODIGO > ?
-         ORDER BY PED_CODIGO ASC`,
-        [sub.lastOrderId],
+      const syncDate = formatFirebirdDate(sub.lastOrderSyncAt);
+      const syncTime = formatFirebirdTime(sub.lastOrderSyncAt);
+      const lastOrderId = sub.lastOrderId || 0;
+
+      const sales = await queryPromise(
+        `SELECT FIRST 25
+           V.VEN_NUMERO, V.LOJ_CODIGO, V.VEN_DATA, V.VEN_HORA,
+           V.SIT_CODIGO, V.CLI_CODIGO, V.VEN_TOTALLIQUIDO, V.VEN_TOTALBRUTO
+         FROM VENDAS V
+         WHERE
+           (V.VEN_DATA > ?)
+           OR (
+             V.VEN_DATA = ?
+             AND (
+               V.VEN_HORA > ?
+               OR (V.VEN_HORA = ? AND V.VEN_NUMERO > ?)
+             )
+           )
+         ORDER BY V.VEN_DATA ASC, V.VEN_HORA ASC, V.VEN_NUMERO ASC`,
+        [syncDate, syncDate, syncTime, syncTime, lastOrderId],
       );
 
-      if (orders.length > 0) {
-        let maxSeenId = sub.lastOrderId;
-        for (const ord of orders) {
-          const pedCodigo = Number(ord.PED_CODIGO);
-          if (pedCodigo > maxSeenId) maxSeenId = pedCodigo;
+      if (sales.length > 0) {
+        let maxSeenId = lastOrderId;
+        let maxSyncAt = sub.lastOrderSyncAt;
+
+        for (const sale of sales) {
+          const venNumero = Number(sale.VEN_NUMERO);
+          const saleDate = formatFirebirdDate(sale.VEN_DATA);
+          const saleTime = formatFirebirdTime(sale.VEN_HORA);
 
           const payload = {
             id: `evt_ord_${crypto.randomBytes(8).toString('hex')}`,
@@ -152,13 +197,13 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
             timestamp: new Date().toISOString(),
             tenant: sub.user.user,
             data: {
-              orderId: pedCodigo,
-              storeId: ord.LOJ_CODIGO,
-              status: ord.PED_SITUACAO,
-              totalValue: Number(ord.PED_TOTAL) || 0,
-              clientId: ord.CLI_CODIGO,
-              createdAt: `${ord.PED_DATA || ''} ${ord.PED_HORA || ''}`.trim(),
-              links: { self: `/api/v1/orders/${pedCodigo}` },
+              orderId: venNumero,
+              storeId: sale.LOJ_CODIGO,
+              status: sale.SIT_CODIGO,
+              totalValue: Number(sale.VEN_TOTALLIQUIDO ?? sale.VEN_TOTALBRUTO) || 0,
+              clientId: sale.CLI_CODIGO,
+              createdAt: `${saleDate} ${saleTime}`.trim(),
+              links: { self: `/api/v1/orders/${venNumero}` },
             },
           };
 
@@ -170,11 +215,16 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
               status: 'PENDING',
             },
           });
+
+          maxSeenId = venNumero;
+          const [y, m, d] = saleDate.split('-').map(Number);
+          const [hh, mm, ss] = saleTime.split(':').map(Number);
+          maxSyncAt = new Date(y, m - 1, d, hh || 0, mm || 0, ss || 0);
         }
 
         await this.prisma.webhookSubscription.update({
           where: { id: sub.id },
-          data: { lastOrderId: maxSeenId, lastOrderSyncAt: new Date() },
+          data: { lastOrderId: maxSeenId, lastOrderSyncAt: maxSyncAt },
         });
       }
     }
@@ -184,23 +234,47 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
       (events.includes('product.created') || events.includes('product.updated')) &&
       allowed.has('tenant.products.view')
     ) {
+      const syncDate = formatFirebirdDate(sub.lastProductSyncAt);
+      const syncTime = formatFirebirdTime(sub.lastProductSyncAt);
+      const lastProductId = sub.lastProductId || 0;
+
       const products = await queryPromise(
-        `SELECT FIRST 20 PRO_CODIGO, PRO_DESCRICAO, PRO_REFERENCIA, PRO_PRECOVENDA, PRO_ATIVO
-         FROM PRODUTOS
-         WHERE PRO_CODIGO > ?
-         ORDER BY PRO_CODIGO ASC`,
-        [sub.lastProductId],
+        `SELECT FIRST 25
+           P.PRO_CODIGO, P.PRO_DESCRICAO, P.PRO_REFERENCIA, P.PRO_PRECOVENDA, P.PRO_ATIVO,
+           P.PRO_DATACADASTRO, P.PRO_DATAALTERACAO, P.PRO_HORA
+         FROM PRODUTOS P
+         WHERE
+           (COALESCE(P.PRO_DATAALTERACAO, P.PRO_DATACADASTRO) > ?)
+           OR (
+             COALESCE(P.PRO_DATAALTERACAO, P.PRO_DATACADASTRO) = ?
+             AND (
+               COALESCE(P.PRO_HORA, '00:00:00') > ?
+               OR (COALESCE(P.PRO_HORA, '00:00:00') = ? AND P.PRO_CODIGO > ?)
+             )
+           )
+         ORDER BY
+           COALESCE(P.PRO_DATAALTERACAO, P.PRO_DATACADASTRO) ASC,
+           COALESCE(P.PRO_HORA, '00:00:00') ASC,
+           P.PRO_CODIGO ASC`,
+        [syncDate, syncDate, syncTime, syncTime, lastProductId],
       );
 
       if (products.length > 0) {
-        let maxSeenId = sub.lastProductId;
+        let maxSeenId = lastProductId;
+        let maxSyncAt = sub.lastProductSyncAt;
+
         for (const prod of products) {
           const proCodigo = Number(prod.PRO_CODIGO);
-          if (proCodigo > maxSeenId) maxSeenId = proCodigo;
+          const dtCad = formatFirebirdDate(prod.PRO_DATACADASTRO);
+          const dtAlt = formatFirebirdDate(prod.PRO_DATAALTERACAO);
+          const hr = formatFirebirdTime(prod.PRO_HORA);
+
+          const isCreated = !prod.PRO_DATACADASTRO || dtCad === dtAlt;
+          const eventType = isCreated ? 'product.created' : 'product.updated';
 
           const payload = {
             id: `evt_prd_${crypto.randomBytes(8).toString('hex')}`,
-            event: 'product.created',
+            event: eventType,
             timestamp: new Date().toISOString(),
             tenant: sub.user.user,
             data: {
@@ -209,6 +283,8 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
               reference: prod.PRO_REFERENCIA,
               price: Number(prod.PRO_PRECOVENDA) || 0,
               active: prod.PRO_ATIVO === 'S' || prod.PRO_ATIVO === 1,
+              registeredAt: `${dtCad} ${hr}`.trim(),
+              updatedAt: `${dtAlt} ${hr}`.trim(),
               links: { self: `/api/v1/products/id/${proCodigo}` },
             },
           };
@@ -216,16 +292,22 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
           await this.prisma.webhookDelivery.create({
             data: {
               subscriptionId: sub.id,
-              event: 'product.created',
+              event: eventType,
               payload: payload as any,
               status: 'PENDING',
             },
           });
+
+          maxSeenId = proCodigo;
+          const latestDate = dtAlt || dtCad;
+          const [y, m, d] = latestDate.split('-').map(Number);
+          const [hh, mm, ss] = hr.split(':').map(Number);
+          maxSyncAt = new Date(y, m - 1, d, hh || 0, mm || 0, ss || 0);
         }
 
         await this.prisma.webhookSubscription.update({
           where: { id: sub.id },
-          data: { lastProductId: maxSeenId, lastProductSyncAt: new Date() },
+          data: { lastProductId: maxSeenId, lastProductSyncAt: maxSyncAt },
         });
       }
     }
