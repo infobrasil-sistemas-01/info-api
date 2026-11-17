@@ -2,6 +2,9 @@ import { Injectable, Logger, OnApplicationBootstrap, OnApplicationShutdown } fro
 import * as crypto from 'crypto';
 import { RegistryPrismaService } from 'src/infra/prisma/registry-prisma.service';
 import { TenantConnectionService } from 'src/infra/database/tenant-connection.service';
+import { PermissionResolver } from 'src/infra/rbac/permission-resolver.service';
+import { EmailService } from 'src/infra/email/email.service';
+import { assertPublicWebhookUrl } from 'src/modules/webhook/utils/webhook-security.util';
 
 @Injectable()
 export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicationShutdown {
@@ -14,6 +17,8 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
   constructor(
     private readonly prisma: RegistryPrismaService,
     private readonly tenantConnectionService: TenantConnectionService,
+    private readonly permissionResolver: PermissionResolver,
+    private readonly emailService: EmailService,
   ) {}
 
   onApplicationBootstrap() {
@@ -65,9 +70,9 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
   }
 
   private async pollTenants() {
-    // 1. Busca apenas assinaturas ATIVAS
+    // 1. Busca apenas assinaturas ATIVAS e NÃO PAUSADAS (Circuit Breaker)
     const subscriptions = await this.prisma.webhookSubscription.findMany({
-      where: { isActive: true },
+      where: { isActive: true, isPaused: false },
       include: {
         user: {
           select: {
@@ -104,6 +109,10 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
       return; // Se o banco do cliente estiver inacessível, ignora silenciosamente nesta rodada
     }
 
+    // Revalidação contínua de permissões em tempo de execução (Anti-TOCTOU)
+    const snap = await this.permissionResolver.resolve(sub.user.id);
+    const allowed = snap.allowedKeys;
+
     const queryPromise = (sql: string, params: any[] = []): Promise<any[]> => {
       return new Promise((resolve) => {
         connection.query(sql, params, (err: any, result: any[]) => {
@@ -118,8 +127,11 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
 
     const events = sub.events || [];
 
-    // 1. Pedidos (orders)
-    if (events.includes('order.created') || events.includes('order.updated')) {
+    // 1. Pedidos (orders) - Requer permissão tenant.orders.view
+    if (
+      (events.includes('order.created') || events.includes('order.updated')) &&
+      allowed.has('tenant.orders.view')
+    ) {
       const orders = await queryPromise(
         `SELECT FIRST 20 PED_CODIGO, LOJ_CODIGO, PED_TOTAL, PED_SITUACAO, CLI_CODIGO, PED_DATA, PED_HORA
          FROM PEDIDOS
@@ -167,8 +179,11 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
       }
     }
 
-    // 2. Produtos (products)
-    if (events.includes('product.created') || events.includes('product.updated')) {
+    // 2. Produtos (products) - Requer permissão tenant.products.view
+    if (
+      (events.includes('product.created') || events.includes('product.updated')) &&
+      allowed.has('tenant.products.view')
+    ) {
       const products = await queryPromise(
         `SELECT FIRST 20 PRO_CODIGO, PRO_DESCRICAO, PRO_REFERENCIA, PRO_PRECOVENDA, PRO_ATIVO
          FROM PRODUTOS
@@ -215,8 +230,11 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
       }
     }
 
-    // 3. Entregas (deliveries)
-    if (events.includes('delivery.created') || events.includes('delivery.updated')) {
+    // 3. Entregas (deliveries) - Requer permissão tenant.deliveries.view
+    if (
+      (events.includes('delivery.created') || events.includes('delivery.updated')) &&
+      allowed.has('tenant.deliveries.view')
+    ) {
       const deliveries = await queryPromise(
         `SELECT FIRST 20 ENT_CODIGO, PED_CODIGO, LOJ_CODIGO, ENT_STATUS, MOT_CODIGO, ENT_DATA
          FROM ENTREGAS
@@ -264,8 +282,11 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
       }
     }
 
-    // 4. Contas a Pagar (account_payable)
-    if (events.includes('account_payable.created') || events.includes('account_payable.updated')) {
+    // 4. Contas a Pagar (account_payable) - Requer permissão tenant.account-payable.view
+    if (
+      (events.includes('account_payable.created') || events.includes('account_payable.updated')) &&
+      allowed.has('tenant.account-payable.view')
+    ) {
       const payables = await queryPromise(
         `SELECT FIRST 20 PAG_CODIGO, PAG_VALOR, PAG_VENCIMENTO, PAG_SITUACAO, FOR_CODIGO, LOJ_CODIGO
          FROM CONTAS_PAGAR
@@ -313,8 +334,11 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
       }
     }
 
-    // 5. Contas a Receber (account_receivable)
-    if (events.includes('account_receivable.created') || events.includes('account_receivable.updated')) {
+    // 5. Contas a Receber (account_receivable) - Requer permissão tenant.account-receivable.view
+    if (
+      (events.includes('account_receivable.created') || events.includes('account_receivable.updated')) &&
+      allowed.has('tenant.account-receivable.view')
+    ) {
       const receivables = await queryPromise(
         `SELECT FIRST 20 REC_CODIGO, REC_VALOR, REC_VENCIMENTO, REC_SITUACAO, CLI_CODIGO, LOJ_CODIGO, PED_CODIGO
          FROM CONTAS_RECEBER
@@ -423,6 +447,36 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
       return;
     }
 
+    if (sub.isPaused) {
+      await this.prisma.webhookDelivery.update({
+        where: { id: delivery.id },
+        data: {
+          status: 'FAILED',
+          lastError: 'Assinatura pausada pelo Circuit Breaker',
+        },
+      });
+      return;
+    }
+
+    // 1. Proteção em tempo de execução contra SSRF / DNS Rebinding
+    try {
+      await assertPublicWebhookUrl(sub.targetUrl);
+    } catch (ssrfErr: any) {
+      await this.prisma.webhookDelivery.update({
+        where: { id: delivery.id },
+        data: {
+          status: 'FAILED',
+          attempts: (delivery.attempts || 0) + 1,
+          lastError: `SSRF_BLOCKED: ${ssrfErr.message}`,
+          nextRetryAt: null,
+        },
+      });
+      this.logger.error(
+        `Disparo de webhook ${delivery.id} bloqueado por política Anti-SSRF (${sub.targetUrl}): ${ssrfErr.message}`,
+      );
+      return;
+    }
+
     const payload = delivery.payload;
     const timestamp = Math.floor(Date.now() / 1000);
     const signature = this.signPayload(sub.secretKey, timestamp, payload);
@@ -480,6 +534,14 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
           nextRetryAt: null,
         },
       });
+
+      // Se havia falhas consecutivas registradas na subscrição, reseta pois o endpoint voltou a responder 2xx
+      if (sub.consecutiveFailures > 0) {
+        await this.prisma.webhookSubscription.update({
+          where: { id: sub.id },
+          data: { consecutiveFailures: 0 },
+        });
+      }
     } else {
       // Exponential backoff: tentativa 1 -> +2 min; tentativa 2 -> +10 min; tentativa 3 -> +30 min
       const retryMinutes = [2, 10, 30][attempts - 1] || 60;
@@ -501,6 +563,88 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
 
       this.logger.warn(
         `Falha ao entregar webhook ${delivery.id} (${delivery.event}) para ${sub.targetUrl}. Tentativa ${attempts}/4. Erro: ${lastError}`,
+      );
+
+      // Quando este evento específico esgota todas as 4 tentativas (falha definitiva do evento):
+      if (attempts >= 4) {
+        const updatedSub = await this.prisma.webhookSubscription.update({
+          where: { id: sub.id },
+          data: { consecutiveFailures: { increment: 1 } },
+          include: { user: { select: { email: true, user: true } } },
+        });
+
+        // Se acumulou 5 eventos consecutivos distintos com falha, aciona o Circuit Breaker
+        if (updatedSub.consecutiveFailures >= 5) {
+          await this.prisma.webhookSubscription.update({
+            where: { id: sub.id },
+            data: {
+              isPaused: true,
+              isActive: false,
+              pausedAt: new Date(),
+              pauseReason:
+                'Circuito aberto: 5 eventos consecutivos distintos falharam na entrega.',
+            },
+          });
+
+          this.logger.error(
+            `Circuit Breaker acionado para a subscrição ${sub.id} (tenant: ${updatedSub.user.user}). Webhook pausado após 5 eventos distintos com falha.`,
+          );
+
+          if (updatedSub.user?.email) {
+            await this.sendCircuitBreakerAlertEmail(
+              updatedSub.user.email,
+              updatedSub.user.user,
+              sub.targetUrl,
+            );
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Envia e-mail de alerta notificando a suspensão da subscrição por Circuit Breaker
+   */
+  private async sendCircuitBreakerAlertEmail(
+    toEmail: string,
+    username: string,
+    targetUrl: string,
+  ) {
+    const subject =
+      '⚠️ [Alerta de Integração] Webhooks pausados por indisponibilidade - InfoBrasil Sistemas';
+    const html = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333; line-height: 1.6;">
+        <div style="background-color: #d9534f; padding: 15px 20px; border-radius: 6px 6px 0 0; color: #fff;">
+          <h2 style="margin: 0; font-size: 20px;">Alerta de Indisponibilidade de Webhook</h2>
+        </div>
+        <div style="padding: 20px; border: 1px solid #e0e0e0; border-top: none; border-radius: 0 0 6px 6px; background-color: #fff;">
+          <p>Olá, <strong>${username}</strong>,</p>
+          <p>Detectamos que o seu endpoint de webhook configurado na InfoAPI falhou em responder com sucesso após <strong>5 eventos consecutivos distintos</strong>.</p>
+          <div style="background-color: #f8f9fa; border-left: 4px solid #d9534f; padding: 12px 16px; margin: 20px 0;">
+            <p style="margin: 0;"><strong>Endpoint afetado:</strong> <code>${targetUrl}</code></p>
+            <p style="margin: 5px 0 0 0;"><strong>Status:</strong> <span style="color: #d9534f; font-weight: bold;">PAUSADO (Circuit Breaker)</span></p>
+          </div>
+          <p>Para proteger a estabilidade da integração e evitar consumo inútil de recursos, os disparos automáticos foram <strong>suspensos temporariamente</strong>.</p>
+          <h3 style="font-size: 16px; color: #111;">Como resolver?</h3>
+          <ol style="padding-left: 20px;">
+            <li>Verifique os logs do seu servidor/integrador (ex: n8n, API externa) para assegurar que ele esteja acessível e respondendo com status HTTP 2xx em menos de 3 segundos.</li>
+            <li>Acesse o seu <strong>Painel InfoAPI</strong> no menu <em>Configurações &gt; Webhooks</em>.</li>
+            <li>Clique no botão <strong>"Reativar Webhook"</strong> após normalizar seu serviço. O sistema executará uma checagem de integridade e retomará as notificações.</li>
+          </ol>
+          <hr style="border: none; border-top: 1px solid #eee; margin: 25px 0;" />
+          <p style="font-size: 12px; color: #888;">Mensagem automática gerada pelo subsistema de Webhooks da InfoBrasil Sistemas.</p>
+        </div>
+      </div>
+    `;
+
+    try {
+      await this.emailService.sendEmail(toEmail, subject, html);
+      this.logger.log(
+        `E-mail de alerta do Circuit Breaker enviado com sucesso para ${toEmail}`,
+      );
+    } catch (err: any) {
+      this.logger.error(
+        `Falha ao enviar e-mail de alerta do Circuit Breaker para ${toEmail}: ${err.message}`,
       );
     }
   }

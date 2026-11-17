@@ -73,6 +73,16 @@ export class WebhookController {
     return this.service.rotateSecret(user.sub);
   }
 
+  @Post('me/unpause')
+  @ApiOperation({
+    summary: 'Reativa os disparos de Webhook pausados pelo Circuit Breaker',
+    description:
+      'Quando um Webhook acumula 5 falhas consecutivas de eventos distintos, ele é pausado automaticamente. Este endpoint permite ao próprio cliente reativar os envios após corrigir seu endpoint.',
+  })
+  unpause(@CurrentUser() user: JwtPayload) {
+    return this.service.unpause(user.sub);
+  }
+
   @Delete('me')
   @ApiOperation({
     summary: 'Remove a inscrição de Webhook do usuário autenticado',

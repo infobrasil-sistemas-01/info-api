@@ -24167,6 +24167,7 @@ export namespace Prisma {
   }
 
   export type WebhookSubscriptionAvgAggregateOutputType = {
+    consecutiveFailures: number | null
     lastOrderId: number | null
     lastProductId: number | null
     lastDeliveryId: number | null
@@ -24175,6 +24176,7 @@ export namespace Prisma {
   }
 
   export type WebhookSubscriptionSumAggregateOutputType = {
+    consecutiveFailures: number | null
     lastOrderId: number | null
     lastProductId: number | null
     lastDeliveryId: number | null
@@ -24188,6 +24190,10 @@ export namespace Prisma {
     targetUrl: string | null
     secretKey: string | null
     isActive: boolean | null
+    consecutiveFailures: number | null
+    isPaused: boolean | null
+    pausedAt: Date | null
+    pauseReason: string | null
     lastOrderId: number | null
     lastOrderSyncAt: Date | null
     lastProductId: number | null
@@ -24208,6 +24214,10 @@ export namespace Prisma {
     targetUrl: string | null
     secretKey: string | null
     isActive: boolean | null
+    consecutiveFailures: number | null
+    isPaused: boolean | null
+    pausedAt: Date | null
+    pauseReason: string | null
     lastOrderId: number | null
     lastOrderSyncAt: Date | null
     lastProductId: number | null
@@ -24229,6 +24239,10 @@ export namespace Prisma {
     secretKey: number
     isActive: number
     events: number
+    consecutiveFailures: number
+    isPaused: number
+    pausedAt: number
+    pauseReason: number
     lastOrderId: number
     lastOrderSyncAt: number
     lastProductId: number
@@ -24246,6 +24260,7 @@ export namespace Prisma {
 
 
   export type WebhookSubscriptionAvgAggregateInputType = {
+    consecutiveFailures?: true
     lastOrderId?: true
     lastProductId?: true
     lastDeliveryId?: true
@@ -24254,6 +24269,7 @@ export namespace Prisma {
   }
 
   export type WebhookSubscriptionSumAggregateInputType = {
+    consecutiveFailures?: true
     lastOrderId?: true
     lastProductId?: true
     lastDeliveryId?: true
@@ -24267,6 +24283,10 @@ export namespace Prisma {
     targetUrl?: true
     secretKey?: true
     isActive?: true
+    consecutiveFailures?: true
+    isPaused?: true
+    pausedAt?: true
+    pauseReason?: true
     lastOrderId?: true
     lastOrderSyncAt?: true
     lastProductId?: true
@@ -24287,6 +24307,10 @@ export namespace Prisma {
     targetUrl?: true
     secretKey?: true
     isActive?: true
+    consecutiveFailures?: true
+    isPaused?: true
+    pausedAt?: true
+    pauseReason?: true
     lastOrderId?: true
     lastOrderSyncAt?: true
     lastProductId?: true
@@ -24308,6 +24332,10 @@ export namespace Prisma {
     secretKey?: true
     isActive?: true
     events?: true
+    consecutiveFailures?: true
+    isPaused?: true
+    pausedAt?: true
+    pauseReason?: true
     lastOrderId?: true
     lastOrderSyncAt?: true
     lastProductId?: true
@@ -24416,6 +24444,10 @@ export namespace Prisma {
     secretKey: string
     isActive: boolean
     events: string[]
+    consecutiveFailures: number
+    isPaused: boolean
+    pausedAt: Date | null
+    pauseReason: string | null
     lastOrderId: number
     lastOrderSyncAt: Date
     lastProductId: number
@@ -24456,6 +24488,10 @@ export namespace Prisma {
     secretKey?: boolean
     isActive?: boolean
     events?: boolean
+    consecutiveFailures?: boolean
+    isPaused?: boolean
+    pausedAt?: boolean
+    pauseReason?: boolean
     lastOrderId?: boolean
     lastOrderSyncAt?: boolean
     lastProductId?: boolean
@@ -24480,6 +24516,10 @@ export namespace Prisma {
     secretKey?: boolean
     isActive?: boolean
     events?: boolean
+    consecutiveFailures?: boolean
+    isPaused?: boolean
+    pausedAt?: boolean
+    pauseReason?: boolean
     lastOrderId?: boolean
     lastOrderSyncAt?: boolean
     lastProductId?: boolean
@@ -24502,6 +24542,10 @@ export namespace Prisma {
     secretKey?: boolean
     isActive?: boolean
     events?: boolean
+    consecutiveFailures?: boolean
+    isPaused?: boolean
+    pausedAt?: boolean
+    pauseReason?: boolean
     lastOrderId?: boolean
     lastOrderSyncAt?: boolean
     lastProductId?: boolean
@@ -24524,6 +24568,10 @@ export namespace Prisma {
     secretKey?: boolean
     isActive?: boolean
     events?: boolean
+    consecutiveFailures?: boolean
+    isPaused?: boolean
+    pausedAt?: boolean
+    pauseReason?: boolean
     lastOrderId?: boolean
     lastOrderSyncAt?: boolean
     lastProductId?: boolean
@@ -24538,7 +24586,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type WebhookSubscriptionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "targetUrl" | "secretKey" | "isActive" | "events" | "lastOrderId" | "lastOrderSyncAt" | "lastProductId" | "lastProductSyncAt" | "lastDeliveryId" | "lastDeliverySyncAt" | "lastAccountPayableId" | "lastAccountPayableSyncAt" | "lastAccountReceivableId" | "lastAccountReceivableSyncAt" | "createdAt" | "updatedAt", ExtArgs["result"]["webhookSubscription"]>
+  export type WebhookSubscriptionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "targetUrl" | "secretKey" | "isActive" | "events" | "consecutiveFailures" | "isPaused" | "pausedAt" | "pauseReason" | "lastOrderId" | "lastOrderSyncAt" | "lastProductId" | "lastProductSyncAt" | "lastDeliveryId" | "lastDeliverySyncAt" | "lastAccountPayableId" | "lastAccountPayableSyncAt" | "lastAccountReceivableId" | "lastAccountReceivableSyncAt" | "createdAt" | "updatedAt", ExtArgs["result"]["webhookSubscription"]>
   export type WebhookSubscriptionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     deliveries?: boolean | WebhookSubscription$deliveriesArgs<ExtArgs>
@@ -24564,6 +24612,10 @@ export namespace Prisma {
       secretKey: string
       isActive: boolean
       events: string[]
+      consecutiveFailures: number
+      isPaused: boolean
+      pausedAt: Date | null
+      pauseReason: string | null
       lastOrderId: number
       lastOrderSyncAt: Date
       lastProductId: number
@@ -25007,6 +25059,10 @@ export namespace Prisma {
     readonly secretKey: FieldRef<"WebhookSubscription", 'String'>
     readonly isActive: FieldRef<"WebhookSubscription", 'Boolean'>
     readonly events: FieldRef<"WebhookSubscription", 'String[]'>
+    readonly consecutiveFailures: FieldRef<"WebhookSubscription", 'Int'>
+    readonly isPaused: FieldRef<"WebhookSubscription", 'Boolean'>
+    readonly pausedAt: FieldRef<"WebhookSubscription", 'DateTime'>
+    readonly pauseReason: FieldRef<"WebhookSubscription", 'String'>
     readonly lastOrderId: FieldRef<"WebhookSubscription", 'Int'>
     readonly lastOrderSyncAt: FieldRef<"WebhookSubscription", 'DateTime'>
     readonly lastProductId: FieldRef<"WebhookSubscription", 'Int'>
@@ -26933,6 +26989,10 @@ export namespace Prisma {
     secretKey: 'secretKey',
     isActive: 'isActive',
     events: 'events',
+    consecutiveFailures: 'consecutiveFailures',
+    isPaused: 'isPaused',
+    pausedAt: 'pausedAt',
+    pauseReason: 'pauseReason',
     lastOrderId: 'lastOrderId',
     lastOrderSyncAt: 'lastOrderSyncAt',
     lastProductId: 'lastProductId',
@@ -28447,6 +28507,10 @@ export namespace Prisma {
     secretKey?: StringFilter<"WebhookSubscription"> | string
     isActive?: BoolFilter<"WebhookSubscription"> | boolean
     events?: StringNullableListFilter<"WebhookSubscription">
+    consecutiveFailures?: IntFilter<"WebhookSubscription"> | number
+    isPaused?: BoolFilter<"WebhookSubscription"> | boolean
+    pausedAt?: DateTimeNullableFilter<"WebhookSubscription"> | Date | string | null
+    pauseReason?: StringNullableFilter<"WebhookSubscription"> | string | null
     lastOrderId?: IntFilter<"WebhookSubscription"> | number
     lastOrderSyncAt?: DateTimeFilter<"WebhookSubscription"> | Date | string
     lastProductId?: IntFilter<"WebhookSubscription"> | number
@@ -28470,6 +28534,10 @@ export namespace Prisma {
     secretKey?: SortOrder
     isActive?: SortOrder
     events?: SortOrder
+    consecutiveFailures?: SortOrder
+    isPaused?: SortOrder
+    pausedAt?: SortOrderInput | SortOrder
+    pauseReason?: SortOrderInput | SortOrder
     lastOrderId?: SortOrder
     lastOrderSyncAt?: SortOrder
     lastProductId?: SortOrder
@@ -28496,6 +28564,10 @@ export namespace Prisma {
     secretKey?: StringFilter<"WebhookSubscription"> | string
     isActive?: BoolFilter<"WebhookSubscription"> | boolean
     events?: StringNullableListFilter<"WebhookSubscription">
+    consecutiveFailures?: IntFilter<"WebhookSubscription"> | number
+    isPaused?: BoolFilter<"WebhookSubscription"> | boolean
+    pausedAt?: DateTimeNullableFilter<"WebhookSubscription"> | Date | string | null
+    pauseReason?: StringNullableFilter<"WebhookSubscription"> | string | null
     lastOrderId?: IntFilter<"WebhookSubscription"> | number
     lastOrderSyncAt?: DateTimeFilter<"WebhookSubscription"> | Date | string
     lastProductId?: IntFilter<"WebhookSubscription"> | number
@@ -28519,6 +28591,10 @@ export namespace Prisma {
     secretKey?: SortOrder
     isActive?: SortOrder
     events?: SortOrder
+    consecutiveFailures?: SortOrder
+    isPaused?: SortOrder
+    pausedAt?: SortOrderInput | SortOrder
+    pauseReason?: SortOrderInput | SortOrder
     lastOrderId?: SortOrder
     lastOrderSyncAt?: SortOrder
     lastProductId?: SortOrder
@@ -28548,6 +28624,10 @@ export namespace Prisma {
     secretKey?: StringWithAggregatesFilter<"WebhookSubscription"> | string
     isActive?: BoolWithAggregatesFilter<"WebhookSubscription"> | boolean
     events?: StringNullableListFilter<"WebhookSubscription">
+    consecutiveFailures?: IntWithAggregatesFilter<"WebhookSubscription"> | number
+    isPaused?: BoolWithAggregatesFilter<"WebhookSubscription"> | boolean
+    pausedAt?: DateTimeNullableWithAggregatesFilter<"WebhookSubscription"> | Date | string | null
+    pauseReason?: StringNullableWithAggregatesFilter<"WebhookSubscription"> | string | null
     lastOrderId?: IntWithAggregatesFilter<"WebhookSubscription"> | number
     lastOrderSyncAt?: DateTimeWithAggregatesFilter<"WebhookSubscription"> | Date | string
     lastProductId?: IntWithAggregatesFilter<"WebhookSubscription"> | number
@@ -30025,6 +30105,10 @@ export namespace Prisma {
     secretKey: string
     isActive?: boolean
     events?: WebhookSubscriptionCreateeventsInput | string[]
+    consecutiveFailures?: number
+    isPaused?: boolean
+    pausedAt?: Date | string | null
+    pauseReason?: string | null
     lastOrderId?: number
     lastOrderSyncAt?: Date | string
     lastProductId?: number
@@ -30048,6 +30132,10 @@ export namespace Prisma {
     secretKey: string
     isActive?: boolean
     events?: WebhookSubscriptionCreateeventsInput | string[]
+    consecutiveFailures?: number
+    isPaused?: boolean
+    pausedAt?: Date | string | null
+    pauseReason?: string | null
     lastOrderId?: number
     lastOrderSyncAt?: Date | string
     lastProductId?: number
@@ -30069,6 +30157,10 @@ export namespace Prisma {
     secretKey?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     events?: WebhookSubscriptionUpdateeventsInput | string[]
+    consecutiveFailures?: IntFieldUpdateOperationsInput | number
+    isPaused?: BoolFieldUpdateOperationsInput | boolean
+    pausedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pauseReason?: NullableStringFieldUpdateOperationsInput | string | null
     lastOrderId?: IntFieldUpdateOperationsInput | number
     lastOrderSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
     lastProductId?: IntFieldUpdateOperationsInput | number
@@ -30092,6 +30184,10 @@ export namespace Prisma {
     secretKey?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     events?: WebhookSubscriptionUpdateeventsInput | string[]
+    consecutiveFailures?: IntFieldUpdateOperationsInput | number
+    isPaused?: BoolFieldUpdateOperationsInput | boolean
+    pausedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pauseReason?: NullableStringFieldUpdateOperationsInput | string | null
     lastOrderId?: IntFieldUpdateOperationsInput | number
     lastOrderSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
     lastProductId?: IntFieldUpdateOperationsInput | number
@@ -30114,6 +30210,10 @@ export namespace Prisma {
     secretKey: string
     isActive?: boolean
     events?: WebhookSubscriptionCreateeventsInput | string[]
+    consecutiveFailures?: number
+    isPaused?: boolean
+    pausedAt?: Date | string | null
+    pauseReason?: string | null
     lastOrderId?: number
     lastOrderSyncAt?: Date | string
     lastProductId?: number
@@ -30134,6 +30234,10 @@ export namespace Prisma {
     secretKey?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     events?: WebhookSubscriptionUpdateeventsInput | string[]
+    consecutiveFailures?: IntFieldUpdateOperationsInput | number
+    isPaused?: BoolFieldUpdateOperationsInput | boolean
+    pausedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pauseReason?: NullableStringFieldUpdateOperationsInput | string | null
     lastOrderId?: IntFieldUpdateOperationsInput | number
     lastOrderSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
     lastProductId?: IntFieldUpdateOperationsInput | number
@@ -30155,6 +30259,10 @@ export namespace Prisma {
     secretKey?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     events?: WebhookSubscriptionUpdateeventsInput | string[]
+    consecutiveFailures?: IntFieldUpdateOperationsInput | number
+    isPaused?: BoolFieldUpdateOperationsInput | boolean
+    pausedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pauseReason?: NullableStringFieldUpdateOperationsInput | string | null
     lastOrderId?: IntFieldUpdateOperationsInput | number
     lastOrderSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
     lastProductId?: IntFieldUpdateOperationsInput | number
@@ -31463,6 +31571,10 @@ export namespace Prisma {
     secretKey?: SortOrder
     isActive?: SortOrder
     events?: SortOrder
+    consecutiveFailures?: SortOrder
+    isPaused?: SortOrder
+    pausedAt?: SortOrder
+    pauseReason?: SortOrder
     lastOrderId?: SortOrder
     lastOrderSyncAt?: SortOrder
     lastProductId?: SortOrder
@@ -31478,6 +31590,7 @@ export namespace Prisma {
   }
 
   export type WebhookSubscriptionAvgOrderByAggregateInput = {
+    consecutiveFailures?: SortOrder
     lastOrderId?: SortOrder
     lastProductId?: SortOrder
     lastDeliveryId?: SortOrder
@@ -31491,6 +31604,10 @@ export namespace Prisma {
     targetUrl?: SortOrder
     secretKey?: SortOrder
     isActive?: SortOrder
+    consecutiveFailures?: SortOrder
+    isPaused?: SortOrder
+    pausedAt?: SortOrder
+    pauseReason?: SortOrder
     lastOrderId?: SortOrder
     lastOrderSyncAt?: SortOrder
     lastProductId?: SortOrder
@@ -31511,6 +31628,10 @@ export namespace Prisma {
     targetUrl?: SortOrder
     secretKey?: SortOrder
     isActive?: SortOrder
+    consecutiveFailures?: SortOrder
+    isPaused?: SortOrder
+    pausedAt?: SortOrder
+    pauseReason?: SortOrder
     lastOrderId?: SortOrder
     lastOrderSyncAt?: SortOrder
     lastProductId?: SortOrder
@@ -31526,6 +31647,7 @@ export namespace Prisma {
   }
 
   export type WebhookSubscriptionSumOrderByAggregateInput = {
+    consecutiveFailures?: SortOrder
     lastOrderId?: SortOrder
     lastProductId?: SortOrder
     lastDeliveryId?: SortOrder
@@ -33168,6 +33290,10 @@ export namespace Prisma {
     secretKey: string
     isActive?: boolean
     events?: WebhookSubscriptionCreateeventsInput | string[]
+    consecutiveFailures?: number
+    isPaused?: boolean
+    pausedAt?: Date | string | null
+    pauseReason?: string | null
     lastOrderId?: number
     lastOrderSyncAt?: Date | string
     lastProductId?: number
@@ -33189,6 +33315,10 @@ export namespace Prisma {
     secretKey: string
     isActive?: boolean
     events?: WebhookSubscriptionCreateeventsInput | string[]
+    consecutiveFailures?: number
+    isPaused?: boolean
+    pausedAt?: Date | string | null
+    pauseReason?: string | null
     lastOrderId?: number
     lastOrderSyncAt?: Date | string
     lastProductId?: number
@@ -33479,6 +33609,10 @@ export namespace Prisma {
     secretKey?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     events?: WebhookSubscriptionUpdateeventsInput | string[]
+    consecutiveFailures?: IntFieldUpdateOperationsInput | number
+    isPaused?: BoolFieldUpdateOperationsInput | boolean
+    pausedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pauseReason?: NullableStringFieldUpdateOperationsInput | string | null
     lastOrderId?: IntFieldUpdateOperationsInput | number
     lastOrderSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
     lastProductId?: IntFieldUpdateOperationsInput | number
@@ -33500,6 +33634,10 @@ export namespace Prisma {
     secretKey?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     events?: WebhookSubscriptionUpdateeventsInput | string[]
+    consecutiveFailures?: IntFieldUpdateOperationsInput | number
+    isPaused?: BoolFieldUpdateOperationsInput | boolean
+    pausedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pauseReason?: NullableStringFieldUpdateOperationsInput | string | null
     lastOrderId?: IntFieldUpdateOperationsInput | number
     lastOrderSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
     lastProductId?: IntFieldUpdateOperationsInput | number
@@ -34978,6 +35116,10 @@ export namespace Prisma {
     secretKey: string
     isActive?: boolean
     events?: WebhookSubscriptionCreateeventsInput | string[]
+    consecutiveFailures?: number
+    isPaused?: boolean
+    pausedAt?: Date | string | null
+    pauseReason?: string | null
     lastOrderId?: number
     lastOrderSyncAt?: Date | string
     lastProductId?: number
@@ -35000,6 +35142,10 @@ export namespace Prisma {
     secretKey: string
     isActive?: boolean
     events?: WebhookSubscriptionCreateeventsInput | string[]
+    consecutiveFailures?: number
+    isPaused?: boolean
+    pausedAt?: Date | string | null
+    pauseReason?: string | null
     lastOrderId?: number
     lastOrderSyncAt?: Date | string
     lastProductId?: number
@@ -35036,6 +35182,10 @@ export namespace Prisma {
     secretKey?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     events?: WebhookSubscriptionUpdateeventsInput | string[]
+    consecutiveFailures?: IntFieldUpdateOperationsInput | number
+    isPaused?: BoolFieldUpdateOperationsInput | boolean
+    pausedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pauseReason?: NullableStringFieldUpdateOperationsInput | string | null
     lastOrderId?: IntFieldUpdateOperationsInput | number
     lastOrderSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
     lastProductId?: IntFieldUpdateOperationsInput | number
@@ -35058,6 +35208,10 @@ export namespace Prisma {
     secretKey?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     events?: WebhookSubscriptionUpdateeventsInput | string[]
+    consecutiveFailures?: IntFieldUpdateOperationsInput | number
+    isPaused?: BoolFieldUpdateOperationsInput | boolean
+    pausedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pauseReason?: NullableStringFieldUpdateOperationsInput | string | null
     lastOrderId?: IntFieldUpdateOperationsInput | number
     lastOrderSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
     lastProductId?: IntFieldUpdateOperationsInput | number

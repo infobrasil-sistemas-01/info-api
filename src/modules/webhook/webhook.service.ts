@@ -1,5 +1,7 @@
 import {
+  BadRequestException,
   ConflictException,
+  ForbiddenException,
   Injectable,
   Logger,
   NotFoundException,
@@ -7,12 +9,18 @@ import {
 import * as crypto from 'crypto';
 import { RegistryPrismaService } from 'src/infra/prisma/registry-prisma.service';
 import { TenantConnectionService } from 'src/infra/database/tenant-connection.service';
-import { CreateWebhookDto } from './dto/create-webhook.dto';
+import { PermissionResolver } from 'src/infra/rbac/permission-resolver.service';
+import {
+  CreateWebhookDto,
+  EVENT_PERMISSION_MAP,
+  type SupportedWebhookEvent,
+} from './dto/create-webhook.dto';
 import { UpdateWebhookDto } from './dto/update-webhook.dto';
 import {
   WebhookDeliveryResponse,
   WebhookSubscriptionResponse,
 } from './dto/webhook-response.dto';
+import { assertPublicWebhookUrl } from './utils/webhook-security.util';
 
 @Injectable()
 export class WebhookService {
@@ -21,7 +29,35 @@ export class WebhookService {
   constructor(
     private readonly prisma: RegistryPrismaService,
     private readonly tenantConnectionService: TenantConnectionService,
+    private readonly permissionResolver: PermissionResolver,
   ) {}
+
+  /**
+   * Valida se o usuário autenticado possui permissões de GET para os eventos solicitados
+   */
+  private async validateEventPermissions(
+    userId: string,
+    events: SupportedWebhookEvent[],
+  ) {
+    const snap = await this.permissionResolver.resolve(userId);
+    const missingPermissions: { event: string; requiredPermission: string }[] = [];
+
+    for (const ev of events) {
+      const required = EVENT_PERMISSION_MAP[ev];
+      if (required && !snap.allowedKeys.has(required)) {
+        missingPermissions.push({ event: ev, requiredPermission: required });
+      }
+    }
+
+    if (missingPermissions.length > 0) {
+      const details = missingPermissions
+        .map((m) => `'${m.event}' (requer: ${m.requiredPermission})`)
+        .join(', ');
+      throw new ForbiddenException(
+        `Você não possui permissão de leitura para os seguintes eventos solicitados: ${details}`,
+      );
+    }
+  }
 
   /**
    * Gera uma chave secreta de assinatura HMAC segura no formato whsec_...
@@ -121,6 +157,12 @@ export class WebhookService {
       );
     }
 
+    // 1. Validação de Governança / RBAC dos eventos
+    await this.validateEventPermissions(userId, dto.events);
+
+    // 2. Validação profunda Anti-SSRF (sintaxe + resolução de DNS para faixas públicas)
+    await assertPublicWebhookUrl(dto.targetUrl);
+
     const secretKey = this.generateSecretKey();
     const marks = await this.getInitialHighWaterMarks(credentialsId);
 
@@ -131,6 +173,8 @@ export class WebhookService {
         events: dto.events,
         secretKey,
         isActive: true,
+        isPaused: false,
+        consecutiveFailures: 0,
         lastOrderId: marks.lastOrderId,
         lastProductId: marks.lastProductId,
         lastDeliveryId: marks.lastDeliveryId,
@@ -170,12 +214,47 @@ export class WebhookService {
       throw new NotFoundException('Nenhum Webhook configurado para este usuário.');
     }
 
+    if (dto.events && dto.events.length > 0) {
+      await this.validateEventPermissions(userId, dto.events);
+    }
+
+    if (dto.targetUrl && dto.targetUrl !== subscription.targetUrl) {
+      await assertPublicWebhookUrl(dto.targetUrl);
+    }
+
     return this.prisma.webhookSubscription.update({
       where: { userId },
       data: {
         targetUrl: dto.targetUrl ?? subscription.targetUrl,
         events: dto.events ?? subscription.events,
         isActive: dto.isActive !== undefined ? dto.isActive : subscription.isActive,
+      },
+    });
+  }
+
+  /**
+   * Despausa a subscrição após correção pelo próprio cliente
+   */
+  async unpause(userId: string): Promise<WebhookSubscriptionResponse> {
+    const subscription = await this.prisma.webhookSubscription.findUnique({
+      where: { userId },
+    });
+
+    if (!subscription) {
+      throw new NotFoundException('Nenhum Webhook configurado para este usuário.');
+    }
+
+    // Valida se o endpoint continua seguro e público
+    await assertPublicWebhookUrl(subscription.targetUrl);
+
+    return this.prisma.webhookSubscription.update({
+      where: { userId },
+      data: {
+        isPaused: false,
+        isActive: true,
+        consecutiveFailures: 0,
+        pausedAt: null,
+        pauseReason: null,
       },
     });
   }
@@ -259,6 +338,9 @@ export class WebhookService {
     if (!subscription) {
       throw new NotFoundException('Nenhum Webhook configurado para este usuário.');
     }
+
+    // Validação de segurança anti-SSRF antes do disparo de teste
+    await assertPublicWebhookUrl(subscription.targetUrl);
 
     const testPayload = {
       id: `evt_test_${crypto.randomBytes(8).toString('hex')}`,

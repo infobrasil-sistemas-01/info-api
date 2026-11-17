@@ -308,6 +308,11 @@ model WebhookSubscription {
   isActive                  Boolean        @default(true) @map("is_active")
   events                    String[]       @default(["order.created", "product.created"])
 
+  consecutiveFailures       Int            @default(0) @map("consecutive_failures")
+  isPaused                  Boolean        @default(false) @map("is_paused")
+  pausedAt                  DateTime?      @map("paused_at")
+  pauseReason               String?        @map("pause_reason") @db.VarChar(255)
+
   lastOrderId               Int            @default(0) @map("last_order_id")
   lastOrderSyncAt           DateTime       @default(now()) @map("last_order_sync_at")
   lastProductId             Int            @default(0) @map("last_product_id")

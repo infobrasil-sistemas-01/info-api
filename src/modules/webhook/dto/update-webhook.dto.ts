@@ -5,12 +5,17 @@ import {
   SUPPORTED_WEBHOOK_EVENTS,
   type SupportedWebhookEvent,
 } from './create-webhook.dto';
+import { validateWebhookUrlSyntax } from '../utils/webhook-security.util';
 
 export const UpdateWebhookSchema = z.object({
   targetUrl: z
     .string()
     .url('A URL de destino deve ser uma URL válida')
     .max(500, 'A URL não pode exceder 500 caracteres')
+    .refine((url) => validateWebhookUrlSyntax(url).valid, {
+      message:
+        'A URL de Webhook deve ser HTTPS, utilizar um domínio (não IP), não ser localhost e não pertencer ao domínio raiz da InfoBrasil.',
+    })
     .optional(),
   events: z
     .array(z.enum(SUPPORTED_WEBHOOK_EVENTS))

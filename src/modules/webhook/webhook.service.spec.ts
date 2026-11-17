@@ -1,13 +1,30 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ConflictException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, ForbiddenException, NotFoundException } from '@nestjs/common';
+import * as dns from 'dns';
 import { WebhookService } from './webhook.service';
 import { RegistryPrismaService } from 'src/infra/prisma/registry-prisma.service';
 import { TenantConnectionService } from 'src/infra/database/tenant-connection.service';
+import { PermissionResolver } from 'src/infra/rbac/permission-resolver.service';
+
+jest.mock('dns', () => ({
+  promises: {
+    lookup: jest.fn().mockImplementation((hostname: string) => {
+      if (hostname === 'api.github.com' || hostname === 'webhook.site') {
+        return Promise.resolve([{ address: '140.82.121.4', family: 4 }]);
+      }
+      if (hostname === 'private-rebinding.com') {
+        return Promise.resolve([{ address: '192.168.243.18', family: 4 }]);
+      }
+      return Promise.reject(new Error(`getaddrinfo ENOTFOUND ${hostname}`));
+    }),
+  },
+}));
 
 describe('WebhookService', () => {
   let service: WebhookService;
   let prismaMock: any;
   let tenantConnectionServiceMock: any;
+  let permissionResolverMock: any;
 
   beforeEach(async () => {
     prismaMock = {
@@ -33,11 +50,26 @@ describe('WebhookService', () => {
       }),
     };
 
+    permissionResolverMock = {
+      resolve: jest.fn().mockResolvedValue({
+        userId: 'user_1',
+        roles: ['INTEGRATOR'],
+        allowedKeys: new Set([
+          'tenant.orders.view',
+          'tenant.products.view',
+          'tenant.deliveries.view',
+          'tenant.account-payable.view',
+          'tenant.account-receivable.view',
+        ]),
+      }),
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         WebhookService,
         { provide: RegistryPrismaService, useValue: prismaMock },
         { provide: TenantConnectionService, useValue: tenantConnectionServiceMock },
+        { provide: PermissionResolver, useValue: permissionResolverMock },
       ],
     }).compile();
 
@@ -58,7 +90,7 @@ describe('WebhookService', () => {
       const result = await service.create(
         'user_1',
         {
-          targetUrl: 'https://webhook.site/test',
+          targetUrl: 'https://api.github.com/webhook',
           events: ['order.created'],
         },
         'cred_1',
@@ -66,8 +98,53 @@ describe('WebhookService', () => {
 
       expect(result.userId).toBe('user_1');
       expect(result.secretKey).toMatch(/^whsec_[a-f0-9]{48}$/);
-      expect(result.targetUrl).toBe('https://webhook.site/test');
+      expect(result.targetUrl).toBe('https://api.github.com/webhook');
       expect(prismaMock.webhookSubscription.create).toHaveBeenCalled();
+    });
+
+    it('deve lancar ForbiddenException se o usuario nao possuir a permissao GET do evento', async () => {
+      permissionResolverMock.resolve.mockResolvedValue({
+        userId: 'user_sem_pedidos',
+        roles: ['READONLY'],
+        allowedKeys: new Set(['tenant.products.view']), // apenas produtos, sem pedidos
+      });
+
+      await expect(
+        service.create(
+          'user_sem_pedidos',
+          {
+            targetUrl: 'https://api.github.com/webhook',
+            events: ['order.created'],
+          },
+          'cred_1',
+        ),
+      ).rejects.toThrow(ForbiddenException);
+    });
+
+    it('deve lancar BadRequestException para URL que viole regras anti-SSRF (ex: IP literal)', async () => {
+      await expect(
+        service.create(
+          'user_1',
+          {
+            targetUrl: 'https://192.168.243.18/webhook',
+            events: ['order.created'],
+          },
+          'cred_1',
+        ),
+      ).rejects.toThrow(BadRequestException);
+    });
+
+    it('deve bloquear domínio público que resolva para IP privado via DNS Rebinding', async () => {
+      await expect(
+        service.create(
+          'user_1',
+          {
+            targetUrl: 'https://private-rebinding.com/webhook',
+            events: ['order.created'],
+          },
+          'cred_1',
+        ),
+      ).rejects.toThrow(BadRequestException);
     });
 
     it('deve lancar ConflictException se o usuario ja possuir webhook (regra 1:1)', async () => {
@@ -77,7 +154,7 @@ describe('WebhookService', () => {
         service.create(
           'user_1',
           {
-            targetUrl: 'https://webhook.site/test',
+            targetUrl: 'https://api.github.com/webhook',
             events: ['order.created'],
           },
           'cred_1',
@@ -94,6 +171,27 @@ describe('WebhookService', () => {
 
       const signature = service.signPayload(secret, timestamp, payload);
       expect(signature).toMatch(/^t=1794668000,v1=[a-f0-9]{64}$/);
+    });
+  });
+
+  describe('unpause', () => {
+    it('deve despausar o webhook e zerar falhas consecutivas', async () => {
+      prismaMock.webhookSubscription.findUnique.mockResolvedValue({
+        id: 'wh_1',
+        userId: 'user_1',
+        targetUrl: 'https://api.github.com/webhook',
+        isPaused: true,
+        consecutiveFailures: 5,
+      });
+
+      prismaMock.webhookSubscription.update.mockImplementation(({ data }: any) =>
+        Promise.resolve({ id: 'wh_1', userId: 'user_1', ...data }),
+      );
+
+      const result = await service.unpause('user_1');
+      expect(result.isPaused).toBe(false);
+      expect(result.consecutiveFailures).toBe(0);
+      expect(result.pauseReason).toBeNull();
     });
   });
 

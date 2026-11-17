@@ -5,6 +5,10 @@ export interface WebhookSubscriptionResponse {
   secretKey: string;
   isActive: boolean;
   events: string[];
+  consecutiveFailures: number;
+  isPaused: boolean;
+  pausedAt?: Date | null;
+  pauseReason?: string | null;
   createdAt: Date;
   updatedAt: Date;
 }

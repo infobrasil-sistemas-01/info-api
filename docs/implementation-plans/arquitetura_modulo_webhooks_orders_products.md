@@ -266,35 +266,51 @@ O worker operará como um processo Node.js independente (ou container Docker par
    ```
 4. **Enfileiramento Atômico:** Grava as entregas no PostgreSQL como `PENDING` e atualiza o cursor `lastAccountPayableId` na mesma transação.
 
-### 5.2. Ciclo do Dispatcher (Despacho HTTP)
-1. **Consumo em Lote:** `SELECT * FROM webhook_deliveries WHERE status = 'PENDING' OR (status = 'FAILED' AND next_retry_at <= NOW()) ORDER BY id ASC LIMIT 50 FOR UPDATE SKIP LOCKED`.
+### 5.2. Ciclo do Dispatcher (Despacho HTTP) & Circuit Breaker
+1. **Consumo em Lote:** `SELECT * FROM webhook_deliveries WHERE status = 'PENDING' OR (status = 'FAILED' AND next_retry_at <= NOW()) ORDER BY id ASC LIMIT 25`.
 2. **Assinatura Criptográfica HMAC-SHA256:**
    * Cabeçalho: `X-Info-Signature: t={timestamp},v1={hash_sha256}`.
-3. **Timeout Estrito:** 3.000 ms por chamada (via `fetch` com `AbortController` ou `axios` com timeout rígido).
-4. **Política de Retry (Exponential Backoff):**
+3. **Timeout Estrito:** 3.000 ms por chamada (via `fetch` nativo com `AbortController`).
+4. **Proteção Anti-SSRF em Runtime (DNS Resolution):**
+   * Antes de cada disparo HTTP, o worker valida se o hostname não é literal IP, não é `localhost`, não pertence ao domínio raiz `infobrasil` e resolve o DNS checando se os IPs pertencem a faixas públicas (bloqueia faixas RFC 1918, Loopback e Link-local para mitigar DNS Rebinding).
+5. **Política de Retry (Exponential Backoff):**
    - Tentativa 1: Imediata
    - Tentativa 2: após 2 minutos
    - Tentativa 3: após 10 minutos
-   - Tentativa 4: após 1 hora (após a 4ª falha, marca como `FAILED` definitivo e para de retentar).
-5. **Circuit Breaker por Inscrição:** Se um webhook acumular 30 falhas consecutivas, a assinatura é pausada (`isActive = false`) para evitar desperdício de I/O contra endpoints abandonados.
+   - Tentativa 4: após 30 minutos (após a 4ª falha, marca como `FAILED` definitivo).
+6. **Circuit Breaker Automático por Eventos Distintos:**
+   - Cada evento distinto que falha definitivamente (esgota as 4 tentativas) incrementa `consecutive_failures`.
+   - Se o webhook acumular **5 eventos consecutivos distintos com falha**, a inscrição é pausada compulsoriamente (`is_paused = true`, `is_active = false`, `paused_at = NOW()`, `pause_reason = 'Circuito aberto: 5 eventos consecutivos distintos falharam na entrega.'`).
+   - Um **e-mail de alerta** é disparado imediatamente para o e-mail do cliente (`User.email`) via `EmailService` notificando a indisponibilidade do endpoint e instruindo a reativação pelo painel.
+   - Caso qualquer entrega intermediária responda com sucesso HTTP 2xx, o contador `consecutive_failures` é zerado imediatamente.
 
 ---
 
 ## 6. Endpoints de Gestão na API Pública (`/api/v1/webhooks`)
 
-1. `POST /api/v1/webhooks` - Cria a inscrição 1:1 (gera `secretKey` `whsec_...`, define URL e eventos).
-2. `GET /api/v1/webhooks/me` - Consulta a configuração atual e o segredo para copiar no front.
-3. `PUT /api/v1/webhooks/me` - Atualiza a URL ou lista de eventos assinados.
+1. `POST /api/v1/webhooks` - Cria a inscrição 1:1 (gera `secretKey` `whsec_...`, valida URL anti-SSRF e verifica se o usuário possui as permissões GET correspondentes a cada evento solicitado).
+2. `GET /api/v1/webhooks/me` - Consulta a configuração atual, o status do Circuit Breaker (`isPaused`, `consecutiveFailures`) e o segredo HMAC para exibição no front.
+3. `PUT /api/v1/webhooks/me` - Atualiza a URL ou lista de eventos assinados (revalida permissões GET e anti-SSRF).
 4. `POST /api/v1/webhooks/me/rotate-secret` - Rotaciona a chave secreta HMAC.
-5. `GET /api/v1/webhooks/me/deliveries` - Retorna as últimas 50 tentativas para depuração do cliente (status, duração, payload).
-6. `POST /api/v1/webhooks/me/deliveries/:id/resend` - Reenvio manual sob demanda.
-7. `DELETE /api/v1/webhooks/me` - Remove a inscrição.
+5. `POST /api/v1/webhooks/me/unpause` - Permite ao próprio cliente reativar os disparos após corrigir o endpoint, zerando `consecutiveFailures` e reabrindo o fluxo.
+6. `GET /api/v1/webhooks/me/deliveries` - Retorna as últimas 50 tentativas para depuração do cliente (status, duração, payload).
+7. `POST /api/v1/webhooks/me/deliveries/:id/resend` - Reenvio manual sob demanda.
+8. `POST /api/v1/webhooks/me/test` - Dispara teste imediato (`test.ping`) com assinatura HMAC para o cliente testar sua infraestrutura em tempo real.
+9. `DELETE /api/v1/webhooks/me` - Remove a inscrição.
+10. `GET /api/v1/dashboard/webhooks` - Métricas administrativas de volume e taxa de sucesso nas últimas 24h/7d.
 
 ---
 
-## 7. Próximos Passos para Implementação
+## 7. Governança e Segurança em Camadas
 
-1. **Fase 1 (Schema & Migrations):** Criar a migration do Prisma com `WebhookSubscription` e `WebhookDelivery`.
-2. **Fase 2 (Módulo de Gestão na API):** Implementar Controller, Service e DTOs de CRUD e segurança HMAC.
-3. **Fase 3 (Worker de Polling & Despacho):** Criar o serviço `infoapi-worker` com loops desacoplados e queries indexadas para os 5 domínios.
-4. **Fase 4 (Infraestrutura Docker):** Adicionar o serviço `worker` no `docker-compose.yml` e ajustar o `deploy.sh` para gerenciar a inicialização do worker.
+1. **Herança Estrita de Permissões GET (Menor Privilégio):**
+   * Os eventos disponíveis para assinatura são condicionados às permissões de visualização do usuário:
+     - `order.*` -> `tenant.orders.view`
+     - `product.*` -> `tenant.products.view`
+     - `delivery.*` -> `tenant.deliveries.view`
+     - `account_payable.*` -> `tenant.account-payable.view`
+     - `account_receivable.*` -> `tenant.account-receivable.view`
+   * **Mitigação de TOCTOU (Time-of-Check to Time-of-Use):** O worker revalida o snapshot de permissões (`PermissionResolver.resolve`) a cada ciclo de polling antes de ler os bancos legados Firebird, garantindo que usuários que tiveram permissões revogadas não recebam eventos.
+2. **Blindagem Anti-SSRF em Duas Camadas:**
+   * **Camada 1 (Sintática - DTO/Zod):** Protocolo HTTPS obrigatório, proibição de IPs literais (IPv4/IPv6), proibição de `localhost`/`.local`/`.internal` e bloqueio do domínio raiz `infobrasil`.
+   * **Camada 2 (Semântica - DNS Resolution):** O Worker e o serviço de teste resolvem o hostname e rejeitam ativamente faixas privadas RFC 1918, Loopback e Link-local antes de abrir conexão TCP.
