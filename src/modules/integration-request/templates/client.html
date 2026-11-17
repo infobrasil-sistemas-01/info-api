@@ -103,6 +103,7 @@
                 <button class="tab-btn active" onclick="UI.switchTab('guide')">Guia de Integração</button>
                 <button class="tab-btn" onclick="UI.switchTab('usage')">Meu Plano e Uso</button>
                 <button class="tab-btn" onclick="UI.switchTab('permissions')">Minhas Permissões</button>
+                <button class="tab-btn" onclick="UI.switchTab('webhooks')"><i class='bx bx-broadcast'></i> Webhooks</button>
                 <!-- 
                 <button class="tab-btn" onclick="UI.switchTab('upgrade')">Upgrade</button> 
                 Desabilitado enquanto os planos não estiverem definidos pelo time comercial.
@@ -396,6 +397,251 @@
                     <p class="role-name" id="user-role-name">-</p>
                     <div class="permissions-list" id="permissions-list">
                         <!-- Permissões entram aqui -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab: Webhooks (Eventos em Tempo Real) -->
+            <section id="tab-webhooks" class="tab-content">
+                <div class="card" style="margin-bottom: 24px;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; margin-bottom: 16px;">
+                        <div>
+                            <h2 style="font-size: 1.6rem; color: var(--primary); display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                                <i class='bx bx-broadcast'></i> Webhooks (Eventos em Tempo Real)
+                            </h2>
+                            <p style="color: var(--text-muted); font-size: 0.95rem;">
+                                Receba notificações HTTP POST automáticas no seu servidor ou integrador (ex: n8n, Webhook.site) assim que novos dados forem gerados no ERP.
+                            </p>
+                        </div>
+                        <div id="webhook-status-badge-container">
+                            <span class="status-badge-mini" style="background: rgba(148, 163, 184, 0.2); color: var(--text-muted);">CARREGANDO...</span>
+                        </div>
+                    </div>
+
+                    <!-- Alerta de Circuit Breaker Pausado -->
+                    <div id="webhook-circuit-breaker-alert" class="hidden" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 12px; padding: 16px; margin-bottom: 24px;">
+                        <div style="display: flex; align-items: flex-start; gap: 12px;">
+                            <i class='bx bx-error-circle' style="color: var(--danger); font-size: 1.8rem; flex-shrink: 0;"></i>
+                            <div style="flex-grow: 1;">
+                                <h4 style="color: var(--danger); font-weight: 700; margin-bottom: 4px;">Webhook Suspenso pelo Circuit Breaker</h4>
+                                <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 12px;" id="webhook-pause-reason-text">
+                                    O seu endpoint acumulou 5 eventos consecutivos distintos com falha. Os disparos foram pausados temporariamente para evitar desperdício de recursos.
+                                </p>
+                                <button type="button" class="btn-primary" onclick="unpauseWebhook()" id="btn-unpause-webhook" style="background: var(--danger); border-color: var(--danger); font-size: 0.85rem; padding: 8px 16px; width: auto;">
+                                    <i class='bx bx-refresh'></i> <span>Reativar Webhook Agora</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Formulário de Configuração -->
+                    <form id="webhook-config-form" onsubmit="saveWebhookConfig(event)">
+                        <div style="display: grid; grid-template-columns: 1fr; gap: 20px; margin-bottom: 24px;">
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--text);">
+                                    URL de Destino (Callback HTTPS) <span style="color: var(--primary);">*</span>
+                                </label>
+                                <input type="url" id="webhook-target-url" required placeholder="https://webhook.site/seu-uuid ou https://n8n.meuservidor.com/webhook/orders" 
+                                    style="width: 100%; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; color: var(--text); font-size: 0.95rem; outline: none; transition: border-color 0.2s;"
+                                    onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'">
+                                <small style="display: block; margin-top: 6px; color: var(--text-muted); font-size: 0.8rem;">
+                                    Requer HTTPS com domínio público válido (IPs literais, localhost e domínios internos são bloqueados por segurança).
+                                </small>
+                            </div>
+
+                            <div class="form-group" id="webhook-secret-group" style="margin-bottom: 0;">
+                                <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--text);">
+                                    Chave Secreta de Assinatura (HMAC-SHA256)
+                                </label>
+                                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                    <input type="password" id="webhook-secret-key" readonly value="" placeholder="whsec_..."
+                                        style="flex-grow: 1; min-width: 200px; background: rgba(0, 0, 0, 0.4); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; color: #34d399; font-family: monospace; font-size: 0.95rem; outline: none;">
+                                    <button type="button" class="btn-primary" onclick="toggleSecretVisibility()" title="Exibir/Ocultar Segredo" style="width: auto; padding: 0 14px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text);">
+                                        <i class='bx bx-show' id="btn-toggle-secret-icon"></i>
+                                    </button>
+                                    <button type="button" class="btn-primary" onclick="copyWebhookSecret()" title="Copiar Segredo" style="width: auto; padding: 0 14px;">
+                                        <i class='bx bx-copy'></i> <span id="copy-secret-text">Copiar</span>
+                                    </button>
+                                    <button type="button" class="btn-primary" onclick="rotateWebhookSecret()" title="Rotacionar Chave" style="width: auto; padding: 0 14px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239,68,68,0.2); color: #fca5a5;">
+                                        <i class='bx bx-refresh'></i> <span>Rotacionar</span>
+                                    </button>
+                                </div>
+                                <small style="display: block; margin-top: 6px; color: var(--text-muted); font-size: 0.8rem;">
+                                    Cada disparo incluirá o cabeçalho <code>X-Info-Signature</code> assinado com esta chave para garantir a autenticidade da requisição.
+                                </small>
+                            </div>
+                        </div>
+
+                        <!-- Seleção de Eventos por Domínio -->
+                        <div style="margin-bottom: 24px;">
+                            <label style="display: block; font-weight: 600; margin-bottom: 12px; color: var(--text);">
+                                Eventos Assinados (Condicionados às suas Permissões de Leitura):
+                            </label>
+
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;" id="webhook-events-grid">
+                                <!-- Pedidos -->
+                                <div class="card" style="background: rgba(0,0,0,0.2); border: 1px solid var(--border); padding: 16px; border-radius: 12px;" id="domain-card-orders">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                        <h4 style="color: var(--primary); font-size: 0.95rem; display: flex; align-items: center; gap: 6px;">
+                                            <i class='bx bx-package'></i> Pedidos (Orders)
+                                        </h4>
+                                        <span class="perm-tag" id="badge-perm-orders" style="font-size: 0.75rem;">tenant.orders.view</span>
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                                        <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer;">
+                                            <input type="checkbox" name="webhook_events" value="order.created" class="webhook-event-checkbox" data-domain="orders">
+                                            <code>order.created</code> (Novo pedido)
+                                        </label>
+                                        <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer;">
+                                            <input type="checkbox" name="webhook_events" value="order.updated" class="webhook-event-checkbox" data-domain="orders">
+                                            <code>order.updated</code> (Alteração status)
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Produtos -->
+                                <div class="card" style="background: rgba(0,0,0,0.2); border: 1px solid var(--border); padding: 16px; border-radius: 12px;" id="domain-card-products">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                        <h4 style="color: var(--primary); font-size: 0.95rem; display: flex; align-items: center; gap: 6px;">
+                                            <i class='bx bx-tag'></i> Produtos (Products)
+                                        </h4>
+                                        <span class="perm-tag" id="badge-perm-products" style="font-size: 0.75rem;">tenant.products.view</span>
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                                        <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer;">
+                                            <input type="checkbox" name="webhook_events" value="product.created" class="webhook-event-checkbox" data-domain="products">
+                                            <code>product.created</code> (Novo produto)
+                                        </label>
+                                        <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer;">
+                                            <input type="checkbox" name="webhook_events" value="product.updated" class="webhook-event-checkbox" data-domain="products">
+                                            <code>product.updated</code> (Preço / Estoque)
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Entregas -->
+                                <div class="card" style="background: rgba(0,0,0,0.2); border: 1px solid var(--border); padding: 16px; border-radius: 12px;" id="domain-card-deliveries">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                        <h4 style="color: var(--primary); font-size: 0.95rem; display: flex; align-items: center; gap: 6px;">
+                                            <i class='bx bx-cycling'></i> Entregas (Deliveries)
+                                        </h4>
+                                        <span class="perm-tag" id="badge-perm-deliveries" style="font-size: 0.75rem;">tenant.deliveries.view</span>
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                                        <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer;">
+                                            <input type="checkbox" name="webhook_events" value="delivery.created" class="webhook-event-checkbox" data-domain="deliveries">
+                                            <code>delivery.created</code> (Nova entrega)
+                                        </label>
+                                        <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer;">
+                                            <input type="checkbox" name="webhook_events" value="delivery.updated" class="webhook-event-checkbox" data-domain="deliveries">
+                                            <code>delivery.updated</code> (Status de entrega)
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Contas a Pagar -->
+                                <div class="card" style="background: rgba(0,0,0,0.2); border: 1px solid var(--border); padding: 16px; border-radius: 12px;" id="domain-card-account-payable">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                        <h4 style="color: var(--primary); font-size: 0.95rem; display: flex; align-items: center; gap: 6px;">
+                                            <i class='bx bx-trending-down'></i> Contas a Pagar
+                                        </h4>
+                                        <span class="perm-tag" id="badge-perm-payable" style="font-size: 0.75rem;">tenant.account-payable.view</span>
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                                        <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer;">
+                                            <input type="checkbox" name="webhook_events" value="account_payable.created" class="webhook-event-checkbox" data-domain="payable">
+                                            <code>account_payable.created</code> (Título a pagar)
+                                        </label>
+                                        <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer;">
+                                            <input type="checkbox" name="webhook_events" value="account_payable.updated" class="webhook-event-checkbox" data-domain="payable">
+                                            <code>account_payable.updated</code> (Baixa ou quitação)
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Contas a Receber -->
+                                <div class="card" style="background: rgba(0,0,0,0.2); border: 1px solid var(--border); padding: 16px; border-radius: 12px;" id="domain-card-account-receivable">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                        <h4 style="color: var(--primary); font-size: 0.95rem; display: flex; align-items: center; gap: 6px;">
+                                            <i class='bx bx-trending-up'></i> Contas a Receber
+                                        </h4>
+                                        <span class="perm-tag" id="badge-perm-receivable" style="font-size: 0.75rem;">tenant.account-receivable.view</span>
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                                        <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer;">
+                                            <input type="checkbox" name="webhook_events" value="account_receivable.created" class="webhook-event-checkbox" data-domain="receivable">
+                                            <code>account_receivable.created</code> (Título a receber)
+                                        </label>
+                                        <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer;">
+                                            <input type="checkbox" name="webhook_events" value="account_receivable.updated" class="webhook-event-checkbox" data-domain="receivable">
+                                            <code>account_receivable.updated</code> (Baixa ou quitação)
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Barra de Ações -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                <button type="submit" class="btn-primary" id="btn-save-webhook" style="width: auto; padding: 10px 24px;">
+                                    <i class='bx bx-check'></i> <span>Salvar Configuração</span>
+                                </button>
+                                <button type="button" class="btn-primary" onclick="testWebhookPing()" id="btn-test-webhook" style="width: auto; padding: 10px 20px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: var(--primary);">
+                                    <i class='bx bx-paper-plane'></i> <span>Testar Envio (Ping)</span>
+                                </button>
+                            </div>
+                            <span id="webhook-feedback-msg" style="font-size: 0.9rem; font-weight: 600;"></span>
+                        </div>
+                    </form>
+
+                    <!-- Console de Resposta do Teste de Ping -->
+                    <div id="webhook-ping-result-box" class="hidden" style="margin-top: 20px; background: rgba(0,0,0,0.4); border: 1px solid var(--border); border-radius: 10px; padding: 16px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Resposta do Endpoint (Ping de Teste):</span>
+                            <span id="webhook-ping-status-pill" class="status-badge-mini">200 OK</span>
+                        </div>
+                        <pre id="webhook-ping-response-body" style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; font-family: monospace; font-size: 0.85rem; color: #a7f3d0; max-height: 200px; overflow-y: auto; white-space: pre-wrap; word-break: break-all;"></pre>
+                    </div>
+                </div>
+
+                <!-- Card de Histórico de Entregas -->
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                        <div>
+                            <h3 style="color: var(--text); font-size: 1.2rem; display: flex; align-items: center; gap: 8px;">
+                                <i class='bx bx-history'></i> Histórico de Entregas Recentes
+                            </h3>
+                            <p style="color: var(--text-muted); font-size: 0.85rem;">
+                                Últimas notificações enviadas para o seu endpoint e logs de diagnóstico.
+                            </p>
+                        </div>
+                        <button type="button" class="btn-primary" onclick="loadWebhookDeliveries()" title="Atualizar Histórico" style="width: auto; padding: 6px 12px; font-size: 0.85rem; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text);">
+                            <i class='bx bx-refresh'></i> <span>Atualizar</span>
+                        </button>
+                    </div>
+
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse; font-size: 0.88rem; text-align: left;" id="webhook-deliveries-table">
+                            <thead>
+                                <tr style="border-bottom: 1px solid var(--border); color: var(--text-muted); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px;">
+                                    <th style="padding: 12px 16px;">Evento</th>
+                                    <th style="padding: 12px 16px;">Status</th>
+                                    <th style="padding: 12px 16px;">HTTP Code</th>
+                                    <th style="padding: 12px 16px;">Tentativas</th>
+                                    <th style="padding: 12px 16px;">Latência</th>
+                                    <th style="padding: 12px 16px;">Data / Hora</th>
+                                    <th style="padding: 12px 16px; text-align: right;">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="webhook-deliveries-tbody">
+                                <tr>
+                                    <td colspan="7" style="text-align: center; padding: 32px; color: var(--text-muted);">
+                                        Nenhuma entrega registrada ainda.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </section>
@@ -884,6 +1130,7 @@ print(f'Basic {auth}')</code></pre>
                 if (tabId === 'usage') refreshTenantStatus();
                 if (tabId === 'requests') loadMyFeatureRequests();
                 if (tabId === 'guide') loadPdfGuides();
+                if (tabId === 'webhooks') loadWebhookData();
             };
 
             // Pré-carrega guias em background para exibir badge
@@ -1244,6 +1491,469 @@ print(f'Basic {auth}')</code></pre>
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = "<i class='bx bx-send'></i> <span>Enviar Solicitação</span>";
+            }
+        }
+
+        // ==========================================
+        // LÓGICA DO SUBSISTEMA DE WEBHOOKS (CLIENTE)
+        // ==========================================
+        window.currentWebhookSubscription = null;
+
+        function toggleSecretVisibility() {
+            const input = document.getElementById('webhook-secret-key');
+            const icon = document.getElementById('btn-toggle-secret-icon');
+            if (!input) return;
+            if (input.type === 'password') {
+                input.type = 'text';
+                if (icon) icon.className = 'bx bx-hide';
+            } else {
+                input.type = 'password';
+                if (icon) icon.className = 'bx bx-show';
+            }
+        }
+
+        async function copyWebhookSecret() {
+            const input = document.getElementById('webhook-secret-key');
+            const textSpan = document.getElementById('copy-secret-text');
+            if (!input || !input.value) return;
+
+            try {
+                await navigator.clipboard.writeText(input.value);
+                if (textSpan) textSpan.innerText = 'Copiado!';
+                setTimeout(() => { if (textSpan) textSpan.innerText = 'Copiar'; }, 2500);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function applyEventPermissionsRbac(permissions) {
+            const permsSet = new Set(permissions || []);
+
+            const rbacConfig = [
+                { domain: 'orders', perm: 'tenant.orders.view', cardId: 'domain-card-orders', badgeId: 'badge-perm-orders' },
+                { domain: 'products', perm: 'tenant.products.view', cardId: 'domain-card-products', badgeId: 'badge-perm-products' },
+                { domain: 'deliveries', perm: 'tenant.deliveries.view', cardId: 'domain-card-deliveries', badgeId: 'badge-perm-deliveries' },
+                { domain: 'payable', perm: 'tenant.account-payable.view', cardId: 'domain-card-account-payable', badgeId: 'badge-perm-payable' },
+                { domain: 'receivable', perm: 'tenant.account-receivable.view', cardId: 'domain-card-account-receivable', badgeId: 'badge-perm-receivable' },
+            ];
+
+            rbacConfig.forEach(cfg => {
+                const hasPerm = permsSet.has(cfg.perm);
+                const checkboxes = document.querySelectorAll(`.webhook-event-checkbox[data-domain="${cfg.domain}"]`);
+                const card = document.getElementById(cfg.cardId);
+                const badge = document.getElementById(cfg.badgeId);
+
+                checkboxes.forEach(cb => {
+                    cb.disabled = !hasPerm;
+                    if (!hasPerm) cb.checked = false;
+                });
+
+                if (card) {
+                    card.style.opacity = hasPerm ? '1' : '0.55';
+                    if (!hasPerm) {
+                        card.title = `Você não possui a permissão '${cfg.perm}' para assinar este domínio.`;
+                    } else {
+                        card.title = '';
+                    }
+                }
+
+                if (badge) {
+                    badge.style.background = hasPerm ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)';
+                    badge.style.color = hasPerm ? 'var(--primary)' : 'var(--danger)';
+                    badge.innerText = hasPerm ? cfg.perm : `${cfg.perm} (Sem Acesso)`;
+                }
+            });
+        }
+
+        async function loadWebhookData() {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            const badgeContainer = document.getElementById('webhook-status-badge-container');
+            const alertBox = document.getElementById('webhook-circuit-breaker-alert');
+            const secretGroup = document.getElementById('webhook-secret-group');
+            const targetUrlInput = document.getElementById('webhook-target-url');
+            const secretKeyInput = document.getElementById('webhook-secret-key');
+            const saveBtn = document.getElementById('btn-save-webhook');
+            const feedbackMsg = document.getElementById('webhook-feedback-msg');
+
+            if (feedbackMsg) feedbackMsg.innerText = '';
+
+            try {
+                // 1. Obtém permissões atuais do usuário para aplicar no RBAC dos checkboxes
+                const meRes = await fetch('/api/v1/auth/me', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (meRes.ok) {
+                    const meData = await meRes.json();
+                    applyEventPermissionsRbac(meData.permissions || []);
+                }
+
+                // 2. Busca subscrição de webhook do cliente
+                const res = await fetch('/api/v1/webhooks/me', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (res.status === 404 || res.status === 204) {
+                    window.currentWebhookSubscription = null;
+                    if (badgeContainer) {
+                        badgeContainer.innerHTML = `<span class="status-badge-mini" style="background: rgba(148, 163, 184, 0.2); color: var(--text-muted);">NÃO CONFIGURADO</span>`;
+                    }
+                    if (alertBox) alertBox.classList.add('hidden');
+                    if (secretGroup) secretGroup.classList.add('hidden');
+                    if (targetUrlInput) targetUrlInput.value = '';
+                    if (secretKeyInput) secretKeyInput.value = '';
+                    if (saveBtn) saveBtn.innerHTML = `<i class='bx bx-plus-circle'></i> <span>Criar Webhook</span>`;
+                    document.querySelectorAll('.webhook-event-checkbox').forEach(cb => { if (!cb.disabled) cb.checked = false; });
+                    return;
+                }
+
+                if (!res.ok) throw new Error('Falha ao carregar configuração de webhook');
+
+                const sub = await res.json();
+                window.currentWebhookSubscription = sub;
+
+                if (targetUrlInput) targetUrlInput.value = sub.targetUrl || '';
+                if (secretKeyInput) secretKeyInput.value = sub.secretKey || '';
+                if (secretGroup) secretGroup.classList.remove('hidden');
+                if (saveBtn) saveBtn.innerHTML = `<i class='bx bx-check'></i> <span>Salvar Alterações</span>`;
+
+                // Marca os eventos assinados
+                const activeEvents = new Set(sub.events || []);
+                document.querySelectorAll('.webhook-event-checkbox').forEach(cb => {
+                    if (!cb.disabled) {
+                        cb.checked = activeEvents.has(cb.value);
+                    }
+                });
+
+                // Status & Circuit Breaker
+                if (sub.isPaused) {
+                    if (badgeContainer) {
+                        badgeContainer.innerHTML = `<span class="status-badge-mini" style="background: rgba(239, 68, 68, 0.2); color: var(--danger);"><i class='bx bx-error-circle'></i> PAUSADO (CIRCUIT BREAKER)</span>`;
+                    }
+                    if (alertBox) {
+                        alertBox.classList.remove('hidden');
+                        const reasonEl = document.getElementById('webhook-pause-reason-text');
+                        if (reasonEl) reasonEl.innerText = sub.pauseReason || 'O seu endpoint acumulou 5 eventos consecutivos distintos com falha.';
+                    }
+                } else if (sub.isActive) {
+                    if (badgeContainer) {
+                        badgeContainer.innerHTML = `<span class="status-badge-mini" style="background: rgba(16, 185, 129, 0.2); color: var(--primary);"><i class='bx bx-check-circle'></i> ATIVO</span>`;
+                    }
+                    if (alertBox) alertBox.classList.add('hidden');
+                } else {
+                    if (badgeContainer) {
+                        badgeContainer.innerHTML = `<span class="status-badge-mini" style="background: rgba(148, 163, 184, 0.2); color: var(--text-muted);">INATIVO</span>`;
+                    }
+                    if (alertBox) alertBox.classList.add('hidden');
+                }
+
+                // Carrega o histórico de entregas
+                await loadWebhookDeliveries();
+            } catch (err) {
+                console.error(err);
+                if (feedbackMsg) {
+                    feedbackMsg.style.color = 'var(--danger)';
+                    feedbackMsg.innerText = err.message || 'Erro ao carregar dados do webhook.';
+                }
+            }
+        }
+
+        async function saveWebhookConfig(event) {
+            event.preventDefault();
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            const targetUrl = document.getElementById('webhook-target-url')?.value?.trim();
+            const feedbackMsg = document.getElementById('webhook-feedback-msg');
+            const saveBtn = document.getElementById('btn-save-webhook');
+
+            const selectedEvents = [];
+            document.querySelectorAll('.webhook-event-checkbox:checked').forEach(cb => {
+                selectedEvents.push(cb.value);
+            });
+
+            if (selectedEvents.length === 0) {
+                if (feedbackMsg) {
+                    feedbackMsg.style.color = 'var(--danger)';
+                    feedbackMsg.innerText = 'Selecione ao menos um evento para assinar.';
+                }
+                return;
+            }
+
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = `<i class='bx bx-loader-alt bx-spin'></i> <span>Salvando...</span>`;
+            if (feedbackMsg) feedbackMsg.innerText = '';
+
+            try {
+                const isUpdate = !!window.currentWebhookSubscription;
+                const endpoint = isUpdate ? '/api/v1/webhooks/me' : '/api/v1/webhooks';
+                const method = isUpdate ? 'PUT' : 'POST';
+
+                const res = await fetch(endpoint, {
+                    method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        targetUrl,
+                        events: selectedEvents,
+                        isActive: true
+                    })
+                });
+
+                const data = await res.json().catch(() => ({}));
+                if (!res.ok) {
+                    throw new Error(data.message || 'Falha ao salvar configuração do webhook');
+                }
+
+                if (feedbackMsg) {
+                    feedbackMsg.style.color = 'var(--primary)';
+                    feedbackMsg.innerText = isUpdate ? 'Webhook atualizado com sucesso!' : 'Webhook configurado e ativado com sucesso!';
+                    setTimeout(() => { if (feedbackMsg) feedbackMsg.innerText = ''; }, 5000);
+                }
+
+                await loadWebhookData();
+            } catch (err) {
+                console.error(err);
+                if (feedbackMsg) {
+                    feedbackMsg.style.color = 'var(--danger)';
+                    feedbackMsg.innerText = err.message || 'Erro ao salvar. Verifique a URL e tente novamente.';
+                }
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = window.currentWebhookSubscription
+                    ? `<i class='bx bx-check'></i> <span>Salvar Alterações</span>`
+                    : `<i class='bx bx-plus-circle'></i> <span>Criar Webhook</span>`;
+            }
+        }
+
+        async function rotateWebhookSecret() {
+            if (!confirm('Deseja realmente rotacionar a chave secreta HMAC? Você precisará atualizar a validação de assinatura no seu integrador.')) {
+                return;
+            }
+
+            const token = localStorage.getItem('token');
+            if (!token) return;
+            const feedbackMsg = document.getElementById('webhook-feedback-msg');
+
+            try {
+                const res = await fetch('/api/v1/webhooks/me/rotate-secret', {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (!res.ok) {
+                    const data = await res.json().catch(() => ({}));
+                    throw new Error(data.message || 'Falha ao rotacionar chave secreta');
+                }
+
+                const updated = await res.json();
+                const secretKeyInput = document.getElementById('webhook-secret-key');
+                if (secretKeyInput) secretKeyInput.value = updated.secretKey || '';
+
+                if (feedbackMsg) {
+                    feedbackMsg.style.color = 'var(--primary)';
+                    feedbackMsg.innerText = 'Chave secreta rotacionada com sucesso! Atualize seu integrador.';
+                    setTimeout(() => { if (feedbackMsg) feedbackMsg.innerText = ''; }, 6000);
+                }
+            } catch (err) {
+                console.error(err);
+                alert(err.message || 'Erro ao rotacionar segredo.');
+            }
+        }
+
+        async function unpauseWebhook() {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            const btn = document.getElementById('btn-unpause-webhook');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = `<i class='bx bx-loader-alt bx-spin'></i> <span>Reativando...</span>`;
+            }
+
+            try {
+                const res = await fetch('/api/v1/webhooks/me/unpause', {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (!res.ok) {
+                    const data = await res.json().catch(() => ({}));
+                    throw new Error(data.message || 'Falha ao reativar webhook');
+                }
+
+                alert('Webhook reativado com sucesso! Os disparos e o Circuit Breaker foram restabelecidos.');
+                await loadWebhookData();
+            } catch (err) {
+                console.error(err);
+                alert(err.message || 'Erro ao reativar. Certifique-se de que o seu endpoint está acessível.');
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = `<i class='bx bx-refresh'></i> <span>Reativar Webhook Agora</span>`;
+                }
+            }
+        }
+
+        async function testWebhookPing() {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            if (!window.currentWebhookSubscription) {
+                alert('Configure e salve a URL de webhook antes de disparar o teste.');
+                return;
+            }
+
+            const btn = document.getElementById('btn-test-webhook');
+            const resultBox = document.getElementById('webhook-ping-result-box');
+            const statusPill = document.getElementById('webhook-ping-status-pill');
+            const bodyPre = document.getElementById('webhook-ping-response-body');
+
+            btn.disabled = true;
+            btn.innerHTML = `<i class='bx bx-loader-alt bx-spin'></i> <span>Enviando Ping...</span>`;
+            resultBox.classList.remove('hidden');
+            statusPill.className = 'status-badge-mini';
+            statusPill.style.background = 'rgba(148, 163, 184, 0.2)';
+            statusPill.style.color = 'var(--text-muted)';
+            statusPill.innerText = 'DISPARANDO...';
+            bodyPre.innerText = 'Aguardando resposta do seu servidor em até 5 segundos...';
+
+            try {
+                const res = await fetch('/api/v1/webhooks/me/test', {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                const data = await res.json().catch(() => ({}));
+
+                if (data.success) {
+                    statusPill.style.background = 'rgba(16, 185, 129, 0.2)';
+                    statusPill.style.color = 'var(--primary)';
+                    statusPill.innerText = `HTTP ${data.statusCode || 200} OK (${data.durationMs}ms)`;
+                } else {
+                    statusPill.style.background = 'rgba(239, 68, 68, 0.2)';
+                    statusPill.style.color = 'var(--danger)';
+                    statusPill.innerText = `HTTP ${data.statusCode || 'FALHA'} (${data.durationMs}ms)`;
+                }
+
+                bodyPre.innerText = JSON.stringify({
+                    message: data.message,
+                    statusCode: data.statusCode,
+                    durationMs: `${data.durationMs}ms`,
+                    responsePreview: data.responseBody || 'Sem corpo de resposta retornado'
+                }, null, 2);
+
+                await loadWebhookDeliveries();
+            } catch (err) {
+                console.error(err);
+                statusPill.style.background = 'rgba(239, 68, 68, 0.2)';
+                statusPill.style.color = 'var(--danger)';
+                statusPill.innerText = 'ERRO DE COMUNICAÇÃO';
+                bodyPre.innerText = err.message || 'Falha ao se comunicar com a API da InfoBrasil.';
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i class='bx bx-paper-plane'></i> <span>Testar Envio (Ping)</span>`;
+            }
+        }
+
+        async function loadWebhookDeliveries() {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            const tbody = document.getElementById('webhook-deliveries-tbody');
+            if (!tbody) return;
+
+            try {
+                const res = await fetch('/api/v1/webhooks/me/deliveries?limit=25', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (!res.ok) return;
+                const deliveries = await res.json();
+
+                if (!deliveries || deliveries.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="7" style="text-align: center; padding: 32px; color: var(--text-muted);">
+                                Nenhuma notificação enviada ainda. Salve seu webhook e dispare um teste!
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                tbody.innerHTML = deliveries.map(d => {
+                    const isSuccess = d.status === 'SUCCESS';
+                    const isPending = d.status === 'PENDING';
+                    const statusColor = isSuccess ? 'var(--primary)' : isPending ? '#f59e0b' : 'var(--danger)';
+                    const statusBg = isSuccess ? 'rgba(16, 185, 129, 0.15)' : isPending ? 'rgba(245, 158, 11, 0.15)' : 'rgba(239, 68, 68, 0.15)';
+                    const statusText = isSuccess ? 'SUCESSO' : isPending ? 'PENDENTE' : 'FALHA';
+                    const httpCode = d.responseStatus ? `HTTP ${d.responseStatus}` : (d.lastError ? 'ERRO' : '-');
+                    const latency = d.durationMs ? `${Math.round(d.durationMs)} ms` : '-';
+                    const dateStr = new Date(d.createdAt).toLocaleString('pt-BR');
+
+                    return `
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.03); transition: background 0.15s;" onmouseover="this.style.background='rgba(255,255,255,0.02)'" onmouseout="this.style.background='transparent'">
+                            <td style="padding: 12px 16px;">
+                                <code style="color: #6ee7b7; font-size: 0.82rem;">${d.event}</code>
+                            </td>
+                            <td style="padding: 12px 16px;">
+                                <span class="status-badge-mini" style="background: ${statusBg}; color: ${statusColor}; font-size: 0.75rem;">
+                                    ${statusText}
+                                </span>
+                            </td>
+                            <td style="padding: 12px 16px; font-weight: 600; font-size: 0.82rem; color: ${isSuccess ? 'var(--text)' : 'var(--danger)'};">
+                                ${httpCode}
+                            </td>
+                            <td style="padding: 12px 16px; color: var(--text-muted); font-size: 0.82rem;">
+                                ${d.attempts || 1}/4
+                            </td>
+                            <td style="padding: 12px 16px; color: var(--text-muted); font-size: 0.82rem;">
+                                ${latency}
+                            </td>
+                            <td style="padding: 12px 16px; color: var(--text-muted); font-size: 0.82rem;">
+                                ${dateStr}
+                            </td>
+                            <td style="padding: 12px 16px; text-align: right;">
+                                ${!isSuccess ? `
+                                    <button type="button" class="btn-primary" onclick="resendWebhookDelivery('${d.id}')" title="Reenviar agora" style="width: auto; padding: 4px 10px; font-size: 0.75rem; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); color: #fbbf24;">
+                                        <i class='bx bx-refresh'></i> Reenviar
+                                    </button>
+                                ` : `
+                                    <span style="color: var(--text-muted); font-size: 0.75rem;">-</span>
+                                `}
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            } catch (err) {
+                console.error('Falha ao carregar entregas:', err);
+            }
+        }
+
+        async function resendWebhookDelivery(deliveryId) {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            try {
+                const res = await fetch(`/api/v1/webhooks/me/deliveries/${deliveryId}/resend`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (!res.ok) {
+                    const data = await res.json().catch(() => ({}));
+                    throw new Error(data.message || 'Falha ao reenviar entrega');
+                }
+
+                alert('Entrega reenfileirada para reenvio imediato!');
+                await loadWebhookDeliveries();
+            } catch (err) {
+                console.error(err);
+                alert(err.message || 'Erro ao solicitar reenvio.');
             }
         }
 

@@ -505,7 +505,7 @@ const Data = {
         const endStr = endDate.toISOString();
 
         try {
-            const [resSummary, resUsers, resEndpoints, resStatus, resTimeSeries, resAlerts, resDBLoad, resPlanDist, resHeartbeat, resRequestLogs] = await Promise.all([
+            const [resSummary, resUsers, resEndpoints, resStatus, resTimeSeries, resAlerts, resDBLoad, resPlanDist, resHeartbeat, resRequestLogs, resWebhooks] = await Promise.all([
                 this.fetch(`${API_URL}/dashboard/summary?startDate=${startStr}&endDate=${endStr}`),
                 this.fetch(`${API_URL}/dashboard/top-users?startDate=${startStr}&endDate=${endStr}&limit=10`),
                 this.fetch(`${API_URL}/dashboard/top-endpoints?startDate=${startStr}&endDate=${endStr}&limit=10`),
@@ -515,7 +515,8 @@ const Data = {
                 this.fetch(`${API_URL}/dashboard/database-load?startDate=${startStr}&endDate=${endStr}&limit=10`),
                 this.fetch(`${API_URL}/dashboard/plan-distribution?startDate=${startStr}&endDate=${endStr}`),
                 this.fetch(`${API_URL}/dashboard/heartbeat`),
-                this.fetch(`${API_URL}/dashboard/request-logs?startDate=${startStr}&endDate=${endStr}&page=${State.logsCurrentPage}&limit=50`)
+                this.fetch(`${API_URL}/dashboard/request-logs?startDate=${startStr}&endDate=${endStr}&page=${State.logsCurrentPage}&limit=50`),
+                this.fetch(`${API_URL}/dashboard/webhooks`).catch(() => ({ ok: false }))
             ]);
 
             if (!resSummary.ok || !resUsers.ok || !resEndpoints.ok || !resStatus.ok || !resTimeSeries.ok || !resAlerts.ok || !resDBLoad.ok || !resPlanDist.ok || !resHeartbeat.ok || !resRequestLogs.ok) {
@@ -532,11 +533,12 @@ const Data = {
             const planDist = await resPlanDist.json();
             const heartbeat = await resHeartbeat.json();
             const requestLogs = await resRequestLogs.json();
+            const webhookMetrics = resWebhooks && resWebhooks.ok ? await resWebhooks.json() : null;
 
             const section = document.getElementById('section-dashboard');
             if (section) {
                 const prevFilter = dateFilter;
-                section.innerHTML = Components.DashboardContent(summary, topUsers, topEndpoints, proactiveAlerts, databaseLoad, planDist, heartbeat, requestLogs);
+                section.innerHTML = Components.DashboardContent(summary, topUsers, topEndpoints, proactiveAlerts, databaseLoad, planDist, heartbeat, requestLogs, webhookMetrics);
                 document.getElementById('dashboard-date-filter').value = prevFilter;
 
                 this.renderDashboardCharts(statusDist, timeSeries);

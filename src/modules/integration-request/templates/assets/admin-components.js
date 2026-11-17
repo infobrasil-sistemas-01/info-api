@@ -938,7 +938,7 @@ const Components = {
     `;
   },
 
-  DashboardContent: (summary, topUsers, topEndpoints, proactiveAlerts, databaseLoad, planDist, heartbeat, requestLogs) => {
+  DashboardContent: (summary, topUsers, topEndpoints, proactiveAlerts, databaseLoad, planDist, heartbeat, requestLogs, webhookMetrics) => {
     const activeRefresh = localStorage.getItem('dashboard-auto-refresh') === 'true' ? 'checked' : '';
 
     const proactiveRows = proactiveAlerts.map(a => `
@@ -1162,6 +1162,20 @@ const Components = {
                       <h2 style="margin: 0; font-size: 1.6rem; color: white;">${(summary.currentRpm ?? 0).toLocaleString()} RPM</h2>
                       <span style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-top: 4px;">
                           Média no período: ${(summary.averageRpm ?? 0).toLocaleString()}
+                      </span>
+                  </div>
+              </div>
+              <div class="card" style="padding: 1.5rem; display: flex; align-items: center; gap: 1.5rem;">
+                  <div style="font-size: 2.2rem; color: #3b82f6; background: rgba(59, 130, 246, 0.1); width: 60px; height: 60px; flex-shrink: 0; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
+                      <i class='bx bx-broadcast'></i>
+                  </div>
+                  <div>
+                      <small style="color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 4px;">WEBHOOKS ATIVOS</small>
+                      <h2 style="margin: 0; font-size: 1.6rem; color: white;">
+                          ${webhookMetrics ? webhookMetrics.activeSubscriptions : 0} <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 400;">/ ${webhookMetrics ? webhookMetrics.totalSubscriptions : 0}</span>
+                      </h2>
+                      <span style="font-size: 0.75rem; color: ${webhookMetrics && webhookMetrics.successRate24h >= 95 ? '#10b981' : '#f59e0b'}; display: block; margin-top: 4px;">
+                          ${webhookMetrics ? webhookMetrics.successRate24h : 100}% sucesso (24h) · ${webhookMetrics ? webhookMetrics.totalDeliveries24h : 0} envios
                       </span>
                   </div>
               </div>
