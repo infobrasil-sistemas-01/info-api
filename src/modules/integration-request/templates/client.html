@@ -103,7 +103,10 @@
                 <button class="tab-btn active" onclick="UI.switchTab('guide')">Guia de Integração</button>
                 <button class="tab-btn" onclick="UI.switchTab('usage')">Meu Plano e Uso</button>
                 <button class="tab-btn" onclick="UI.switchTab('permissions')">Minhas Permissões</button>
-                <button class="tab-btn" onclick="UI.switchTab('webhooks')"><i class='bx bx-broadcast'></i> Webhooks</button>
+                <button class="tab-btn" onclick="UI.switchTab('webhooks')" style="display: inline-flex; align-items: center; gap: 6px;">
+                    <i class='bx bx-broadcast'></i> Webhooks
+                    <span class="badge-beta" title="Esta funcionalidade está em fase BETA de testes. Qualquer erro pode ser informado via e-mail para ajustes e correções." style="background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.4); font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; font-weight: 700; cursor: help; letter-spacing: 0.5px;">BETA</span>
+                </button>
                 <!-- 
                 <button class="tab-btn" onclick="UI.switchTab('upgrade')">Upgrade</button> 
                 Desabilitado enquanto os planos não estiverem definidos pelo time comercial.
@@ -408,10 +411,17 @@
                         <div>
                             <h2 style="font-size: 1.6rem; color: var(--primary); display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
                                 <i class='bx bx-broadcast'></i> Webhooks (Eventos em Tempo Real)
+                                <span class="badge-beta" title="Esta funcionalidade está em fase BETA de testes. Qualquer erro pode ser informado via e-mail para ajustes e correções." style="background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.4); font-size: 0.68rem; padding: 2px 8px; border-radius: 4px; font-weight: 700; cursor: help; letter-spacing: 0.5px;">BETA</span>
                             </h2>
-                            <p style="color: var(--text-muted); font-size: 0.95rem;">
+                            <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 12px;">
                                 Receba notificações HTTP POST automáticas no seu servidor ou integrador (ex: n8n, Webhook.site) assim que novos dados forem gerados no ERP.
                             </p>
+                            <div style="background: rgba(245, 158, 11, 0.08); border-left: 4px solid #f59e0b; padding: 8px 14px; border-radius: 6px; font-size: 0.84rem; color: #fcd34d; display: flex; align-items: center; gap: 10px;">
+                                <i class='bx bx-info-circle' style="font-size: 1.2rem; flex-shrink: 0;"></i>
+                                <span>
+                                    <b>Recurso em Fase Beta:</b> O módulo de Webhooks está em testes ativos. Qualquer erro, inconsistência ou dúvida pode ser informado diretamente via e-mail para que possamos efetuar os devidos ajustes e correções.
+                                </span>
+                            </div>
                         </div>
                         <div id="webhook-status-badge-container">
                             <span class="webhook-badge-pill" style="background: rgba(148, 163, 184, 0.2); color: var(--text-muted);">CARREGANDO...</span>
@@ -468,6 +478,9 @@
                                 </div>
                                 <small style="display: block; margin-top: 6px; color: var(--text-muted); font-size: 0.8rem;">
                                     Cada disparo incluirá o cabeçalho <code>X-Info-Signature</code> assinado com esta chave para garantir a autenticidade da requisição.
+                                    <a href="#webhook-docs-section" style="color: var(--primary); margin-left: 6px; text-decoration: underline; font-weight: 600;">
+                                        <i class='bx bx-book-open'></i> Guia: Formato do Payload e Como Usar a Chave Secreta
+                                    </a>
                                 </small>
                             </div>
                         </div>
@@ -642,6 +655,252 @@
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+
+                <!-- Card: Guia do Desenvolvedor & Especificação Técnica de Webhooks -->
+                <div class="card" id="webhook-docs-section" style="margin-top: 24px;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+                        <div>
+                            <h3 style="color: var(--text); font-size: 1.25rem; display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                                <i class='bx bx-code-alt' style="color: var(--primary);"></i> Guia de Integração: Formato do Payload & Validação da Chave Secreta
+                            </h3>
+                            <p style="color: var(--text-muted); font-size: 0.9rem;">
+                                Entenda a estrutura dos eventos recebidos e como utilizar sua chave <code>whsec_...</code> para validar a autenticidade criptográfica com HMAC-SHA256.
+                            </p>
+                        </div>
+                        <span class="webhook-badge-pill" style="background: rgba(16, 185, 129, 0.15); color: var(--primary);">
+                            <i class='bx bx-shield-quarter'></i> HMAC-SHA256
+                        </span>
+                    </div>
+
+                    <!-- 1. Cabeçalhos HTTP Enviados -->
+                    <div style="margin-bottom: 24px;">
+                        <h4 style="color: var(--text); font-size: 0.98rem; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+                            <i class='bx bx-transfer'></i> 1. Cabeçalhos HTTP Enviados em Cada Notificação
+                        </h4>
+                        <div style="overflow-x: auto;">
+                            <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; background: rgba(0,0,0,0.25); border-radius: 8px; overflow: hidden; border: 1px solid var(--border);">
+                                <thead>
+                                    <tr style="background: rgba(255,255,255,0.03); color: var(--text-muted); text-align: left; border-bottom: 1px solid var(--border);">
+                                        <th style="padding: 10px 14px;">Cabeçalho HTTP</th>
+                                        <th style="padding: 10px 14px;">Exemplo de Valor</th>
+                                        <th style="padding: 10px 14px;">Descrição e Finalidade</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+                                        <td style="padding: 10px 14px;"><code style="color: #6ee7b7;">X-Info-Signature</code></td>
+                                        <td style="padding: 10px 14px; font-family: monospace; color: #fde047;">t=1763380200,v1=9f8a3c...</td>
+                                        <td style="padding: 10px 14px; color: var(--text-muted);">Assinatura digital calculada via HMAC-SHA256 com sua <b>Chave Secreta</b>. Use para comprovar que o disparo partiu da InfoBrasil.</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+                                        <td style="padding: 10px 14px;"><code style="color: #6ee7b7;">X-Info-Event</code></td>
+                                        <td style="padding: 10px 14px; font-family: monospace; color: #a5f3fc;">orders.created</td>
+                                        <td style="padding: 10px 14px; color: var(--text-muted);">Nome do evento disparado. Permite ao seu roteador filtrar requisições antes mesmo de processar o JSON.</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+                                        <td style="padding: 10px 14px;"><code style="color: #6ee7b7;">X-Info-Delivery-Id</code></td>
+                                        <td style="padding: 10px 14px; font-family: monospace; color: #e2e8f0;">cm3x89a... (UUID)</td>
+                                        <td style="padding: 10px 14px; color: var(--text-muted);">Identificador exclusivo desta tentativa de entrega. <b>Dica de Idempotência:</b> guarde esse ID para descartar mensagens repetidas.</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 10px 14px;"><code style="color: #6ee7b7;">Content-Type</code></td>
+                                        <td style="padding: 10px 14px; font-family: monospace; color: #e2e8f0;">application/json</td>
+                                        <td style="padding: 10px 14px; color: var(--text-muted);">Todos os payloads são entregues em JSON codificado em UTF-8.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- 2. Formato do Objeto JSON -->
+                    <div style="margin-bottom: 24px;">
+                        <h4 style="color: var(--text); font-size: 0.98rem; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+                            <i class='bx bx-data'></i> 2. Estrutura do Payload JSON (Corpo da Requisição POST)
+                        </h4>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px;">
+                            <div>
+                                <pre style="background: rgba(0,0,0,0.5); border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-family: monospace; font-size: 0.82rem; color: #a7f3d0; margin: 0; overflow-x: auto; max-height: 280px;"><code>{
+  "id": "cm3x98a120000abcde1234567",
+  "event": "orders.created",
+  "timestamp": 1763380200,
+  "data": {
+    "id": 10452,
+    "storeId": 1,
+    "customer": "Supermercado Exemplo",
+    "total": 450.90,
+    "status": "APROVADO",
+    "createdAt": "2026-11-17T12:00:00.000Z"
+  }
+}</code></pre>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-size: 0.88rem;">
+                                <p style="margin-bottom: 8px; color: var(--text);"><b style="color: #6ee7b7;">id:</b> UUID único da notificação para deduplicação no seu banco/filas.</p>
+                                <p style="margin-bottom: 8px; color: var(--text);"><b style="color: #6ee7b7;">event:</b> Nome qualificado do evento assinado (ex: <code>orders.created</code>, <code>products.stock_changed</code>).</p>
+                                <p style="margin-bottom: 8px; color: var(--text);"><b style="color: #6ee7b7;">timestamp:</b> Epoch Unix (em segundos) do disparo. Útil para rejeitar requisições atrasadas.</p>
+                                <p style="margin-bottom: 0; color: var(--text);"><b style="color: #6ee7b7;">data:</b> Dados detalhados da entidade gerada no ERP InfoBrasil.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Como Funciona a Chave Secreta -->
+                    <div style="margin-bottom: 24px; background: rgba(59, 130, 246, 0.05); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 10px; padding: 16px;">
+                        <h4 style="color: #60a5fa; font-size: 1rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                            <i class='bx bx-key'></i> 3. Por Que a Chave Secreta (`whsec_...`) Não Vem no Payload?
+                        </h4>
+                        <div style="font-size: 0.88rem; color: var(--text); line-height: 1.6;">
+                            <p style="margin-bottom: 8px;">
+                                A chave <code>whsec_...</code> é um <b>Segredo Compartilhado (*Shared Secret*)</b>, exatamente como na <b>Stripe</b> e no <b>GitHub</b>. Ela <b>NUNCA trafega pela rede</b>. Se ela fosse enviada em texto puro, qualquer interceptador na internet poderia capturá-la e forjar pedidos falsos para o seu sistema.
+                            </p>
+                            <p style="margin-bottom: 8px;">
+                                <b>Como a InfoBrasil assina:</b><br>
+                                Ao enviar o webhook, nossos servidores pegam o timestamp <code>t</code> e o corpo bruto JSON <code>rawBody</code> e calculam:
+                                <br>
+                                <code style="background: rgba(0,0,0,0.4); padding: 4px 8px; border-radius: 4px; display: inline-block; margin-top: 4px; color: #fde047;">
+                                    hash = HMAC-SHA256(t + "." + rawBody, suaChaveSecreta)
+                                </code>
+                            </p>
+                            <p style="margin-bottom: 0;">
+                                O resultado é enviado no header <code>X-Info-Signature: t=1763380200,v1=9f8a3c...</code>.<br>
+                                No seu integrador, você guarda a chave no seu <code>.env</code>, recalcula o hash sobre a mensagem recebida e compara com <code>v1</code>. Se forem idênticos, a mensagem é 100% autêntica e inalterada!
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 4. Exemplos Práticos de Código Prontos para Usar -->
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                            <h4 style="color: var(--text); font-size: 0.98rem; margin: 0; display: flex; align-items: center; gap: 6px;">
+                                <i class='bx bx-terminal'></i> 4. Código Pronto de Validação para Copiar
+                            </h4>
+                            <div style="display: flex; gap: 6px;" id="webhook-code-tab-buttons">
+                                <button type="button" class="btn-primary" onclick="switchWebhookDocTab('nodejs')" id="btn-tab-doc-nodejs" style="width: auto; padding: 4px 12px; font-size: 0.8rem; background: var(--primary); color: #0f172a;">Node.js / Express</button>
+                                <button type="button" class="btn-primary" onclick="switchWebhookDocTab('python')" id="btn-tab-doc-python" style="width: auto; padding: 4px 12px; font-size: 0.8rem; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text);">Python / FastAPI</button>
+                                <button type="button" class="btn-primary" onclick="switchWebhookDocTab('n8n')" id="btn-tab-doc-n8n" style="width: auto; padding: 4px 12px; font-size: 0.8rem; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text);">n8n Workflow</button>
+                            </div>
+                        </div>
+
+                        <!-- Tab: Node.js -->
+                        <div id="webhook-doc-pane-nodejs">
+                            <pre style="background: rgba(0,0,0,0.6); border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-family: monospace; font-size: 0.82rem; color: #e2e8f0; overflow-x: auto; margin: 0;"><code>const express = require('express');
+const crypto = require('crypto');
+const app = express();
+
+// IMPORTANTE: Utilize express.raw para preservar os bytes exatos antes do JSON.parse
+app.post('/webhook', express.raw({ type: 'application/json' }), (req, res) => {
+  const signatureHeader = req.headers['x-info-signature'];
+  const secretKey = process.env.WEBHOOK_SECRET; // Sua chave whsec_...
+
+  if (!signatureHeader || !secretKey) {
+    return res.status(401).send('Assinatura ausente ou chave não configurada');
+  }
+
+  // 1. Extrai timestamp (t) e hash da assinatura (v1)
+  const parts = Object.fromEntries(signatureHeader.split(',').map(kv => kv.split('=')));
+  const { t, v1 } = parts;
+
+  // 2. Proteção contra Replay Attack (tolerância recomendada: 5 minutos)
+  const now = Math.floor(Date.now() / 1000);
+  if (Math.abs(now - parseInt(t, 10)) > 300) {
+    return res.status(400).send('Timestamp expirado (> 5 min)');
+  }
+
+  // 3. Recalcula o HMAC-SHA256
+  const rawBody = req.body.toString('utf8');
+  const expectedHash = crypto
+    .createHmac('sha256', secretKey)
+    .update(`${t}.${rawBody}`)
+    .digest('hex');
+
+  // 4. Comparação em tempo constante (evita Timing Attacks)
+  const isValid = crypto.timingSafeEqual(
+    Buffer.from(v1, 'hex'),
+    Buffer.from(expectedHash, 'hex')
+  );
+
+  if (!isValid) {
+    return res.status(401).send('Assinatura HMAC inválida!');
+  }
+
+  // Payload autêntico! Prossiga com as ações no seu sistema:
+  const payload = JSON.parse(rawBody);
+  console.log(`Evento autêntico recebido: ${payload.event}`, payload.data);
+
+  return res.status(200).json({ received: true });
+});</code></pre>
+                        </div>
+
+                        <!-- Tab: Python -->
+                        <div id="webhook-doc-pane-python" style="display: none;">
+                            <pre style="background: rgba(0,0,0,0.6); border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-family: monospace; font-size: 0.82rem; color: #e2e8f0; overflow-x: auto; margin: 0;"><code>from fastapi import FastAPI, Request, HTTPException, Header
+import hmac
+import hashlib
+import time
+import os
+
+app = FastAPI()
+WEBHOOK_SECRET = os.getenv("WEBHOOK_SECRET") # Sua chave whsec_...
+
+@app.post("/webhook")
+async def receive_webhook(request: Request, x_info_signature: str = Header(None)):
+    if not x_info_signature or not WEBHOOK_SECRET:
+        raise HTTPException(status_code=401, detail="Assinatura ausente")
+
+    # 1. Extrai timestamp (t) e hash (v1)
+    parts = dict(kv.split("=") for kv in x_info_signature.split(","))
+    t = parts.get("t")
+    v1 = parts.get("v1")
+
+    # 2. Proteção contra Replay Attack (5 minutos)
+    if abs(int(time.time()) - int(t)) > 300:
+        raise HTTPException(status_code=400, detail="Notificação expirada")
+
+    # 3. Recalcula HMAC-SHA256 sobre o raw body
+    raw_body = await request.body()
+    signature_payload = f"{t}.".encode("utf-8") + raw_body
+    expected_hash = hmac.new(
+        WEBHOOK_SECRET.encode("utf-8"),
+        signature_payload,
+        hashlib.sha256
+    ).hexdigest()
+
+    # 4. Comparação segura de tempo constante
+    if not hmac.compare_digest(v1, expected_hash):
+        raise HTTPException(status_code=401, detail="Assinatura HMAC inválida")
+
+    # Payload autêntico!
+    event_data = await request.json()
+    print(f"Evento recebido: {event_data['event']}")
+    return {"received": True}</code></pre>
+                        </div>
+
+                        <!-- Tab: n8n -->
+                        <div id="webhook-doc-pane-n8n" style="display: none;">
+                            <div style="background: rgba(0,0,0,0.6); border: 1px solid var(--border); border-radius: 8px; padding: 16px; font-size: 0.88rem; color: var(--text); line-height: 1.6;">
+                                <h5 style="color: #f59e0b; margin-bottom: 8px; font-size: 0.95rem;">Configuração no n8n:</h5>
+                                <ol style="padding-left: 20px; margin-bottom: 12px;">
+                                    <li style="margin-bottom: 6px;"><b>No nó Webhook:</b> Deixe a opção de autenticação como <i>None</i> e conecte a saída em um nó <b>Code (JavaScript)</b>.</li>
+                                    <li style="margin-bottom: 6px;"><b>No nó Code:</b> Cole o código abaixo para validar o cabeçalho <code>headers['x-info-signature']</code>:</li>
+                                </ol>
+                                <pre style="background: rgba(0,0,0,0.4); border: 1px solid var(--border); border-radius: 6px; padding: 12px; font-family: monospace; font-size: 0.82rem; color: #a7f3d0; margin: 0; overflow-x: auto;"><code>const crypto = require('crypto');
+const signature = $input.first().json.headers['x-info-signature'];
+const secretKey = 'whsec_SUA_CHAVE_AQUI'; // Configure nas credenciais do seu n8n
+
+const parts = Object.fromEntries(signature.split(',').map(kv => kv.split('=')));
+const rawBody = JSON.stringify($input.first().json.body);
+
+const expected = crypto.createHmac('sha256', secretKey)
+  .update(`${parts.t}.${rawBody}`)
+  .digest('hex');
+
+if (parts.v1 !== expected) {
+  throw new Error('Assinatura HMAC InfoBrasil inválida! Requisição descartada.');
+}
+
+return $input.all();</code></pre>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -1982,6 +2241,27 @@ print(f'Basic {auth}')</code></pre>
                 refreshTenantStatus();
             }
         }, 60000);
+
+        function switchWebhookDocTab(tab) {
+            const tabs = ['nodejs', 'python', 'n8n'];
+            tabs.forEach(t => {
+                const pane = document.getElementById('webhook-doc-pane-' + t);
+                const btn = document.getElementById('btn-tab-doc-' + t);
+                if (pane) pane.style.display = (t === tab) ? 'block' : 'none';
+                if (btn) {
+                    if (t === tab) {
+                        btn.style.background = 'var(--primary)';
+                        btn.style.color = '#0f172a';
+                        btn.style.border = 'none';
+                    } else {
+                        btn.style.background = 'rgba(255,255,255,0.05)';
+                        btn.style.color = 'var(--text)';
+                        btn.style.border = '1px solid var(--border)';
+                    }
+                }
+            });
+        }
+        window.switchWebhookDocTab = switchWebhookDocTab;
 
         // Control sticky header scrolled state
         window.addEventListener('scroll', () => {
