@@ -1174,8 +1174,8 @@ const Components = {
                       <h2 style="margin: 0; font-size: 1.6rem; color: white;">
                           ${webhookMetrics ? webhookMetrics.activeSubscriptions : 0} <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 400;">/ ${webhookMetrics ? webhookMetrics.totalSubscriptions : 0}</span>
                       </h2>
-                      <span style="font-size: 0.75rem; color: ${webhookMetrics && webhookMetrics.successRate24h >= 95 ? '#10b981' : '#f59e0b'}; display: block; margin-top: 4px;">
-                          ${webhookMetrics ? webhookMetrics.successRate24h : 100}% sucesso (24h) · ${webhookMetrics ? webhookMetrics.totalDeliveries24h : 0} envios
+                      <span style="font-size: 0.75rem; color: ${(webhookMetrics && (webhookMetrics.totalDeliveries24h > 0 ? (webhookMetrics.successRatePercent ?? webhookMetrics.successRate24h ?? 100) >= 95 : true)) ? '#10b981' : '#f59e0b'}; display: block; margin-top: 4px;">
+                          ${webhookMetrics && webhookMetrics.totalDeliveries24h > 0 ? `${webhookMetrics.successRatePercent ?? webhookMetrics.successRate24h ?? 100}% sucesso (24h)` : '100% operacional'} · ${webhookMetrics ? webhookMetrics.totalDeliveries24h : 0} envios
                       </span>
                   </div>
               </div>

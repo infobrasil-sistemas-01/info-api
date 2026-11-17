@@ -622,6 +622,7 @@ export class DashboardService {
       successDeliveries24h,
       failedDeliveries24h,
       successRatePercent,
+      successRate24h: successRatePercent,
       avgDurationMs,
       recentFailures: recentFailures.map((f) => ({
         id: f.id,
