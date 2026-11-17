@@ -281,7 +281,7 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
           try {
             const rawItems = await queryPromise(
               `SELECT 
-                 IV.VEN_NUMERO, IV.PRO_CODIGO, P.PRO_DESCRICAO, P.PRO_UNIDADE, P.PRO_REFERENCIA,
+                 IV.VEN_NUMERO, IV.PRO_CODIGO, P.PRO_DESCRICAO, P.PRO_UNIDADE,
                  IV.IVD_QTDE, IV.IVD_PRECO, IV.IVD_DESCONTO, IV.IVD_TOTAL, IV.IVD_LIQUIDO
                FROM ITENSVEN IV
                LEFT JOIN PRODUTOS P ON P.PRO_CODIGO = IV.PRO_CODIGO
@@ -297,7 +297,6 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
               itemsByOrder.get(orderId)!.push({
                 productId: Number(item.PRO_CODIGO),
                 description: item.PRO_DESCRICAO ? String(item.PRO_DESCRICAO).trim() : null,
-                reference: item.PRO_REFERENCIA ? String(item.PRO_REFERENCIA).trim() : null,
                 unit: item.PRO_UNIDADE ? String(item.PRO_UNIDADE).trim() : null,
                 quantity: Number(item.IVD_QTDE) || 0,
                 unitPrice: Number(item.IVD_PRECO) || 0,
@@ -482,7 +481,7 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
 
       const products = await queryPromise(
         `SELECT FIRST 25
-           P.PRO_CODIGO, P.PRO_CODIGOBAR, P.PRO_DESCRICAO, P.PRO_REFERENCIA, P.PRO_UNIDADE,
+           P.PRO_CODIGO, P.PRO_CODIGOBAR, P.PRO_DESCRICAO, P.PRO_UNIDADE,
            P.PRO_PRECOVENDA, P.PRO_ATIVO,
            P.PRO_DATACADASTRO, P.PRO_DATAALTERACAO, P.PRO_HORA,
            P.MAR_CODIGO, M.MAR_DESCRICAO,
@@ -560,7 +559,6 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
               productId: proCodigo,
               barcode: prod.PRO_CODIGOBAR ? String(prod.PRO_CODIGOBAR).trim() : null,
               description: prod.PRO_DESCRICAO ? String(prod.PRO_DESCRICAO).trim() : null,
-              reference: prod.PRO_REFERENCIA ? String(prod.PRO_REFERENCIA).trim() : null,
               unit: prod.PRO_UNIDADE ? String(prod.PRO_UNIDADE).trim() : null,
               price: Number(prod.PRO_PRECOVENDA) || 0,
               active: prod.PRO_ATIVO === 'S' || prod.PRO_ATIVO === 1,
