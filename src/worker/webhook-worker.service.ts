@@ -188,7 +188,31 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
       (events.includes('order.created') || events.includes('order.updated')) &&
       allowed.has('tenant.orders.view')
     ) {
-      const lastOrderId = sub.lastOrderId || 0;
+      let lastOrderId = sub.lastOrderId || 0;
+
+      // Proteção contra Cold-Start desancorado: se lastOrderId for 0, ancora imediatamente no MAX atual
+      if (lastOrderId === 0) {
+        try {
+          const maxRows = await queryPromise(
+            'SELECT COALESCE(MAX(VEN_NUMERO), 0) AS MAX_ID FROM VENDAS',
+          );
+          const currentMax = Number(maxRows?.[0]?.MAX_ID || 0);
+          if (currentMax > 0) {
+            this.logger.warn(
+              `Assinatura ${sub.id} (tenant: ${sub.user.user}) possuía lastOrderId zerado. Ancorando no MAX(VEN_NUMERO) atual: ${currentMax}`,
+            );
+            await this.prisma.webhookSubscription.update({
+              where: { id: sub.id },
+              data: { lastOrderId: currentMax, lastOrderSyncAt: new Date() },
+            });
+            lastOrderId = currentMax;
+          }
+        } catch (err: any) {
+          this.logger.warn(
+            `Falha ao auto-ancorar lastOrderId zerado na sub ${sub.id}: ${err.message}`,
+          );
+        }
+      }
 
       const sales = await queryPromise(
         `SELECT FIRST 25

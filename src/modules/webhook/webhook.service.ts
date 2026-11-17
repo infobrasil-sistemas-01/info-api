@@ -1,4 +1,5 @@
 import {
+  BadGatewayException,
   BadRequestException,
   ConflictException,
   ForbiddenException,
@@ -79,28 +80,30 @@ export class WebhookService {
   }
 
   /**
-   * Obtém os IDs máximos atuais no Firebird para inicializar os cursores no momento da ativação (Cold Start)
+   * Obtém os IDs máximos atuais no Firebird para inicializar os cursores no momento da ativação (Cold Start).
+   * Abordagem 1: Ancoragem Síncrona Obrigatória.
+   * Lança BadGatewayException se a conexão ou consulta ao Firebird falhar, impedindo a criação com cursores zerados.
    */
-  private async getInitialHighWaterMarks(credentialsId?: string) {
-    const marks = {
-      lastOrderId: 0,
-      lastProductId: 0,
-      lastDeliveryId: 0,
-      lastAccountPayableId: 0,
-      lastAccountReceivableId: 0,
-    };
-
-    if (!credentialsId) return marks;
-
+  private async getInitialHighWaterMarks(credentialsId: string) {
     let connection: any;
     try {
       connection =
         await this.tenantConnectionService.getConnection(credentialsId);
+    } catch (err: any) {
+      this.logger.error(
+        `Falha ao conectar no Firebird do tenant (${credentialsId}) para ancoragem inicial: ${err.message}`,
+      );
+      throw new BadGatewayException(
+        `Não foi possível conectar ao banco de dados do tenant para ancorar os cursores iniciais. Verifique a conectividade da base: ${err.message}`,
+      );
+    }
 
+    try {
       const queryMax = (sql: string): Promise<number> => {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
           connection.query(sql, [], (err: any, result: any[]) => {
-            if (err || !result || result.length === 0) {
+            if (err) return reject(err);
+            if (!result || result.length === 0) {
               resolve(0);
               return;
             }
@@ -128,22 +131,25 @@ export class WebhookService {
             .catch(() => 0),
         ]);
 
-      marks.lastOrderId = maxOrder;
-      marks.lastProductId = maxProduct;
-      marks.lastDeliveryId = maxDelivery;
-      marks.lastAccountPayableId = maxPayable;
-      marks.lastAccountReceivableId = maxReceivable;
+      return {
+        lastOrderId: maxOrder,
+        lastProductId: maxProduct,
+        lastDeliveryId: maxDelivery,
+        lastAccountPayableId: maxPayable,
+        lastAccountReceivableId: maxReceivable,
+      };
     } catch (err: any) {
-      this.logger.warn(
-        `Falha ao obter IDs iniciais do Firebird (${credentialsId}). Iniciando em 0. Detalhes: ${err.message}`,
+      this.logger.error(
+        `Falha ao consultar cursores máximos no Firebird (${credentialsId}): ${err.message}`,
+      );
+      throw new BadGatewayException(
+        `Falha ao obter marcas d'água iniciais no Firebird: ${err.message}`,
       );
     } finally {
       if (connection) {
         this.tenantConnectionService.releaseConnection(connection);
       }
     }
-
-    return marks;
   }
 
   /**
@@ -164,14 +170,31 @@ export class WebhookService {
       );
     }
 
-    // 1. Validação de Governança / RBAC dos eventos
+    // 1. Resolução segura de dbCredentialsId (caso não venha na claim do JWT)
+    let effectiveCredentialsId = credentialsId;
+    if (!effectiveCredentialsId) {
+      const user = await this.prisma.user.findUnique({
+        where: { id: userId },
+        select: { dbCredentialsId: true },
+      });
+      effectiveCredentialsId = user?.dbCredentialsId ?? undefined;
+    }
+
+    if (!effectiveCredentialsId) {
+      throw new BadRequestException(
+        'Usuário não possui credenciais de banco de dados (dbCredentialsId) configuradas.',
+      );
+    }
+
+    // 2. Validação de Governança / RBAC dos eventos
     await this.validateEventPermissions(userId, dto.events);
 
-    // 2. Validação profunda Anti-SSRF (sintaxe + resolução de DNS para faixas públicas)
+    // 3. Validação profunda Anti-SSRF (sintaxe + resolução de DNS para faixas públicas)
     await assertPublicWebhookUrl(dto.targetUrl);
 
+    // 4. Ancoragem Síncrona Obrigatória (Abordagem 1): falha fast se o Firebird estiver inacessível
+    const marks = await this.getInitialHighWaterMarks(effectiveCredentialsId);
     const secretKey = this.generateSecretKey();
-    const marks = await this.getInitialHighWaterMarks(credentialsId);
 
     const subscription = await this.prisma.webhookSubscription.create({
       data: {

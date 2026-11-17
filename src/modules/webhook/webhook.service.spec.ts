@@ -1,5 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { BadRequestException, ConflictException, ForbiddenException, NotFoundException } from '@nestjs/common';
+import {
+  BadGatewayException,
+  BadRequestException,
+  ConflictException,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
 import * as dns from 'dns';
 import { WebhookService } from './webhook.service';
 import { RegistryPrismaService } from 'src/infra/prisma/registry-prisma.service';
@@ -41,6 +47,9 @@ describe('WebhookService', () => {
         create: jest.fn(),
         update: jest.fn(),
         count: jest.fn(),
+      },
+      user: {
+        findUnique: jest.fn().mockResolvedValue({ dbCredentialsId: 'cred_1' }),
       },
     };
 
@@ -161,6 +170,40 @@ describe('WebhookService', () => {
           'cred_1',
         ),
       ).rejects.toThrow(ConflictException);
+    });
+
+    it('deve lancar BadRequestException se o usuario nao possuir dbCredentialsId configurado', async () => {
+      prismaMock.webhookSubscription.findUnique.mockResolvedValue(null);
+      prismaMock.user.findUnique.mockResolvedValue(null);
+
+      await expect(
+        service.create(
+          'user_sem_banco',
+          {
+            targetUrl: 'https://api.github.com/webhook',
+            events: ['order.created'],
+          },
+          undefined,
+        ),
+      ).rejects.toThrow(BadRequestException);
+    });
+
+    it('deve lancar BadGatewayException se a conexao ao Firebird falhar durante a ancoragem inicial', async () => {
+      prismaMock.webhookSubscription.findUnique.mockResolvedValue(null);
+      tenantConnectionServiceMock.getConnection.mockRejectedValueOnce(
+        new Error('Firebird connection refused'),
+      );
+
+      await expect(
+        service.create(
+          'user_1',
+          {
+            targetUrl: 'https://api.github.com/webhook',
+            events: ['order.created'],
+          },
+          'cred_offline',
+        ),
+      ).rejects.toThrow(BadGatewayException);
     });
   });
 
