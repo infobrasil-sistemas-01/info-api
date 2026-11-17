@@ -6,6 +6,33 @@ Para visualizar a versão interativa com busca em tempo real, acesse o portal we
 
 ---
 
+## [v1.20.13] - 2026-11-17
+
+### 📌 Inclusão de wathcdog.sh e melhorias
+> Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral & Usabilidade, Clientes, Geral.
+
+**Destaques:**
+- ⭐ Inclusão de wathcdog.sh
+- ⭐ CLI_OBS on /client endpoints
+
+#### 🚀 Novidades & Melhorias
+- **[Geral & Usabilidade]** Inclusão de wathcdog.sh: Atualização no módulo de Geral & Usabilidade: add wathcdog.sh.
+- **[Clientes]** CLI_OBS on /client endpoints: Atualização no módulo de Clientes: CLI_OBS on /client endpoints.
+- **[Geral]** unify image tag for zero-rebuild worker and add webhook circuit breaker: Atualização no módulo de Geral: unify image tag for zero-rebuild worker and add webhook circuit breaker.
+- **[Autenticação & Acesso]** return expires_in on POST /auth/login: Atualização no módulo de Autenticação & Acesso: return expires_in on POST /auth/login.
+- **[Geral]** Inclusão de customer webhooks self-service dashboard and admin telemetry card: Atualização no módulo de Geral: add customer webhooks self-service dashboard and admin telemetry card.
+- **[Geral]** Inclusão de RBAC-tied event scopes, anti-SSRF DNS protection and circuit breaker: Atualização no módulo de Geral: add RBAC-tied event scopes, anti-SSRF DNS protection and circuit breaker.
+
+#### 🛠️ Correções & Estabilidade
+- **[Clientes]** cast CLI_CPF_CNPJ to avoid Firebird string truncation on search: Atualização no módulo de Clientes: cast CLI_CPF_CNPJ to avoid Firebird string truncation on search.
+- **[Catálogo de Produtos]** Remoção de DTO pageSize limit and persist swagger authorization: Atualização no módulo de Catálogo de Produtos: remove DTO pageSize limit and persist swagger authorization.
+- **[Painel & Métricas]** webhook counter on admin dashboard: Atualização no módulo de Painel & Métricas: webhook counter on admin dashboard.
+
+#### 🔒 Segurança & Infraestrutura
+- **[Geral]** multi-domain webhooks engine, isolated worker, admin metrics and HMAC security: Atualização no módulo de Geral: multi-domain webhooks engine, isolated worker, admin metrics and HMAC security.
+
+---
+
 ## [v1.20.12] - 2026-11-12
 
 ### 📌 GET /products/stock e melhorias

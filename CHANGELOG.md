@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.20.13](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.20.12...v1.20.13) (2026-11-17)
+
+
+### Features
+
+* add wathcdog.sh ([80083b2](https://github.com/infobrasil-sistemas-01/info-api/commit/80083b240db225f9c6c5038f4456adac09280930))
+* CLI_OBS on /client endpoints ([1499dc2](https://github.com/infobrasil-sistemas-01/info-api/commit/1499dc2283d66a16132a81c60922291092b4ef03))
+* **deploy:** unify image tag for zero-rebuild worker and add webhook circuit breaker ([7520f88](https://github.com/infobrasil-sistemas-01/info-api/commit/7520f887f200a67774072aec803308fd6df034a2))
+* return expires_in on POST /auth/login ([767afcd](https://github.com/infobrasil-sistemas-01/info-api/commit/767afcd1aca07c3b4b20a813ed36efc8fd89d100))
+* **ui:** add customer webhooks self-service dashboard and admin telemetry card ([bb0dfa4](https://github.com/infobrasil-sistemas-01/info-api/commit/bb0dfa494a5fbfb4d5d668151e9eb396a28723c3))
+* **webhook:** add RBAC-tied event scopes, anti-SSRF DNS protection and circuit breaker ([c69cee5](https://github.com/infobrasil-sistemas-01/info-api/commit/c69cee5f76706cea030dbc84e3b0948268f81f14))
+* **webhooks:** multi-domain webhooks engine, isolated worker, admin metrics and HMAC security ([bdcae79](https://github.com/infobrasil-sistemas-01/info-api/commit/bdcae79bd5a0453655aef8928734c3a4495c61d3))
+
+
+### Bug Fixes
+
+* **client:** cast CLI_CPF_CNPJ to avoid Firebird string truncation on search ([3c8b5d4](https://github.com/infobrasil-sistemas-01/info-api/commit/3c8b5d4af6536f825f2dfa0c37274dd79ecd03e8))
+* **product:** remove DTO pageSize limit and persist swagger authorization ([bc407c6](https://github.com/infobrasil-sistemas-01/info-api/commit/bc407c6054716ce30dcf3ea47e3adb3d044b99b3))
+* webhook counter on admin dashboard ([fffe6ec](https://github.com/infobrasil-sistemas-01/info-api/commit/fffe6ecb06c0a4a90c2bb44309c9c2f8d4633dfa))
+
 ## [1.20.12](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.20.11...v1.20.12) (2026-11-12)
 
 

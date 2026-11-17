@@ -1,5 +1,108 @@
 [
   {
+    "version": "1.20.13",
+    "date": "2026-11-17",
+    "title": "Inclusão de wathcdog.sh e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral & Usabilidade, Clientes, Geral.",
+    "highlights": [
+      "Inclusão de wathcdog.sh",
+      "CLI_OBS on /client endpoints"
+    ],
+    "items": [
+      {
+        "module": "Geral & Usabilidade",
+        "type": "feature",
+        "title": "Inclusão de wathcdog.sh",
+        "description": "Atualização no módulo de Geral & Usabilidade: add wathcdog.sh.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add wathcdog.sh",
+        "commitHash": "80083b2"
+      },
+      {
+        "module": "Clientes",
+        "type": "feature",
+        "title": "CLI_OBS on /client endpoints",
+        "description": "Atualização no módulo de Clientes: CLI_OBS on /client endpoints.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "CLI_OBS on /client endpoints",
+        "commitHash": "1499dc2"
+      },
+      {
+        "module": "Geral",
+        "type": "feature",
+        "title": "unify image tag for zero-rebuild worker and add webhook circuit breaker",
+        "description": "Atualização no módulo de Geral: unify image tag for zero-rebuild worker and add webhook circuit breaker.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "unify image tag for zero-rebuild worker and add webhook circuit breaker",
+        "commitHash": "7520f88"
+      },
+      {
+        "module": "Autenticação & Acesso",
+        "type": "feature",
+        "title": "return expires_in on POST /auth/login",
+        "description": "Atualização no módulo de Autenticação & Acesso: return expires_in on POST /auth/login.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "return expires_in on POST /auth/login",
+        "commitHash": "767afcd"
+      },
+      {
+        "module": "Geral",
+        "type": "feature",
+        "title": "Inclusão de customer webhooks self-service dashboard and admin telemetry card",
+        "description": "Atualização no módulo de Geral: add customer webhooks self-service dashboard and admin telemetry card.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add customer webhooks self-service dashboard and admin telemetry card",
+        "commitHash": "bb0dfa4"
+      },
+      {
+        "module": "Geral",
+        "type": "feature",
+        "title": "Inclusão de RBAC-tied event scopes, anti-SSRF DNS protection and circuit breaker",
+        "description": "Atualização no módulo de Geral: add RBAC-tied event scopes, anti-SSRF DNS protection and circuit breaker.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add RBAC-tied event scopes, anti-SSRF DNS protection and circuit breaker",
+        "commitHash": "c69cee5"
+      },
+      {
+        "module": "Geral",
+        "type": "security",
+        "title": "multi-domain webhooks engine, isolated worker, admin metrics and HMAC security",
+        "description": "Atualização no módulo de Geral: multi-domain webhooks engine, isolated worker, admin metrics and HMAC security.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "multi-domain webhooks engine, isolated worker, admin metrics and HMAC security",
+        "commitHash": "bdcae79"
+      },
+      {
+        "module": "Clientes",
+        "type": "fix",
+        "title": "cast CLI_CPF_CNPJ to avoid Firebird string truncation on search",
+        "description": "Atualização no módulo de Clientes: cast CLI_CPF_CNPJ to avoid Firebird string truncation on search.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "cast CLI_CPF_CNPJ to avoid Firebird string truncation on search",
+        "commitHash": "3c8b5d4"
+      },
+      {
+        "module": "Catálogo de Produtos",
+        "type": "fix",
+        "title": "Remoção de DTO pageSize limit and persist swagger authorization",
+        "description": "Atualização no módulo de Catálogo de Produtos: remove DTO pageSize limit and persist swagger authorization.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "remove DTO pageSize limit and persist swagger authorization",
+        "commitHash": "bc407c6"
+      },
+      {
+        "module": "Painel & Métricas",
+        "type": "fix",
+        "title": "webhook counter on admin dashboard",
+        "description": "Atualização no módulo de Painel & Métricas: webhook counter on admin dashboard.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "webhook counter on admin dashboard",
+        "commitHash": "fffe6ec"
+      }
+    ],
+    "totalChanges": 10
+  },
+  {
     "version": "1.20.12",
     "date": "2026-11-12",
     "title": "GET /products/stock e melhorias",
