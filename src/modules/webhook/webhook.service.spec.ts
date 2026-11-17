@@ -48,6 +48,7 @@ describe('WebhookService', () => {
       getConnection: jest.fn().mockResolvedValue({
         query: jest.fn((sql, params, cb) => cb(null, [{ max: 100 }])),
       }),
+      releaseConnection: jest.fn(),
     };
 
     permissionResolverMock = {

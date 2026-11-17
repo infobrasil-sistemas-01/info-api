@@ -92,8 +92,9 @@ export class WebhookService {
 
     if (!credentialsId) return marks;
 
+    let connection: any;
     try {
-      const connection =
+      connection =
         await this.tenantConnectionService.getConnection(credentialsId);
 
       const queryMax = (sql: string): Promise<number> => {
@@ -136,6 +137,10 @@ export class WebhookService {
       this.logger.warn(
         `Falha ao obter IDs iniciais do Firebird (${credentialsId}). Iniciando em 0. Detalhes: ${err.message}`,
       );
+    } finally {
+      if (connection) {
+        this.tenantConnectionService.releaseConnection(connection);
+      }
     }
 
     return marks;

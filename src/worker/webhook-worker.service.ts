@@ -163,21 +163,22 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
       return; // Se o banco do cliente estiver inacessível, ignora silenciosamente nesta rodada
     }
 
-    // Revalidação contínua de permissões em tempo de execução (Anti-TOCTOU)
-    const snap = await this.permissionResolver.resolve(sub.user.id);
-    const allowed = snap.allowedKeys;
+    try {
+      // Revalidação contínua de permissões em tempo de execução (Anti-TOCTOU)
+      const snap = await this.permissionResolver.resolve(sub.user.id);
+      const allowed = snap.allowedKeys;
 
-    const queryPromise = (sql: string, params: any[] = []): Promise<any[]> => {
-      return new Promise((resolve) => {
-        connection.query(sql, params, (err: any, result: any[]) => {
-          if (err || !result) {
-            resolve([]);
-          } else {
-            resolve(result);
-          }
+      const queryPromise = (sql: string, params: any[] = []): Promise<any[]> => {
+        return new Promise((resolve) => {
+          connection.query(sql, params, (err: any, result: any[]) => {
+            if (err || !result) {
+              resolve([]);
+            } else {
+              resolve(result);
+            }
+          });
         });
-      });
-    };
+      };
 
     const events = sub.events || [];
 
@@ -522,7 +523,12 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
         });
       }
     }
+  } finally {
+    if (connection) {
+      this.tenantConnectionService.releaseConnection(connection);
+    }
   }
+}
 
   // ==========================================
   // LOOP B: DISPATCHER (Despacho HTTP)
