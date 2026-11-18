@@ -24177,11 +24177,11 @@ export namespace Prisma {
 
   export type WebhookSubscriptionSumAggregateOutputType = {
     consecutiveFailures: number | null
-    lastOrderId: number | null
-    lastProductId: number | null
-    lastDeliveryId: number | null
-    lastAccountPayableId: number | null
-    lastAccountReceivableId: number | null
+    lastOrderId: bigint | null
+    lastProductId: bigint | null
+    lastDeliveryId: bigint | null
+    lastAccountPayableId: bigint | null
+    lastAccountReceivableId: bigint | null
   }
 
   export type WebhookSubscriptionMinAggregateOutputType = {
@@ -24194,15 +24194,15 @@ export namespace Prisma {
     isPaused: boolean | null
     pausedAt: Date | null
     pauseReason: string | null
-    lastOrderId: number | null
+    lastOrderId: bigint | null
     lastOrderSyncAt: Date | null
-    lastProductId: number | null
+    lastProductId: bigint | null
     lastProductSyncAt: Date | null
-    lastDeliveryId: number | null
+    lastDeliveryId: bigint | null
     lastDeliverySyncAt: Date | null
-    lastAccountPayableId: number | null
+    lastAccountPayableId: bigint | null
     lastAccountPayableSyncAt: Date | null
-    lastAccountReceivableId: number | null
+    lastAccountReceivableId: bigint | null
     lastAccountReceivableSyncAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -24218,15 +24218,15 @@ export namespace Prisma {
     isPaused: boolean | null
     pausedAt: Date | null
     pauseReason: string | null
-    lastOrderId: number | null
+    lastOrderId: bigint | null
     lastOrderSyncAt: Date | null
-    lastProductId: number | null
+    lastProductId: bigint | null
     lastProductSyncAt: Date | null
-    lastDeliveryId: number | null
+    lastDeliveryId: bigint | null
     lastDeliverySyncAt: Date | null
-    lastAccountPayableId: number | null
+    lastAccountPayableId: bigint | null
     lastAccountPayableSyncAt: Date | null
-    lastAccountReceivableId: number | null
+    lastAccountReceivableId: bigint | null
     lastAccountReceivableSyncAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -24448,15 +24448,15 @@ export namespace Prisma {
     isPaused: boolean
     pausedAt: Date | null
     pauseReason: string | null
-    lastOrderId: number
+    lastOrderId: bigint
     lastOrderSyncAt: Date
-    lastProductId: number
+    lastProductId: bigint
     lastProductSyncAt: Date
-    lastDeliveryId: number
+    lastDeliveryId: bigint
     lastDeliverySyncAt: Date
-    lastAccountPayableId: number
+    lastAccountPayableId: bigint
     lastAccountPayableSyncAt: Date
-    lastAccountReceivableId: number
+    lastAccountReceivableId: bigint
     lastAccountReceivableSyncAt: Date
     createdAt: Date
     updatedAt: Date
@@ -24616,15 +24616,15 @@ export namespace Prisma {
       isPaused: boolean
       pausedAt: Date | null
       pauseReason: string | null
-      lastOrderId: number
+      lastOrderId: bigint
       lastOrderSyncAt: Date
-      lastProductId: number
+      lastProductId: bigint
       lastProductSyncAt: Date
-      lastDeliveryId: number
+      lastDeliveryId: bigint
       lastDeliverySyncAt: Date
-      lastAccountPayableId: number
+      lastAccountPayableId: bigint
       lastAccountPayableSyncAt: Date
-      lastAccountReceivableId: number
+      lastAccountReceivableId: bigint
       lastAccountReceivableSyncAt: Date
       createdAt: Date
       updatedAt: Date
@@ -25063,15 +25063,15 @@ export namespace Prisma {
     readonly isPaused: FieldRef<"WebhookSubscription", 'Boolean'>
     readonly pausedAt: FieldRef<"WebhookSubscription", 'DateTime'>
     readonly pauseReason: FieldRef<"WebhookSubscription", 'String'>
-    readonly lastOrderId: FieldRef<"WebhookSubscription", 'Int'>
+    readonly lastOrderId: FieldRef<"WebhookSubscription", 'BigInt'>
     readonly lastOrderSyncAt: FieldRef<"WebhookSubscription", 'DateTime'>
-    readonly lastProductId: FieldRef<"WebhookSubscription", 'Int'>
+    readonly lastProductId: FieldRef<"WebhookSubscription", 'BigInt'>
     readonly lastProductSyncAt: FieldRef<"WebhookSubscription", 'DateTime'>
-    readonly lastDeliveryId: FieldRef<"WebhookSubscription", 'Int'>
+    readonly lastDeliveryId: FieldRef<"WebhookSubscription", 'BigInt'>
     readonly lastDeliverySyncAt: FieldRef<"WebhookSubscription", 'DateTime'>
-    readonly lastAccountPayableId: FieldRef<"WebhookSubscription", 'Int'>
+    readonly lastAccountPayableId: FieldRef<"WebhookSubscription", 'BigInt'>
     readonly lastAccountPayableSyncAt: FieldRef<"WebhookSubscription", 'DateTime'>
-    readonly lastAccountReceivableId: FieldRef<"WebhookSubscription", 'Int'>
+    readonly lastAccountReceivableId: FieldRef<"WebhookSubscription", 'BigInt'>
     readonly lastAccountReceivableSyncAt: FieldRef<"WebhookSubscription", 'DateTime'>
     readonly createdAt: FieldRef<"WebhookSubscription", 'DateTime'>
     readonly updatedAt: FieldRef<"WebhookSubscription", 'DateTime'>
@@ -27208,6 +27208,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'BigInt'
+   */
+  export type BigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt'>
+    
+
+
+  /**
+   * Reference to a field of type 'BigInt[]'
+   */
+  export type ListBigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt[]'>
+    
+
+
+  /**
    * Reference to a field of type 'WebhookDeliveryStatus'
    */
   export type EnumWebhookDeliveryStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WebhookDeliveryStatus'>
@@ -28511,15 +28525,15 @@ export namespace Prisma {
     isPaused?: BoolFilter<"WebhookSubscription"> | boolean
     pausedAt?: DateTimeNullableFilter<"WebhookSubscription"> | Date | string | null
     pauseReason?: StringNullableFilter<"WebhookSubscription"> | string | null
-    lastOrderId?: IntFilter<"WebhookSubscription"> | number
+    lastOrderId?: BigIntFilter<"WebhookSubscription"> | bigint | number
     lastOrderSyncAt?: DateTimeFilter<"WebhookSubscription"> | Date | string
-    lastProductId?: IntFilter<"WebhookSubscription"> | number
+    lastProductId?: BigIntFilter<"WebhookSubscription"> | bigint | number
     lastProductSyncAt?: DateTimeFilter<"WebhookSubscription"> | Date | string
-    lastDeliveryId?: IntFilter<"WebhookSubscription"> | number
+    lastDeliveryId?: BigIntFilter<"WebhookSubscription"> | bigint | number
     lastDeliverySyncAt?: DateTimeFilter<"WebhookSubscription"> | Date | string
-    lastAccountPayableId?: IntFilter<"WebhookSubscription"> | number
+    lastAccountPayableId?: BigIntFilter<"WebhookSubscription"> | bigint | number
     lastAccountPayableSyncAt?: DateTimeFilter<"WebhookSubscription"> | Date | string
-    lastAccountReceivableId?: IntFilter<"WebhookSubscription"> | number
+    lastAccountReceivableId?: BigIntFilter<"WebhookSubscription"> | bigint | number
     lastAccountReceivableSyncAt?: DateTimeFilter<"WebhookSubscription"> | Date | string
     createdAt?: DateTimeFilter<"WebhookSubscription"> | Date | string
     updatedAt?: DateTimeFilter<"WebhookSubscription"> | Date | string
@@ -28568,15 +28582,15 @@ export namespace Prisma {
     isPaused?: BoolFilter<"WebhookSubscription"> | boolean
     pausedAt?: DateTimeNullableFilter<"WebhookSubscription"> | Date | string | null
     pauseReason?: StringNullableFilter<"WebhookSubscription"> | string | null
-    lastOrderId?: IntFilter<"WebhookSubscription"> | number
+    lastOrderId?: BigIntFilter<"WebhookSubscription"> | bigint | number
     lastOrderSyncAt?: DateTimeFilter<"WebhookSubscription"> | Date | string
-    lastProductId?: IntFilter<"WebhookSubscription"> | number
+    lastProductId?: BigIntFilter<"WebhookSubscription"> | bigint | number
     lastProductSyncAt?: DateTimeFilter<"WebhookSubscription"> | Date | string
-    lastDeliveryId?: IntFilter<"WebhookSubscription"> | number
+    lastDeliveryId?: BigIntFilter<"WebhookSubscription"> | bigint | number
     lastDeliverySyncAt?: DateTimeFilter<"WebhookSubscription"> | Date | string
-    lastAccountPayableId?: IntFilter<"WebhookSubscription"> | number
+    lastAccountPayableId?: BigIntFilter<"WebhookSubscription"> | bigint | number
     lastAccountPayableSyncAt?: DateTimeFilter<"WebhookSubscription"> | Date | string
-    lastAccountReceivableId?: IntFilter<"WebhookSubscription"> | number
+    lastAccountReceivableId?: BigIntFilter<"WebhookSubscription"> | bigint | number
     lastAccountReceivableSyncAt?: DateTimeFilter<"WebhookSubscription"> | Date | string
     createdAt?: DateTimeFilter<"WebhookSubscription"> | Date | string
     updatedAt?: DateTimeFilter<"WebhookSubscription"> | Date | string
@@ -28628,15 +28642,15 @@ export namespace Prisma {
     isPaused?: BoolWithAggregatesFilter<"WebhookSubscription"> | boolean
     pausedAt?: DateTimeNullableWithAggregatesFilter<"WebhookSubscription"> | Date | string | null
     pauseReason?: StringNullableWithAggregatesFilter<"WebhookSubscription"> | string | null
-    lastOrderId?: IntWithAggregatesFilter<"WebhookSubscription"> | number
+    lastOrderId?: BigIntWithAggregatesFilter<"WebhookSubscription"> | bigint | number
     lastOrderSyncAt?: DateTimeWithAggregatesFilter<"WebhookSubscription"> | Date | string
-    lastProductId?: IntWithAggregatesFilter<"WebhookSubscription"> | number
+    lastProductId?: BigIntWithAggregatesFilter<"WebhookSubscription"> | bigint | number
     lastProductSyncAt?: DateTimeWithAggregatesFilter<"WebhookSubscription"> | Date | string
-    lastDeliveryId?: IntWithAggregatesFilter<"WebhookSubscription"> | number
+    lastDeliveryId?: BigIntWithAggregatesFilter<"WebhookSubscription"> | bigint | number
     lastDeliverySyncAt?: DateTimeWithAggregatesFilter<"WebhookSubscription"> | Date | string
-    lastAccountPayableId?: IntWithAggregatesFilter<"WebhookSubscription"> | number
+    lastAccountPayableId?: BigIntWithAggregatesFilter<"WebhookSubscription"> | bigint | number
     lastAccountPayableSyncAt?: DateTimeWithAggregatesFilter<"WebhookSubscription"> | Date | string
-    lastAccountReceivableId?: IntWithAggregatesFilter<"WebhookSubscription"> | number
+    lastAccountReceivableId?: BigIntWithAggregatesFilter<"WebhookSubscription"> | bigint | number
     lastAccountReceivableSyncAt?: DateTimeWithAggregatesFilter<"WebhookSubscription"> | Date | string
     createdAt?: DateTimeWithAggregatesFilter<"WebhookSubscription"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"WebhookSubscription"> | Date | string
@@ -30109,15 +30123,15 @@ export namespace Prisma {
     isPaused?: boolean
     pausedAt?: Date | string | null
     pauseReason?: string | null
-    lastOrderId?: number
+    lastOrderId?: bigint | number
     lastOrderSyncAt?: Date | string
-    lastProductId?: number
+    lastProductId?: bigint | number
     lastProductSyncAt?: Date | string
-    lastDeliveryId?: number
+    lastDeliveryId?: bigint | number
     lastDeliverySyncAt?: Date | string
-    lastAccountPayableId?: number
+    lastAccountPayableId?: bigint | number
     lastAccountPayableSyncAt?: Date | string
-    lastAccountReceivableId?: number
+    lastAccountReceivableId?: bigint | number
     lastAccountReceivableSyncAt?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -30136,15 +30150,15 @@ export namespace Prisma {
     isPaused?: boolean
     pausedAt?: Date | string | null
     pauseReason?: string | null
-    lastOrderId?: number
+    lastOrderId?: bigint | number
     lastOrderSyncAt?: Date | string
-    lastProductId?: number
+    lastProductId?: bigint | number
     lastProductSyncAt?: Date | string
-    lastDeliveryId?: number
+    lastDeliveryId?: bigint | number
     lastDeliverySyncAt?: Date | string
-    lastAccountPayableId?: number
+    lastAccountPayableId?: bigint | number
     lastAccountPayableSyncAt?: Date | string
-    lastAccountReceivableId?: number
+    lastAccountReceivableId?: bigint | number
     lastAccountReceivableSyncAt?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -30161,15 +30175,15 @@ export namespace Prisma {
     isPaused?: BoolFieldUpdateOperationsInput | boolean
     pausedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pauseReason?: NullableStringFieldUpdateOperationsInput | string | null
-    lastOrderId?: IntFieldUpdateOperationsInput | number
+    lastOrderId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastOrderSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lastProductId?: IntFieldUpdateOperationsInput | number
+    lastProductId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastProductSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lastDeliveryId?: IntFieldUpdateOperationsInput | number
+    lastDeliveryId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastDeliverySyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lastAccountPayableId?: IntFieldUpdateOperationsInput | number
+    lastAccountPayableId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastAccountPayableSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lastAccountReceivableId?: IntFieldUpdateOperationsInput | number
+    lastAccountReceivableId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastAccountReceivableSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -30188,15 +30202,15 @@ export namespace Prisma {
     isPaused?: BoolFieldUpdateOperationsInput | boolean
     pausedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pauseReason?: NullableStringFieldUpdateOperationsInput | string | null
-    lastOrderId?: IntFieldUpdateOperationsInput | number
+    lastOrderId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastOrderSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lastProductId?: IntFieldUpdateOperationsInput | number
+    lastProductId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastProductSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lastDeliveryId?: IntFieldUpdateOperationsInput | number
+    lastDeliveryId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastDeliverySyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lastAccountPayableId?: IntFieldUpdateOperationsInput | number
+    lastAccountPayableId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastAccountPayableSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lastAccountReceivableId?: IntFieldUpdateOperationsInput | number
+    lastAccountReceivableId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastAccountReceivableSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -30214,15 +30228,15 @@ export namespace Prisma {
     isPaused?: boolean
     pausedAt?: Date | string | null
     pauseReason?: string | null
-    lastOrderId?: number
+    lastOrderId?: bigint | number
     lastOrderSyncAt?: Date | string
-    lastProductId?: number
+    lastProductId?: bigint | number
     lastProductSyncAt?: Date | string
-    lastDeliveryId?: number
+    lastDeliveryId?: bigint | number
     lastDeliverySyncAt?: Date | string
-    lastAccountPayableId?: number
+    lastAccountPayableId?: bigint | number
     lastAccountPayableSyncAt?: Date | string
-    lastAccountReceivableId?: number
+    lastAccountReceivableId?: bigint | number
     lastAccountReceivableSyncAt?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -30238,15 +30252,15 @@ export namespace Prisma {
     isPaused?: BoolFieldUpdateOperationsInput | boolean
     pausedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pauseReason?: NullableStringFieldUpdateOperationsInput | string | null
-    lastOrderId?: IntFieldUpdateOperationsInput | number
+    lastOrderId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastOrderSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lastProductId?: IntFieldUpdateOperationsInput | number
+    lastProductId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastProductSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lastDeliveryId?: IntFieldUpdateOperationsInput | number
+    lastDeliveryId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastDeliverySyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lastAccountPayableId?: IntFieldUpdateOperationsInput | number
+    lastAccountPayableId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastAccountPayableSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lastAccountReceivableId?: IntFieldUpdateOperationsInput | number
+    lastAccountReceivableId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastAccountReceivableSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -30263,15 +30277,15 @@ export namespace Prisma {
     isPaused?: BoolFieldUpdateOperationsInput | boolean
     pausedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pauseReason?: NullableStringFieldUpdateOperationsInput | string | null
-    lastOrderId?: IntFieldUpdateOperationsInput | number
+    lastOrderId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastOrderSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lastProductId?: IntFieldUpdateOperationsInput | number
+    lastProductId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastProductSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lastDeliveryId?: IntFieldUpdateOperationsInput | number
+    lastDeliveryId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastDeliverySyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lastAccountPayableId?: IntFieldUpdateOperationsInput | number
+    lastAccountPayableId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastAccountPayableSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lastAccountReceivableId?: IntFieldUpdateOperationsInput | number
+    lastAccountReceivableId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastAccountReceivableSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -31554,6 +31568,17 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type BigIntFilter<$PrismaModel = never> = {
+    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    not?: NestedBigIntFilter<$PrismaModel> | bigint | number
+  }
+
   export type WebhookDeliveryListRelationFilter = {
     every?: WebhookDeliveryWhereInput
     some?: WebhookDeliveryWhereInput
@@ -31653,6 +31678,22 @@ export namespace Prisma {
     lastDeliveryId?: SortOrder
     lastAccountPayableId?: SortOrder
     lastAccountReceivableId?: SortOrder
+  }
+
+  export type BigIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    not?: NestedBigIntWithAggregatesFilter<$PrismaModel> | bigint | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedBigIntFilter<$PrismaModel>
+    _min?: NestedBigIntFilter<$PrismaModel>
+    _max?: NestedBigIntFilter<$PrismaModel>
   }
 
   export type EnumWebhookDeliveryStatusFilter<$PrismaModel = never> = {
@@ -32657,6 +32698,14 @@ export namespace Prisma {
     push?: string | string[]
   }
 
+  export type BigIntFieldUpdateOperationsInput = {
+    set?: bigint | number
+    increment?: bigint | number
+    decrement?: bigint | number
+    multiply?: bigint | number
+    divide?: bigint | number
+  }
+
   export type UserUpdateOneRequiredWithoutWebhookSubscriptionNestedInput = {
     create?: XOR<UserCreateWithoutWebhookSubscriptionInput, UserUncheckedCreateWithoutWebhookSubscriptionInput>
     connectOrCreate?: UserCreateOrConnectWithoutWebhookSubscriptionInput
@@ -33045,6 +33094,33 @@ export namespace Prisma {
     _max?: NestedEnumFeatureRequestStatusFilter<$PrismaModel>
   }
 
+  export type NestedBigIntFilter<$PrismaModel = never> = {
+    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    not?: NestedBigIntFilter<$PrismaModel> | bigint | number
+  }
+
+  export type NestedBigIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    not?: NestedBigIntWithAggregatesFilter<$PrismaModel> | bigint | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedBigIntFilter<$PrismaModel>
+    _min?: NestedBigIntFilter<$PrismaModel>
+    _max?: NestedBigIntFilter<$PrismaModel>
+  }
+
   export type NestedEnumWebhookDeliveryStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.WebhookDeliveryStatus | EnumWebhookDeliveryStatusFieldRefInput<$PrismaModel>
     in?: $Enums.WebhookDeliveryStatus[] | ListEnumWebhookDeliveryStatusFieldRefInput<$PrismaModel>
@@ -33294,15 +33370,15 @@ export namespace Prisma {
     isPaused?: boolean
     pausedAt?: Date | string | null
     pauseReason?: string | null
-    lastOrderId?: number
+    lastOrderId?: bigint | number
     lastOrderSyncAt?: Date | string
-    lastProductId?: number
+    lastProductId?: bigint | number
     lastProductSyncAt?: Date | string
-    lastDeliveryId?: number
+    lastDeliveryId?: bigint | number
     lastDeliverySyncAt?: Date | string
-    lastAccountPayableId?: number
+    lastAccountPayableId?: bigint | number
     lastAccountPayableSyncAt?: Date | string
-    lastAccountReceivableId?: number
+    lastAccountReceivableId?: bigint | number
     lastAccountReceivableSyncAt?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -33319,15 +33395,15 @@ export namespace Prisma {
     isPaused?: boolean
     pausedAt?: Date | string | null
     pauseReason?: string | null
-    lastOrderId?: number
+    lastOrderId?: bigint | number
     lastOrderSyncAt?: Date | string
-    lastProductId?: number
+    lastProductId?: bigint | number
     lastProductSyncAt?: Date | string
-    lastDeliveryId?: number
+    lastDeliveryId?: bigint | number
     lastDeliverySyncAt?: Date | string
-    lastAccountPayableId?: number
+    lastAccountPayableId?: bigint | number
     lastAccountPayableSyncAt?: Date | string
-    lastAccountReceivableId?: number
+    lastAccountReceivableId?: bigint | number
     lastAccountReceivableSyncAt?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -33613,15 +33689,15 @@ export namespace Prisma {
     isPaused?: BoolFieldUpdateOperationsInput | boolean
     pausedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pauseReason?: NullableStringFieldUpdateOperationsInput | string | null
-    lastOrderId?: IntFieldUpdateOperationsInput | number
+    lastOrderId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastOrderSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lastProductId?: IntFieldUpdateOperationsInput | number
+    lastProductId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastProductSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lastDeliveryId?: IntFieldUpdateOperationsInput | number
+    lastDeliveryId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastDeliverySyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lastAccountPayableId?: IntFieldUpdateOperationsInput | number
+    lastAccountPayableId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastAccountPayableSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lastAccountReceivableId?: IntFieldUpdateOperationsInput | number
+    lastAccountReceivableId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastAccountReceivableSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -33638,15 +33714,15 @@ export namespace Prisma {
     isPaused?: BoolFieldUpdateOperationsInput | boolean
     pausedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pauseReason?: NullableStringFieldUpdateOperationsInput | string | null
-    lastOrderId?: IntFieldUpdateOperationsInput | number
+    lastOrderId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastOrderSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lastProductId?: IntFieldUpdateOperationsInput | number
+    lastProductId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastProductSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lastDeliveryId?: IntFieldUpdateOperationsInput | number
+    lastDeliveryId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastDeliverySyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lastAccountPayableId?: IntFieldUpdateOperationsInput | number
+    lastAccountPayableId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastAccountPayableSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lastAccountReceivableId?: IntFieldUpdateOperationsInput | number
+    lastAccountReceivableId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastAccountReceivableSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -35120,15 +35196,15 @@ export namespace Prisma {
     isPaused?: boolean
     pausedAt?: Date | string | null
     pauseReason?: string | null
-    lastOrderId?: number
+    lastOrderId?: bigint | number
     lastOrderSyncAt?: Date | string
-    lastProductId?: number
+    lastProductId?: bigint | number
     lastProductSyncAt?: Date | string
-    lastDeliveryId?: number
+    lastDeliveryId?: bigint | number
     lastDeliverySyncAt?: Date | string
-    lastAccountPayableId?: number
+    lastAccountPayableId?: bigint | number
     lastAccountPayableSyncAt?: Date | string
-    lastAccountReceivableId?: number
+    lastAccountReceivableId?: bigint | number
     lastAccountReceivableSyncAt?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -35146,15 +35222,15 @@ export namespace Prisma {
     isPaused?: boolean
     pausedAt?: Date | string | null
     pauseReason?: string | null
-    lastOrderId?: number
+    lastOrderId?: bigint | number
     lastOrderSyncAt?: Date | string
-    lastProductId?: number
+    lastProductId?: bigint | number
     lastProductSyncAt?: Date | string
-    lastDeliveryId?: number
+    lastDeliveryId?: bigint | number
     lastDeliverySyncAt?: Date | string
-    lastAccountPayableId?: number
+    lastAccountPayableId?: bigint | number
     lastAccountPayableSyncAt?: Date | string
-    lastAccountReceivableId?: number
+    lastAccountReceivableId?: bigint | number
     lastAccountReceivableSyncAt?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -35186,15 +35262,15 @@ export namespace Prisma {
     isPaused?: BoolFieldUpdateOperationsInput | boolean
     pausedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pauseReason?: NullableStringFieldUpdateOperationsInput | string | null
-    lastOrderId?: IntFieldUpdateOperationsInput | number
+    lastOrderId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastOrderSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lastProductId?: IntFieldUpdateOperationsInput | number
+    lastProductId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastProductSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lastDeliveryId?: IntFieldUpdateOperationsInput | number
+    lastDeliveryId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastDeliverySyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lastAccountPayableId?: IntFieldUpdateOperationsInput | number
+    lastAccountPayableId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastAccountPayableSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lastAccountReceivableId?: IntFieldUpdateOperationsInput | number
+    lastAccountReceivableId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastAccountReceivableSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -35212,15 +35288,15 @@ export namespace Prisma {
     isPaused?: BoolFieldUpdateOperationsInput | boolean
     pausedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pauseReason?: NullableStringFieldUpdateOperationsInput | string | null
-    lastOrderId?: IntFieldUpdateOperationsInput | number
+    lastOrderId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastOrderSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lastProductId?: IntFieldUpdateOperationsInput | number
+    lastProductId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastProductSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lastDeliveryId?: IntFieldUpdateOperationsInput | number
+    lastDeliveryId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastDeliverySyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lastAccountPayableId?: IntFieldUpdateOperationsInput | number
+    lastAccountPayableId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastAccountPayableSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    lastAccountReceivableId?: IntFieldUpdateOperationsInput | number
+    lastAccountReceivableId?: BigIntFieldUpdateOperationsInput | bigint | number
     lastAccountReceivableSyncAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

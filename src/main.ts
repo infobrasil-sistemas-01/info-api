@@ -12,6 +12,12 @@ import * as Sentry from '@sentry/node';
 import * as fs from 'fs';
 import * as path from 'path';
 
+// Permite que campos BigInt do Prisma sejam serializados nativamente em respostas JSON sem runtime crash
+(BigInt.prototype as any).toJSON = function () {
+  const n = Number(this);
+  return Number.isSafeInteger(n) ? n : this.toString();
+};
+
 // Previne que bugs internos do driver ou quedas de conexões de clientes derrubem o servidor
 const isIgnorableDriverError = (err: any): boolean => {
   const msg = err?.message || '';

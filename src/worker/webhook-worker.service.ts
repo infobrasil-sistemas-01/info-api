@@ -34,19 +34,25 @@ function getBrazilDateTime(val?: Date | string | null): { dateStr: string; timeS
   };
 }
 
-function parseFirebirdDate(val: any): string {
-  if (!val) return getBrazilDateTime(new Date()).dateStr;
+function parseFirebirdDate(val: any): string | null {
+  if (!val) return null;
   if (val instanceof Date) {
-    return getBrazilDateTime(val).dateStr;
+    const y = val.getFullYear();
+    const m = String(val.getMonth() + 1).padStart(2, '0');
+    const d = String(val.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
   }
   const s = String(val).trim();
-  return s.length >= 10 ? s.slice(0, 10) : s;
+  return s.length >= 10 ? s.slice(0, 10) : s || null;
 }
 
 function parseFirebirdTime(val: any): string {
   if (!val) return '00:00:00';
   if (val instanceof Date) {
-    return getBrazilDateTime(val).timeStr;
+    const h = String(val.getHours()).padStart(2, '0');
+    const m = String(val.getMinutes()).padStart(2, '0');
+    const s = String(val.getSeconds()).padStart(2, '0');
+    return `${h}:${m}:${s}`;
   }
   const s = String(val).trim();
   if (s.length === 5) return `${s}:00`;
@@ -218,31 +224,32 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
       (events.includes('order.created') || events.includes('order.updated')) &&
       allowed.has('tenant.orders.view')
     ) {
-      let lastOrderId = sub.lastOrderId ?? -1;
+      let lastOrderId = sub.lastOrderId !== undefined && sub.lastOrderId !== null ? BigInt(sub.lastOrderId) : -1n;
       let wasColdStart = false;
 
       // Proteção contra Cold-Start: se lastOrderId for -1 (novo webhook) ou 0 (legado desancorado)
-      if (lastOrderId === -1 || lastOrderId === 0) {
+      if (lastOrderId === -1n || lastOrderId === 0n) {
         const currentMax = await queryMaxId(
           'SELECT COALESCE(MAX(VEN_NUMERO), 0) AS MAX_ID FROM VENDAS',
           'SELECT COALESCE(MAX(PED_CODIGO), 0) AS MAX_ID FROM PEDIDOS',
         );
 
-        if (lastOrderId === -1 || currentMax > 0) {
+        if (lastOrderId === -1n || currentMax > 0) {
+          const currentMaxBig = BigInt(currentMax);
           this.logger.log(
-            `[Cold-Start Webhook] Ancorando cursor de pedidos da sub ${sub.id} (tenant: ${sub.user.user}): lastOrderId = ${currentMax}`,
+            `[Cold-Start Webhook] Ancorando cursor de pedidos da sub ${sub.id} (tenant: ${sub.user.user}): lastOrderId = ${currentMaxBig}`,
           );
           await this.prisma.webhookSubscription.update({
             where: { id: sub.id },
-            data: { lastOrderId: currentMax, lastOrderSyncAt: new Date() },
+            data: { lastOrderId: currentMaxBig, lastOrderSyncAt: new Date() },
           });
-          sub.lastOrderId = currentMax;
-          lastOrderId = currentMax;
+          sub.lastOrderId = currentMaxBig;
+          lastOrderId = currentMaxBig;
           wasColdStart = true;
         }
       }
 
-      if (!wasColdStart && lastOrderId >= 0) {
+      if (!wasColdStart && lastOrderId >= 0n) {
         const sales = await queryPromise(
         `SELECT FIRST 25
            V.VEN_NUMERO, V.LOJ_CODIGO, LOJ.LOJ_NOME, LOJ.LOJ_FANTASIA,
@@ -269,7 +276,7 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
          LEFT JOIN FORMASPAG FPG4 ON FPG4.FPG_CODIGO = V.FP4_CODIGO
          WHERE V.VEN_NUMERO > ?
          ORDER BY V.VEN_NUMERO ASC`,
-        [lastOrderId],
+        [lastOrderId.toString()],
       );
 
       if (sales.length > 0) {
@@ -310,11 +317,13 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
           }
         }
 
+        const deliveriesToCreate: any[] = [];
+
         for (const sale of sales) {
           const venNumero = Number(sale.VEN_NUMERO);
-          if (venNumero > maxSeenId) maxSeenId = venNumero;
+          if (BigInt(venNumero) > maxSeenId) maxSeenId = BigInt(venNumero);
 
-          const saleDate = parseFirebirdDate(sale.VEN_DATA);
+          const saleDate = parseFirebirdDate(sale.VEN_DATA) || getBrazilDateTime(new Date()).dateStr;
           const saleTime = parseFirebirdTime(sale.VEN_HORA);
 
           const payments: Array<{ code: number; name: string; value: number }> = [];
@@ -420,19 +429,24 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
             },
           };
 
-          await this.prisma.webhookDelivery.create({
-            data: {
-              subscriptionId: sub.id,
-              event: eventType,
-              payload: payload as any,
-              status: 'PENDING',
-            },
+          deliveriesToCreate.push({
+            subscriptionId: sub.id,
+            event: eventType,
+            payload: payload as any,
+            status: 'PENDING',
           });
         }
 
-        await this.prisma.webhookSubscription.update({
-          where: { id: sub.id },
-          data: { lastOrderId: maxSeenId, lastOrderSyncAt: new Date() },
+        await this.prisma.$transaction(async (tx) => {
+          if (deliveriesToCreate.length > 0) {
+            await tx.webhookDelivery.createMany({
+              data: deliveriesToCreate,
+            });
+          }
+          await tx.webhookSubscription.update({
+            where: { id: sub.id },
+            data: { lastOrderId: maxSeenId, lastOrderSyncAt: new Date() },
+          });
         });
       }
     }
@@ -443,28 +457,29 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
       (events.includes('product.created') || events.includes('product.updated')) &&
       allowed.has('tenant.products.view')
     ) {
-      let lastProductId = sub.lastProductId ?? -1;
+      let lastProductId = sub.lastProductId !== undefined && sub.lastProductId !== null ? BigInt(sub.lastProductId) : -1n;
       let wasColdStart = false;
 
-      if (lastProductId === -1) {
+      if (lastProductId === -1n) {
         const currentMax = await queryMaxId(
           'SELECT COALESCE(MAX(PRO_CODIGO), 0) AS MAX_ID FROM PRODUTOS',
         );
+        const currentMaxBig = BigInt(currentMax);
         const now = new Date();
         this.logger.log(
-          `[Cold-Start Webhook] Ancorando cursor de produtos da sub ${sub.id} (tenant: ${sub.user.user}): lastProductId = ${currentMax}`,
+          `[Cold-Start Webhook] Ancorando cursor de produtos da sub ${sub.id} (tenant: ${sub.user.user}): lastProductId = ${currentMaxBig}`,
         );
         await this.prisma.webhookSubscription.update({
           where: { id: sub.id },
-          data: { lastProductId: currentMax, lastProductSyncAt: now },
+          data: { lastProductId: currentMaxBig, lastProductSyncAt: now },
         });
-        sub.lastProductId = currentMax;
+        sub.lastProductId = currentMaxBig;
         sub.lastProductSyncAt = now;
-        lastProductId = currentMax;
+        lastProductId = currentMaxBig;
         wasColdStart = true;
       }
 
-      if (!wasColdStart && lastProductId >= 0) {
+      if (!wasColdStart && lastProductId >= 0n) {
         const sync = getBrazilDateTime(sub.lastProductSyncAt);
         const nowBrazil = getBrazilDateTime(new Date());
 
@@ -501,15 +516,15 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
            COALESCE(P.PRO_DATAALTERACAO, P.PRO_DATACADASTRO) ASC,
            COALESCE(P.PRO_HORA, '00:00:00') ASC,
            P.PRO_CODIGO ASC`,
-        [syncDate, syncDate, syncTime, syncTime, lastProductId],
+        [syncDate, syncDate, syncTime, syncTime, lastProductId.toString()],
       );
 
       if (products.length > 0) {
         let maxSeenId = lastProductId;
         let maxSyncAt = sub.lastProductSyncAt;
 
-        const prodIds = products.map((p: any) => Number(p.PRO_CODIGO)).filter(Boolean);
-        const stockByProduct = new Map<number, any[]>();
+        const prodIds = products.map((p: any) => String(p.PRO_CODIGO).trim()).filter(Boolean);
+        const stockByProduct = new Map<string, any[]>();
 
         if (prodIds.length > 0) {
           try {
@@ -521,7 +536,7 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
             );
 
             for (const st of rawStock) {
-              const pid = Number(st.PRO_CODIGO);
+              const pid = String(st.PRO_CODIGO).trim();
               if (!stockByProduct.has(pid)) {
                 stockByProduct.set(pid, []);
               }
@@ -536,13 +551,17 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
           }
         }
 
+        const deliveriesToCreate: any[] = [];
+
         for (const prod of products) {
-          const proCodigo = Number(prod.PRO_CODIGO);
-          const dtCad = parseFirebirdDate(prod.PRO_DATACADASTRO);
+          const proCodigoStr = String(prod.PRO_CODIGO).trim();
+          const proCodigoNum = Number(prod.PRO_CODIGO);
+          const proCodigoId = Number.isSafeInteger(proCodigoNum) ? proCodigoNum : proCodigoStr;
+          const dtCad = parseFirebirdDate(prod.PRO_DATACADASTRO) || getBrazilDateTime(new Date()).dateStr;
           const dtAlt = parseFirebirdDate(prod.PRO_DATAALTERACAO);
           const hr = parseFirebirdTime(prod.PRO_HORA);
 
-          const isCreated = !prod.PRO_DATAALTERACAO || dtCad === dtAlt;
+          const isCreated = !dtAlt || dtCad === dtAlt;
           let eventType = isCreated ? 'product.created' : 'product.updated';
           if (!events.includes(eventType)) {
             if (events.includes('product.created')) eventType = 'product.created';
@@ -555,7 +574,7 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
             timestamp: new Date().toISOString(),
             tenant: sub.user.user,
             data: {
-              productId: proCodigo,
+              productId: proCodigoId,
               barcode: prod.PRO_CODIGOBAR ? String(prod.PRO_CODIGOBAR).trim() : null,
               description: prod.PRO_DESCRICAO ? String(prod.PRO_DESCRICAO).trim() : null,
               unit: prod.PRO_UNIDADE ? String(prod.PRO_UNIDADE).trim() : null,
@@ -571,30 +590,35 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
                     name: prod.GRU_DESCRICAO ? String(prod.GRU_DESCRICAO).trim() : null,
                   }
                 : null,
-              stock: stockByProduct.get(proCodigo) || [],
+              stock: stockByProduct.get(proCodigoStr) || [],
               registeredAt: `${dtCad} ${hr}`.trim(),
               updatedAt: `${dtAlt || dtCad} ${hr}`.trim(),
-              links: { self: `/api/v1/products/id/${proCodigo}` },
+              links: { self: `/api/v1/products/id/${proCodigoStr}` },
             },
           };
 
-          await this.prisma.webhookDelivery.create({
-            data: {
-              subscriptionId: sub.id,
-              event: eventType,
-              payload: payload as any,
-              status: 'PENDING',
-            },
+          deliveriesToCreate.push({
+            subscriptionId: sub.id,
+            event: eventType,
+            payload: payload as any,
+            status: 'PENDING',
           });
 
-          maxSeenId = proCodigo;
+          maxSeenId = BigInt(proCodigoStr);
           const latestDate = dtAlt || dtCad;
           maxSyncAt = fromBrazilDateTimeToUtc(latestDate, hr);
         }
 
-        await this.prisma.webhookSubscription.update({
-          where: { id: sub.id },
-          data: { lastProductId: maxSeenId, lastProductSyncAt: maxSyncAt },
+        await this.prisma.$transaction(async (tx) => {
+          if (deliveriesToCreate.length > 0) {
+            await tx.webhookDelivery.createMany({
+              data: deliveriesToCreate,
+            });
+          }
+          await tx.webhookSubscription.update({
+            where: { id: sub.id },
+            data: { lastProductId: maxSeenId, lastProductSyncAt: maxSyncAt },
+          });
         });
       }
     }
@@ -605,29 +629,30 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
       (events.includes('delivery.created') || events.includes('delivery.updated')) &&
       allowed.has('tenant.deliveries.view')
     ) {
-      let lastDeliveryId = sub.lastDeliveryId ?? -1;
+      let lastDeliveryId = sub.lastDeliveryId !== undefined && sub.lastDeliveryId !== null ? BigInt(sub.lastDeliveryId) : -1n;
       let wasColdStart = false;
 
-      if (lastDeliveryId === -1) {
+      if (lastDeliveryId === -1n) {
         const currentMax = await queryMaxId(
           'SELECT COALESCE(MAX(ENT_NUMERO), 0) AS MAX_ID FROM ENTREGAS',
           'SELECT COALESCE(MAX(ENT_CODIGO), 0) AS MAX_ID FROM ENTREGAS',
         );
+        const currentMaxBig = BigInt(currentMax);
         const now = new Date();
         this.logger.log(
-          `[Cold-Start Webhook] Ancorando cursor de entregas da sub ${sub.id} (tenant: ${sub.user.user}): lastDeliveryId = ${currentMax}`,
+          `[Cold-Start Webhook] Ancorando cursor de entregas da sub ${sub.id} (tenant: ${sub.user.user}): lastDeliveryId = ${currentMaxBig}`,
         );
         await this.prisma.webhookSubscription.update({
           where: { id: sub.id },
-          data: { lastDeliveryId: currentMax, lastDeliverySyncAt: now },
+          data: { lastDeliveryId: currentMaxBig, lastDeliverySyncAt: now },
         });
-        sub.lastDeliveryId = currentMax;
+        sub.lastDeliveryId = currentMaxBig;
         sub.lastDeliverySyncAt = now;
-        lastDeliveryId = currentMax;
+        lastDeliveryId = currentMaxBig;
         wasColdStart = true;
       }
 
-      if (!wasColdStart && lastDeliveryId >= 0) {
+      if (!wasColdStart && lastDeliveryId >= 0n) {
         const sync = getBrazilDateTime(sub.lastDeliverySyncAt);
         const nowBrazil = getBrazilDateTime(new Date());
 
@@ -666,16 +691,17 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
            COALESCE(E.ENT_DATABAIXA, E.ENT_DATA) ASC,
            COALESCE(E.ENT_HORA, '00:00:00') ASC,
            E.ENT_NUMERO ASC`,
-        [syncDate, syncDate, syncTime, syncTime, lastDeliveryId],
+        [syncDate, syncDate, syncTime, syncTime, lastDeliveryId.toString()],
       );
 
       if (deliveries.length > 0) {
         let maxSeenId = lastDeliveryId;
         let maxSyncAt = sub.lastDeliverySyncAt;
+        const deliveriesToCreate: any[] = [];
 
         for (const d of deliveries) {
           const entNumero = Number(d.ENT_NUMERO);
-          const entDate = parseFirebirdDate(d.ENT_DATA);
+          const entDate = parseFirebirdDate(d.ENT_DATA) || getBrazilDateTime(new Date()).dateStr;
           const entBaixa = d.ENT_DATABAIXA ? parseFirebirdDate(d.ENT_DATABAIXA) : null;
           const entTime = parseFirebirdTime(d.ENT_HORA);
 
@@ -720,23 +746,28 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
             },
           };
 
-          await this.prisma.webhookDelivery.create({
-            data: {
-              subscriptionId: sub.id,
-              event: eventType,
-              payload: payload as any,
-              status: 'PENDING',
-            },
+          deliveriesToCreate.push({
+            subscriptionId: sub.id,
+            event: eventType,
+            payload: payload as any,
+            status: 'PENDING',
           });
 
-          maxSeenId = entNumero;
+          maxSeenId = BigInt(entNumero);
           const latestDate = entBaixa || entDate;
           maxSyncAt = fromBrazilDateTimeToUtc(latestDate, entTime);
         }
 
-        await this.prisma.webhookSubscription.update({
-          where: { id: sub.id },
-          data: { lastDeliveryId: maxSeenId, lastDeliverySyncAt: maxSyncAt },
+        await this.prisma.$transaction(async (tx) => {
+          if (deliveriesToCreate.length > 0) {
+            await tx.webhookDelivery.createMany({
+              data: deliveriesToCreate,
+            });
+          }
+          await tx.webhookSubscription.update({
+            where: { id: sub.id },
+            data: { lastDeliveryId: maxSeenId, lastDeliverySyncAt: maxSyncAt },
+          });
         });
       }
     }
@@ -747,29 +778,30 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
       (events.includes('account_payable.created') || events.includes('account_payable.updated')) &&
       allowed.has('tenant.account-payable.view')
     ) {
-      let lastAccountPayableId = sub.lastAccountPayableId ?? -1;
+      let lastAccountPayableId = sub.lastAccountPayableId !== undefined && sub.lastAccountPayableId !== null ? BigInt(sub.lastAccountPayableId) : -1n;
       let wasColdStart = false;
 
-      if (lastAccountPayableId === -1) {
+      if (lastAccountPayableId === -1n) {
         const currentMax = await queryMaxId(
           'SELECT COALESCE(MAX(PAG_NUMERO), 0) AS MAX_ID FROM CONTASPAGAR',
           'SELECT COALESCE(MAX(PAG_CODIGO), 0) AS MAX_ID FROM CONTAS_PAGAR',
         );
+        const currentMaxBig = BigInt(currentMax);
         const now = new Date();
         this.logger.log(
-          `[Cold-Start Webhook] Ancorando cursor de contas a pagar da sub ${sub.id} (tenant: ${sub.user.user}): lastAccountPayableId = ${currentMax}`,
+          `[Cold-Start Webhook] Ancorando cursor de contas a pagar da sub ${sub.id} (tenant: ${sub.user.user}): lastAccountPayableId = ${currentMaxBig}`,
         );
         await this.prisma.webhookSubscription.update({
           where: { id: sub.id },
-          data: { lastAccountPayableId: currentMax, lastAccountPayableSyncAt: now },
+          data: { lastAccountPayableId: currentMaxBig, lastAccountPayableSyncAt: now },
         });
-        sub.lastAccountPayableId = currentMax;
+        sub.lastAccountPayableId = currentMaxBig;
         sub.lastAccountPayableSyncAt = now;
-        lastAccountPayableId = currentMax;
+        lastAccountPayableId = currentMaxBig;
         wasColdStart = true;
       }
 
-      if (!wasColdStart && lastAccountPayableId >= 0) {
+      if (!wasColdStart && lastAccountPayableId >= 0n) {
         const sync = getBrazilDateTime(sub.lastAccountPayableSyncAt);
         const nowBrazil = getBrazilDateTime(new Date());
 
@@ -797,16 +829,17 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
          ORDER BY
            COALESCE(CP.PAG_DATAPAG, CP.PAG_DATAMOV) ASC,
            CP.PAG_NUMERO ASC`,
-        [syncDate, syncDate, lastAccountPayableId],
+        [syncDate, syncDate, lastAccountPayableId.toString()],
       );
 
       if (payables.length > 0) {
         let maxSeenId = lastAccountPayableId;
         let maxSyncAt = sub.lastAccountPayableSyncAt;
+        const deliveriesToCreate: any[] = [];
 
         for (const p of payables) {
           const pagNumero = Number(p.PAG_NUMERO);
-          const dtMov = parseFirebirdDate(p.PAG_DATAMOV);
+          const dtMov = parseFirebirdDate(p.PAG_DATAMOV) || getBrazilDateTime(new Date()).dateStr;
           const dtPag = p.PAG_DATAPAG ? parseFirebirdDate(p.PAG_DATAPAG) : null;
           const dueDate = parseFirebirdDate(p.PAG_DATAVENC);
 
@@ -840,23 +873,28 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
             },
           };
 
-          await this.prisma.webhookDelivery.create({
-            data: {
-              subscriptionId: sub.id,
-              event: eventType,
-              payload: payload as any,
-              status: 'PENDING',
-            },
+          deliveriesToCreate.push({
+            subscriptionId: sub.id,
+            event: eventType,
+            payload: payload as any,
+            status: 'PENDING',
           });
 
-          maxSeenId = pagNumero;
+          maxSeenId = BigInt(pagNumero);
           const latestDate = dtPag || dtMov;
           maxSyncAt = fromBrazilDateTimeToUtc(latestDate, '00:00:00');
         }
 
-        await this.prisma.webhookSubscription.update({
-          where: { id: sub.id },
-          data: { lastAccountPayableId: maxSeenId, lastAccountPayableSyncAt: maxSyncAt },
+        await this.prisma.$transaction(async (tx) => {
+          if (deliveriesToCreate.length > 0) {
+            await tx.webhookDelivery.createMany({
+              data: deliveriesToCreate,
+            });
+          }
+          await tx.webhookSubscription.update({
+            where: { id: sub.id },
+            data: { lastAccountPayableId: maxSeenId, lastAccountPayableSyncAt: maxSyncAt },
+          });
         });
       }
     }
@@ -867,29 +905,30 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
       (events.includes('account_receivable.created') || events.includes('account_receivable.updated')) &&
       allowed.has('tenant.account-receivable.view')
     ) {
-      let lastAccountReceivableId = sub.lastAccountReceivableId ?? -1;
+      let lastAccountReceivableId = sub.lastAccountReceivableId !== undefined && sub.lastAccountReceivableId !== null ? BigInt(sub.lastAccountReceivableId) : -1n;
       let wasColdStart = false;
 
-      if (lastAccountReceivableId === -1) {
+      if (lastAccountReceivableId === -1n) {
         const currentMax = await queryMaxId(
           'SELECT COALESCE(MAX(REC_NUMERO), 0) AS MAX_ID FROM CONTASRECEBER',
           'SELECT COALESCE(MAX(REC_CODIGO), 0) AS MAX_ID FROM CONTAS_RECEBER',
         );
+        const currentMaxBig = BigInt(currentMax);
         const now = new Date();
         this.logger.log(
-          `[Cold-Start Webhook] Ancorando cursor de contas a receber da sub ${sub.id} (tenant: ${sub.user.user}): lastAccountReceivableId = ${currentMax}`,
+          `[Cold-Start Webhook] Ancorando cursor de contas a receber da sub ${sub.id} (tenant: ${sub.user.user}): lastAccountReceivableId = ${currentMaxBig}`,
         );
         await this.prisma.webhookSubscription.update({
           where: { id: sub.id },
-          data: { lastAccountReceivableId: currentMax, lastAccountReceivableSyncAt: now },
+          data: { lastAccountReceivableId: currentMaxBig, lastAccountReceivableSyncAt: now },
         });
-        sub.lastAccountReceivableId = currentMax;
+        sub.lastAccountReceivableId = currentMaxBig;
         sub.lastAccountReceivableSyncAt = now;
-        lastAccountReceivableId = currentMax;
+        lastAccountReceivableId = currentMaxBig;
         wasColdStart = true;
       }
 
-      if (!wasColdStart && lastAccountReceivableId >= 0) {
+      if (!wasColdStart && lastAccountReceivableId >= 0n) {
         const receivables = await queryPromise(
           `SELECT FIRST 25 
              REC.REC_NUMERO, CLI.LOJ_CODIGO, REC.CLI_CODIGO, CLI.CLI_NOME, CLI.CLI_CPF_CNPJ,
@@ -898,11 +937,12 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
            LEFT JOIN CLIENTES CLI ON CLI.CLI_CODIGO = REC.CLI_CODIGO
            WHERE REC.REC_NUMERO > ?
            ORDER BY REC.REC_NUMERO ASC`,
-          [lastAccountReceivableId],
+          [lastAccountReceivableId.toString()],
         );
 
         if (receivables.length > 0) {
           let maxSeenId = lastAccountReceivableId;
+          const deliveriesToCreate: any[] = [];
 
           for (const r of receivables) {
             const recNumero = Number(r.REC_NUMERO);
@@ -935,21 +975,26 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
               },
             };
 
-            await this.prisma.webhookDelivery.create({
-              data: {
-                subscriptionId: sub.id,
-                event: eventType,
-                payload: payload as any,
-                status: 'PENDING',
-              },
+            deliveriesToCreate.push({
+              subscriptionId: sub.id,
+              event: eventType,
+              payload: payload as any,
+              status: 'PENDING',
             });
 
-            maxSeenId = recNumero;
+            maxSeenId = BigInt(recNumero);
           }
 
-          await this.prisma.webhookSubscription.update({
-            where: { id: sub.id },
-            data: { lastAccountReceivableId: maxSeenId, lastAccountReceivableSyncAt: new Date() },
+          await this.prisma.$transaction(async (tx) => {
+            if (deliveriesToCreate.length > 0) {
+              await tx.webhookDelivery.createMany({
+                data: deliveriesToCreate,
+              });
+            }
+            await tx.webhookSubscription.update({
+              where: { id: sub.id },
+              data: { lastAccountReceivableId: maxSeenId, lastAccountReceivableSyncAt: new Date() },
+            });
           });
         }
       }

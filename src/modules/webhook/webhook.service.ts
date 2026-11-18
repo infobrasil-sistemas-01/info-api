@@ -198,31 +198,31 @@ export class WebhookService {
     if (dto.events && dto.events.length > 0) {
       if (
         dto.events.some((e) => e.startsWith('order.')) &&
-        (subscription.lastOrderId === null || subscription.lastOrderId === 0)
+        (subscription.lastOrderId === null || Number(subscription.lastOrderId) === 0)
       ) {
         dataToUpdate.lastOrderId = -1;
       }
       if (
         dto.events.some((e) => e.startsWith('product.')) &&
-        (subscription.lastProductId === null || subscription.lastProductId === 0)
+        (subscription.lastProductId === null || Number(subscription.lastProductId) === 0)
       ) {
         dataToUpdate.lastProductId = -1;
       }
       if (
         dto.events.some((e) => e.startsWith('delivery.')) &&
-        (subscription.lastDeliveryId === null || subscription.lastDeliveryId === 0)
+        (subscription.lastDeliveryId === null || Number(subscription.lastDeliveryId) === 0)
       ) {
         dataToUpdate.lastDeliveryId = -1;
       }
       if (
         dto.events.some((e) => e.startsWith('account_payable.')) &&
-        (subscription.lastAccountPayableId === null || subscription.lastAccountPayableId === 0)
+        (subscription.lastAccountPayableId === null || Number(subscription.lastAccountPayableId) === 0)
       ) {
         dataToUpdate.lastAccountPayableId = -1;
       }
       if (
         dto.events.some((e) => e.startsWith('account_receivable.')) &&
-        (subscription.lastAccountReceivableId === null || subscription.lastAccountReceivableId === 0)
+        (subscription.lastAccountReceivableId === null || Number(subscription.lastAccountReceivableId) === 0)
       ) {
         dataToUpdate.lastAccountReceivableId = -1;
       }
