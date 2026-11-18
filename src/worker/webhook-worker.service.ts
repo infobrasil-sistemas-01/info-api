@@ -133,7 +133,7 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
     private readonly tenantConnectionService: TenantConnectionService,
     private readonly permissionResolver: PermissionResolver,
     private readonly emailService: EmailService,
-  ) { }
+  ) {}
 
   async onApplicationBootstrap() {
     this.logger.log('Iniciando Webhook Worker autônomo...');
