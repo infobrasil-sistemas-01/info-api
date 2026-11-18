@@ -501,14 +501,20 @@
                                         <span class="perm-tag" id="badge-perm-orders" style="font-size: 0.75rem;">tenant.orders.view</span>
                                     </div>
                                     <div style="display: flex; flex-direction: column; gap: 8px;">
-                                        <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer;">
-                                            <input type="checkbox" name="webhook_events" value="order.created" class="webhook-event-checkbox" data-domain="orders">
-                                            <code>order.created</code> (Novo pedido)
-                                        </label>
-                                        <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer;">
-                                            <input type="checkbox" name="webhook_events" value="order.updated" class="webhook-event-checkbox" data-domain="orders">
-                                            <code>order.updated</code> (Alteração status)
-                                        </label>
+                                        <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.85rem;">
+                                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                                <input type="checkbox" name="webhook_events" value="order.created" class="webhook-event-checkbox" data-domain="orders">
+                                                <code>order.created</code> (Novo pedido)
+                                            </label>
+                                            <a href="javascript:void(0)" onclick="inspectWebhookSchema('order.created')" style="color: var(--primary); font-size: 0.75rem; text-decoration: underline;" title="Inspecionar Schema e Payload">Schema</a>
+                                        </div>
+                                        <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.85rem;">
+                                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                                <input type="checkbox" name="webhook_events" value="order.updated" class="webhook-event-checkbox" data-domain="orders">
+                                                <code>order.updated</code> (Alteração status)
+                                            </label>
+                                            <a href="javascript:void(0)" onclick="inspectWebhookSchema('order.updated')" style="color: var(--primary); font-size: 0.75rem; text-decoration: underline;" title="Inspecionar Schema e Payload">Schema</a>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -521,14 +527,20 @@
                                         <span class="perm-tag" id="badge-perm-products" style="font-size: 0.75rem;">tenant.products.view</span>
                                     </div>
                                     <div style="display: flex; flex-direction: column; gap: 8px;">
-                                        <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer;">
-                                            <input type="checkbox" name="webhook_events" value="product.created" class="webhook-event-checkbox" data-domain="products">
-                                            <code>product.created</code> (Novo produto)
-                                        </label>
-                                        <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer;">
-                                            <input type="checkbox" name="webhook_events" value="product.updated" class="webhook-event-checkbox" data-domain="products">
-                                            <code>product.updated</code> (Preço / Estoque)
-                                        </label>
+                                        <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.85rem;">
+                                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                                <input type="checkbox" name="webhook_events" value="product.created" class="webhook-event-checkbox" data-domain="products">
+                                                <code>product.created</code> (Novo produto)
+                                            </label>
+                                            <a href="javascript:void(0)" onclick="inspectWebhookSchema('product.created')" style="color: var(--primary); font-size: 0.75rem; text-decoration: underline;" title="Inspecionar Schema e Payload">Schema</a>
+                                        </div>
+                                        <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.85rem;">
+                                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                                <input type="checkbox" name="webhook_events" value="product.updated" class="webhook-event-checkbox" data-domain="products">
+                                                <code>product.updated</code> (Preço / Estoque)
+                                            </label>
+                                            <a href="javascript:void(0)" onclick="inspectWebhookSchema('product.updated')" style="color: var(--primary); font-size: 0.75rem; text-decoration: underline; font-weight: 600;" title="Inspecionar Schema com Matriz de Preços">Schema</a>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -541,14 +553,20 @@
                                         <span class="perm-tag" id="badge-perm-deliveries" style="font-size: 0.75rem;">tenant.deliveries.view</span>
                                     </div>
                                     <div style="display: flex; flex-direction: column; gap: 8px;">
-                                        <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer;">
-                                            <input type="checkbox" name="webhook_events" value="delivery.created" class="webhook-event-checkbox" data-domain="deliveries">
-                                            <code>delivery.created</code> (Nova entrega)
-                                        </label>
-                                        <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer;">
-                                            <input type="checkbox" name="webhook_events" value="delivery.updated" class="webhook-event-checkbox" data-domain="deliveries">
-                                            <code>delivery.updated</code> (Status de entrega)
-                                        </label>
+                                        <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.85rem;">
+                                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                                <input type="checkbox" name="webhook_events" value="delivery.created" class="webhook-event-checkbox" data-domain="deliveries">
+                                                <code>delivery.created</code> (Nova entrega)
+                                            </label>
+                                            <a href="javascript:void(0)" onclick="inspectWebhookSchema('delivery.created')" style="color: var(--primary); font-size: 0.75rem; text-decoration: underline;" title="Inspecionar Schema e Payload">Schema</a>
+                                        </div>
+                                        <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.85rem;">
+                                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                                <input type="checkbox" name="webhook_events" value="delivery.updated" class="webhook-event-checkbox" data-domain="deliveries">
+                                                <code>delivery.updated</code> (Status de entrega)
+                                            </label>
+                                            <a href="javascript:void(0)" onclick="inspectWebhookSchema('delivery.updated')" style="color: var(--primary); font-size: 0.75rem; text-decoration: underline;" title="Inspecionar Schema e Payload">Schema</a>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -561,14 +579,20 @@
                                         <span class="perm-tag" id="badge-perm-payable" style="font-size: 0.75rem;">tenant.account-payable.view</span>
                                     </div>
                                     <div style="display: flex; flex-direction: column; gap: 8px;">
-                                        <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer;">
-                                            <input type="checkbox" name="webhook_events" value="account_payable.created" class="webhook-event-checkbox" data-domain="payable">
-                                            <code>account_payable.created</code> (Título a pagar)
-                                        </label>
-                                        <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer;">
-                                            <input type="checkbox" name="webhook_events" value="account_payable.updated" class="webhook-event-checkbox" data-domain="payable">
-                                            <code>account_payable.updated</code> (Baixa ou quitação)
-                                        </label>
+                                        <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.85rem;">
+                                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                                <input type="checkbox" name="webhook_events" value="account_payable.created" class="webhook-event-checkbox" data-domain="payable">
+                                                <code>account_payable.created</code> (Título a pagar)
+                                            </label>
+                                            <a href="javascript:void(0)" onclick="inspectWebhookSchema('account_payable.created')" style="color: var(--primary); font-size: 0.75rem; text-decoration: underline;" title="Inspecionar Schema e Payload">Schema</a>
+                                        </div>
+                                        <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.85rem;">
+                                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                                <input type="checkbox" name="webhook_events" value="account_payable.updated" class="webhook-event-checkbox" data-domain="payable">
+                                                <code>account_payable.updated</code> (Baixa ou quitação)
+                                            </label>
+                                            <a href="javascript:void(0)" onclick="inspectWebhookSchema('account_payable.updated')" style="color: var(--primary); font-size: 0.75rem; text-decoration: underline;" title="Inspecionar Schema e Payload">Schema</a>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -581,14 +605,20 @@
                                         <span class="perm-tag" id="badge-perm-receivable" style="font-size: 0.75rem;">tenant.account-receivable.view</span>
                                     </div>
                                     <div style="display: flex; flex-direction: column; gap: 8px;">
-                                        <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer;">
-                                            <input type="checkbox" name="webhook_events" value="account_receivable.created" class="webhook-event-checkbox" data-domain="receivable">
-                                            <code>account_receivable.created</code> (Título a receber)
-                                        </label>
-                                        <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer;">
-                                            <input type="checkbox" name="webhook_events" value="account_receivable.updated" class="webhook-event-checkbox" data-domain="receivable">
-                                            <code>account_receivable.updated</code> (Baixa ou quitação)
-                                        </label>
+                                        <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.85rem;">
+                                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                                <input type="checkbox" name="webhook_events" value="account_receivable.created" class="webhook-event-checkbox" data-domain="receivable">
+                                                <code>account_receivable.created</code> (Título a receber)
+                                            </label>
+                                            <a href="javascript:void(0)" onclick="inspectWebhookSchema('account_receivable.created')" style="color: var(--primary); font-size: 0.75rem; text-decoration: underline;" title="Inspecionar Schema e Payload">Schema</a>
+                                        </div>
+                                        <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.85rem;">
+                                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                                <input type="checkbox" name="webhook_events" value="account_receivable.updated" class="webhook-event-checkbox" data-domain="receivable">
+                                                <code>account_receivable.updated</code> (Baixa ou quitação)
+                                            </label>
+                                            <a href="javascript:void(0)" onclick="inspectWebhookSchema('account_receivable.updated')" style="color: var(--primary); font-size: 0.75rem; text-decoration: underline;" title="Inspecionar Schema e Payload">Schema</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -714,32 +744,62 @@
                         </div>
                     </div>
 
-                    <!-- 2. Formato do Objeto JSON -->
-                    <div style="margin-bottom: 24px;">
-                        <h4 style="color: var(--text); font-size: 0.98rem; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
-                            <i class='bx bx-data'></i> 2. Estrutura do Payload JSON (Corpo da Requisição POST)
-                        </h4>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px;">
-                            <div>
-                                <pre style="background: rgba(0,0,0,0.5); border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-family: monospace; font-size: 0.82rem; color: #a7f3d0; margin: 0; overflow-x: auto; max-height: 280px;"><code>{
-  "id": "cm3x98a120000abcde1234567",
-  "event": "orders.created",
-  "timestamp": 1763380200,
-  "data": {
-    "id": 10452,
-    "storeId": 1,
-    "customer": "Supermercado Exemplo",
-    "total": 450.90,
-    "status": "APROVADO",
-    "createdAt": "2026-11-17T12:00:00.000Z"
-  }
-}</code></pre>
+                    <!-- 2. Catálogo & Inspetor de Schemas de Eventos (Padrão OpenAPI / JSON Schema) -->
+                    <div style="margin-bottom: 24px;" id="webhook-schema-inspector-section">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                            <h4 style="color: var(--text); font-size: 0.98rem; margin: 0; display: flex; align-items: center; gap: 6px;">
+                                <i class='bx bx-data' style="color: var(--primary);"></i> 2. Catálogo & Inspetor de Schemas de Eventos (OpenAPI / JSON Schema)
+                            </h4>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <label for="webhook-schema-event-select" style="font-size: 0.82rem; color: var(--text-muted);">Evento:</label>
+                                <select id="webhook-schema-event-select" onchange="onWebhookSchemaEventChange(this.value)" 
+                                    style="background: rgba(0,0,0,0.5); border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; color: var(--primary); font-family: monospace; font-size: 0.85rem; outline: none; cursor: pointer;">
+                                    <optgroup label="Produtos & Estoque">
+                                        <option value="product.updated" selected>product.updated (Estoque & Preços Multi-Tabela)</option>
+                                        <option value="product.created">product.created (Novo Produto)</option>
+                                    </optgroup>
+                                    <optgroup label="Pedidos & Vendas">
+                                        <option value="order.created">order.created (Novo Pedido)</option>
+                                        <option value="order.updated">order.updated (Alteração de Pedido)</option>
+                                    </optgroup>
+                                    <optgroup label="Entregas & Logística">
+                                        <option value="delivery.created">delivery.created (Nova Entrega)</option>
+                                        <option value="delivery.updated">delivery.updated (Status de Entrega)</option>
+                                    </optgroup>
+                                    <optgroup label="Financeiro">
+                                        <option value="account_payable.created">account_payable.created (Contas a Pagar)</option>
+                                        <option value="account_payable.updated">account_payable.updated (Baixa a Pagar)</option>
+                                        <option value="account_receivable.created">account_receivable.created (Contas a Receber)</option>
+                                        <option value="account_receivable.updated">account_receivable.updated (Baixa a Receber)</option>
+                                    </optgroup>
+                                </select>
                             </div>
-                            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-size: 0.88rem;">
-                                <p style="margin-bottom: 8px; color: var(--text);"><b style="color: #6ee7b7;">id:</b> UUID único da notificação para deduplicação no seu banco/filas.</p>
-                                <p style="margin-bottom: 8px; color: var(--text);"><b style="color: #6ee7b7;">event:</b> Nome qualificado do evento assinado (ex: <code>orders.created</code>, <code>products.stock_changed</code>).</p>
-                                <p style="margin-bottom: 8px; color: var(--text);"><b style="color: #6ee7b7;">timestamp:</b> Epoch Unix (em segundos) do disparo. Útil para rejeitar requisições atrasadas.</p>
-                                <p style="margin-bottom: 0; color: var(--text);"><b style="color: #6ee7b7;">data:</b> Dados detalhados da entidade gerada no ERP InfoBrasil.</p>
+                        </div>
+
+                        <!-- Card do Inspetor de Schemas -->
+                        <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 10px; padding: 16px;">
+                            <!-- Barra de Ferramentas: Abas + Ações -->
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                                <div style="display: flex; gap: 6px;" id="webhook-schema-tab-buttons">
+                                    <button type="button" class="btn-primary" onclick="switchWebhookSchemaTab('payload')" id="btn-schema-tab-payload" style="width: auto; padding: 4px 12px; font-size: 0.8rem; background: var(--primary); color: #0f172a;">Exemplo JSON</button>
+                                    <button type="button" class="btn-primary" onclick="switchWebhookSchemaTab('schema')" id="btn-schema-tab-schema" style="width: auto; padding: 4px 12px; font-size: 0.8rem; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text);">JSON Schema (Draft-07)</button>
+                                    <button type="button" class="btn-primary" onclick="switchWebhookSchemaTab('typescript')" id="btn-schema-tab-typescript" style="width: auto; padding: 4px 12px; font-size: 0.8rem; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text);">TypeScript Interface</button>
+                                </div>
+                                <div style="display: flex; gap: 8px;">
+                                    <button type="button" class="btn-primary" onclick="copyCurrentWebhookSchemaContent()" id="btn-copy-schema-content" title="Copiar conteúdo exibido" style="width: auto; padding: 4px 12px; font-size: 0.8rem; background: rgba(255,255,255,0.08); border: 1px solid var(--border); color: var(--text);">
+                                        <i class='bx bx-copy'></i> <span id="copy-schema-content-text">Copiar</span>
+                                    </button>
+                                    <button type="button" class="btn-primary" onclick="downloadCurrentWebhookJsonSchema()" title="Baixar arquivo JSON Schema do evento" style="width: auto; padding: 4px 12px; font-size: 0.8rem; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: var(--primary);">
+                                        <i class='bx bx-download'></i> <span>Exportar Schema (.json)</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Visualizador de Código -->
+                            <pre style="background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 14px; font-family: monospace; font-size: 0.82rem; color: #a7f3d0; margin: 0; overflow-x: auto; max-height: 380px;"><code id="webhook-schema-code-block"></code></pre>
+
+                            <!-- Explicação Dinâmica dos Campos -->
+                            <div id="webhook-schema-field-notes" style="margin-top: 14px; padding: 12px 14px; background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 8px; font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
                             </div>
                         </div>
                     </div>
@@ -2262,6 +2322,443 @@ print(f'Basic {auth}')</code></pre>
             });
         }
         window.switchWebhookDocTab = switchWebhookDocTab;
+
+        // ==========================================
+        // CATÁLOGO E INSPETOR DE SCHEMAS DE WEBHOOK
+        // ==========================================
+        let currentWebhookSchemaEvent = 'product.updated';
+        let currentWebhookSchemaTab = 'payload';
+
+        const WEBHOOK_SCHEMAS_REGISTRY = {
+            'product.updated': {
+                name: 'product.updated',
+                title: 'Atualização de Produto (Metadados, Estoque ou Preços)',
+                payload: {
+                    id: "evt_prd_70a5d45057220b3b",
+                    event: "product.updated",
+                    timestamp: "2026-11-18T14:15:00.000Z",
+                    tenant: "infoadmin",
+                    data: {
+                        productId: 1,
+                        barcode: "7891234567890",
+                        description: "REFRIGERANTE COCA-COLA 2L",
+                        unit: "UN",
+                        brand: { id: 2, name: "COCA-COLA" },
+                        group: { id: 1, name: "BEBIDAS" },
+                        stock: [
+                            {
+                                storeId: 1,
+                                current: 376,
+                                support: -20,
+                                price: 10.50,
+                                promotionalPrice: 9.90,
+                                prices: [
+                                    { table: 1, price: 10.50, promotionalPrice: 9.90 },
+                                    { table: 2, price: 11.00, promotionalPrice: null },
+                                    { table: 3, price: 9.80, promotionalPrice: null }
+                                ]
+                            },
+                            {
+                                storeId: 2,
+                                current: 48,
+                                support: 0,
+                                price: 10.50,
+                                promotionalPrice: null,
+                                prices: [
+                                    { table: 1, price: 10.50, promotionalPrice: null }
+                                ]
+                            }
+                        ],
+                        registeredAt: "2023-06-18 14:52:10",
+                        updatedAt: "2026-11-18 10:24:00",
+                        links: { self: "/api/v1/products/id/1" }
+                    }
+                },
+                schema: {
+                    "$schema": "http://json-schema.org/draft-07/schema#",
+                    "title": "ProductUpdatedWebhookEvent",
+                    "type": "object",
+                    "required": ["id", "event", "timestamp", "tenant", "data"],
+                    "properties": {
+                        "id": { "type": "string", "description": "Identificador exclusivo do evento para deduplicação (ex: evt_prd_...)" },
+                        "event": { "type": "string", "enum": ["product.updated"], "description": "Nome qualificado do evento" },
+                        "timestamp": { "type": "string", "format": "date-time", "description": "Data e hora de emissão do evento (UTC)" },
+                        "tenant": { "type": "string", "description": "Identificador do tenant emissor" },
+                        "data": {
+                            "type": "object",
+                            "required": ["productId", "description", "stock", "updatedAt"],
+                            "properties": {
+                                "productId": { "type": ["number", "string"], "description": "Código do produto no ERP" },
+                                "barcode": { "type": ["string", "null"], "description": "Código de barras GTIN/EAN-13" },
+                                "description": { "type": "string", "description": "Descrição cadastral do produto" },
+                                "unit": { "type": ["string", "null"], "description": "Unidade de medida comercial (ex: UN, KG, CX)" },
+                                "brand": {
+                                    "type": ["object", "null"],
+                                    "properties": {
+                                        "id": { "type": "number", "description": "Código da marca" },
+                                        "name": { "type": ["string", "null"], "description": "Nome da marca" }
+                                    }
+                                },
+                                "group": {
+                                    "type": ["object", "null"],
+                                    "properties": {
+                                        "id": { "type": "number", "description": "Código do grupo" },
+                                        "name": { "type": ["string", "null"], "description": "Nome do grupo" }
+                                    }
+                                },
+                                "stock": {
+                                    "type": "array",
+                                    "description": "Saldos e tabelas de preço distribuídos por loja/filial",
+                                    "items": {
+                                        "type": "object",
+                                        "required": ["storeId", "current", "support", "price", "prices"],
+                                        "properties": {
+                                            "storeId": { "type": "number", "description": "Código da filial / loja" },
+                                            "current": { "type": "number", "description": "Estoque atual na loja" },
+                                            "support": { "type": "number", "description": "Estoque de apoio / depósito" },
+                                            "price": { "type": "number", "description": "Preço da Tabela 1 padrão (ou fallback para primeira tabela ativa)" },
+                                            "promotionalPrice": { "type": ["number", "null"], "description": "Preço promocional ativo da Tabela 1 (ou null)" },
+                                            "prices": {
+                                                "type": "array",
+                                                "description": "Matriz completa com todas as tabelas de preço configuradas (> 0)",
+                                                "items": {
+                                                    "type": "object",
+                                                    "required": ["table", "price"],
+                                                    "properties": {
+                                                        "table": { "type": "number", "description": "Número da tabela (1 a 12)" },
+                                                        "price": { "type": "number", "description": "Preço de venda regular" },
+                                                        "promotionalPrice": { "type": ["number", "null"], "description": "Preço promocional ativo na tabela" }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "registeredAt": { "type": "string", "description": "Data/hora de cadastro (YYYY-MM-DD HH:mm:ss)" },
+                                "updatedAt": { "type": "string", "description": "Data/hora da última alteração de cadastro ou estoque" },
+                                "links": {
+                                    "type": "object",
+                                    "properties": {
+                                        "self": { "type": "string", "description": "Endpoint REST para consulta do produto" }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                typescript: `export interface WebhookEvent<T> {\n  id: string;\n  event: 'product.updated';\n  timestamp: string;\n  tenant: string;\n  data: T;\n}\n\nexport interface ProductPriceTableItem {\n  table: number; // 1 a 12\n  price: number;\n  promotionalPrice: number | null;\n}\n\nexport interface ProductStockStoreItem {\n  storeId: number;\n  current: number;\n  support: number;\n  price: number; // Preço Tabela 1 padrão\n  promotionalPrice: number | null; // Promoção Tabela 1\n  prices: ProductPriceTableItem[]; // Matriz multi-tabela ativa (> 0)\n}\n\nexport interface ProductUpdatedPayload {\n  productId: number | string;\n  barcode: string | null;\n  description: string;\n  unit: string | null;\n  brand: { id: number; name: string | null } | null;\n  group: { id: number; name: string | null } | null;\n  stock: ProductStockStoreItem[];\n  registeredAt: string;\n  updatedAt: string;\n  links: { self: string };\n}\n\nexport type ProductUpdatedEvent = WebhookEvent<ProductUpdatedPayload>;`,
+                notes: `<b style="color: #6ee7b7;">Gatilho de Disparo:</b> Emitido tanto em alterações cadastrais (descrição, código de barras, marca) quanto em <b>qualquer alteração de saldo de estoque (vendas no PDV, transferências) ou reajuste de preços</b>.<br><b style="color: #6ee7b7;">Destaque de Preços:</b> O objeto <code>stock[i]</code> expõe <code>price</code> e <code>promotionalPrice</code> referentes à Tabela 1 padrão, além do array <code>prices</code> contendo todas as tabelas (1 a 12) configuradas com preço maior que zero.`
+            },
+            'product.created': {
+                name: 'product.created',
+                title: 'Criação de Produto (Novo Cadastro)',
+                payload: {
+                    id: "evt_prd_5267af32f479c1f6",
+                    event: "product.created",
+                    timestamp: "2026-11-18T14:10:00.000Z",
+                    tenant: "infoadmin",
+                    data: {
+                        productId: 105,
+                        barcode: "7890000010178",
+                        description: "NOVO PRODUTO CADASTRADO",
+                        unit: "UN",
+                        brand: { id: 1, name: "ITATIAIA" },
+                        group: { id: 1, name: "1-GRUPO01" },
+                        stock: [
+                            {
+                                storeId: 1,
+                                current: 0,
+                                support: 0,
+                                price: 299.90,
+                                promotionalPrice: null,
+                                prices: [{ table: 1, price: 299.90, promotionalPrice: null }]
+                            }
+                        ],
+                        registeredAt: "2026-11-18 14:10:00",
+                        updatedAt: "2026-11-18 14:10:00",
+                        links: { self: "/api/v1/products/id/105" }
+                    }
+                },
+                schema: {
+                    "$schema": "http://json-schema.org/draft-07/schema#",
+                    "title": "ProductCreatedWebhookEvent",
+                    "type": "object",
+                    "required": ["id", "event", "timestamp", "tenant", "data"]
+                },
+                typescript: `export interface ProductCreatedPayload {\n  productId: number | string;\n  barcode: string | null;\n  description: string;\n  unit: string | null;\n  brand: { id: number; name: string | null } | null;\n  group: { id: number; name: string | null } | null;\n  stock: Array<{\n    storeId: number;\n    current: number;\n    support: number;\n    price: number;\n    promotionalPrice: number | null;\n    prices: Array<{ table: number; price: number; promotionalPrice: number | null }>;\n  }>;\n  registeredAt: string;\n  updatedAt: string;\n  links: { self: string };\n}\n\nexport type ProductCreatedEvent = WebhookEvent<ProductCreatedPayload>;`,
+                notes: `<b style="color: #6ee7b7;">Gatilho de Disparo:</b> Disparado imediatamente após um novo produto ser cadastrado na base de dados do cliente.`
+            },
+            'order.created': {
+                name: 'order.created',
+                title: 'Novo Pedido de Venda',
+                payload: {
+                    id: "evt_ord_a1b2c3d4e5f60718",
+                    event: "order.created",
+                    timestamp: "2026-11-18T14:00:00.000Z",
+                    tenant: "infoadmin",
+                    data: {
+                        orderNumber: 10452,
+                        storeId: 1,
+                        customer: { id: 45, name: "SUPERMERCADO CENTRAL LTDA" },
+                        total: 1250.80,
+                        discount: 50.00,
+                        netTotal: 1200.80,
+                        status: "PENDENTE",
+                        paymentMethodId: 1,
+                        issuedAt: "2026-11-18 13:58:00",
+                        links: { self: "/api/v1/orders/10452" }
+                    }
+                },
+                schema: {
+                    "$schema": "http://json-schema.org/draft-07/schema#",
+                    "title": "OrderCreatedWebhookEvent",
+                    "type": "object",
+                    "required": ["id", "event", "timestamp", "tenant", "data"]
+                },
+                typescript: `export interface OrderCreatedPayload {\n  orderNumber: number;\n  storeId: number;\n  customer: { id: number; name: string };\n  total: number;\n  discount: number;\n  netTotal: number;\n  status: string;\n  paymentMethodId: number;\n  issuedAt: string;\n  links: { self: string };\n}\n\nexport type OrderCreatedEvent = WebhookEvent<OrderCreatedPayload>;`,
+                notes: `<b style="color: #6ee7b7;">Gatilho de Disparo:</b> Emitido quando um novo pedido de venda é registrado no ERP ou PDV.`
+            },
+            'order.updated': {
+                name: 'order.updated',
+                title: 'Atualização de Pedido de Venda',
+                payload: {
+                    id: "evt_ord_9988776655443322",
+                    event: "order.updated",
+                    timestamp: "2026-11-18T14:05:00.000Z",
+                    tenant: "infoadmin",
+                    data: {
+                        orderNumber: 10452,
+                        storeId: 1,
+                        status: "FATURADO",
+                        updatedAt: "2026-11-18 14:04:30",
+                        links: { self: "/api/v1/orders/10452" }
+                    }
+                },
+                schema: { "$schema": "http://json-schema.org/draft-07/schema#", "title": "OrderUpdatedWebhookEvent", "type": "object" },
+                typescript: `export interface OrderUpdatedPayload {\n  orderNumber: number;\n  storeId: number;\n  status: string;\n  updatedAt: string;\n  links: { self: string };\n}\n\nexport type OrderUpdatedEvent = WebhookEvent<OrderUpdatedPayload>;`,
+                notes: `<b style="color: #6ee7b7;">Gatilho de Disparo:</b> Emitido quando o pedido sofre alteração de status (ex: faturamento, cancelamento, entrega).`
+            },
+            'delivery.created': {
+                name: 'delivery.created',
+                title: 'Nova Ordem de Entrega / Despacho',
+                payload: {
+                    id: "evt_del_1234abcd5678ef90",
+                    event: "delivery.created",
+                    timestamp: "2026-11-18T14:12:00.000Z",
+                    tenant: "infoadmin",
+                    data: {
+                        deliveryId: 501,
+                        storeId: 1,
+                        orderNumber: 10452,
+                        status: "PREPARACAO",
+                        deliveryDate: "2026-11-19",
+                        links: { self: "/api/v1/deliveries/501" }
+                    }
+                },
+                schema: { "$schema": "http://json-schema.org/draft-07/schema#", "title": "DeliveryCreatedWebhookEvent", "type": "object" },
+                typescript: `export interface DeliveryCreatedPayload {\n  deliveryId: number;\n  storeId: number;\n  orderNumber: number;\n  status: string;\n  deliveryDate: string;\n  links: { self: string };\n}\n\nexport type DeliveryCreatedEvent = WebhookEvent<DeliveryCreatedPayload>;`,
+                notes: `<b style="color: #6ee7b7;">Gatilho de Disparo:</b> Emitido na criação de um romaneio ou ordem de entrega logística vinculada a um pedido.`
+            },
+            'delivery.updated': {
+                name: 'delivery.updated',
+                title: 'Atualização de Status de Entrega',
+                payload: {
+                    id: "evt_del_9900aabbccddeeff",
+                    event: "delivery.updated",
+                    timestamp: "2026-11-18T14:20:00.000Z",
+                    tenant: "infoadmin",
+                    data: {
+                        deliveryId: 501,
+                        status: "ENTREGUE",
+                        deliveredAt: "2026-11-18 14:19:00",
+                        links: { self: "/api/v1/deliveries/501" }
+                    }
+                },
+                schema: { "$schema": "http://json-schema.org/draft-07/schema#", "title": "DeliveryUpdatedWebhookEvent", "type": "object" },
+                typescript: `export interface DeliveryUpdatedPayload {\n  deliveryId: number;\n  status: string;\n  deliveredAt: string;\n  links: { self: string };\n}\n\nexport type DeliveryUpdatedEvent = WebhookEvent<DeliveryUpdatedPayload>;`,
+                notes: `<b style="color: #6ee7b7;">Gatilho de Disparo:</b> Emitido quando o motorista/entregador atualiza o despacho para em trânsito, entregue ou extraviado.`
+            },
+            'account_payable.created': {
+                name: 'account_payable.created',
+                title: 'Novo Título de Conta a Pagar',
+                payload: {
+                    id: "evt_pay_aabb112233445566",
+                    event: "account_payable.created",
+                    timestamp: "2026-11-18T14:02:00.000Z",
+                    tenant: "infoadmin",
+                    data: {
+                        payableId: 8812,
+                        storeId: 1,
+                        supplier: { id: 12, name: "FORNECEDOR DISTRIBUIDOR" },
+                        amount: 3500.00,
+                        dueDate: "2026-12-10",
+                        status: "ABERTO",
+                        links: { self: "/api/v1/account-payable/8812" }
+                    }
+                },
+                schema: { "$schema": "http://json-schema.org/draft-07/schema#", "title": "AccountPayableCreatedWebhookEvent", "type": "object" },
+                typescript: `export interface AccountPayableCreatedPayload {\n  payableId: number;\n  storeId: number;\n  supplier: { id: number; name: string };\n  amount: number;\n  dueDate: string;\n  status: string;\n  links: { self: string };\n}\n\nexport type AccountPayableCreatedEvent = WebhookEvent<AccountPayableCreatedPayload>;`,
+                notes: `<b style="color: #6ee7b7;">Gatilho de Disparo:</b> Emitido quando uma nova conta a pagar é cadastrada no financeiro.`
+            },
+            'account_payable.updated': {
+                name: 'account_payable.updated',
+                title: 'Baixa ou Quitação de Conta a Pagar',
+                payload: {
+                    id: "evt_pay_ffeeddccbbaa9988",
+                    event: "account_payable.updated",
+                    timestamp: "2026-11-18T14:25:00.000Z",
+                    tenant: "infoadmin",
+                    data: {
+                        payableId: 8812,
+                        status: "PAGO",
+                        paidAmount: 3500.00,
+                        paidAt: "2026-11-18 14:24:00",
+                        links: { self: "/api/v1/account-payable/8812" }
+                    }
+                },
+                schema: { "$schema": "http://json-schema.org/draft-07/schema#", "title": "AccountPayableUpdatedWebhookEvent", "type": "object" },
+                typescript: `export interface AccountPayableUpdatedPayload {\n  payableId: number;\n  status: string;\n  paidAmount: number;\n  paidAt: string;\n  links: { self: string };\n}\n\nexport type AccountPayableUpdatedEvent = WebhookEvent<AccountPayableUpdatedPayload>;`,
+                notes: `<b style="color: #6ee7b7;">Gatilho de Disparo:</b> Emitido quando o financeiro liquida ou cancela um título a pagar.`
+            },
+            'account_receivable.created': {
+                name: 'account_receivable.created',
+                title: 'Novo Título de Conta a Receber',
+                payload: {
+                    id: "evt_rec_1122334455667788",
+                    event: "account_receivable.created",
+                    timestamp: "2026-11-18T14:03:00.000Z",
+                    tenant: "infoadmin",
+                    data: {
+                        receivableId: 9940,
+                        storeId: 1,
+                        customer: { id: 45, name: "SUPERMERCADO CENTRAL LTDA" },
+                        amount: 1200.80,
+                        dueDate: "2026-11-30",
+                        status: "ABERTO",
+                        links: { self: "/api/v1/account-receivable/9940" }
+                    }
+                },
+                schema: { "$schema": "http://json-schema.org/draft-07/schema#", "title": "AccountReceivableCreatedWebhookEvent", "type": "object" },
+                typescript: `export interface AccountReceivableCreatedPayload {\n  receivableId: number;\n  storeId: number;\n  customer: { id: number; name: string };\n  amount: number;\n  dueDate: string;\n  status: string;\n  links: { self: string };\n}\n\nexport type AccountReceivableCreatedEvent = WebhookEvent<AccountReceivableCreatedPayload>;`,
+                notes: `<b style="color: #6ee7b7;">Gatilho de Disparo:</b> Emitido quando uma duplicata/título a receber é gerado por uma venda a prazo.`
+            },
+            'account_receivable.updated': {
+                name: 'account_receivable.updated',
+                title: 'Baixa ou Quitação de Conta a Receber',
+                payload: {
+                    id: "evt_rec_8877665544332211",
+                    event: "account_receivable.updated",
+                    timestamp: "2026-11-18T14:30:00.000Z",
+                    tenant: "infoadmin",
+                    data: {
+                        receivableId: 9940,
+                        status: "RECEBIDO",
+                        receivedAmount: 1200.80,
+                        receivedAt: "2026-11-18 14:29:00",
+                        links: { self: "/api/v1/account-receivable/9940" }
+                    }
+                },
+                schema: { "$schema": "http://json-schema.org/draft-07/schema#", "title": "AccountReceivableUpdatedWebhookEvent", "type": "object" },
+                typescript: `export interface AccountReceivableUpdatedPayload {\n  receivableId: number;\n  status: string;\n  receivedAmount: number;\n  receivedAt: string;\n  links: { self: string };\n}\n\nexport type AccountReceivableUpdatedEvent = WebhookEvent<AccountReceivableUpdatedPayload>;`,
+                notes: `<b style="color: #6ee7b7;">Gatilho de Disparo:</b> Emitido no recebimento ou conciliação bancária do título.`
+            }
+        };
+
+        function renderWebhookSchemaView() {
+            const entry = WEBHOOK_SCHEMAS_REGISTRY[currentWebhookSchemaEvent] || WEBHOOK_SCHEMAS_REGISTRY['product.updated'];
+            const codeEl = document.getElementById('webhook-schema-code-block');
+            const notesEl = document.getElementById('webhook-schema-field-notes');
+            if (!codeEl || !notesEl) return;
+
+            if (currentWebhookSchemaTab === 'payload') {
+                codeEl.textContent = JSON.stringify(entry.payload, null, 2);
+            } else if (currentWebhookSchemaTab === 'schema') {
+                codeEl.textContent = JSON.stringify(entry.schema, null, 2);
+            } else if (currentWebhookSchemaTab === 'typescript') {
+                codeEl.textContent = entry.typescript;
+            }
+
+            notesEl.innerHTML = entry.notes || '';
+        }
+
+        function onWebhookSchemaEventChange(evtName) {
+            currentWebhookSchemaEvent = evtName;
+            renderWebhookSchemaView();
+        }
+
+        function switchWebhookSchemaTab(tab) {
+            currentWebhookSchemaTab = tab;
+            const tabs = ['payload', 'schema', 'typescript'];
+            tabs.forEach(t => {
+                const btn = document.getElementById('btn-schema-tab-' + t);
+                if (btn) {
+                    if (t === tab) {
+                        btn.style.background = 'var(--primary)';
+                        btn.style.color = '#0f172a';
+                        btn.style.border = 'none';
+                    } else {
+                        btn.style.background = 'rgba(255,255,255,0.05)';
+                        btn.style.color = 'var(--text)';
+                        btn.style.border = '1px solid var(--border)';
+                    }
+                }
+            });
+            renderWebhookSchemaView();
+        }
+
+        function inspectWebhookSchema(evtName) {
+            const select = document.getElementById('webhook-schema-event-select');
+            if (select) {
+                select.value = evtName;
+            }
+            currentWebhookSchemaEvent = evtName;
+            renderWebhookSchemaView();
+
+            const targetSection = document.getElementById('webhook-schema-inspector-section');
+            if (targetSection) {
+                targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function copyCurrentWebhookSchemaContent() {
+            const codeEl = document.getElementById('webhook-schema-code-block');
+            if (!codeEl) return;
+            const text = codeEl.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const textSpan = document.getElementById('copy-schema-content-text');
+                if (textSpan) {
+                    const original = textSpan.textContent;
+                    textSpan.textContent = 'Copiado!';
+                    setTimeout(() => { textSpan.textContent = original; }, 2000);
+                }
+            }).catch(err => {
+                console.error('Falha ao copiar:', err);
+            });
+        }
+
+        function downloadCurrentWebhookJsonSchema() {
+            const entry = WEBHOOK_SCHEMAS_REGISTRY[currentWebhookSchemaEvent] || WEBHOOK_SCHEMAS_REGISTRY['product.updated'];
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(entry.schema, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `schema-${currentWebhookSchemaEvent}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        }
+
+        // Inicializa o inspetor de schemas no carregamento
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', renderWebhookSchemaView);
+        } else {
+            renderWebhookSchemaView();
+        }
+
+        window.inspectWebhookSchema = inspectWebhookSchema;
+        window.switchWebhookSchemaTab = switchWebhookSchemaTab;
+        window.onWebhookSchemaEventChange = onWebhookSchemaEventChange;
+        window.copyCurrentWebhookSchemaContent = copyCurrentWebhookSchemaContent;
+        window.downloadCurrentWebhookJsonSchema = downloadCurrentWebhookJsonSchema;
 
         // Control sticky header scrolled state
         window.addEventListener('scroll', () => {
