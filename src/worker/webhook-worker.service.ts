@@ -77,6 +77,57 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
   // Idempotent Filter: armazena chaves de idempotência recentes com TTL de 2 horas
   private readonly recentEventKeys = new Map<string, number>();
 
+  // Cursor em memória para varredura sequencial de alterações em ESTOQUE
+  private readonly lastStockSweepProductIdBySub = new Map<string, string>();
+
+  /**
+   * Converte linha da tabela ESTOQUE para objeto com preços estruturados por tabela
+   */
+  private mapStockRow(st: any) {
+    const prices: { table: number; price: number; promotionalPrice: number | null }[] = [];
+    for (let i = 1; i <= 12; i++) {
+      const rawPrice = st[`PRO_PRECO${i}`];
+      const priceNum = rawPrice != null ? Number(rawPrice) : 0;
+      if (priceNum > 0) {
+        const rawPromo = st[`PRO_PRECOP${i}`];
+        const promoNum = rawPromo != null ? Number(rawPromo) : null;
+        prices.push({
+          table: i,
+          price: priceNum,
+          promotionalPrice: promoNum !== null && promoNum > 0 ? promoNum : null,
+        });
+      }
+    }
+
+    const table1 = prices.find((p) => p.table === 1);
+    const defaultPrice = table1 ? table1.price : (prices[0]?.price ?? 0);
+    const defaultPromoPrice = table1 ? table1.promotionalPrice : (prices[0]?.promotionalPrice ?? null);
+
+    return {
+      storeId: Number(st.LOJ_CODIGO),
+      current: Number(st.EST_ATUAL) || 0,
+      support: Number(st.EST_APOIO) || 0,
+      price: defaultPrice,
+      promotionalPrice: defaultPromoPrice,
+      prices,
+    };
+  }
+
+  /**
+   * Calcula hash/checksum determinístico do estado do estoque do produto (saldos e preços de todas as lojas)
+   */
+  private computeStockChecksum(stocks: any[]): string {
+    const normalized = (stocks || [])
+      .map((s) => ({
+        storeId: s.storeId,
+        current: s.current,
+        support: s.support,
+        prices: s.prices,
+      }))
+      .sort((a, b) => a.storeId - b.storeId);
+    return crypto.createHash('md5').update(JSON.stringify(normalized)).digest('hex');
+  }
+
   constructor(
     private readonly prisma: RegistryPrismaService,
     private readonly tenantConnectionService: TenantConnectionService,
@@ -122,6 +173,11 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
         if (entityId !== undefined) {
           const key = `${d.subscriptionId}:${d.event}:${entityId}:${state}`;
           this.recentEventKeys.set(key, expiry);
+        }
+        if (data.productId !== undefined && Array.isArray(data.stock)) {
+          const stockChecksum = this.computeStockChecksum(data.stock);
+          const stockStateKey = `${d.subscriptionId}:stock_state:${data.productId}:${stockChecksum}`;
+          this.recentEventKeys.set(stockStateKey, expiry);
         }
       }
       this.logger.log(
@@ -578,20 +634,32 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
         [syncDate, syncDate, syncTime, syncTime, lastProductId.toString()],
       );
 
-      if (products.length > 0) {
-        let maxSeenId = lastProductId;
-        let maxSyncAt = sub.lastProductSyncAt;
+      const stockSelectCols = `
+        E.PRO_CODIGO, E.LOJ_CODIGO, E.EST_ATUAL, E.EST_APOIO, E.EST_DTALTERACAO,
+        E.PRO_PRECO1, E.PRO_PRECO2, E.PRO_PRECO3, E.PRO_PRECO4, E.PRO_PRECO5, E.PRO_PRECO6,
+        E.PRO_PRECO7, E.PRO_PRECO8, E.PRO_PRECO9, E.PRO_PRECO10, E.PRO_PRECO11, E.PRO_PRECO12,
+        E.PRO_PRECOP1, E.PRO_PRECOP2, E.PRO_PRECOP3, E.PRO_PRECOP4, E.PRO_PRECOP5, E.PRO_PRECOP6,
+        E.PRO_PRECOP7, E.PRO_PRECOP8, E.PRO_PRECOP9, E.PRO_PRECOP10, E.PRO_PRECOP11, E.PRO_PRECOP12
+      `;
 
+      let deliveriesToCreate: any[] = [];
+      let maxSeenId = lastProductId;
+      let maxSyncAt = sub.lastProductSyncAt;
+
+      // 2.a Processamento de PRODUTOS (novos cadastros e alterações cadastrais)
+      if (products.length > 0) {
         const prodIds = products.map((p: any) => String(p.PRO_CODIGO).trim()).filter(Boolean);
         const stockByProduct = new Map<string, any[]>();
 
         if (prodIds.length > 0) {
           try {
+            const inPlaceholders = prodIds.map(() => '?').join(',');
             const rawStock = await queryPromise(
-              `SELECT E.PRO_CODIGO, E.LOJ_CODIGO, E.EST_ATUAL, E.EST_APOIO
+              `SELECT ${stockSelectCols}
                FROM ESTOQUE E
-               WHERE E.PRO_CODIGO IN (${prodIds.join(',')})
+               WHERE E.PRO_CODIGO IN (${inPlaceholders})
                ORDER BY E.PRO_CODIGO ASC, E.LOJ_CODIGO ASC`,
+              prodIds,
             );
 
             for (const st of rawStock) {
@@ -599,18 +667,12 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
               if (!stockByProduct.has(pid)) {
                 stockByProduct.set(pid, []);
               }
-              stockByProduct.get(pid)!.push({
-                storeId: Number(st.LOJ_CODIGO),
-                current: Number(st.EST_ATUAL) || 0,
-                support: Number(st.EST_APOIO) || 0,
-              });
+              stockByProduct.get(pid)!.push(this.mapStockRow(st));
             }
           } catch (err: any) {
             this.logger.warn(`Erro ao carregar estoque para produtos (${prodIds.join(',')}): ${err.message}`);
           }
         }
-
-        const deliveriesToCreate: any[] = [];
 
         for (const prod of products) {
           const proCodigoStr = String(prod.PRO_CODIGO).trim();
@@ -630,11 +692,16 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
           const stateTimestamp = `${dtAlt || dtCad} ${hr}`.trim();
           const idempotencyKey = `${sub.id}:${eventType}:${proCodigoStr}:${stateTimestamp}`;
 
+          const stockList = stockByProduct.get(proCodigoStr) || [];
+          const stockChecksum = this.computeStockChecksum(stockList);
+
           if (this.isDuplicateEvent(idempotencyKey)) {
             // Evento já emitido para este exato estado do produto: ignora entrega duplicada
             maxSeenId = BigInt(proCodigoStr);
             const latestDate = dtAlt || dtCad;
             maxSyncAt = fromBrazilDateTimeToUtc(latestDate, hr);
+            // Registra também o checksum do estoque para sincronizar a varredura de ESTOQUE
+            this.isDuplicateEvent(`${sub.id}:stock_state:${proCodigoStr}:${stockChecksum}`);
             continue;
           }
 
@@ -660,7 +727,7 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
                     name: prod.GRU_DESCRICAO ? String(prod.GRU_DESCRICAO).trim() : null,
                   }
                 : null,
-              stock: stockByProduct.get(proCodigoStr) || [],
+              stock: stockList,
               registeredAt: `${dtCad} ${hr}`.trim(),
               updatedAt: `${dtAlt || dtCad} ${hr}`.trim(),
               links: { self: `/api/v1/products/id/${proCodigoStr}` },
@@ -674,14 +741,148 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
             status: 'PENDING',
           });
 
+          // Registra o estado atual de estoque para que a varredura de ESTOQUE não duplique este evento
+          this.isDuplicateEvent(`${sub.id}:stock_state:${proCodigoStr}:${stockChecksum}`);
+
           maxSeenId = BigInt(proCodigoStr);
           const latestDate = dtAlt || dtCad;
           maxSyncAt = fromBrazilDateTimeToUtc(latestDate, hr);
         }
+      }
 
-        // Se todas as mensagens do lote forem duplicatas e o cursor não tiver avançado em relação ao atual:
-        // Forçamos o avanço do cursor em +1 segundo para que o Firebird não fique eternamente re-selecionando o mesmo registro
+      // 2.b Varredura de alterações em ESTOQUE (para disparar product.updated)
+      if (events.includes('product.updated')) {
+        const todayStr = getBrazilDateTime(new Date()).dateStr;
+        const lastStockProCode = this.lastStockSweepProductIdBySub.get(sub.id) || '';
+
+        try {
+          const modifiedStockProds = await queryPromise(
+            `SELECT FIRST 25 E.PRO_CODIGO
+             FROM ESTOQUE E
+             WHERE E.EST_DTALTERACAO >= ? AND E.PRO_CODIGO > ?
+             GROUP BY E.PRO_CODIGO
+             ORDER BY E.PRO_CODIGO ASC`,
+            [todayStr, lastStockProCode],
+          );
+
+          if (modifiedStockProds.length > 0) {
+            const stockProdIds = modifiedStockProds
+              .map((r: any) => String(r.PRO_CODIGO).trim())
+              .filter(Boolean);
+
+            const lastInBatch = stockProdIds[stockProdIds.length - 1];
+            if (modifiedStockProds.length < 25) {
+              this.lastStockSweepProductIdBySub.set(sub.id, '');
+            } else {
+              this.lastStockSweepProductIdBySub.set(sub.id, lastInBatch);
+            }
+
+            // Filtra produtos que já foram processados nesta mesma iteração por PRODUTOS
+            const idsToLoad = stockProdIds.filter(
+              (pid) => !products.some((p: any) => String(p.PRO_CODIGO).trim() === pid),
+            );
+
+            if (idsToLoad.length > 0) {
+              const inPlaceholders = idsToLoad.map(() => '?').join(',');
+              const rawStockBatch = await queryPromise(
+                `SELECT ${stockSelectCols}
+                 FROM ESTOQUE E
+                 WHERE E.PRO_CODIGO IN (${inPlaceholders})
+                 ORDER BY E.PRO_CODIGO ASC, E.LOJ_CODIGO ASC`,
+                idsToLoad,
+              );
+
+              const stockItemsByProd = new Map<string, any[]>();
+              for (const st of rawStockBatch) {
+                const pid = String(st.PRO_CODIGO).trim();
+                if (!stockItemsByProd.has(pid)) {
+                  stockItemsByProd.set(pid, []);
+                }
+                stockItemsByProd.get(pid)!.push(this.mapStockRow(st));
+              }
+
+              const prodsNeedingUpdate: string[] = [];
+              for (const pid of idsToLoad) {
+                const stList = stockItemsByProd.get(pid) || [];
+                const checksum = this.computeStockChecksum(stList);
+                const stateKey = `${sub.id}:stock_state:${pid}:${checksum}`;
+                if (!this.isDuplicateEvent(stateKey)) {
+                  prodsNeedingUpdate.push(pid);
+                }
+              }
+
+              if (prodsNeedingUpdate.length > 0) {
+                const updatePlaceholders = prodsNeedingUpdate.map(() => '?').join(',');
+                const updatedProdsDetails = await queryPromise(
+                  `SELECT
+                     P.PRO_CODIGO, P.PRO_CODIGOBAR, P.PRO_DESCRICAO, P.PRO_UNIDADE,
+                     P.PRO_DATACADASTRO, P.PRO_DATAALTERACAO, P.PRO_HORA,
+                     P.MAR_CODIGO, M.MAR_DESCRICAO,
+                     P.GRU_CODIGO, G.GRU_DESCRICAO
+                   FROM PRODUTOS P
+                   LEFT JOIN MARCAS M ON P.MAR_CODIGO = M.MAR_CODIGO
+                   LEFT JOIN GRUPOSPRO G ON P.GRU_CODIGO = G.GRU_CODIGO
+                   WHERE P.PRO_CODIGO IN (${updatePlaceholders})`,
+                  prodsNeedingUpdate,
+                );
+
+                for (const prod of updatedProdsDetails) {
+                  const proCodigoStr = String(prod.PRO_CODIGO).trim();
+                  const proCodigoNum = Number(prod.PRO_CODIGO);
+                  const proCodigoId = Number.isSafeInteger(proCodigoNum) ? proCodigoNum : proCodigoStr;
+                  const dtCad = parseFirebirdDate(prod.PRO_DATACADASTRO) || todayStr;
+                  const dtAlt = parseFirebirdDate(prod.PRO_DATAALTERACAO) || todayStr;
+                  const hr = parseFirebirdTime(prod.PRO_HORA);
+
+                  const payload = {
+                    id: `evt_prd_${crypto.randomBytes(8).toString('hex')}`,
+                    event: 'product.updated',
+                    timestamp: new Date().toISOString(),
+                    tenant: sub.user.user,
+                    data: {
+                      productId: proCodigoId,
+                      barcode: prod.PRO_CODIGOBAR ? String(prod.PRO_CODIGOBAR).trim() : null,
+                      description: prod.PRO_DESCRICAO ? String(prod.PRO_DESCRICAO).trim() : null,
+                      unit: prod.PRO_UNIDADE ? String(prod.PRO_UNIDADE).trim() : null,
+                      brand: prod.MAR_CODIGO
+                        ? {
+                            id: Number(prod.MAR_CODIGO),
+                            name: prod.MAR_DESCRICAO ? String(prod.MAR_DESCRICAO).trim() : null,
+                          }
+                        : null,
+                      group: prod.GRU_CODIGO
+                        ? {
+                            id: Number(prod.GRU_CODIGO),
+                            name: prod.GRU_DESCRICAO ? String(prod.GRU_DESCRICAO).trim() : null,
+                          }
+                        : null,
+                      stock: stockItemsByProd.get(proCodigoStr) || [],
+                      registeredAt: `${dtCad} ${hr}`.trim(),
+                      updatedAt: `${dtAlt} ${hr}`.trim(),
+                      links: { self: `/api/v1/products/id/${proCodigoStr}` },
+                    },
+                  };
+
+                  deliveriesToCreate.push({
+                    subscriptionId: sub.id,
+                    event: 'product.updated',
+                    payload: payload as any,
+                    status: 'PENDING',
+                  });
+                }
+              }
+            }
+          } else {
+            this.lastStockSweepProductIdBySub.set(sub.id, '');
+          }
+        } catch (err: any) {
+          this.logger.warn(`Erro na varredura de alterações em ESTOQUE da sub ${sub.id}: ${err.message}`);
+        }
+      }
+
+      if (deliveriesToCreate.length > 0 || products.length > 0) {
         if (
+          products.length > 0 &&
           deliveriesToCreate.length === 0 &&
           maxSyncAt.getTime() <= new Date(sub.lastProductSyncAt).getTime() &&
           maxSeenId === lastProductId
@@ -695,10 +896,14 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
               data: deliveriesToCreate,
             });
           }
-          await tx.webhookSubscription.update({
-            where: { id: sub.id },
-            data: { lastProductId: maxSeenId, lastProductSyncAt: maxSyncAt },
-          });
+          if (products.length > 0) {
+            await tx.webhookSubscription.update({
+              where: { id: sub.id },
+              data: { lastProductId: maxSeenId, lastProductSyncAt: maxSyncAt },
+            });
+            sub.lastProductId = maxSeenId;
+            sub.lastProductSyncAt = maxSyncAt;
+          }
         });
       }
     }
