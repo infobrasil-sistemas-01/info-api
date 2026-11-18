@@ -81,35 +81,35 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
   private readonly lastStockSweepProductIdBySub = new Map<string, string>();
 
   /**
-   * Converte linha da tabela ESTOQUE para objeto com preços estruturados por tabela
+   * Converte linha da tabela ESTOQUE para objeto com preços estruturados por tabela no padrão do ERP
    */
   private mapStockRow(st: any) {
-    const prices: { table: number; price: number; promotionalPrice: number | null }[] = [];
+    const tabelasPreco: { TABELA: number; PRECO: number; PRECO_PROMOCIONAL: number | null }[] = [];
     for (let i = 1; i <= 12; i++) {
       const rawPrice = st[`PRO_PRECO${i}`];
       const priceNum = rawPrice != null ? Number(rawPrice) : 0;
       if (priceNum > 0) {
         const rawPromo = st[`PRO_PRECOP${i}`];
         const promoNum = rawPromo != null ? Number(rawPromo) : null;
-        prices.push({
-          table: i,
-          price: priceNum,
-          promotionalPrice: promoNum !== null && promoNum > 0 ? promoNum : null,
+        tabelasPreco.push({
+          TABELA: i,
+          PRECO: priceNum,
+          PRECO_PROMOCIONAL: promoNum !== null && promoNum > 0 ? promoNum : null,
         });
       }
     }
 
-    const table1 = prices.find((p) => p.table === 1);
-    const defaultPrice = table1 ? table1.price : (prices[0]?.price ?? 0);
-    const defaultPromoPrice = table1 ? table1.promotionalPrice : (prices[0]?.promotionalPrice ?? null);
+    const table1 = tabelasPreco.find((p) => p.TABELA === 1);
+    const defaultPrice = table1 ? table1.PRECO : (tabelasPreco[0]?.PRECO ?? 0);
+    const defaultPromoPrice = table1 ? table1.PRECO_PROMOCIONAL : (tabelasPreco[0]?.PRECO_PROMOCIONAL ?? null);
 
     return {
-      storeId: Number(st.LOJ_CODIGO),
-      current: Number(st.EST_ATUAL) || 0,
-      support: Number(st.EST_APOIO) || 0,
-      price: defaultPrice,
-      promotionalPrice: defaultPromoPrice,
-      prices,
+      LOJ_CODIGO: Number(st.LOJ_CODIGO),
+      EST_ATUAL: Number(st.EST_ATUAL) || 0,
+      EST_APOIO: Number(st.EST_APOIO) || 0,
+      PRECO: defaultPrice,
+      PRECO_PROMOCIONAL: defaultPromoPrice,
+      TABELAS_PRECO: tabelasPreco,
     };
   }
 
@@ -119,12 +119,12 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
   private computeStockChecksum(stocks: any[]): string {
     const normalized = (stocks || [])
       .map((s) => ({
-        storeId: s.storeId,
-        current: s.current,
-        support: s.support,
-        prices: s.prices,
+        LOJ_CODIGO: s.LOJ_CODIGO ?? s.storeId,
+        EST_ATUAL: s.EST_ATUAL ?? s.current,
+        EST_APOIO: s.EST_APOIO ?? s.support,
+        TABELAS_PRECO: s.TABELAS_PRECO ?? s.prices,
       }))
-      .sort((a, b) => a.storeId - b.storeId);
+      .sort((a, b) => a.LOJ_CODIGO - b.LOJ_CODIGO);
     return crypto.createHash('md5').update(JSON.stringify(normalized)).digest('hex');
   }
 
@@ -167,16 +167,20 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
         const p = d.payload as any;
         const data = p?.data || {};
         const entityId =
-          data.productId ?? data.orderNumber ?? data.deliveryId ?? data.payableId ?? data.receivableId;
+          data.PRO_CODIGO ?? data.VEN_NUMERO ?? data.ENT_NUMERO ?? data.PAG_NUMERO ?? data.REC_NUMERO ??
+          data.productId ?? data.orderNumber ?? data.orderId ?? data.deliveryId ?? data.payableId ?? data.receivableId;
         const state =
+          data.PRO_DATAALTERACAO ?? data.PRO_DATACADASTRO ?? data.VEN_DATAVENDA ?? data.ENT_DATA ?? data.PAG_DATAMOV ?? data.REC_DATAVENC ??
           data.updatedAt ?? data.issuedAt ?? data.deliveryDate ?? data.issueDate ?? data.dueDate ?? '';
         if (entityId !== undefined) {
           const key = `${d.subscriptionId}:${d.event}:${entityId}:${state}`;
           this.recentEventKeys.set(key, expiry);
         }
-        if (data.productId !== undefined && Array.isArray(data.stock)) {
-          const stockChecksum = this.computeStockChecksum(data.stock);
-          const stockStateKey = `${d.subscriptionId}:stock_state:${data.productId}:${stockChecksum}`;
+        const prodId = data.PRO_CODIGO ?? data.productId;
+        const stockArr = data.ESTOQUE ?? data.stock;
+        if (prodId !== undefined && Array.isArray(stockArr)) {
+          const stockChecksum = this.computeStockChecksum(stockArr);
+          const stockStateKey = `${d.subscriptionId}:stock_state:${prodId}:${stockChecksum}`;
           this.recentEventKeys.set(stockStateKey, expiry);
         }
       }
@@ -417,14 +421,14 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
                 itemsByOrder.set(orderId, []);
               }
               itemsByOrder.get(orderId)!.push({
-                productId: Number(item.PRO_CODIGO),
-                description: item.PRO_DESCRICAO ? String(item.PRO_DESCRICAO).trim() : null,
-                unit: item.PRO_UNIDADE ? String(item.PRO_UNIDADE).trim() : null,
-                quantity: Number(item.IVD_QTDE) || 0,
-                unitPrice: Number(item.IVD_PRECO) || 0,
-                discount: Number(item.IVD_DESCONTO) || 0,
-                total: Number(item.IVD_TOTAL) || 0,
-                netTotal: Number(item.IVD_LIQUIDO) || 0,
+                PRO_CODIGO: Number(item.PRO_CODIGO),
+                PRO_DESCRICAO: item.PRO_DESCRICAO ? String(item.PRO_DESCRICAO).trim() : null,
+                PRO_UNIDADE: item.PRO_UNIDADE ? String(item.PRO_UNIDADE).trim() : null,
+                IVD_QTDE: Number(item.IVD_QTDE) || 0,
+                IVD_PRECO: Number(item.IVD_PRECO) || 0,
+                IVD_DESCONTO: Number(item.IVD_DESCONTO) || 0,
+                IVD_TOTAL: Number(item.IVD_TOTAL) || 0,
+                IVD_LIQUIDO: Number(item.IVD_LIQUIDO) || 0,
               });
             }
           } catch (err: any) {
@@ -441,37 +445,37 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
           const saleDate = parseFirebirdDate(sale.VEN_DATA) || getBrazilDateTime(new Date()).dateStr;
           const saleTime = parseFirebirdTime(sale.VEN_HORA);
 
-          const payments: Array<{ code: number; name: string; value: number }> = [];
+          const payments: Array<{ CODIGO: number; DESCRICAO: string; VALOR: number }> = [];
           if (sale.FP1_CODIGO && Number(sale.FP1_CODIGO) > 0) {
             const val1 =
               sale.VEN_TOTALPP1 !== null && sale.VEN_TOTALPP1 !== undefined
                 ? Number(sale.VEN_TOTALPP1)
                 : Number(sale.VEN_TOTALLIQUIDO || 0);
             payments.push({
-              code: Number(sale.FP1_CODIGO),
-              name: sale.FPG1_DESCRICAO ? String(sale.FPG1_DESCRICAO).trim() : 'Forma de Pagamento 1',
-              value: Number(Number(val1).toFixed(2)),
+              CODIGO: Number(sale.FP1_CODIGO),
+              DESCRICAO: sale.FPG1_DESCRICAO ? String(sale.FPG1_DESCRICAO).trim() : 'Forma de Pagamento 1',
+              VALOR: Number(Number(val1).toFixed(2)),
             });
           }
           if (sale.FP2_CODIGO && Number(sale.FP2_CODIGO) > 0) {
             payments.push({
-              code: Number(sale.FP2_CODIGO),
-              name: sale.FPG2_DESCRICAO ? String(sale.FPG2_DESCRICAO).trim() : 'Forma de Pagamento 2',
-              value: Number((Number(sale.VEN_TOTALPP2) || 0).toFixed(2)),
+              CODIGO: Number(sale.FP2_CODIGO),
+              DESCRICAO: sale.FPG2_DESCRICAO ? String(sale.FPG2_DESCRICAO).trim() : 'Forma de Pagamento 2',
+              VALOR: Number((Number(sale.VEN_TOTALPP2) || 0).toFixed(2)),
             });
           }
           if (sale.FP3_CODIGO && Number(sale.FP3_CODIGO) > 0) {
             payments.push({
-              code: Number(sale.FP3_CODIGO),
-              name: sale.FPG3_DESCRICAO ? String(sale.FPG3_DESCRICAO).trim() : 'Forma de Pagamento 3',
-              value: Number((Number(sale.VEN_TOTALPP3) || 0).toFixed(2)),
+              CODIGO: Number(sale.FP3_CODIGO),
+              DESCRICAO: sale.FPG3_DESCRICAO ? String(sale.FPG3_DESCRICAO).trim() : 'Forma de Pagamento 3',
+              VALOR: Number((Number(sale.VEN_TOTALPP3) || 0).toFixed(2)),
             });
           }
           if (sale.FP4_CODIGO && Number(sale.FP4_CODIGO) > 0) {
             payments.push({
-              code: Number(sale.FP4_CODIGO),
-              name: sale.FPG4_DESCRICAO ? String(sale.FPG4_DESCRICAO).trim() : 'Forma de Pagamento 4',
-              value: Number((Number(sale.VEN_TOTALPP4) || 0).toFixed(2)),
+              CODIGO: Number(sale.FP4_CODIGO),
+              DESCRICAO: sale.FPG4_DESCRICAO ? String(sale.FPG4_DESCRICAO).trim() : 'Forma de Pagamento 4',
+              VALOR: Number((Number(sale.VEN_TOTALPP4) || 0).toFixed(2)),
             });
           }
 
@@ -496,47 +500,30 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
             timestamp: new Date().toISOString(),
             tenant: sub.user.user,
             data: {
-              orderId: venNumero,
-              siteOrderNumber: sale.VEN_NUMSITE ? String(sale.VEN_NUMSITE).trim() : null,
-              orderType: sale.VEN_TIPO ? String(sale.VEN_TIPO).trim() : null,
-              store: {
-                id: Number(sale.LOJ_CODIGO),
-                name: sale.LOJ_NOME ? String(sale.LOJ_NOME).trim() : null,
-                tradeName: sale.LOJ_FANTASIA ? String(sale.LOJ_FANTASIA).trim() : null,
-              },
-              status: {
-                code: Number(sale.SIT_CODIGO),
-                description: statusDesc,
-              },
-              customer: sale.CLI_CODIGO
-                ? {
-                    id: Number(sale.CLI_CODIGO),
-                    name: sale.CLI_NOME ? String(sale.CLI_NOME).trim() : null,
-                    cpfCnpj: sale.CLI_CPF_CNPJ ? String(sale.CLI_CPF_CNPJ).trim() : null,
-                    phone: sale.CLI_FONE ? String(sale.CLI_FONE).trim() : null,
-                    email: sale.CLI_EMAIL ? String(sale.CLI_EMAIL).trim() : null,
-                  }
-                : null,
-              seller: sale.FUN_CODIGO
-                ? {
-                    id: Number(sale.FUN_CODIGO),
-                    name: sale.FUN_NOME ? String(sale.FUN_NOME).trim() : null,
-                  }
-                : null,
-              operator: sale.USU_CODIGO
-                ? {
-                    id: Number(sale.USU_CODIGO),
-                    username: sale.USU_APELIDO ? String(sale.USU_APELIDO).trim() : null,
-                  }
-                : null,
-              totals: {
-                gross: Number(sale.VEN_TOTALBRUTO) || 0,
-                discount: Number(sale.VEN_TOTALDESC) || 0,
-                net: Number(sale.VEN_TOTALLIQUIDO ?? sale.VEN_TOTALBRUTO) || 0,
-              },
-              payments,
-              items: itemsByOrder.get(venNumero) || [],
-              issuedAt: `${saleDate} ${saleTime}`.trim(),
+              VEN_NUMERO: venNumero,
+              VEN_NUMSITE: sale.VEN_NUMSITE ? String(sale.VEN_NUMSITE).trim() : null,
+              VEN_TIPO: sale.VEN_TIPO ? String(sale.VEN_TIPO).trim() : null,
+              LOJ_CODIGO: Number(sale.LOJ_CODIGO),
+              LOJ_NOME: sale.LOJ_NOME ? String(sale.LOJ_NOME).trim() : null,
+              LOJ_FANTASIA: sale.LOJ_FANTASIA ? String(sale.LOJ_FANTASIA).trim() : null,
+              SIT_CODIGO: Number(sale.SIT_CODIGO),
+              SIT_DESCRICAO: statusDesc,
+              CLI_CODIGO: sale.CLI_CODIGO ? Number(sale.CLI_CODIGO) : null,
+              CLI_NOME: sale.CLI_NOME ? String(sale.CLI_NOME).trim() : null,
+              CLI_CPF_CNPJ: sale.CLI_CPF_CNPJ ? String(sale.CLI_CPF_CNPJ).trim() : null,
+              CLI_FONE: sale.CLI_FONE ? String(sale.CLI_FONE).trim() : null,
+              CLI_EMAIL: sale.CLI_EMAIL ? String(sale.CLI_EMAIL).trim() : null,
+              FUN_CODIGO: sale.FUN_CODIGO ? Number(sale.FUN_CODIGO) : null,
+              FUN_NOME: sale.FUN_NOME ? String(sale.FUN_NOME).trim() : null,
+              USU_CODIGO: sale.USU_CODIGO ? Number(sale.USU_CODIGO) : null,
+              USU_APELIDO: sale.USU_APELIDO ? String(sale.USU_APELIDO).trim() : null,
+              VEN_TOTALBRUTO: Number(sale.VEN_TOTALBRUTO) || 0,
+              VEN_TOTALDESC: Number(sale.VEN_TOTALDESC) || 0,
+              VEN_TOTALLIQUIDO: Number(sale.VEN_TOTALLIQUIDO ?? sale.VEN_TOTALBRUTO) || 0,
+              FORMAS_PAGAMENTO: payments,
+              ITENS: itemsByOrder.get(venNumero) || [],
+              VEN_DATA: saleDate,
+              VEN_HORA: saleTime,
               links: {
                 self: `/api/v1/orders/${venNumero}`,
                 items: `/api/v1/orders/${venNumero}/items`,
@@ -711,25 +698,17 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
             timestamp: new Date().toISOString(),
             tenant: sub.user.user,
             data: {
-              productId: proCodigoId,
-              barcode: prod.PRO_CODIGOBAR ? String(prod.PRO_CODIGOBAR).trim() : null,
-              description: prod.PRO_DESCRICAO ? String(prod.PRO_DESCRICAO).trim() : null,
-              unit: prod.PRO_UNIDADE ? String(prod.PRO_UNIDADE).trim() : null,
-              brand: prod.MAR_CODIGO
-                ? {
-                    id: Number(prod.MAR_CODIGO),
-                    name: prod.MAR_DESCRICAO ? String(prod.MAR_DESCRICAO).trim() : null,
-                  }
-                : null,
-              group: prod.GRU_CODIGO
-                ? {
-                    id: Number(prod.GRU_CODIGO),
-                    name: prod.GRU_DESCRICAO ? String(prod.GRU_DESCRICAO).trim() : null,
-                  }
-                : null,
-              stock: stockList,
-              registeredAt: `${dtCad} ${hr}`.trim(),
-              updatedAt: `${dtAlt || dtCad} ${hr}`.trim(),
+              PRO_CODIGO: proCodigoId,
+              PRO_CODIGOBAR: prod.PRO_CODIGOBAR ? String(prod.PRO_CODIGOBAR).trim() : null,
+              PRO_DESCRICAO: prod.PRO_DESCRICAO ? String(prod.PRO_DESCRICAO).trim() : null,
+              PRO_UNIDADE: prod.PRO_UNIDADE ? String(prod.PRO_UNIDADE).trim() : null,
+              MAR_CODIGO: prod.MAR_CODIGO ? Number(prod.MAR_CODIGO) : null,
+              MAR_DESCRICAO: prod.MAR_DESCRICAO ? String(prod.MAR_DESCRICAO).trim() : null,
+              GRU_CODIGO: prod.GRU_CODIGO ? Number(prod.GRU_CODIGO) : null,
+              GRU_DESCRICAO: prod.GRU_DESCRICAO ? String(prod.GRU_DESCRICAO).trim() : null,
+              ESTOQUE: stockList,
+              PRO_DATACADASTRO: `${dtCad} ${hr}`.trim(),
+              PRO_DATAALTERACAO: `${dtAlt || dtCad} ${hr}`.trim(),
               links: { self: `/api/v1/products/id/${proCodigoStr}` },
             },
           };
@@ -840,25 +819,17 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
                     timestamp: new Date().toISOString(),
                     tenant: sub.user.user,
                     data: {
-                      productId: proCodigoId,
-                      barcode: prod.PRO_CODIGOBAR ? String(prod.PRO_CODIGOBAR).trim() : null,
-                      description: prod.PRO_DESCRICAO ? String(prod.PRO_DESCRICAO).trim() : null,
-                      unit: prod.PRO_UNIDADE ? String(prod.PRO_UNIDADE).trim() : null,
-                      brand: prod.MAR_CODIGO
-                        ? {
-                            id: Number(prod.MAR_CODIGO),
-                            name: prod.MAR_DESCRICAO ? String(prod.MAR_DESCRICAO).trim() : null,
-                          }
-                        : null,
-                      group: prod.GRU_CODIGO
-                        ? {
-                            id: Number(prod.GRU_CODIGO),
-                            name: prod.GRU_DESCRICAO ? String(prod.GRU_DESCRICAO).trim() : null,
-                          }
-                        : null,
-                      stock: stockItemsByProd.get(proCodigoStr) || [],
-                      registeredAt: `${dtCad} ${hr}`.trim(),
-                      updatedAt: `${dtAlt} ${hr}`.trim(),
+                      PRO_CODIGO: proCodigoId,
+                      PRO_CODIGOBAR: prod.PRO_CODIGOBAR ? String(prod.PRO_CODIGOBAR).trim() : null,
+                      PRO_DESCRICAO: prod.PRO_DESCRICAO ? String(prod.PRO_DESCRICAO).trim() : null,
+                      PRO_UNIDADE: prod.PRO_UNIDADE ? String(prod.PRO_UNIDADE).trim() : null,
+                      MAR_CODIGO: prod.MAR_CODIGO ? Number(prod.MAR_CODIGO) : null,
+                      MAR_DESCRICAO: prod.MAR_DESCRICAO ? String(prod.MAR_DESCRICAO).trim() : null,
+                      GRU_CODIGO: prod.GRU_CODIGO ? Number(prod.GRU_CODIGO) : null,
+                      GRU_DESCRICAO: prod.GRU_DESCRICAO ? String(prod.GRU_DESCRICAO).trim() : null,
+                      ESTOQUE: stockItemsByProd.get(proCodigoStr) || [],
+                      PRO_DATACADASTRO: `${dtCad} ${hr}`.trim(),
+                      PRO_DATAALTERACAO: `${dtAlt} ${hr}`.trim(),
                       links: { self: `/api/v1/products/id/${proCodigoStr}` },
                     },
                   };
@@ -1003,30 +974,24 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
             timestamp: new Date().toISOString(),
             tenant: sub.user.user,
             data: {
-              deliveryId: entNumero,
-              orderId: d.VEN_NUMERO ? Number(d.VEN_NUMERO) : null,
-              storeId: d.LOJ_CODIGO ? Number(d.LOJ_CODIGO) : null,
-              driver: d.PRE_CODIGO
-                ? {
-                    id: Number(d.PRE_CODIGO),
-                    name: d.PRE_NOME ? String(d.PRE_NOME).trim() : null,
-                  }
-                : null,
-              vehiclePlate: d.VEI_PLACA ? String(d.VEI_PLACA).trim() : null,
-              status: {
-                code:
-                  d.TBS_CODIGO !== null && d.TBS_CODIGO !== undefined
-                    ? Number(d.TBS_CODIGO)
-                    : null,
-                description: d.TBS_DESCRICAO ? String(d.TBS_DESCRICAO).trim() : null,
-                situation:
-                  d.SIT_CODIGO !== null && d.SIT_CODIGO !== undefined
-                    ? Number(d.SIT_CODIGO)
-                    : null,
-              },
-              deliveryDate: entDate,
-              deliveryTime: entTime,
-              completionDate: entBaixa,
+              ENT_NUMERO: entNumero,
+              VEN_NUMERO: d.VEN_NUMERO ? Number(d.VEN_NUMERO) : null,
+              LOJ_CODIGO: d.LOJ_CODIGO ? Number(d.LOJ_CODIGO) : null,
+              PRE_CODIGO: d.PRE_CODIGO ? Number(d.PRE_CODIGO) : null,
+              PRE_NOME: d.PRE_NOME ? String(d.PRE_NOME).trim() : null,
+              VEI_PLACA: d.VEI_PLACA ? String(d.VEI_PLACA).trim() : null,
+              TBS_CODIGO:
+                d.TBS_CODIGO !== null && d.TBS_CODIGO !== undefined
+                  ? Number(d.TBS_CODIGO)
+                  : null,
+              TBS_DESCRICAO: d.TBS_DESCRICAO ? String(d.TBS_DESCRICAO).trim() : null,
+              SIT_CODIGO:
+                d.SIT_CODIGO !== null && d.SIT_CODIGO !== undefined
+                  ? Number(d.SIT_CODIGO)
+                  : null,
+              ENT_DATA: entDate,
+              ENT_HORA: entTime,
+              ENT_DATABAIXA: entBaixa,
               links: { self: `/api/v1/deliveries/${entNumero}` },
             },
           };
@@ -1141,19 +1106,15 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
             timestamp: new Date().toISOString(),
             tenant: sub.user.user,
             data: {
-              payableId: pagNumero,
-              storeId: p.LOJ_CODIGO ? Number(p.LOJ_CODIGO) : null,
-              supplier: p.CRE_CODIGO
-                ? {
-                    id: Number(p.CRE_CODIGO),
-                    name: p.CRE_NOME ? String(p.CRE_NOME).trim() : null,
-                  }
-                : null,
-              value: Number(p.PAG_VALOR) || 0,
-              issueDate: dtMov,
-              paymentDate: dtPag,
-              dueDate,
-              situation: p.PAG_SITUACAO ? String(p.PAG_SITUACAO).trim() : null,
+              PAG_NUMERO: pagNumero,
+              LOJ_CODIGO: p.LOJ_CODIGO ? Number(p.LOJ_CODIGO) : null,
+              CRE_CODIGO: p.CRE_CODIGO ? Number(p.CRE_CODIGO) : null,
+              CRE_NOME: p.CRE_NOME ? String(p.CRE_NOME).trim() : null,
+              PAG_VALOR: Number(p.PAG_VALOR) || 0,
+              PAG_DATAMOV: dtMov,
+              PAG_DATAPAG: dtPag,
+              PAG_DATAVENC: dueDate,
+              PAG_SITUACAO: p.PAG_SITUACAO ? String(p.PAG_SITUACAO).trim() : null,
               links: { self: `/api/v1/account-payable/${pagNumero}` },
             },
           };
@@ -1244,18 +1205,14 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
               timestamp: new Date().toISOString(),
               tenant: sub.user.user,
               data: {
-                receivableId: recNumero,
-                storeId: r.LOJ_CODIGO ? Number(r.LOJ_CODIGO) : null,
-                customer: r.CLI_CODIGO
-                  ? {
-                      id: Number(r.CLI_CODIGO),
-                      name: r.CLI_NOME ? String(r.CLI_NOME).trim() : null,
-                      cpfCnpj: r.CLI_CPF_CNPJ ? String(r.CLI_CPF_CNPJ).trim() : null,
-                    }
-                  : null,
-                value: Number(r.REC_VALOR) || 0,
-                dueDate,
-                situation: r.REC_SITUACAO ? String(r.REC_SITUACAO).trim() : null,
+                REC_NUMERO: recNumero,
+                LOJ_CODIGO: r.LOJ_CODIGO ? Number(r.LOJ_CODIGO) : null,
+                CLI_CODIGO: r.CLI_CODIGO ? Number(r.CLI_CODIGO) : null,
+                CLI_NOME: r.CLI_NOME ? String(r.CLI_NOME).trim() : null,
+                CLI_CPF_CNPJ: r.CLI_CPF_CNPJ ? String(r.CLI_CPF_CNPJ).trim() : null,
+                REC_VALOR: Number(r.REC_VALOR) || 0,
+                REC_DATAVENC: dueDate,
+                REC_SITUACAO: r.REC_SITUACAO ? String(r.REC_SITUACAO).trim() : null,
                 links: { self: `/api/v1/account-receivable/${recNumero}` },
               },
             };
