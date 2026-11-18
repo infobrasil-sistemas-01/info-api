@@ -6,6 +6,36 @@ Para visualizar a versão interativa com busca em tempo real, acesse o portal we
 
 ---
 
+## [v1.21.0] - 2026-11-18
+
+### 📌 Inclusão de interactive webhook schema inspector with json schema and typescript export e melhorias
+> Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral, Geral & Usabilidade, Pedidos & Vendas.
+
+**Destaques:**
+- ⭐ Inclusão de interactive webhook schema inspector with json schema and typescript export
+- ⭐ Inclusão de stock table cdc with multi-table prices and checksum deduplication
+
+#### 🚀 Novidades & Melhorias
+- **[Geral]** Inclusão de interactive webhook schema inspector with json schema and typescript export: Atualização no módulo de Geral: add interactive webhook schema inspector with json schema and typescript export.
+- **[Geral]** Inclusão de stock table cdc with multi-table prices and checksum deduplication: Atualização no módulo de Geral: add stock table cdc with multi-table prices and checksum deduplication.
+- **[Geral]** enrich notification payloads and optimize firebird queries: Atualização no módulo de Geral: enrich notification payloads and optimize firebird queries.
+- **[Geral]** Implementação de cdc mutation watermark for deliveries and accounts: Atualização no módulo de Geral: implement cdc mutation watermark for deliveries and accounts.
+- **[Geral]** require synchronous cold-start anchoring and prevent historical replay: Atualização no módulo de Geral: require synchronous cold-start anchoring and prevent historical replay.
+
+#### 🛠️ Correções & Estabilidade
+- **[Geral & Usabilidade]** /webhook/me return: Atualização no módulo de Geral & Usabilidade: /webhook/me return.
+- **[Geral & Usabilidade]** Inclusão de detach on webhook worker functions: Atualização no módulo de Geral & Usabilidade: add detach on webhook worker functions.
+- **[Pedidos & Vendas]** timestamp verification on webhook by orders && products: Atualização no módulo de Pedidos & Vendas: timestamp verification on webhook by orders && products.
+- **[Geral & Usabilidade]** timezone conversion on webhook events verification: Atualização no módulo de Geral & Usabilidade: timezone conversion on webhook events verification.
+- **[Geral & Usabilidade]** webhook badges design: Atualização no módulo de Geral & Usabilidade: webhook badges design.
+- **[Geral]** Inclusão de idempotent event filter and cursor push on duplicate batches: Atualização no módulo de Geral: add idempotent event filter and cursor push on duplicate batches.
+- **[Geral]** align product and receivable queries strictly with canonical erp schema: Atualização no módulo de Geral: align product and receivable queries strictly with canonical erp schema.
+- **[Geral]** Gestão de Entregas e Logística: Implementado o módulo de controle e rastreamento de entregas vinculadas a pedidos de venda.
+- **[Geral]** Remoção de nonexistent PRO_REFERENCIA column and schema field: Atualização no módulo de Geral: remove nonexistent PRO_REFERENCIA column and schema field.
+- **[Geral]** restore composite date and time tracking for product cdc: Atualização no módulo de Geral: restore composite date and time tracking for product cdc.
+
+---
+
 ## [v1.20.13] - 2026-11-17
 
 ### 📌 Inclusão de wathcdog.sh e melhorias

@@ -1,5 +1,153 @@
 [
   {
+    "version": "1.21.0",
+    "date": "2026-11-18",
+    "title": "Inclusão de interactive webhook schema inspector with json schema and typescript export e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral, Geral & Usabilidade, Pedidos & Vendas.",
+    "highlights": [
+      "Inclusão de interactive webhook schema inspector with json schema and typescript export",
+      "Inclusão de stock table cdc with multi-table prices and checksum deduplication"
+    ],
+    "items": [
+      {
+        "module": "Geral",
+        "type": "feature",
+        "title": "Inclusão de interactive webhook schema inspector with json schema and typescript export",
+        "description": "Atualização no módulo de Geral: add interactive webhook schema inspector with json schema and typescript export.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add interactive webhook schema inspector with json schema and typescript export",
+        "commitHash": "4992f55"
+      },
+      {
+        "module": "Geral",
+        "type": "feature",
+        "title": "Inclusão de stock table cdc with multi-table prices and checksum deduplication",
+        "description": "Atualização no módulo de Geral: add stock table cdc with multi-table prices and checksum deduplication.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add stock table cdc with multi-table prices and checksum deduplication",
+        "commitHash": "5bd5de8"
+      },
+      {
+        "module": "Geral",
+        "type": "feature",
+        "title": "enrich notification payloads and optimize firebird queries",
+        "description": "Atualização no módulo de Geral: enrich notification payloads and optimize firebird queries.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "enrich notification payloads and optimize firebird queries",
+        "commitHash": "14873fa"
+      },
+      {
+        "module": "Geral",
+        "type": "feature",
+        "title": "Implementação de cdc mutation watermark for deliveries and accounts",
+        "description": "Atualização no módulo de Geral: implement cdc mutation watermark for deliveries and accounts.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "implement cdc mutation watermark for deliveries and accounts",
+        "commitHash": "876e269"
+      },
+      {
+        "module": "Geral",
+        "type": "feature",
+        "title": "require synchronous cold-start anchoring and prevent historical replay",
+        "description": "Atualização no módulo de Geral: require synchronous cold-start anchoring and prevent historical replay.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "require synchronous cold-start anchoring and prevent historical replay",
+        "commitHash": "c0ad5cc"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "/webhook/me return",
+        "description": "Atualização no módulo de Geral & Usabilidade: /webhook/me return.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "/webhook/me return",
+        "commitHash": "7eecd40"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "Inclusão de detach on webhook worker functions",
+        "description": "Atualização no módulo de Geral & Usabilidade: add detach on webhook worker functions.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add detach on webhook worker functions",
+        "commitHash": "9b27de4"
+      },
+      {
+        "module": "Pedidos & Vendas",
+        "type": "fix",
+        "title": "timestamp verification on webhook by orders && products",
+        "description": "Atualização no módulo de Pedidos & Vendas: timestamp verification on webhook by orders && products.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "timestamp verification on webhook by orders && products",
+        "commitHash": "fad7908"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "timezone conversion on webhook events verification",
+        "description": "Atualização no módulo de Geral & Usabilidade: timezone conversion on webhook events verification.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "timezone conversion on webhook events verification",
+        "commitHash": "2d65fdd"
+      },
+      {
+        "module": "Geral & Usabilidade",
+        "type": "fix",
+        "title": "webhook badges design",
+        "description": "Atualização no módulo de Geral & Usabilidade: webhook badges design.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "webhook badges design",
+        "commitHash": "2a416da"
+      },
+      {
+        "module": "Geral",
+        "type": "fix",
+        "title": "Inclusão de idempotent event filter and cursor push on duplicate batches",
+        "description": "Atualização no módulo de Geral: add idempotent event filter and cursor push on duplicate batches.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add idempotent event filter and cursor push on duplicate batches",
+        "commitHash": "f142930"
+      },
+      {
+        "module": "Geral",
+        "type": "fix",
+        "title": "align product and receivable queries strictly with canonical erp schema",
+        "description": "Atualização no módulo de Geral: align product and receivable queries strictly with canonical erp schema.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "align product and receivable queries strictly with canonical erp schema",
+        "commitHash": "3a6770d"
+      },
+      {
+        "module": "Geral",
+        "type": "fix",
+        "title": "Gestão de Entregas e Logística",
+        "description": "Implementado o módulo de controle e rastreamento de entregas vinculadas a pedidos de venda.",
+        "impact": "Acompanhamento do status de despacho e rota de entregas aos clientes.",
+        "originalCommit": "migrate cursor ids to bigint and make delivery enqueuing atomic",
+        "commitHash": "1d2e988"
+      },
+      {
+        "module": "Geral",
+        "type": "fix",
+        "title": "Remoção de nonexistent PRO_REFERENCIA column and schema field",
+        "description": "Atualização no módulo de Geral: remove nonexistent PRO_REFERENCIA column and schema field.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "remove nonexistent PRO_REFERENCIA column and schema field",
+        "commitHash": "4447386"
+      },
+      {
+        "module": "Geral",
+        "type": "fix",
+        "title": "restore composite date and time tracking for product cdc",
+        "description": "Atualização no módulo de Geral: restore composite date and time tracking for product cdc.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "restore composite date and time tracking for product cdc",
+        "commitHash": "019012d"
+      }
+    ],
+    "totalChanges": 15
+  },
+  {
     "version": "1.20.13",
     "date": "2026-11-17",
     "title": "Inclusão de wathcdog.sh e melhorias",

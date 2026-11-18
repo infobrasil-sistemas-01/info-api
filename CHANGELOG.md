@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.21.0](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.20.13...v1.21.0) (2026-11-18)
+
+
+### Features
+
+* **portal:** add interactive webhook schema inspector with json schema and typescript export ([4992f55](https://github.com/infobrasil-sistemas-01/info-api/commit/4992f5556ea278eae94f1d8272c6157a3e644d1e))
+* **webhook:** add stock table cdc with multi-table prices and checksum deduplication ([5bd5de8](https://github.com/infobrasil-sistemas-01/info-api/commit/5bd5de87ae79be44751b9f15fb5f3613a45762bb))
+* **webhook:** enrich notification payloads and optimize firebird queries ([14873fa](https://github.com/infobrasil-sistemas-01/info-api/commit/14873fa4e221b938d3f91196026083ae4174a7eb))
+* **webhook:** implement cdc mutation watermark for deliveries and accounts ([876e269](https://github.com/infobrasil-sistemas-01/info-api/commit/876e269cd3aa9262333e59e8a72c0e1eb25c1309))
+* **webhook:** require synchronous cold-start anchoring and prevent historical replay ([c0ad5cc](https://github.com/infobrasil-sistemas-01/info-api/commit/c0ad5ccf5de9e14d6f400ea93e50fba7f4b2cf4b))
+
+
+### Bug Fixes
+
+* /webhook/me return ([7eecd40](https://github.com/infobrasil-sistemas-01/info-api/commit/7eecd4030a732e07f146c5adba699c8f0ee0ddf6))
+* add detach on webhook worker functions ([9b27de4](https://github.com/infobrasil-sistemas-01/info-api/commit/9b27de4d880249c5c49062d8d4252070e12a18cf))
+* timestamp verification on webhook by orders && products ([fad7908](https://github.com/infobrasil-sistemas-01/info-api/commit/fad7908b6b4516cef83ad8ad61331bb61d9d4aeb))
+* timezone conversion on webhook events verification ([2d65fdd](https://github.com/infobrasil-sistemas-01/info-api/commit/2d65fdde43ac8bbe5ffa352c69b5d9aa4a496fb7))
+* webhook badges design ([2a416da](https://github.com/infobrasil-sistemas-01/info-api/commit/2a416da816a86f383eecae32a1ddc698d62527b3))
+* **webhook:** add idempotent event filter and cursor push on duplicate batches ([f142930](https://github.com/infobrasil-sistemas-01/info-api/commit/f142930db473b4e656f14c1b94c75776ff23598f))
+* **webhook:** align product and receivable queries strictly with canonical erp schema ([3a6770d](https://github.com/infobrasil-sistemas-01/info-api/commit/3a6770db90788f921a2928ec725220930cfa68cf))
+* **webhook:** migrate cursor ids to bigint and make delivery enqueuing atomic ([1d2e988](https://github.com/infobrasil-sistemas-01/info-api/commit/1d2e988288ca6a0d27d729cdf8d9609188e22a7c))
+* **webhook:** remove nonexistent PRO_REFERENCIA column and schema field ([4447386](https://github.com/infobrasil-sistemas-01/info-api/commit/444738600847011d8193b905107a759741865c9b))
+* **webhook:** restore composite date and time tracking for product cdc ([019012d](https://github.com/infobrasil-sistemas-01/info-api/commit/019012d2210a037f4ff1b39bf53441adec447378))
+
 ## [1.20.13](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.20.12...v1.20.13) (2026-11-17)
 
 
