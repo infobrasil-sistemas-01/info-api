@@ -74,9 +74,6 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
   private dispatcherTimer?: NodeJS.Timeout;
   private cleanupTimer?: NodeJS.Timeout;
 
-  // Idempotent Filter: armazena chaves de idempotência recentes com TTL de 2 horas
-  private readonly recentEventKeys = new Map<string, number>();
-
   // Cursor em memória para varredura sequencial de alterações em ESTOQUE
   private readonly lastStockSweepProductIdBySub = new Map<string, string>();
 
@@ -114,18 +111,87 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
   }
 
   /**
-   * Calcula hash/checksum determinístico do estado do estoque do produto (saldos e preços de todas as lojas)
+   * Calcula hash determinístico MD5 de um objeto ou nó de dados canônico
    */
-  private computeStockChecksum(stocks: any[]): string {
-    const normalized = (stocks || [])
-      .map((s) => ({
-        LOJ_CODIGO: s.LOJ_CODIGO ?? s.storeId,
-        EST_ATUAL: s.EST_ATUAL ?? s.current,
-        EST_APOIO: s.EST_APOIO ?? s.support,
-        TABELAS_PRECO: s.TABELAS_PRECO ?? s.prices,
-      }))
-      .sort((a, b) => a.LOJ_CODIGO - b.LOJ_CODIGO);
-    return crypto.createHash('md5').update(JSON.stringify(normalized)).digest('hex');
+  private computeDataHash(data: any): string {
+    return crypto
+      .createHash('md5')
+      .update(JSON.stringify(data))
+      .digest('hex');
+  }
+
+  /**
+   * Filtra entidades cujos estados atuais diferem do último hash persistido no PostgreSQL.
+   * Retorna os entityIds que sofreram alteração real ou que são inéditos.
+   */
+  private async filterModifiedEntities(
+    tenantId: string,
+    entityType: string,
+    items: Array<{ id: string; hash: string }>,
+  ): Promise<Set<string>> {
+    if (items.length === 0) return new Set();
+
+    const ids = items.map((i) => i.id);
+    const storedStates = await this.prisma.webhookEntityState.findMany({
+      where: {
+        tenantId,
+        entityType,
+        entityId: { in: ids },
+      },
+      select: {
+        entityId: true,
+        stateHash: true,
+      },
+    });
+
+    const storedMap = new Map<string, string>();
+    for (const st of storedStates) {
+      storedMap.set(st.entityId, st.stateHash);
+    }
+
+    const modifiedIds = new Set<string>();
+    for (const item of items) {
+      const existingHash = storedMap.get(item.id);
+      if (!existingHash || existingHash !== item.hash) {
+        modifiedIds.add(item.id);
+      }
+    }
+
+    return modifiedIds;
+  }
+
+  /**
+   * Grava ou atualiza os hashes de estado das entidades no PostgreSQL de forma durável
+   */
+  private async saveEntityStates(
+    tenantId: string,
+    entityType: string,
+    items: Array<{ id: string; hash: string }>,
+    tx?: any,
+  ): Promise<void> {
+    if (items.length === 0) return;
+    const client = tx || this.prisma;
+
+    for (const item of items) {
+      await client.webhookEntityState.upsert({
+        where: {
+          tenantId_entityType_entityId: {
+            tenantId,
+            entityType,
+            entityId: item.id,
+          },
+        },
+        create: {
+          tenantId,
+          entityType,
+          entityId: item.id,
+          stateHash: item.hash,
+        },
+        update: {
+          stateHash: item.hash,
+        },
+      });
+    }
   }
 
   constructor(
@@ -136,76 +202,11 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
   ) {}
 
   async onApplicationBootstrap() {
-    this.logger.log('Iniciando Webhook Worker autônomo...');
+    this.logger.log('Iniciando Webhook Worker autônomo (CDC com State Store durável)...');
     this.isRunning = true;
-    await this.warmupIdempotencyKeys();
     this.startPollerLoop();
     this.startDispatcherLoop();
     this.startCleanupLoop();
-  }
-
-  /**
-   * Pré-carrega chaves de eventos recentes criadas nas últimas 2 horas para garantir
-   * idempotência estrita mesmo após restart do worker.
-   */
-  private async warmupIdempotencyKeys() {
-    try {
-      const twoHoursAgo = new Date(Date.now() - 2 * 60 * 60 * 1000);
-      const recentDeliveries = await this.prisma.webhookDelivery.findMany({
-        where: { createdAt: { gte: twoHoursAgo } },
-        select: {
-          subscriptionId: true,
-          event: true,
-          payload: true,
-        },
-        take: 3000,
-        orderBy: { createdAt: 'desc' },
-      });
-
-      const expiry = Date.now() + 2 * 60 * 60 * 1000;
-      for (const d of recentDeliveries) {
-        const p = d.payload as any;
-        const data = p?.data || {};
-        const entityId =
-          data.PRO_CODIGO ?? data.VEN_NUMERO ?? data.ENT_NUMERO ?? data.PAG_NUMERO ?? data.REC_NUMERO ??
-          data.productId ?? data.orderNumber ?? data.orderId ?? data.deliveryId ?? data.payableId ?? data.receivableId;
-        const state =
-          data.PRO_DATAALTERACAO ?? data.PRO_DATACADASTRO ?? data.VEN_DATAVENDA ?? data.ENT_DATA ?? data.PAG_DATAMOV ?? data.REC_DATAVENC ??
-          data.updatedAt ?? data.issuedAt ?? data.deliveryDate ?? data.issueDate ?? data.dueDate ?? '';
-        if (entityId !== undefined) {
-          const key = `${d.subscriptionId}:${d.event}:${entityId}:${state}`;
-          this.recentEventKeys.set(key, expiry);
-        }
-        const prodId = data.PRO_CODIGO ?? data.productId;
-        const stockArr = data.ESTOQUE ?? data.stock;
-        if (prodId !== undefined && Array.isArray(stockArr)) {
-          const stockChecksum = this.computeStockChecksum(stockArr);
-          const stockStateKey = `${d.subscriptionId}:stock_state:${prodId}:${stockChecksum}`;
-          this.recentEventKeys.set(stockStateKey, expiry);
-        }
-      }
-      this.logger.log(
-        `[IdempotentFilter] Pré-carregadas ${this.recentEventKeys.size} chaves recentes de idempotência.`,
-      );
-    } catch (err: any) {
-      this.logger.warn(
-        `[IdempotentFilter] Falha ao pré-carregar chaves de idempotência: ${err.message}`,
-      );
-    }
-  }
-
-  /**
-   * Filtro de Idempotência: verifica se um evento idêntico já foi emitido recentemente.
-   */
-  private isDuplicateEvent(key: string): boolean {
-    const now = Date.now();
-    const expiry = this.recentEventKeys.get(key);
-    if (expiry && expiry > now) {
-      return true;
-    }
-    // Armazena com TTL de 2 horas
-    this.recentEventKeys.set(key, now + 2 * 60 * 60 * 1000);
-    return false;
   }
 
   onApplicationShutdown(signal?: string) {
@@ -436,7 +437,7 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
               }
             }
 
-            const deliveriesToCreate: any[] = [];
+            const candidateOrders: Array<{ id: string; hash: string; eventType: string; payload: any }> = [];
 
             for (const sale of sales) {
               const venNumero = Number(sale.VEN_NUMERO);
@@ -445,37 +446,37 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
               const saleDate = parseFirebirdDate(sale.VEN_DATA) || getBrazilDateTime(new Date()).dateStr;
               const saleTime = parseFirebirdTime(sale.VEN_HORA);
 
-              const payments: Array<{ code: number; name: string; value: number }> = [];
+              const payments: Array<{ CODIGO: number; DESCRICAO: string; VALOR: number }> = [];
               if (sale.FP1_CODIGO && Number(sale.FP1_CODIGO) > 0) {
                 const val1 =
                   sale.VEN_TOTALPP1 !== null && sale.VEN_TOTALPP1 !== undefined
                     ? Number(sale.VEN_TOTALPP1)
                     : Number(sale.VEN_TOTALLIQUIDO || 0);
                 payments.push({
-                  code: Number(sale.FP1_CODIGO),
-                  name: sale.FPG1_DESCRICAO ? String(sale.FPG1_DESCRICAO).trim() : 'Forma de Pagamento 1',
-                  value: Number(Number(val1).toFixed(2)),
+                  CODIGO: Number(sale.FP1_CODIGO),
+                  DESCRICAO: sale.FPG1_DESCRICAO ? String(sale.FPG1_DESCRICAO).trim() : 'Forma de Pagamento 1',
+                  VALOR: Number(Number(val1).toFixed(2)),
                 });
               }
               if (sale.FP2_CODIGO && Number(sale.FP2_CODIGO) > 0) {
                 payments.push({
-                  code: Number(sale.FP2_CODIGO),
-                  name: sale.FPG2_DESCRICAO ? String(sale.FPG2_DESCRICAO).trim() : 'Forma de Pagamento 2',
-                  value: Number((Number(sale.VEN_TOTALPP2) || 0).toFixed(2)),
+                  CODIGO: Number(sale.FP2_CODIGO),
+                  DESCRICAO: sale.FPG2_DESCRICAO ? String(sale.FPG2_DESCRICAO).trim() : 'Forma de Pagamento 2',
+                  VALOR: Number((Number(sale.VEN_TOTALPP2) || 0).toFixed(2)),
                 });
               }
               if (sale.FP3_CODIGO && Number(sale.FP3_CODIGO) > 0) {
                 payments.push({
-                  code: Number(sale.FP3_CODIGO),
-                  name: sale.FPG3_DESCRICAO ? String(sale.FPG3_DESCRICAO).trim() : 'Forma de Pagamento 3',
-                  value: Number((Number(sale.VEN_TOTALPP3) || 0).toFixed(2)),
+                  CODIGO: Number(sale.FP3_CODIGO),
+                  DESCRICAO: sale.FPG3_DESCRICAO ? String(sale.FPG3_DESCRICAO).trim() : 'Forma de Pagamento 3',
+                  VALOR: Number((Number(sale.VEN_TOTALPP3) || 0).toFixed(2)),
                 });
               }
               if (sale.FP4_CODIGO && Number(sale.FP4_CODIGO) > 0) {
                 payments.push({
-                  code: Number(sale.FP4_CODIGO),
-                  name: sale.FPG4_DESCRICAO ? String(sale.FPG4_DESCRICAO).trim() : 'Forma de Pagamento 4',
-                  value: Number((Number(sale.VEN_TOTALPP4) || 0).toFixed(2)),
+                  CODIGO: Number(sale.FP4_CODIGO),
+                  DESCRICAO: sale.FPG4_DESCRICAO ? String(sale.FPG4_DESCRICAO).trim() : 'Forma de Pagamento 4',
+                  VALOR: Number((Number(sale.VEN_TOTALPP4) || 0).toFixed(2)),
                 });
               }
 
@@ -494,66 +495,73 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
                 else if (events.includes('order.updated')) eventType = 'order.updated';
               }
 
+              const payloadData = {
+                VEN_NUMERO: venNumero,
+                VEN_NUMSITE: sale.VEN_NUMSITE ? String(sale.VEN_NUMSITE).trim() : null,
+                VEN_TIPO: sale.VEN_TIPO ? String(sale.VEN_TIPO).trim() : null,
+                LOJ_CODIGO: Number(sale.LOJ_CODIGO),
+                LOJ_NOME: sale.LOJ_NOME ? String(sale.LOJ_NOME).trim() : null,
+                LOJ_FANTASIA: sale.LOJ_FANTASIA ? String(sale.LOJ_FANTASIA).trim() : null,
+                SIT_CODIGO: Number(sale.SIT_CODIGO),
+                SIT_DESCRICAO: statusDesc,
+                CLI_CODIGO: sale.CLI_CODIGO ? Number(sale.CLI_CODIGO) : null,
+                CLI_NOME: sale.CLI_NOME ? String(sale.CLI_NOME).trim() : null,
+                CLI_CPF_CNPJ: sale.CLI_CPF_CNPJ ? String(sale.CLI_CPF_CNPJ).trim() : null,
+                CLI_FONE: sale.CLI_FONE ? String(sale.CLI_FONE).trim() : null,
+                CLI_EMAIL: sale.CLI_EMAIL ? String(sale.CLI_EMAIL).trim() : null,
+                FUN_CODIGO: sale.FUN_CODIGO ? Number(sale.FUN_CODIGO) : null,
+                FUN_NOME: sale.FUN_NOME ? String(sale.FUN_NOME).trim() : null,
+                USU_CODIGO: sale.USU_CODIGO ? Number(sale.USU_CODIGO) : null,
+                USU_APELIDO: sale.USU_APELIDO ? String(sale.USU_APELIDO).trim() : null,
+                VEN_TOTALBRUTO: Number(sale.VEN_TOTALBRUTO) || 0,
+                VEN_TOTALDESC: Number(sale.VEN_TOTALDESC) || 0,
+                VEN_TOTALLIQUIDO: Number(sale.VEN_TOTALLIQUIDO ?? sale.VEN_TOTALBRUTO) || 0,
+                FORMAS_PAGAMENTO: payments,
+                ITENS: itemsByOrder.get(venNumero) || [],
+                VEN_DATA: saleDate,
+                VEN_HORA: saleTime,
+                links: {
+                  self: `/api/v1/orders/${venNumero}`,
+                  items: `/api/v1/orders/${venNumero}/items`,
+                },
+              };
+
+              const dataHash = this.computeDataHash(payloadData);
               const payload = {
                 id: `evt_ord_${crypto.randomBytes(8).toString('hex')}`,
                 event: eventType,
                 timestamp: new Date().toISOString(),
                 tenant: sub.user.user,
-                data: {
-                  orderId: venNumero,
-                  siteOrderNumber: sale.VEN_NUMSITE ? String(sale.VEN_NUMSITE).trim() : null,
-                  orderType: sale.VEN_TIPO ? String(sale.VEN_TIPO).trim() : null,
-                  store: {
-                    id: Number(sale.LOJ_CODIGO),
-                    name: sale.LOJ_NOME ? String(sale.LOJ_NOME).trim() : null,
-                    tradeName: sale.LOJ_FANTASIA ? String(sale.LOJ_FANTASIA).trim() : null,
-                  },
-                  status: {
-                    code: Number(sale.SIT_CODIGO),
-                    description: statusDesc,
-                  },
-                  customer: sale.CLI_CODIGO
-                    ? {
-                      id: Number(sale.CLI_CODIGO),
-                      name: sale.CLI_NOME ? String(sale.CLI_NOME).trim() : null,
-                      cpfCnpj: sale.CLI_CPF_CNPJ ? String(sale.CLI_CPF_CNPJ).trim() : null,
-                      phone: sale.CLI_FONE ? String(sale.CLI_FONE).trim() : null,
-                      email: sale.CLI_EMAIL ? String(sale.CLI_EMAIL).trim() : null,
-                    }
-                    : null,
-                  seller: sale.FUN_CODIGO
-                    ? {
-                      id: Number(sale.FUN_CODIGO),
-                      name: sale.FUN_NOME ? String(sale.FUN_NOME).trim() : null,
-                    }
-                    : null,
-                  operator: sale.USU_CODIGO
-                    ? {
-                      id: Number(sale.USU_CODIGO),
-                      username: sale.USU_APELIDO ? String(sale.USU_APELIDO).trim() : null,
-                    }
-                    : null,
-                  totals: {
-                    gross: Number(sale.VEN_TOTALBRUTO) || 0,
-                    discount: Number(sale.VEN_TOTALDESC) || 0,
-                    net: Number(sale.VEN_TOTALLIQUIDO ?? sale.VEN_TOTALBRUTO) || 0,
-                  },
-                  payments,
-                  items: itemsByOrder.get(venNumero) || [],
-                  issuedAt: `${saleDate} ${saleTime}`.trim(),
-                  links: {
-                    self: `/api/v1/orders/${venNumero}`,
-                    items: `/api/v1/orders/${venNumero}/items`,
-                  },
-                },
+                data: payloadData,
               };
 
-              deliveriesToCreate.push({
-                subscriptionId: sub.id,
-                event: eventType,
-                payload: payload as any,
-                status: 'PENDING',
+              candidateOrders.push({
+                id: String(venNumero),
+                hash: dataHash,
+                eventType,
+                payload,
               });
+            }
+
+            const modifiedOrderIds = await this.filterModifiedEntities(
+              sub.user.user,
+              'order',
+              candidateOrders.map((c) => ({ id: c.id, hash: c.hash })),
+            );
+
+            const deliveriesToCreate: any[] = [];
+            const statesToPersist: Array<{ id: string; hash: string }> = [];
+
+            for (const cand of candidateOrders) {
+              if (modifiedOrderIds.has(cand.id)) {
+                deliveriesToCreate.push({
+                  subscriptionId: sub.id,
+                  event: cand.eventType,
+                  payload: cand.payload as any,
+                  status: 'PENDING',
+                });
+                statesToPersist.push({ id: cand.id, hash: cand.hash });
+              }
             }
 
             await this.prisma.$transaction(async (tx) => {
@@ -561,6 +569,9 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
                 await tx.webhookDelivery.createMany({
                   data: deliveriesToCreate,
                 });
+              }
+              if (statesToPersist.length > 0) {
+                await this.saveEntityStates(sub.user.user, 'order', statesToPersist, tx);
               }
               await tx.webhookSubscription.update({
                 where: { id: sub.id },
@@ -646,7 +657,7 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
         E.PRO_PRECOP7, E.PRO_PRECOP8, E.PRO_PRECOP9, E.PRO_PRECOP10, E.PRO_PRECOP11, E.PRO_PRECOP12
       `;
 
-          let deliveriesToCreate: any[] = [];
+          const candidateProducts: Array<{ id: string; hash: string; eventType: string; payload: any }> = [];
           let maxSeenId = lastProductId;
           let maxSyncAt = sub.lastProductSyncAt;
 
@@ -693,60 +704,37 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
                 else if (events.includes('product.updated')) eventType = 'product.updated';
               }
 
-              const stateTimestamp = `${dtAlt || dtCad} ${hr}`.trim();
-              const idempotencyKey = `${sub.id}:${eventType}:${proCodigoStr}:${stateTimestamp}`;
-
               const stockList = stockByProduct.get(proCodigoStr) || [];
-              const stockChecksum = this.computeStockChecksum(stockList);
+              const payloadData = {
+                PRO_CODIGO: proCodigoId,
+                PRO_CODIGOBAR: prod.PRO_CODIGOBAR ? String(prod.PRO_CODIGOBAR).trim() : null,
+                PRO_DESCRICAO: prod.PRO_DESCRICAO ? String(prod.PRO_DESCRICAO).trim() : null,
+                PRO_UNIDADE: prod.PRO_UNIDADE ? String(prod.PRO_UNIDADE).trim() : null,
+                MAR_CODIGO: prod.MAR_CODIGO ? Number(prod.MAR_CODIGO) : null,
+                MAR_DESCRICAO: prod.MAR_DESCRICAO ? String(prod.MAR_DESCRICAO).trim() : null,
+                GRU_CODIGO: prod.GRU_CODIGO ? Number(prod.GRU_CODIGO) : null,
+                GRU_DESCRICAO: prod.GRU_DESCRICAO ? String(prod.GRU_DESCRICAO).trim() : null,
+                ESTOQUE: stockList,
+                PRO_DATACADASTRO: `${dtCad} ${hr}`.trim(),
+                PRO_DATAALTERACAO: `${dtAlt || dtCad} ${hr}`.trim(),
+                links: { self: `/api/v1/products/id/${proCodigoStr}` },
+              };
 
-              if (this.isDuplicateEvent(idempotencyKey)) {
-                // Evento já emitido para este exato estado do produto: ignora entrega duplicada
-                maxSeenId = BigInt(proCodigoStr);
-                const latestDate = dtAlt || dtCad;
-                maxSyncAt = fromBrazilDateTimeToUtc(latestDate, hr);
-                // Registra também o checksum do estoque para sincronizar a varredura de ESTOQUE
-                this.isDuplicateEvent(`${sub.id}:stock_state:${proCodigoStr}:${stockChecksum}`);
-                continue;
-              }
-
+              const dataHash = this.computeDataHash(payloadData);
               const payload = {
                 id: `evt_prd_${crypto.randomBytes(8).toString('hex')}`,
                 event: eventType,
                 timestamp: new Date().toISOString(),
                 tenant: sub.user.user,
-                data: {
-                  productId: proCodigoId,
-                  barcode: prod.PRO_CODIGOBAR ? String(prod.PRO_CODIGOBAR).trim() : null,
-                  description: prod.PRO_DESCRICAO ? String(prod.PRO_DESCRICAO).trim() : null,
-                  unit: prod.PRO_UNIDADE ? String(prod.PRO_UNIDADE).trim() : null,
-                  brand: prod.MAR_CODIGO
-                    ? {
-                      id: Number(prod.MAR_CODIGO),
-                      name: prod.MAR_DESCRICAO ? String(prod.MAR_DESCRICAO).trim() : null,
-                    }
-                    : null,
-                  group: prod.GRU_CODIGO
-                    ? {
-                      id: Number(prod.GRU_CODIGO),
-                      name: prod.GRU_DESCRICAO ? String(prod.GRU_DESCRICAO).trim() : null,
-                    }
-                    : null,
-                  stock: stockList,
-                  registeredAt: `${dtCad} ${hr}`.trim(),
-                  updatedAt: `${dtAlt || dtCad} ${hr}`.trim(),
-                  links: { self: `/api/v1/products/id/${proCodigoStr}` },
-                },
+                data: payloadData,
               };
 
-              deliveriesToCreate.push({
-                subscriptionId: sub.id,
-                event: eventType,
-                payload: payload as any,
-                status: 'PENDING',
+              candidateProducts.push({
+                id: proCodigoStr,
+                hash: dataHash,
+                eventType,
+                payload,
               });
-
-              // Registra o estado atual de estoque para que a varredura de ESTOQUE não duplique este evento
-              this.isDuplicateEvent(`${sub.id}:stock_state:${proCodigoStr}:${stockChecksum}`);
 
               maxSeenId = BigInt(proCodigoStr);
               const latestDate = dtAlt || dtCad;
@@ -805,75 +793,58 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
                     stockItemsByProd.get(pid)!.push(this.mapStockRow(st));
                   }
 
-                  const prodsNeedingUpdate: string[] = [];
-                  for (const pid of idsToLoad) {
-                    const stList = stockItemsByProd.get(pid) || [];
-                    const checksum = this.computeStockChecksum(stList);
-                    const stateKey = `${sub.id}:stock_state:${pid}:${checksum}`;
-                    if (!this.isDuplicateEvent(stateKey)) {
-                      prodsNeedingUpdate.push(pid);
-                    }
-                  }
+                  const updatePlaceholders = idsToLoad.map(() => '?').join(',');
+                  const updatedProdsDetails = await queryPromise(
+                    `SELECT
+                   P.PRO_CODIGO, P.PRO_CODIGOBAR, P.PRO_DESCRICAO, P.PRO_UNIDADE,
+                   P.PRO_DATACADASTRO, P.PRO_DATAALTERACAO, P.PRO_HORA,
+                   P.MAR_CODIGO, M.MAR_DESCRICAO,
+                   P.GRU_CODIGO, G.GRU_DESCRICAO
+                 FROM PRODUTOS P
+                 LEFT JOIN MARCAS M ON P.MAR_CODIGO = M.MAR_CODIGO
+                 LEFT JOIN GRUPOSPRO G ON P.GRU_CODIGO = G.GRU_CODIGO
+                 WHERE P.PRO_CODIGO IN (${updatePlaceholders})`,
+                    idsToLoad,
+                  );
 
-                  if (prodsNeedingUpdate.length > 0) {
-                    const updatePlaceholders = prodsNeedingUpdate.map(() => '?').join(',');
-                    const updatedProdsDetails = await queryPromise(
-                      `SELECT
-                     P.PRO_CODIGO, P.PRO_CODIGOBAR, P.PRO_DESCRICAO, P.PRO_UNIDADE,
-                     P.PRO_DATACADASTRO, P.PRO_DATAALTERACAO, P.PRO_HORA,
-                     P.MAR_CODIGO, M.MAR_DESCRICAO,
-                     P.GRU_CODIGO, G.GRU_DESCRICAO
-                   FROM PRODUTOS P
-                   LEFT JOIN MARCAS M ON P.MAR_CODIGO = M.MAR_CODIGO
-                   LEFT JOIN GRUPOSPRO G ON P.GRU_CODIGO = G.GRU_CODIGO
-                   WHERE P.PRO_CODIGO IN (${updatePlaceholders})`,
-                      prodsNeedingUpdate,
-                    );
+                  for (const prod of updatedProdsDetails) {
+                    const proCodigoStr = String(prod.PRO_CODIGO).trim();
+                    const proCodigoNum = Number(prod.PRO_CODIGO);
+                    const proCodigoId = Number.isSafeInteger(proCodigoNum) ? proCodigoNum : proCodigoStr;
+                    const dtCad = parseFirebirdDate(prod.PRO_DATACADASTRO) || todayStr;
+                    const dtAlt = parseFirebirdDate(prod.PRO_DATAALTERACAO) || todayStr;
+                    const hr = parseFirebirdTime(prod.PRO_HORA);
 
-                    for (const prod of updatedProdsDetails) {
-                      const proCodigoStr = String(prod.PRO_CODIGO).trim();
-                      const proCodigoNum = Number(prod.PRO_CODIGO);
-                      const proCodigoId = Number.isSafeInteger(proCodigoNum) ? proCodigoNum : proCodigoStr;
-                      const dtCad = parseFirebirdDate(prod.PRO_DATACADASTRO) || todayStr;
-                      const dtAlt = parseFirebirdDate(prod.PRO_DATAALTERACAO) || todayStr;
-                      const hr = parseFirebirdTime(prod.PRO_HORA);
+                    const payloadData = {
+                      PRO_CODIGO: proCodigoId,
+                      PRO_CODIGOBAR: prod.PRO_CODIGOBAR ? String(prod.PRO_CODIGOBAR).trim() : null,
+                      PRO_DESCRICAO: prod.PRO_DESCRICAO ? String(prod.PRO_DESCRICAO).trim() : null,
+                      PRO_UNIDADE: prod.PRO_UNIDADE ? String(prod.PRO_UNIDADE).trim() : null,
+                      MAR_CODIGO: prod.MAR_CODIGO ? Number(prod.MAR_CODIGO) : null,
+                      MAR_DESCRICAO: prod.MAR_DESCRICAO ? String(prod.MAR_DESCRICAO).trim() : null,
+                      GRU_CODIGO: prod.GRU_CODIGO ? Number(prod.GRU_CODIGO) : null,
+                      GRU_DESCRICAO: prod.GRU_DESCRICAO ? String(prod.GRU_DESCRICAO).trim() : null,
+                      ESTOQUE: stockItemsByProd.get(proCodigoStr) || [],
+                      PRO_DATACADASTRO: `${dtCad} ${hr}`.trim(),
+                      PRO_DATAALTERACAO: `${dtAlt} ${hr}`.trim(),
+                      links: { self: `/api/v1/products/id/${proCodigoStr}` },
+                    };
 
-                      const payload = {
-                        id: `evt_prd_${crypto.randomBytes(8).toString('hex')}`,
-                        event: 'product.updated',
-                        timestamp: new Date().toISOString(),
-                        tenant: sub.user.user,
-                        data: {
-                          productId: proCodigoId,
-                          barcode: prod.PRO_CODIGOBAR ? String(prod.PRO_CODIGOBAR).trim() : null,
-                          description: prod.PRO_DESCRICAO ? String(prod.PRO_DESCRICAO).trim() : null,
-                          unit: prod.PRO_UNIDADE ? String(prod.PRO_UNIDADE).trim() : null,
-                          brand: prod.MAR_CODIGO
-                            ? {
-                              id: Number(prod.MAR_CODIGO),
-                              name: prod.MAR_DESCRICAO ? String(prod.MAR_DESCRICAO).trim() : null,
-                            }
-                            : null,
-                          group: prod.GRU_CODIGO
-                            ? {
-                              id: Number(prod.GRU_CODIGO),
-                              name: prod.GRU_DESCRICAO ? String(prod.GRU_DESCRICAO).trim() : null,
-                            }
-                            : null,
-                          stock: stockItemsByProd.get(proCodigoStr) || [],
-                          registeredAt: `${dtCad} ${hr}`.trim(),
-                          updatedAt: `${dtAlt} ${hr}`.trim(),
-                          links: { self: `/api/v1/products/id/${proCodigoStr}` },
-                        },
-                      };
+                    const dataHash = this.computeDataHash(payloadData);
+                    const payload = {
+                      id: `evt_prd_${crypto.randomBytes(8).toString('hex')}`,
+                      event: 'product.updated',
+                      timestamp: new Date().toISOString(),
+                      tenant: sub.user.user,
+                      data: payloadData,
+                    };
 
-                      deliveriesToCreate.push({
-                        subscriptionId: sub.id,
-                        event: 'product.updated',
-                        payload: payload as any,
-                        status: 'PENDING',
-                      });
-                    }
+                    candidateProducts.push({
+                      id: proCodigoStr,
+                      hash: dataHash,
+                      eventType: 'product.updated',
+                      payload,
+                    });
                   }
                 }
               } else {
@@ -881,6 +852,27 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
               }
             } catch (err: any) {
               this.logger.warn(`Erro na varredura de alterações em ESTOQUE da sub ${sub.id}: ${err.message}`);
+            }
+          }
+
+          const modifiedProductIds = await this.filterModifiedEntities(
+            sub.user.user,
+            'product',
+            candidateProducts.map((c) => ({ id: c.id, hash: c.hash })),
+          );
+
+          const deliveriesToCreate: any[] = [];
+          const statesToPersist: Array<{ id: string; hash: string }> = [];
+
+          for (const cand of candidateProducts) {
+            if (modifiedProductIds.has(cand.id)) {
+              deliveriesToCreate.push({
+                subscriptionId: sub.id,
+                event: cand.eventType,
+                payload: cand.payload as any,
+                status: 'PENDING',
+              });
+              statesToPersist.push({ id: cand.id, hash: cand.hash });
             }
           }
 
@@ -899,6 +891,9 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
                 await tx.webhookDelivery.createMany({
                   data: deliveriesToCreate,
                 });
+              }
+              if (statesToPersist.length > 0) {
+                await this.saveEntityStates(sub.user.user, 'product', statesToPersist, tx);
               }
               if (products.length > 0) {
                 await tx.webhookSubscription.update({
@@ -986,7 +981,7 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
           if (deliveries.length > 0) {
             let maxSeenId = lastDeliveryId;
             let maxSyncAt = sub.lastDeliverySyncAt;
-            const deliveriesToCreate: any[] = [];
+            const candidateDeliveries: Array<{ id: string; hash: string; eventType: string; payload: any }> = [];
 
             for (const d of deliveries) {
               const entNumero = Number(d.ENT_NUMERO);
@@ -1001,45 +996,42 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
                 else if (events.includes('delivery.updated')) eventType = 'delivery.updated';
               }
 
+              const payloadData = {
+                ENT_NUMERO: entNumero,
+                VEN_NUMERO: d.VEN_NUMERO ? Number(d.VEN_NUMERO) : null,
+                LOJ_CODIGO: d.LOJ_CODIGO ? Number(d.LOJ_CODIGO) : null,
+                PRE_CODIGO: d.PRE_CODIGO ? Number(d.PRE_CODIGO) : null,
+                PRE_NOME: d.PRE_NOME ? String(d.PRE_NOME).trim() : null,
+                VEI_PLACA: d.VEI_PLACA ? String(d.VEI_PLACA).trim() : null,
+                TBS_CODIGO:
+                  d.TBS_CODIGO !== null && d.TBS_CODIGO !== undefined
+                    ? Number(d.TBS_CODIGO)
+                    : null,
+                TBS_DESCRICAO: d.TBS_DESCRICAO ? String(d.TBS_DESCRICAO).trim() : null,
+                SIT_CODIGO:
+                  d.SIT_CODIGO !== null && d.SIT_CODIGO !== undefined
+                    ? Number(d.SIT_CODIGO)
+                    : null,
+                ENT_DATA: entDate,
+                ENT_HORA: entTime,
+                ENT_DATABAIXA: entBaixa,
+                links: { self: `/api/v1/deliveries/${entNumero}` },
+              };
+
+              const dataHash = this.computeDataHash(payloadData);
               const payload = {
                 id: `evt_del_${crypto.randomBytes(8).toString('hex')}`,
                 event: eventType,
                 timestamp: new Date().toISOString(),
                 tenant: sub.user.user,
-                data: {
-                  deliveryId: entNumero,
-                  orderId: d.VEN_NUMERO ? Number(d.VEN_NUMERO) : null,
-                  storeId: d.LOJ_CODIGO ? Number(d.LOJ_CODIGO) : null,
-                  driver: d.PRE_CODIGO
-                    ? {
-                      id: Number(d.PRE_CODIGO),
-                      name: d.PRE_NOME ? String(d.PRE_NOME).trim() : null,
-                    }
-                    : null,
-                  vehiclePlate: d.VEI_PLACA ? String(d.VEI_PLACA).trim() : null,
-                  status: {
-                    code:
-                      d.TBS_CODIGO !== null && d.TBS_CODIGO !== undefined
-                        ? Number(d.TBS_CODIGO)
-                        : null,
-                    description: d.TBS_DESCRICAO ? String(d.TBS_DESCRICAO).trim() : null,
-                    situation:
-                      d.SIT_CODIGO !== null && d.SIT_CODIGO !== undefined
-                        ? Number(d.SIT_CODIGO)
-                        : null,
-                  },
-                  deliveryDate: entDate,
-                  deliveryTime: entTime,
-                  completionDate: entBaixa,
-                  links: { self: `/api/v1/deliveries/${entNumero}` },
-                },
+                data: payloadData,
               };
 
-              deliveriesToCreate.push({
-                subscriptionId: sub.id,
-                event: eventType,
-                payload: payload as any,
-                status: 'PENDING',
+              candidateDeliveries.push({
+                id: String(entNumero),
+                hash: dataHash,
+                eventType,
+                payload,
               });
 
               maxSeenId = BigInt(entNumero);
@@ -1047,11 +1039,35 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
               maxSyncAt = fromBrazilDateTimeToUtc(latestDate, entTime);
             }
 
+            const modifiedDeliveryIds = await this.filterModifiedEntities(
+              sub.user.user,
+              'delivery',
+              candidateDeliveries.map((c) => ({ id: c.id, hash: c.hash })),
+            );
+
+            const deliveriesToCreate: any[] = [];
+            const statesToPersist: Array<{ id: string; hash: string }> = [];
+
+            for (const cand of candidateDeliveries) {
+              if (modifiedDeliveryIds.has(cand.id)) {
+                deliveriesToCreate.push({
+                  subscriptionId: sub.id,
+                  event: cand.eventType,
+                  payload: cand.payload as any,
+                  status: 'PENDING',
+                });
+                statesToPersist.push({ id: cand.id, hash: cand.hash });
+              }
+            }
+
             await this.prisma.$transaction(async (tx) => {
               if (deliveriesToCreate.length > 0) {
                 await tx.webhookDelivery.createMany({
                   data: deliveriesToCreate,
                 });
+              }
+              if (statesToPersist.length > 0) {
+                await this.saveEntityStates(sub.user.user, 'delivery', statesToPersist, tx);
               }
               await tx.webhookSubscription.update({
                 where: { id: sub.id },
@@ -1124,7 +1140,7 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
           if (payables.length > 0) {
             let maxSeenId = lastAccountPayableId;
             let maxSyncAt = sub.lastAccountPayableSyncAt;
-            const deliveriesToCreate: any[] = [];
+            const candidatePayables: Array<{ id: string; hash: string; eventType: string; payload: any }> = [];
 
             for (const p of payables) {
               const pagNumero = Number(p.PAG_NUMERO);
@@ -1139,34 +1155,33 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
                 else if (events.includes('account_payable.updated')) eventType = 'account_payable.updated';
               }
 
+              const payloadData = {
+                PAG_NUMERO: pagNumero,
+                LOJ_CODIGO: p.LOJ_CODIGO ? Number(p.LOJ_CODIGO) : null,
+                CRE_CODIGO: p.CRE_CODIGO ? Number(p.CRE_CODIGO) : null,
+                CRE_NOME: p.CRE_NOME ? String(p.CRE_NOME).trim() : null,
+                PAG_VALOR: Number(p.PAG_VALOR) || 0,
+                PAG_DATAMOV: dtMov,
+                PAG_DATAPAG: dtPag,
+                PAG_DATAVENC: dueDate,
+                PAG_SITUACAO: p.PAG_SITUACAO ? String(p.PAG_SITUACAO).trim() : null,
+                links: { self: `/api/v1/account-payable/${pagNumero}` },
+              };
+
+              const dataHash = this.computeDataHash(payloadData);
               const payload = {
                 id: `evt_pag_${crypto.randomBytes(8).toString('hex')}`,
                 event: eventType,
                 timestamp: new Date().toISOString(),
                 tenant: sub.user.user,
-                data: {
-                  payableId: pagNumero,
-                  storeId: p.LOJ_CODIGO ? Number(p.LOJ_CODIGO) : null,
-                  supplier: p.CRE_CODIGO
-                    ? {
-                      id: Number(p.CRE_CODIGO),
-                      name: p.CRE_NOME ? String(p.CRE_NOME).trim() : null,
-                    }
-                    : null,
-                  value: Number(p.PAG_VALOR) || 0,
-                  issueDate: dtMov,
-                  paymentDate: dtPag,
-                  dueDate,
-                  situation: p.PAG_SITUACAO ? String(p.PAG_SITUACAO).trim() : null,
-                  links: { self: `/api/v1/account-payable/${pagNumero}` },
-                },
+                data: payloadData,
               };
 
-              deliveriesToCreate.push({
-                subscriptionId: sub.id,
-                event: eventType,
-                payload: payload as any,
-                status: 'PENDING',
+              candidatePayables.push({
+                id: String(pagNumero),
+                hash: dataHash,
+                eventType,
+                payload,
               });
 
               maxSeenId = BigInt(pagNumero);
@@ -1174,11 +1189,35 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
               maxSyncAt = fromBrazilDateTimeToUtc(latestDate, '00:00:00');
             }
 
+            const modifiedPayableIds = await this.filterModifiedEntities(
+              sub.user.user,
+              'account_payable',
+              candidatePayables.map((c) => ({ id: c.id, hash: c.hash })),
+            );
+
+            const deliveriesToCreate: any[] = [];
+            const statesToPersist: Array<{ id: string; hash: string }> = [];
+
+            for (const cand of candidatePayables) {
+              if (modifiedPayableIds.has(cand.id)) {
+                deliveriesToCreate.push({
+                  subscriptionId: sub.id,
+                  event: cand.eventType,
+                  payload: cand.payload as any,
+                  status: 'PENDING',
+                });
+                statesToPersist.push({ id: cand.id, hash: cand.hash });
+              }
+            }
+
             await this.prisma.$transaction(async (tx) => {
               if (deliveriesToCreate.length > 0) {
                 await tx.webhookDelivery.createMany({
                   data: deliveriesToCreate,
                 });
+              }
+              if (statesToPersist.length > 0) {
+                await this.saveEntityStates(sub.user.user, 'account_payable', statesToPersist, tx);
               }
               await tx.webhookSubscription.update({
                 where: { id: sub.id },
@@ -1231,7 +1270,7 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
 
           if (receivables.length > 0) {
             let maxSeenId = lastAccountReceivableId;
-            const deliveriesToCreate: any[] = [];
+            const candidateReceivables: Array<{ id: string; hash: string; eventType: string; payload: any }> = [];
 
             for (const r of receivables) {
               const recNumero = Number(r.REC_NUMERO);
@@ -1242,36 +1281,56 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
                 if (events.includes('account_receivable.updated')) eventType = 'account_receivable.updated';
               }
 
+              const payloadData = {
+                REC_NUMERO: recNumero,
+                LOJ_CODIGO: r.LOJ_CODIGO ? Number(r.LOJ_CODIGO) : null,
+                CLI_CODIGO: r.CLI_CODIGO ? Number(r.CLI_CODIGO) : null,
+                CLI_NOME: r.CLI_NOME ? String(r.CLI_NOME).trim() : null,
+                CLI_CPF_CNPJ: r.CLI_CPF_CNPJ ? String(r.CLI_CPF_CNPJ).trim() : null,
+                REC_VALOR: Number(r.REC_VALOR) || 0,
+                REC_DATAVENC: dueDate,
+                REC_SITUACAO: r.REC_SITUACAO ? String(r.REC_SITUACAO).trim() : null,
+                links: { self: `/api/v1/account-receivable/${recNumero}` },
+              };
+
+              const dataHash = this.computeDataHash(payloadData);
               const payload = {
                 id: `evt_rec_${crypto.randomBytes(8).toString('hex')}`,
                 event: eventType,
                 timestamp: new Date().toISOString(),
                 tenant: sub.user.user,
-                data: {
-                  receivableId: recNumero,
-                  storeId: r.LOJ_CODIGO ? Number(r.LOJ_CODIGO) : null,
-                  customer: r.CLI_CODIGO
-                    ? {
-                      id: Number(r.CLI_CODIGO),
-                      name: r.CLI_NOME ? String(r.CLI_NOME).trim() : null,
-                      cpfCnpj: r.CLI_CPF_CNPJ ? String(r.CLI_CPF_CNPJ).trim() : null,
-                    }
-                    : null,
-                  value: Number(r.REC_VALOR) || 0,
-                  dueDate,
-                  situation: r.REC_SITUACAO ? String(r.REC_SITUACAO).trim() : null,
-                  links: { self: `/api/v1/account-receivable/${recNumero}` },
-                },
+                data: payloadData,
               };
 
-              deliveriesToCreate.push({
-                subscriptionId: sub.id,
-                event: eventType,
-                payload: payload as any,
-                status: 'PENDING',
+              candidateReceivables.push({
+                id: String(recNumero),
+                hash: dataHash,
+                eventType,
+                payload,
               });
 
               maxSeenId = BigInt(recNumero);
+            }
+
+            const modifiedReceivableIds = await this.filterModifiedEntities(
+              sub.user.user,
+              'account_receivable',
+              candidateReceivables.map((c) => ({ id: c.id, hash: c.hash })),
+            );
+
+            const deliveriesToCreate: any[] = [];
+            const statesToPersist: Array<{ id: string; hash: string }> = [];
+
+            for (const cand of candidateReceivables) {
+              if (modifiedReceivableIds.has(cand.id)) {
+                deliveriesToCreate.push({
+                  subscriptionId: sub.id,
+                  event: cand.eventType,
+                  payload: cand.payload as any,
+                  status: 'PENDING',
+                });
+                statesToPersist.push({ id: cand.id, hash: cand.hash });
+              }
             }
 
             await this.prisma.$transaction(async (tx) => {
@@ -1279,6 +1338,9 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
                 await tx.webhookDelivery.createMany({
                   data: deliveriesToCreate,
                 });
+              }
+              if (statesToPersist.length > 0) {
+                await this.saveEntityStates(sub.user.user, 'account_receivable', statesToPersist, tx);
               }
               await tx.webhookSubscription.update({
                 where: { id: sub.id },
@@ -1573,14 +1635,6 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
           this.logger.log(
             `Limpeza de retenção de 7 dias executada: ${deleted.count} entregas antigas removidas.`,
           );
-        }
-
-        // Expira chaves de idempotência antigas em memória
-        const now = Date.now();
-        for (const [key, expiry] of this.recentEventKeys.entries()) {
-          if (expiry <= now) {
-            this.recentEventKeys.delete(key);
-          }
         }
       } catch (err: any) {
         this.logger.error(`Erro ao executar limpeza de 7 dias: ${err.message}`);

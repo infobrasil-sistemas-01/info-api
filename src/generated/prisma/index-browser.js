@@ -349,6 +349,15 @@ exports.Prisma.WebhookDeliveryScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.WebhookEntityStateScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  entityType: 'entityType',
+  entityId: 'entityId',
+  stateHash: 'stateHash',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -419,7 +428,8 @@ exports.Prisma.ModelName = {
   FeatureRequestMessage: 'FeatureRequestMessage',
   IntegrationGuide: 'IntegrationGuide',
   WebhookSubscription: 'WebhookSubscription',
-  WebhookDelivery: 'WebhookDelivery'
+  WebhookDelivery: 'WebhookDelivery',
+  WebhookEntityState: 'WebhookEntityState'
 };
 
 /**

@@ -118,6 +118,11 @@ export type WebhookSubscription = $Result.DefaultSelection<Prisma.$WebhookSubscr
  * 
  */
 export type WebhookDelivery = $Result.DefaultSelection<Prisma.$WebhookDeliveryPayload>
+/**
+ * Model WebhookEntityState
+ * 
+ */
+export type WebhookEntityState = $Result.DefaultSelection<Prisma.$WebhookEntityStatePayload>
 
 /**
  * Enums
@@ -507,6 +512,16 @@ export class PrismaClient<
     * ```
     */
   get webhookDelivery(): Prisma.WebhookDeliveryDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.webhookEntityState`: Exposes CRUD operations for the **WebhookEntityState** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more WebhookEntityStates
+    * const webhookEntityStates = await prisma.webhookEntityState.findMany()
+    * ```
+    */
+  get webhookEntityState(): Prisma.WebhookEntityStateDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -961,7 +976,8 @@ export namespace Prisma {
     FeatureRequestMessage: 'FeatureRequestMessage',
     IntegrationGuide: 'IntegrationGuide',
     WebhookSubscription: 'WebhookSubscription',
-    WebhookDelivery: 'WebhookDelivery'
+    WebhookDelivery: 'WebhookDelivery',
+    WebhookEntityState: 'WebhookEntityState'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -977,7 +993,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "plan" | "requestLog" | "dashboardHourlyRollup" | "userInvitation" | "dbCredentials" | "role" | "permission" | "rolePermission" | "integrationRequest" | "announcement" | "newsletter" | "announcementView" | "statusLog" | "systemHeartbeat" | "usageAlertLog" | "featureRequest" | "featureRequestMessage" | "integrationGuide" | "webhookSubscription" | "webhookDelivery"
+      modelProps: "user" | "plan" | "requestLog" | "dashboardHourlyRollup" | "userInvitation" | "dbCredentials" | "role" | "permission" | "rolePermission" | "integrationRequest" | "announcement" | "newsletter" | "announcementView" | "statusLog" | "systemHeartbeat" | "usageAlertLog" | "featureRequest" | "featureRequestMessage" | "integrationGuide" | "webhookSubscription" | "webhookDelivery" | "webhookEntityState"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2535,6 +2551,80 @@ export namespace Prisma {
           }
         }
       }
+      WebhookEntityState: {
+        payload: Prisma.$WebhookEntityStatePayload<ExtArgs>
+        fields: Prisma.WebhookEntityStateFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.WebhookEntityStateFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebhookEntityStatePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.WebhookEntityStateFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebhookEntityStatePayload>
+          }
+          findFirst: {
+            args: Prisma.WebhookEntityStateFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebhookEntityStatePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.WebhookEntityStateFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebhookEntityStatePayload>
+          }
+          findMany: {
+            args: Prisma.WebhookEntityStateFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebhookEntityStatePayload>[]
+          }
+          create: {
+            args: Prisma.WebhookEntityStateCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebhookEntityStatePayload>
+          }
+          createMany: {
+            args: Prisma.WebhookEntityStateCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.WebhookEntityStateCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebhookEntityStatePayload>[]
+          }
+          delete: {
+            args: Prisma.WebhookEntityStateDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebhookEntityStatePayload>
+          }
+          update: {
+            args: Prisma.WebhookEntityStateUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebhookEntityStatePayload>
+          }
+          deleteMany: {
+            args: Prisma.WebhookEntityStateDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.WebhookEntityStateUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.WebhookEntityStateUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebhookEntityStatePayload>[]
+          }
+          upsert: {
+            args: Prisma.WebhookEntityStateUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WebhookEntityStatePayload>
+          }
+          aggregate: {
+            args: Prisma.WebhookEntityStateAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateWebhookEntityState>
+          }
+          groupBy: {
+            args: Prisma.WebhookEntityStateGroupByArgs<ExtArgs>
+            result: $Utils.Optional<WebhookEntityStateGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.WebhookEntityStateCountArgs<ExtArgs>
+            result: $Utils.Optional<WebhookEntityStateCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2664,6 +2754,7 @@ export namespace Prisma {
     integrationGuide?: IntegrationGuideOmit
     webhookSubscription?: WebhookSubscriptionOmit
     webhookDelivery?: WebhookDeliveryOmit
+    webhookEntityState?: WebhookEntityStateOmit
   }
 
   /* Types for Logging */
@@ -26724,6 +26815,1019 @@ export namespace Prisma {
 
 
   /**
+   * Model WebhookEntityState
+   */
+
+  export type AggregateWebhookEntityState = {
+    _count: WebhookEntityStateCountAggregateOutputType | null
+    _min: WebhookEntityStateMinAggregateOutputType | null
+    _max: WebhookEntityStateMaxAggregateOutputType | null
+  }
+
+  export type WebhookEntityStateMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    entityType: string | null
+    entityId: string | null
+    stateHash: string | null
+    updatedAt: Date | null
+  }
+
+  export type WebhookEntityStateMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    entityType: string | null
+    entityId: string | null
+    stateHash: string | null
+    updatedAt: Date | null
+  }
+
+  export type WebhookEntityStateCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    entityType: number
+    entityId: number
+    stateHash: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type WebhookEntityStateMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    entityType?: true
+    entityId?: true
+    stateHash?: true
+    updatedAt?: true
+  }
+
+  export type WebhookEntityStateMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    entityType?: true
+    entityId?: true
+    stateHash?: true
+    updatedAt?: true
+  }
+
+  export type WebhookEntityStateCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    entityType?: true
+    entityId?: true
+    stateHash?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type WebhookEntityStateAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WebhookEntityState to aggregate.
+     */
+    where?: WebhookEntityStateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WebhookEntityStates to fetch.
+     */
+    orderBy?: WebhookEntityStateOrderByWithRelationInput | WebhookEntityStateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: WebhookEntityStateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WebhookEntityStates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WebhookEntityStates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned WebhookEntityStates
+    **/
+    _count?: true | WebhookEntityStateCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: WebhookEntityStateMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: WebhookEntityStateMaxAggregateInputType
+  }
+
+  export type GetWebhookEntityStateAggregateType<T extends WebhookEntityStateAggregateArgs> = {
+        [P in keyof T & keyof AggregateWebhookEntityState]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateWebhookEntityState[P]>
+      : GetScalarType<T[P], AggregateWebhookEntityState[P]>
+  }
+
+
+
+
+  export type WebhookEntityStateGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WebhookEntityStateWhereInput
+    orderBy?: WebhookEntityStateOrderByWithAggregationInput | WebhookEntityStateOrderByWithAggregationInput[]
+    by: WebhookEntityStateScalarFieldEnum[] | WebhookEntityStateScalarFieldEnum
+    having?: WebhookEntityStateScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: WebhookEntityStateCountAggregateInputType | true
+    _min?: WebhookEntityStateMinAggregateInputType
+    _max?: WebhookEntityStateMaxAggregateInputType
+  }
+
+  export type WebhookEntityStateGroupByOutputType = {
+    id: string
+    tenantId: string
+    entityType: string
+    entityId: string
+    stateHash: string
+    updatedAt: Date
+    _count: WebhookEntityStateCountAggregateOutputType | null
+    _min: WebhookEntityStateMinAggregateOutputType | null
+    _max: WebhookEntityStateMaxAggregateOutputType | null
+  }
+
+  type GetWebhookEntityStateGroupByPayload<T extends WebhookEntityStateGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<WebhookEntityStateGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof WebhookEntityStateGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], WebhookEntityStateGroupByOutputType[P]>
+            : GetScalarType<T[P], WebhookEntityStateGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type WebhookEntityStateSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    entityType?: boolean
+    entityId?: boolean
+    stateHash?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["webhookEntityState"]>
+
+  export type WebhookEntityStateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    entityType?: boolean
+    entityId?: boolean
+    stateHash?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["webhookEntityState"]>
+
+  export type WebhookEntityStateSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    entityType?: boolean
+    entityId?: boolean
+    stateHash?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["webhookEntityState"]>
+
+  export type WebhookEntityStateSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    entityType?: boolean
+    entityId?: boolean
+    stateHash?: boolean
+    updatedAt?: boolean
+  }
+
+  export type WebhookEntityStateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tenantId" | "entityType" | "entityId" | "stateHash" | "updatedAt", ExtArgs["result"]["webhookEntityState"]>
+
+  export type $WebhookEntityStatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "WebhookEntityState"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      entityType: string
+      entityId: string
+      stateHash: string
+      updatedAt: Date
+    }, ExtArgs["result"]["webhookEntityState"]>
+    composites: {}
+  }
+
+  type WebhookEntityStateGetPayload<S extends boolean | null | undefined | WebhookEntityStateDefaultArgs> = $Result.GetResult<Prisma.$WebhookEntityStatePayload, S>
+
+  type WebhookEntityStateCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<WebhookEntityStateFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: WebhookEntityStateCountAggregateInputType | true
+    }
+
+  export interface WebhookEntityStateDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['WebhookEntityState'], meta: { name: 'WebhookEntityState' } }
+    /**
+     * Find zero or one WebhookEntityState that matches the filter.
+     * @param {WebhookEntityStateFindUniqueArgs} args - Arguments to find a WebhookEntityState
+     * @example
+     * // Get one WebhookEntityState
+     * const webhookEntityState = await prisma.webhookEntityState.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends WebhookEntityStateFindUniqueArgs>(args: SelectSubset<T, WebhookEntityStateFindUniqueArgs<ExtArgs>>): Prisma__WebhookEntityStateClient<$Result.GetResult<Prisma.$WebhookEntityStatePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one WebhookEntityState that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {WebhookEntityStateFindUniqueOrThrowArgs} args - Arguments to find a WebhookEntityState
+     * @example
+     * // Get one WebhookEntityState
+     * const webhookEntityState = await prisma.webhookEntityState.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends WebhookEntityStateFindUniqueOrThrowArgs>(args: SelectSubset<T, WebhookEntityStateFindUniqueOrThrowArgs<ExtArgs>>): Prisma__WebhookEntityStateClient<$Result.GetResult<Prisma.$WebhookEntityStatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WebhookEntityState that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WebhookEntityStateFindFirstArgs} args - Arguments to find a WebhookEntityState
+     * @example
+     * // Get one WebhookEntityState
+     * const webhookEntityState = await prisma.webhookEntityState.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends WebhookEntityStateFindFirstArgs>(args?: SelectSubset<T, WebhookEntityStateFindFirstArgs<ExtArgs>>): Prisma__WebhookEntityStateClient<$Result.GetResult<Prisma.$WebhookEntityStatePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WebhookEntityState that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WebhookEntityStateFindFirstOrThrowArgs} args - Arguments to find a WebhookEntityState
+     * @example
+     * // Get one WebhookEntityState
+     * const webhookEntityState = await prisma.webhookEntityState.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends WebhookEntityStateFindFirstOrThrowArgs>(args?: SelectSubset<T, WebhookEntityStateFindFirstOrThrowArgs<ExtArgs>>): Prisma__WebhookEntityStateClient<$Result.GetResult<Prisma.$WebhookEntityStatePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more WebhookEntityStates that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WebhookEntityStateFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all WebhookEntityStates
+     * const webhookEntityStates = await prisma.webhookEntityState.findMany()
+     * 
+     * // Get first 10 WebhookEntityStates
+     * const webhookEntityStates = await prisma.webhookEntityState.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const webhookEntityStateWithIdOnly = await prisma.webhookEntityState.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends WebhookEntityStateFindManyArgs>(args?: SelectSubset<T, WebhookEntityStateFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WebhookEntityStatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a WebhookEntityState.
+     * @param {WebhookEntityStateCreateArgs} args - Arguments to create a WebhookEntityState.
+     * @example
+     * // Create one WebhookEntityState
+     * const WebhookEntityState = await prisma.webhookEntityState.create({
+     *   data: {
+     *     // ... data to create a WebhookEntityState
+     *   }
+     * })
+     * 
+     */
+    create<T extends WebhookEntityStateCreateArgs>(args: SelectSubset<T, WebhookEntityStateCreateArgs<ExtArgs>>): Prisma__WebhookEntityStateClient<$Result.GetResult<Prisma.$WebhookEntityStatePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many WebhookEntityStates.
+     * @param {WebhookEntityStateCreateManyArgs} args - Arguments to create many WebhookEntityStates.
+     * @example
+     * // Create many WebhookEntityStates
+     * const webhookEntityState = await prisma.webhookEntityState.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends WebhookEntityStateCreateManyArgs>(args?: SelectSubset<T, WebhookEntityStateCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many WebhookEntityStates and returns the data saved in the database.
+     * @param {WebhookEntityStateCreateManyAndReturnArgs} args - Arguments to create many WebhookEntityStates.
+     * @example
+     * // Create many WebhookEntityStates
+     * const webhookEntityState = await prisma.webhookEntityState.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many WebhookEntityStates and only return the `id`
+     * const webhookEntityStateWithIdOnly = await prisma.webhookEntityState.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends WebhookEntityStateCreateManyAndReturnArgs>(args?: SelectSubset<T, WebhookEntityStateCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WebhookEntityStatePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a WebhookEntityState.
+     * @param {WebhookEntityStateDeleteArgs} args - Arguments to delete one WebhookEntityState.
+     * @example
+     * // Delete one WebhookEntityState
+     * const WebhookEntityState = await prisma.webhookEntityState.delete({
+     *   where: {
+     *     // ... filter to delete one WebhookEntityState
+     *   }
+     * })
+     * 
+     */
+    delete<T extends WebhookEntityStateDeleteArgs>(args: SelectSubset<T, WebhookEntityStateDeleteArgs<ExtArgs>>): Prisma__WebhookEntityStateClient<$Result.GetResult<Prisma.$WebhookEntityStatePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one WebhookEntityState.
+     * @param {WebhookEntityStateUpdateArgs} args - Arguments to update one WebhookEntityState.
+     * @example
+     * // Update one WebhookEntityState
+     * const webhookEntityState = await prisma.webhookEntityState.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends WebhookEntityStateUpdateArgs>(args: SelectSubset<T, WebhookEntityStateUpdateArgs<ExtArgs>>): Prisma__WebhookEntityStateClient<$Result.GetResult<Prisma.$WebhookEntityStatePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more WebhookEntityStates.
+     * @param {WebhookEntityStateDeleteManyArgs} args - Arguments to filter WebhookEntityStates to delete.
+     * @example
+     * // Delete a few WebhookEntityStates
+     * const { count } = await prisma.webhookEntityState.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends WebhookEntityStateDeleteManyArgs>(args?: SelectSubset<T, WebhookEntityStateDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WebhookEntityStates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WebhookEntityStateUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many WebhookEntityStates
+     * const webhookEntityState = await prisma.webhookEntityState.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends WebhookEntityStateUpdateManyArgs>(args: SelectSubset<T, WebhookEntityStateUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WebhookEntityStates and returns the data updated in the database.
+     * @param {WebhookEntityStateUpdateManyAndReturnArgs} args - Arguments to update many WebhookEntityStates.
+     * @example
+     * // Update many WebhookEntityStates
+     * const webhookEntityState = await prisma.webhookEntityState.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more WebhookEntityStates and only return the `id`
+     * const webhookEntityStateWithIdOnly = await prisma.webhookEntityState.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends WebhookEntityStateUpdateManyAndReturnArgs>(args: SelectSubset<T, WebhookEntityStateUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WebhookEntityStatePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one WebhookEntityState.
+     * @param {WebhookEntityStateUpsertArgs} args - Arguments to update or create a WebhookEntityState.
+     * @example
+     * // Update or create a WebhookEntityState
+     * const webhookEntityState = await prisma.webhookEntityState.upsert({
+     *   create: {
+     *     // ... data to create a WebhookEntityState
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the WebhookEntityState we want to update
+     *   }
+     * })
+     */
+    upsert<T extends WebhookEntityStateUpsertArgs>(args: SelectSubset<T, WebhookEntityStateUpsertArgs<ExtArgs>>): Prisma__WebhookEntityStateClient<$Result.GetResult<Prisma.$WebhookEntityStatePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of WebhookEntityStates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WebhookEntityStateCountArgs} args - Arguments to filter WebhookEntityStates to count.
+     * @example
+     * // Count the number of WebhookEntityStates
+     * const count = await prisma.webhookEntityState.count({
+     *   where: {
+     *     // ... the filter for the WebhookEntityStates we want to count
+     *   }
+     * })
+    **/
+    count<T extends WebhookEntityStateCountArgs>(
+      args?: Subset<T, WebhookEntityStateCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], WebhookEntityStateCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a WebhookEntityState.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WebhookEntityStateAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends WebhookEntityStateAggregateArgs>(args: Subset<T, WebhookEntityStateAggregateArgs>): Prisma.PrismaPromise<GetWebhookEntityStateAggregateType<T>>
+
+    /**
+     * Group by WebhookEntityState.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WebhookEntityStateGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends WebhookEntityStateGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: WebhookEntityStateGroupByArgs['orderBy'] }
+        : { orderBy?: WebhookEntityStateGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, WebhookEntityStateGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetWebhookEntityStateGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the WebhookEntityState model
+   */
+  readonly fields: WebhookEntityStateFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for WebhookEntityState.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__WebhookEntityStateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the WebhookEntityState model
+   */
+  interface WebhookEntityStateFieldRefs {
+    readonly id: FieldRef<"WebhookEntityState", 'String'>
+    readonly tenantId: FieldRef<"WebhookEntityState", 'String'>
+    readonly entityType: FieldRef<"WebhookEntityState", 'String'>
+    readonly entityId: FieldRef<"WebhookEntityState", 'String'>
+    readonly stateHash: FieldRef<"WebhookEntityState", 'String'>
+    readonly updatedAt: FieldRef<"WebhookEntityState", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * WebhookEntityState findUnique
+   */
+  export type WebhookEntityStateFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebhookEntityState
+     */
+    select?: WebhookEntityStateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebhookEntityState
+     */
+    omit?: WebhookEntityStateOmit<ExtArgs> | null
+    /**
+     * Filter, which WebhookEntityState to fetch.
+     */
+    where: WebhookEntityStateWhereUniqueInput
+  }
+
+  /**
+   * WebhookEntityState findUniqueOrThrow
+   */
+  export type WebhookEntityStateFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebhookEntityState
+     */
+    select?: WebhookEntityStateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebhookEntityState
+     */
+    omit?: WebhookEntityStateOmit<ExtArgs> | null
+    /**
+     * Filter, which WebhookEntityState to fetch.
+     */
+    where: WebhookEntityStateWhereUniqueInput
+  }
+
+  /**
+   * WebhookEntityState findFirst
+   */
+  export type WebhookEntityStateFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebhookEntityState
+     */
+    select?: WebhookEntityStateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebhookEntityState
+     */
+    omit?: WebhookEntityStateOmit<ExtArgs> | null
+    /**
+     * Filter, which WebhookEntityState to fetch.
+     */
+    where?: WebhookEntityStateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WebhookEntityStates to fetch.
+     */
+    orderBy?: WebhookEntityStateOrderByWithRelationInput | WebhookEntityStateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WebhookEntityStates.
+     */
+    cursor?: WebhookEntityStateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WebhookEntityStates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WebhookEntityStates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WebhookEntityStates.
+     */
+    distinct?: WebhookEntityStateScalarFieldEnum | WebhookEntityStateScalarFieldEnum[]
+  }
+
+  /**
+   * WebhookEntityState findFirstOrThrow
+   */
+  export type WebhookEntityStateFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebhookEntityState
+     */
+    select?: WebhookEntityStateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebhookEntityState
+     */
+    omit?: WebhookEntityStateOmit<ExtArgs> | null
+    /**
+     * Filter, which WebhookEntityState to fetch.
+     */
+    where?: WebhookEntityStateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WebhookEntityStates to fetch.
+     */
+    orderBy?: WebhookEntityStateOrderByWithRelationInput | WebhookEntityStateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WebhookEntityStates.
+     */
+    cursor?: WebhookEntityStateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WebhookEntityStates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WebhookEntityStates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WebhookEntityStates.
+     */
+    distinct?: WebhookEntityStateScalarFieldEnum | WebhookEntityStateScalarFieldEnum[]
+  }
+
+  /**
+   * WebhookEntityState findMany
+   */
+  export type WebhookEntityStateFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebhookEntityState
+     */
+    select?: WebhookEntityStateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebhookEntityState
+     */
+    omit?: WebhookEntityStateOmit<ExtArgs> | null
+    /**
+     * Filter, which WebhookEntityStates to fetch.
+     */
+    where?: WebhookEntityStateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WebhookEntityStates to fetch.
+     */
+    orderBy?: WebhookEntityStateOrderByWithRelationInput | WebhookEntityStateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing WebhookEntityStates.
+     */
+    cursor?: WebhookEntityStateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WebhookEntityStates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WebhookEntityStates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WebhookEntityStates.
+     */
+    distinct?: WebhookEntityStateScalarFieldEnum | WebhookEntityStateScalarFieldEnum[]
+  }
+
+  /**
+   * WebhookEntityState create
+   */
+  export type WebhookEntityStateCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebhookEntityState
+     */
+    select?: WebhookEntityStateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebhookEntityState
+     */
+    omit?: WebhookEntityStateOmit<ExtArgs> | null
+    /**
+     * The data needed to create a WebhookEntityState.
+     */
+    data: XOR<WebhookEntityStateCreateInput, WebhookEntityStateUncheckedCreateInput>
+  }
+
+  /**
+   * WebhookEntityState createMany
+   */
+  export type WebhookEntityStateCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many WebhookEntityStates.
+     */
+    data: WebhookEntityStateCreateManyInput | WebhookEntityStateCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * WebhookEntityState createManyAndReturn
+   */
+  export type WebhookEntityStateCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebhookEntityState
+     */
+    select?: WebhookEntityStateSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebhookEntityState
+     */
+    omit?: WebhookEntityStateOmit<ExtArgs> | null
+    /**
+     * The data used to create many WebhookEntityStates.
+     */
+    data: WebhookEntityStateCreateManyInput | WebhookEntityStateCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * WebhookEntityState update
+   */
+  export type WebhookEntityStateUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebhookEntityState
+     */
+    select?: WebhookEntityStateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebhookEntityState
+     */
+    omit?: WebhookEntityStateOmit<ExtArgs> | null
+    /**
+     * The data needed to update a WebhookEntityState.
+     */
+    data: XOR<WebhookEntityStateUpdateInput, WebhookEntityStateUncheckedUpdateInput>
+    /**
+     * Choose, which WebhookEntityState to update.
+     */
+    where: WebhookEntityStateWhereUniqueInput
+  }
+
+  /**
+   * WebhookEntityState updateMany
+   */
+  export type WebhookEntityStateUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update WebhookEntityStates.
+     */
+    data: XOR<WebhookEntityStateUpdateManyMutationInput, WebhookEntityStateUncheckedUpdateManyInput>
+    /**
+     * Filter which WebhookEntityStates to update
+     */
+    where?: WebhookEntityStateWhereInput
+    /**
+     * Limit how many WebhookEntityStates to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * WebhookEntityState updateManyAndReturn
+   */
+  export type WebhookEntityStateUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebhookEntityState
+     */
+    select?: WebhookEntityStateSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebhookEntityState
+     */
+    omit?: WebhookEntityStateOmit<ExtArgs> | null
+    /**
+     * The data used to update WebhookEntityStates.
+     */
+    data: XOR<WebhookEntityStateUpdateManyMutationInput, WebhookEntityStateUncheckedUpdateManyInput>
+    /**
+     * Filter which WebhookEntityStates to update
+     */
+    where?: WebhookEntityStateWhereInput
+    /**
+     * Limit how many WebhookEntityStates to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * WebhookEntityState upsert
+   */
+  export type WebhookEntityStateUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebhookEntityState
+     */
+    select?: WebhookEntityStateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebhookEntityState
+     */
+    omit?: WebhookEntityStateOmit<ExtArgs> | null
+    /**
+     * The filter to search for the WebhookEntityState to update in case it exists.
+     */
+    where: WebhookEntityStateWhereUniqueInput
+    /**
+     * In case the WebhookEntityState found by the `where` argument doesn't exist, create a new WebhookEntityState with this data.
+     */
+    create: XOR<WebhookEntityStateCreateInput, WebhookEntityStateUncheckedCreateInput>
+    /**
+     * In case the WebhookEntityState was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<WebhookEntityStateUpdateInput, WebhookEntityStateUncheckedUpdateInput>
+  }
+
+  /**
+   * WebhookEntityState delete
+   */
+  export type WebhookEntityStateDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebhookEntityState
+     */
+    select?: WebhookEntityStateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebhookEntityState
+     */
+    omit?: WebhookEntityStateOmit<ExtArgs> | null
+    /**
+     * Filter which WebhookEntityState to delete.
+     */
+    where: WebhookEntityStateWhereUniqueInput
+  }
+
+  /**
+   * WebhookEntityState deleteMany
+   */
+  export type WebhookEntityStateDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WebhookEntityStates to delete
+     */
+    where?: WebhookEntityStateWhereInput
+    /**
+     * Limit how many WebhookEntityStates to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * WebhookEntityState without action
+   */
+  export type WebhookEntityStateDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebhookEntityState
+     */
+    select?: WebhookEntityStateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WebhookEntityState
+     */
+    omit?: WebhookEntityStateOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -27027,6 +28131,18 @@ export namespace Prisma {
   };
 
   export type WebhookDeliveryScalarFieldEnum = (typeof WebhookDeliveryScalarFieldEnum)[keyof typeof WebhookDeliveryScalarFieldEnum]
+
+
+  export const WebhookEntityStateScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    entityType: 'entityType',
+    entityId: 'entityId',
+    stateHash: 'stateHash',
+    updatedAt: 'updatedAt'
+  };
+
+  export type WebhookEntityStateScalarFieldEnum = (typeof WebhookEntityStateScalarFieldEnum)[keyof typeof WebhookEntityStateScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -28753,6 +29869,64 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"WebhookDelivery"> | Date | string
   }
 
+  export type WebhookEntityStateWhereInput = {
+    AND?: WebhookEntityStateWhereInput | WebhookEntityStateWhereInput[]
+    OR?: WebhookEntityStateWhereInput[]
+    NOT?: WebhookEntityStateWhereInput | WebhookEntityStateWhereInput[]
+    id?: StringFilter<"WebhookEntityState"> | string
+    tenantId?: StringFilter<"WebhookEntityState"> | string
+    entityType?: StringFilter<"WebhookEntityState"> | string
+    entityId?: StringFilter<"WebhookEntityState"> | string
+    stateHash?: StringFilter<"WebhookEntityState"> | string
+    updatedAt?: DateTimeFilter<"WebhookEntityState"> | Date | string
+  }
+
+  export type WebhookEntityStateOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    entityType?: SortOrder
+    entityId?: SortOrder
+    stateHash?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WebhookEntityStateWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tenantId_entityType_entityId?: WebhookEntityStateTenantIdEntityTypeEntityIdCompoundUniqueInput
+    AND?: WebhookEntityStateWhereInput | WebhookEntityStateWhereInput[]
+    OR?: WebhookEntityStateWhereInput[]
+    NOT?: WebhookEntityStateWhereInput | WebhookEntityStateWhereInput[]
+    tenantId?: StringFilter<"WebhookEntityState"> | string
+    entityType?: StringFilter<"WebhookEntityState"> | string
+    entityId?: StringFilter<"WebhookEntityState"> | string
+    stateHash?: StringFilter<"WebhookEntityState"> | string
+    updatedAt?: DateTimeFilter<"WebhookEntityState"> | Date | string
+  }, "id" | "tenantId_entityType_entityId">
+
+  export type WebhookEntityStateOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    entityType?: SortOrder
+    entityId?: SortOrder
+    stateHash?: SortOrder
+    updatedAt?: SortOrder
+    _count?: WebhookEntityStateCountOrderByAggregateInput
+    _max?: WebhookEntityStateMaxOrderByAggregateInput
+    _min?: WebhookEntityStateMinOrderByAggregateInput
+  }
+
+  export type WebhookEntityStateScalarWhereWithAggregatesInput = {
+    AND?: WebhookEntityStateScalarWhereWithAggregatesInput | WebhookEntityStateScalarWhereWithAggregatesInput[]
+    OR?: WebhookEntityStateScalarWhereWithAggregatesInput[]
+    NOT?: WebhookEntityStateScalarWhereWithAggregatesInput | WebhookEntityStateScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"WebhookEntityState"> | string
+    tenantId?: StringWithAggregatesFilter<"WebhookEntityState"> | string
+    entityType?: StringWithAggregatesFilter<"WebhookEntityState"> | string
+    entityId?: StringWithAggregatesFilter<"WebhookEntityState"> | string
+    stateHash?: StringWithAggregatesFilter<"WebhookEntityState"> | string
+    updatedAt?: DateTimeWithAggregatesFilter<"WebhookEntityState"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     user: string
@@ -30402,6 +31576,69 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type WebhookEntityStateCreateInput = {
+    id?: string
+    tenantId: string
+    entityType: string
+    entityId: string
+    stateHash: string
+    updatedAt?: Date | string
+  }
+
+  export type WebhookEntityStateUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    entityType: string
+    entityId: string
+    stateHash: string
+    updatedAt?: Date | string
+  }
+
+  export type WebhookEntityStateUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    entityType?: StringFieldUpdateOperationsInput | string
+    entityId?: StringFieldUpdateOperationsInput | string
+    stateHash?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WebhookEntityStateUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    entityType?: StringFieldUpdateOperationsInput | string
+    entityId?: StringFieldUpdateOperationsInput | string
+    stateHash?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WebhookEntityStateCreateManyInput = {
+    id?: string
+    tenantId: string
+    entityType: string
+    entityId: string
+    stateHash: string
+    updatedAt?: Date | string
+  }
+
+  export type WebhookEntityStateUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    entityType?: StringFieldUpdateOperationsInput | string
+    entityId?: StringFieldUpdateOperationsInput | string
+    stateHash?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WebhookEntityStateUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    entityType?: StringFieldUpdateOperationsInput | string
+    entityId?: StringFieldUpdateOperationsInput | string
+    stateHash?: StringFieldUpdateOperationsInput | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -31774,6 +33011,39 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumWebhookDeliveryStatusFilter<$PrismaModel>
     _max?: NestedEnumWebhookDeliveryStatusFilter<$PrismaModel>
+  }
+
+  export type WebhookEntityStateTenantIdEntityTypeEntityIdCompoundUniqueInput = {
+    tenantId: string
+    entityType: string
+    entityId: string
+  }
+
+  export type WebhookEntityStateCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    entityType?: SortOrder
+    entityId?: SortOrder
+    stateHash?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WebhookEntityStateMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    entityType?: SortOrder
+    entityId?: SortOrder
+    stateHash?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WebhookEntityStateMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    entityType?: SortOrder
+    entityId?: SortOrder
+    stateHash?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type DbCredentialsCreateNestedOneWithoutUsersInput = {

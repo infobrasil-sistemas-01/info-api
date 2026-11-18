@@ -355,3 +355,16 @@ model WebhookDelivery {
   @@index([createdAt])
   @@map("webhook_deliveries")
 }
+
+model WebhookEntityState {
+  id         String   @id @default(uuid())
+  tenantId   String   @map("tenant_id") @db.VarChar(100)
+  entityType String   @map("entity_type") @db.VarChar(50)
+  entityId   String   @map("entity_id") @db.VarChar(100)
+  stateHash  String   @map("state_hash") @db.VarChar(64)
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@unique([tenantId, entityType, entityId])
+  @@index([tenantId, entityType])
+  @@map("webhook_entity_states")
+}
