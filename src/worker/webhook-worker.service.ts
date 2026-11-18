@@ -482,19 +482,26 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
       const products = await queryPromise(
         `SELECT FIRST 25
            P.PRO_CODIGO, P.PRO_CODIGOBAR, P.PRO_DESCRICAO, P.PRO_UNIDADE,
-           P.PRO_DATAALTERACAO,
+           P.PRO_DATACADASTRO, P.PRO_DATAALTERACAO, P.PRO_HORA,
            P.MAR_CODIGO, M.MAR_DESCRICAO,
            P.GRU_CODIGO, G.GRU_DESCRICAO
          FROM PRODUTOS P
          LEFT JOIN MARCAS M ON P.MAR_CODIGO = M.MAR_CODIGO
          LEFT JOIN GRUPOSPRO G ON P.GRU_CODIGO = G.GRU_CODIGO
          WHERE
-           P.PRO_DATAALTERACAO > ?
-           OR (P.PRO_DATAALTERACAO = ? AND P.PRO_CODIGO > ?)
+           (COALESCE(P.PRO_DATAALTERACAO, P.PRO_DATACADASTRO) > ?)
+           OR (
+             COALESCE(P.PRO_DATAALTERACAO, P.PRO_DATACADASTRO) = ?
+             AND (
+               COALESCE(P.PRO_HORA, '00:00:00') > ?
+               OR (COALESCE(P.PRO_HORA, '00:00:00') = ? AND P.PRO_CODIGO > ?)
+             )
+           )
          ORDER BY
-           P.PRO_DATAALTERACAO ASC,
+           COALESCE(P.PRO_DATAALTERACAO, P.PRO_DATACADASTRO) ASC,
+           COALESCE(P.PRO_HORA, '00:00:00') ASC,
            P.PRO_CODIGO ASC`,
-        [syncDate, syncDate, lastProductId],
+        [syncDate, syncDate, syncTime, syncTime, lastProductId],
       );
 
       if (products.length > 0) {
@@ -531,11 +538,16 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
 
         for (const prod of products) {
           const proCodigo = Number(prod.PRO_CODIGO);
+          const dtCad = parseFirebirdDate(prod.PRO_DATACADASTRO);
           const dtAlt = parseFirebirdDate(prod.PRO_DATAALTERACAO);
+          const hr = parseFirebirdTime(prod.PRO_HORA);
 
-          let eventType = events.includes('product.updated')
-            ? 'product.updated'
-            : 'product.created';
+          const isCreated = !prod.PRO_DATAALTERACAO || dtCad === dtAlt;
+          let eventType = isCreated ? 'product.created' : 'product.updated';
+          if (!events.includes(eventType)) {
+            if (events.includes('product.created')) eventType = 'product.created';
+            else if (events.includes('product.updated')) eventType = 'product.updated';
+          }
 
           const payload = {
             id: `evt_prd_${crypto.randomBytes(8).toString('hex')}`,
@@ -560,7 +572,8 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
                   }
                 : null,
               stock: stockByProduct.get(proCodigo) || [],
-              updatedAt: dtAlt,
+              registeredAt: `${dtCad} ${hr}`.trim(),
+              updatedAt: `${dtAlt || dtCad} ${hr}`.trim(),
               links: { self: `/api/v1/products/id/${proCodigo}` },
             },
           };
@@ -575,7 +588,8 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
           });
 
           maxSeenId = proCodigo;
-          maxSyncAt = fromBrazilDateTimeToUtc(dtAlt, '00:00:00');
+          const latestDate = dtAlt || dtCad;
+          maxSyncAt = fromBrazilDateTimeToUtc(latestDate, hr);
         }
 
         await this.prisma.webhookSubscription.update({
