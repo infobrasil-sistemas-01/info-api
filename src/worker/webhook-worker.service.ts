@@ -61,7 +61,7 @@ function parseFirebirdTime(val: any): string {
 
 function fromBrazilDateTimeToUtc(dateStr: string, timeStr: string): Date {
   const cleanDate = (dateStr || '').trim().slice(0, 10);
-  const cleanTime = (timeStr || '00:00:00').trim().slice(0, 8);
+  const cleanTime = (timeStr || '00:00:00').trim();
   const normalizedTime = cleanTime.length === 5 ? `${cleanTime}:00` : cleanTime;
   return new Date(`${cleanDate}T${normalizedTime}-03:00`);
 }
@@ -74,6 +74,9 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
   private dispatcherTimer?: NodeJS.Timeout;
   private cleanupTimer?: NodeJS.Timeout;
 
+  // Idempotent Filter: armazena chaves de idempotência recentes com TTL de 2 horas
+  private readonly recentEventKeys = new Map<string, number>();
+
   constructor(
     private readonly prisma: RegistryPrismaService,
     private readonly tenantConnectionService: TenantConnectionService,
@@ -81,12 +84,68 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
     private readonly emailService: EmailService,
   ) {}
 
-  onApplicationBootstrap() {
+  async onApplicationBootstrap() {
     this.logger.log('Iniciando Webhook Worker autônomo...');
     this.isRunning = true;
+    await this.warmupIdempotencyKeys();
     this.startPollerLoop();
     this.startDispatcherLoop();
     this.startCleanupLoop();
+  }
+
+  /**
+   * Pré-carrega chaves de eventos recentes criadas nas últimas 2 horas para garantir
+   * idempotência estrita mesmo após restart do worker.
+   */
+  private async warmupIdempotencyKeys() {
+    try {
+      const twoHoursAgo = new Date(Date.now() - 2 * 60 * 60 * 1000);
+      const recentDeliveries = await this.prisma.webhookDelivery.findMany({
+        where: { createdAt: { gte: twoHoursAgo } },
+        select: {
+          subscriptionId: true,
+          event: true,
+          payload: true,
+        },
+        take: 3000,
+        orderBy: { createdAt: 'desc' },
+      });
+
+      const expiry = Date.now() + 2 * 60 * 60 * 1000;
+      for (const d of recentDeliveries) {
+        const p = d.payload as any;
+        const data = p?.data || {};
+        const entityId =
+          data.productId ?? data.orderNumber ?? data.deliveryId ?? data.payableId ?? data.receivableId;
+        const state =
+          data.updatedAt ?? data.issuedAt ?? data.deliveryDate ?? data.issueDate ?? data.dueDate ?? '';
+        if (entityId !== undefined) {
+          const key = `${d.subscriptionId}:${d.event}:${entityId}:${state}`;
+          this.recentEventKeys.set(key, expiry);
+        }
+      }
+      this.logger.log(
+        `[IdempotentFilter] Pré-carregadas ${this.recentEventKeys.size} chaves recentes de idempotência.`,
+      );
+    } catch (err: any) {
+      this.logger.warn(
+        `[IdempotentFilter] Falha ao pré-carregar chaves de idempotência: ${err.message}`,
+      );
+    }
+  }
+
+  /**
+   * Filtro de Idempotência: verifica se um evento idêntico já foi emitido recentemente.
+   */
+  private isDuplicateEvent(key: string): boolean {
+    const now = Date.now();
+    const expiry = this.recentEventKeys.get(key);
+    if (expiry && expiry > now) {
+      return true;
+    }
+    // Armazena com TTL de 2 horas
+    this.recentEventKeys.set(key, now + 2 * 60 * 60 * 1000);
+    return false;
   }
 
   onApplicationShutdown(signal?: string) {
@@ -568,6 +627,17 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
             else if (events.includes('product.updated')) eventType = 'product.updated';
           }
 
+          const stateTimestamp = `${dtAlt || dtCad} ${hr}`.trim();
+          const idempotencyKey = `${sub.id}:${eventType}:${proCodigoStr}:${stateTimestamp}`;
+
+          if (this.isDuplicateEvent(idempotencyKey)) {
+            // Evento já emitido para este exato estado do produto: ignora entrega duplicada
+            maxSeenId = BigInt(proCodigoStr);
+            const latestDate = dtAlt || dtCad;
+            maxSyncAt = fromBrazilDateTimeToUtc(latestDate, hr);
+            continue;
+          }
+
           const payload = {
             id: `evt_prd_${crypto.randomBytes(8).toString('hex')}`,
             event: eventType,
@@ -607,6 +677,16 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
           maxSeenId = BigInt(proCodigoStr);
           const latestDate = dtAlt || dtCad;
           maxSyncAt = fromBrazilDateTimeToUtc(latestDate, hr);
+        }
+
+        // Se todas as mensagens do lote forem duplicatas e o cursor não tiver avançado em relação ao atual:
+        // Forçamos o avanço do cursor em +1 segundo para que o Firebird não fique eternamente re-selecionando o mesmo registro
+        if (
+          deliveriesToCreate.length === 0 &&
+          maxSyncAt.getTime() <= new Date(sub.lastProductSyncAt).getTime() &&
+          maxSeenId === lastProductId
+        ) {
+          maxSyncAt = new Date(maxSyncAt.getTime() + 1000);
         }
 
         await this.prisma.$transaction(async (tx) => {
@@ -1284,6 +1364,14 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
           this.logger.log(
             `Limpeza de retenção de 7 dias executada: ${deleted.count} entregas antigas removidas.`,
           );
+        }
+
+        // Expira chaves de idempotência antigas em memória
+        const now = Date.now();
+        for (const [key, expiry] of this.recentEventKeys.entries()) {
+          if (expiry <= now) {
+            this.recentEventKeys.delete(key);
+          }
         }
       } catch (err: any) {
         this.logger.error(`Erro ao executar limpeza de 7 dias: ${err.message}`);
