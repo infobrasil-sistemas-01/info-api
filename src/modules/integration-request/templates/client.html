@@ -2339,38 +2339,40 @@ print(f'Basic {auth}')</code></pre>
                     timestamp: "2026-11-18T14:15:00.000Z",
                     tenant: "infoadmin",
                     data: {
-                        productId: 1,
-                        barcode: "7891234567890",
-                        description: "REFRIGERANTE COCA-COLA 2L",
-                        unit: "UN",
-                        brand: { id: 2, name: "COCA-COLA" },
-                        group: { id: 1, name: "BEBIDAS" },
-                        stock: [
+                        PRO_CODIGO: 1,
+                        PRO_CODIGOBAR: "7891234567890",
+                        PRO_DESCRICAO: "REFRIGERANTE COCA-COLA 2L",
+                        PRO_UNIDADE: "UN",
+                        MAR_CODIGO: 2,
+                        MAR_DESCRICAO: "COCA-COLA",
+                        GRU_CODIGO: 1,
+                        GRU_DESCRICAO: "BEBIDAS",
+                        ESTOQUE: [
                             {
-                                storeId: 1,
-                                current: 376,
-                                support: -20,
-                                price: 10.50,
-                                promotionalPrice: 9.90,
-                                prices: [
-                                    { table: 1, price: 10.50, promotionalPrice: 9.90 },
-                                    { table: 2, price: 11.00, promotionalPrice: null },
-                                    { table: 3, price: 9.80, promotionalPrice: null }
+                                LOJ_CODIGO: 1,
+                                EST_ATUAL: 376,
+                                EST_APOIO: -20,
+                                PRECO: 10.50,
+                                PRECO_PROMOCIONAL: 9.90,
+                                TABELAS_PRECO: [
+                                    { TABELA: 1, PRECO: 10.50, PRECO_PROMOCIONAL: 9.90 },
+                                    { TABELA: 2, PRECO: 11.00, PRECO_PROMOCIONAL: null },
+                                    { TABELA: 3, PRECO: 9.80, PRECO_PROMOCIONAL: null }
                                 ]
                             },
                             {
-                                storeId: 2,
-                                current: 48,
-                                support: 0,
-                                price: 10.50,
-                                promotionalPrice: null,
-                                prices: [
-                                    { table: 1, price: 10.50, promotionalPrice: null }
+                                LOJ_CODIGO: 2,
+                                EST_ATUAL: 48,
+                                EST_APOIO: 0,
+                                PRECO: 10.50,
+                                PRECO_PROMOCIONAL: null,
+                                TABELAS_PRECO: [
+                                    { TABELA: 1, PRECO: 10.50, PRECO_PROMOCIONAL: null }
                                 ]
                             }
                         ],
-                        registeredAt: "2023-06-18 14:52:10",
-                        updatedAt: "2026-11-18 10:24:00",
+                        PRO_DATACADASTRO: "2023-06-18 14:52:10",
+                        PRO_DATAALTERACAO: "2026-11-18 10:24:00",
                         links: { self: "/api/v1/products/id/1" }
                     }
                 },
@@ -2386,56 +2388,46 @@ print(f'Basic {auth}')</code></pre>
                         "tenant": { "type": "string", "description": "Identificador do tenant emissor" },
                         "data": {
                             "type": "object",
-                            "required": ["productId", "description", "stock", "updatedAt"],
+                            "required": ["PRO_CODIGO", "PRO_DESCRICAO", "ESTOQUE", "PRO_DATAALTERACAO"],
                             "properties": {
-                                "productId": { "type": ["number", "string"], "description": "Código do produto no ERP" },
-                                "barcode": { "type": ["string", "null"], "description": "Código de barras GTIN/EAN-13" },
-                                "description": { "type": "string", "description": "Descrição cadastral do produto" },
-                                "unit": { "type": ["string", "null"], "description": "Unidade de medida comercial (ex: UN, KG, CX)" },
-                                "brand": {
-                                    "type": ["object", "null"],
-                                    "properties": {
-                                        "id": { "type": "number", "description": "Código da marca" },
-                                        "name": { "type": ["string", "null"], "description": "Nome da marca" }
-                                    }
-                                },
-                                "group": {
-                                    "type": ["object", "null"],
-                                    "properties": {
-                                        "id": { "type": "number", "description": "Código do grupo" },
-                                        "name": { "type": ["string", "null"], "description": "Nome do grupo" }
-                                    }
-                                },
-                                "stock": {
+                                "PRO_CODIGO": { "type": ["number", "string"], "description": "Código do produto no ERP" },
+                                "PRO_CODIGOBAR": { "type": ["string", "null"], "description": "Código de barras GTIN/EAN-13" },
+                                "PRO_DESCRICAO": { "type": "string", "description": "Descrição cadastral do produto" },
+                                "PRO_UNIDADE": { "type": ["string", "null"], "description": "Unidade de medida comercial (ex: UN, KG, CX)" },
+                                "MAR_CODIGO": { "type": ["number", "null"], "description": "Código da marca" },
+                                "MAR_DESCRICAO": { "type": ["string", "null"], "description": "Descrição da marca" },
+                                "GRU_CODIGO": { "type": ["number", "null"], "description": "Código do grupo" },
+                                "GRU_DESCRICAO": { "type": ["string", "null"], "description": "Descrição do grupo" },
+                                "ESTOQUE": {
                                     "type": "array",
-                                    "description": "Saldos e tabelas de preço distribuídos por loja/filial",
+                                    "description": "Saldos e matriz de tabelas de preço distribuídos por filial/loja",
                                     "items": {
                                         "type": "object",
-                                        "required": ["storeId", "current", "support", "price", "prices"],
+                                        "required": ["LOJ_CODIGO", "EST_ATUAL", "EST_APOIO", "PRECO", "TABELAS_PRECO"],
                                         "properties": {
-                                            "storeId": { "type": "number", "description": "Código da filial / loja" },
-                                            "current": { "type": "number", "description": "Estoque atual na loja" },
-                                            "support": { "type": "number", "description": "Estoque de apoio / depósito" },
-                                            "price": { "type": "number", "description": "Preço da Tabela 1 padrão (ou fallback para primeira tabela ativa)" },
-                                            "promotionalPrice": { "type": ["number", "null"], "description": "Preço promocional ativo da Tabela 1 (ou null)" },
-                                            "prices": {
+                                            "LOJ_CODIGO": { "type": "number", "description": "Código da filial / loja" },
+                                            "EST_ATUAL": { "type": "number", "description": "Estoque atual na loja" },
+                                            "EST_APOIO": { "type": "number", "description": "Estoque de apoio / depósito" },
+                                            "PRECO": { "type": "number", "description": "Preço da Tabela 1 padrão (ou primeira ativa)" },
+                                            "PRECO_PROMOCIONAL": { "type": ["number", "null"], "description": "Preço promocional ativo da Tabela 1 (ou null)" },
+                                            "TABELAS_PRECO": {
                                                 "type": "array",
-                                                "description": "Matriz completa com todas as tabelas de preço configuradas (> 0)",
+                                                "description": "Matriz com todas as tabelas de preço configuradas (> 0)",
                                                 "items": {
                                                     "type": "object",
-                                                    "required": ["table", "price"],
+                                                    "required": ["TABELA", "PRECO"],
                                                     "properties": {
-                                                        "table": { "type": "number", "description": "Número da tabela (1 a 12)" },
-                                                        "price": { "type": "number", "description": "Preço de venda regular" },
-                                                        "promotionalPrice": { "type": ["number", "null"], "description": "Preço promocional ativo na tabela" }
+                                                        "TABELA": { "type": "number", "description": "Número da tabela (1 a 12)" },
+                                                        "PRECO": { "type": "number", "description": "Preço de venda regular" },
+                                                        "PRECO_PROMOCIONAL": { "type": ["number", "null"], "description": "Preço promocional ativo na tabela" }
                                                     }
                                                 }
                                             }
                                         }
                                     }
                                 },
-                                "registeredAt": { "type": "string", "description": "Data/hora de cadastro (YYYY-MM-DD HH:mm:ss)" },
-                                "updatedAt": { "type": "string", "description": "Data/hora da última alteração de cadastro ou estoque" },
+                                "PRO_DATACADASTRO": { "type": "string", "description": "Data/hora de cadastro (YYYY-MM-DD HH:mm:ss)" },
+                                "PRO_DATAALTERACAO": { "type": "string", "description": "Data/hora da última alteração de cadastro ou estoque" },
                                 "links": {
                                     "type": "object",
                                     "properties": {
@@ -2446,8 +2438,8 @@ print(f'Basic {auth}')</code></pre>
                         }
                     }
                 },
-                typescript: `export interface WebhookEvent<T> {\n  id: string;\n  event: 'product.updated';\n  timestamp: string;\n  tenant: string;\n  data: T;\n}\n\nexport interface ProductPriceTableItem {\n  table: number; // 1 a 12\n  price: number;\n  promotionalPrice: number | null;\n}\n\nexport interface ProductStockStoreItem {\n  storeId: number;\n  current: number;\n  support: number;\n  price: number; // Preço Tabela 1 padrão\n  promotionalPrice: number | null; // Promoção Tabela 1\n  prices: ProductPriceTableItem[]; // Matriz multi-tabela ativa (> 0)\n}\n\nexport interface ProductUpdatedPayload {\n  productId: number | string;\n  barcode: string | null;\n  description: string;\n  unit: string | null;\n  brand: { id: number; name: string | null } | null;\n  group: { id: number; name: string | null } | null;\n  stock: ProductStockStoreItem[];\n  registeredAt: string;\n  updatedAt: string;\n  links: { self: string };\n}\n\nexport type ProductUpdatedEvent = WebhookEvent<ProductUpdatedPayload>;`,
-                notes: `<b style="color: #6ee7b7;">Gatilho de Disparo:</b> Emitido tanto em alterações cadastrais (descrição, código de barras, marca) quanto em <b>qualquer alteração de saldo de estoque (vendas no PDV, transferências) ou reajuste de preços</b>.<br><b style="color: #6ee7b7;">Destaque de Preços:</b> O objeto <code>stock[i]</code> expõe <code>price</code> e <code>promotionalPrice</code> referentes à Tabela 1 padrão, além do array <code>prices</code> contendo todas as tabelas (1 a 12) configuradas com preço maior que zero.`
+                typescript: `export interface WebhookEvent<T> {\n  id: string;\n  event: string;\n  timestamp: string;\n  tenant: string;\n  data: T;\n}\n\nexport interface TabelaPrecoItem {\n  TABELA: number; // 1 a 12\n  PRECO: number;\n  PRECO_PROMOCIONAL: number | null;\n}\n\nexport interface EstoqueLojaItem {\n  LOJ_CODIGO: number;\n  EST_ATUAL: number;\n  EST_APOIO: number;\n  PRECO: number; // Preço Tabela 1 padrão\n  PRECO_PROMOCIONAL: number | null; // Promoção Tabela 1\n  TABELAS_PRECO: TabelaPrecoItem[]; // Matriz multi-tabela ativa (> 0)\n}\n\nexport interface ProductWebhookPayload {\n  PRO_CODIGO: number | string;\n  PRO_CODIGOBAR: string | null;\n  PRO_DESCRICAO: string;\n  PRO_UNIDADE: string | null;\n  MAR_CODIGO: number | null;\n  MAR_DESCRICAO: string | null;\n  GRU_CODIGO: number | null;\n  GRU_DESCRICAO: string | null;\n  ESTOQUE: EstoqueLojaItem[];\n  PRO_DATACADASTRO: string;\n  PRO_DATAALTERACAO: string;\n  links: { self: string };\n}\n\nexport type ProductUpdatedEvent = WebhookEvent<ProductWebhookPayload>;`,
+                notes: `<b style="color: #6ee7b7;">Gatilho de Disparo:</b> Emitido tanto em alterações cadastrais (descrição, código de barras, marca) quanto em <b>qualquer alteração de saldo de estoque (vendas no PDV, transferências) ou reajuste de preços</b>.<br><b style="color: #6ee7b7;">Padrão DTO ERP:</b> O nó <code>data</code> adota a nomenclatura nativa do ERP em maiúsculas (ex: <code>PRO_CODIGO</code>, <code>ESTOQUE</code>, <code>TABELAS_PRECO</code>), garantindo 100% de paridade com os endpoints REST.`
             },
             'product.created': {
                 name: 'product.created',
@@ -2458,24 +2450,26 @@ print(f'Basic {auth}')</code></pre>
                     timestamp: "2026-11-18T14:10:00.000Z",
                     tenant: "infoadmin",
                     data: {
-                        productId: 105,
-                        barcode: "7890000010178",
-                        description: "NOVO PRODUTO CADASTRADO",
-                        unit: "UN",
-                        brand: { id: 1, name: "ITATIAIA" },
-                        group: { id: 1, name: "1-GRUPO01" },
-                        stock: [
+                        PRO_CODIGO: 105,
+                        PRO_CODIGOBAR: "7890000010178",
+                        PRO_DESCRICAO: "NOVO PRODUTO CADASTRADO",
+                        PRO_UNIDADE: "UN",
+                        MAR_CODIGO: 1,
+                        MAR_DESCRICAO: "ITATIAIA",
+                        GRU_CODIGO: 1,
+                        GRU_DESCRICAO: "1-GRUPO01",
+                        ESTOQUE: [
                             {
-                                storeId: 1,
-                                current: 0,
-                                support: 0,
-                                price: 299.90,
-                                promotionalPrice: null,
-                                prices: [{ table: 1, price: 299.90, promotionalPrice: null }]
+                                LOJ_CODIGO: 1,
+                                EST_ATUAL: 0,
+                                EST_APOIO: 0,
+                                PRECO: 299.90,
+                                PRECO_PROMOCIONAL: null,
+                                TABELAS_PRECO: [{ TABELA: 1, PRECO: 299.90, PRECO_PROMOCIONAL: null }]
                             }
                         ],
-                        registeredAt: "2026-11-18 14:10:00",
-                        updatedAt: "2026-11-18 14:10:00",
+                        PRO_DATACADASTRO: "2026-11-18 14:10:00",
+                        PRO_DATAALTERACAO: "2026-11-18 14:10:00",
                         links: { self: "/api/v1/products/id/105" }
                     }
                 },
@@ -2485,7 +2479,7 @@ print(f'Basic {auth}')</code></pre>
                     "type": "object",
                     "required": ["id", "event", "timestamp", "tenant", "data"]
                 },
-                typescript: `export interface ProductCreatedPayload {\n  productId: number | string;\n  barcode: string | null;\n  description: string;\n  unit: string | null;\n  brand: { id: number; name: string | null } | null;\n  group: { id: number; name: string | null } | null;\n  stock: Array<{\n    storeId: number;\n    current: number;\n    support: number;\n    price: number;\n    promotionalPrice: number | null;\n    prices: Array<{ table: number; price: number; promotionalPrice: number | null }>;\n  }>;\n  registeredAt: string;\n  updatedAt: string;\n  links: { self: string };\n}\n\nexport type ProductCreatedEvent = WebhookEvent<ProductCreatedPayload>;`,
+                typescript: `export type ProductCreatedEvent = WebhookEvent<ProductWebhookPayload>;`,
                 notes: `<b style="color: #6ee7b7;">Gatilho de Disparo:</b> Disparado imediatamente após um novo produto ser cadastrado na base de dados do cliente.`
             },
             'order.created': {
@@ -2497,25 +2491,84 @@ print(f'Basic {auth}')</code></pre>
                     timestamp: "2026-11-18T14:00:00.000Z",
                     tenant: "infoadmin",
                     data: {
-                        orderNumber: 10452,
-                        storeId: 1,
-                        customer: { id: 45, name: "SUPERMERCADO CENTRAL LTDA" },
-                        total: 1250.80,
-                        discount: 50.00,
-                        netTotal: 1200.80,
-                        status: "PENDENTE",
-                        paymentMethodId: 1,
-                        issuedAt: "2026-11-18 13:58:00",
-                        links: { self: "/api/v1/orders/10452" }
+                        VEN_NUMERO: 10452,
+                        VEN_NUMSITE: "PED-99881",
+                        VEN_TIPO: "E",
+                        LOJ_CODIGO: 1,
+                        LOJ_NOME: "LOJA MATRIZ",
+                        LOJ_FANTASIA: "CENTRO",
+                        SIT_CODIGO: 1,
+                        SIT_DESCRICAO: "ABERTO",
+                        CLI_CODIGO: 45,
+                        CLI_NOME: "SUPERMERCADO CENTRAL LTDA",
+                        CLI_CPF_CNPJ: "12345678000199",
+                        CLI_FONE: "85999998888",
+                        CLI_EMAIL: "compras@central.com.br",
+                        FUN_CODIGO: 3,
+                        FUN_NOME: "VENDEDOR BALCAO",
+                        USU_CODIGO: 1,
+                        USU_APELIDO: "ADMIN",
+                        VEN_TOTALBRUTO: 1250.80,
+                        VEN_TOTALDESC: 50.00,
+                        VEN_TOTALLIQUIDO: 1200.80,
+                        FORMAS_PAGAMENTO: [
+                            { CODIGO: 1, DESCRICAO: "DINHEIRO", VALOR: 1200.80 }
+                        ],
+                        ITENS: [
+                            {
+                                PRO_CODIGO: 101,
+                                PRO_DESCRICAO: "PRODUTO EXECUTIVO A",
+                                PRO_UNIDADE: "UN",
+                                IVD_QTDE: 2,
+                                IVD_PRECO: 625.40,
+                                IVD_DESCONTO: 50.00,
+                                IVD_TOTAL: 1250.80,
+                                IVD_LIQUIDO: 1200.80
+                            }
+                        ],
+                        VEN_DATA: "2026-11-18",
+                        VEN_HORA: "13:58:00",
+                        links: {
+                            self: "/api/v1/orders/10452",
+                            items: "/api/v1/orders/10452/items"
+                        }
                     }
                 },
                 schema: {
                     "$schema": "http://json-schema.org/draft-07/schema#",
                     "title": "OrderCreatedWebhookEvent",
                     "type": "object",
-                    "required": ["id", "event", "timestamp", "tenant", "data"]
+                    "required": ["id", "event", "timestamp", "tenant", "data"],
+                    "properties": {
+                        "id": { "type": "string" },
+                        "event": { "type": "string", "enum": ["order.created"] },
+                        "timestamp": { "type": "string", "format": "date-time" },
+                        "tenant": { "type": "string" },
+                        "data": {
+                            "type": "object",
+                            "required": ["VEN_NUMERO", "LOJ_CODIGO", "SIT_CODIGO", "VEN_TOTALLIQUIDO"],
+                            "properties": {
+                                "VEN_NUMERO": { "type": "number", "description": "Número do pedido de venda" },
+                                "VEN_NUMSITE": { "type": ["string", "null"], "description": "Número do pedido no e-commerce / integrador" },
+                                "VEN_TIPO": { "type": ["string", "null"] },
+                                "LOJ_CODIGO": { "type": "number", "description": "Código da loja" },
+                                "SIT_CODIGO": { "type": "number", "description": "1: Aberto, 2: Fechado, 3: Cancelado" },
+                                "SIT_DESCRICAO": { "type": "string" },
+                                "CLI_CODIGO": { "type": ["number", "null"] },
+                                "CLI_NOME": { "type": ["string", "null"] },
+                                "VEN_TOTALBRUTO": { "type": "number" },
+                                "VEN_TOTALDESC": { "type": "number" },
+                                "VEN_TOTALLIQUIDO": { "type": "number" },
+                                "FORMAS_PAGAMENTO": { "type": "array" },
+                                "ITENS": { "type": "array" },
+                                "VEN_DATA": { "type": "string" },
+                                "VEN_HORA": { "type": "string" },
+                                "links": { "type": "object" }
+                            }
+                        }
+                    }
                 },
-                typescript: `export interface OrderCreatedPayload {\n  orderNumber: number;\n  storeId: number;\n  customer: { id: number; name: string };\n  total: number;\n  discount: number;\n  netTotal: number;\n  status: string;\n  paymentMethodId: number;\n  issuedAt: string;\n  links: { self: string };\n}\n\nexport type OrderCreatedEvent = WebhookEvent<OrderCreatedPayload>;`,
+                typescript: `export interface OrderItemPayload {\n  PRO_CODIGO: number;\n  PRO_DESCRICAO: string | null;\n  PRO_UNIDADE: string | null;\n  IVD_QTDE: number;\n  IVD_PRECO: number;\n  IVD_DESCONTO: number;\n  IVD_TOTAL: number;\n  IVD_LIQUIDO: number;\n}\n\nexport interface OrderPaymentPayload {\n  CODIGO: number;\n  DESCRICAO: string;\n  VALOR: number;\n}\n\nexport interface OrderWebhookPayload {\n  VEN_NUMERO: number;\n  VEN_NUMSITE: string | null;\n  VEN_TIPO: string | null;\n  LOJ_CODIGO: number;\n  LOJ_NOME: string | null;\n  LOJ_FANTASIA: string | null;\n  SIT_CODIGO: number;\n  SIT_DESCRICAO: string;\n  CLI_CODIGO: number | null;\n  CLI_NOME: string | null;\n  CLI_CPF_CNPJ: string | null;\n  CLI_FONE: string | null;\n  CLI_EMAIL: string | null;\n  FUN_CODIGO: number | null;\n  FUN_NOME: string | null;\n  USU_CODIGO: number | null;\n  USU_APELIDO: string | null;\n  VEN_TOTALBRUTO: number;\n  VEN_TOTALDESC: number;\n  VEN_TOTALLIQUIDO: number;\n  FORMAS_PAGAMENTO: OrderPaymentPayload[];\n  ITENS: OrderItemPayload[];\n  VEN_DATA: string;\n  VEN_HORA: string;\n  links: { self: string; items: string };\n}\n\nexport type OrderCreatedEvent = WebhookEvent<OrderWebhookPayload>;`,
                 notes: `<b style="color: #6ee7b7;">Gatilho de Disparo:</b> Emitido quando um novo pedido de venda é registrado no ERP ou PDV.`
             },
             'order.updated': {
@@ -2527,16 +2580,52 @@ print(f'Basic {auth}')</code></pre>
                     timestamp: "2026-11-18T14:05:00.000Z",
                     tenant: "infoadmin",
                     data: {
-                        orderNumber: 10452,
-                        storeId: 1,
-                        status: "FATURADO",
-                        updatedAt: "2026-11-18 14:04:30",
-                        links: { self: "/api/v1/orders/10452" }
+                        VEN_NUMERO: 10452,
+                        VEN_NUMSITE: "PED-99881",
+                        VEN_TIPO: "E",
+                        LOJ_CODIGO: 1,
+                        LOJ_NOME: "LOJA MATRIZ",
+                        LOJ_FANTASIA: "CENTRO",
+                        SIT_CODIGO: 2,
+                        SIT_DESCRICAO: "FECHADO",
+                        CLI_CODIGO: 45,
+                        CLI_NOME: "SUPERMERCADO CENTRAL LTDA",
+                        CLI_CPF_CNPJ: "12345678000199",
+                        CLI_FONE: "85999998888",
+                        CLI_EMAIL: "compras@central.com.br",
+                        FUN_CODIGO: 3,
+                        FUN_NOME: "VENDEDOR BALCAO",
+                        USU_CODIGO: 1,
+                        USU_APELIDO: "ADMIN",
+                        VEN_TOTALBRUTO: 1250.80,
+                        VEN_TOTALDESC: 50.00,
+                        VEN_TOTALLIQUIDO: 1200.80,
+                        FORMAS_PAGAMENTO: [
+                            { CODIGO: 1, DESCRICAO: "DINHEIRO", VALOR: 1200.80 }
+                        ],
+                        ITENS: [
+                            {
+                                PRO_CODIGO: 101,
+                                PRO_DESCRICAO: "PRODUTO EXECUTIVO A",
+                                PRO_UNIDADE: "UN",
+                                IVD_QTDE: 2,
+                                IVD_PRECO: 625.40,
+                                IVD_DESCONTO: 50.00,
+                                IVD_TOTAL: 1250.80,
+                                IVD_LIQUIDO: 1200.80
+                            }
+                        ],
+                        VEN_DATA: "2026-11-18",
+                        VEN_HORA: "14:04:30",
+                        links: {
+                            self: "/api/v1/orders/10452",
+                            items: "/api/v1/orders/10452/items"
+                        }
                     }
                 },
                 schema: { "$schema": "http://json-schema.org/draft-07/schema#", "title": "OrderUpdatedWebhookEvent", "type": "object" },
-                typescript: `export interface OrderUpdatedPayload {\n  orderNumber: number;\n  storeId: number;\n  status: string;\n  updatedAt: string;\n  links: { self: string };\n}\n\nexport type OrderUpdatedEvent = WebhookEvent<OrderUpdatedPayload>;`,
-                notes: `<b style="color: #6ee7b7;">Gatilho de Disparo:</b> Emitido quando o pedido sofre alteração de status (ex: faturamento, cancelamento, entrega).`
+                typescript: `export type OrderUpdatedEvent = WebhookEvent<OrderWebhookPayload>;`,
+                notes: `<b style="color: #6ee7b7;">Gatilho de Disparo:</b> Emitido quando o pedido sofre alteração de status (ex: faturamento/fechamento, cancelamento).`
             },
             'delivery.created': {
                 name: 'delivery.created',
@@ -2547,16 +2636,23 @@ print(f'Basic {auth}')</code></pre>
                     timestamp: "2026-11-18T14:12:00.000Z",
                     tenant: "infoadmin",
                     data: {
-                        deliveryId: 501,
-                        storeId: 1,
-                        orderNumber: 10452,
-                        status: "PREPARACAO",
-                        deliveryDate: "2026-11-19",
+                        ENT_NUMERO: 501,
+                        VEN_NUMERO: 10452,
+                        LOJ_CODIGO: 1,
+                        PRE_CODIGO: 12,
+                        PRE_NOME: "JOAO MOTORISTA",
+                        VEI_PLACA: "ABC-1234",
+                        TBS_CODIGO: 1,
+                        TBS_DESCRICAO: "PREPARACAO / AGENDADO",
+                        SIT_CODIGO: 1,
+                        ENT_DATA: "2026-11-19",
+                        ENT_HORA: "08:30:00",
+                        ENT_DATABAIXA: null,
                         links: { self: "/api/v1/deliveries/501" }
                     }
                 },
                 schema: { "$schema": "http://json-schema.org/draft-07/schema#", "title": "DeliveryCreatedWebhookEvent", "type": "object" },
-                typescript: `export interface DeliveryCreatedPayload {\n  deliveryId: number;\n  storeId: number;\n  orderNumber: number;\n  status: string;\n  deliveryDate: string;\n  links: { self: string };\n}\n\nexport type DeliveryCreatedEvent = WebhookEvent<DeliveryCreatedPayload>;`,
+                typescript: `export interface DeliveryWebhookPayload {\n  ENT_NUMERO: number;\n  VEN_NUMERO: number | null;\n  LOJ_CODIGO: number | null;\n  PRE_CODIGO: number | null;\n  PRE_NOME: string | null;\n  VEI_PLACA: string | null;\n  TBS_CODIGO: number | null;\n  TBS_DESCRICAO: string | null;\n  SIT_CODIGO: number | null;\n  ENT_DATA: string;\n  ENT_HORA: string;\n  ENT_DATABAIXA: string | null;\n  links: { self: string };\n}\n\nexport type DeliveryCreatedEvent = WebhookEvent<DeliveryWebhookPayload>;`,
                 notes: `<b style="color: #6ee7b7;">Gatilho de Disparo:</b> Emitido na criação de um romaneio ou ordem de entrega logística vinculada a um pedido.`
             },
             'delivery.updated': {
@@ -2568,15 +2664,24 @@ print(f'Basic {auth}')</code></pre>
                     timestamp: "2026-11-18T14:20:00.000Z",
                     tenant: "infoadmin",
                     data: {
-                        deliveryId: 501,
-                        status: "ENTREGUE",
-                        deliveredAt: "2026-11-18 14:19:00",
+                        ENT_NUMERO: 501,
+                        VEN_NUMERO: 10452,
+                        LOJ_CODIGO: 1,
+                        PRE_CODIGO: 12,
+                        PRE_NOME: "JOAO MOTORISTA",
+                        VEI_PLACA: "ABC-1234",
+                        TBS_CODIGO: 2,
+                        TBS_DESCRICAO: "ENTREGUE",
+                        SIT_CODIGO: 2,
+                        ENT_DATA: "2026-11-19",
+                        ENT_HORA: "08:30:00",
+                        ENT_DATABAIXA: "2026-11-18",
                         links: { self: "/api/v1/deliveries/501" }
                     }
                 },
                 schema: { "$schema": "http://json-schema.org/draft-07/schema#", "title": "DeliveryUpdatedWebhookEvent", "type": "object" },
-                typescript: `export interface DeliveryUpdatedPayload {\n  deliveryId: number;\n  status: string;\n  deliveredAt: string;\n  links: { self: string };\n}\n\nexport type DeliveryUpdatedEvent = WebhookEvent<DeliveryUpdatedPayload>;`,
-                notes: `<b style="color: #6ee7b7;">Gatilho de Disparo:</b> Emitido quando o motorista/entregador atualiza o despacho para em trânsito, entregue ou extraviado.`
+                typescript: `export type DeliveryUpdatedEvent = WebhookEvent<DeliveryWebhookPayload>;`,
+                notes: `<b style="color: #6ee7b7;">Gatilho de Disparo:</b> Emitido quando o motorista/entregador baixa a entrega ou altera sua situação logística.`
             },
             'account_payable.created': {
                 name: 'account_payable.created',
@@ -2587,17 +2692,20 @@ print(f'Basic {auth}')</code></pre>
                     timestamp: "2026-11-18T14:02:00.000Z",
                     tenant: "infoadmin",
                     data: {
-                        payableId: 8812,
-                        storeId: 1,
-                        supplier: { id: 12, name: "FORNECEDOR DISTRIBUIDOR" },
-                        amount: 3500.00,
-                        dueDate: "2026-12-10",
-                        status: "ABERTO",
+                        PAG_NUMERO: 8812,
+                        LOJ_CODIGO: 1,
+                        CRE_CODIGO: 12,
+                        CRE_NOME: "FORNECEDOR DISTRIBUIDOR LTDA",
+                        PAG_VALOR: 3500.00,
+                        PAG_DATAMOV: "2026-11-18",
+                        PAG_DATAPAG: null,
+                        PAG_DATAVENC: "2026-12-10",
+                        PAG_SITUACAO: "A",
                         links: { self: "/api/v1/account-payable/8812" }
                     }
                 },
                 schema: { "$schema": "http://json-schema.org/draft-07/schema#", "title": "AccountPayableCreatedWebhookEvent", "type": "object" },
-                typescript: `export interface AccountPayableCreatedPayload {\n  payableId: number;\n  storeId: number;\n  supplier: { id: number; name: string };\n  amount: number;\n  dueDate: string;\n  status: string;\n  links: { self: string };\n}\n\nexport type AccountPayableCreatedEvent = WebhookEvent<AccountPayableCreatedPayload>;`,
+                typescript: `export interface AccountPayableWebhookPayload {\n  PAG_NUMERO: number;\n  LOJ_CODIGO: number | null;\n  CRE_CODIGO: number | null;\n  CRE_NOME: string | null;\n  PAG_VALOR: number;\n  PAG_DATAMOV: string;\n  PAG_DATAPAG: string | null;\n  PAG_DATAVENC: string | null;\n  PAG_SITUACAO: string | null;\n  links: { self: string };\n}\n\nexport type AccountPayableCreatedEvent = WebhookEvent<AccountPayableWebhookPayload>;`,
                 notes: `<b style="color: #6ee7b7;">Gatilho de Disparo:</b> Emitido quando uma nova conta a pagar é cadastrada no financeiro.`
             },
             'account_payable.updated': {
@@ -2609,16 +2717,21 @@ print(f'Basic {auth}')</code></pre>
                     timestamp: "2026-11-18T14:25:00.000Z",
                     tenant: "infoadmin",
                     data: {
-                        payableId: 8812,
-                        status: "PAGO",
-                        paidAmount: 3500.00,
-                        paidAt: "2026-11-18 14:24:00",
+                        PAG_NUMERO: 8812,
+                        LOJ_CODIGO: 1,
+                        CRE_CODIGO: 12,
+                        CRE_NOME: "FORNECEDOR DISTRIBUIDOR LTDA",
+                        PAG_VALOR: 3500.00,
+                        PAG_DATAMOV: "2026-11-18",
+                        PAG_DATAPAG: "2026-11-18",
+                        PAG_DATAVENC: "2026-12-10",
+                        PAG_SITUACAO: "L",
                         links: { self: "/api/v1/account-payable/8812" }
                     }
                 },
                 schema: { "$schema": "http://json-schema.org/draft-07/schema#", "title": "AccountPayableUpdatedWebhookEvent", "type": "object" },
-                typescript: `export interface AccountPayableUpdatedPayload {\n  payableId: number;\n  status: string;\n  paidAmount: number;\n  paidAt: string;\n  links: { self: string };\n}\n\nexport type AccountPayableUpdatedEvent = WebhookEvent<AccountPayableUpdatedPayload>;`,
-                notes: `<b style="color: #6ee7b7;">Gatilho de Disparo:</b> Emitido quando o financeiro liquida ou cancela um título a pagar.`
+                typescript: `export type AccountPayableUpdatedEvent = WebhookEvent<AccountPayableWebhookPayload>;`,
+                notes: `<b style="color: #6ee7b7;">Gatilho de Disparo:</b> Emitido quando o financeiro liquida (L) ou cancela um título a pagar.`
             },
             'account_receivable.created': {
                 name: 'account_receivable.created',
@@ -2629,17 +2742,19 @@ print(f'Basic {auth}')</code></pre>
                     timestamp: "2026-11-18T14:03:00.000Z",
                     tenant: "infoadmin",
                     data: {
-                        receivableId: 9940,
-                        storeId: 1,
-                        customer: { id: 45, name: "SUPERMERCADO CENTRAL LTDA" },
-                        amount: 1200.80,
-                        dueDate: "2026-11-30",
-                        status: "ABERTO",
+                        REC_NUMERO: 9940,
+                        LOJ_CODIGO: 1,
+                        CLI_CODIGO: 45,
+                        CLI_NOME: "SUPERMERCADO CENTRAL LTDA",
+                        CLI_CPF_CNPJ: "12345678000199",
+                        REC_VALOR: 1200.80,
+                        REC_DATAVENC: "2026-11-30",
+                        REC_SITUACAO: "A",
                         links: { self: "/api/v1/account-receivable/9940" }
                     }
                 },
                 schema: { "$schema": "http://json-schema.org/draft-07/schema#", "title": "AccountReceivableCreatedWebhookEvent", "type": "object" },
-                typescript: `export interface AccountReceivableCreatedPayload {\n  receivableId: number;\n  storeId: number;\n  customer: { id: number; name: string };\n  amount: number;\n  dueDate: string;\n  status: string;\n  links: { self: string };\n}\n\nexport type AccountReceivableCreatedEvent = WebhookEvent<AccountReceivableCreatedPayload>;`,
+                typescript: `export interface AccountReceivableWebhookPayload {\n  REC_NUMERO: number;\n  LOJ_CODIGO: number | null;\n  CLI_CODIGO: number | null;\n  CLI_NOME: string | null;\n  CLI_CPF_CNPJ: string | null;\n  REC_VALOR: number;\n  REC_DATAVENC: string | null;\n  REC_SITUACAO: string | null;\n  links: { self: string };\n}\n\nexport type AccountReceivableCreatedEvent = WebhookEvent<AccountReceivableWebhookPayload>;`,
                 notes: `<b style="color: #6ee7b7;">Gatilho de Disparo:</b> Emitido quando uma duplicata/título a receber é gerado por uma venda a prazo.`
             },
             'account_receivable.updated': {
@@ -2651,15 +2766,19 @@ print(f'Basic {auth}')</code></pre>
                     timestamp: "2026-11-18T14:30:00.000Z",
                     tenant: "infoadmin",
                     data: {
-                        receivableId: 9940,
-                        status: "RECEBIDO",
-                        receivedAmount: 1200.80,
-                        receivedAt: "2026-11-18 14:29:00",
+                        REC_NUMERO: 9940,
+                        LOJ_CODIGO: 1,
+                        CLI_CODIGO: 45,
+                        CLI_NOME: "SUPERMERCADO CENTRAL LTDA",
+                        CLI_CPF_CNPJ: "12345678000199",
+                        REC_VALOR: 1200.80,
+                        REC_DATAVENC: "2026-11-30",
+                        REC_SITUACAO: "L",
                         links: { self: "/api/v1/account-receivable/9940" }
                     }
                 },
                 schema: { "$schema": "http://json-schema.org/draft-07/schema#", "title": "AccountReceivableUpdatedWebhookEvent", "type": "object" },
-                typescript: `export interface AccountReceivableUpdatedPayload {\n  receivableId: number;\n  status: string;\n  receivedAmount: number;\n  receivedAt: string;\n  links: { self: string };\n}\n\nexport type AccountReceivableUpdatedEvent = WebhookEvent<AccountReceivableUpdatedPayload>;`,
+                typescript: `export type AccountReceivableUpdatedEvent = WebhookEvent<AccountReceivableWebhookPayload>;`,
                 notes: `<b style="color: #6ee7b7;">Gatilho de Disparo:</b> Emitido no recebimento ou conciliação bancária do título.`
             }
         };

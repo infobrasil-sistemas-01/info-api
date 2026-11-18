@@ -81,35 +81,35 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
   private readonly lastStockSweepProductIdBySub = new Map<string, string>();
 
   /**
-   * Converte linha da tabela ESTOQUE para objeto com preços estruturados por tabela
+   * Converte linha da tabela ESTOQUE para objeto com preços estruturados por tabela no padrão do ERP
    */
   private mapStockRow(st: any) {
-    const prices: { table: number; price: number; promotionalPrice: number | null }[] = [];
+    const tabelasPreco: { TABELA: number; PRECO: number; PRECO_PROMOCIONAL: number | null }[] = [];
     for (let i = 1; i <= 12; i++) {
       const rawPrice = st[`PRO_PRECO${i}`];
       const priceNum = rawPrice != null ? Number(rawPrice) : 0;
       if (priceNum > 0) {
         const rawPromo = st[`PRO_PRECOP${i}`];
         const promoNum = rawPromo != null ? Number(rawPromo) : null;
-        prices.push({
-          table: i,
-          price: priceNum,
-          promotionalPrice: promoNum !== null && promoNum > 0 ? promoNum : null,
+        tabelasPreco.push({
+          TABELA: i,
+          PRECO: priceNum,
+          PRECO_PROMOCIONAL: promoNum !== null && promoNum > 0 ? promoNum : null,
         });
       }
     }
 
-    const table1 = prices.find((p) => p.table === 1);
-    const defaultPrice = table1 ? table1.price : (prices[0]?.price ?? 0);
-    const defaultPromoPrice = table1 ? table1.promotionalPrice : (prices[0]?.promotionalPrice ?? null);
+    const table1 = tabelasPreco.find((p) => p.TABELA === 1);
+    const defaultPrice = table1 ? table1.PRECO : (tabelasPreco[0]?.PRECO ?? 0);
+    const defaultPromoPrice = table1 ? table1.PRECO_PROMOCIONAL : (tabelasPreco[0]?.PRECO_PROMOCIONAL ?? null);
 
     return {
-      storeId: Number(st.LOJ_CODIGO),
-      current: Number(st.EST_ATUAL) || 0,
-      support: Number(st.EST_APOIO) || 0,
-      price: defaultPrice,
-      promotionalPrice: defaultPromoPrice,
-      prices,
+      LOJ_CODIGO: Number(st.LOJ_CODIGO),
+      EST_ATUAL: Number(st.EST_ATUAL) || 0,
+      EST_APOIO: Number(st.EST_APOIO) || 0,
+      PRECO: defaultPrice,
+      PRECO_PROMOCIONAL: defaultPromoPrice,
+      TABELAS_PRECO: tabelasPreco,
     };
   }
 
@@ -119,12 +119,12 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
   private computeStockChecksum(stocks: any[]): string {
     const normalized = (stocks || [])
       .map((s) => ({
-        storeId: s.storeId,
-        current: s.current,
-        support: s.support,
-        prices: s.prices,
+        LOJ_CODIGO: s.LOJ_CODIGO ?? s.storeId,
+        EST_ATUAL: s.EST_ATUAL ?? s.current,
+        EST_APOIO: s.EST_APOIO ?? s.support,
+        TABELAS_PRECO: s.TABELAS_PRECO ?? s.prices,
       }))
-      .sort((a, b) => a.storeId - b.storeId);
+      .sort((a, b) => a.LOJ_CODIGO - b.LOJ_CODIGO);
     return crypto.createHash('md5').update(JSON.stringify(normalized)).digest('hex');
   }
 
@@ -133,7 +133,7 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
     private readonly tenantConnectionService: TenantConnectionService,
     private readonly permissionResolver: PermissionResolver,
     private readonly emailService: EmailService,
-  ) {}
+  ) { }
 
   async onApplicationBootstrap() {
     this.logger.log('Iniciando Webhook Worker autônomo...');
@@ -167,16 +167,20 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
         const p = d.payload as any;
         const data = p?.data || {};
         const entityId =
-          data.productId ?? data.orderNumber ?? data.deliveryId ?? data.payableId ?? data.receivableId;
+          data.PRO_CODIGO ?? data.VEN_NUMERO ?? data.ENT_NUMERO ?? data.PAG_NUMERO ?? data.REC_NUMERO ??
+          data.productId ?? data.orderNumber ?? data.orderId ?? data.deliveryId ?? data.payableId ?? data.receivableId;
         const state =
+          data.PRO_DATAALTERACAO ?? data.PRO_DATACADASTRO ?? data.VEN_DATAVENDA ?? data.ENT_DATA ?? data.PAG_DATAMOV ?? data.REC_DATAVENC ??
           data.updatedAt ?? data.issuedAt ?? data.deliveryDate ?? data.issueDate ?? data.dueDate ?? '';
         if (entityId !== undefined) {
           const key = `${d.subscriptionId}:${d.event}:${entityId}:${state}`;
           this.recentEventKeys.set(key, expiry);
         }
-        if (data.productId !== undefined && Array.isArray(data.stock)) {
-          const stockChecksum = this.computeStockChecksum(data.stock);
-          const stockStateKey = `${d.subscriptionId}:stock_state:${data.productId}:${stockChecksum}`;
+        const prodId = data.PRO_CODIGO ?? data.productId;
+        const stockArr = data.ESTOQUE ?? data.stock;
+        if (prodId !== undefined && Array.isArray(stockArr)) {
+          const stockChecksum = this.computeStockChecksum(stockArr);
+          const stockStateKey = `${d.subscriptionId}:stock_state:${prodId}:${stockChecksum}`;
           this.recentEventKeys.set(stockStateKey, expiry);
         }
       }
@@ -331,42 +335,42 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
         return 0;
       };
 
-    const events = sub.events || [];
+      const events = sub.events || [];
 
-    // 1. Vendas / Pedidos (orders) - Requer permissão tenant.orders.view
-    // Abordagem 1: Sequência Monotônica Estrita por ID (Generator do Firebird)
-    if (
-      (events.includes('order.created') || events.includes('order.updated')) &&
-      allowed.has('tenant.orders.view')
-    ) {
-      let lastOrderId = sub.lastOrderId !== undefined && sub.lastOrderId !== null ? BigInt(sub.lastOrderId) : -1n;
-      let wasColdStart = false;
+      // 1. Vendas / Pedidos (orders) - Requer permissão tenant.orders.view
+      // Abordagem 1: Sequência Monotônica Estrita por ID (Generator do Firebird)
+      if (
+        (events.includes('order.created') || events.includes('order.updated')) &&
+        allowed.has('tenant.orders.view')
+      ) {
+        let lastOrderId = sub.lastOrderId !== undefined && sub.lastOrderId !== null ? BigInt(sub.lastOrderId) : -1n;
+        let wasColdStart = false;
 
-      // Proteção contra Cold-Start: se lastOrderId for -1 (novo webhook) ou 0 (legado desancorado)
-      if (lastOrderId === -1n || lastOrderId === 0n) {
-        const currentMax = await queryMaxId(
-          'SELECT COALESCE(MAX(VEN_NUMERO), 0) AS MAX_ID FROM VENDAS',
-          'SELECT COALESCE(MAX(PED_CODIGO), 0) AS MAX_ID FROM PEDIDOS',
-        );
-
-        if (lastOrderId === -1n || currentMax > 0) {
-          const currentMaxBig = BigInt(currentMax);
-          this.logger.log(
-            `[Cold-Start Webhook] Ancorando cursor de pedidos da sub ${sub.id} (tenant: ${sub.user.user}): lastOrderId = ${currentMaxBig}`,
+        // Proteção contra Cold-Start: se lastOrderId for -1 (novo webhook) ou 0 (legado desancorado)
+        if (lastOrderId === -1n || lastOrderId === 0n) {
+          const currentMax = await queryMaxId(
+            'SELECT COALESCE(MAX(VEN_NUMERO), 0) AS MAX_ID FROM VENDAS',
+            'SELECT COALESCE(MAX(PED_CODIGO), 0) AS MAX_ID FROM PEDIDOS',
           );
-          await this.prisma.webhookSubscription.update({
-            where: { id: sub.id },
-            data: { lastOrderId: currentMaxBig, lastOrderSyncAt: new Date() },
-          });
-          sub.lastOrderId = currentMaxBig;
-          lastOrderId = currentMaxBig;
-          wasColdStart = true;
-        }
-      }
 
-      if (!wasColdStart && lastOrderId >= 0n) {
-        const sales = await queryPromise(
-        `SELECT FIRST 25
+          if (lastOrderId === -1n || currentMax > 0) {
+            const currentMaxBig = BigInt(currentMax);
+            this.logger.log(
+              `[Cold-Start Webhook] Ancorando cursor de pedidos da sub ${sub.id} (tenant: ${sub.user.user}): lastOrderId = ${currentMaxBig}`,
+            );
+            await this.prisma.webhookSubscription.update({
+              where: { id: sub.id },
+              data: { lastOrderId: currentMaxBig, lastOrderSyncAt: new Date() },
+            });
+            sub.lastOrderId = currentMaxBig;
+            lastOrderId = currentMaxBig;
+            wasColdStart = true;
+          }
+        }
+
+        if (!wasColdStart && lastOrderId >= 0n) {
+          const sales = await queryPromise(
+            `SELECT FIRST 25
            V.VEN_NUMERO, V.LOJ_CODIGO, LOJ.LOJ_NOME, LOJ.LOJ_FANTASIA,
            V.VEN_DATA, V.VEN_HORA,
            V.SIT_CODIGO, S.SIT_DESCRICAO,
@@ -391,226 +395,226 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
          LEFT JOIN FORMASPAG FPG4 ON FPG4.FPG_CODIGO = V.FP4_CODIGO
          WHERE V.VEN_NUMERO > ?
          ORDER BY V.VEN_NUMERO ASC`,
-        [lastOrderId.toString()],
-      );
+            [lastOrderId.toString()],
+          );
 
-      if (sales.length > 0) {
-        let maxSeenId = lastOrderId;
-        const saleIds = sales.map((s: any) => Number(s.VEN_NUMERO)).filter(Boolean);
-        const itemsByOrder = new Map<number, any[]>();
+          if (sales.length > 0) {
+            let maxSeenId = lastOrderId;
+            const saleIds = sales.map((s: any) => Number(s.VEN_NUMERO)).filter(Boolean);
+            const itemsByOrder = new Map<number, any[]>();
 
-        if (saleIds.length > 0) {
-          try {
-            const rawItems = await queryPromise(
-              `SELECT 
+            if (saleIds.length > 0) {
+              try {
+                const rawItems = await queryPromise(
+                  `SELECT 
                  IV.VEN_NUMERO, IV.PRO_CODIGO, P.PRO_DESCRICAO, P.PRO_UNIDADE,
                  IV.IVD_QTDE, IV.IVD_PRECO, IV.IVD_DESCONTO, IV.IVD_TOTAL, IV.IVD_LIQUIDO
                FROM ITENSVEN IV
                LEFT JOIN PRODUTOS P ON P.PRO_CODIGO = IV.PRO_CODIGO
                WHERE IV.VEN_NUMERO IN (${saleIds.join(',')})
                ORDER BY IV.VEN_NUMERO ASC`,
-            );
+                );
 
-            for (const item of rawItems) {
-              const orderId = Number(item.VEN_NUMERO);
-              if (!itemsByOrder.has(orderId)) {
-                itemsByOrder.set(orderId, []);
+                for (const item of rawItems) {
+                  const orderId = Number(item.VEN_NUMERO);
+                  if (!itemsByOrder.has(orderId)) {
+                    itemsByOrder.set(orderId, []);
+                  }
+                  itemsByOrder.get(orderId)!.push({
+                    productId: Number(item.PRO_CODIGO),
+                    description: item.PRO_DESCRICAO ? String(item.PRO_DESCRICAO).trim() : null,
+                    unit: item.PRO_UNIDADE ? String(item.PRO_UNIDADE).trim() : null,
+                    quantity: Number(item.IVD_QTDE) || 0,
+                    unitPrice: Number(item.IVD_PRECO) || 0,
+                    discount: Number(item.IVD_DESCONTO) || 0,
+                    total: Number(item.IVD_TOTAL) || 0,
+                    netTotal: Number(item.IVD_LIQUIDO) || 0,
+                  });
+                }
+              } catch (err: any) {
+                this.logger.warn(`Erro ao carregar itens de venda para webhook (${saleIds}): ${err.message}`);
               }
-              itemsByOrder.get(orderId)!.push({
-                productId: Number(item.PRO_CODIGO),
-                description: item.PRO_DESCRICAO ? String(item.PRO_DESCRICAO).trim() : null,
-                unit: item.PRO_UNIDADE ? String(item.PRO_UNIDADE).trim() : null,
-                quantity: Number(item.IVD_QTDE) || 0,
-                unitPrice: Number(item.IVD_PRECO) || 0,
-                discount: Number(item.IVD_DESCONTO) || 0,
-                total: Number(item.IVD_TOTAL) || 0,
-                netTotal: Number(item.IVD_LIQUIDO) || 0,
+            }
+
+            const deliveriesToCreate: any[] = [];
+
+            for (const sale of sales) {
+              const venNumero = Number(sale.VEN_NUMERO);
+              if (BigInt(venNumero) > maxSeenId) maxSeenId = BigInt(venNumero);
+
+              const saleDate = parseFirebirdDate(sale.VEN_DATA) || getBrazilDateTime(new Date()).dateStr;
+              const saleTime = parseFirebirdTime(sale.VEN_HORA);
+
+              const payments: Array<{ code: number; name: string; value: number }> = [];
+              if (sale.FP1_CODIGO && Number(sale.FP1_CODIGO) > 0) {
+                const val1 =
+                  sale.VEN_TOTALPP1 !== null && sale.VEN_TOTALPP1 !== undefined
+                    ? Number(sale.VEN_TOTALPP1)
+                    : Number(sale.VEN_TOTALLIQUIDO || 0);
+                payments.push({
+                  code: Number(sale.FP1_CODIGO),
+                  name: sale.FPG1_DESCRICAO ? String(sale.FPG1_DESCRICAO).trim() : 'Forma de Pagamento 1',
+                  value: Number(Number(val1).toFixed(2)),
+                });
+              }
+              if (sale.FP2_CODIGO && Number(sale.FP2_CODIGO) > 0) {
+                payments.push({
+                  code: Number(sale.FP2_CODIGO),
+                  name: sale.FPG2_DESCRICAO ? String(sale.FPG2_DESCRICAO).trim() : 'Forma de Pagamento 2',
+                  value: Number((Number(sale.VEN_TOTALPP2) || 0).toFixed(2)),
+                });
+              }
+              if (sale.FP3_CODIGO && Number(sale.FP3_CODIGO) > 0) {
+                payments.push({
+                  code: Number(sale.FP3_CODIGO),
+                  name: sale.FPG3_DESCRICAO ? String(sale.FPG3_DESCRICAO).trim() : 'Forma de Pagamento 3',
+                  value: Number((Number(sale.VEN_TOTALPP3) || 0).toFixed(2)),
+                });
+              }
+              if (sale.FP4_CODIGO && Number(sale.FP4_CODIGO) > 0) {
+                payments.push({
+                  code: Number(sale.FP4_CODIGO),
+                  name: sale.FPG4_DESCRICAO ? String(sale.FPG4_DESCRICAO).trim() : 'Forma de Pagamento 4',
+                  value: Number((Number(sale.VEN_TOTALPP4) || 0).toFixed(2)),
+                });
+              }
+
+              const statusDesc = sale.SIT_DESCRICAO
+                ? String(sale.SIT_DESCRICAO).trim()
+                : sale.SIT_CODIGO === 2
+                  ? 'FECHADO'
+                  : sale.SIT_CODIGO === 3
+                    ? 'CANCELADO'
+                    : 'ABERTO';
+
+              const isCreated = !sale.SIT_CODIGO || sale.SIT_CODIGO === 1;
+              let eventType = isCreated ? 'order.created' : 'order.updated';
+              if (!events.includes(eventType)) {
+                if (events.includes('order.created')) eventType = 'order.created';
+                else if (events.includes('order.updated')) eventType = 'order.updated';
+              }
+
+              const payload = {
+                id: `evt_ord_${crypto.randomBytes(8).toString('hex')}`,
+                event: eventType,
+                timestamp: new Date().toISOString(),
+                tenant: sub.user.user,
+                data: {
+                  orderId: venNumero,
+                  siteOrderNumber: sale.VEN_NUMSITE ? String(sale.VEN_NUMSITE).trim() : null,
+                  orderType: sale.VEN_TIPO ? String(sale.VEN_TIPO).trim() : null,
+                  store: {
+                    id: Number(sale.LOJ_CODIGO),
+                    name: sale.LOJ_NOME ? String(sale.LOJ_NOME).trim() : null,
+                    tradeName: sale.LOJ_FANTASIA ? String(sale.LOJ_FANTASIA).trim() : null,
+                  },
+                  status: {
+                    code: Number(sale.SIT_CODIGO),
+                    description: statusDesc,
+                  },
+                  customer: sale.CLI_CODIGO
+                    ? {
+                      id: Number(sale.CLI_CODIGO),
+                      name: sale.CLI_NOME ? String(sale.CLI_NOME).trim() : null,
+                      cpfCnpj: sale.CLI_CPF_CNPJ ? String(sale.CLI_CPF_CNPJ).trim() : null,
+                      phone: sale.CLI_FONE ? String(sale.CLI_FONE).trim() : null,
+                      email: sale.CLI_EMAIL ? String(sale.CLI_EMAIL).trim() : null,
+                    }
+                    : null,
+                  seller: sale.FUN_CODIGO
+                    ? {
+                      id: Number(sale.FUN_CODIGO),
+                      name: sale.FUN_NOME ? String(sale.FUN_NOME).trim() : null,
+                    }
+                    : null,
+                  operator: sale.USU_CODIGO
+                    ? {
+                      id: Number(sale.USU_CODIGO),
+                      username: sale.USU_APELIDO ? String(sale.USU_APELIDO).trim() : null,
+                    }
+                    : null,
+                  totals: {
+                    gross: Number(sale.VEN_TOTALBRUTO) || 0,
+                    discount: Number(sale.VEN_TOTALDESC) || 0,
+                    net: Number(sale.VEN_TOTALLIQUIDO ?? sale.VEN_TOTALBRUTO) || 0,
+                  },
+                  payments,
+                  items: itemsByOrder.get(venNumero) || [],
+                  issuedAt: `${saleDate} ${saleTime}`.trim(),
+                  links: {
+                    self: `/api/v1/orders/${venNumero}`,
+                    items: `/api/v1/orders/${venNumero}/items`,
+                  },
+                },
+              };
+
+              deliveriesToCreate.push({
+                subscriptionId: sub.id,
+                event: eventType,
+                payload: payload as any,
+                status: 'PENDING',
               });
             }
-          } catch (err: any) {
-            this.logger.warn(`Erro ao carregar itens de venda para webhook (${saleIds}): ${err.message}`);
+
+            await this.prisma.$transaction(async (tx) => {
+              if (deliveriesToCreate.length > 0) {
+                await tx.webhookDelivery.createMany({
+                  data: deliveriesToCreate,
+                });
+              }
+              await tx.webhookSubscription.update({
+                where: { id: sub.id },
+                data: { lastOrderId: maxSeenId, lastOrderSyncAt: new Date() },
+              });
+            });
           }
         }
+      }
 
-        const deliveriesToCreate: any[] = [];
+      // 2. Produtos (products) - Requer permissão tenant.products.view
+      if (
+        (events.includes('product.created') || events.includes('product.updated')) &&
+        allowed.has('tenant.products.view')
+      ) {
+        let lastProductId = sub.lastProductId !== undefined && sub.lastProductId !== null ? BigInt(sub.lastProductId) : -1n;
+        let wasColdStart = false;
 
-        for (const sale of sales) {
-          const venNumero = Number(sale.VEN_NUMERO);
-          if (BigInt(venNumero) > maxSeenId) maxSeenId = BigInt(venNumero);
-
-          const saleDate = parseFirebirdDate(sale.VEN_DATA) || getBrazilDateTime(new Date()).dateStr;
-          const saleTime = parseFirebirdTime(sale.VEN_HORA);
-
-          const payments: Array<{ code: number; name: string; value: number }> = [];
-          if (sale.FP1_CODIGO && Number(sale.FP1_CODIGO) > 0) {
-            const val1 =
-              sale.VEN_TOTALPP1 !== null && sale.VEN_TOTALPP1 !== undefined
-                ? Number(sale.VEN_TOTALPP1)
-                : Number(sale.VEN_TOTALLIQUIDO || 0);
-            payments.push({
-              code: Number(sale.FP1_CODIGO),
-              name: sale.FPG1_DESCRICAO ? String(sale.FPG1_DESCRICAO).trim() : 'Forma de Pagamento 1',
-              value: Number(Number(val1).toFixed(2)),
-            });
-          }
-          if (sale.FP2_CODIGO && Number(sale.FP2_CODIGO) > 0) {
-            payments.push({
-              code: Number(sale.FP2_CODIGO),
-              name: sale.FPG2_DESCRICAO ? String(sale.FPG2_DESCRICAO).trim() : 'Forma de Pagamento 2',
-              value: Number((Number(sale.VEN_TOTALPP2) || 0).toFixed(2)),
-            });
-          }
-          if (sale.FP3_CODIGO && Number(sale.FP3_CODIGO) > 0) {
-            payments.push({
-              code: Number(sale.FP3_CODIGO),
-              name: sale.FPG3_DESCRICAO ? String(sale.FPG3_DESCRICAO).trim() : 'Forma de Pagamento 3',
-              value: Number((Number(sale.VEN_TOTALPP3) || 0).toFixed(2)),
-            });
-          }
-          if (sale.FP4_CODIGO && Number(sale.FP4_CODIGO) > 0) {
-            payments.push({
-              code: Number(sale.FP4_CODIGO),
-              name: sale.FPG4_DESCRICAO ? String(sale.FPG4_DESCRICAO).trim() : 'Forma de Pagamento 4',
-              value: Number((Number(sale.VEN_TOTALPP4) || 0).toFixed(2)),
-            });
-          }
-
-          const statusDesc = sale.SIT_DESCRICAO
-            ? String(sale.SIT_DESCRICAO).trim()
-            : sale.SIT_CODIGO === 2
-              ? 'FECHADO'
-              : sale.SIT_CODIGO === 3
-                ? 'CANCELADO'
-                : 'ABERTO';
-
-          const isCreated = !sale.SIT_CODIGO || sale.SIT_CODIGO === 1;
-          let eventType = isCreated ? 'order.created' : 'order.updated';
-          if (!events.includes(eventType)) {
-            if (events.includes('order.created')) eventType = 'order.created';
-            else if (events.includes('order.updated')) eventType = 'order.updated';
-          }
-
-          const payload = {
-            id: `evt_ord_${crypto.randomBytes(8).toString('hex')}`,
-            event: eventType,
-            timestamp: new Date().toISOString(),
-            tenant: sub.user.user,
-            data: {
-              orderId: venNumero,
-              siteOrderNumber: sale.VEN_NUMSITE ? String(sale.VEN_NUMSITE).trim() : null,
-              orderType: sale.VEN_TIPO ? String(sale.VEN_TIPO).trim() : null,
-              store: {
-                id: Number(sale.LOJ_CODIGO),
-                name: sale.LOJ_NOME ? String(sale.LOJ_NOME).trim() : null,
-                tradeName: sale.LOJ_FANTASIA ? String(sale.LOJ_FANTASIA).trim() : null,
-              },
-              status: {
-                code: Number(sale.SIT_CODIGO),
-                description: statusDesc,
-              },
-              customer: sale.CLI_CODIGO
-                ? {
-                    id: Number(sale.CLI_CODIGO),
-                    name: sale.CLI_NOME ? String(sale.CLI_NOME).trim() : null,
-                    cpfCnpj: sale.CLI_CPF_CNPJ ? String(sale.CLI_CPF_CNPJ).trim() : null,
-                    phone: sale.CLI_FONE ? String(sale.CLI_FONE).trim() : null,
-                    email: sale.CLI_EMAIL ? String(sale.CLI_EMAIL).trim() : null,
-                  }
-                : null,
-              seller: sale.FUN_CODIGO
-                ? {
-                    id: Number(sale.FUN_CODIGO),
-                    name: sale.FUN_NOME ? String(sale.FUN_NOME).trim() : null,
-                  }
-                : null,
-              operator: sale.USU_CODIGO
-                ? {
-                    id: Number(sale.USU_CODIGO),
-                    username: sale.USU_APELIDO ? String(sale.USU_APELIDO).trim() : null,
-                  }
-                : null,
-              totals: {
-                gross: Number(sale.VEN_TOTALBRUTO) || 0,
-                discount: Number(sale.VEN_TOTALDESC) || 0,
-                net: Number(sale.VEN_TOTALLIQUIDO ?? sale.VEN_TOTALBRUTO) || 0,
-              },
-              payments,
-              items: itemsByOrder.get(venNumero) || [],
-              issuedAt: `${saleDate} ${saleTime}`.trim(),
-              links: {
-                self: `/api/v1/orders/${venNumero}`,
-                items: `/api/v1/orders/${venNumero}/items`,
-              },
-            },
-          };
-
-          deliveriesToCreate.push({
-            subscriptionId: sub.id,
-            event: eventType,
-            payload: payload as any,
-            status: 'PENDING',
-          });
-        }
-
-        await this.prisma.$transaction(async (tx) => {
-          if (deliveriesToCreate.length > 0) {
-            await tx.webhookDelivery.createMany({
-              data: deliveriesToCreate,
-            });
-          }
-          await tx.webhookSubscription.update({
+        if (lastProductId === -1n) {
+          const currentMax = await queryMaxId(
+            'SELECT COALESCE(MAX(PRO_CODIGO), 0) AS MAX_ID FROM PRODUTOS',
+          );
+          const currentMaxBig = BigInt(currentMax);
+          const now = new Date();
+          this.logger.log(
+            `[Cold-Start Webhook] Ancorando cursor de produtos da sub ${sub.id} (tenant: ${sub.user.user}): lastProductId = ${currentMaxBig}`,
+          );
+          await this.prisma.webhookSubscription.update({
             where: { id: sub.id },
-            data: { lastOrderId: maxSeenId, lastOrderSyncAt: new Date() },
+            data: { lastProductId: currentMaxBig, lastProductSyncAt: now },
           });
-        });
-      }
-    }
-  }
-
-    // 2. Produtos (products) - Requer permissão tenant.products.view
-    if (
-      (events.includes('product.created') || events.includes('product.updated')) &&
-      allowed.has('tenant.products.view')
-    ) {
-      let lastProductId = sub.lastProductId !== undefined && sub.lastProductId !== null ? BigInt(sub.lastProductId) : -1n;
-      let wasColdStart = false;
-
-      if (lastProductId === -1n) {
-        const currentMax = await queryMaxId(
-          'SELECT COALESCE(MAX(PRO_CODIGO), 0) AS MAX_ID FROM PRODUTOS',
-        );
-        const currentMaxBig = BigInt(currentMax);
-        const now = new Date();
-        this.logger.log(
-          `[Cold-Start Webhook] Ancorando cursor de produtos da sub ${sub.id} (tenant: ${sub.user.user}): lastProductId = ${currentMaxBig}`,
-        );
-        await this.prisma.webhookSubscription.update({
-          where: { id: sub.id },
-          data: { lastProductId: currentMaxBig, lastProductSyncAt: now },
-        });
-        sub.lastProductId = currentMaxBig;
-        sub.lastProductSyncAt = now;
-        lastProductId = currentMaxBig;
-        wasColdStart = true;
-      }
-
-      if (!wasColdStart && lastProductId >= 0n) {
-        const sync = getBrazilDateTime(sub.lastProductSyncAt);
-        const nowBrazil = getBrazilDateTime(new Date());
-
-        let syncDate = sync.dateStr;
-        let syncTime = sync.timeStr;
-
-        // Proteção Anti-Drift: só reancora se o cursor estiver mais de 1 hora no futuro (ex: bug UTC)
-        const nowUtc = Date.now();
-        const cursorUtc = new Date(sub.lastProductSyncAt).getTime();
-        if (cursorUtc - nowUtc > 60 * 60 * 1000) {
-          syncDate = nowBrazil.dateStr;
-          syncTime = nowBrazil.timeStr;
+          sub.lastProductId = currentMaxBig;
+          sub.lastProductSyncAt = now;
+          lastProductId = currentMaxBig;
+          wasColdStart = true;
         }
 
-      const products = await queryPromise(
-        `SELECT FIRST 25
+        if (!wasColdStart && lastProductId >= 0n) {
+          const sync = getBrazilDateTime(sub.lastProductSyncAt);
+          const nowBrazil = getBrazilDateTime(new Date());
+
+          let syncDate = sync.dateStr;
+          let syncTime = sync.timeStr;
+
+          // Proteção Anti-Drift: só reancora se o cursor estiver mais de 1 hora no futuro (ex: bug UTC)
+          const nowUtc = Date.now();
+          const cursorUtc = new Date(sub.lastProductSyncAt).getTime();
+          if (cursorUtc - nowUtc > 60 * 60 * 1000) {
+            syncDate = nowBrazil.dateStr;
+            syncTime = nowBrazil.timeStr;
+          }
+
+          const products = await queryPromise(
+            `SELECT FIRST 25
            P.PRO_CODIGO, P.PRO_CODIGOBAR, P.PRO_DESCRICAO, P.PRO_UNIDADE,
            P.PRO_DATACADASTRO, P.PRO_DATAALTERACAO, P.PRO_HORA,
            P.MAR_CODIGO, M.MAR_DESCRICAO,
@@ -631,10 +635,10 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
            COALESCE(P.PRO_DATAALTERACAO, P.PRO_DATACADASTRO) ASC,
            COALESCE(P.PRO_HORA, '00:00:00') ASC,
            P.PRO_CODIGO ASC`,
-        [syncDate, syncDate, syncTime, syncTime, lastProductId.toString()],
-      );
+            [syncDate, syncDate, syncTime, syncTime, lastProductId.toString()],
+          );
 
-      const stockSelectCols = `
+          const stockSelectCols = `
         E.PRO_CODIGO, E.LOJ_CODIGO, E.EST_ATUAL, E.EST_APOIO, E.EST_DTALTERACAO,
         E.PRO_PRECO1, E.PRO_PRECO2, E.PRO_PRECO3, E.PRO_PRECO4, E.PRO_PRECO5, E.PRO_PRECO6,
         E.PRO_PRECO7, E.PRO_PRECO8, E.PRO_PRECO9, E.PRO_PRECO10, E.PRO_PRECO11, E.PRO_PRECO12,
@@ -642,179 +646,179 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
         E.PRO_PRECOP7, E.PRO_PRECOP8, E.PRO_PRECOP9, E.PRO_PRECOP10, E.PRO_PRECOP11, E.PRO_PRECOP12
       `;
 
-      let deliveriesToCreate: any[] = [];
-      let maxSeenId = lastProductId;
-      let maxSyncAt = sub.lastProductSyncAt;
+          let deliveriesToCreate: any[] = [];
+          let maxSeenId = lastProductId;
+          let maxSyncAt = sub.lastProductSyncAt;
 
-      // 2.a Processamento de PRODUTOS (novos cadastros e alterações cadastrais)
-      if (products.length > 0) {
-        const prodIds = products.map((p: any) => String(p.PRO_CODIGO).trim()).filter(Boolean);
-        const stockByProduct = new Map<string, any[]>();
+          // 2.a Processamento de PRODUTOS (novos cadastros e alterações cadastrais)
+          if (products.length > 0) {
+            const prodIds = products.map((p: any) => String(p.PRO_CODIGO).trim()).filter(Boolean);
+            const stockByProduct = new Map<string, any[]>();
 
-        if (prodIds.length > 0) {
-          try {
-            const inPlaceholders = prodIds.map(() => '?').join(',');
-            const rawStock = await queryPromise(
-              `SELECT ${stockSelectCols}
+            if (prodIds.length > 0) {
+              try {
+                const inPlaceholders = prodIds.map(() => '?').join(',');
+                const rawStock = await queryPromise(
+                  `SELECT ${stockSelectCols}
                FROM ESTOQUE E
                WHERE E.PRO_CODIGO IN (${inPlaceholders})
                ORDER BY E.PRO_CODIGO ASC, E.LOJ_CODIGO ASC`,
-              prodIds,
-            );
+                  prodIds,
+                );
 
-            for (const st of rawStock) {
-              const pid = String(st.PRO_CODIGO).trim();
-              if (!stockByProduct.has(pid)) {
-                stockByProduct.set(pid, []);
+                for (const st of rawStock) {
+                  const pid = String(st.PRO_CODIGO).trim();
+                  if (!stockByProduct.has(pid)) {
+                    stockByProduct.set(pid, []);
+                  }
+                  stockByProduct.get(pid)!.push(this.mapStockRow(st));
+                }
+              } catch (err: any) {
+                this.logger.warn(`Erro ao carregar estoque para produtos (${prodIds.join(',')}): ${err.message}`);
               }
-              stockByProduct.get(pid)!.push(this.mapStockRow(st));
             }
-          } catch (err: any) {
-            this.logger.warn(`Erro ao carregar estoque para produtos (${prodIds.join(',')}): ${err.message}`);
+
+            for (const prod of products) {
+              const proCodigoStr = String(prod.PRO_CODIGO).trim();
+              const proCodigoNum = Number(prod.PRO_CODIGO);
+              const proCodigoId = Number.isSafeInteger(proCodigoNum) ? proCodigoNum : proCodigoStr;
+              const dtCad = parseFirebirdDate(prod.PRO_DATACADASTRO) || getBrazilDateTime(new Date()).dateStr;
+              const dtAlt = parseFirebirdDate(prod.PRO_DATAALTERACAO);
+              const hr = parseFirebirdTime(prod.PRO_HORA);
+
+              const isCreated = !dtAlt || dtCad === dtAlt;
+              let eventType = isCreated ? 'product.created' : 'product.updated';
+              if (!events.includes(eventType)) {
+                if (events.includes('product.created')) eventType = 'product.created';
+                else if (events.includes('product.updated')) eventType = 'product.updated';
+              }
+
+              const stateTimestamp = `${dtAlt || dtCad} ${hr}`.trim();
+              const idempotencyKey = `${sub.id}:${eventType}:${proCodigoStr}:${stateTimestamp}`;
+
+              const stockList = stockByProduct.get(proCodigoStr) || [];
+              const stockChecksum = this.computeStockChecksum(stockList);
+
+              if (this.isDuplicateEvent(idempotencyKey)) {
+                // Evento já emitido para este exato estado do produto: ignora entrega duplicada
+                maxSeenId = BigInt(proCodigoStr);
+                const latestDate = dtAlt || dtCad;
+                maxSyncAt = fromBrazilDateTimeToUtc(latestDate, hr);
+                // Registra também o checksum do estoque para sincronizar a varredura de ESTOQUE
+                this.isDuplicateEvent(`${sub.id}:stock_state:${proCodigoStr}:${stockChecksum}`);
+                continue;
+              }
+
+              const payload = {
+                id: `evt_prd_${crypto.randomBytes(8).toString('hex')}`,
+                event: eventType,
+                timestamp: new Date().toISOString(),
+                tenant: sub.user.user,
+                data: {
+                  productId: proCodigoId,
+                  barcode: prod.PRO_CODIGOBAR ? String(prod.PRO_CODIGOBAR).trim() : null,
+                  description: prod.PRO_DESCRICAO ? String(prod.PRO_DESCRICAO).trim() : null,
+                  unit: prod.PRO_UNIDADE ? String(prod.PRO_UNIDADE).trim() : null,
+                  brand: prod.MAR_CODIGO
+                    ? {
+                      id: Number(prod.MAR_CODIGO),
+                      name: prod.MAR_DESCRICAO ? String(prod.MAR_DESCRICAO).trim() : null,
+                    }
+                    : null,
+                  group: prod.GRU_CODIGO
+                    ? {
+                      id: Number(prod.GRU_CODIGO),
+                      name: prod.GRU_DESCRICAO ? String(prod.GRU_DESCRICAO).trim() : null,
+                    }
+                    : null,
+                  stock: stockList,
+                  registeredAt: `${dtCad} ${hr}`.trim(),
+                  updatedAt: `${dtAlt || dtCad} ${hr}`.trim(),
+                  links: { self: `/api/v1/products/id/${proCodigoStr}` },
+                },
+              };
+
+              deliveriesToCreate.push({
+                subscriptionId: sub.id,
+                event: eventType,
+                payload: payload as any,
+                status: 'PENDING',
+              });
+
+              // Registra o estado atual de estoque para que a varredura de ESTOQUE não duplique este evento
+              this.isDuplicateEvent(`${sub.id}:stock_state:${proCodigoStr}:${stockChecksum}`);
+
+              maxSeenId = BigInt(proCodigoStr);
+              const latestDate = dtAlt || dtCad;
+              maxSyncAt = fromBrazilDateTimeToUtc(latestDate, hr);
+            }
           }
-        }
 
-        for (const prod of products) {
-          const proCodigoStr = String(prod.PRO_CODIGO).trim();
-          const proCodigoNum = Number(prod.PRO_CODIGO);
-          const proCodigoId = Number.isSafeInteger(proCodigoNum) ? proCodigoNum : proCodigoStr;
-          const dtCad = parseFirebirdDate(prod.PRO_DATACADASTRO) || getBrazilDateTime(new Date()).dateStr;
-          const dtAlt = parseFirebirdDate(prod.PRO_DATAALTERACAO);
-          const hr = parseFirebirdTime(prod.PRO_HORA);
+          // 2.b Varredura de alterações em ESTOQUE (para disparar product.updated)
+          if (events.includes('product.updated')) {
+            const todayStr = getBrazilDateTime(new Date()).dateStr;
+            const lastStockProCode = this.lastStockSweepProductIdBySub.get(sub.id) || '';
 
-          const isCreated = !dtAlt || dtCad === dtAlt;
-          let eventType = isCreated ? 'product.created' : 'product.updated';
-          if (!events.includes(eventType)) {
-            if (events.includes('product.created')) eventType = 'product.created';
-            else if (events.includes('product.updated')) eventType = 'product.updated';
-          }
-
-          const stateTimestamp = `${dtAlt || dtCad} ${hr}`.trim();
-          const idempotencyKey = `${sub.id}:${eventType}:${proCodigoStr}:${stateTimestamp}`;
-
-          const stockList = stockByProduct.get(proCodigoStr) || [];
-          const stockChecksum = this.computeStockChecksum(stockList);
-
-          if (this.isDuplicateEvent(idempotencyKey)) {
-            // Evento já emitido para este exato estado do produto: ignora entrega duplicada
-            maxSeenId = BigInt(proCodigoStr);
-            const latestDate = dtAlt || dtCad;
-            maxSyncAt = fromBrazilDateTimeToUtc(latestDate, hr);
-            // Registra também o checksum do estoque para sincronizar a varredura de ESTOQUE
-            this.isDuplicateEvent(`${sub.id}:stock_state:${proCodigoStr}:${stockChecksum}`);
-            continue;
-          }
-
-          const payload = {
-            id: `evt_prd_${crypto.randomBytes(8).toString('hex')}`,
-            event: eventType,
-            timestamp: new Date().toISOString(),
-            tenant: sub.user.user,
-            data: {
-              productId: proCodigoId,
-              barcode: prod.PRO_CODIGOBAR ? String(prod.PRO_CODIGOBAR).trim() : null,
-              description: prod.PRO_DESCRICAO ? String(prod.PRO_DESCRICAO).trim() : null,
-              unit: prod.PRO_UNIDADE ? String(prod.PRO_UNIDADE).trim() : null,
-              brand: prod.MAR_CODIGO
-                ? {
-                    id: Number(prod.MAR_CODIGO),
-                    name: prod.MAR_DESCRICAO ? String(prod.MAR_DESCRICAO).trim() : null,
-                  }
-                : null,
-              group: prod.GRU_CODIGO
-                ? {
-                    id: Number(prod.GRU_CODIGO),
-                    name: prod.GRU_DESCRICAO ? String(prod.GRU_DESCRICAO).trim() : null,
-                  }
-                : null,
-              stock: stockList,
-              registeredAt: `${dtCad} ${hr}`.trim(),
-              updatedAt: `${dtAlt || dtCad} ${hr}`.trim(),
-              links: { self: `/api/v1/products/id/${proCodigoStr}` },
-            },
-          };
-
-          deliveriesToCreate.push({
-            subscriptionId: sub.id,
-            event: eventType,
-            payload: payload as any,
-            status: 'PENDING',
-          });
-
-          // Registra o estado atual de estoque para que a varredura de ESTOQUE não duplique este evento
-          this.isDuplicateEvent(`${sub.id}:stock_state:${proCodigoStr}:${stockChecksum}`);
-
-          maxSeenId = BigInt(proCodigoStr);
-          const latestDate = dtAlt || dtCad;
-          maxSyncAt = fromBrazilDateTimeToUtc(latestDate, hr);
-        }
-      }
-
-      // 2.b Varredura de alterações em ESTOQUE (para disparar product.updated)
-      if (events.includes('product.updated')) {
-        const todayStr = getBrazilDateTime(new Date()).dateStr;
-        const lastStockProCode = this.lastStockSweepProductIdBySub.get(sub.id) || '';
-
-        try {
-          const modifiedStockProds = await queryPromise(
-            `SELECT FIRST 25 E.PRO_CODIGO
+            try {
+              const modifiedStockProds = await queryPromise(
+                `SELECT FIRST 25 E.PRO_CODIGO
              FROM ESTOQUE E
              WHERE E.EST_DTALTERACAO >= ? AND E.PRO_CODIGO > ?
              GROUP BY E.PRO_CODIGO
              ORDER BY E.PRO_CODIGO ASC`,
-            [todayStr, lastStockProCode],
-          );
+                [todayStr, lastStockProCode],
+              );
 
-          if (modifiedStockProds.length > 0) {
-            const stockProdIds = modifiedStockProds
-              .map((r: any) => String(r.PRO_CODIGO).trim())
-              .filter(Boolean);
+              if (modifiedStockProds.length > 0) {
+                const stockProdIds = modifiedStockProds
+                  .map((r: any) => String(r.PRO_CODIGO).trim())
+                  .filter(Boolean);
 
-            const lastInBatch = stockProdIds[stockProdIds.length - 1];
-            if (modifiedStockProds.length < 25) {
-              this.lastStockSweepProductIdBySub.set(sub.id, '');
-            } else {
-              this.lastStockSweepProductIdBySub.set(sub.id, lastInBatch);
-            }
+                const lastInBatch = stockProdIds[stockProdIds.length - 1];
+                if (modifiedStockProds.length < 25) {
+                  this.lastStockSweepProductIdBySub.set(sub.id, '');
+                } else {
+                  this.lastStockSweepProductIdBySub.set(sub.id, lastInBatch);
+                }
 
-            // Filtra produtos que já foram processados nesta mesma iteração por PRODUTOS
-            const idsToLoad = stockProdIds.filter(
-              (pid) => !products.some((p: any) => String(p.PRO_CODIGO).trim() === pid),
-            );
+                // Filtra produtos que já foram processados nesta mesma iteração por PRODUTOS
+                const idsToLoad = stockProdIds.filter(
+                  (pid) => !products.some((p: any) => String(p.PRO_CODIGO).trim() === pid),
+                );
 
-            if (idsToLoad.length > 0) {
-              const inPlaceholders = idsToLoad.map(() => '?').join(',');
-              const rawStockBatch = await queryPromise(
-                `SELECT ${stockSelectCols}
+                if (idsToLoad.length > 0) {
+                  const inPlaceholders = idsToLoad.map(() => '?').join(',');
+                  const rawStockBatch = await queryPromise(
+                    `SELECT ${stockSelectCols}
                  FROM ESTOQUE E
                  WHERE E.PRO_CODIGO IN (${inPlaceholders})
                  ORDER BY E.PRO_CODIGO ASC, E.LOJ_CODIGO ASC`,
-                idsToLoad,
-              );
+                    idsToLoad,
+                  );
 
-              const stockItemsByProd = new Map<string, any[]>();
-              for (const st of rawStockBatch) {
-                const pid = String(st.PRO_CODIGO).trim();
-                if (!stockItemsByProd.has(pid)) {
-                  stockItemsByProd.set(pid, []);
-                }
-                stockItemsByProd.get(pid)!.push(this.mapStockRow(st));
-              }
+                  const stockItemsByProd = new Map<string, any[]>();
+                  for (const st of rawStockBatch) {
+                    const pid = String(st.PRO_CODIGO).trim();
+                    if (!stockItemsByProd.has(pid)) {
+                      stockItemsByProd.set(pid, []);
+                    }
+                    stockItemsByProd.get(pid)!.push(this.mapStockRow(st));
+                  }
 
-              const prodsNeedingUpdate: string[] = [];
-              for (const pid of idsToLoad) {
-                const stList = stockItemsByProd.get(pid) || [];
-                const checksum = this.computeStockChecksum(stList);
-                const stateKey = `${sub.id}:stock_state:${pid}:${checksum}`;
-                if (!this.isDuplicateEvent(stateKey)) {
-                  prodsNeedingUpdate.push(pid);
-                }
-              }
+                  const prodsNeedingUpdate: string[] = [];
+                  for (const pid of idsToLoad) {
+                    const stList = stockItemsByProd.get(pid) || [];
+                    const checksum = this.computeStockChecksum(stList);
+                    const stateKey = `${sub.id}:stock_state:${pid}:${checksum}`;
+                    if (!this.isDuplicateEvent(stateKey)) {
+                      prodsNeedingUpdate.push(pid);
+                    }
+                  }
 
-              if (prodsNeedingUpdate.length > 0) {
-                const updatePlaceholders = prodsNeedingUpdate.map(() => '?').join(',');
-                const updatedProdsDetails = await queryPromise(
-                  `SELECT
+                  if (prodsNeedingUpdate.length > 0) {
+                    const updatePlaceholders = prodsNeedingUpdate.map(() => '?').join(',');
+                    const updatedProdsDetails = await queryPromise(
+                      `SELECT
                      P.PRO_CODIGO, P.PRO_CODIGOBAR, P.PRO_DESCRICAO, P.PRO_UNIDADE,
                      P.PRO_DATACADASTRO, P.PRO_DATAALTERACAO, P.PRO_HORA,
                      P.MAR_CODIGO, M.MAR_DESCRICAO,
@@ -823,137 +827,137 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
                    LEFT JOIN MARCAS M ON P.MAR_CODIGO = M.MAR_CODIGO
                    LEFT JOIN GRUPOSPRO G ON P.GRU_CODIGO = G.GRU_CODIGO
                    WHERE P.PRO_CODIGO IN (${updatePlaceholders})`,
-                  prodsNeedingUpdate,
-                );
+                      prodsNeedingUpdate,
+                    );
 
-                for (const prod of updatedProdsDetails) {
-                  const proCodigoStr = String(prod.PRO_CODIGO).trim();
-                  const proCodigoNum = Number(prod.PRO_CODIGO);
-                  const proCodigoId = Number.isSafeInteger(proCodigoNum) ? proCodigoNum : proCodigoStr;
-                  const dtCad = parseFirebirdDate(prod.PRO_DATACADASTRO) || todayStr;
-                  const dtAlt = parseFirebirdDate(prod.PRO_DATAALTERACAO) || todayStr;
-                  const hr = parseFirebirdTime(prod.PRO_HORA);
+                    for (const prod of updatedProdsDetails) {
+                      const proCodigoStr = String(prod.PRO_CODIGO).trim();
+                      const proCodigoNum = Number(prod.PRO_CODIGO);
+                      const proCodigoId = Number.isSafeInteger(proCodigoNum) ? proCodigoNum : proCodigoStr;
+                      const dtCad = parseFirebirdDate(prod.PRO_DATACADASTRO) || todayStr;
+                      const dtAlt = parseFirebirdDate(prod.PRO_DATAALTERACAO) || todayStr;
+                      const hr = parseFirebirdTime(prod.PRO_HORA);
 
-                  const payload = {
-                    id: `evt_prd_${crypto.randomBytes(8).toString('hex')}`,
-                    event: 'product.updated',
-                    timestamp: new Date().toISOString(),
-                    tenant: sub.user.user,
-                    data: {
-                      productId: proCodigoId,
-                      barcode: prod.PRO_CODIGOBAR ? String(prod.PRO_CODIGOBAR).trim() : null,
-                      description: prod.PRO_DESCRICAO ? String(prod.PRO_DESCRICAO).trim() : null,
-                      unit: prod.PRO_UNIDADE ? String(prod.PRO_UNIDADE).trim() : null,
-                      brand: prod.MAR_CODIGO
-                        ? {
-                            id: Number(prod.MAR_CODIGO),
-                            name: prod.MAR_DESCRICAO ? String(prod.MAR_DESCRICAO).trim() : null,
-                          }
-                        : null,
-                      group: prod.GRU_CODIGO
-                        ? {
-                            id: Number(prod.GRU_CODIGO),
-                            name: prod.GRU_DESCRICAO ? String(prod.GRU_DESCRICAO).trim() : null,
-                          }
-                        : null,
-                      stock: stockItemsByProd.get(proCodigoStr) || [],
-                      registeredAt: `${dtCad} ${hr}`.trim(),
-                      updatedAt: `${dtAlt} ${hr}`.trim(),
-                      links: { self: `/api/v1/products/id/${proCodigoStr}` },
-                    },
-                  };
+                      const payload = {
+                        id: `evt_prd_${crypto.randomBytes(8).toString('hex')}`,
+                        event: 'product.updated',
+                        timestamp: new Date().toISOString(),
+                        tenant: sub.user.user,
+                        data: {
+                          productId: proCodigoId,
+                          barcode: prod.PRO_CODIGOBAR ? String(prod.PRO_CODIGOBAR).trim() : null,
+                          description: prod.PRO_DESCRICAO ? String(prod.PRO_DESCRICAO).trim() : null,
+                          unit: prod.PRO_UNIDADE ? String(prod.PRO_UNIDADE).trim() : null,
+                          brand: prod.MAR_CODIGO
+                            ? {
+                              id: Number(prod.MAR_CODIGO),
+                              name: prod.MAR_DESCRICAO ? String(prod.MAR_DESCRICAO).trim() : null,
+                            }
+                            : null,
+                          group: prod.GRU_CODIGO
+                            ? {
+                              id: Number(prod.GRU_CODIGO),
+                              name: prod.GRU_DESCRICAO ? String(prod.GRU_DESCRICAO).trim() : null,
+                            }
+                            : null,
+                          stock: stockItemsByProd.get(proCodigoStr) || [],
+                          registeredAt: `${dtCad} ${hr}`.trim(),
+                          updatedAt: `${dtAlt} ${hr}`.trim(),
+                          links: { self: `/api/v1/products/id/${proCodigoStr}` },
+                        },
+                      };
 
-                  deliveriesToCreate.push({
-                    subscriptionId: sub.id,
-                    event: 'product.updated',
-                    payload: payload as any,
-                    status: 'PENDING',
-                  });
+                      deliveriesToCreate.push({
+                        subscriptionId: sub.id,
+                        event: 'product.updated',
+                        payload: payload as any,
+                        status: 'PENDING',
+                      });
+                    }
+                  }
                 }
+              } else {
+                this.lastStockSweepProductIdBySub.set(sub.id, '');
               }
+            } catch (err: any) {
+              this.logger.warn(`Erro na varredura de alterações em ESTOQUE da sub ${sub.id}: ${err.message}`);
             }
-          } else {
-            this.lastStockSweepProductIdBySub.set(sub.id, '');
           }
-        } catch (err: any) {
-          this.logger.warn(`Erro na varredura de alterações em ESTOQUE da sub ${sub.id}: ${err.message}`);
-        }
-      }
 
-      if (deliveriesToCreate.length > 0 || products.length > 0) {
-        if (
-          products.length > 0 &&
-          deliveriesToCreate.length === 0 &&
-          maxSyncAt.getTime() <= new Date(sub.lastProductSyncAt).getTime() &&
-          maxSeenId === lastProductId
-        ) {
-          maxSyncAt = new Date(maxSyncAt.getTime() + 1000);
-        }
+          if (deliveriesToCreate.length > 0 || products.length > 0) {
+            if (
+              products.length > 0 &&
+              deliveriesToCreate.length === 0 &&
+              maxSyncAt.getTime() <= new Date(sub.lastProductSyncAt).getTime() &&
+              maxSeenId === lastProductId
+            ) {
+              maxSyncAt = new Date(maxSyncAt.getTime() + 1000);
+            }
 
-        await this.prisma.$transaction(async (tx) => {
-          if (deliveriesToCreate.length > 0) {
-            await tx.webhookDelivery.createMany({
-              data: deliveriesToCreate,
+            await this.prisma.$transaction(async (tx) => {
+              if (deliveriesToCreate.length > 0) {
+                await tx.webhookDelivery.createMany({
+                  data: deliveriesToCreate,
+                });
+              }
+              if (products.length > 0) {
+                await tx.webhookSubscription.update({
+                  where: { id: sub.id },
+                  data: { lastProductId: maxSeenId, lastProductSyncAt: maxSyncAt },
+                });
+                sub.lastProductId = maxSeenId;
+                sub.lastProductSyncAt = maxSyncAt;
+              }
             });
           }
-          if (products.length > 0) {
-            await tx.webhookSubscription.update({
-              where: { id: sub.id },
-              data: { lastProductId: maxSeenId, lastProductSyncAt: maxSyncAt },
-            });
-            sub.lastProductId = maxSeenId;
-            sub.lastProductSyncAt = maxSyncAt;
-          }
-        });
-      }
-    }
-  }
-
-    // 3. Entregas (deliveries) - Requer permissão tenant.deliveries.view
-    if (
-      (events.includes('delivery.created') || events.includes('delivery.updated')) &&
-      allowed.has('tenant.deliveries.view')
-    ) {
-      let lastDeliveryId = sub.lastDeliveryId !== undefined && sub.lastDeliveryId !== null ? BigInt(sub.lastDeliveryId) : -1n;
-      let wasColdStart = false;
-
-      if (lastDeliveryId === -1n) {
-        const currentMax = await queryMaxId(
-          'SELECT COALESCE(MAX(ENT_NUMERO), 0) AS MAX_ID FROM ENTREGAS',
-          'SELECT COALESCE(MAX(ENT_CODIGO), 0) AS MAX_ID FROM ENTREGAS',
-        );
-        const currentMaxBig = BigInt(currentMax);
-        const now = new Date();
-        this.logger.log(
-          `[Cold-Start Webhook] Ancorando cursor de entregas da sub ${sub.id} (tenant: ${sub.user.user}): lastDeliveryId = ${currentMaxBig}`,
-        );
-        await this.prisma.webhookSubscription.update({
-          where: { id: sub.id },
-          data: { lastDeliveryId: currentMaxBig, lastDeliverySyncAt: now },
-        });
-        sub.lastDeliveryId = currentMaxBig;
-        sub.lastDeliverySyncAt = now;
-        lastDeliveryId = currentMaxBig;
-        wasColdStart = true;
+        }
       }
 
-      if (!wasColdStart && lastDeliveryId >= 0n) {
-        const sync = getBrazilDateTime(sub.lastDeliverySyncAt);
-        const nowBrazil = getBrazilDateTime(new Date());
+      // 3. Entregas (deliveries) - Requer permissão tenant.deliveries.view
+      if (
+        (events.includes('delivery.created') || events.includes('delivery.updated')) &&
+        allowed.has('tenant.deliveries.view')
+      ) {
+        let lastDeliveryId = sub.lastDeliveryId !== undefined && sub.lastDeliveryId !== null ? BigInt(sub.lastDeliveryId) : -1n;
+        let wasColdStart = false;
 
-        let syncDate = sync.dateStr;
-        let syncTime = sync.timeStr;
-
-        // Proteção Anti-Drift: só reancora se o cursor estiver mais de 1 hora no futuro (ex: bug UTC)
-        const nowUtc = Date.now();
-        const cursorUtc = new Date(sub.lastDeliverySyncAt).getTime();
-        if (cursorUtc - nowUtc > 60 * 60 * 1000) {
-          syncDate = nowBrazil.dateStr;
-          syncTime = nowBrazil.timeStr;
+        if (lastDeliveryId === -1n) {
+          const currentMax = await queryMaxId(
+            'SELECT COALESCE(MAX(ENT_NUMERO), 0) AS MAX_ID FROM ENTREGAS',
+            'SELECT COALESCE(MAX(ENT_CODIGO), 0) AS MAX_ID FROM ENTREGAS',
+          );
+          const currentMaxBig = BigInt(currentMax);
+          const now = new Date();
+          this.logger.log(
+            `[Cold-Start Webhook] Ancorando cursor de entregas da sub ${sub.id} (tenant: ${sub.user.user}): lastDeliveryId = ${currentMaxBig}`,
+          );
+          await this.prisma.webhookSubscription.update({
+            where: { id: sub.id },
+            data: { lastDeliveryId: currentMaxBig, lastDeliverySyncAt: now },
+          });
+          sub.lastDeliveryId = currentMaxBig;
+          sub.lastDeliverySyncAt = now;
+          lastDeliveryId = currentMaxBig;
+          wasColdStart = true;
         }
 
-      const deliveries = await queryPromise(
-        `SELECT FIRST 25 
+        if (!wasColdStart && lastDeliveryId >= 0n) {
+          const sync = getBrazilDateTime(sub.lastDeliverySyncAt);
+          const nowBrazil = getBrazilDateTime(new Date());
+
+          let syncDate = sync.dateStr;
+          let syncTime = sync.timeStr;
+
+          // Proteção Anti-Drift: só reancora se o cursor estiver mais de 1 hora no futuro (ex: bug UTC)
+          const nowUtc = Date.now();
+          const cursorUtc = new Date(sub.lastDeliverySyncAt).getTime();
+          if (cursorUtc - nowUtc > 60 * 60 * 1000) {
+            syncDate = nowBrazil.dateStr;
+            syncTime = nowBrazil.timeStr;
+          }
+
+          const deliveries = await queryPromise(
+            `SELECT FIRST 25 
            E.ENT_NUMERO, E.VEN_NUMERO, V.LOJ_CODIGO, 
            E.PRE_CODIGO, P.PRE_NOME, 
            E.SIT_CODIGO, 
@@ -976,131 +980,131 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
            COALESCE(E.ENT_DATABAIXA, E.ENT_DATA) ASC,
            COALESCE(E.ENT_HORA, '00:00:00') ASC,
            E.ENT_NUMERO ASC`,
-        [syncDate, syncDate, syncTime, syncTime, lastDeliveryId.toString()],
-      );
+            [syncDate, syncDate, syncTime, syncTime, lastDeliveryId.toString()],
+          );
 
-      if (deliveries.length > 0) {
-        let maxSeenId = lastDeliveryId;
-        let maxSyncAt = sub.lastDeliverySyncAt;
-        const deliveriesToCreate: any[] = [];
+          if (deliveries.length > 0) {
+            let maxSeenId = lastDeliveryId;
+            let maxSyncAt = sub.lastDeliverySyncAt;
+            const deliveriesToCreate: any[] = [];
 
-        for (const d of deliveries) {
-          const entNumero = Number(d.ENT_NUMERO);
-          const entDate = parseFirebirdDate(d.ENT_DATA) || getBrazilDateTime(new Date()).dateStr;
-          const entBaixa = d.ENT_DATABAIXA ? parseFirebirdDate(d.ENT_DATABAIXA) : null;
-          const entTime = parseFirebirdTime(d.ENT_HORA);
+            for (const d of deliveries) {
+              const entNumero = Number(d.ENT_NUMERO);
+              const entDate = parseFirebirdDate(d.ENT_DATA) || getBrazilDateTime(new Date()).dateStr;
+              const entBaixa = d.ENT_DATABAIXA ? parseFirebirdDate(d.ENT_DATABAIXA) : null;
+              const entTime = parseFirebirdTime(d.ENT_HORA);
 
-          const isUpdated = !!entBaixa || (d.TBS_CODIGO !== null && Number(d.TBS_CODIGO) > 1);
-          let eventType = isUpdated ? 'delivery.updated' : 'delivery.created';
-          if (!events.includes(eventType)) {
-            if (events.includes('delivery.created')) eventType = 'delivery.created';
-            else if (events.includes('delivery.updated')) eventType = 'delivery.updated';
-          }
+              const isUpdated = !!entBaixa || (d.TBS_CODIGO !== null && Number(d.TBS_CODIGO) > 1);
+              let eventType = isUpdated ? 'delivery.updated' : 'delivery.created';
+              if (!events.includes(eventType)) {
+                if (events.includes('delivery.created')) eventType = 'delivery.created';
+                else if (events.includes('delivery.updated')) eventType = 'delivery.updated';
+              }
 
-          const payload = {
-            id: `evt_del_${crypto.randomBytes(8).toString('hex')}`,
-            event: eventType,
-            timestamp: new Date().toISOString(),
-            tenant: sub.user.user,
-            data: {
-              deliveryId: entNumero,
-              orderId: d.VEN_NUMERO ? Number(d.VEN_NUMERO) : null,
-              storeId: d.LOJ_CODIGO ? Number(d.LOJ_CODIGO) : null,
-              driver: d.PRE_CODIGO
-                ? {
-                    id: Number(d.PRE_CODIGO),
-                    name: d.PRE_NOME ? String(d.PRE_NOME).trim() : null,
-                  }
-                : null,
-              vehiclePlate: d.VEI_PLACA ? String(d.VEI_PLACA).trim() : null,
-              status: {
-                code:
-                  d.TBS_CODIGO !== null && d.TBS_CODIGO !== undefined
-                    ? Number(d.TBS_CODIGO)
+              const payload = {
+                id: `evt_del_${crypto.randomBytes(8).toString('hex')}`,
+                event: eventType,
+                timestamp: new Date().toISOString(),
+                tenant: sub.user.user,
+                data: {
+                  deliveryId: entNumero,
+                  orderId: d.VEN_NUMERO ? Number(d.VEN_NUMERO) : null,
+                  storeId: d.LOJ_CODIGO ? Number(d.LOJ_CODIGO) : null,
+                  driver: d.PRE_CODIGO
+                    ? {
+                      id: Number(d.PRE_CODIGO),
+                      name: d.PRE_NOME ? String(d.PRE_NOME).trim() : null,
+                    }
                     : null,
-                description: d.TBS_DESCRICAO ? String(d.TBS_DESCRICAO).trim() : null,
-                situation:
-                  d.SIT_CODIGO !== null && d.SIT_CODIGO !== undefined
-                    ? Number(d.SIT_CODIGO)
-                    : null,
-              },
-              deliveryDate: entDate,
-              deliveryTime: entTime,
-              completionDate: entBaixa,
-              links: { self: `/api/v1/deliveries/${entNumero}` },
-            },
-          };
+                  vehiclePlate: d.VEI_PLACA ? String(d.VEI_PLACA).trim() : null,
+                  status: {
+                    code:
+                      d.TBS_CODIGO !== null && d.TBS_CODIGO !== undefined
+                        ? Number(d.TBS_CODIGO)
+                        : null,
+                    description: d.TBS_DESCRICAO ? String(d.TBS_DESCRICAO).trim() : null,
+                    situation:
+                      d.SIT_CODIGO !== null && d.SIT_CODIGO !== undefined
+                        ? Number(d.SIT_CODIGO)
+                        : null,
+                  },
+                  deliveryDate: entDate,
+                  deliveryTime: entTime,
+                  completionDate: entBaixa,
+                  links: { self: `/api/v1/deliveries/${entNumero}` },
+                },
+              };
 
-          deliveriesToCreate.push({
-            subscriptionId: sub.id,
-            event: eventType,
-            payload: payload as any,
-            status: 'PENDING',
-          });
+              deliveriesToCreate.push({
+                subscriptionId: sub.id,
+                event: eventType,
+                payload: payload as any,
+                status: 'PENDING',
+              });
 
-          maxSeenId = BigInt(entNumero);
-          const latestDate = entBaixa || entDate;
-          maxSyncAt = fromBrazilDateTimeToUtc(latestDate, entTime);
-        }
+              maxSeenId = BigInt(entNumero);
+              const latestDate = entBaixa || entDate;
+              maxSyncAt = fromBrazilDateTimeToUtc(latestDate, entTime);
+            }
 
-        await this.prisma.$transaction(async (tx) => {
-          if (deliveriesToCreate.length > 0) {
-            await tx.webhookDelivery.createMany({
-              data: deliveriesToCreate,
+            await this.prisma.$transaction(async (tx) => {
+              if (deliveriesToCreate.length > 0) {
+                await tx.webhookDelivery.createMany({
+                  data: deliveriesToCreate,
+                });
+              }
+              await tx.webhookSubscription.update({
+                where: { id: sub.id },
+                data: { lastDeliveryId: maxSeenId, lastDeliverySyncAt: maxSyncAt },
+              });
             });
           }
-          await tx.webhookSubscription.update({
+        }
+      }
+
+      // 4. Contas a Pagar (account_payable) - Requer permissão tenant.account-payable.view
+      if (
+        (events.includes('account_payable.created') || events.includes('account_payable.updated')) &&
+        allowed.has('tenant.account-payable.view')
+      ) {
+        let lastAccountPayableId = sub.lastAccountPayableId !== undefined && sub.lastAccountPayableId !== null ? BigInt(sub.lastAccountPayableId) : -1n;
+        let wasColdStart = false;
+
+        if (lastAccountPayableId === -1n) {
+          const currentMax = await queryMaxId(
+            'SELECT COALESCE(MAX(PAG_NUMERO), 0) AS MAX_ID FROM CONTASPAGAR',
+            'SELECT COALESCE(MAX(PAG_CODIGO), 0) AS MAX_ID FROM CONTAS_PAGAR',
+          );
+          const currentMaxBig = BigInt(currentMax);
+          const now = new Date();
+          this.logger.log(
+            `[Cold-Start Webhook] Ancorando cursor de contas a pagar da sub ${sub.id} (tenant: ${sub.user.user}): lastAccountPayableId = ${currentMaxBig}`,
+          );
+          await this.prisma.webhookSubscription.update({
             where: { id: sub.id },
-            data: { lastDeliveryId: maxSeenId, lastDeliverySyncAt: maxSyncAt },
+            data: { lastAccountPayableId: currentMaxBig, lastAccountPayableSyncAt: now },
           });
-        });
-      }
-    }
-  }
-
-    // 4. Contas a Pagar (account_payable) - Requer permissão tenant.account-payable.view
-    if (
-      (events.includes('account_payable.created') || events.includes('account_payable.updated')) &&
-      allowed.has('tenant.account-payable.view')
-    ) {
-      let lastAccountPayableId = sub.lastAccountPayableId !== undefined && sub.lastAccountPayableId !== null ? BigInt(sub.lastAccountPayableId) : -1n;
-      let wasColdStart = false;
-
-      if (lastAccountPayableId === -1n) {
-        const currentMax = await queryMaxId(
-          'SELECT COALESCE(MAX(PAG_NUMERO), 0) AS MAX_ID FROM CONTASPAGAR',
-          'SELECT COALESCE(MAX(PAG_CODIGO), 0) AS MAX_ID FROM CONTAS_PAGAR',
-        );
-        const currentMaxBig = BigInt(currentMax);
-        const now = new Date();
-        this.logger.log(
-          `[Cold-Start Webhook] Ancorando cursor de contas a pagar da sub ${sub.id} (tenant: ${sub.user.user}): lastAccountPayableId = ${currentMaxBig}`,
-        );
-        await this.prisma.webhookSubscription.update({
-          where: { id: sub.id },
-          data: { lastAccountPayableId: currentMaxBig, lastAccountPayableSyncAt: now },
-        });
-        sub.lastAccountPayableId = currentMaxBig;
-        sub.lastAccountPayableSyncAt = now;
-        lastAccountPayableId = currentMaxBig;
-        wasColdStart = true;
-      }
-
-      if (!wasColdStart && lastAccountPayableId >= 0n) {
-        const sync = getBrazilDateTime(sub.lastAccountPayableSyncAt);
-        const nowBrazil = getBrazilDateTime(new Date());
-
-        let syncDate = sync.dateStr;
-
-        // Proteção Anti-Drift: só reancora se o cursor estiver mais de 1 hora no futuro (ex: bug UTC)
-        const nowUtc = Date.now();
-        const cursorUtc = new Date(sub.lastAccountPayableSyncAt).getTime();
-        if (cursorUtc - nowUtc > 60 * 60 * 1000) {
-          syncDate = nowBrazil.dateStr;
+          sub.lastAccountPayableId = currentMaxBig;
+          sub.lastAccountPayableSyncAt = now;
+          lastAccountPayableId = currentMaxBig;
+          wasColdStart = true;
         }
 
-      const payables = await queryPromise(
-        `SELECT FIRST 25 
+        if (!wasColdStart && lastAccountPayableId >= 0n) {
+          const sync = getBrazilDateTime(sub.lastAccountPayableSyncAt);
+          const nowBrazil = getBrazilDateTime(new Date());
+
+          let syncDate = sync.dateStr;
+
+          // Proteção Anti-Drift: só reancora se o cursor estiver mais de 1 hora no futuro (ex: bug UTC)
+          const nowUtc = Date.now();
+          const cursorUtc = new Date(sub.lastAccountPayableSyncAt).getTime();
+          if (cursorUtc - nowUtc > 60 * 60 * 1000) {
+            syncDate = nowBrazil.dateStr;
+          }
+
+          const payables = await queryPromise(
+            `SELECT FIRST 25 
            CP.PAG_NUMERO, CP.LOJ_CODIGO, CP.CRE_CODIGO, C.CRE_NOME, 
            CP.PAG_VALOR, CP.PAG_SITUACAO, CP.PAG_DATAVENC, CP.PAG_DATAMOV, CP.PAG_DATAPAG
          FROM CONTASPAGAR CP
@@ -1114,182 +1118,182 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
          ORDER BY
            COALESCE(CP.PAG_DATAPAG, CP.PAG_DATAMOV) ASC,
            CP.PAG_NUMERO ASC`,
-        [syncDate, syncDate, lastAccountPayableId.toString()],
-      );
+            [syncDate, syncDate, lastAccountPayableId.toString()],
+          );
 
-      if (payables.length > 0) {
-        let maxSeenId = lastAccountPayableId;
-        let maxSyncAt = sub.lastAccountPayableSyncAt;
-        const deliveriesToCreate: any[] = [];
+          if (payables.length > 0) {
+            let maxSeenId = lastAccountPayableId;
+            let maxSyncAt = sub.lastAccountPayableSyncAt;
+            const deliveriesToCreate: any[] = [];
 
-        for (const p of payables) {
-          const pagNumero = Number(p.PAG_NUMERO);
-          const dtMov = parseFirebirdDate(p.PAG_DATAMOV) || getBrazilDateTime(new Date()).dateStr;
-          const dtPag = p.PAG_DATAPAG ? parseFirebirdDate(p.PAG_DATAPAG) : null;
-          const dueDate = parseFirebirdDate(p.PAG_DATAVENC);
+            for (const p of payables) {
+              const pagNumero = Number(p.PAG_NUMERO);
+              const dtMov = parseFirebirdDate(p.PAG_DATAMOV) || getBrazilDateTime(new Date()).dateStr;
+              const dtPag = p.PAG_DATAPAG ? parseFirebirdDate(p.PAG_DATAPAG) : null;
+              const dueDate = parseFirebirdDate(p.PAG_DATAVENC);
 
-          const isUpdated = !!dtPag || p.PAG_SITUACAO === 'L';
-          let eventType = isUpdated ? 'account_payable.updated' : 'account_payable.created';
-          if (!events.includes(eventType)) {
-            if (events.includes('account_payable.created')) eventType = 'account_payable.created';
-            else if (events.includes('account_payable.updated')) eventType = 'account_payable.updated';
-          }
+              const isUpdated = !!dtPag || p.PAG_SITUACAO === 'L';
+              let eventType = isUpdated ? 'account_payable.updated' : 'account_payable.created';
+              if (!events.includes(eventType)) {
+                if (events.includes('account_payable.created')) eventType = 'account_payable.created';
+                else if (events.includes('account_payable.updated')) eventType = 'account_payable.updated';
+              }
 
-          const payload = {
-            id: `evt_pag_${crypto.randomBytes(8).toString('hex')}`,
-            event: eventType,
-            timestamp: new Date().toISOString(),
-            tenant: sub.user.user,
-            data: {
-              payableId: pagNumero,
-              storeId: p.LOJ_CODIGO ? Number(p.LOJ_CODIGO) : null,
-              supplier: p.CRE_CODIGO
-                ? {
-                    id: Number(p.CRE_CODIGO),
-                    name: p.CRE_NOME ? String(p.CRE_NOME).trim() : null,
-                  }
-                : null,
-              value: Number(p.PAG_VALOR) || 0,
-              issueDate: dtMov,
-              paymentDate: dtPag,
-              dueDate,
-              situation: p.PAG_SITUACAO ? String(p.PAG_SITUACAO).trim() : null,
-              links: { self: `/api/v1/account-payable/${pagNumero}` },
-            },
-          };
+              const payload = {
+                id: `evt_pag_${crypto.randomBytes(8).toString('hex')}`,
+                event: eventType,
+                timestamp: new Date().toISOString(),
+                tenant: sub.user.user,
+                data: {
+                  payableId: pagNumero,
+                  storeId: p.LOJ_CODIGO ? Number(p.LOJ_CODIGO) : null,
+                  supplier: p.CRE_CODIGO
+                    ? {
+                      id: Number(p.CRE_CODIGO),
+                      name: p.CRE_NOME ? String(p.CRE_NOME).trim() : null,
+                    }
+                    : null,
+                  value: Number(p.PAG_VALOR) || 0,
+                  issueDate: dtMov,
+                  paymentDate: dtPag,
+                  dueDate,
+                  situation: p.PAG_SITUACAO ? String(p.PAG_SITUACAO).trim() : null,
+                  links: { self: `/api/v1/account-payable/${pagNumero}` },
+                },
+              };
 
-          deliveriesToCreate.push({
-            subscriptionId: sub.id,
-            event: eventType,
-            payload: payload as any,
-            status: 'PENDING',
-          });
+              deliveriesToCreate.push({
+                subscriptionId: sub.id,
+                event: eventType,
+                payload: payload as any,
+                status: 'PENDING',
+              });
 
-          maxSeenId = BigInt(pagNumero);
-          const latestDate = dtPag || dtMov;
-          maxSyncAt = fromBrazilDateTimeToUtc(latestDate, '00:00:00');
-        }
+              maxSeenId = BigInt(pagNumero);
+              const latestDate = dtPag || dtMov;
+              maxSyncAt = fromBrazilDateTimeToUtc(latestDate, '00:00:00');
+            }
 
-        await this.prisma.$transaction(async (tx) => {
-          if (deliveriesToCreate.length > 0) {
-            await tx.webhookDelivery.createMany({
-              data: deliveriesToCreate,
+            await this.prisma.$transaction(async (tx) => {
+              if (deliveriesToCreate.length > 0) {
+                await tx.webhookDelivery.createMany({
+                  data: deliveriesToCreate,
+                });
+              }
+              await tx.webhookSubscription.update({
+                where: { id: sub.id },
+                data: { lastAccountPayableId: maxSeenId, lastAccountPayableSyncAt: maxSyncAt },
+              });
             });
           }
-          await tx.webhookSubscription.update({
+        }
+      }
+
+      // 5. Contas a Receber (account_receivable) - Requer permissão tenant.account-receivable.view
+      if (
+        (events.includes('account_receivable.created') || events.includes('account_receivable.updated')) &&
+        allowed.has('tenant.account-receivable.view')
+      ) {
+        let lastAccountReceivableId = sub.lastAccountReceivableId !== undefined && sub.lastAccountReceivableId !== null ? BigInt(sub.lastAccountReceivableId) : -1n;
+        let wasColdStart = false;
+
+        if (lastAccountReceivableId === -1n) {
+          const currentMax = await queryMaxId(
+            'SELECT COALESCE(MAX(REC_NUMERO), 0) AS MAX_ID FROM CONTASRECEBER',
+            'SELECT COALESCE(MAX(REC_CODIGO), 0) AS MAX_ID FROM CONTAS_RECEBER',
+          );
+          const currentMaxBig = BigInt(currentMax);
+          const now = new Date();
+          this.logger.log(
+            `[Cold-Start Webhook] Ancorando cursor de contas a receber da sub ${sub.id} (tenant: ${sub.user.user}): lastAccountReceivableId = ${currentMaxBig}`,
+          );
+          await this.prisma.webhookSubscription.update({
             where: { id: sub.id },
-            data: { lastAccountPayableId: maxSeenId, lastAccountPayableSyncAt: maxSyncAt },
+            data: { lastAccountReceivableId: currentMaxBig, lastAccountReceivableSyncAt: now },
           });
-        });
-      }
-    }
-  }
+          sub.lastAccountReceivableId = currentMaxBig;
+          sub.lastAccountReceivableSyncAt = now;
+          lastAccountReceivableId = currentMaxBig;
+          wasColdStart = true;
+        }
 
-    // 5. Contas a Receber (account_receivable) - Requer permissão tenant.account-receivable.view
-    if (
-      (events.includes('account_receivable.created') || events.includes('account_receivable.updated')) &&
-      allowed.has('tenant.account-receivable.view')
-    ) {
-      let lastAccountReceivableId = sub.lastAccountReceivableId !== undefined && sub.lastAccountReceivableId !== null ? BigInt(sub.lastAccountReceivableId) : -1n;
-      let wasColdStart = false;
-
-      if (lastAccountReceivableId === -1n) {
-        const currentMax = await queryMaxId(
-          'SELECT COALESCE(MAX(REC_NUMERO), 0) AS MAX_ID FROM CONTASRECEBER',
-          'SELECT COALESCE(MAX(REC_CODIGO), 0) AS MAX_ID FROM CONTAS_RECEBER',
-        );
-        const currentMaxBig = BigInt(currentMax);
-        const now = new Date();
-        this.logger.log(
-          `[Cold-Start Webhook] Ancorando cursor de contas a receber da sub ${sub.id} (tenant: ${sub.user.user}): lastAccountReceivableId = ${currentMaxBig}`,
-        );
-        await this.prisma.webhookSubscription.update({
-          where: { id: sub.id },
-          data: { lastAccountReceivableId: currentMaxBig, lastAccountReceivableSyncAt: now },
-        });
-        sub.lastAccountReceivableId = currentMaxBig;
-        sub.lastAccountReceivableSyncAt = now;
-        lastAccountReceivableId = currentMaxBig;
-        wasColdStart = true;
-      }
-
-      if (!wasColdStart && lastAccountReceivableId >= 0n) {
-        const receivables = await queryPromise(
-          `SELECT FIRST 25 
+        if (!wasColdStart && lastAccountReceivableId >= 0n) {
+          const receivables = await queryPromise(
+            `SELECT FIRST 25 
              REC.REC_NUMERO, CLI.LOJ_CODIGO, REC.CLI_CODIGO, CLI.CLI_NOME, CLI.CLI_CPF_CNPJ,
              REC.REC_VALOR, REC.REC_SITUACAO, REC.REC_DATAVENC
            FROM CONTASRECEBER REC
            LEFT JOIN CLIENTES CLI ON CLI.CLI_CODIGO = REC.CLI_CODIGO
            WHERE REC.REC_NUMERO > ?
            ORDER BY REC.REC_NUMERO ASC`,
-          [lastAccountReceivableId.toString()],
-        );
+            [lastAccountReceivableId.toString()],
+          );
 
-        if (receivables.length > 0) {
-          let maxSeenId = lastAccountReceivableId;
-          const deliveriesToCreate: any[] = [];
+          if (receivables.length > 0) {
+            let maxSeenId = lastAccountReceivableId;
+            const deliveriesToCreate: any[] = [];
 
-          for (const r of receivables) {
-            const recNumero = Number(r.REC_NUMERO);
-            const dueDate = parseFirebirdDate(r.REC_DATAVENC);
+            for (const r of receivables) {
+              const recNumero = Number(r.REC_NUMERO);
+              const dueDate = parseFirebirdDate(r.REC_DATAVENC);
 
-            let eventType = 'account_receivable.created';
-            if (!events.includes(eventType)) {
-              if (events.includes('account_receivable.updated')) eventType = 'account_receivable.updated';
-            }
+              let eventType = 'account_receivable.created';
+              if (!events.includes(eventType)) {
+                if (events.includes('account_receivable.updated')) eventType = 'account_receivable.updated';
+              }
 
-            const payload = {
-              id: `evt_rec_${crypto.randomBytes(8).toString('hex')}`,
-              event: eventType,
-              timestamp: new Date().toISOString(),
-              tenant: sub.user.user,
-              data: {
-                receivableId: recNumero,
-                storeId: r.LOJ_CODIGO ? Number(r.LOJ_CODIGO) : null,
-                customer: r.CLI_CODIGO
-                  ? {
+              const payload = {
+                id: `evt_rec_${crypto.randomBytes(8).toString('hex')}`,
+                event: eventType,
+                timestamp: new Date().toISOString(),
+                tenant: sub.user.user,
+                data: {
+                  receivableId: recNumero,
+                  storeId: r.LOJ_CODIGO ? Number(r.LOJ_CODIGO) : null,
+                  customer: r.CLI_CODIGO
+                    ? {
                       id: Number(r.CLI_CODIGO),
                       name: r.CLI_NOME ? String(r.CLI_NOME).trim() : null,
                       cpfCnpj: r.CLI_CPF_CNPJ ? String(r.CLI_CPF_CNPJ).trim() : null,
                     }
-                  : null,
-                value: Number(r.REC_VALOR) || 0,
-                dueDate,
-                situation: r.REC_SITUACAO ? String(r.REC_SITUACAO).trim() : null,
-                links: { self: `/api/v1/account-receivable/${recNumero}` },
-              },
-            };
+                    : null,
+                  value: Number(r.REC_VALOR) || 0,
+                  dueDate,
+                  situation: r.REC_SITUACAO ? String(r.REC_SITUACAO).trim() : null,
+                  links: { self: `/api/v1/account-receivable/${recNumero}` },
+                },
+              };
 
-            deliveriesToCreate.push({
-              subscriptionId: sub.id,
-              event: eventType,
-              payload: payload as any,
-              status: 'PENDING',
-            });
-
-            maxSeenId = BigInt(recNumero);
-          }
-
-          await this.prisma.$transaction(async (tx) => {
-            if (deliveriesToCreate.length > 0) {
-              await tx.webhookDelivery.createMany({
-                data: deliveriesToCreate,
+              deliveriesToCreate.push({
+                subscriptionId: sub.id,
+                event: eventType,
+                payload: payload as any,
+                status: 'PENDING',
               });
+
+              maxSeenId = BigInt(recNumero);
             }
-            await tx.webhookSubscription.update({
-              where: { id: sub.id },
-              data: { lastAccountReceivableId: maxSeenId, lastAccountReceivableSyncAt: new Date() },
+
+            await this.prisma.$transaction(async (tx) => {
+              if (deliveriesToCreate.length > 0) {
+                await tx.webhookDelivery.createMany({
+                  data: deliveriesToCreate,
+                });
+              }
+              await tx.webhookSubscription.update({
+                where: { id: sub.id },
+                data: { lastAccountReceivableId: maxSeenId, lastAccountReceivableSyncAt: new Date() },
+              });
             });
-          });
+          }
         }
       }
-  }
-  } finally {
-    if (connection) {
-      this.tenantConnectionService.releaseConnection(connection);
+    } finally {
+      if (connection) {
+        this.tenantConnectionService.releaseConnection(connection);
+      }
     }
   }
-}
 
   // ==========================================
   // LOOP B: DISPATCHER (Despacho HTTP)
