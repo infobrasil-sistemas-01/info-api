@@ -321,8 +321,8 @@ export class PlanService {
       : `Você utilizou <strong>${currentUsage.toLocaleString('pt-BR')}</strong> de um total de <strong>${limit.toLocaleString('pt-BR')}</strong> requisições mensais disponíveis.`;
 
     const nextStepsIntro = isLimitReached
-      ? `Para restabelecer o funcionamento da sua integração imediatamente e evitar a rejeição de chamadas, sugerimos duas ações:`
-      : `Para garantir que seu serviço não sofra interrupções automáticas ao atingir 100% de uso, sugerimos duas ações:`;
+      ? `Para restabelecer o funcionamento da sua integração imediatamente e evitar a rejeição de chamadas, sugerimos as ações abaixo:`
+      : `Para garantir que seu serviço não sofra interrupções automáticas ao atingir 100% de uso, sugerimos as ações abaixo:`;
 
     return `
     <!DOCTYPE html>
@@ -385,7 +385,7 @@ export class PlanService {
                             <a href="${baseUrl}/integration" style="background: #10b981; color: white; padding: 6px 12px; font-size: 0.8rem; font-weight: bold; text-decoration: none; border-radius: 6px; display: inline-block;">Ver Planos de Integração</a>
                           </div>
                         </li>
-                        <li>
+                        <li style="margin-bottom: 12px;">
                           <strong>Otimize suas Consultas:</strong> Aproveite para otimizar suas integrações seguindo nossa documentação sobre a aplicação de filtros eficientes (como limites, paginação e ranges de data apropriados).
                           <div style="margin-top: 8px;">
                             <a href="${baseUrl}/docs" style="background: #0f172a; color: white; padding: 6px 12px; font-size: 0.8rem; font-weight: bold; text-decoration: none; border-radius: 6px; display: inline-block;">Ler Documentação de Filtros</a>
@@ -399,7 +399,7 @@ export class PlanService {
                             <a href="${baseUrl}/docs" style="background: #10b981; color: white; padding: 6px 12px; font-size: 0.8rem; font-weight: bold; text-decoration: none; border-radius: 6px; display: inline-block;">Ler Documentação de Filtros</a>
                           </div>
                         </li>
-                        <li>
+                        <li style="margin-bottom: 12px;">
                           <strong>Upgrade de Plano:</strong> Se o seu volume de requisições cresceu de forma orgânica, considere migrar para um plano que atenda melhor a sua demanda atual.
                           <div style="margin-top: 8px;">
                             <a href="${baseUrl}/integration" style="background: #0f172a; color: white; padding: 6px 12px; font-size: 0.8rem; font-weight: bold; text-decoration: none; border-radius: 6px; display: inline-block;">Ver Planos de Integração</a>
@@ -407,6 +407,12 @@ export class PlanService {
                         </li>
                         `
                     }
+                    <li>
+                      <strong>Substitua o Polling por Webhooks (Beta):</strong> Se o alto consumo decorre de consultas recorrentes (<em>polling</em>) para checar atualizações, você pode ativar nossos <strong>Webhooks</strong> e receber notificações em tempo real (pedidos, produtos/estoque, entregas e contas a pagar/receber) diretamente no seu servidor, reduzindo drasticamente o consumo da sua cota.
+                      <div style="margin-top: 8px;">
+                        <a href="${baseUrl}/integration/client#webhooks" style="background: #0f172a; color: white; padding: 6px 12px; font-size: 0.8rem; font-weight: bold; text-decoration: none; border-radius: 6px; display: inline-block;">Configurar Webhooks (Beta)</a>
+                      </div>
+                    </li>
                   </ul>
 
                   <p style="color: #475569; font-size: 1rem; line-height: 1.6; margin-top: 0; margin-bottom: 0;">
