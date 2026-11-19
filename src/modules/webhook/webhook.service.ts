@@ -28,7 +28,7 @@ export class WebhookService {
   constructor(
     private readonly prisma: RegistryPrismaService,
     private readonly permissionResolver: PermissionResolver,
-  ) {}
+  ) { }
 
   /**
    * Valida se o usuário autenticado possui permissões de GET para os eventos solicitados
@@ -187,6 +187,8 @@ export class WebhookService {
 
     if (dto.targetUrl && dto.targetUrl !== subscription.targetUrl) {
       await assertPublicWebhookUrl(dto.targetUrl);
+    } else if (dto.isActive === true && subscription.isPaused) {
+      await assertPublicWebhookUrl(subscription.targetUrl);
     }
 
     const dataToUpdate: any = {
@@ -194,6 +196,13 @@ export class WebhookService {
       events: dto.events ?? subscription.events,
       isActive: dto.isActive !== undefined ? dto.isActive : subscription.isActive,
     };
+
+    if (dto.isActive === true && subscription.isPaused) {
+      dataToUpdate.isPaused = false;
+      dataToUpdate.consecutiveFailures = 0;
+      dataToUpdate.pausedAt = null;
+      dataToUpdate.pauseReason = null;
+    }
 
     if (dto.events && dto.events.length > 0) {
       if (
@@ -301,22 +310,65 @@ export class WebhookService {
   }
 
   /**
-   * Retorna as últimas entregas com limite configurável
+   * Retorna as últimas entregas com limite e paginação configurável
    */
   async getDeliveries(
     userId: string,
     limit: number = 50,
-  ): Promise<WebhookDeliveryResponse[]> {
+    page?: number,
+  ): Promise<
+    | WebhookDeliveryResponse[]
+    | {
+      data: WebhookDeliveryResponse[];
+      meta: { total: number; page: number; limit: number; totalPages: number };
+    }
+  > {
+    const safeLimit = Math.min(Math.max(limit || 25, 1), 100);
     const subscription = await this.prisma.webhookSubscription.findUnique({
       where: { userId },
     });
 
-    if (!subscription) return [];
+    if (!subscription) {
+      if (page !== undefined) {
+        return {
+          data: [],
+          meta: { total: 0, page: 1, limit: safeLimit, totalPages: 1 },
+        };
+      }
+      return [];
+    }
+
+    if (page !== undefined) {
+      const safePage = Math.max(page || 1, 1);
+      const skip = (safePage - 1) * safeLimit;
+
+      const [deliveries, total] = await Promise.all([
+        this.prisma.webhookDelivery.findMany({
+          where: { subscriptionId: subscription.id },
+          orderBy: { createdAt: 'desc' },
+          skip,
+          take: safeLimit,
+        }),
+        this.prisma.webhookDelivery.count({
+          where: { subscriptionId: subscription.id },
+        }),
+      ]);
+
+      return {
+        data: deliveries as unknown as WebhookDeliveryResponse[],
+        meta: {
+          total,
+          page: safePage,
+          limit: safeLimit,
+          totalPages: Math.max(Math.ceil(total / safeLimit), 1),
+        },
+      };
+    }
 
     const deliveries = await this.prisma.webhookDelivery.findMany({
       where: { subscriptionId: subscription.id },
       orderBy: { createdAt: 'desc' },
-      take: Math.min(limit, 100),
+      take: safeLimit,
     });
 
     return deliveries as unknown as WebhookDeliveryResponse[];
@@ -430,12 +482,34 @@ export class WebhookService {
   }
 
   /**
-   * Reenvia uma entrega específica sob demanda
+   * Reativa automaticamente a subscrição se estiver pausada pelo Circuit Breaker
+   */
+  private async reactivateSubscriptionIfPaused(
+    subscription: { id: string; isPaused: boolean; targetUrl: string },
+    tx: any,
+  ): Promise<boolean> {
+    if (!subscription.isPaused) return false;
+
+    await tx.webhookSubscription.update({
+      where: { id: subscription.id },
+      data: {
+        isPaused: false,
+        isActive: true,
+        consecutiveFailures: 0,
+        pausedAt: null,
+        pauseReason: null,
+      },
+    });
+    return true;
+  }
+
+  /**
+   * Reenvia uma entrega específica sob demanda (apenas status diferente de 2XX)
    */
   async resendDelivery(
     userId: string,
     deliveryId: string,
-  ): Promise<{ success: boolean; message: string }> {
+  ): Promise<{ success: boolean; reactivated: boolean; message: string }> {
     const subscription = await this.prisma.webhookSubscription.findUnique({
       where: { userId },
     });
@@ -452,16 +526,110 @@ export class WebhookService {
       throw new NotFoundException('Entrega não encontrada.');
     }
 
-    await this.prisma.webhookDelivery.update({
-      where: { id: delivery.id },
-      data: {
-        status: 'PENDING',
-        nextRetryAt: new Date(),
-        attempts: 0,
-      },
+    const isHttp2xx =
+      delivery.responseStatus !== null &&
+      delivery.responseStatus !== undefined &&
+      delivery.responseStatus >= 200 &&
+      delivery.responseStatus < 300;
+
+    if (delivery.status === 'SUCCESS' || isHttp2xx) {
+      throw new BadRequestException(
+        'Apenas entregas com falha ou pendentes (status diferente de 2XX) podem ser reenviadas.',
+      );
+    }
+
+    if (subscription.isPaused) {
+      await assertPublicWebhookUrl(subscription.targetUrl);
+    }
+
+    const reactivated = await this.prisma.$transaction(async (tx) => {
+      await tx.webhookDelivery.update({
+        where: { id: delivery.id },
+        data: {
+          status: 'PENDING',
+          nextRetryAt: new Date(),
+          attempts: 0,
+        },
+      });
+      return this.reactivateSubscriptionIfPaused(subscription, tx);
     });
 
-    return { success: true, message: 'Entrega reenfileirada para reenvio imediato.' };
+    return {
+      success: true,
+      reactivated,
+      message: reactivated
+        ? 'Webhook reativado automaticamente e entrega reenfileirada para reenvio imediato.'
+        : 'Entrega reenfileirada para reenvio imediato.',
+    };
+  }
+
+  /**
+   * Reenvia múltiplas entregas em lote sob demanda (apenas FAILED/PENDING com status diferente de 2XX)
+   */
+  async bulkResendDeliveries(
+    userId: string,
+    deliveryIds: string[],
+  ): Promise<{
+    success: boolean;
+    count: number;
+    reactivated: boolean;
+    message: string;
+  }> {
+    const subscription = await this.prisma.webhookSubscription.findUnique({
+      where: { userId },
+    });
+
+    if (!subscription) {
+      throw new NotFoundException('Webhook não encontrado para este usuário.');
+    }
+
+    const uniqueIds = Array.from(new Set(deliveryIds));
+
+    if (subscription.isPaused) {
+      await assertPublicWebhookUrl(subscription.targetUrl);
+    }
+
+    const { count, reactivated } = await this.prisma.$transaction(async (tx) => {
+      const result = await tx.webhookDelivery.updateMany({
+        where: {
+          id: { in: uniqueIds },
+          subscriptionId: subscription.id,
+          status: { in: ['FAILED', 'PENDING'] },
+          OR: [
+            { responseStatus: null },
+            { responseStatus: { lt: 200 } },
+            { responseStatus: { gte: 300 } },
+          ],
+        },
+        data: {
+          status: 'PENDING',
+          nextRetryAt: new Date(),
+          attempts: 0,
+        },
+      });
+
+      if (result.count === 0) {
+        throw new NotFoundException(
+          'Nenhuma entrega elegível (FAILED/PENDING com status diferente de 2XX) encontrada para reenvio.',
+        );
+      }
+
+      const wasReactivated = await this.reactivateSubscriptionIfPaused(
+        subscription,
+        tx,
+      );
+
+      return { count: result.count, reactivated: wasReactivated };
+    });
+
+    return {
+      success: true,
+      count,
+      reactivated,
+      message: reactivated
+        ? `Webhook reativado automaticamente e ${count} entrega(s) reenfileirada(s) para reenvio imediato.`
+        : `${count} entrega(s) reenfileirada(s) para reenvio imediato.`,
+    };
   }
 
   /**
@@ -523,9 +691,9 @@ export class WebhookService {
     const avgDurationMs =
       deliveries7d.length > 0
         ? Math.round(
-            deliveries7d.reduce((acc, d) => acc + (d.durationMs || 0), 0) /
-              deliveries7d.length,
-          )
+          deliveries7d.reduce((acc, d) => acc + (d.durationMs || 0), 0) /
+          deliveries7d.length,
+        )
         : 0;
 
     const successRatePercent =

@@ -22,6 +22,7 @@ import type { JwtPayload } from 'src/modules/auth/types/jwt-payload';
 import { WebhookService } from './webhook.service';
 import { CreateWebhookDto } from './dto/create-webhook.dto';
 import { UpdateWebhookDto } from './dto/update-webhook.dto';
+import { BulkResendDeliveriesDto } from './dto/bulk-resend-deliveries.dto';
 
 @ApiTags('Webhooks')
 @ApiBearerAuth()
@@ -107,17 +108,26 @@ export class WebhookController {
     summary: 'Lista o histórico recente de entregas/tentativas de Webhook',
   })
   @ApiQuery({
+    name: 'page',
+    required: false,
+    example: 1,
+    description:
+      'Número da página (quando informado, retorna objeto paginado { data, meta })',
+  })
+  @ApiQuery({
     name: 'limit',
     required: false,
-    example: 50,
-    description: 'Quantidade de registros a retornar (máximo 100)',
+    example: 25,
+    description: 'Quantidade de registros por página (máximo 100)',
   })
   getDeliveries(
     @CurrentUser() user: JwtPayload,
     @Query('limit') limit?: string,
+    @Query('page') page?: string,
   ) {
-    const parsedLimit = limit ? parseInt(limit, 10) : 50;
-    return this.service.getDeliveries(user.sub, parsedLimit);
+    const parsedPage = page ? parseInt(page, 10) : undefined;
+    const parsedLimit = limit ? parseInt(limit, 10) : parsedPage ? 25 : 50;
+    return this.service.getDeliveries(user.sub, parsedLimit, parsedPage);
   }
 
   @Post('me/test')
@@ -128,6 +138,18 @@ export class WebhookController {
   })
   testWebhook(@CurrentUser() user: JwtPayload) {
     return this.service.testWebhook(user.sub);
+  }
+
+  @Post('me/deliveries/bulk-resend')
+  @ApiOperation({
+    summary:
+      'Reenfileira múltiplas entregas (FAILED/PENDING) em lote para reenvio imediato',
+  })
+  bulkResendDeliveries(
+    @CurrentUser() user: JwtPayload,
+    @Body() dto: BulkResendDeliveriesDto,
+  ) {
+    return this.service.bulkResendDeliveries(user.sub, dto.deliveryIds);
   }
 
   @Post('me/deliveries/:id/resend')

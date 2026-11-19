@@ -1427,6 +1427,9 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
       return;
     }
 
+    const payload = delivery.payload as any;
+    const eventId = payload?.id || 'n/a';
+
     // 1. Proteção em tempo de execução contra SSRF / DNS Rebinding
     try {
       await assertPublicWebhookUrl(sub.targetUrl);
@@ -1441,12 +1444,11 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
         },
       });
       this.logger.error(
-        `Disparo de webhook ${delivery.id} bloqueado por política Anti-SSRF (${sub.targetUrl}): ${ssrfErr.message}`,
+        `Disparo de webhook ${delivery.id} (eventId=${eventId}) bloqueado por política Anti-SSRF (${sub.targetUrl}): ${ssrfErr.message}`,
       );
       return;
     }
 
-    const payload = delivery.payload;
     const timestamp = Math.floor(Date.now() / 1000);
     const signature = this.signPayload(sub.secretKey, timestamp, payload);
 
@@ -1531,7 +1533,7 @@ export class WebhookWorkerService implements OnApplicationBootstrap, OnApplicati
       });
 
       this.logger.warn(
-        `Falha ao entregar webhook ${delivery.id} (${delivery.event}) para ${sub.targetUrl}. Tentativa ${attempts}/4. Erro: ${lastError}`,
+        `Falha ao entregar webhook ${delivery.id} (${delivery.event}, eventId=${eventId}) para ${sub.targetUrl}. Tentativa ${attempts}/4. Erro: ${lastError}`,
       );
 
       // Quando este evento específico esgota todas as 4 tentativas (falha definitiva do evento):

@@ -423,8 +423,14 @@
                                 </span>
                             </div>
                         </div>
-                        <div id="webhook-status-badge-container" style="display: flex; align-items: center; position: relative;">
-                            <span class="webhook-badge-pill" style="position: static !important; display: inline-flex !important; margin: 0 !important; background: rgba(148, 163, 184, 0.2); color: var(--text-muted);">CARREGANDO...</span>
+                        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                            <label id="webhook-active-toggle-wrapper" title="Ativar ou desativar os disparos de Webhook livremente" style="display: inline-flex; align-items: center; gap: 8px; cursor: pointer; background: rgba(0,0,0,0.25); border: 1px solid var(--border); padding: 6px 12px; border-radius: 999px; font-size: 0.82rem; font-weight: 600; color: var(--text);">
+                                <input type="checkbox" id="webhook-active-toggle" checked onchange="toggleWebhookActive(this.checked)" style="accent-color: var(--primary); width: 16px; height: 16px; cursor: pointer;">
+                                <span id="webhook-active-toggle-label">Disparos Ativos</span>
+                            </label>
+                            <div id="webhook-status-badge-container" style="display: flex; align-items: center; position: relative;">
+                                <span class="webhook-badge-pill" style="position: static !important; display: inline-flex !important; margin: 0 !important; background: rgba(148, 163, 184, 0.2); color: var(--text-muted);">CARREGANDO...</span>
+                            </div>
                         </div>
                     </div>
 
@@ -659,16 +665,36 @@
                                 Últimas notificações enviadas para o seu endpoint e logs de diagnóstico.
                             </p>
                         </div>
-                        <button type="button" class="btn-primary" onclick="loadWebhookDeliveries()" title="Atualizar Histórico" style="width: auto; padding: 6px 12px; font-size: 0.85rem; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text);">
+                        <button type="button" class="btn-primary" onclick="loadWebhookDeliveries(currentWebhookDeliveriesPage)" title="Atualizar Histórico" style="width: auto; padding: 6px 12px; font-size: 0.85rem; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text);">
                             <i class='bx bx-refresh'></i> <span>Atualizar</span>
                         </button>
+                    </div>
+
+                    <!-- Barra Contextual de Ações em Massa -->
+                    <div id="webhook-bulk-actions-bar" class="hidden" style="display: none; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 10px; padding: 10px 16px; margin-bottom: 14px;">
+                        <div style="display: flex; align-items: center; gap: 10px; font-size: 0.88rem; color: #fcd34d; font-weight: 600;">
+                            <i class='bx bx-check-square' style="font-size: 1.15rem;"></i>
+                            <span id="webhook-bulk-count">0 selecionado(s)</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                            <button type="button" id="btn-webhook-bulk-resend" class="btn-primary" onclick="bulkResendWebhookDeliveries()" style="width: auto; padding: 6px 14px; font-size: 0.82rem; background: rgba(245, 158, 11, 0.2); border: 1px solid rgba(245, 158, 11, 0.4); color: #fbbf24;">
+                                <i class='bx bx-refresh'></i> <span>Reenviar Selecionados</span>
+                            </button>
+                            <button type="button" class="btn-primary" onclick="clearWebhookDeliverySelection()" style="width: auto; padding: 6px 12px; font-size: 0.82rem; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text-muted);">
+                                Limpar seleção
+                            </button>
+                        </div>
                     </div>
 
                     <div style="overflow-x: auto;">
                         <table style="width: 100%; border-collapse: collapse; font-size: 0.88rem; text-align: left;" id="webhook-deliveries-table">
                             <thead>
                                 <tr style="border-bottom: 1px solid var(--border); color: var(--text-muted); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px;">
+                                    <th style="padding: 12px 10px 12px 16px; width: 38px;">
+                                        <input type="checkbox" id="webhook-select-all" onchange="toggleAllWebhookDeliveries(this.checked)" title="Selecionar todos elegíveis (não-2XX) desta página" style="cursor: pointer; accent-color: var(--primary); width: 15px; height: 15px;">
+                                    </th>
                                     <th style="padding: 12px 16px;">Evento</th>
+                                    <th style="padding: 12px 16px;">ID do Evento</th>
                                     <th style="padding: 12px 16px;">Status</th>
                                     <th style="padding: 12px 16px;">HTTP Code</th>
                                     <th style="padding: 12px 16px;">Tentativas</th>
@@ -679,12 +705,15 @@
                             </thead>
                             <tbody id="webhook-deliveries-tbody">
                                 <tr>
-                                    <td colspan="7" style="text-align: center; padding: 32px; color: var(--text-muted);">
+                                    <td colspan="9" style="text-align: center; padding: 32px; color: var(--text-muted);">
                                         Nenhuma entrega registrada ainda.
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+
+                    <div id="webhook-deliveries-pagination" style="display: none; justify-content: space-between; align-items: center; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 10px;">
                     </div>
                 </div>
 
@@ -1963,8 +1992,19 @@ print(f'Basic {auth}')</code></pre>
                     }
                 });
 
+                const activeToggle = document.getElementById('webhook-active-toggle');
+                const activeToggleLabel = document.getElementById('webhook-active-toggle-label');
+                const setToggleState = (active) => {
+                    if (activeToggle) activeToggle.checked = !!active;
+                    if (activeToggleLabel) {
+                        activeToggleLabel.innerText = active ? 'Disparos Ativos' : 'Disparos Desativados';
+                        activeToggleLabel.style.color = active ? 'var(--primary)' : 'var(--text-muted)';
+                    }
+                };
+
                 // Status & Circuit Breaker
                 if (sub.isPaused) {
+                    setToggleState(false);
                     if (badgeContainer) {
                         badgeContainer.innerHTML = `<span class="webhook-badge-pill" style="position: static !important; display: inline-flex !important; margin: 0 !important; background: rgba(239, 68, 68, 0.2); color: var(--danger);"><i class='bx bx-error-circle'></i> PAUSADO (CIRCUIT BREAKER)</span>`;
                     }
@@ -1974,11 +2014,13 @@ print(f'Basic {auth}')</code></pre>
                         if (reasonEl) reasonEl.innerText = sub.pauseReason || 'O seu endpoint acumulou 5 eventos consecutivos distintos com falha.';
                     }
                 } else if (sub.isActive) {
+                    setToggleState(true);
                     if (badgeContainer) {
                         badgeContainer.innerHTML = `<span class="webhook-badge-pill" style="position: static !important; display: inline-flex !important; margin: 0 !important; background: rgba(16, 185, 129, 0.2); color: var(--primary);"><i class='bx bx-check-circle'></i> ATIVO</span>`;
                     }
                     if (alertBox) alertBox.classList.add('hidden');
                 } else {
+                    setToggleState(false);
                     if (badgeContainer) {
                         badgeContainer.innerHTML = `<span class="webhook-badge-pill" style="position: static !important; display: inline-flex !important; margin: 0 !important; background: rgba(148, 163, 184, 0.2); color: var(--text-muted);">INATIVO</span>`;
                     }
@@ -1986,13 +2028,68 @@ print(f'Basic {auth}')</code></pre>
                 }
 
                 // Carrega o histórico de entregas
-                await loadWebhookDeliveries();
+                await loadWebhookDeliveries(currentWebhookDeliveriesPage);
             } catch (err) {
                 console.error(err);
                 if (feedbackMsg) {
                     feedbackMsg.style.color = 'var(--danger)';
                     feedbackMsg.innerText = err.message || 'Erro ao carregar dados do webhook.';
                 }
+            }
+        }
+
+        async function toggleWebhookActive(isActive) {
+            const toggle = document.getElementById('webhook-active-toggle');
+            const label = document.getElementById('webhook-active-toggle-label');
+            const feedbackMsg = document.getElementById('webhook-feedback-msg');
+
+            if (label) {
+                label.innerText = isActive ? 'Disparos Ativos' : 'Disparos Desativados';
+                label.style.color = isActive ? 'var(--primary)' : 'var(--text-muted)';
+            }
+
+            // Se ainda não existe webhook salvo, apenas reflete o estado visual para a criação
+            if (!window.currentWebhookSubscription) return;
+
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            if (toggle) toggle.disabled = true;
+            try {
+                const res = await fetch('/api/v1/webhooks/me', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ isActive })
+                });
+
+                const data = await res.json().catch(() => ({}));
+                if (!res.ok) {
+                    throw new Error(data.message || 'Falha ao alterar status do webhook');
+                }
+
+                if (feedbackMsg) {
+                    feedbackMsg.style.color = 'var(--primary)';
+                    feedbackMsg.innerText = isActive ? 'Webhook ativado com sucesso!' : 'Webhook desativado temporariamente.';
+                    setTimeout(() => { if (feedbackMsg) feedbackMsg.innerText = ''; }, 4000);
+                }
+
+                await loadWebhookData();
+            } catch (err) {
+                console.error(err);
+                if (toggle) toggle.checked = !isActive;
+                if (label) {
+                    label.innerText = !isActive ? 'Disparos Ativos' : 'Disparos Desativados';
+                    label.style.color = !isActive ? 'var(--primary)' : 'var(--text-muted)';
+                }
+                if (feedbackMsg) {
+                    feedbackMsg.style.color = 'var(--danger)';
+                    feedbackMsg.innerText = err.message || 'Erro ao alterar status do webhook.';
+                }
+            } finally {
+                if (toggle) toggle.disabled = false;
             }
         }
 
@@ -2036,7 +2133,7 @@ print(f'Basic {auth}')</code></pre>
                     body: JSON.stringify({
                         targetUrl,
                         events: selectedEvents,
-                        isActive: true
+                        isActive: document.getElementById('webhook-active-toggle')?.checked ?? true
                     })
                 });
 
@@ -2196,46 +2293,131 @@ print(f'Basic {auth}')</code></pre>
             }
         }
 
-        async function loadWebhookDeliveries() {
+        let currentWebhookDeliveriesPage = 1;
+
+        function copyWebhookEventId(eventId, btn) {
+            if (!eventId || eventId === '-') return;
+            navigator.clipboard.writeText(eventId).then(() => {
+                const icon = btn?.querySelector('i');
+                if (icon) {
+                    const prevClass = icon.className;
+                    icon.className = 'bx bx-check';
+                    btn.style.color = 'var(--primary)';
+                    setTimeout(() => {
+                        icon.className = prevClass;
+                        btn.style.color = 'var(--text-muted)';
+                    }, 1500);
+                }
+            }).catch(() => {});
+        }
+
+        function updateWebhookBulkSelectionUI() {
+            const checkboxes = Array.from(document.querySelectorAll('.webhook-delivery-checkbox'));
+            const eligibleCheckboxes = checkboxes.filter(cb => !cb.disabled);
+            const checkedCheckboxes = eligibleCheckboxes.filter(cb => cb.checked);
+            const selectAll = document.getElementById('webhook-select-all');
+            const bar = document.getElementById('webhook-bulk-actions-bar');
+            const countEl = document.getElementById('webhook-bulk-count');
+
+            if (selectAll) {
+                selectAll.disabled = eligibleCheckboxes.length === 0;
+                selectAll.checked = eligibleCheckboxes.length > 0 && checkedCheckboxes.length === eligibleCheckboxes.length;
+                selectAll.indeterminate = checkedCheckboxes.length > 0 && checkedCheckboxes.length < eligibleCheckboxes.length;
+            }
+
+            if (bar && countEl) {
+                if (checkedCheckboxes.length > 0) {
+                    bar.classList.remove('hidden');
+                    bar.style.display = 'flex';
+                    countEl.innerText = `${checkedCheckboxes.length} evento(s) selecionado(s)`;
+                } else {
+                    bar.classList.add('hidden');
+                    bar.style.display = 'none';
+                }
+            }
+        }
+
+        function toggleAllWebhookDeliveries(checked) {
+            document.querySelectorAll('.webhook-delivery-checkbox:not(:disabled)').forEach(cb => {
+                cb.checked = checked;
+            });
+            updateWebhookBulkSelectionUI();
+        }
+
+        function clearWebhookDeliverySelection() {
+            document.querySelectorAll('.webhook-delivery-checkbox').forEach(cb => {
+                cb.checked = false;
+            });
+            updateWebhookBulkSelectionUI();
+        }
+
+        async function loadWebhookDeliveries(page = 1) {
             const token = localStorage.getItem('token');
             if (!token) return;
 
             const tbody = document.getElementById('webhook-deliveries-tbody');
+            const paginationContainer = document.getElementById('webhook-deliveries-pagination');
             if (!tbody) return;
 
+            const targetPage = Math.max(Number(page) || 1, 1);
+
             try {
-                const res = await fetch('/api/v1/webhooks/me/deliveries?limit=25', {
+                const res = await fetch(`/api/v1/webhooks/me/deliveries?page=${targetPage}&limit=25`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
 
                 if (!res.ok) return;
-                const deliveries = await res.json().catch(() => []);
+                const json = await res.json().catch(() => null);
+                const deliveries = Array.isArray(json) ? json : (json?.data || []);
+                const meta = (!Array.isArray(json) && json?.meta)
+                    ? json.meta
+                    : { total: deliveries.length, page: 1, limit: 25, totalPages: 1 };
+
+                currentWebhookDeliveriesPage = meta.page || 1;
 
                 if (!deliveries || deliveries.length === 0) {
                     tbody.innerHTML = `
                         <tr>
-                            <td colspan="7" style="text-align: center; padding: 32px; color: var(--text-muted);">
+                            <td colspan="9" style="text-align: center; padding: 32px; color: var(--text-muted);">
                                 Nenhuma notificação enviada ainda. Salve seu webhook e dispare um teste!
                             </td>
                         </tr>
                     `;
+                    if (paginationContainer) paginationContainer.style.display = 'none';
+                    updateWebhookBulkSelectionUI();
                     return;
                 }
 
                 tbody.innerHTML = deliveries.map(d => {
                     const isSuccess = d.status === 'SUCCESS';
                     const isPending = d.status === 'PENDING';
+                    const isHttp2xx = d.responseStatus !== null && d.responseStatus !== undefined && d.responseStatus >= 200 && d.responseStatus < 300;
+                    const canResend = !isSuccess && !isHttp2xx;
                     const statusColor = isSuccess ? 'var(--primary)' : isPending ? '#f59e0b' : 'var(--danger)';
                     const statusBg = isSuccess ? 'rgba(16, 185, 129, 0.15)' : isPending ? 'rgba(245, 158, 11, 0.15)' : 'rgba(239, 68, 68, 0.15)';
                     const statusText = isSuccess ? 'SUCESSO' : isPending ? 'PENDENTE' : 'FALHA';
                     const httpCode = d.responseStatus ? `HTTP ${d.responseStatus}` : (d.lastError ? 'ERRO' : '-');
                     const latency = d.durationMs ? `${Math.round(d.durationMs)} ms` : '-';
                     const dateStr = new Date(d.createdAt).toLocaleString('pt-BR');
+                    const eventId = (d.payload && d.payload.id) ? String(d.payload.id) : '-';
 
                     return `
                         <tr style="border-bottom: 1px solid rgba(255,255,255,0.03); transition: background 0.15s;" onmouseover="this.style.background='rgba(255,255,255,0.02)'" onmouseout="this.style.background='transparent'">
+                            <td style="padding: 12px 10px 12px 16px;">
+                                <input type="checkbox" class="webhook-delivery-checkbox" value="${d.id}" ${canResend ? '' : 'disabled'} onchange="updateWebhookBulkSelectionUI()" title="${canResend ? 'Selecionar para reenvio em massa' : 'Apenas entregas com falha/pendentes (não-2XX) podem ser reenviadas'}" style="cursor: ${canResend ? 'pointer' : 'not-allowed'}; opacity: ${canResend ? '1' : '0.3'}; accent-color: var(--primary); width: 15px; height: 15px;">
+                            </td>
                             <td style="padding: 12px 16px;">
                                 <code style="color: #6ee7b7; font-size: 0.82rem;">${d.event}</code>
+                            </td>
+                            <td style="padding: 12px 16px;">
+                                <div style="display: inline-flex; align-items: center; gap: 6px;">
+                                    <code style="color: var(--text); font-size: 0.8rem; background: rgba(255,255,255,0.05); padding: 2px 6px; border-radius: 4px;">${eventId}</code>
+                                    ${eventId !== '-' ? `
+                                        <button type="button" onclick="copyWebhookEventId('${eventId}', this)" title="Copiar ID do Evento" style="background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 2px 4px; display: inline-flex; align-items: center;">
+                                            <i class='bx bx-copy' style="font-size: 0.9rem;"></i>
+                                        </button>
+                                    ` : ''}
+                                </div>
                             </td>
                             <td style="padding: 12px 16px;">
                                 <span class="webhook-badge-pill" style="position: static !important; display: inline-flex !important; margin: 0 !important; background: ${statusBg}; color: ${statusColor};">
@@ -2255,7 +2437,7 @@ print(f'Basic {auth}')</code></pre>
                                 ${dateStr}
                             </td>
                             <td style="padding: 12px 16px; text-align: right;">
-                                ${!isSuccess ? `
+                                ${canResend ? `
                                     <button type="button" class="btn-primary" onclick="resendWebhookDelivery('${d.id}')" title="Reenviar agora" style="width: auto; padding: 4px 10px; font-size: 0.75rem; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); color: #fbbf24;">
                                         <i class='bx bx-refresh'></i> Reenviar
                                     </button>
@@ -2266,6 +2448,26 @@ print(f'Basic {auth}')</code></pre>
                         </tr>
                     `;
                 }).join('');
+
+                if (paginationContainer) {
+                    const totalPages = meta.totalPages || 1;
+                    paginationContainer.style.display = 'flex';
+                    paginationContainer.innerHTML = `
+                        <span style="color: var(--text-muted); font-size: 0.8rem; font-weight: 500;">
+                            Página <strong style="color: white;">${meta.page}</strong> de <strong style="color: white;">${totalPages}</strong> (Total: ${meta.total})
+                        </span>
+                        <div style="display: flex; gap: 8px;">
+                            <button type="button" class="btn-primary" onclick="loadWebhookDeliveries(${meta.page - 1})" ${meta.page <= 1 ? 'disabled' : ''} style="width: auto; padding: 6px 14px; font-size: 0.8rem; font-weight: 600; border-radius: 6px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text); ${meta.page <= 1 ? 'opacity: 0.4; cursor: not-allowed;' : ''}">
+                                Anterior
+                            </button>
+                            <button type="button" class="btn-primary" onclick="loadWebhookDeliveries(${meta.page + 1})" ${meta.page >= totalPages ? 'disabled' : ''} style="width: auto; padding: 6px 14px; font-size: 0.8rem; font-weight: 600; border-radius: 6px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text); ${meta.page >= totalPages ? 'opacity: 0.4; cursor: not-allowed;' : ''}">
+                                Próxima
+                            </button>
+                        </div>
+                    `;
+                }
+
+                updateWebhookBulkSelectionUI();
             } catch (err) {
                 console.error('Falha ao carregar entregas:', err);
             }
@@ -2281,16 +2483,70 @@ print(f'Basic {auth}')</code></pre>
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
 
+                const data = await res.json().catch(() => ({}));
                 if (!res.ok) {
-                    const data = await res.json().catch(() => ({}));
                     throw new Error(data.message || 'Falha ao reenviar entrega');
                 }
 
-                alert('Entrega reenfileirada para reenvio imediato!');
-                await loadWebhookDeliveries();
+                alert(data.message || 'Entrega reenfileirada para reenvio imediato!');
+                if (data.reactivated) {
+                    await loadWebhookData();
+                } else {
+                    await loadWebhookDeliveries(currentWebhookDeliveriesPage);
+                }
             } catch (err) {
                 console.error(err);
                 alert(err.message || 'Erro ao solicitar reenvio.');
+            }
+        }
+
+        async function bulkResendWebhookDeliveries() {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            const deliveryIds = Array.from(
+                document.querySelectorAll('.webhook-delivery-checkbox:not(:disabled):checked')
+            ).map(cb => cb.value);
+
+            if (deliveryIds.length === 0) return;
+
+            const btn = document.getElementById('btn-webhook-bulk-resend');
+            const originalHtml = btn ? btn.innerHTML : '';
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = `<i class='bx bx-loader-alt bx-spin'></i> <span>Reenviando...</span>`;
+            }
+
+            try {
+                const res = await fetch('/api/v1/webhooks/me/deliveries/bulk-resend', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ deliveryIds })
+                });
+
+                const data = await res.json().catch(() => ({}));
+                if (!res.ok) {
+                    throw new Error(data.message || 'Falha ao reenviar entregas selecionadas');
+                }
+
+                alert(data.message || `${data.count} entrega(s) reenfileirada(s) para reenvio imediato!`);
+                clearWebhookDeliverySelection();
+                if (data.reactivated) {
+                    await loadWebhookData();
+                } else {
+                    await loadWebhookDeliveries(currentWebhookDeliveriesPage);
+                }
+            } catch (err) {
+                console.error(err);
+                alert(err.message || 'Erro ao solicitar reenvio em massa.');
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = originalHtml;
+                }
             }
         }
 

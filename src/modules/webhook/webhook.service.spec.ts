@@ -46,8 +46,10 @@ describe('WebhookService', () => {
         findFirst: jest.fn(),
         create: jest.fn(),
         update: jest.fn(),
+        updateMany: jest.fn(),
         count: jest.fn(),
       },
+      $transaction: jest.fn((cb: any) => cb(prismaMock)),
       user: {
         findUnique: jest.fn().mockResolvedValue({ dbCredentialsId: 'cred_1' }),
       },
@@ -266,6 +268,144 @@ describe('WebhookService', () => {
       await expect(service.rotateSecret('user_inexistente')).rejects.toThrow(
         NotFoundException,
       );
+    });
+  });
+
+  describe('getDeliveries', () => {
+    it('deve retornar lista paginada com meta quando page for informado', async () => {
+      prismaMock.webhookSubscription.findUnique.mockResolvedValue({
+        id: 'wh_1',
+        userId: 'user_1',
+      });
+      prismaMock.webhookDelivery.findMany.mockResolvedValue([
+        { id: 'del_1', event: 'order.created', status: 'FAILED' },
+      ]);
+      prismaMock.webhookDelivery.count.mockResolvedValue(30);
+
+      const result: any = await service.getDeliveries('user_1', 25, 2);
+
+      expect(prismaMock.webhookDelivery.findMany).toHaveBeenCalledWith({
+        where: { subscriptionId: 'wh_1' },
+        orderBy: { createdAt: 'desc' },
+        skip: 25,
+        take: 25,
+      });
+      expect(result).toEqual({
+        data: [{ id: 'del_1', event: 'order.created', status: 'FAILED' }],
+        meta: { total: 30, page: 2, limit: 25, totalPages: 2 },
+      });
+    });
+  });
+
+  describe('update (toggle isActive)', () => {
+    it('deve permitir ativar/desativar livremente e limpar pausa do Circuit Breaker ao reativar', async () => {
+      prismaMock.webhookSubscription.findUnique.mockResolvedValue({
+        id: 'wh_1',
+        userId: 'user_1',
+        targetUrl: 'https://api.github.com/webhook',
+        events: ['order.created'],
+        isActive: false,
+        isPaused: true,
+        lastOrderId: BigInt(10),
+        lastProductId: BigInt(0),
+        lastDeliveryId: BigInt(0),
+        lastAccountPayableId: BigInt(0),
+        lastAccountReceivableId: BigInt(0),
+      });
+      prismaMock.webhookSubscription.update.mockImplementation(({ data }: any) =>
+        Promise.resolve({ id: 'wh_1', userId: 'user_1', ...data }),
+      );
+
+      const result = await service.update('user_1', { isActive: true });
+      expect(result.isActive).toBe(true);
+      expect(result.isPaused).toBe(false);
+      expect(result.consecutiveFailures).toBe(0);
+    });
+  });
+
+  describe('resendDelivery', () => {
+    it('deve rejeitar reenvio de entrega com status SUCCESS ou HTTP 2XX', async () => {
+      prismaMock.webhookSubscription.findUnique.mockResolvedValue({
+        id: 'wh_1',
+        userId: 'user_1',
+        targetUrl: 'https://api.github.com/webhook',
+        isPaused: false,
+      });
+      prismaMock.webhookDelivery.findFirst.mockResolvedValue({
+        id: 'del_1',
+        subscriptionId: 'wh_1',
+        status: 'SUCCESS',
+        responseStatus: 200,
+      });
+
+      await expect(service.resendDelivery('user_1', 'del_1')).rejects.toThrow(
+        BadRequestException,
+      );
+    });
+  });
+
+  describe('bulkResendDeliveries', () => {
+    it('deve reenfileirar apenas entregas FAILED/PENDING nao-2XX e reativar webhook pausado', async () => {
+      prismaMock.webhookSubscription.findUnique.mockResolvedValue({
+        id: 'wh_1',
+        userId: 'user_1',
+        targetUrl: 'https://api.github.com/webhook',
+        isPaused: true,
+      });
+      prismaMock.webhookDelivery.updateMany.mockResolvedValue({ count: 2 });
+      prismaMock.webhookSubscription.update.mockResolvedValue({
+        id: 'wh_1',
+        isPaused: false,
+        isActive: true,
+      });
+
+      const result = await service.bulkResendDeliveries('user_1', [
+        '550e8400-e29b-41d4-a716-446655440001',
+        '550e8400-e29b-41d4-a716-446655440001',
+        '550e8400-e29b-41d4-a716-446655440002',
+      ]);
+
+      expect(prismaMock.webhookDelivery.updateMany).toHaveBeenCalledWith({
+        where: {
+          id: {
+            in: [
+              '550e8400-e29b-41d4-a716-446655440001',
+              '550e8400-e29b-41d4-a716-446655440002',
+            ],
+          },
+          subscriptionId: 'wh_1',
+          status: { in: ['FAILED', 'PENDING'] },
+          OR: [
+            { responseStatus: null },
+            { responseStatus: { lt: 200 } },
+            { responseStatus: { gte: 300 } },
+          ],
+        },
+        data: expect.objectContaining({
+          status: 'PENDING',
+          attempts: 0,
+        }),
+      });
+      expect(prismaMock.webhookSubscription.update).toHaveBeenCalled();
+      expect(result.success).toBe(true);
+      expect(result.count).toBe(2);
+      expect(result.reactivated).toBe(true);
+    });
+
+    it('deve lancar NotFoundException quando nenhuma entrega elegivel for atualizada', async () => {
+      prismaMock.webhookSubscription.findUnique.mockResolvedValue({
+        id: 'wh_1',
+        userId: 'user_1',
+        targetUrl: 'https://api.github.com/webhook',
+        isPaused: false,
+      });
+      prismaMock.webhookDelivery.updateMany.mockResolvedValue({ count: 0 });
+
+      await expect(
+        service.bulkResendDeliveries('user_1', [
+          '550e8400-e29b-41d4-a716-446655440001',
+        ]),
+      ).rejects.toThrow(NotFoundException);
     });
   });
 });
