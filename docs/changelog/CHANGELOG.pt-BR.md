@@ -6,6 +6,26 @@ Para visualizar a versão interativa com busca em tempo real, acesse o portal we
 
 ---
 
+## [v1.21.1] - 2026-11-19
+
+### 📌 adjustments on webhook tab e melhorias
+> Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Clientes, Geral.
+
+**Destaques:**
+- ⭐ adjustments on webhook tab
+- ⭐ Implementação de durable postgresql state store for webhook cdc deduplication
+
+#### 🚀 Novidades & Melhorias
+- **[Clientes]** adjustments on webhook tab: Atualização no módulo de Clientes: adjustments on webhook tab.
+- **[Geral]** Implementação de durable postgresql state store for webhook cdc deduplication: Atualização no módulo de Geral: implement durable postgresql state store for webhook cdc deduplication.
+- **[Geral]** standardize webhook payloads to match ERP Portuguese response DTOs: Atualização no módulo de Geral: standardize webhook payloads to match ERP Portuguese response DTOs.
+- **[Geral]** standardize webhook payloads to match ERP Portuguese response DTOs: Atualização no módulo de Geral: standardize webhook payloads to match ERP Portuguese response DTOs.
+
+#### 🛠️ Correções & Estabilidade
+- **[Geral]** resolve duplicate merge artifacts in webhook worker service: Atualização no módulo de Geral: resolve duplicate merge artifacts in webhook worker service.
+
+---
+
 ## [v1.21.0] - 2026-11-18
 
 ### 📌 Inclusão de interactive webhook schema inspector with json schema and typescript export e melhorias

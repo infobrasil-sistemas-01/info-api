@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.21.1](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.21.0...v1.21.1) (2026-11-19)
+
+
+### Features
+
+* **client:** adjustments on webhook tab ([46cb2fe](https://github.com/infobrasil-sistemas-01/info-api/commit/46cb2fe32abcf732b2306114f472923dfc56968e))
+* **webhook:** implement durable postgresql state store for webhook cdc deduplication ([4b300d4](https://github.com/infobrasil-sistemas-01/info-api/commit/4b300d4f599025ef34efc19ad9c073434370f546))
+* **webhook:** standardize webhook payloads to match ERP Portuguese response DTOs ([994004d](https://github.com/infobrasil-sistemas-01/info-api/commit/994004dbaa41c6768131761fed0f2b154c445901))
+* **webhook:** standardize webhook payloads to match ERP Portuguese response DTOs ([20ea86a](https://github.com/infobrasil-sistemas-01/info-api/commit/20ea86ae67c7d53d6fb89e4f2d1d7a5bc7962e27))
+
+
+### Bug Fixes
+
+* **webhook:** resolve duplicate merge artifacts in webhook worker service ([8a98d9e](https://github.com/infobrasil-sistemas-01/info-api/commit/8a98d9e47160ed2800e41939dda687d031dcbada))
+
 ## [1.21.0](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.20.13...v1.21.0) (2026-11-18)
 
 

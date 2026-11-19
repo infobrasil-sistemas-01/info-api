@@ -1,5 +1,63 @@
 [
   {
+    "version": "1.21.1",
+    "date": "2026-11-19",
+    "title": "adjustments on webhook tab e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Clientes, Geral.",
+    "highlights": [
+      "adjustments on webhook tab",
+      "Implementação de durable postgresql state store for webhook cdc deduplication"
+    ],
+    "items": [
+      {
+        "module": "Clientes",
+        "type": "feature",
+        "title": "adjustments on webhook tab",
+        "description": "Atualização no módulo de Clientes: adjustments on webhook tab.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "adjustments on webhook tab",
+        "commitHash": "46cb2fe"
+      },
+      {
+        "module": "Geral",
+        "type": "feature",
+        "title": "Implementação de durable postgresql state store for webhook cdc deduplication",
+        "description": "Atualização no módulo de Geral: implement durable postgresql state store for webhook cdc deduplication.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "implement durable postgresql state store for webhook cdc deduplication",
+        "commitHash": "4b300d4"
+      },
+      {
+        "module": "Geral",
+        "type": "feature",
+        "title": "standardize webhook payloads to match ERP Portuguese response DTOs",
+        "description": "Atualização no módulo de Geral: standardize webhook payloads to match ERP Portuguese response DTOs.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "standardize webhook payloads to match ERP Portuguese response DTOs",
+        "commitHash": "994004d"
+      },
+      {
+        "module": "Geral",
+        "type": "feature",
+        "title": "standardize webhook payloads to match ERP Portuguese response DTOs",
+        "description": "Atualização no módulo de Geral: standardize webhook payloads to match ERP Portuguese response DTOs.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "standardize webhook payloads to match ERP Portuguese response DTOs",
+        "commitHash": "20ea86a"
+      },
+      {
+        "module": "Geral",
+        "type": "fix",
+        "title": "resolve duplicate merge artifacts in webhook worker service",
+        "description": "Atualização no módulo de Geral: resolve duplicate merge artifacts in webhook worker service.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "resolve duplicate merge artifacts in webhook worker service",
+        "commitHash": "8a98d9e"
+      }
+    ],
+    "totalChanges": 5
+  },
+  {
     "version": "1.21.0",
     "date": "2026-11-18",
     "title": "Inclusão de interactive webhook schema inspector with json schema and typescript export e melhorias",
