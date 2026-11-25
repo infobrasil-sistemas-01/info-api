@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.21.2](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.21.1...v1.21.2) (2026-11-25)
+
+
+### Features
+
+* **proposal:** add proposals CRUD (without DELETE) for PROPOSTAS and ITENSPRO ([4755569](https://github.com/infobrasil-sistemas-01/info-api/commit/4755569ddcb39c122c86ffc7eef3ef60531b1bc0))
+
 ## [1.21.1](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.21.0...v1.21.1) (2026-11-19)
 
 

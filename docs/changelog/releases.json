@@ -1,5 +1,26 @@
 [
   {
+    "version": "1.21.2",
+    "date": "2026-11-25",
+    "title": "Inclusão de proposals CRUD (without DELETE) for PROPOSTAS and ITENSPRO e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral.",
+    "highlights": [
+      "Inclusão de proposals CRUD (without DELETE) for PROPOSTAS and ITENSPRO"
+    ],
+    "items": [
+      {
+        "module": "Geral",
+        "type": "feature",
+        "title": "Inclusão de proposals CRUD (without DELETE) for PROPOSTAS and ITENSPRO",
+        "description": "Atualização no módulo de Geral: add proposals CRUD (without DELETE) for PROPOSTAS and ITENSPRO.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add proposals CRUD (without DELETE) for PROPOSTAS and ITENSPRO",
+        "commitHash": "4755569"
+      }
+    ],
+    "totalChanges": 1
+  },
+  {
     "version": "1.21.1",
     "date": "2026-11-19",
     "title": "adjustments on webhook tab e melhorias",

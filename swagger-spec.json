@@ -4943,6 +4943,354 @@
         ]
       }
     },
+    "/proposals": {
+      "post": {
+        "description": "Cria uma nova proposta na tabela PROPOSTAS (sempre inicializada com PRO_GERADA = \"N\", pois a conversão em venda é exclusiva do sistema) e seus itens na tabela ITENSPRO em transação atômica, seguindo estritamente a nomenclatura das colunas do banco.",
+        "operationId": "ProposalController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProposalDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Proposta criada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProposalDetailResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados inválidos ou produtos não encontrados."
+          },
+          "403": {
+            "description": "Operador H2M não autorizado a criar proposta em nome de outro vendedor/usuário ou filial."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Criar proposta comercial",
+        "tags": [
+          "Proposals"
+        ]
+      },
+      "get": {
+        "description": "Retorna a listagem paginada da tabela PROPOSTAS com suporte a filtros e cabeçalhos de paginação via X-Request-Count: true.",
+        "operationId": "ProposalController_get",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Página atual",
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "description": "Itens por página",
+            "schema": {
+              "example": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "storeId",
+            "required": false,
+            "in": "query",
+            "description": "Código da loja (LOJ_CODIGO)",
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "statusId",
+            "required": false,
+            "in": "query",
+            "description": "Código da situação (SIT_CODIGO)",
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "clientId",
+            "required": false,
+            "in": "query",
+            "description": "Código do cliente (CLI_CODIGO)",
+            "schema": {
+              "example": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "sellerId",
+            "required": false,
+            "in": "query",
+            "description": "Código do funcionário/vendedor (FUN_CODIGO)",
+            "schema": {
+              "example": 2,
+              "type": "number"
+            }
+          },
+          {
+            "name": "proposalNumber",
+            "required": false,
+            "in": "query",
+            "description": "Número da proposta (PRO_NUMERO)",
+            "schema": {
+              "example": 105,
+              "type": "number"
+            }
+          },
+          {
+            "name": "proGerada",
+            "required": false,
+            "in": "query",
+            "description": "Indica se a proposta já gerou venda (PRO_GERADA: S ou N)",
+            "schema": {
+              "example": "N",
+              "type": "string",
+              "enum": [
+                "S",
+                "N"
+              ]
+            }
+          },
+          {
+            "name": "proStatus",
+            "required": false,
+            "in": "query",
+            "description": "Status interno da proposta (PRO_STATUS)",
+            "schema": {
+              "example": "2",
+              "type": "string"
+            }
+          },
+          {
+            "name": "startDate",
+            "required": false,
+            "in": "query",
+            "description": "Data inicial da proposta (PRO_DATA >= YYYY-MM-DD)",
+            "schema": {
+              "example": "2026-01-01",
+              "type": "string"
+            }
+          },
+          {
+            "name": "endDate",
+            "required": false,
+            "in": "query",
+            "description": "Data final da proposta (PRO_DATA <= YYYY-MM-DD)",
+            "schema": {
+              "example": "2026-01-31",
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Request-Count",
+            "in": "header",
+            "description": "Envie \"true\" para incluir os cabeçalhos X-Total-Count e X-Total-Pages na resposta",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "true"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de propostas retornada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProposalResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Listar propostas comerciais",
+        "tags": [
+          "Proposals"
+        ]
+      }
+    },
+    "/proposals/{id}": {
+      "get": {
+        "description": "Retorna o cabeçalho da proposta (PROPOSTAS) e a lista completa de itens (ITENSPRO) em ITENS.",
+        "operationId": "ProposalController_getById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Número da proposta (PRO_NUMERO)",
+            "schema": {
+              "example": 105,
+              "type": "number"
+            }
+          },
+          {
+            "name": "storeId",
+            "required": false,
+            "in": "query",
+            "description": "Código da loja (LOJ_CODIGO)",
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes da proposta retornados com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProposalDetailResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Proposta não encontrada."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Obter detalhes da proposta por PRO_NUMERO",
+        "tags": [
+          "Proposals"
+        ]
+      },
+      "patch": {
+        "description": "Atualiza parcialmente os campos de PROPOSTAS. Não permite edição caso a proposta já tenha sido convertida em venda (PRO_GERADA = \"S\"). Caso o array ITENS seja enviado no payload, ocorre a substituição integral e atômica (DELETE + INSERT em ITENSPRO dentro da mesma transação) de todos os itens da proposta, recalculando automaticamente totais não informados.",
+        "operationId": "ProposalController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Número da proposta (PRO_NUMERO)",
+            "schema": {
+              "example": 105,
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProposalDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Proposta atualizada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProposalDetailResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados inválidos, produtos inexistentes ou proposta já convertida em venda (PRO_GERADA = S)."
+          },
+          "404": {
+            "description": "Proposta não encontrada."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Atualizar proposta comercial",
+        "tags": [
+          "Proposals"
+        ]
+      }
+    },
+    "/proposals/{id}/items": {
+      "get": {
+        "description": "Retorna os itens vinculados a uma proposta específica pelo PRO_NUMERO.",
+        "operationId": "ProposalController_getItems",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Número da proposta (PRO_NUMERO)",
+            "schema": {
+              "example": 105,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Itens da proposta retornados com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProposalItemResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Proposta não encontrada."
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Listar itens de uma proposta (ITENSPRO)",
+        "tags": [
+          "Proposals"
+        ]
+      }
+    },
     "/webhooks": {
       "post": {
         "description": "Gera uma chave secreta HMAC-SHA256 e inicializa os cursores de eventos a partir do momento da ativação.",
@@ -5229,7 +5577,7 @@
   "info": {
     "title": "InfoBrasil API",
     "description": "API de integração do sistema Retaguarda (by InfoBrasil) com outros sistemas, como ERPs, e-commerce, etc. <br><br>\n      Se deseja solicitar um acesso, preencha o formulário em: <a href='https://info-api.infobrasilsistemas.com.br/integration/form'>Solicitar Acesso</a>\n      <br><br>\n      **O sistema conta com duas formas de autenticação:**<br> \n      - Basic Auth para login e obtenção de token JWT<br>\n      - JWT para acesso aos endpoints protegidos.\n      <br><br>\n      Para verificar a disponibilidade da API acesse nossa <a href='/status'>Página de Status</a> | Para novidades e histórico de versões acesse o <a href='/changelog'>Changelog Oficial</a>\n      <br><br>\n      A API é organizada em módulos, cada um responsável por uma área específica do sistema, como produtos, clientes, vendas, etc.",
-    "version": "1.21.1",
+    "version": "1.21.2",
     "contact": {
       "name": "InfoBrasil Sistemas",
       "url": "https://www.infobrasilsistemas.com.br",
@@ -5280,6 +5628,10 @@
     {
       "name": "Order Items",
       "description": "Endpoints relacionados à consulta de itens de pedido"
+    },
+    {
+      "name": "Proposals",
+      "description": "Endpoints relacionados à gestão de propostas comerciais e seus itens"
     },
     {
       "name": "Delivery",
@@ -11100,6 +11452,1607 @@
           "ORP_DATA",
           "PRO_CODIGO"
         ]
+      },
+      "CreateProposalItemDto": {
+        "type": "object",
+        "properties": {
+          "PRO_CODIGO": {
+            "type": "string",
+            "example": "00000000000045",
+            "description": "Código do produto (PRO_CODIGO)"
+          },
+          "IPR_QTDE": {
+            "type": "number",
+            "example": 2,
+            "description": "Quantidade (IPR_QTDE)"
+          },
+          "IPR_PRECO": {
+            "type": "number",
+            "example": 50,
+            "description": "Preço unitário (IPR_PRECO). Se omitido, será buscado da tabela ESTOQUE."
+          },
+          "IPR_TOTAL": {
+            "type": "number",
+            "example": 100,
+            "description": "Total bruto do item (IPR_TOTAL). Se omitido, será calculado (IPR_QTDE * IPR_PRECO)."
+          },
+          "IPR_DESCONTO": {
+            "type": "object",
+            "example": 0,
+            "description": "Desconto em valor (IPR_DESCONTO)"
+          },
+          "IPR_LIQUIDO": {
+            "type": "object",
+            "example": 100,
+            "description": "Valor líquido do item (IPR_LIQUIDO). Se omitido, será calculado automaticamente."
+          },
+          "IPR_PERCDESCONTO": {
+            "type": "object",
+            "example": 0,
+            "description": "Percentual de desconto (IPR_PERCDESCONTO)"
+          },
+          "PES_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "PES_CODIGO"
+          },
+          "TEC_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "TEC_CODIGO"
+          },
+          "IPR_QTDEENT": {
+            "type": "object",
+            "example": null,
+            "description": "IPR_QTDEENT"
+          },
+          "IPR_INFADICIONAIS": {
+            "type": "object",
+            "example": null,
+            "description": "IPR_INFADICIONAIS"
+          },
+          "LOJ_CODIGO": {
+            "type": "object",
+            "example": 1,
+            "description": "LOJ_CODIGO do item (se omitido, usa o da proposta)"
+          },
+          "IPR_NEGATIVO": {
+            "type": "object",
+            "example": null,
+            "description": "IPR_NEGATIVO"
+          },
+          "AMB_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "AMB_CODIGO"
+          },
+          "IPR_PRCVENDADIA": {
+            "type": "object",
+            "example": null,
+            "description": "IPR_PRCVENDADIA"
+          },
+          "TAM_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "TAM_CODIGO"
+          },
+          "COR_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "COR_CODIGO"
+          },
+          "PRG_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "PRG_CODIGO"
+          },
+          "IPR_ALTURA": {
+            "type": "object",
+            "example": null,
+            "description": "IPR_ALTURA"
+          },
+          "IPR_LARGURA": {
+            "type": "object",
+            "example": null,
+            "description": "IPR_LARGURA"
+          },
+          "IPR_QTDEUNT": {
+            "type": "object",
+            "example": null,
+            "description": "IPR_QTDEUNT"
+          },
+          "PRK_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "PRK_CODIGO"
+          },
+          "IPR_TABELAPRECO": {
+            "type": "object",
+            "example": "1",
+            "description": "Tabela de preço (IPR_TABELAPRECO, padrão 1)"
+          },
+          "IPR_METRAGEMSUGERIDA": {
+            "type": "object",
+            "example": null,
+            "description": "IPR_METRAGEMSUGERIDA"
+          },
+          "IPR_QTDEMETRAGEMSUGERIDA": {
+            "type": "object",
+            "example": null,
+            "description": "IPR_QTDEMETRAGEMSUGERIDA"
+          },
+          "TRM_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "TRM_CODIGO"
+          },
+          "IPR_ITEM": {
+            "type": "object",
+            "example": 1,
+            "description": "Número sequencial do item (IPR_ITEM)"
+          },
+          "IPR_GARANTEESTOQUE": {
+            "type": "object",
+            "example": "N",
+            "description": "Garante estoque S/N (IPR_GARANTEESTOQUE, padrão N)"
+          },
+          "IPR_PRCCUSTO": {
+            "type": "object",
+            "example": null,
+            "description": "IPR_PRCCUSTO"
+          },
+          "IPR_PRCCOMPRA": {
+            "type": "object",
+            "example": null,
+            "description": "IPR_PRCCOMPRA"
+          },
+          "IPR_MARGEMLUCROCOMPRA": {
+            "type": "object",
+            "example": null,
+            "description": "IPR_MARGEMLUCROCOMPRA"
+          },
+          "IPR_MARGEMLUCROCUSTO": {
+            "type": "object",
+            "example": null,
+            "description": "IPR_MARGEMLUCROCUSTO"
+          },
+          "IPR_ACRESCIMO": {
+            "type": "object",
+            "example": 0,
+            "description": "IPR_ACRESCIMO"
+          },
+          "IPR_PERCACRESC": {
+            "type": "object",
+            "example": 0,
+            "description": "IPR_PERCACRESC"
+          }
+        },
+        "required": [
+          "PRO_CODIGO",
+          "IPR_QTDE"
+        ]
+      },
+      "CreateProposalDto": {
+        "type": "object",
+        "properties": {
+          "FUN_CODIGO": {
+            "type": "number",
+            "example": 2,
+            "description": "Código do funcionário/vendedor (FUN_CODIGO)"
+          },
+          "SIT_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código da situação (SIT_CODIGO)"
+          },
+          "LOJ_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código da loja (LOJ_CODIGO). Para H2M é forçado pelo token."
+          },
+          "CLI_CODIGO": {
+            "type": "number",
+            "example": 10,
+            "description": "Código do cliente (CLI_CODIGO)"
+          },
+          "USU_CODIGO": {
+            "type": "object",
+            "example": 1,
+            "description": "Código do usuário operador (USU_CODIGO)"
+          },
+          "FPG_CODIGO": {
+            "type": "object",
+            "example": 1,
+            "description": "Código da forma de pagamento (FPG_CODIGO)"
+          },
+          "PRO_ATENCIOSAMENTE": {
+            "type": "object",
+            "example": "Sr. João",
+            "description": "PRO_ATENCIOSAMENTE"
+          },
+          "PRO_PRAZO": {
+            "type": "object",
+            "example": "10 DIAS",
+            "description": "PRO_PRAZO"
+          },
+          "PRO_VALIDADE": {
+            "type": "object",
+            "example": "15 DIAS",
+            "description": "PRO_VALIDADE"
+          },
+          "PRO_DATA": {
+            "type": "string",
+            "example": "2026-11-25",
+            "description": "Data da proposta (PRO_DATA, padrão hoje)"
+          },
+          "PRO_HORA": {
+            "type": "object",
+            "example": "14:30:00",
+            "description": "Hora da proposta (PRO_HORA, padrão agora)"
+          },
+          "PRO_DATABAIXA": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_DATABAIXA"
+          },
+          "PRO_TOTALBRUTO": {
+            "type": "object",
+            "example": 100,
+            "description": "PRO_TOTALBRUTO (calculado se omitido)"
+          },
+          "PRO_TOTALDESC": {
+            "type": "object",
+            "example": 0,
+            "description": "PRO_TOTALDESC (calculado se omitido)"
+          },
+          "PRO_PERCDESC": {
+            "type": "object",
+            "example": 0,
+            "description": "PRO_PERCDESC"
+          },
+          "PRO_TOTALLIQUIDO": {
+            "type": "object",
+            "example": 100,
+            "description": "PRO_TOTALLIQUIDO (calculado se omitido)"
+          },
+          "PRO_OBS": {
+            "type": "object",
+            "example": "Observação comercial",
+            "description": "PRO_OBS"
+          },
+          "PRO_QUANT": {
+            "type": "object",
+            "example": 2,
+            "description": "PRO_QUANT (calculado se omitido)"
+          },
+          "PRO_CONDICAOPAG": {
+            "type": "object",
+            "example": "30/60 DIAS",
+            "description": "PRO_CONDICAOPAG"
+          },
+          "PRO_FANTCLI": {
+            "type": "object",
+            "example": "CLIENTE FANTASIA",
+            "description": "PRO_FANTCLI"
+          },
+          "PRE_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "PRE_CODIGO"
+          },
+          "PRO_PRECO": {
+            "type": "object",
+            "example": "2",
+            "description": "PRO_PRECO (padrão 2)"
+          },
+          "PRO_PEDCLIENTE": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_PEDCLIENTE"
+          },
+          "TRA_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "TRA_CODIGO"
+          },
+          "PRO_MOTIVO": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_MOTIVO"
+          },
+          "PRO_STATUS": {
+            "type": "object",
+            "example": "2",
+            "description": "PRO_STATUS (padrão 2)"
+          },
+          "PRO_TOTALPP1": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_TOTALPP1"
+          },
+          "PRO_TOTALPP2": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_TOTALPP2"
+          },
+          "PRO_TOTALPP3": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_TOTALPP3"
+          },
+          "PP1_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "PP1_CODIGO"
+          },
+          "PP2_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "PP2_CODIGO"
+          },
+          "PP3_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "PP3_CODIGO"
+          },
+          "FP1_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "FP1_CODIGO"
+          },
+          "FP2_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "FP2_CODIGO"
+          },
+          "FP3_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "FP3_CODIGO"
+          },
+          "PRO_NUMORG": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_NUMORG"
+          },
+          "PRO_DATABASE1": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_DATABASE1"
+          },
+          "PRO_DATABASE2": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_DATABASE2"
+          },
+          "PRO_DATABASE3": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_DATABASE3"
+          },
+          "PRO_HORABAIXA": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_HORABAIXA"
+          },
+          "PRO_PERCDESC1": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_PERCDESC1"
+          },
+          "PRO_PERCDESC2": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_PERCDESC2"
+          },
+          "PRO_PERCDESC3": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_PERCDESC3"
+          },
+          "PRO_TOTALDESC1": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_TOTALDESC1"
+          },
+          "PRO_TOTALDESC2": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_TOTALDESC2"
+          },
+          "PRO_TOTALDESC3": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_TOTALDESC3"
+          },
+          "PRO_TOTALPPA1": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_TOTALPPA1"
+          },
+          "PRO_TOTALPPA2": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_TOTALPPA2"
+          },
+          "PRO_TOTALPPA3": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_TOTALPPA3"
+          },
+          "PRO_INFADICIONAIS": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_INFADICIONAIS"
+          },
+          "PRO_PERCACRESC": {
+            "type": "object",
+            "example": 0,
+            "description": "PRO_PERCACRESC"
+          },
+          "PRO_TOTALACRESC": {
+            "type": "object",
+            "example": 0,
+            "description": "PRO_TOTALACRESC"
+          },
+          "TCN_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "TCN_CODIGO"
+          },
+          "ITENS": {
+            "description": "Lista de itens da proposta (ITENSPRO)",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateProposalItemDto"
+            }
+          }
+        },
+        "required": [
+          "FUN_CODIGO",
+          "SIT_CODIGO",
+          "CLI_CODIGO",
+          "ITENS"
+        ]
+      },
+      "ProposalItemResponseDto": {
+        "type": "object",
+        "properties": {
+          "IPR_NUMERO": {
+            "type": "number",
+            "example": 501,
+            "description": "ID do item da proposta (IPR_NUMERO)"
+          },
+          "PRO_NUMERO": {
+            "type": "number",
+            "example": 105,
+            "description": "Número da proposta (PRO_NUMERO)"
+          },
+          "PRO_CODIGO": {
+            "type": "string",
+            "example": "00000000000045",
+            "description": "Código do produto (PRO_CODIGO)"
+          },
+          "PRO_DESCRICAO": {
+            "type": "object",
+            "example": "PRODUTO EXEMPLO",
+            "description": "Descrição do produto"
+          },
+          "PRO_UNIDADE": {
+            "type": "object",
+            "example": "UN",
+            "description": "Unidade do produto"
+          },
+          "PRO_CODIGOBAR": {
+            "type": "object",
+            "example": "7891234560045",
+            "description": "Código de barras do produto"
+          },
+          "IPR_QTDE": {
+            "type": "number",
+            "example": 2,
+            "description": "Quantidade (IPR_QTDE)"
+          },
+          "IPR_PRECO": {
+            "type": "number",
+            "example": 50,
+            "description": "Preço unitário (IPR_PRECO)"
+          },
+          "IPR_TOTAL": {
+            "type": "number",
+            "example": 100,
+            "description": "Valor total bruto do item (IPR_TOTAL)"
+          },
+          "IPR_DESCONTO": {
+            "type": "object",
+            "example": 0,
+            "description": "Desconto em valor (IPR_DESCONTO)"
+          },
+          "IPR_LIQUIDO": {
+            "type": "object",
+            "example": 100,
+            "description": "Valor líquido do item (IPR_LIQUIDO)"
+          },
+          "IPR_PERCDESCONTO": {
+            "type": "object",
+            "example": 0,
+            "description": "Percentual de desconto (IPR_PERCDESCONTO)"
+          },
+          "PES_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "PES_CODIGO"
+          },
+          "TEC_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "TEC_CODIGO"
+          },
+          "IPR_QTDEENT": {
+            "type": "object",
+            "example": null,
+            "description": "IPR_QTDEENT"
+          },
+          "IPR_INFADICIONAIS": {
+            "type": "object",
+            "example": null,
+            "description": "Informações adicionais do item (IPR_INFADICIONAIS)"
+          },
+          "LOJ_CODIGO": {
+            "type": "object",
+            "example": 1,
+            "description": "Código da loja (LOJ_CODIGO)"
+          },
+          "IPR_NEGATIVO": {
+            "type": "object",
+            "example": null,
+            "description": "IPR_NEGATIVO"
+          },
+          "AMB_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "AMB_CODIGO"
+          },
+          "IPR_PRCVENDADIA": {
+            "type": "object",
+            "example": null,
+            "description": "IPR_PRCVENDADIA"
+          },
+          "TAM_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "TAM_CODIGO"
+          },
+          "COR_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "COR_CODIGO"
+          },
+          "PRG_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "PRG_CODIGO"
+          },
+          "IPR_ALTURA": {
+            "type": "object",
+            "example": null,
+            "description": "IPR_ALTURA"
+          },
+          "IPR_LARGURA": {
+            "type": "object",
+            "example": null,
+            "description": "IPR_LARGURA"
+          },
+          "IPR_QTDEUNT": {
+            "type": "object",
+            "example": null,
+            "description": "IPR_QTDEUNT"
+          },
+          "PRK_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "PRK_CODIGO"
+          },
+          "IPR_TABELAPRECO": {
+            "type": "object",
+            "example": "1",
+            "description": "Tabela de preço (IPR_TABELAPRECO)"
+          },
+          "IPR_METRAGEMSUGERIDA": {
+            "type": "object",
+            "example": null,
+            "description": "IPR_METRAGEMSUGERIDA"
+          },
+          "IPR_QTDEMETRAGEMSUGERIDA": {
+            "type": "object",
+            "example": null,
+            "description": "IPR_QTDEMETRAGEMSUGERIDA"
+          },
+          "TRM_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "TRM_CODIGO"
+          },
+          "IPR_ITEM": {
+            "type": "object",
+            "example": 1,
+            "description": "Ordem sequencial do item (IPR_ITEM)"
+          },
+          "IPR_GARANTEESTOQUE": {
+            "type": "object",
+            "example": "N",
+            "description": "Garante estoque S/N (IPR_GARANTEESTOQUE)"
+          },
+          "IPR_PRCCUSTO": {
+            "type": "object",
+            "example": null,
+            "description": "Preço de custo (IPR_PRCCUSTO)"
+          },
+          "IPR_PRCCOMPRA": {
+            "type": "object",
+            "example": null,
+            "description": "Preço de compra (IPR_PRCCOMPRA)"
+          },
+          "IPR_MARGEMLUCROCOMPRA": {
+            "type": "object",
+            "example": null,
+            "description": "Margem lucro compra (IPR_MARGEMLUCROCOMPRA)"
+          },
+          "IPR_MARGEMLUCROCUSTO": {
+            "type": "object",
+            "example": null,
+            "description": "Margem lucro custo (IPR_MARGEMLUCROCUSTO)"
+          },
+          "IPR_ACRESCIMO": {
+            "type": "object",
+            "example": 0,
+            "description": "Acréscimo em valor (IPR_ACRESCIMO)"
+          },
+          "IPR_PERCACRESC": {
+            "type": "object",
+            "example": 0,
+            "description": "Percentual de acréscimo (IPR_PERCACRESC)"
+          }
+        },
+        "required": [
+          "IPR_NUMERO",
+          "PRO_NUMERO",
+          "PRO_CODIGO",
+          "IPR_QTDE",
+          "IPR_PRECO",
+          "IPR_TOTAL"
+        ]
+      },
+      "ProposalDetailResponseDto": {
+        "type": "object",
+        "properties": {
+          "PRO_NUMERO": {
+            "type": "number",
+            "example": 105,
+            "description": "Número da proposta (PRO_NUMERO)"
+          },
+          "FUN_CODIGO": {
+            "type": "number",
+            "example": 2,
+            "description": "Código do funcionário/vendedor (FUN_CODIGO)"
+          },
+          "FUN_NOME": {
+            "type": "object",
+            "example": "CARLOS VENDEDOR",
+            "description": "Nome do funcionário"
+          },
+          "SIT_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código da situação (SIT_CODIGO)"
+          },
+          "SIT_DESCRICAO": {
+            "type": "object",
+            "example": "ABERTA",
+            "description": "Descrição da situação"
+          },
+          "LOJ_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código da loja (LOJ_CODIGO)"
+          },
+          "LOJ_NOME": {
+            "type": "object",
+            "example": "LOJA MATRIZ",
+            "description": "Nome da loja"
+          },
+          "LOJ_FANTASIA": {
+            "type": "object",
+            "example": "MATRIZ",
+            "description": "Fantasia da loja"
+          },
+          "CLI_CODIGO": {
+            "type": "number",
+            "example": 10,
+            "description": "Código do cliente (CLI_CODIGO)"
+          },
+          "CLI_NOME": {
+            "type": "object",
+            "example": "CLIENTE EXEMPLO LTDA",
+            "description": "Nome do cliente"
+          },
+          "USU_CODIGO": {
+            "type": "object",
+            "example": 1,
+            "description": "Código do usuário operador (USU_CODIGO)"
+          },
+          "USU_APELIDO": {
+            "type": "object",
+            "example": "admin",
+            "description": "Apelido do usuário"
+          },
+          "FPG_CODIGO": {
+            "type": "object",
+            "example": 1,
+            "description": "Código da forma de pagamento (FPG_CODIGO)"
+          },
+          "PRO_ATENCIOSAMENTE": {
+            "type": "object",
+            "example": "Sr. João",
+            "description": "Contato/Atenção (PRO_ATENCIOSAMENTE)"
+          },
+          "PRO_PRAZO": {
+            "type": "object",
+            "example": "10 DIAS",
+            "description": "Prazo de entrega (PRO_PRAZO)"
+          },
+          "PRO_VALIDADE": {
+            "type": "object",
+            "example": "15 DIAS",
+            "description": "Validade da proposta (PRO_VALIDADE)"
+          },
+          "PRO_DATA": {
+            "type": "string",
+            "example": "2026-11-25T00:00:00.000Z",
+            "description": "Data da proposta (PRO_DATA)"
+          },
+          "PRO_HORA": {
+            "type": "object",
+            "example": "14:30:00",
+            "description": "Hora da proposta (PRO_HORA)"
+          },
+          "PRO_DATABAIXA": {
+            "type": "object",
+            "example": null,
+            "description": "Data da baixa (PRO_DATABAIXA)"
+          },
+          "PRO_TOTALBRUTO": {
+            "type": "object",
+            "example": 100,
+            "description": "Total bruto (PRO_TOTALBRUTO)"
+          },
+          "PRO_TOTALDESC": {
+            "type": "object",
+            "example": 0,
+            "description": "Total desconto (PRO_TOTALDESC)"
+          },
+          "PRO_PERCDESC": {
+            "type": "object",
+            "example": 0,
+            "description": "Percentual desconto (PRO_PERCDESC)"
+          },
+          "PRO_TOTALLIQUIDO": {
+            "type": "object",
+            "example": 100,
+            "description": "Total líquido (PRO_TOTALLIQUIDO)"
+          },
+          "PRO_OBS": {
+            "type": "object",
+            "example": "Observação da proposta",
+            "description": "Observações (PRO_OBS)"
+          },
+          "PRO_QUANT": {
+            "type": "object",
+            "example": 2,
+            "description": "Quantidade total de itens (PRO_QUANT)"
+          },
+          "PRO_CONDICAOPAG": {
+            "type": "object",
+            "example": "30/60 DIAS",
+            "description": "Condição de pagamento (PRO_CONDICAOPAG)"
+          },
+          "PRO_GERADA": {
+            "type": "object",
+            "example": "N",
+            "description": "Proposta convertida em venda S/N (PRO_GERADA)"
+          },
+          "PRO_FANTCLI": {
+            "type": "object",
+            "example": "CLIENTE FANTASIA",
+            "description": "Nome fantasia do cliente (PRO_FANTCLI)"
+          },
+          "VEN_NUMERO": {
+            "type": "object",
+            "example": null,
+            "description": "Número da venda gerada pelo sistema (VEN_NUMERO)"
+          },
+          "PRE_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "PRE_CODIGO"
+          },
+          "PRO_PRECO": {
+            "type": "object",
+            "example": "2",
+            "description": "Tabela de preço padrão (PRO_PRECO)"
+          },
+          "PRO_PEDCLIENTE": {
+            "type": "object",
+            "example": null,
+            "description": "Número do pedido do cliente (PRO_PEDCLIENTE)"
+          },
+          "TRA_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "Código da transportadora (TRA_CODIGO)"
+          },
+          "PRO_MOTIVO": {
+            "type": "object",
+            "example": null,
+            "description": "Motivo (PRO_MOTIVO)"
+          },
+          "PRO_STATUS": {
+            "type": "object",
+            "example": "2",
+            "description": "Status da proposta (PRO_STATUS)"
+          },
+          "PRO_TOTALPP1": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_TOTALPP1"
+          },
+          "PRO_TOTALPP2": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_TOTALPP2"
+          },
+          "PRO_TOTALPP3": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_TOTALPP3"
+          },
+          "PP1_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "PP1_CODIGO"
+          },
+          "PP2_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "PP2_CODIGO"
+          },
+          "PP3_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "PP3_CODIGO"
+          },
+          "FP1_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "FP1_CODIGO"
+          },
+          "FP2_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "FP2_CODIGO"
+          },
+          "FP3_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "FP3_CODIGO"
+          },
+          "PRO_NUMORG": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_NUMORG"
+          },
+          "PRO_DATABASE1": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_DATABASE1"
+          },
+          "PRO_DATABASE2": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_DATABASE2"
+          },
+          "PRO_DATABASE3": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_DATABASE3"
+          },
+          "PRO_HORABAIXA": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_HORABAIXA"
+          },
+          "PRO_PERCDESC1": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_PERCDESC1"
+          },
+          "PRO_PERCDESC2": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_PERCDESC2"
+          },
+          "PRO_PERCDESC3": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_PERCDESC3"
+          },
+          "PRO_TOTALDESC1": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_TOTALDESC1"
+          },
+          "PRO_TOTALDESC2": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_TOTALDESC2"
+          },
+          "PRO_TOTALDESC3": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_TOTALDESC3"
+          },
+          "PRO_TOTALPPA1": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_TOTALPPA1"
+          },
+          "PRO_TOTALPPA2": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_TOTALPPA2"
+          },
+          "PRO_TOTALPPA3": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_TOTALPPA3"
+          },
+          "PRO_INFADICIONAIS": {
+            "type": "object",
+            "example": null,
+            "description": "Informações adicionais (PRO_INFADICIONAIS)"
+          },
+          "PRO_PERCACRESC": {
+            "type": "object",
+            "example": 0,
+            "description": "Percentual de acréscimo (PRO_PERCACRESC)"
+          },
+          "PRO_TOTALACRESC": {
+            "type": "object",
+            "example": 0,
+            "description": "Total de acréscimo (PRO_TOTALACRESC)"
+          },
+          "TCN_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "TCN_CODIGO"
+          },
+          "ITENS": {
+            "description": "Itens da proposta (ITENSPRO)",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProposalItemResponseDto"
+            }
+          }
+        },
+        "required": [
+          "PRO_NUMERO",
+          "FUN_CODIGO",
+          "SIT_CODIGO",
+          "LOJ_CODIGO",
+          "CLI_CODIGO",
+          "PRO_DATA",
+          "ITENS"
+        ]
+      },
+      "ProposalResponseDto": {
+        "type": "object",
+        "properties": {
+          "PRO_NUMERO": {
+            "type": "number",
+            "example": 105,
+            "description": "Número da proposta (PRO_NUMERO)"
+          },
+          "FUN_CODIGO": {
+            "type": "number",
+            "example": 2,
+            "description": "Código do funcionário/vendedor (FUN_CODIGO)"
+          },
+          "FUN_NOME": {
+            "type": "object",
+            "example": "CARLOS VENDEDOR",
+            "description": "Nome do funcionário"
+          },
+          "SIT_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código da situação (SIT_CODIGO)"
+          },
+          "SIT_DESCRICAO": {
+            "type": "object",
+            "example": "ABERTA",
+            "description": "Descrição da situação"
+          },
+          "LOJ_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código da loja (LOJ_CODIGO)"
+          },
+          "LOJ_NOME": {
+            "type": "object",
+            "example": "LOJA MATRIZ",
+            "description": "Nome da loja"
+          },
+          "LOJ_FANTASIA": {
+            "type": "object",
+            "example": "MATRIZ",
+            "description": "Fantasia da loja"
+          },
+          "CLI_CODIGO": {
+            "type": "number",
+            "example": 10,
+            "description": "Código do cliente (CLI_CODIGO)"
+          },
+          "CLI_NOME": {
+            "type": "object",
+            "example": "CLIENTE EXEMPLO LTDA",
+            "description": "Nome do cliente"
+          },
+          "USU_CODIGO": {
+            "type": "object",
+            "example": 1,
+            "description": "Código do usuário operador (USU_CODIGO)"
+          },
+          "USU_APELIDO": {
+            "type": "object",
+            "example": "admin",
+            "description": "Apelido do usuário"
+          },
+          "FPG_CODIGO": {
+            "type": "object",
+            "example": 1,
+            "description": "Código da forma de pagamento (FPG_CODIGO)"
+          },
+          "PRO_ATENCIOSAMENTE": {
+            "type": "object",
+            "example": "Sr. João",
+            "description": "Contato/Atenção (PRO_ATENCIOSAMENTE)"
+          },
+          "PRO_PRAZO": {
+            "type": "object",
+            "example": "10 DIAS",
+            "description": "Prazo de entrega (PRO_PRAZO)"
+          },
+          "PRO_VALIDADE": {
+            "type": "object",
+            "example": "15 DIAS",
+            "description": "Validade da proposta (PRO_VALIDADE)"
+          },
+          "PRO_DATA": {
+            "type": "string",
+            "example": "2026-11-25T00:00:00.000Z",
+            "description": "Data da proposta (PRO_DATA)"
+          },
+          "PRO_HORA": {
+            "type": "object",
+            "example": "14:30:00",
+            "description": "Hora da proposta (PRO_HORA)"
+          },
+          "PRO_DATABAIXA": {
+            "type": "object",
+            "example": null,
+            "description": "Data da baixa (PRO_DATABAIXA)"
+          },
+          "PRO_TOTALBRUTO": {
+            "type": "object",
+            "example": 100,
+            "description": "Total bruto (PRO_TOTALBRUTO)"
+          },
+          "PRO_TOTALDESC": {
+            "type": "object",
+            "example": 0,
+            "description": "Total desconto (PRO_TOTALDESC)"
+          },
+          "PRO_PERCDESC": {
+            "type": "object",
+            "example": 0,
+            "description": "Percentual desconto (PRO_PERCDESC)"
+          },
+          "PRO_TOTALLIQUIDO": {
+            "type": "object",
+            "example": 100,
+            "description": "Total líquido (PRO_TOTALLIQUIDO)"
+          },
+          "PRO_OBS": {
+            "type": "object",
+            "example": "Observação da proposta",
+            "description": "Observações (PRO_OBS)"
+          },
+          "PRO_QUANT": {
+            "type": "object",
+            "example": 2,
+            "description": "Quantidade total de itens (PRO_QUANT)"
+          },
+          "PRO_CONDICAOPAG": {
+            "type": "object",
+            "example": "30/60 DIAS",
+            "description": "Condição de pagamento (PRO_CONDICAOPAG)"
+          },
+          "PRO_GERADA": {
+            "type": "object",
+            "example": "N",
+            "description": "Proposta convertida em venda S/N (PRO_GERADA)"
+          },
+          "PRO_FANTCLI": {
+            "type": "object",
+            "example": "CLIENTE FANTASIA",
+            "description": "Nome fantasia do cliente (PRO_FANTCLI)"
+          },
+          "VEN_NUMERO": {
+            "type": "object",
+            "example": null,
+            "description": "Número da venda gerada pelo sistema (VEN_NUMERO)"
+          },
+          "PRE_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "PRE_CODIGO"
+          },
+          "PRO_PRECO": {
+            "type": "object",
+            "example": "2",
+            "description": "Tabela de preço padrão (PRO_PRECO)"
+          },
+          "PRO_PEDCLIENTE": {
+            "type": "object",
+            "example": null,
+            "description": "Número do pedido do cliente (PRO_PEDCLIENTE)"
+          },
+          "TRA_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "Código da transportadora (TRA_CODIGO)"
+          },
+          "PRO_MOTIVO": {
+            "type": "object",
+            "example": null,
+            "description": "Motivo (PRO_MOTIVO)"
+          },
+          "PRO_STATUS": {
+            "type": "object",
+            "example": "2",
+            "description": "Status da proposta (PRO_STATUS)"
+          },
+          "PRO_TOTALPP1": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_TOTALPP1"
+          },
+          "PRO_TOTALPP2": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_TOTALPP2"
+          },
+          "PRO_TOTALPP3": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_TOTALPP3"
+          },
+          "PP1_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "PP1_CODIGO"
+          },
+          "PP2_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "PP2_CODIGO"
+          },
+          "PP3_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "PP3_CODIGO"
+          },
+          "FP1_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "FP1_CODIGO"
+          },
+          "FP2_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "FP2_CODIGO"
+          },
+          "FP3_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "FP3_CODIGO"
+          },
+          "PRO_NUMORG": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_NUMORG"
+          },
+          "PRO_DATABASE1": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_DATABASE1"
+          },
+          "PRO_DATABASE2": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_DATABASE2"
+          },
+          "PRO_DATABASE3": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_DATABASE3"
+          },
+          "PRO_HORABAIXA": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_HORABAIXA"
+          },
+          "PRO_PERCDESC1": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_PERCDESC1"
+          },
+          "PRO_PERCDESC2": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_PERCDESC2"
+          },
+          "PRO_PERCDESC3": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_PERCDESC3"
+          },
+          "PRO_TOTALDESC1": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_TOTALDESC1"
+          },
+          "PRO_TOTALDESC2": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_TOTALDESC2"
+          },
+          "PRO_TOTALDESC3": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_TOTALDESC3"
+          },
+          "PRO_TOTALPPA1": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_TOTALPPA1"
+          },
+          "PRO_TOTALPPA2": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_TOTALPPA2"
+          },
+          "PRO_TOTALPPA3": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_TOTALPPA3"
+          },
+          "PRO_INFADICIONAIS": {
+            "type": "object",
+            "example": null,
+            "description": "Informações adicionais (PRO_INFADICIONAIS)"
+          },
+          "PRO_PERCACRESC": {
+            "type": "object",
+            "example": 0,
+            "description": "Percentual de acréscimo (PRO_PERCACRESC)"
+          },
+          "PRO_TOTALACRESC": {
+            "type": "object",
+            "example": 0,
+            "description": "Total de acréscimo (PRO_TOTALACRESC)"
+          },
+          "TCN_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "TCN_CODIGO"
+          }
+        },
+        "required": [
+          "PRO_NUMERO",
+          "FUN_CODIGO",
+          "SIT_CODIGO",
+          "LOJ_CODIGO",
+          "CLI_CODIGO",
+          "PRO_DATA"
+        ]
+      },
+      "UpdateProposalDto": {
+        "type": "object",
+        "properties": {
+          "FUN_CODIGO": {
+            "type": "number",
+            "example": 2,
+            "description": "Código do funcionário/vendedor (FUN_CODIGO)"
+          },
+          "SIT_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código da situação (SIT_CODIGO)"
+          },
+          "LOJ_CODIGO": {
+            "type": "number",
+            "example": 1,
+            "description": "Código da loja (LOJ_CODIGO)"
+          },
+          "CLI_CODIGO": {
+            "type": "number",
+            "example": 10,
+            "description": "Código do cliente (CLI_CODIGO)"
+          },
+          "USU_CODIGO": {
+            "type": "object",
+            "example": 1,
+            "description": "Código do usuário operador (USU_CODIGO)"
+          },
+          "FPG_CODIGO": {
+            "type": "object",
+            "example": 1,
+            "description": "Código da forma de pagamento (FPG_CODIGO)"
+          },
+          "PRO_ATENCIOSAMENTE": {
+            "type": "object",
+            "example": "Sr. João",
+            "description": "PRO_ATENCIOSAMENTE"
+          },
+          "PRO_PRAZO": {
+            "type": "object",
+            "example": "10 DIAS",
+            "description": "PRO_PRAZO"
+          },
+          "PRO_VALIDADE": {
+            "type": "object",
+            "example": "15 DIAS",
+            "description": "PRO_VALIDADE"
+          },
+          "PRO_DATA": {
+            "type": "string",
+            "example": "2026-11-25",
+            "description": "PRO_DATA"
+          },
+          "PRO_HORA": {
+            "type": "object",
+            "example": "14:30:00",
+            "description": "PRO_HORA"
+          },
+          "PRO_DATABAIXA": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_DATABAIXA"
+          },
+          "PRO_TOTALBRUTO": {
+            "type": "object",
+            "example": 100,
+            "description": "PRO_TOTALBRUTO"
+          },
+          "PRO_TOTALDESC": {
+            "type": "object",
+            "example": 0,
+            "description": "PRO_TOTALDESC"
+          },
+          "PRO_PERCDESC": {
+            "type": "object",
+            "example": 0,
+            "description": "PRO_PERCDESC"
+          },
+          "PRO_TOTALLIQUIDO": {
+            "type": "object",
+            "example": 100,
+            "description": "PRO_TOTALLIQUIDO"
+          },
+          "PRO_OBS": {
+            "type": "object",
+            "example": "Observação atualizada",
+            "description": "PRO_OBS"
+          },
+          "PRO_QUANT": {
+            "type": "object",
+            "example": 2,
+            "description": "PRO_QUANT"
+          },
+          "PRO_CONDICAOPAG": {
+            "type": "object",
+            "example": "30/60 DIAS",
+            "description": "PRO_CONDICAOPAG"
+          },
+          "PRO_FANTCLI": {
+            "type": "object",
+            "example": "CLIENTE FANTASIA",
+            "description": "PRO_FANTCLI"
+          },
+          "PRE_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "PRE_CODIGO"
+          },
+          "PRO_PRECO": {
+            "type": "object",
+            "example": "2",
+            "description": "PRO_PRECO"
+          },
+          "PRO_PEDCLIENTE": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_PEDCLIENTE"
+          },
+          "TRA_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "TRA_CODIGO"
+          },
+          "PRO_MOTIVO": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_MOTIVO"
+          },
+          "PRO_STATUS": {
+            "type": "object",
+            "example": "2",
+            "description": "PRO_STATUS"
+          },
+          "PRO_TOTALPP1": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_TOTALPP1"
+          },
+          "PRO_TOTALPP2": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_TOTALPP2"
+          },
+          "PRO_TOTALPP3": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_TOTALPP3"
+          },
+          "PP1_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "PP1_CODIGO"
+          },
+          "PP2_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "PP2_CODIGO"
+          },
+          "PP3_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "PP3_CODIGO"
+          },
+          "FP1_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "FP1_CODIGO"
+          },
+          "FP2_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "FP2_CODIGO"
+          },
+          "FP3_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "FP3_CODIGO"
+          },
+          "PRO_NUMORG": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_NUMORG"
+          },
+          "PRO_DATABASE1": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_DATABASE1"
+          },
+          "PRO_DATABASE2": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_DATABASE2"
+          },
+          "PRO_DATABASE3": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_DATABASE3"
+          },
+          "PRO_HORABAIXA": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_HORABAIXA"
+          },
+          "PRO_PERCDESC1": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_PERCDESC1"
+          },
+          "PRO_PERCDESC2": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_PERCDESC2"
+          },
+          "PRO_PERCDESC3": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_PERCDESC3"
+          },
+          "PRO_TOTALDESC1": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_TOTALDESC1"
+          },
+          "PRO_TOTALDESC2": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_TOTALDESC2"
+          },
+          "PRO_TOTALDESC3": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_TOTALDESC3"
+          },
+          "PRO_TOTALPPA1": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_TOTALPPA1"
+          },
+          "PRO_TOTALPPA2": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_TOTALPPA2"
+          },
+          "PRO_TOTALPPA3": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_TOTALPPA3"
+          },
+          "PRO_INFADICIONAIS": {
+            "type": "object",
+            "example": null,
+            "description": "PRO_INFADICIONAIS"
+          },
+          "PRO_PERCACRESC": {
+            "type": "object",
+            "example": 0,
+            "description": "PRO_PERCACRESC"
+          },
+          "PRO_TOTALACRESC": {
+            "type": "object",
+            "example": 0,
+            "description": "PRO_TOTALACRESC"
+          },
+          "TCN_CODIGO": {
+            "type": "object",
+            "example": null,
+            "description": "TCN_CODIGO"
+          },
+          "ITENS": {
+            "description": "Se informado, substitui integralmente (DELETE + INSERT atômico) todos os itens da proposta em ITENSPRO.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateProposalItemDto"
+            }
+          }
+        }
       },
       "CreateWebhookDto": {
         "type": "object",

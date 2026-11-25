@@ -6,6 +6,19 @@ Para visualizar a versão interativa com busca em tempo real, acesse o portal we
 
 ---
 
+## [v1.21.2] - 2026-11-25
+
+### 📌 Inclusão de proposals CRUD (without DELETE) for PROPOSTAS and ITENSPRO e melhorias
+> Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral.
+
+**Destaques:**
+- ⭐ Inclusão de proposals CRUD (without DELETE) for PROPOSTAS and ITENSPRO
+
+#### 🚀 Novidades & Melhorias
+- **[Geral]** Inclusão de proposals CRUD (without DELETE) for PROPOSTAS and ITENSPRO: Atualização no módulo de Geral: add proposals CRUD (without DELETE) for PROPOSTAS and ITENSPRO.
+
+---
+
 ## [v1.21.1] - 2026-11-19
 
 ### 📌 adjustments on webhook tab e melhorias
