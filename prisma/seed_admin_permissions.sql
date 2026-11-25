@@ -41,7 +41,10 @@ VALUES
     (gen_random_uuid(), 'tenant.production-orders.view', 'Visualizar ordens de produção do tenant', 'Visualizar ordens de produção do tenant'),
     (gen_random_uuid(), 'tenant.production-orders.create', 'Criar ordens de produção do tenant', 'Criar ordens de produção do tenant'),
     (gen_random_uuid(), 'tenant.production-orders.update', 'Atualizar ordens de produção do tenant', 'Atualizar ordens de produção do tenant'),
-    (gen_random_uuid(), 'tenant.production-orders.delete', 'Deletar ordens de produção do tenant', 'Deletar ordens de produção do tenant')
+    (gen_random_uuid(), 'tenant.production-orders.delete', 'Deletar ordens de produção do tenant', 'Deletar ordens de produção do tenant'),
+    (gen_random_uuid(), 'tenant.proposals.view', 'Visualizar propostas comerciais do tenant', 'Visualizar propostas comerciais do tenant'),
+    (gen_random_uuid(), 'tenant.proposals.create', 'Criar propostas comerciais do tenant', 'Criar propostas comerciais do tenant'),
+    (gen_random_uuid(), 'tenant.proposals.update', 'Atualizar propostas comerciais do tenant', 'Atualizar propostas comerciais do tenant')
 ON CONFLICT ("key") DO UPDATE 
 SET "name" = EXCLUDED."name", 
     "description" = EXCLUDED."description";
@@ -84,7 +87,10 @@ JOIN "permissions" p ON p."key" IN (
     'tenant.production-orders.view',
     'tenant.production-orders.create',
     'tenant.production-orders.update',
-    'tenant.production-orders.delete'
+    'tenant.production-orders.delete',
+    'tenant.proposals.view',
+    'tenant.proposals.create',
+    'tenant.proposals.update'
 )
 WHERE r."name" = 'Admin'
 ON CONFLICT ("roleId", "permissionId") DO NOTHING;

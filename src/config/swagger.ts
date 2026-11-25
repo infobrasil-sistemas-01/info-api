@@ -67,6 +67,10 @@ export function getSwaggerConfigBuilder(
       'Order Items',
       'Endpoints relacionados à consulta de itens de pedido',
     )
+    .addTag(
+      'Proposals',
+      'Endpoints relacionados à gestão de propostas comerciais e seus itens',
+    )
     .addTag('Delivery', 'Endpoints relacionados à gestão de entregas')
 
     // --- Financeiro ---

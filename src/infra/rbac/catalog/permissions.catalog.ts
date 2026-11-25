@@ -402,6 +402,23 @@ export const PERMISSIONS = [
     module: 'tenant',
   },
 
+  // ========= PROPOSTAS =========
+  {
+    key: 'tenant.proposals.view',
+    descricao: 'Visualizar propostas comerciais do tenant',
+    module: 'tenant',
+  },
+  {
+    key: 'tenant.proposals.create',
+    descricao: 'Criar propostas comerciais do tenant',
+    module: 'tenant',
+  },
+  {
+    key: 'tenant.proposals.update',
+    descricao: 'Atualizar propostas comerciais do tenant',
+    module: 'tenant',
+  },
+
   // ========= SOLICITAÇÕES =========
   {
     key: 'integration-request.view',
