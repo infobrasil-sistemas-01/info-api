@@ -1066,6 +1066,10 @@ const LABEL_MAP = {
     'adjustments': 'Acertos de Estoque',
     'adjustment': 'Acertos de Estoque',
     'acertos': 'Acertos de Estoque',
+    'production-orders': 'Ordens de Produção',
+    'proposals': 'Propostas',
+    'proposal': 'Propostas',
+    'propostas': 'Propostas',
     'cities': 'Cidades',
 
     // Ações do painel de solicitação
