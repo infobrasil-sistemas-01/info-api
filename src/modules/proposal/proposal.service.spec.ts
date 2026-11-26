@@ -118,12 +118,15 @@ describe('ProposalService', () => {
       // 2. Transaction header insert + item insert
       mockTransaction.query
         .mockImplementationOnce((sql: string, params: any[], cb: any) => {
-          expect(sql).toContain("GEN_ID(GEN_NUMEROPRO, 1)");
-          expect(sql).toContain("PRO_GERADA");
+          expect(sql).toContain('GEN_ID(GEN_NUMEROPRO, 1)');
+          expect(sql).toContain('PRO_GERADA');
+          // Garante que os totalizadores iniciam em 0 para a trigger do Firebird não duplicar
+          expect(sql).toContain('PRO_TOTALBRUTO');
+          expect(params).toEqual(expect.arrayContaining([0]));
           cb(null, [{ PRO_NUMERO: 105 }]);
         })
         .mockImplementationOnce((sql: string, params: any[], cb: any) => {
-          expect(sql).toContain("GEN_ID(GEN_NUMEROIPR, 1)");
+          expect(sql).toContain('GEN_ID(GEN_NUMEROIPR, 1)');
           cb(null, []);
         });
 
@@ -147,6 +150,17 @@ describe('ProposalService', () => {
 
       expect(result).toEqual({ ...createdHeader, ITENS: createdItems });
       expect(mockTransaction.commit).toHaveBeenCalled();
+    });
+
+    it('should reject create when SIT_CODIGO is not 1', async () => {
+      await expect(
+        service.create('cred_1', 1, 10, {
+          FUN_CODIGO: 2,
+          SIT_CODIGO: 3,
+          CLI_CODIGO: 15,
+          ITENS: [{ PRO_CODIGO: '001', IPR_QTDE: 1 }],
+        }),
+      ).rejects.toThrow(BadRequestException);
     });
 
     it('should throw BadRequestException if product does not exist', async () => {
@@ -182,10 +196,27 @@ describe('ProposalService', () => {
       ).rejects.toThrow(BadRequestException);
     });
 
+    it('should reject update with ITENS when existing SIT_CODIGO is not 1', async () => {
+      mockConnection.query
+        .mockImplementationOnce((sql: string, params: any[], cb: any) => {
+          cb(null, [{ PRO_NUMERO: 105, LOJ_CODIGO: 1, SIT_CODIGO: 3, PRO_GERADA: 'N' }]);
+        })
+        .mockImplementationOnce((sql: string, params: any[], cb: any) => {
+          cb(null, []);
+        });
+
+      await expect(
+        service.update('cred_1', 1, 105, {
+          ITENS: [{ PRO_CODIGO: '002', IPR_QTDE: 3 }],
+        }),
+      ).rejects.toThrow(BadRequestException);
+    });
+
     it('should update header and atomically replace items when ITENS is provided', async () => {
       const existingHeader = {
         PRO_NUMERO: 105,
         LOJ_CODIGO: 1,
+        SIT_CODIGO: 1,
         PRO_GERADA: 'N',
         PRO_PRECO: '2',
       };

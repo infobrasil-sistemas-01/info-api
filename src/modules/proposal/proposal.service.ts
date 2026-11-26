@@ -622,6 +622,12 @@ export class ProposalService {
     operatorId: number,
     createDto: CreateProposalDto,
   ) {
+    if (Number(createDto.SIT_CODIGO) !== 1) {
+      throw new BadRequestException(
+        'Novas propostas devem ser criadas com SIT_CODIGO = 1, pois a trigger de ITENSPRO exige SIT_CODIGO = 1 para calcular os totais.',
+      );
+    }
+
     const connection =
       await this.tenantConnectionService.getConnection(credentialsId);
 
@@ -634,39 +640,21 @@ export class ProposalService {
         createDto.ITENS,
       );
 
-      const sumQty = Number(
-        preparedItems
-          .reduce((acc, item) => acc + Number(item.IPR_QTDE || 0), 0)
-          .toFixed(2),
-      );
-      const sumGross = Number(
-        preparedItems
-          .reduce((acc, item) => acc + Number(item.IPR_TOTAL || 0), 0)
-          .toFixed(2),
-      );
-      const sumItemsDiscount = Number(
-        preparedItems
-          .reduce((acc, item) => acc + Number(item.IPR_DESCONTO || 0), 0)
-          .toFixed(2),
-      );
-      const sumNet = Number(
-        preparedItems
-          .reduce((acc, item) => acc + Number(item.IPR_LIQUIDO || 0), 0)
-          .toFixed(2),
-      );
-
       const { dateVal, timeVal } = this.getCurrentBrazilDateTime();
 
+      // Totais são inicializados com 0 (não NULL e não pré-somados) para que a trigger
+      // AFTER INSERT de ITENSPRO no Firebird acumule os valores exatamente 1x sem duplicar.
       const headerData: Record<string, any> = {
         ...createDto,
         LOJ_CODIGO: storeId,
         USU_CODIGO: createDto.USU_CODIGO ?? operatorId,
         PRO_DATA: createDto.PRO_DATA ?? dateVal,
         PRO_HORA: createDto.PRO_HORA ?? timeVal,
-        PRO_TOTALBRUTO: createDto.PRO_TOTALBRUTO ?? sumGross,
-        PRO_TOTALDESC: createDto.PRO_TOTALDESC ?? sumItemsDiscount,
-        PRO_TOTALLIQUIDO: createDto.PRO_TOTALLIQUIDO ?? sumNet,
-        PRO_QUANT: createDto.PRO_QUANT ?? sumQty,
+        PRO_TOTALBRUTO: 0,
+        PRO_TOTALDESC: 0,
+        PRO_PERCDESC: 0,
+        PRO_TOTALLIQUIDO: 0,
+        PRO_QUANT: 0,
         PRO_PRECO: defaultPriceTable,
         PRO_STATUS: createDto.PRO_STATUS ?? '2',
       };
@@ -768,6 +756,20 @@ export class ProposalService {
       }
 
       if (updateDto.ITENS && updateDto.ITENS.length > 0) {
+        if (Number(existing.SIT_CODIGO) !== 1) {
+          throw new BadRequestException(
+            'Não é possível alterar os itens de uma proposta com SIT_CODIGO diferente de 1.',
+          );
+        }
+        if (
+          updateDto.SIT_CODIGO !== undefined &&
+          Number(updateDto.SIT_CODIGO) !== 1
+        ) {
+          throw new BadRequestException(
+            'Não é possível alterar os itens e modificar SIT_CODIGO para diferente de 1 na mesma requisição.',
+          );
+        }
+
         const defaultPriceTable =
           updateDto.PRO_PRECO ?? existing.PRO_PRECO ?? '2';
         preparedItems = await this.prepareProposalItems(
@@ -777,34 +779,13 @@ export class ProposalService {
           updateDto.ITENS,
         );
 
-        if (updateDto.PRO_QUANT === undefined) {
-          updateHeaderData.PRO_QUANT = Number(
-            preparedItems
-              .reduce((acc, item) => acc + Number(item.IPR_QTDE || 0), 0)
-              .toFixed(2),
-          );
-        }
-        if (updateDto.PRO_TOTALBRUTO === undefined) {
-          updateHeaderData.PRO_TOTALBRUTO = Number(
-            preparedItems
-              .reduce((acc, item) => acc + Number(item.IPR_TOTAL || 0), 0)
-              .toFixed(2),
-          );
-        }
-        if (updateDto.PRO_TOTALDESC === undefined) {
-          updateHeaderData.PRO_TOTALDESC = Number(
-            preparedItems
-              .reduce((acc, item) => acc + Number(item.IPR_DESCONTO || 0), 0)
-              .toFixed(2),
-          );
-        }
-        if (updateDto.PRO_TOTALLIQUIDO === undefined) {
-          updateHeaderData.PRO_TOTALLIQUIDO = Number(
-            preparedItems
-              .reduce((acc, item) => acc + Number(item.IPR_LIQUIDO || 0), 0)
-              .toFixed(2),
-          );
-        }
+        // Quando ITENS são substituídos, a trigger AFTER DELETE/INSERT de ITENSPRO
+        // recalcula os totalizadores automaticamente; não sobrescrever na capa.
+        delete updateHeaderData.PRO_QUANT;
+        delete updateHeaderData.PRO_TOTALBRUTO;
+        delete updateHeaderData.PRO_TOTALDESC;
+        delete updateHeaderData.PRO_PERCDESC;
+        delete updateHeaderData.PRO_TOTALLIQUIDO;
       }
 
       const fieldsToUpdate: string[] = [];
