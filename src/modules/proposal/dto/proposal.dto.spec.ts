@@ -37,6 +37,15 @@ describe('Proposal DTO Schemas', () => {
           PRO_STATUS: '2',
         },
       ],
+      [
+        'numeric PRO_PRECO (1..12), PRO_STATUS and IPR_TABELAPRECO',
+        {
+          ...validProposal,
+          PRO_PRECO: 1,
+          PRO_STATUS: 2,
+          ITENS: [{ ...validItem, IPR_TABELAPRECO: 12 }],
+        },
+      ],
     ])('should accept %s', (_, input) => {
       expect(() => CreateProposalSchema.parse(input)).not.toThrow();
     });
@@ -51,8 +60,30 @@ describe('Proposal DTO Schemas', () => {
         'non-positive IPR_QTDE',
         { ...validProposal, ITENS: [{ ...validItem, IPR_QTDE: 0 }] },
       ],
+      ['PRO_PRECO out of range (0)', { ...validProposal, PRO_PRECO: 0 }],
+      ['PRO_PRECO out of range (13)', { ...validProposal, PRO_PRECO: 13 }],
+      [
+        'IPR_TABELAPRECO out of range (13)',
+        { ...validProposal, ITENS: [{ ...validItem, IPR_TABELAPRECO: 13 }] },
+      ],
+      [
+        'IPR_TABELAPRECO invalid string',
+        { ...validProposal, ITENS: [{ ...validItem, IPR_TABELAPRECO: 'abc' }] },
+      ],
     ])('should reject %s', (_, input) => {
       expect(() => CreateProposalSchema.parse(input)).toThrow();
+    });
+
+    it('should normalize numeric PRO_PRECO, PRO_STATUS and IPR_TABELAPRECO to string', () => {
+      const parsed = CreateProposalSchema.parse({
+        ...validProposal,
+        PRO_PRECO: 1,
+        PRO_STATUS: 2,
+        ITENS: [{ ...validItem, IPR_TABELAPRECO: 12 }],
+      });
+      expect(parsed.PRO_PRECO).toBe('1');
+      expect(parsed.PRO_STATUS).toBe('2');
+      expect(parsed.ITENS[0].IPR_TABELAPRECO).toBe('12');
     });
   });
 

@@ -71,7 +71,14 @@ export class UpdateProposalDto extends ZodDto(UpdateProposalSchema) {
   @ApiPropertyOptional({ example: null, description: 'PRE_CODIGO' })
   PRE_CODIGO?: number | null;
 
-  @ApiPropertyOptional({ example: '2', description: 'PRO_PRECO' })
+  @ApiPropertyOptional({
+    example: 1,
+    description: 'Tabela de preço padrão da proposta (1 a 12)',
+    oneOf: [
+      { type: 'integer', minimum: 1, maximum: 12 },
+      { type: 'string', example: '1' },
+    ],
+  })
   PRO_PRECO?: string | null;
 
   @ApiPropertyOptional({ example: null, description: 'PRO_PEDCLIENTE' })
@@ -83,7 +90,14 @@ export class UpdateProposalDto extends ZodDto(UpdateProposalSchema) {
   @ApiPropertyOptional({ example: null, description: 'PRO_MOTIVO' })
   PRO_MOTIVO?: string | null;
 
-  @ApiPropertyOptional({ example: '2', description: 'PRO_STATUS' })
+  @ApiPropertyOptional({
+    example: 2,
+    description: 'Status da proposta (PRO_STATUS)',
+    oneOf: [
+      { type: 'integer', minimum: 0, maximum: 9 },
+      { type: 'string', example: '2' },
+    ],
+  })
   PRO_STATUS?: string | null;
 
   @ApiPropertyOptional({ example: null, description: 'PRO_TOTALPP1' })

@@ -647,7 +647,7 @@ export class ProposalService {
       await this.tenantConnectionService.getConnection(credentialsId);
 
     try {
-      const defaultPriceTable = createDto.PRO_PRECO ?? '2';
+      const defaultPriceTable = String(createDto.PRO_PRECO ?? '1');
       const preparedItems = await this.prepareProposalItems(
         connection,
         storeId,
@@ -671,7 +671,7 @@ export class ProposalService {
         PRO_TOTALLIQUIDO: 0,
         PRO_QUANT: 0,
         PRO_PRECO: defaultPriceTable,
-        PRO_STATUS: createDto.PRO_STATUS ?? '2',
+        PRO_STATUS: String(createDto.PRO_STATUS ?? '2'),
       };
 
       const columns = WRITABLE_PROPOSAL_COLUMNS.filter(
@@ -785,8 +785,9 @@ export class ProposalService {
           );
         }
 
-        const defaultPriceTable =
-          updateDto.PRO_PRECO ?? existing.PRO_PRECO ?? '2';
+        const defaultPriceTable = String(
+          updateDto.PRO_PRECO ?? existing.PRO_PRECO ?? '1',
+        );
         preparedItems = await this.prepareProposalItems(
           connection,
           effectiveStoreId,

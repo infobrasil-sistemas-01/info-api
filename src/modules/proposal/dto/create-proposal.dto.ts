@@ -10,6 +10,31 @@ const timeStrSchema = z
   .string()
   .regex(/^\d{2}:\d{2}(:\d{2})?$/, 'Formato inválido de hora. Use HH:mm ou HH:mm:ss');
 
+const priceTableSchema = z
+  .union([
+    z
+      .number()
+      .int('Tabela de preço deve ser um número inteiro')
+      .min(1, 'Tabela de preço deve ser entre 1 e 12')
+      .max(12, 'Tabela de preço deve ser entre 1 e 12'),
+    z
+      .string()
+      .trim()
+      .regex(/^(?:[1-9]|1[0-2])$/, 'Tabela de preço deve ser entre 1 e 12'),
+  ])
+  .transform((val) => String(val));
+
+const proStatusSchema = z
+  .union([
+    z
+      .number()
+      .int('PRO_STATUS deve ser um número inteiro de 0 a 9')
+      .min(0, 'PRO_STATUS deve ser entre 0 e 9')
+      .max(9, 'PRO_STATUS deve ser entre 0 e 9'),
+    z.string().trim().max(1, 'PRO_STATUS deve ter no máximo 1 caractere'),
+  ])
+  .transform((val) => String(val));
+
 export const CreateProposalItemSchema = z.object({
   PRO_CODIGO: z.string().min(1, 'PRO_CODIGO é obrigatório').max(14),
   IPR_QTDE: z.number().positive('IPR_QTDE deve ser maior que zero'),
@@ -33,7 +58,7 @@ export const CreateProposalItemSchema = z.object({
   IPR_LARGURA: z.number().min(0).optional().nullable(),
   IPR_QTDEUNT: z.number().min(0).optional().nullable(),
   PRK_CODIGO: z.string().max(14).optional().nullable(),
-  IPR_TABELAPRECO: z.string().max(2).optional().nullable(),
+  IPR_TABELAPRECO: priceTableSchema.optional().nullable(),
   IPR_METRAGEMSUGERIDA: z.number().min(0).optional().nullable(),
   IPR_QTDEMETRAGEMSUGERIDA: z.number().min(0).optional().nullable(),
   TRM_CODIGO: z.number().int().optional().nullable(),
@@ -123,7 +148,14 @@ export class CreateProposalItemDto extends ZodDto(CreateProposalItemSchema) {
   @ApiPropertyOptional({ example: null, description: 'PRK_CODIGO' })
   PRK_CODIGO?: string | null;
 
-  @ApiPropertyOptional({ example: '1', description: 'Tabela de preço (IPR_TABELAPRECO, padrão 1)' })
+  @ApiPropertyOptional({
+    example: 1,
+    description: 'Tabela de preço do item (1 a 12, padrão 1)',
+    oneOf: [
+      { type: 'integer', minimum: 1, maximum: 12 },
+      { type: 'string', example: '1' },
+    ],
+  })
   IPR_TABELAPRECO?: string | null;
 
   @ApiPropertyOptional({ example: null, description: 'IPR_METRAGEMSUGERIDA' })
@@ -182,11 +214,11 @@ export const CreateProposalSchema = z.object({
   PRO_CONDICAOPAG: z.string().max(40).optional().nullable(),
   PRO_FANTCLI: z.string().max(40).optional().nullable(),
   PRE_CODIGO: z.number().int().optional().nullable(),
-  PRO_PRECO: z.string().max(2).optional().nullable(),
+  PRO_PRECO: priceTableSchema.optional().nullable(),
   PRO_PEDCLIENTE: z.number().int().optional().nullable(),
   TRA_CODIGO: z.number().int().optional().nullable(),
   PRO_MOTIVO: z.string().max(100).optional().nullable(),
-  PRO_STATUS: z.string().max(1).optional().nullable(),
+  PRO_STATUS: proStatusSchema.optional().nullable(),
   PRO_TOTALPP1: z.number().min(0).optional().nullable(),
   PRO_TOTALPP2: z.number().min(0).optional().nullable(),
   PRO_TOTALPP3: z.number().min(0).optional().nullable(),
@@ -283,7 +315,14 @@ export class CreateProposalDto extends ZodDto(CreateProposalSchema) {
   @ApiPropertyOptional({ example: null, description: 'PRE_CODIGO' })
   PRE_CODIGO?: number | null;
 
-  @ApiPropertyOptional({ example: '2', description: 'PRO_PRECO (padrão 2)' })
+  @ApiPropertyOptional({
+    example: 1,
+    description: 'Tabela de preço padrão da proposta (1 a 12, padrão 1)',
+    oneOf: [
+      { type: 'integer', minimum: 1, maximum: 12 },
+      { type: 'string', example: '1' },
+    ],
+  })
   PRO_PRECO?: string | null;
 
   @ApiPropertyOptional({ example: null, description: 'PRO_PEDCLIENTE' })
@@ -295,7 +334,14 @@ export class CreateProposalDto extends ZodDto(CreateProposalSchema) {
   @ApiPropertyOptional({ example: null, description: 'PRO_MOTIVO' })
   PRO_MOTIVO?: string | null;
 
-  @ApiPropertyOptional({ example: '2', description: 'PRO_STATUS (padrão 2)' })
+  @ApiPropertyOptional({
+    example: 2,
+    description: 'Status da proposta (PRO_STATUS, padrão 2)',
+    oneOf: [
+      { type: 'integer', minimum: 0, maximum: 9 },
+      { type: 'string', example: '2' },
+    ],
+  })
   PRO_STATUS?: string | null;
 
   @ApiPropertyOptional({ example: null, description: 'PRO_TOTALPP1' })
