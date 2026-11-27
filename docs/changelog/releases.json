@@ -1,5 +1,72 @@
 [
   {
+    "version": "1.21.3",
+    "date": "2026-11-27",
+    "title": "Inclusão de proposals permissions to request form, role management and sync script e melhorias",
+    "summary": "Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral.",
+    "highlights": [
+      "Inclusão de proposals permissions to request form, role management and sync script",
+      "calculate IPR_MARGEMLUCROCOMPRA and IPR_MARGEMLUCROCUSTO automatically"
+    ],
+    "items": [
+      {
+        "module": "Geral",
+        "type": "feature",
+        "title": "Inclusão de proposals permissions to request form, role management and sync script",
+        "description": "Atualização no módulo de Geral: add proposals permissions to request form, role management and sync script.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "add proposals permissions to request form, role management and sync script",
+        "commitHash": "f5f5e4d"
+      },
+      {
+        "module": "Geral",
+        "type": "feature",
+        "title": "calculate IPR_MARGEMLUCROCOMPRA and IPR_MARGEMLUCROCUSTO automatically",
+        "description": "Atualização no módulo de Geral: calculate IPR_MARGEMLUCROCOMPRA and IPR_MARGEMLUCROCUSTO automatically.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "calculate IPR_MARGEMLUCROCOMPRA and IPR_MARGEMLUCROCUSTO automatically",
+        "commitHash": "bd22efb"
+      },
+      {
+        "module": "Geral",
+        "type": "feature",
+        "title": "populate IPR_PRCVENDADIA, IPR_PRCCUSTO and IPR_PRCCOMPRA from product and stock",
+        "description": "Atualização no módulo de Geral: populate IPR_PRCVENDADIA, IPR_PRCCUSTO and IPR_PRCCOMPRA from product and stock.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "populate IPR_PRCVENDADIA, IPR_PRCCUSTO and IPR_PRCCOMPRA from product and stock",
+        "commitHash": "d188548"
+      },
+      {
+        "module": "Geral",
+        "type": "fix",
+        "title": "accept numeric price table (1-12) and status, default PRO_PRECO to 1",
+        "description": "Atualização no módulo de Geral: accept numeric price table (1-12) and status, default PRO_PRECO to 1.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "accept numeric price table (1-12) and status, default PRO_PRECO to 1",
+        "commitHash": "943596a"
+      },
+      {
+        "module": "Geral",
+        "type": "fix",
+        "title": "initialize proposal totals at zero and enforce SIT_CODIGO = 1 for trigger compatibility",
+        "description": "Atualização no módulo de Geral: initialize proposal totals at zero and enforce SIT_CODIGO = 1 for trigger compatibility.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "initialize proposal totals at zero and enforce SIT_CODIGO = 1 for trigger compatibility",
+        "commitHash": "3c9cb70"
+      },
+      {
+        "module": "Geral",
+        "type": "fix",
+        "title": "resolve PRO_OBS and PRO_INFADICIONAIS BLOB fields on read",
+        "description": "Atualização no módulo de Geral: resolve PRO_OBS and PRO_INFADICIONAIS BLOB fields on read.",
+        "impact": "Melhoria contínua na integridade e experiência do sistema.",
+        "originalCommit": "resolve PRO_OBS and PRO_INFADICIONAIS BLOB fields on read",
+        "commitHash": "4624212"
+      }
+    ],
+    "totalChanges": 6
+  },
+  {
     "version": "1.21.2",
     "date": "2026-11-25",
     "title": "Inclusão de proposals CRUD (without DELETE) for PROPOSTAS and ITENSPRO e melhorias",

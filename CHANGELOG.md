@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.21.3](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.21.2...v1.21.3) (2026-11-27)
+
+
+### Features
+
+* **proposal:** add proposals permissions to request form, role management and sync script ([f5f5e4d](https://github.com/infobrasil-sistemas-01/info-api/commit/f5f5e4d1c4d5d41dfaed9bea0f3d3c0856018a9f))
+* **proposal:** calculate IPR_MARGEMLUCROCOMPRA and IPR_MARGEMLUCROCUSTO automatically ([bd22efb](https://github.com/infobrasil-sistemas-01/info-api/commit/bd22efb513bd45c46ec2367e0995bfaf7d98b691))
+* **proposal:** populate IPR_PRCVENDADIA, IPR_PRCCUSTO and IPR_PRCCOMPRA from product and stock ([d188548](https://github.com/infobrasil-sistemas-01/info-api/commit/d188548533b55a74a5080dda8e02b2cc318f662b))
+
+
+### Bug Fixes
+
+* **proposal:** accept numeric price table (1-12) and status, default PRO_PRECO to 1 ([943596a](https://github.com/infobrasil-sistemas-01/info-api/commit/943596a628caba0fdeefb10b26de28b72c22e38b))
+* **proposal:** initialize proposal totals at zero and enforce SIT_CODIGO = 1 for trigger compatibility ([3c9cb70](https://github.com/infobrasil-sistemas-01/info-api/commit/3c9cb703bdf5378eacd4de2cfc78bd4d9ccee82d))
+* **proposal:** resolve PRO_OBS and PRO_INFADICIONAIS BLOB fields on read ([4624212](https://github.com/infobrasil-sistemas-01/info-api/commit/462421297f4d5e23afe09172fd95802467450455))
+
 ## [1.21.2](https://github.com/infobrasil-sistemas-01/info-api/compare/v1.21.1...v1.21.2) (2026-11-25)
 
 

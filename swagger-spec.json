@@ -5577,7 +5577,7 @@
   "info": {
     "title": "InfoBrasil API",
     "description": "API de integração do sistema Retaguarda (by InfoBrasil) com outros sistemas, como ERPs, e-commerce, etc. <br><br>\n      Se deseja solicitar um acesso, preencha o formulário em: <a href='https://info-api.infobrasilsistemas.com.br/integration/form'>Solicitar Acesso</a>\n      <br><br>\n      **O sistema conta com duas formas de autenticação:**<br> \n      - Basic Auth para login e obtenção de token JWT<br>\n      - JWT para acesso aos endpoints protegidos.\n      <br><br>\n      Para verificar a disponibilidade da API acesse nossa <a href='/status'>Página de Status</a> | Para novidades e histórico de versões acesse o <a href='/changelog'>Changelog Oficial</a>\n      <br><br>\n      A API é organizada em módulos, cada um responsável por uma área específica do sistema, como produtos, clientes, vendas, etc.",
-    "version": "1.21.2",
+    "version": "1.21.3",
     "contact": {
       "name": "InfoBrasil Sistemas",
       "url": "https://www.infobrasilsistemas.com.br",
@@ -11567,9 +11567,19 @@
             "description": "PRK_CODIGO"
           },
           "IPR_TABELAPRECO": {
-            "type": "object",
-            "example": "1",
-            "description": "Tabela de preço (IPR_TABELAPRECO, padrão 1)"
+            "example": 1,
+            "description": "Tabela de preço do item (1 a 12, padrão 1)",
+            "oneOf": [
+              {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 12
+              },
+              {
+                "type": "string",
+                "example": "1"
+              }
+            ]
           },
           "IPR_METRAGEMSUGERIDA": {
             "type": "object",
@@ -11741,9 +11751,19 @@
             "description": "PRE_CODIGO"
           },
           "PRO_PRECO": {
-            "type": "object",
-            "example": "2",
-            "description": "PRO_PRECO (padrão 2)"
+            "example": 1,
+            "description": "Tabela de preço padrão da proposta (1 a 12, padrão 1)",
+            "oneOf": [
+              {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 12
+              },
+              {
+                "type": "string",
+                "example": "1"
+              }
+            ]
           },
           "PRO_PEDCLIENTE": {
             "type": "object",
@@ -11761,9 +11781,19 @@
             "description": "PRO_MOTIVO"
           },
           "PRO_STATUS": {
-            "type": "object",
-            "example": "2",
-            "description": "PRO_STATUS (padrão 2)"
+            "example": 2,
+            "description": "Status da proposta (PRO_STATUS, padrão 2)",
+            "oneOf": [
+              {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9
+              },
+              {
+                "type": "string",
+                "example": "2"
+              }
+            ]
           },
           "PRO_TOTALPP1": {
             "type": "object",
@@ -12886,9 +12916,19 @@
             "description": "PRE_CODIGO"
           },
           "PRO_PRECO": {
-            "type": "object",
-            "example": "2",
-            "description": "PRO_PRECO"
+            "example": 1,
+            "description": "Tabela de preço padrão da proposta (1 a 12)",
+            "oneOf": [
+              {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 12
+              },
+              {
+                "type": "string",
+                "example": "1"
+              }
+            ]
           },
           "PRO_PEDCLIENTE": {
             "type": "object",
@@ -12906,9 +12946,19 @@
             "description": "PRO_MOTIVO"
           },
           "PRO_STATUS": {
-            "type": "object",
-            "example": "2",
-            "description": "PRO_STATUS"
+            "example": 2,
+            "description": "Status da proposta (PRO_STATUS)",
+            "oneOf": [
+              {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9
+              },
+              {
+                "type": "string",
+                "example": "2"
+              }
+            ]
           },
           "PRO_TOTALPP1": {
             "type": "object",

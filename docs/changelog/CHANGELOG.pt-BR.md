@@ -6,6 +6,27 @@ Para visualizar a versão interativa com busca em tempo real, acesse o portal we
 
 ---
 
+## [v1.21.3] - 2026-11-27
+
+### 📌 Inclusão de proposals permissions to request form, role management and sync script e melhorias
+> Esta versão reúne melhorias contínuas, foco em estabilidade e segurança nos módulos de Geral.
+
+**Destaques:**
+- ⭐ Inclusão de proposals permissions to request form, role management and sync script
+- ⭐ calculate IPR_MARGEMLUCROCOMPRA and IPR_MARGEMLUCROCUSTO automatically
+
+#### 🚀 Novidades & Melhorias
+- **[Geral]** Inclusão de proposals permissions to request form, role management and sync script: Atualização no módulo de Geral: add proposals permissions to request form, role management and sync script.
+- **[Geral]** calculate IPR_MARGEMLUCROCOMPRA and IPR_MARGEMLUCROCUSTO automatically: Atualização no módulo de Geral: calculate IPR_MARGEMLUCROCOMPRA and IPR_MARGEMLUCROCUSTO automatically.
+- **[Geral]** populate IPR_PRCVENDADIA, IPR_PRCCUSTO and IPR_PRCCOMPRA from product and stock: Atualização no módulo de Geral: populate IPR_PRCVENDADIA, IPR_PRCCUSTO and IPR_PRCCOMPRA from product and stock.
+
+#### 🛠️ Correções & Estabilidade
+- **[Geral]** accept numeric price table (1-12) and status, default PRO_PRECO to 1: Atualização no módulo de Geral: accept numeric price table (1-12) and status, default PRO_PRECO to 1.
+- **[Geral]** initialize proposal totals at zero and enforce SIT_CODIGO = 1 for trigger compatibility: Atualização no módulo de Geral: initialize proposal totals at zero and enforce SIT_CODIGO = 1 for trigger compatibility.
+- **[Geral]** resolve PRO_OBS and PRO_INFADICIONAIS BLOB fields on read: Atualização no módulo de Geral: resolve PRO_OBS and PRO_INFADICIONAIS BLOB fields on read.
+
+---
+
 ## [v1.21.2] - 2026-11-25
 
 ### 📌 Inclusão de proposals CRUD (without DELETE) for PROPOSTAS and ITENSPRO e melhorias
