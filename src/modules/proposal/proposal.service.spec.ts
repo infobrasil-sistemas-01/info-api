@@ -108,10 +108,20 @@ describe('ProposalService', () => {
 
   describe('create', () => {
     it('should create proposal with PRO_GERADA = N and items atomically', async () => {
-      // 1. ESTOQUE lookup
+      // 1. ESTOQUE + PRODUTOS lookup
       mockConnection.query.mockImplementationOnce(
         (sql: string, params: any[], cb: any) => {
-          cb(null, [{ PRO_CODIGO: '001', PRO_PRECO1: 50, PRO_PRECO2: 45 }]);
+          expect(sql).toContain('P.PRO_PRCCOMPRA');
+          expect(sql).toContain('P.PRO_PRCCUSTO');
+          cb(null, [
+            {
+              PRO_CODIGO: '001',
+              PRO_PRCCOMPRA: 20,
+              PRO_PRCCUSTO: 25,
+              PRO_PRECO1: 50,
+              PRO_PRECO2: 45,
+            },
+          ]);
         },
       );
 
@@ -127,6 +137,8 @@ describe('ProposalService', () => {
         })
         .mockImplementationOnce((sql: string, params: any[], cb: any) => {
           expect(sql).toContain('GEN_ID(GEN_NUMEROIPR, 1)');
+          // Garante enriquecimento de IPR_PRCVENDADIA (45), IPR_PRCCUSTO (25), IPR_PRCCOMPRA (20)
+          expect(params).toEqual(expect.arrayContaining([45, 25, 20]));
           cb(null, []);
         });
 

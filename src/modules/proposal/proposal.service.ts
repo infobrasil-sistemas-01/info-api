@@ -242,6 +242,8 @@ export class ProposalService {
     const stockQuery = `
       SELECT
         P.PRO_CODIGO,
+        P.PRO_PRCCOMPRA,
+        P.PRO_PRCCUSTO,
         E.PRO_PRECO1, E.PRO_PRECO2, E.PRO_PRECO3, E.PRO_PRECO4,
         E.PRO_PRECO5, E.PRO_PRECO6, E.PRO_PRECO7, E.PRO_PRECO8,
         E.PRO_PRECO9, E.PRO_PRECO10, E.PRO_PRECO11, E.PRO_PRECO12
@@ -299,6 +301,19 @@ export class ProposalService {
         IPR_TOTAL: total,
         IPR_DESCONTO: item.IPR_DESCONTO ?? 0,
         IPR_LIQUIDO: netTotal,
+        IPR_PRCVENDADIA:
+          item.IPR_PRCVENDADIA ??
+          (stockPrice > 0 ? Number(stockPrice.toFixed(2)) : null),
+        IPR_PRCCUSTO:
+          item.IPR_PRCCUSTO ??
+          (stockRow?.PRO_PRCCUSTO != null
+            ? Number(stockRow.PRO_PRCCUSTO)
+            : null),
+        IPR_PRCCOMPRA:
+          item.IPR_PRCCOMPRA ??
+          (stockRow?.PRO_PRCCOMPRA != null
+            ? Number(stockRow.PRO_PRCCOMPRA)
+            : null),
         IPR_TABELAPRECO: tableStr,
         IPR_ITEM: item.IPR_ITEM ?? index + 1,
         IPR_GARANTEESTOQUE: item.IPR_GARANTEESTOQUE ?? 'N',
