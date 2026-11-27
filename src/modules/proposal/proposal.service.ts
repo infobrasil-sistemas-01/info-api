@@ -333,6 +333,26 @@ export class ProposalService {
           ? Number(item.IPR_LIQUIDO)
           : Number(Math.max(total - discount + addition, 0).toFixed(2));
 
+      const costPrice =
+        item.IPR_PRCCUSTO ??
+        (stockRow?.PRO_PRCCUSTO != null ? Number(stockRow.PRO_PRCCUSTO) : null);
+      const purchasePrice =
+        item.IPR_PRCCOMPRA ??
+        (stockRow?.PRO_PRCCOMPRA != null
+          ? Number(stockRow.PRO_PRCCOMPRA)
+          : null);
+      const effectiveUnitSalePrice =
+        quantity > 0 ? netTotal / quantity : unitPrice;
+      const calcMargin = (base: number | null) =>
+        effectiveUnitSalePrice > 0 && base !== null
+          ? Number(
+              (
+                ((effectiveUnitSalePrice - base) / effectiveUnitSalePrice) *
+                100
+              ).toFixed(4),
+            )
+          : null;
+
       return {
         ...item,
         PRO_CODIGO: code,
@@ -345,16 +365,12 @@ export class ProposalService {
         IPR_PRCVENDADIA:
           item.IPR_PRCVENDADIA ??
           (stockPrice > 0 ? Number(stockPrice.toFixed(2)) : null),
-        IPR_PRCCUSTO:
-          item.IPR_PRCCUSTO ??
-          (stockRow?.PRO_PRCCUSTO != null
-            ? Number(stockRow.PRO_PRCCUSTO)
-            : null),
-        IPR_PRCCOMPRA:
-          item.IPR_PRCCOMPRA ??
-          (stockRow?.PRO_PRCCOMPRA != null
-            ? Number(stockRow.PRO_PRCCOMPRA)
-            : null),
+        IPR_PRCCUSTO: costPrice,
+        IPR_PRCCOMPRA: purchasePrice,
+        IPR_MARGEMLUCROCOMPRA:
+          item.IPR_MARGEMLUCROCOMPRA ?? calcMargin(purchasePrice),
+        IPR_MARGEMLUCROCUSTO:
+          item.IPR_MARGEMLUCROCUSTO ?? calcMargin(costPrice),
         IPR_TABELAPRECO: tableStr,
         IPR_ITEM: item.IPR_ITEM ?? index + 1,
         IPR_GARANTEESTOQUE: item.IPR_GARANTEESTOQUE ?? 'N',

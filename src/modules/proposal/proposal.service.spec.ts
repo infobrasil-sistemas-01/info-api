@@ -167,8 +167,8 @@ describe('ProposalService', () => {
         })
         .mockImplementationOnce((sql: string, params: any[], cb: any) => {
           expect(sql).toContain('GEN_ID(GEN_NUMEROIPR, 1)');
-          // Tabela padrão agora é 1 (PRO_PRECO1 = 50), PRO_PRCCUSTO = 25, PRO_PRCCOMPRA = 20
-          expect(params).toEqual(expect.arrayContaining([50, 25, 20]));
+          // Tabela padrão é 1 (PRO_PRECO1 = 50), PRO_PRCCUSTO = 25 (margem 50%), PRO_PRCCOMPRA = 20 (margem 60%)
+          expect(params).toEqual(expect.arrayContaining([50, 25, 20, 60, 50]));
           cb(null, []);
         });
 
