@@ -206,6 +206,47 @@ export class ProposalService {
     });
   }
 
+  private async parseBlob(blobField: any): Promise<string | null> {
+    if (!blobField) return null;
+    if (typeof blobField === 'string') return blobField;
+    if (Buffer.isBuffer(blobField)) return blobField.toString('utf-8');
+    if (typeof blobField === 'function') {
+      try {
+        return await new Promise((resolve) => {
+          blobField((err: any, _name: any, eventEmitter: any) => {
+            if (err || !eventEmitter) return resolve(null);
+            const chunks: Buffer[] = [];
+            eventEmitter.on('data', (chunk: any) => {
+              chunks.push(
+                Buffer.isBuffer(chunk) ? chunk : Buffer.from(String(chunk)),
+              );
+            });
+            eventEmitter.on('end', () =>
+              resolve(Buffer.concat(chunks).toString('utf-8')),
+            );
+            eventEmitter.on('error', () => resolve(null));
+          });
+        });
+      } catch {
+        return null;
+      }
+    }
+    return String(blobField);
+  }
+
+  private async mapProposalRow(row: any) {
+    const [proObs, proInfAdicionais] = await Promise.all([
+      this.parseBlob(row.PRO_OBS),
+      this.parseBlob(row.PRO_INFADICIONAIS),
+    ]);
+
+    return {
+      ...row,
+      PRO_OBS: proObs,
+      PRO_INFADICIONAIS: proInfAdicionais,
+    };
+  }
+
   private getCurrentBrazilDateTime() {
     const now = new Date();
     const dateVal = new Intl.DateTimeFormat('en-CA', {
@@ -508,7 +549,10 @@ export class ProposalService {
                     ORDER BY P.PRO_DATA DESC, P.PRO_NUMERO DESC`;
 
       const startTime = Date.now();
-      const result = await this.queryDb<any[]>(connection, query, queryParams);
+      const rawResult = await this.queryDb<any[]>(connection, query, queryParams);
+      const result = Array.isArray(rawResult)
+        ? await Promise.all(rawResult.map((row) => this.mapProposalRow(row)))
+        : [];
       const endTime = Date.now();
 
       let total: number | undefined;
@@ -578,10 +622,13 @@ export class ProposalService {
         throw new NotFoundException(`Proposta ${id} não encontrada.`);
       }
 
-      const itens = await this.fetchItemsByProposalNumber(connection, id);
+      const [header, itens] = await Promise.all([
+        this.mapProposalRow(result[0]),
+        this.fetchItemsByProposalNumber(connection, id),
+      ]);
 
       return {
-        ...result[0],
+        ...header,
         ITENS: itens,
       };
     } finally {

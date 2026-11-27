@@ -45,7 +45,15 @@ describe('ProposalService', () => {
 
   describe('get', () => {
     it('should return paginated proposals with total when includeCount is true', async () => {
-      const mockRows = [{ PRO_NUMERO: 105, CLI_CODIGO: 10, PRO_GERADA: 'N' }];
+      const mockRows = [
+        {
+          PRO_NUMERO: 105,
+          CLI_CODIGO: 10,
+          PRO_GERADA: 'N',
+          PRO_OBS: null,
+          PRO_INFADICIONAIS: null,
+        },
+      ];
       mockConnection.query
         .mockImplementationOnce((sql: string, params: any[], cb: any) => {
           cb(null, mockRows);
@@ -76,8 +84,23 @@ describe('ProposalService', () => {
   });
 
   describe('getById', () => {
-    it('should return proposal header with ITENS', async () => {
-      const header = { PRO_NUMERO: 105, LOJ_CODIGO: 1, PRO_GERADA: 'N' };
+    it('should return proposal header with ITENS and resolve BLOB fields (PRO_OBS, PRO_INFADICIONAIS)', async () => {
+      const { EventEmitter } = require('events');
+      const mockBlobFn = (cb: any) => {
+        const ee = new EventEmitter();
+        cb(null, 'PRO_OBS', ee);
+        ee.emit('data', Buffer.from('Observação ', 'utf-8'));
+        ee.emit('data', Buffer.from('em BLOB', 'utf-8'));
+        ee.emit('end');
+      };
+
+      const header = {
+        PRO_NUMERO: 105,
+        LOJ_CODIGO: 1,
+        PRO_GERADA: 'N',
+        PRO_OBS: mockBlobFn,
+        PRO_INFADICIONAIS: Buffer.from('Info adicional', 'utf-8'),
+      };
       const items = [{ IPR_NUMERO: 501, PRO_NUMERO: 105, PRO_CODIGO: '001' }];
 
       mockConnection.query
@@ -90,7 +113,14 @@ describe('ProposalService', () => {
 
       const result = await service.getById('cred_1', 1, 105);
 
-      expect(result).toEqual({ ...header, ITENS: items });
+      expect(result).toEqual({
+        PRO_NUMERO: 105,
+        LOJ_CODIGO: 1,
+        PRO_GERADA: 'N',
+        PRO_OBS: 'Observação em BLOB',
+        PRO_INFADICIONAIS: 'Info adicional',
+        ITENS: items,
+      });
     });
 
     it('should throw NotFoundException when proposal does not exist', async () => {
@@ -143,7 +173,13 @@ describe('ProposalService', () => {
         });
 
       // 3. getById after create
-      const createdHeader = { PRO_NUMERO: 105, PRO_GERADA: 'N', PRO_TOTALLIQUIDO: 90 };
+      const createdHeader = {
+        PRO_NUMERO: 105,
+        PRO_GERADA: 'N',
+        PRO_TOTALLIQUIDO: 90,
+        PRO_OBS: null,
+        PRO_INFADICIONAIS: null,
+      };
       const createdItems = [{ IPR_NUMERO: 501, PRO_NUMERO: 105, PRO_CODIGO: '001', IPR_PRECO: 45, IPR_TOTAL: 90 }];
       mockConnection.query
         .mockImplementationOnce((sql: string, params: any[], cb: any) => {
